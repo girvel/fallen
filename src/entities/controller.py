@@ -1,3 +1,5 @@
+import sys
+
 from ecs import OwnedEntity
 
 from src.lib.vector import up, down, left, right
@@ -28,5 +30,9 @@ def create(pc):
     @hotkey("d")
     def move_down(pc):
         pc.p += right
+
+    @hotkey("Q")
+    def quit(pc):
+        sys.exit()
 
     return controller
