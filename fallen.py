@@ -1,7 +1,8 @@
 import curses
 import logging
+from pathlib import Path
 
-from ecs import Metasystem
+from ecs import Metasystem, OwnedEntity
 
 from src.entities.controller import controller
 from src.entities.level import level
@@ -29,11 +30,23 @@ if __name__ == '__main__':
 
     level = ms.add(level)
     ms.add(controller)
-
     ms.create(name='game_camera', display_canvas=None, size=Vector(60, 20))
-    controller.controls = level.put(ms.create(name='player_character', character='@'), Vector(5, 5))
-    level.put(ms.create(name='tree', character='T'), Vector(7, 10))
-    level.put(ms.create(name='tree', character='T'), Vector(3, 12))
+
+    palette = {
+        'T': OwnedEntity(name='tree', character='T'),
+        '@': OwnedEntity(name='player_character', character='@'),
+    }
+
+    for y, line in enumerate(Path('assets/level.txt').read_text().split('\n')):
+        for x, c in enumerate(line):
+            if c == ".":
+                continue
+
+            assert c in palette
+            e = level.put(ms.create(**dict(palette[c])), Vector(x, y))
+
+            if c == "@":
+                controller.controls = e
 
     log.info("Curses initialization")
 
