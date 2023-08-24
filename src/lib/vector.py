@@ -81,6 +81,12 @@ class Vector:
     def create_grid(self, filler):
         return [[filler for _ in range(self.x)] for _ in range(self.y)]
 
+    def get_in(self, grid):
+        return grid[self.y][self.x]
+
+    def set_in(self, grid, value):
+        grid[self.y][self.x] = value
+
     def __repr__(self):
         return f'{{{round(self.x, 2)}; {round(self.y, 2)}}}'
 

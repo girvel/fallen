@@ -12,10 +12,10 @@ def fill_canvas(
     subject: 'p, character',
     camera: 'display_canvas',
 ):
-    if not (subject.p <= camera.size):
+    if not (subject.p < camera.size):
         return
 
-    camera.display_canvas[subject.p.y][subject.p.x] = subject.character
+    subject.p.set_in(camera.display_canvas, subject.character)
 
 @create_system
 def display_canvas(camera: 'display_canvas', screen: 'screen_flag'):
