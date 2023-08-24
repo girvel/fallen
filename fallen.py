@@ -1,3 +1,4 @@
+import curses
 import logging
 
 from ecs import Metasystem
@@ -21,8 +22,12 @@ if __name__ == '__main__':
         ms.add(system)
 
     ms.create(name='game_camera', display_canvas=None, size=Vector(60, 20))
-    pc = ms.create(name='player_character', p=Vector(5, 5), character='@', player_character_flag=None)
+    pc = ms.create(name='player_character', p=Vector(5, 5), character='@')
     ms.add(controller.create(pc))
 
-    while True:
-        ms.update()
+    @curses.wrapper
+    def main(stdscr):
+        ms.create(name='screen', main=stdscr, screen_flag=None)
+
+        while True:
+            ms.update()

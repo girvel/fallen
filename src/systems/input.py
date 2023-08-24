@@ -1,13 +1,12 @@
 import logging
 
-import keyboard
 from ecs import create_system
 
 
 @create_system
-def read_input(controller: 'hotkeys, controls'):
+def read_input(controller: 'hotkeys, controls', screen: 'screen_flag'):
     while True:
-        hotkey = keyboard.read_key()
+        hotkey = screen.main.getkey()
         if hotkey in controller.hotkeys:
             break
         logging.debug(f"Hotkey ignored: [{hotkey}]")

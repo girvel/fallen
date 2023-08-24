@@ -18,7 +18,9 @@ def fill_canvas(
     camera.display_canvas[subject.p.y][subject.p.x] = subject.character
 
 @create_system
-def display_canvas(camera: 'display_canvas'):
-    os.system("cls||clear")
-    for line in camera.display_canvas:
-        print(''.join(line))
+def display_canvas(camera: 'display_canvas', screen: 'screen_flag'):
+    screen.main.clear()
+    for i, line in enumerate(camera.display_canvas):
+        screen.main.addstr(i, 0, ''.join(line))
+
+    screen.main.refresh()
