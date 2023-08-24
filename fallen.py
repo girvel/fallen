@@ -2,14 +2,14 @@ import curses
 import logging
 from pathlib import Path
 
-from ecs import Metasystem
+from ecs import Metasystem, create_system
 
 from src.entities.controller import Controller
 from src.entities.level import Level
 from src.lib.vector import Vector
 from src.systems.display import clear_canvas, fill_canvas, display_canvas
 from src.systems.input import read_input
-from src.systems.movement import move
+from src.systems.acting import act
 
 log = logging.getLogger(__name__)
 
@@ -20,16 +20,28 @@ if __name__ == '__main__':
     ms = Metasystem()
 
     # Systems
+    @create_system
+    def destruction(hades: 'entities_to_destroy', level: 'level_grid'):
+        for e in hades.entities_to_destroy:
+            if "p" in e:
+                e.p.set_in(level.level_grid, None)
+
+            ms.delete(e)
+
+        hades.entities_to_destroy.clear()
+
     for system in [
         clear_canvas,
         fill_canvas,
         display_canvas,
         read_input,
-        move,
+        act,
+        destruction,
     ]:
         ms.add(system)
 
     # Entities
+    ms.create(name='hades', entities_to_destroy=[])
     level = ms.add(Level())
     player = level.load(ms, Path("assets/level.txt"))
 

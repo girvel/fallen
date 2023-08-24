@@ -1,2 +1,2 @@
-ecs-girvel~=1.0.0
+ecs-girvel~=1.0.1
 windows-curses

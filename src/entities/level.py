@@ -16,8 +16,8 @@ class Level(OwnedEntity):
         return movable
 
     palette = {
-        'T': OwnedEntity(name='tree', character='T'),  # TODO reorganize to classes?
-        '@': OwnedEntity(name='player_character', character='@'),
+        'T': OwnedEntity(name='tree', character='T', health=100),  # TODO reorganize to classes?
+        '@': OwnedEntity(name='player_character', character='@', health=100, power=15),
     }
 
     def load(self, metasystem, path: Path):
