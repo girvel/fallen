@@ -7,7 +7,7 @@ log = logging.getLogger(__name__)
 
 
 @create_system
-def read_input(controller: 'hotkeys, controls', screen: 'screen_flag'):
+def read_input(controller: 'hotkeys, controls', screen: 'screen_flag', level: 'level_grid'):
     while True:
         hotkey = screen.main.getkey()
         if hotkey in controller.hotkeys:
@@ -15,4 +15,4 @@ def read_input(controller: 'hotkeys, controls', screen: 'screen_flag'):
         log.debug(f"Hotkey ignored: [{hotkey}]")
 
     log.info(f"[{hotkey}]")
-    controller.hotkeys[hotkey]()
+    controller.hotkeys[hotkey](level.level_grid)

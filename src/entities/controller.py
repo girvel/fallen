@@ -3,12 +3,13 @@ import sys
 from ecs import OwnedEntity
 
 from src.lib.vector import up, down, left, right
-from src.systems.acting import Act
+from src.systems.acting.attack import Attack
+from src.systems.acting.move import Move
 
 
 class Controller(OwnedEntity):
     def __init__(self, controls):
-        super().__init__(name='controller', controls=controls, hotkeys={}, mode=Act.Move)
+        super().__init__(name='controller', controls=controls, hotkeys={}, mode=Move)
 
         class _hotkey:
             def __init__(hk, hotkeys):
@@ -20,12 +21,13 @@ class Controller(OwnedEntity):
 
         def generate_movement_function(keys, direction):
             @_hotkey(*keys)
-            def _():
-                match self.mode:
-                    case Act.Move:
-                        self.controls.act = Act.Move(direction)
-                    case Act.Attack:
-                        self.controls.act = Act.Attack(direction)
+            def _(level_grid):
+                if (self.controls.p + direction).get_in(level_grid) is None:
+                    act = Move
+                else:
+                    act = self.mode
+
+                self.controls.act = act(direction)
 
         for keys, direction in {
             ("w", ): up,
@@ -36,10 +38,10 @@ class Controller(OwnedEntity):
             generate_movement_function(keys, direction)
 
         @_hotkey("Q")
-        def quit_():
+        def quit_(level_grid):
             sys.exit()
 
         @_hotkey("r")
-        def change_mode():
-            self.mode = (self.mode == Act.Move) and Act.Attack or Act.Move
+        def change_mode(level_grid):
+            self.mode = (self.mode == Move) and Attack or Move
 
