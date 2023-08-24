@@ -78,11 +78,26 @@ class Vector:
             asin(self.y / abs(self))
         )
 
+    def create_grid(self, filler):
+        return [[filler for _ in range(self.x)] for _ in range(self.y)]
+
     def __repr__(self):
         return f'{{{round(self.x, 2)}; {round(self.y, 2)}}}'
 
     def __bool__(self):
         return self != zero
+
+    def __gt__(self, other):
+        return self.x > other.x and self.y > other.y
+
+    def __ge__(self, other):
+        return self.x >= other.x and self.y >= other.y
+
+    def __lt__(self, other):
+        return self.x < other.x and self.y < other.y
+
+    def __le__(self, other):
+        return self.x <= other.x and self.y <= other.y
 
 
 zero = Vector(0, 0)
