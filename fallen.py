@@ -10,6 +10,9 @@ from src.systems.input import read_input
 
 if __name__ == '__main__':
     logging.basicConfig(filename='.last.log', encoding='utf-8', level=logging.DEBUG)
+    log = logging.getLogger(__name__)
+
+    log.info("Game initialization")
 
     ms = Metasystem()
 
@@ -25,9 +28,15 @@ if __name__ == '__main__':
     pc = ms.create(name='player_character', p=Vector(5, 5), character='@')
     ms.add(controller.create(pc))
 
+    log.info("Curses initialization")
+
     @curses.wrapper
     def main(stdscr):
         ms.create(name='screen', main=stdscr, screen_flag=None)
 
-        while True:
-            ms.update()
+        log.info("Started game cycle")
+        try:
+            while True:
+                ms.update()
+        finally:
+            log.info("Ended game cycle")
