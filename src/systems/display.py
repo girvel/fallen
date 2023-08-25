@@ -3,6 +3,7 @@ import curses
 from ecs import create_system
 
 from src.entities.special.screen import Colors
+from src.lib.vector import Vector, zero
 from src.systems.acting.move import Move
 
 import logging
@@ -27,6 +28,7 @@ def get_color_pair(entity):
 def resize_windows(screen: 'screen_flag'):
     h, w = screen.main.getmaxyx()
     screen.game.resize(h - 1, w - screen.gui_w)
+    screen.following_offset = Vector(w - screen.gui_w, h - 1) // 3
     screen.gui.resize(h - 1, screen.gui_w)
     screen.gui.mvwin(0, w - screen.gui_w)
 
@@ -35,14 +37,21 @@ def display_canvas(controller: 'controls', level: 'level_grid', screen: 'screen_
     screen.game.clear()
 
     h, w = screen.game.getmaxyx()
-    for y in range(min(h, level.size.y)):
-        for x in range(min(w - 1, level.size.x)):
-            entity = level.level_grid[y][x]
+    for y in range(h):
+        for x in range(w - 1):
+            p_in_level = Vector(x + screen.virtual_p.x, y + screen.virtual_p.y)
+            if zero <= p_in_level < level.size:
+                entity = p_in_level.get_in(level.level_grid)
+                view = [
+                    entity and entity.character or ".",
+                    get_color_pair(entity) | (
+                        entity and entity == controller.controls.inspects and curses.A_REVERSE or 0
+                    )
+                ]
+            else:
+                view = [" "]
 
-            screen.game.addch(
-                y, x, entity and entity.character or ".",
-                get_color_pair(entity) | (entity and entity == controller.controls.inspects and curses.A_REVERSE or 0)
-            )
+            screen.game.addch(y, x, *view)
 
     screen.game.refresh()
 

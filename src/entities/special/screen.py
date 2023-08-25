@@ -5,6 +5,8 @@ from ecs import OwnedEntity
 
 import logging
 
+from src.lib.vector import Vector
+
 log = logging.getLogger(__name__)
 
 class Colors(Enum):
@@ -19,6 +21,8 @@ class Colors(Enum):
 class Screen(OwnedEntity):
     name = 'screen'
     screen_flag = None
+    virtual_p = Vector(0, 0)
+    following_offset = Vector(0, 0)  # modified on resize
 
     def __init__(self, stdscr):
         super().__init__(main=stdscr, game=curses.newwin(1, 1, 0, 0), gui=curses.newwin(1, 1, 0, 0), gui_w=35)

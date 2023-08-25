@@ -12,6 +12,7 @@ class Controller(OwnedEntity):
     name = 'controller'
     hotkeys = {}
     mode = Move
+    controller_flag = None
 
     def __init__(self, controls):
         super().__init__(controls=controls)

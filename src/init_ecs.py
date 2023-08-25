@@ -7,6 +7,7 @@ from src.entities.special.controller import Controller
 from src.entities.special.level import Level
 from src.entities.special.screen import Screen
 from src.systems.ai import attack_if_possible
+from src.systems.camera_following import camera_follow
 from src.systems.display import display_canvas, resize_windows, display_systems
 from src.systems.input import read_input
 from src.systems.acting import act
@@ -30,6 +31,7 @@ def init(stdscr):
         hades.entities_to_destroy.clear()
 
     for system in [
+        camera_follow,
         *display_systems,
         read_input,
         attack_if_possible,

@@ -38,6 +38,9 @@ class Vector:
     def __truediv__(self, other):
         return self * (1 / other)
 
+    def __floordiv__(self, other):
+        return Vector(self.x // other, self.y // other)
+
     def squared_magnitude(self):
         return self.x ** 2 + self.y ** 2
 
@@ -89,8 +92,15 @@ class Vector:
     def create_grid(self, filler):
         return [[filler for _ in range(self.x)] for _ in range(self.y)]
 
-    def get_in(self, grid):
-        return grid[self.y][self.x]
+    def get_in(self, grid, default=None):
+        if self.y >= len(grid):
+            return default
+
+        line = grid[self.y]
+        if self.x >= len(line):
+            return None
+
+        return line[self.x]
 
     def set_in(self, grid, value):
         grid[self.y][self.x] = value
@@ -108,10 +118,10 @@ class Vector:
         return self.x >= other.x and self.y >= other.y
 
     def __lt__(self, other):
-        return self.x < other.x and self.y < other.y
+        return other > self
 
     def __le__(self, other):
-        return self.x <= other.x and self.y <= other.y
+        return other >= self
 
 
 zero = Vector(0, 0)
