@@ -1,141 +1,154 @@
 from math import cos, sin, pi, asin, copysign, acos
 
+import numpy
+
 from src.lib.toolkit import sign
 
 
-class Vector:
-    def __init__(self, x, y):
-        self.x = x
-        self.y = y
+# class Vector:
+#     def __init__(self, x, y):
+#         self.x = x
+#         self.y = y
+#
+#     def __add__(self, other):
+#         return Vector(
+#             self.x + other.x,
+#             self.y + other.y
+#         )
+#
+#     def __neg__(self):
+#         return Vector(
+#             -self.x,
+#             -self.y
+#         )
+#
+#     def __sub__(self, other):
+#         return self + -other
+#
+#     def __mul__(self, other):
+#         if isinstance(other, Vector):
+#             return self.x * other.x + self.y * other.y
+#
+#         return Vector(
+#             self.x * other,
+#             self.y * other
+#         )
+#
+#     def __rmul__(self, other):
+#         return self * other
+#
+#     def __truediv__(self, other):
+#         return self * (1 / other)
+#
+#     def __floordiv__(self, other):
+#         return Vector(self.x // other, self.y // other)
+#
+#     def squared_magnitude(self):
+#         return self.x ** 2 + self.y ** 2
+#
+#     def __abs__(self):
+#         return self.squared_magnitude() ** 0.5
+#
+#     def is_minimal(self):
+#         return abs(self.x) + abs(self.y) == 1
+#
+#     def minimize(self):
+#         if abs(self.x) > abs(self.y):
+#             return Vector(sign(self.x), 0)
+#         return Vector(0, sign(self.y))
+#
+#     def integer_normalize(self):
+#         return Vector(sign(self.x), sign(self.y))
+#
+#     def __eq__(self, other):
+#         return isinstance(other, Vector) and self.x == other.x and self.y == other.y
+#
+#     def __pow__(self, power, modulo=None):
+#         if power == 0:
+#             return self / abs(self) if self != zero else zero
+#         if power % 2 == 0:
+#             return abs(self) ** power
+#         raise Exception
+#
+#     def __invert__(self):
+#         return Vector(self.y, self.x)
+#
+#     def project(self, other):
+#         return self * other / other.squared_magnitude() * other
+#
+#     def scalar_project(self, other):
+#         return self * other / abs(other)
+#
+#     def rotated(self, angle):
+#         if not angle:
+#             return self
+#
+#         cs = cos(angle)
+#         sn = sin(angle)
+#
+#         return Vector(
+#             self.x * cs - self.y * sn,
+#             self.x * sn + self.y * cs)
+#
+#     def angle(self):
+#         return copysign(
+#             acos(self.x / abs(self)),
+#             asin(self.y / abs(self))
+#         )
+#
+#     def create_grid(self, filler):
+#         return [[filler for _ in range(self.x)] for _ in range(self.y)]
+#
+#     def get_in(self, grid, default=None):
+#         if self.y >= len(grid):
+#             return default
+#
+#         line = grid[self.y]
+#         if self.x >= len(line):
+#             return None
+#
+#         return line[self.x]
+#
+#     def set_in(self, grid, value):
+#         grid[self.y][self.x] = value
+#
+#     def __repr__(self):
+#         return f'{{{round(self.x, 2)}; {round(self.y, 2)}}}'
+#
+#     def __bool__(self):
+#         return self != zero
+#
+#     def __gt__(self, other):
+#         return self.x > other.x and self.y > other.y
+#
+#     def __ge__(self, other):
+#         return self.x >= other.x and self.y >= other.y
+#
+#     def __lt__(self, other):
+#         return other > self
+#
+#     def __le__(self, other):
+#         return other >= self
+#
+#     def __hash__(self):
+#         return hash((self.x, self.y))
 
-    def __add__(self, other):
-        return Vector(
-            self.x + other.x,
-            self.y + other.y
-        )
 
-    def __neg__(self):
-        return Vector(
-            -self.x,
-            -self.y
-        )
+zero = numpy.array([0, 0])
+one  = numpy.array([1, 1])
 
-    def __sub__(self, other):
-        return self + -other
+up    = numpy.array([ 0, -1])
+down  = numpy.array([ 0,  1])
+right = numpy.array([ 1,  0])
+left  = numpy.array([-1,  0])
 
-    def __mul__(self, other):
-        if isinstance(other, Vector):
-            return self.x * other.x + self.y * other.y
+def safe_get(grid, vector, default=None):
+    if numpy.all(vector < grid.shape) and numpy.all(vector >= 0):
+        return grid[tuple(vector)]
+    else:
+        return default
 
-        return Vector(
-            self.x * other,
-            self.y * other
-        )
-
-    def __rmul__(self, other):
-        return self * other
-
-    def __truediv__(self, other):
-        return self * (1 / other)
-
-    def __floordiv__(self, other):
-        return Vector(self.x // other, self.y // other)
-
-    def squared_magnitude(self):
-        return self.x ** 2 + self.y ** 2
-
-    def __abs__(self):
-        return self.squared_magnitude() ** 0.5
-
-    def is_minimal(self):
-        return abs(self.x) + abs(self.y) == 1
-
-    def minimize(self):
-        if abs(self.x) > abs(self.y):
-            return Vector(sign(self.x), 0)
-        return Vector(0, sign(self.y))
-
-    def integer_normalize(self):
-        return Vector(sign(self.x), sign(self.y))
-
-    def __eq__(self, other):
-        return isinstance(other, Vector) and self.x == other.x and self.y == other.y
-
-    def __pow__(self, power, modulo=None):
-        if power == 0:
-            return self / abs(self) if self != zero else zero
-        if power % 2 == 0:
-            return abs(self) ** power
-        raise Exception
-
-    def __invert__(self):
-        return Vector(self.y, self.x)
-
-    def project(self, other):
-        return self * other / other.squared_magnitude() * other
-
-    def scalar_project(self, other):
-        return self * other / abs(other)
-
-    def rotated(self, angle):
-        if not angle:
-            return self
-
-        cs = cos(angle)
-        sn = sin(angle)
-
-        return Vector(
-            self.x * cs - self.y * sn,
-            self.x * sn + self.y * cs)
-
-    def angle(self):
-        return copysign(
-            acos(self.x / abs(self)),
-            asin(self.y / abs(self))
-        )
-
-    def create_grid(self, filler):
-        return [[filler for _ in range(self.x)] for _ in range(self.y)]
-
-    def get_in(self, grid, default=None):
-        if self.y >= len(grid):
-            return default
-
-        line = grid[self.y]
-        if self.x >= len(line):
-            return None
-
-        return line[self.x]
-
-    def set_in(self, grid, value):
-        grid[self.y][self.x] = value
-
-    def __repr__(self):
-        return f'{{{round(self.x, 2)}; {round(self.y, 2)}}}'
-
-    def __bool__(self):
-        return self != zero
-
-    def __gt__(self, other):
-        return self.x > other.x and self.y > other.y
-
-    def __ge__(self, other):
-        return self.x >= other.x and self.y >= other.y
-
-    def __lt__(self, other):
-        return other > self
-
-    def __le__(self, other):
-        return other >= self
-
-    def __hash__(self):
-        return hash((self.x, self.y))
-
-
-zero = Vector(0, 0)
-one = Vector(1, 1)
-
-up    = Vector( 0, -1)
-down  = Vector( 0,  1)
-right = Vector( 1,  0)
-left  = Vector(-1,  0)
+def minimize(vector):
+    if abs(vector[0]) > abs(vector[1]):
+        return numpy.array([sign(vector[0]), 0])
+    return numpy.array([0, sign(vector[1])])

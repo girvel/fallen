@@ -21,7 +21,7 @@ def init(stdscr):
     def destruction(hades: 'entities_to_destroy', level: 'level_grid'):
         for e in hades.entities_to_destroy:
             if "p" in e:
-                e.p.set_in(level.level_grid, None)
+                level.level_grid[tuple(e.p)] = None
 
             ms.delete(e)
 

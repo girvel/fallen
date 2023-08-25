@@ -1,10 +1,10 @@
 from importlib.util import spec_from_file_location, module_from_spec
 from pathlib import Path
 
+import numpy
 from ecs import OwnedEntity
 
 from src.lib.toolkit import to_camel_case
-from src.lib.vector import Vector, zero
 
 
 class Level(OwnedEntity):
@@ -13,7 +13,7 @@ class Level(OwnedEntity):
     level_grid = None
 
     def put(self, movable, p):
-        p.set_in(self.level_grid, movable)
+        self.level_grid[tuple(p)] = movable
         movable.p = p
         return movable
 
@@ -28,12 +28,12 @@ class Level(OwnedEntity):
         cls = getattr(module, to_camel_case(p.stem))
         palette[cls.character] = cls
 
-    def load(self, metasystem, path: Path):
+    def load(self, metasystem, path):
         player = None
 
         level_lines = path.read_text().split('\n')
-        self.size = Vector(max(len(l) for l in level_lines), len(level_lines))
-        self.level_grid = self.size.create_grid(None)
+        self.size = numpy.array([max(len(l) for l in level_lines), len(level_lines)])
+        self.level_grid = numpy.full(tuple(self.size), None)
 
         for y, line in enumerate(level_lines):
             for x, c in enumerate(line):
@@ -41,7 +41,7 @@ class Level(OwnedEntity):
                     continue
 
                 assert c in self.palette
-                e = self.put(metasystem.add(self.palette[c]()), Vector(x, y))
+                e = self.put(metasystem.add(self.palette[c]()), numpy.array([x, y]))
 
                 if c == "@":
                     player = e

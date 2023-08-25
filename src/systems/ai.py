@@ -1,14 +1,10 @@
-import random
 from dataclasses import dataclass
 from enum import Enum
-from math import copysign
 
+import numpy
 from ecs import create_system, OwnedEntity
 
-from src.lib.toolkit import sign
-from src.lib.vector import Vector, one, up, down, left, right
-from src.systems.acting.attack import Attack
-from src.systems.acting.move import Move
+from src.lib.vector import up, down, left, right, safe_get, minimize
 
 
 class Kind(Enum):
@@ -22,25 +18,28 @@ class Senses:
 
 @dataclass
 class Perception:
-    vision: dict[Vector, OwnedEntity]
-    hearing: dict[Vector, int]
-    smell: dict[Vector, OwnedEntity]
+    vision: dict[numpy.ndarray, OwnedEntity]
+    hearing: dict[numpy.ndarray, int]
+    smell: dict[numpy.ndarray, OwnedEntity]
 
 @create_system
 def think(subject: 'ai', level: 'level_grid'):
     if "senses" in subject:
         # TODO optimize
-        vision = {subject.p, subject.p + up, subject.p + down, subject.p + left, subject.p + right}
+        vision = {tuple(p) for p in [
+            subject.p, subject.p + up, subject.p + down, subject.p + left, subject.p + right
+        ]}
+
         for _ in range(subject.senses.vision - 1):
             for p in vision.copy():
-                entity = p.get_in(level.level_grid)
+                entity = safe_get(level.level_grid, numpy.array(p))
                 if not entity or "solid_flag" not in entity:
                     vision |= {
-                        p + d for d in [ up, down, left, right, ] if d != (subject.p - p).minimize()
+                        tuple(p + d) for d in [ up, down, left, right, ] if not numpy.array_equal(d, minimize(subject.p - p))
                     }  # TODO bottleneck
 
         perception = Perception(
-            {p: p.get_in(level.level_grid) for p in vision},
+            {p: safe_get(level.level_grid, numpy.array(p)) for p in vision},
             None,
             None,
         )

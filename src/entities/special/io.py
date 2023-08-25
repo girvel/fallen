@@ -3,9 +3,10 @@ import sys
 from enum import Enum
 from statistics import median
 
+import numpy
 from ecs import OwnedEntity
 
-from src.lib.vector import Vector, zero, up, down, left, right
+from src.lib.vector import zero, up, down, left, right
 
 import logging
 
@@ -44,8 +45,8 @@ class IO(OwnedEntity):
     name = 'Input/Output'
 
     # input
-    virtual_p = Vector(0, 0)
-    following_offset = Vector(0, 0)  # modified on resize
+    virtual_p = numpy.array([0, 0])
+    following_offset = numpy.array([0, 0])  # modified on resize
     gui_w = 35
     level_size = None
 
@@ -82,41 +83,41 @@ class IO(OwnedEntity):
         # TODO as a reaction to event, not on update
         h, w = self.main.getmaxyx()
         self.game.resize(h - 1, w - self.gui_w)
-        self.following_offset = Vector(w - self.gui_w, h - 1) // 3
+        self.following_offset = numpy.array([w - self.gui_w, h - 1]) // 3
         self.gui.resize(h - 1, self.gui_w)
         self.gui.mvwin(0, w - self.gui_w)
 
     def move_camera(self, subject):
         h, w = self.game.getmaxyx()
 
-        self.virtual_p = Vector(
+        self.virtual_p = numpy.array([
             median((
                 0,
-                subject.p.x - w + self.following_offset.x,
-                self.virtual_p.x,
-                subject.p.x - self.following_offset.x,
-                self.level_size.x - w,
+                subject.p[0] - w + self.following_offset[0],
+                self.virtual_p[0],
+                subject.p[0] - self.following_offset[0],
+                self.level_size[0] - w,
             )),
             median((
                 0,
-                subject.p.y - h + self.following_offset.y,
-                self.virtual_p.y,
-                subject.p.y - self.following_offset.y,
-                self.level_size.y - h,
+                subject.p[1] - h + self.following_offset[1],
+                self.virtual_p[1],
+                subject.p[1] - self.following_offset[1],
+                self.level_size[1] - h,
             ))
-        )
+        ])
 
     def display_perception(self, subject, perception):
         self.game.clear()
         h, w = self.game.getmaxyx()
-        screen_size = Vector(w - 1, h)
+        screen_size = numpy.array([w - 1, h])
 
         for p, entity in perception.vision.items():
             p_on_screen = p - self.virtual_p
-            if not (zero <= p_on_screen < screen_size): continue
+            if not ((zero <= p_on_screen) & (p_on_screen < screen_size)).all(): continue
 
             self.game.addch(
-                p_on_screen.y, p_on_screen.x,
+                p_on_screen[1], p_on_screen[0],
                 entity and entity.character or ".",
                 get_color_pair(entity) | (
                     entity and isinstance(subject.act, Inspect) and subject.act.subject == entity
@@ -176,7 +177,7 @@ def generate_default_hotkeys():
     def generate_movement_function(keys, direction):
         @_hotkey(*keys)
         def _(subject, vision, io):
-            if vision.get(subject.p + direction) is None:
+            if vision.get(tuple(subject.p + direction)) is None:
                 act = Move
             else:
                 act = io.mode
@@ -202,6 +203,6 @@ def generate_default_hotkeys():
     @_hotkey("KEY_MOUSE")
     def inspect(subject, vision, io):
         _, mx, my, _, _ = curses.getmouse()
-        return Inspect(vision.get(io.virtual_p + Vector(mx, my)))
+        return Inspect(vision.get(tuple(io.virtual_p + numpy.array([mx, my]))))
 
     return result
