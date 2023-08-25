@@ -6,7 +6,7 @@ from src.systems.ai import Kind
 
 
 class RabidDog(OwnedEntity):
-    name = 'rabid_dog'
+    name = 'Rabid dog'
     character = 'd'
     classifiers = {Kind.Animate}
     health = 20

@@ -4,7 +4,7 @@ from src.entities.special.screen import Colors
 
 
 class Bush(OwnedEntity):
-    name = 'bush'
+    name = 'Bush'
     character = 'b'
     color = Colors.Green
     health = 10

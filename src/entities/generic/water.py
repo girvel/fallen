@@ -4,6 +4,6 @@ from src.entities.special.screen import Colors
 
 
 class Water(OwnedEntity):
-    name = 'water'
+    name = 'Water'
     character = '~'
     color = Colors.WhiteOnBlue

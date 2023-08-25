@@ -4,7 +4,7 @@ from src.entities.special.screen import Colors
 
 
 class Tree(OwnedEntity):
-    name = 'tree'
+    name = 'Tree'
     character = 'T'
     color = Colors.Green
     health = 100
