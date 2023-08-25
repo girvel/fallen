@@ -9,3 +9,5 @@ class Player(OwnedEntity):
     classifiers = {Kind.Animate}
     health = 100
     power = 15
+
+    inspects = None

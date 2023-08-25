@@ -27,7 +27,7 @@ def resize_windows(screen: 'screen_flag'):
     screen.gui.resize(h - 1, screen.gui_w)
 
 @create_system
-def display_canvas(level: 'level_grid', screen: 'screen_flag'):
+def display_canvas(controller: 'controls', level: 'level_grid', screen: 'screen_flag'):
     screen.game.clear()
 
     h, w = screen.game.getmaxyx()
@@ -35,7 +35,10 @@ def display_canvas(level: 'level_grid', screen: 'screen_flag'):
         for x in range(min(w, level.size.x)):
             entity = level.level_grid[y][x]
 
-            screen.game.addch(y, x, entity and entity.character or ".", get_color_pair(entity))
+            screen.game.addch(
+                y, x, entity and entity.character or ".",
+                get_color_pair(entity) | (entity and entity == controller.controls.inspects and curses.A_REVERSE or 0)
+            )
 
     screen.game.refresh()
 
@@ -54,6 +57,9 @@ def display_gui(controller: 'controls', screen: 'screen_flag'):
         screen.gui.addstr(6, 2, "MOVE")
     else:
         screen.gui.addstr(6, 2, "ATTACK", curses.color_pair(Colors.WhiteOnRed.value))
+
+    if pc.inspects:
+        screen.gui.addstr(8, 2, f"Inspects {pc.inspects.name}")
 
     screen.gui.refresh()
 

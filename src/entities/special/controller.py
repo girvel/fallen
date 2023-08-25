@@ -1,3 +1,4 @@
+import curses
 import sys
 
 from ecs import OwnedEntity
@@ -16,7 +17,7 @@ class Controller(OwnedEntity):
         super().__init__(controls=controls)
 
         class _hotkey:
-            def __init__(hk, hotkeys):
+            def __init__(hk, *hotkeys):
                 hk.hotkeys = hotkeys
 
             def __call__(hk, f):
@@ -25,7 +26,7 @@ class Controller(OwnedEntity):
 
         def generate_movement_function(keys, direction):
             @_hotkey(*keys)
-            def _(level_grid):
+            def _(level_grid, screen):
                 if (self.controls.p + direction).get_in(level_grid) is None:
                     act = Move
                 else:
@@ -42,10 +43,15 @@ class Controller(OwnedEntity):
             generate_movement_function(keys, direction)
 
         @_hotkey("Q")
-        def quit_(level_grid):
+        def quit_(level_grid, screen):
             sys.exit()
 
         @_hotkey("r")
-        def change_mode(level_grid):
+        def change_mode(level_grid, screen):
             self.mode = (self.mode == Move) and Attack or Move
+
+        @_hotkey("KEY_MOUSE")
+        def inspect(level_grid, screen):
+            _, mx, my, _, _ = curses.getmouse()
+            self.controls.inspects = level_grid[my][mx]  # TODO correct for camera p
 
