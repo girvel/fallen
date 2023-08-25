@@ -5,6 +5,10 @@ from ecs import create_system
 from src.entities.special.screen import Colors
 from src.systems.acting.move import Move
 
+import logging
+
+log = logging.getLogger(__name__)
+
 
 def _get_color_pair(entity):
     if entity is None:
@@ -32,9 +36,10 @@ def display_canvas(controller: 'controls', level: 'level_grid', screen: 'screen_
 
     h, w = screen.game.getmaxyx()
     for y in range(min(h, level.size.y)):
-        for x in range(min(w, level.size.x)):
+        for x in range(min(w - 1, level.size.x)):
             entity = level.level_grid[y][x]
 
+            log.debug((x, y))
             screen.game.addch(
                 y, x, entity and entity.character or ".",
                 get_color_pair(entity) | (entity and entity == controller.controls.inspects and curses.A_REVERSE or 0)
