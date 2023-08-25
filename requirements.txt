@@ -1,2 +1,3 @@
 ecs-girvel~=1.0.1
 windows-curses
+PyYAML~=6.0

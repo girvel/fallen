@@ -1,0 +1,9 @@
+damage_kinds:
+  Slashing:
+  Piercing:
+
+armor_kinds:
+  Organic: [[], []]
+  Wood: [[Slashing, Piercing], []]
+  Steel: [[Slashing, Piercing], []]
+  Stone: [[Slashing, Piercing], []]

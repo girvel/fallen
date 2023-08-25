@@ -1,10 +1,15 @@
+import random
+
 from ecs import OwnedEntity
 
 from src.entities.special.screen import Colors
+from src.systems.acting.attack import ArmorKind, Health
 
 
 class Tree(OwnedEntity):
     name = 'Tree'
     character = 'T'
     color = Colors.Green
-    health = 100
+
+    def __init__(self):
+        self.health = Health(random.randrange(250, 2000), ArmorKind.Wood)

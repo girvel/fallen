@@ -63,16 +63,17 @@ def display_gui(controller: 'controls', screen: 'screen_flag'):
     pc = controller.controls
 
     screen.gui.addstr(2, 2, pc.name)
-    screen.gui.addstr(3, 2, f"Health: {pc.health}")
-    screen.gui.addstr(4, 2, f"Attack power: {pc.power}")
+    screen.gui.addstr(3, 2, f"Health: {pc.health.value}")
+    screen.gui.addstr(4, 2, f"Armor: {pc.health.armor_kind}")
+    screen.gui.addstr(5, 2, f"Damage: {pc.weapon.power} {pc.weapon.damage_kind}")
 
     if controller.mode == Move:
-        screen.gui.addstr(6, 2, "MOVE")
+        screen.gui.addstr(7, 2, "MOVE")
     else:
-        screen.gui.addstr(6, 2, "ATTACK", curses.color_pair(Colors.WhiteOnRed.value))
+        screen.gui.addstr(7, 2, "ATTACK", curses.color_pair(Colors.WhiteOnRed.value))
 
     if pc.inspects:
-        screen.gui.addstr(8, 2, f"Inspects {pc.inspects.name}")
+        screen.gui.addstr(9, 2, f"Inspects {pc.inspects.name}")
 
     screen.gui.refresh()
 
