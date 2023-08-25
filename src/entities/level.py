@@ -1,6 +1,8 @@
 from pathlib import Path
 
 from ecs import OwnedEntity
+
+from src.entities.screen import Colors
 from src.lib.vector import Vector, zero
 
 
@@ -16,7 +18,7 @@ class Level(OwnedEntity):
         return movable
 
     palette = {
-        'T': OwnedEntity(name='tree', character='T', health=100),  # TODO reorganize to classes?
+        'T': OwnedEntity(name='tree', character='T', color = Colors.Green, health=100),  # TODO reorganize to classes?
         '@': OwnedEntity(name='player_character', character='@', health=100, power=15),
     }
 

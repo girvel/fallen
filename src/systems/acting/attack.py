@@ -9,5 +9,6 @@ class Attack(namedtuple("AttackBase", "v")):
 
             if "health" in enemy:
                 enemy.health -= movable.power
+                enemy.receives_damage = True
                 if enemy.health <= 0:
                     hades.entities_to_destroy.append(enemy)
