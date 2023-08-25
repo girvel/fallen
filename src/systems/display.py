@@ -27,8 +27,8 @@ def get_color_pair(entity):
 def resize_windows(screen: 'screen_flag'):
     h, w = screen.main.getmaxyx()
     screen.game.resize(h - 1, w - screen.gui_w)
-    screen.gui.mvwin(0, w - screen.gui_w)
     screen.gui.resize(h - 1, screen.gui_w)
+    screen.gui.mvwin(0, w - screen.gui_w)
 
 @create_system
 def display_canvas(controller: 'controls', level: 'level_grid', screen: 'screen_flag'):
@@ -39,7 +39,6 @@ def display_canvas(controller: 'controls', level: 'level_grid', screen: 'screen_
         for x in range(min(w - 1, level.size.x)):
             entity = level.level_grid[y][x]
 
-            log.debug((x, y))
             screen.game.addch(
                 y, x, entity and entity.character or ".",
                 get_color_pair(entity) | (entity and entity == controller.controls.inspects and curses.A_REVERSE or 0)
