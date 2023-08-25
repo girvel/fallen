@@ -62,18 +62,24 @@ def display_gui(controller: 'controls', screen: 'screen_flag'):
 
     pc = controller.controls
 
-    screen.gui.addstr(2, 2, pc.name)
-    screen.gui.addstr(3, 2, f"Health: {pc.health.value}")
-    screen.gui.addstr(4, 2, f"Armor: {pc.health.armor_kind}")
-    screen.gui.addstr(5, 2, f"Damage: {pc.weapon.power} {pc.weapon.damage_kind}")
+    name_tag = f"\__ {pc.name} __/"
+
+    screen.gui.addstr(1, 2, " " * ((screen.gui_w - 2 - len(name_tag)) // 2) + name_tag, curses.A_BOLD)
+    screen.gui.addstr(4, 2, f"Health: ")
+    screen.gui.addstr(4, 10, str(pc.health.value), Colors.Yellow.format())
+    screen.gui.addstr(5, 2, f"Armor: ")
+    screen.gui.addstr(5, 10, pc.health.armor_kind, Colors.Yellow.format())
+    screen.gui.addstr(6, 2, f"Damage: ")
+    screen.gui.addstr(6, 10, f"{pc.weapon.power} {pc.weapon.damage_kind}", Colors.Yellow.format())
+
 
     if controller.mode == Move:
-        screen.gui.addstr(7, 2, "MOVE")
+        screen.gui.addstr(8, 2, "MOVE")
     else:
-        screen.gui.addstr(7, 2, "ATTACK", curses.color_pair(Colors.WhiteOnRed.value))
+        screen.gui.addstr(8, 2, "ATTACK", Colors.WhiteOnRed.format())
 
     if pc.inspects:
-        screen.gui.addstr(9, 2, f"Inspects {pc.inspects.name}")
+        screen.gui.addstr(10, 2, f"Inspects {pc.inspects.name}")
 
     screen.gui.refresh()
 

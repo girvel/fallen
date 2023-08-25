@@ -17,6 +17,9 @@ class Colors(Enum):
     Yellow = 4
     WhiteOnRed = 5
 
+    def format(self):
+        return curses.color_pair(self.value)
+
 
 class Screen(OwnedEntity):
     name = 'screen'

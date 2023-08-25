@@ -12,7 +12,7 @@ class RabidDog(OwnedEntity):
     vision = 10
 
     def __init__(self):
-        self.weapon = Weapon(15, DamageKind.Piercing)
+        self.weapon = Weapon(3, DamageKind.Piercing)
         self.health = Health(20, ArmorKind.Organic)
         self.classifiers = {Kind.Animate}
 

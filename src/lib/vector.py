@@ -48,7 +48,7 @@ class Vector:
         return self.squared_magnitude() ** 0.5
 
     def is_minimal(self):
-        return abs(self.x + self.y) == 1
+        return abs(self.x) + abs(self.y) == 1
 
     def integer_normalize(self):
         return Vector(sign(self.x), sign(self.y))

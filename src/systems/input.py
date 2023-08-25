@@ -15,5 +15,5 @@ def read_input(controller: 'hotkeys, controls', screen: 'screen_flag', level: 'l
         log.debug(f"Hotkey ignored: [{hotkey}]")
         log.debug(controller.hotkeys)
 
-    log.info(f"[{hotkey}]")
+    log.debug(f"[{hotkey}]")
     controller.hotkeys[hotkey](level.level_grid, screen)
