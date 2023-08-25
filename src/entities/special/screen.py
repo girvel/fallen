@@ -8,6 +8,8 @@ from src.lib.vector import Vector, zero
 
 import logging
 
+from src.systems.acting.move import Move
+
 log = logging.getLogger(__name__)
 
 
@@ -61,6 +63,14 @@ class Screen(OwnedEntity):
     def refresh_level_size(self, level_size):
         self.level_size = level_size
 
+    def resize_windows(self):
+        # TODO as a reaction to event, not on update
+        h, w = self.main.getmaxyx()
+        self.game.resize(h - 1, w - self.gui_w)
+        self.following_offset = Vector(w - self.gui_w, h - 1) // 3
+        self.gui.resize(h - 1, self.gui_w)
+        self.gui.mvwin(0, w - self.gui_w)
+
     def move_camera(self, subject):
         h, w = self.game.getmaxyx()
 
@@ -99,3 +109,27 @@ class Screen(OwnedEntity):
             )
 
         self.game.refresh()
+
+    def display_gui(self, controller, subject):
+        self.gui.clear()
+        self.gui.border()
+
+        name_tag = f"\__ {subject.name} __/"
+
+        self.gui.addstr(1, 2, " " * ((self.gui_w - 2 - len(name_tag)) // 2) + name_tag, curses.A_BOLD)
+        self.gui.addstr(4, 2, f"Health: ")
+        self.gui.addstr(4, 10, str(subject.health.value), Colors.Yellow.format())
+        self.gui.addstr(5, 2, f"Armor: ")
+        self.gui.addstr(5, 10, subject.health.armor_kind, Colors.Yellow.format())
+        self.gui.addstr(6, 2, f"Damage: ")
+        self.gui.addstr(6, 10, f"{subject.weapon.power} {subject.weapon.damage_kind}", Colors.Yellow.format())
+
+        if controller.mode == Move:
+            self.gui.addstr(8, 2, "MOVE")
+        else:
+            self.gui.addstr(8, 2, "ATTACK", Colors.WhiteOnRed.format())
+
+        if subject.inspects:
+            self.gui.addstr(10, 2, f"Inspects {subject.inspects.name}")
+
+        self.gui.refresh()

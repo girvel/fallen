@@ -1,10 +1,5 @@
-import curses
-
 from ecs import OwnedEntity
 
-from src.entities.special.controller import Controller
-from src.entities.special.screen import Colors
-from src.lib.vector import zero, Vector
 from src.systems.acting.attack import DamageKind, ArmorKind, Weapon, Health
 from src.systems.ai import Kind, Senses
 
@@ -30,6 +25,8 @@ class Player(OwnedEntity):
     senses = Senses(25, 40, 1)
 
     def make_decision(self, perception):
+        self.screen.resize_windows()
         self.screen.move_camera(self)
         self.screen.display_perception(self, perception)
+        self.screen.display_gui(self.controller, self)
         return self.controller.wait_for_input(self.screen, self, perception.vision)

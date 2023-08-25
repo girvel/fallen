@@ -7,7 +7,6 @@ from src.entities.special.controller import Controller
 from src.entities.special.level import Level
 from src.entities.special.screen import Screen
 from src.systems.ai import think
-from src.systems.display import display_canvas, resize_windows, display_systems
 from src.systems.input import read_input
 from src.systems.acting import act
 from src.systems.temporal_components import remove_temporals
@@ -30,7 +29,6 @@ def init(stdscr):
         hades.entities_to_destroy.clear()
 
     for system in [
-        *display_systems,
         read_input,
         think,
         *remove_temporals,  # TODO these should be separate functions
