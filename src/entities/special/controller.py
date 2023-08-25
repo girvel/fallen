@@ -3,7 +3,7 @@ import sys
 
 from ecs import OwnedEntity
 
-from src.lib.vector import up, down, left, right
+from src.lib.vector import up, down, left, right, Vector
 from src.systems.acting.attack import Attack
 from src.systems.acting.move import Move
 
@@ -54,5 +54,5 @@ class Controller(OwnedEntity):
         @_hotkey("KEY_MOUSE")
         def inspect(level_grid, screen):
             _, mx, my, _, _ = curses.getmouse()
-            self.controls.inspects = level_grid[my][mx]  # TODO correct for camera p
+            self.controls.inspects = (screen.virtual_p + Vector(mx, my)).get_in(level_grid)
 

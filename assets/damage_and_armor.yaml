@@ -1,9 +1,21 @@
 damage_kinds:
-  Slashing:
+  Acid:
+  Cold:
+  Crushing:
+  Fire:
+  Lightning:
   Piercing:
+  Slashing:
+  Thunder:
+
+  # non-physical
+  Force:
+  Necrotic:
+  Psychic:
+  Radiant:
 
 armor_kinds:
-  Organic: [[], []]
-  Wood: [[Slashing, Piercing], []]
-  Steel: [[Slashing, Piercing], []]
-  Stone: [[Slashing, Piercing], []]
+  Organic: [[], [Acid, Cold, Crushing, Fire, Lightning, Piercing, Slashing, Thunder]]
+  Wood: [[Cold, Piercing], [Fire, Lightning]]
+  Steel: [[Slashing], [Fire, Lightning]]
+  Stone: [[Acid, Slashing, Piercing], [Crushing]]
