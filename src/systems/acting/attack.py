@@ -5,6 +5,10 @@ from pathlib import Path
 import yaml
 from ecs import Entity
 
+import logging
+
+log = logging.getLogger(__name__)
+
 
 class Attack(namedtuple("AttackBase", "v")):
     def execute(self, actor, level, hades):
@@ -25,9 +29,15 @@ class Attack(namedtuple("AttackBase", "v")):
         else:
             modifier = 1
 
+        log.info(
+            f"{actor.name} damages {enemy.name} w/ {actor.weapon.power} * {modifier} "
+            f"({actor.weapon.damage_kind} on {enemy.health.armor_kind})"
+        )
+
         enemy.health.value -= actor.weapon.power * modifier
         enemy.receives_damage = True
         if enemy.health.value <= 0:
+            log.info(f"{actor.name} kills {enemy.name}")
             hades.entities_to_destroy.append(enemy)
 
 
