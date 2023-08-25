@@ -4,7 +4,6 @@ from src.entities.special.screen import Colors
 
 
 class ThickWall(OwnedEntity):
+    name = 'thick_wall'
     character = '#'
-
-    def __init__(self):
-        super().__init__(name='thick_wall', color=Colors.Yellow)
+    color = Colors.Yellow

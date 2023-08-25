@@ -4,7 +4,6 @@ from src.entities.special.screen import Colors
 
 
 class SlashWall(OwnedEntity):
+    name = 'inclined_wall'
     character = '\\'
-
-    def __init__(self):
-        super().__init__(name='inclined_wall', color=Colors.Yellow)
+    color = Colors.Yellow

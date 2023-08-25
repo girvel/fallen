@@ -4,7 +4,7 @@ from src.entities.special.screen import Colors
 
 
 class Bush(OwnedEntity):
+    name = 'bush'
     character = 'b'
-
-    def __init__(self):
-        super().__init__(name='bush', color=Colors.Green, health=10)
+    color = Colors.Green
+    health = 10

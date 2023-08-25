@@ -4,7 +4,6 @@ from src.entities.special.screen import Colors
 
 
 class Water(OwnedEntity):
+    name = 'water'
     character = '~'
-
-    def __init__(self):
-        super().__init__(name='water', color=Colors.WhiteOnBlue)
+    color = Colors.WhiteOnBlue
