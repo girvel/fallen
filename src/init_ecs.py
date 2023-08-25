@@ -3,9 +3,8 @@ from pathlib import Path
 
 from ecs import Metasystem, create_system
 
-from src.entities.special.controller import Controller
 from src.entities.special.level import Level
-from src.entities.special.screen import Screen
+from src.entities.special.io import IO
 from src.systems.ai import think
 from src.systems.input import read_input
 from src.systems.acting import act
@@ -40,14 +39,13 @@ def init(stdscr):
     # Entities
     ms.create(name='hades', entities_to_destroy=[])
 
-    controller = ms.add(Controller())
-    screen = ms.add(Screen(stdscr))
+    io = ms.add(IO(stdscr))
 
     level = ms.add(Level())
     player = level.load(ms, Path("assets/level.txt"))
 
-    player.initialize(controller, screen)
-    screen.refresh_level_size(level.size)
+    player.ai = io
+    io.refresh_level_size(level.size)
 
     # Game cycle
     log.info("Starting game cycle")
@@ -58,4 +56,3 @@ def init(stdscr):
         log.exception(ex)
     finally:
         log.info("Finishing game cycle")
-        del player.screen.main

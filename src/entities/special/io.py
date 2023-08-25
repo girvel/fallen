@@ -1,13 +1,15 @@
 import curses
+import sys
 from enum import Enum
 from statistics import median
 
 from ecs import OwnedEntity
 
-from src.lib.vector import Vector, zero
+from src.lib.vector import Vector, zero, up, down, left, right
 
 import logging
 
+from src.systems.acting.attack import Attack
 from src.systems.acting.move import Move
 
 log = logging.getLogger(__name__)
@@ -37,19 +39,24 @@ class Colors(Enum):
         return curses.color_pair(self.value)
 
 
-class Screen(OwnedEntity):
-    name = 'screen'
-    screen_flag = None
+class IO(OwnedEntity):
+    name = 'Input/Output'
+
+    # input
     virtual_p = Vector(0, 0)
     following_offset = Vector(0, 0)  # modified on resize
-
     gui_w = 35
+    level_size = None
+
+    # output
+    mode = Move
 
     def __init__(self, stdscr):
         self.main = stdscr
         self.game = curses.newwin(1, 1, 0, 0)
         self.gui = curses.newwin(1, 1, 0, 0)
-        self.level_size = None
+
+        self.hotkeys = generate_default_hotkeys()
 
         log.info(f"Initalized mouse with {curses.mousemask(curses.ALL_MOUSE_EVENTS)}")
         print('\033[?1003h')
@@ -62,6 +69,13 @@ class Screen(OwnedEntity):
 
     def refresh_level_size(self, level_size):
         self.level_size = level_size
+
+    def make_decision(self, subject, perception):
+        self.resize_windows()
+        self.move_camera(subject)
+        self.display_perception(subject, perception)
+        self.display_gui(subject)
+        return self.wait_for_input(subject, perception.vision)
 
     def resize_windows(self):
         # TODO as a reaction to event, not on update
@@ -110,7 +124,7 @@ class Screen(OwnedEntity):
 
         self.game.refresh()
 
-    def display_gui(self, controller, subject):
+    def display_gui(self, subject):
         self.gui.clear()
         self.gui.border()
 
@@ -124,7 +138,7 @@ class Screen(OwnedEntity):
         self.gui.addstr(6, 2, f"Damage: ")
         self.gui.addstr(6, 10, f"{subject.weapon.power} {subject.weapon.damage_kind}", Colors.Yellow.format())
 
-        if controller.mode == Move:
+        if self.mode == Move:
             self.gui.addstr(8, 2, "MOVE")
         else:
             self.gui.addstr(8, 2, "ATTACK", Colors.WhiteOnRed.format())
@@ -133,3 +147,58 @@ class Screen(OwnedEntity):
             self.gui.addstr(10, 2, f"Inspects {subject.inspects.name}")
 
         self.gui.refresh()
+
+    def wait_for_input(self, subject, vision):
+        while True:
+            hotkey = self.main.getkey()
+            if hotkey in self.hotkeys:
+                break
+            log.debug(f"Ignored: [{hotkey}]")
+
+        log.debug(f"[{hotkey}]")
+        return self.hotkeys[hotkey](subject, vision, self)
+
+
+def generate_default_hotkeys():
+    result = {}
+
+    class _hotkey:
+        def __init__(self, *hotkeys):
+            self.hotkeys = hotkeys
+
+        def __call__(self, f):
+            for hotkey in self.hotkeys:
+                result[hotkey] = f
+
+    def generate_movement_function(keys, direction):
+        @_hotkey(*keys)
+        def _(subject, vision, io):
+            if vision.get(subject.p + direction) is None:
+                act = Move
+            else:
+                act = io.mode
+
+            return act(direction)
+
+    for keys, direction in {
+        ("w", ): up,
+        ("s", ): down,
+        ("a", ): left,
+        ("d", ): right,
+    }.items():
+        generate_movement_function(keys, direction)
+
+    @_hotkey("Q")
+    def quit_(subject, vision, io):
+        sys.exit()
+
+    @_hotkey("r")
+    def change_mode(subject, vision, io):
+        io.mode = (io.mode == Move) and Attack or Move
+
+    @_hotkey("KEY_MOUSE")
+    def inspect(subject, vision, io):
+        _, mx, my, _, _ = curses.getmouse()
+        subject.inspects = vision.get(io.virtual_p + Vector(mx, my))  # TODO inspects as an act
+
+    return result

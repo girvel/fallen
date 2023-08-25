@@ -27,7 +27,7 @@ class Perception:
     smell: dict[Vector, OwnedEntity]
 
 @create_system
-def think(subject: 'make_decision', level: 'level_grid'):
+def think(subject: 'ai', level: 'level_grid'):
     if "senses" in subject:
         # TODO optimize
         vision = {subject.p, subject.p + up, subject.p + down, subject.p + left, subject.p + right}
@@ -47,7 +47,7 @@ def think(subject: 'make_decision', level: 'level_grid'):
     else:
         perception = Perception(None, None, None)
 
-    subject.act = subject.make_decision(perception)
+    subject.act = subject.ai.make_decision(subject, perception)
 
     # start = subject.p - subject.vision * one
     # end = subject.p + subject.vision * one

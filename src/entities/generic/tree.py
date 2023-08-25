@@ -2,7 +2,7 @@ import random
 
 from ecs import OwnedEntity
 
-from src.entities.special.screen import Colors
+from src.entities.special.io import Colors
 from src.systems.acting.attack import ArmorKind, Health
 
 

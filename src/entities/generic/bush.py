@@ -1,6 +1,6 @@
 from ecs import OwnedEntity, Entity
 
-from src.entities.special.screen import Colors
+from src.entities.special.io import Colors
 from src.systems.acting.attack import ArmorKind, Health
 
 
