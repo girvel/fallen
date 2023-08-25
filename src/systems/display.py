@@ -1,10 +1,8 @@
 import curses
-import os
-from enum import Enum
 
 from ecs import create_system
 
-from src.entities.screen import Colors
+from src.entities.special.screen import Colors
 
 
 def _get_color_pair(entity):

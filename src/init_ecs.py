@@ -1,14 +1,11 @@
-import curses
 import logging
-from enum import Enum
 from pathlib import Path
 
 from ecs import Metasystem, create_system
 
-from src.entities.controller import Controller
-from src.entities.level import Level
-from src.entities.screen import Screen
-from src.lib.vector import Vector
+from src.entities.special.controller import Controller
+from src.entities.special.level import Level
+from src.entities.special.screen import Screen
 from src.systems.display import display_canvas
 from src.systems.input import read_input
 from src.systems.acting import act
