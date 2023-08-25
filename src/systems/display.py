@@ -3,6 +3,7 @@ import curses
 from ecs import create_system
 
 from src.entities.special.screen import Colors
+from src.systems.acting.move import Move
 
 
 def _get_color_pair(entity):
@@ -39,11 +40,20 @@ def display_canvas(level: 'level_grid', screen: 'screen_flag'):
     screen.game.refresh()
 
 @create_system
-def display_gui(screen: 'screen_flag'):
+def display_gui(controller: 'controls', screen: 'screen_flag'):
     screen.gui.clear()
     screen.gui.border()
 
-    screen.gui.addstr(2, 2, "Hello world")
+    pc = controller.controls
+
+    screen.gui.addstr(2, 2, pc.name)
+    screen.gui.addstr(3, 2, f"Health: {pc.health}")
+    screen.gui.addstr(4, 2, f"Attack power: {pc.power}")
+
+    if controller.mode == Move:
+        screen.gui.addstr(6, 2, "MOVE")
+    else:
+        screen.gui.addstr(6, 2, "ATTACK", curses.color_pair(Colors.WhiteOnRed.value))
 
     screen.gui.refresh()
 

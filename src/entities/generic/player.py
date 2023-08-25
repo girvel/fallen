@@ -4,7 +4,7 @@ from src.systems.ai import Kind
 
 
 class Player(OwnedEntity):
-    name = 'player_character'
+    name = 'Sir Aethan'
     character = '@'
     classifiers = {Kind.Animate}
     health = 100

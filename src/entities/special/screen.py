@@ -9,6 +9,7 @@ class Colors(Enum):
     Green = 2
     WhiteOnBlue = 3
     Yellow = 4
+    WhiteOnRed = 5
 
 class Screen(OwnedEntity):
     name = 'screen'
@@ -21,3 +22,4 @@ class Screen(OwnedEntity):
         curses.init_pair(Colors.Green.value, curses.COLOR_GREEN, curses.COLOR_BLACK)
         curses.init_pair(Colors.WhiteOnBlue.value, curses.COLOR_WHITE, curses.COLOR_BLUE)
         curses.init_pair(Colors.Yellow.value, curses.COLOR_YELLOW, curses.COLOR_BLACK)
+        curses.init_pair(Colors.WhiteOnRed.value, curses.COLOR_WHITE, curses.COLOR_RED)
