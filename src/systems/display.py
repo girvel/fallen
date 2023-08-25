@@ -19,14 +19,36 @@ def get_color_pair(entity):
 
 
 @create_system
-def display_canvas(level: 'level_grid', screen: 'screen_flag'):
-    screen.main.clear()
-
+def resize_windows(screen: 'screen_flag'):
     h, w = screen.main.getmaxyx()
+    screen.game.resize(h - 1, w - screen.gui_w)
+    screen.gui.mvwin(0, w - screen.gui_w)
+    screen.gui.resize(h - 1, screen.gui_w)
+
+@create_system
+def display_canvas(level: 'level_grid', screen: 'screen_flag'):
+    screen.game.clear()
+
+    h, w = screen.game.getmaxyx()
     for y in range(min(h, level.size.y)):
         for x in range(min(w, level.size.x)):
             entity = level.level_grid[y][x]
 
-            screen.main.addch(y, x, entity and entity.character or ".", get_color_pair(entity))
+            screen.game.addch(y, x, entity and entity.character or ".", get_color_pair(entity))
 
-    screen.main.refresh()
+    screen.game.refresh()
+
+@create_system
+def display_gui(screen: 'screen_flag'):
+    screen.gui.clear()
+    screen.gui.border()
+
+    screen.gui.addstr(2, 2, "Hello world")
+
+    screen.gui.refresh()
+
+display_systems = [
+    resize_windows,
+    display_canvas,
+    display_gui,
+]

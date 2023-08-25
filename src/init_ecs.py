@@ -7,7 +7,7 @@ from src.entities.special.controller import Controller
 from src.entities.special.level import Level
 from src.entities.special.screen import Screen
 from src.systems.ai import attack_if_possible
-from src.systems.display import display_canvas
+from src.systems.display import display_canvas, resize_windows, display_systems
 from src.systems.input import read_input
 from src.systems.acting import act
 from src.systems.temporal_components import remove_temporals
@@ -30,11 +30,11 @@ def init(stdscr):
         hades.entities_to_destroy.clear()
 
     for system in [
+        *display_systems,
         read_input,
         attack_if_possible,
+        *remove_temporals,  # TODO these should be separate functions
         act,
-        display_canvas,
-        *remove_temporals,
         destruction,
     ]:
         ms.add(system)
@@ -53,6 +53,8 @@ def init(stdscr):
     try:
         while True:
             ms.update()
+    except Exception as ex:
+        log.exception(ex)
     finally:
         log.info("Finishing game cycle")
         del screen.main

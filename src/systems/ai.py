@@ -41,8 +41,8 @@ def attack_if_possible(subject: 'choose_target', level: 'level_grid'):
             v2 = Vector(0, sign(v.y))
 
             if (subject.p + v1).get_in(level.level_grid) is not None:
-                subject.act = Move(v1)
-            elif (subject.p + v2).get_in(level.level_grid) is not None:
                 subject.act = Move(v2)
+            elif (subject.p + v2).get_in(level.level_grid) is not None:
+                subject.act = Move(v1)
             else:
                 subject.act = Move(random.choice([v1, v2]))
