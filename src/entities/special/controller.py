@@ -27,13 +27,13 @@ class Controller(OwnedEntity):
 
         def generate_movement_function(keys, direction):
             @_hotkey(*keys)
-            def _(level_grid, screen):
-                if (self.controls.p + direction).get_in(level_grid) is None:
+            def _(vision, screen):
+                if vision[self.controls.p + direction] is None:
                     act = Move
                 else:
                     act = self.mode
 
-                self.controls.act = act(direction)
+                return act(direction)
 
         for keys, direction in {
             ("w", ): up,
@@ -44,15 +44,15 @@ class Controller(OwnedEntity):
             generate_movement_function(keys, direction)
 
         @_hotkey("Q")
-        def quit_(level_grid, screen):
+        def quit_(vision, screen):
             sys.exit()
 
         @_hotkey("r")
-        def change_mode(level_grid, screen):
+        def change_mode(vision, screen):
             self.mode = (self.mode == Move) and Attack or Move
 
         @_hotkey("KEY_MOUSE")
-        def inspect(level_grid, screen):
+        def inspect(vision, screen):
             _, mx, my, _, _ = curses.getmouse()
-            self.controls.inspects = (screen.virtual_p + Vector(mx, my)).get_in(level_grid)
+            self.controls.inspects = vision.get(screen.virtual_p + Vector(mx, my))  # TODO inspects as an act
 

@@ -11,19 +11,6 @@ import logging
 log = logging.getLogger(__name__)
 
 
-def _get_color_pair(entity):
-    if entity is None:
-        return Colors.Default
-
-    if getattr(entity, "receives_damage", None):
-        return Colors.Red
-
-    return getattr(entity, "color", Colors.Default)
-
-def get_color_pair(entity):
-    return curses.color_pair(_get_color_pair(entity).value)
-
-
 @create_system
 def resize_windows(screen: 'screen_flag'):
     h, w = screen.main.getmaxyx()
@@ -85,6 +72,6 @@ def display_gui(controller: 'controls', screen: 'screen_flag'):
 
 display_systems = [
     resize_windows,
-    display_canvas,
+    # display_canvas,
     display_gui,
 ]

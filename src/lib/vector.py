@@ -54,7 +54,7 @@ class Vector:
         return Vector(sign(self.x), sign(self.y))
 
     def __eq__(self, other):
-        return self.x == other.x and self.y == other.y
+        return isinstance(other, Vector) and self.x == other.x and self.y == other.y
 
     def __pow__(self, power, modulo=None):
         if power == 0:
@@ -122,6 +122,9 @@ class Vector:
 
     def __le__(self, other):
         return other >= self
+
+    def __hash__(self):
+        return hash((self.x, self.y))
 
 
 zero = Vector(0, 0)

@@ -6,7 +6,7 @@ from ecs import Metasystem, create_system
 from src.entities.special.controller import Controller
 from src.entities.special.level import Level
 from src.entities.special.screen import Screen
-from src.systems.ai import attack_if_possible
+from src.systems.ai import think
 from src.systems.camera_following import camera_follow
 from src.systems.display import display_canvas, resize_windows, display_systems
 from src.systems.input import read_input
@@ -34,7 +34,7 @@ def init(stdscr):
         camera_follow,
         *display_systems,
         read_input,
-        attack_if_possible,
+        think,
         *remove_temporals,  # TODO these should be separate functions
         act,
         destruction,
@@ -48,7 +48,7 @@ def init(stdscr):
     player = level.load(ms, Path("assets/level.txt"))
 
     ms.add(Controller(player))
-    screen = ms.add(Screen(stdscr))
+    player.screen = ms.add(Screen(stdscr))
 
     # Game cycle
     log.info("Starting game cycle")
@@ -59,4 +59,4 @@ def init(stdscr):
         log.exception(ex)
     finally:
         log.info("Finishing game cycle")
-        del screen.main
+        del player.screen.main
