@@ -6,6 +6,7 @@ from ecs import Metasystem, create_system
 from src.entities.special.controller import Controller
 from src.entities.special.level import Level
 from src.entities.special.screen import Screen
+from src.systems.ai import attack_if_possible
 from src.systems.display import display_canvas
 from src.systems.input import read_input
 from src.systems.acting import act
@@ -30,6 +31,7 @@ def init(stdscr):
 
     for system in [
         read_input,
+        attack_if_possible,
         act,
         display_canvas,
         *remove_temporals,

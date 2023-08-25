@@ -1,5 +1,7 @@
 from math import cos, sin, pi, asin, copysign, acos
 
+from src.lib.toolkit import sign
+
 
 class Vector:
     def __init__(self, x, y):
@@ -41,6 +43,12 @@ class Vector:
 
     def __abs__(self):
         return self.squared_magnitude() ** 0.5
+
+    def is_minimal(self):
+        return abs(self.x + self.y) == 1
+
+    def integer_normalize(self):
+        return Vector(sign(self.x), sign(self.y))
 
     def __eq__(self, other):
         return self.x == other.x and self.y == other.y

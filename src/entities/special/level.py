@@ -3,12 +3,6 @@ from pathlib import Path
 
 from ecs import OwnedEntity
 
-from src.entities.generic.bush import Bush
-from src.entities.generic.player import Player
-from src.entities.generic.slash_wall import SlashWall
-from src.entities.generic.thick_wall import ThickWall
-from src.entities.generic.tree import Tree
-from src.entities.generic.water import Water
 from src.lib.toolkit import to_camel_case
 from src.lib.vector import Vector, zero
 
@@ -21,7 +15,6 @@ class Level(OwnedEntity):
     def put(self, movable, p):
         p.set_in(self.level_grid, movable)
         movable.p = p
-        movable.v = zero
         return movable
 
     palette = {}
