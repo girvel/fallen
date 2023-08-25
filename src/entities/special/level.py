@@ -12,9 +12,9 @@ from src.lib.vector import Vector, zero
 
 
 class Level(OwnedEntity):
-    def __init__(self):
-        super().__init__(name='level_container', size=None, level_grid=None)
-        self.level_grid = None
+    name = 'level_container'
+    size = None
+    level_grid = None
 
     def put(self, movable, p):
         p.set_in(self.level_grid, movable)

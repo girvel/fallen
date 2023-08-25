@@ -8,8 +8,12 @@ from src.systems.acting.move import Move
 
 
 class Controller(OwnedEntity):
+    name = 'controller'
+    hotkeys = {}
+    mode = Move
+
     def __init__(self, controls):
-        super().__init__(name='controller', controls=controls, hotkeys={}, mode=Move)
+        super().__init__(controls=controls)
 
         class _hotkey:
             def __init__(hk, hotkeys):

@@ -11,8 +11,11 @@ class Colors(Enum):
     Yellow = 4
 
 class Screen(OwnedEntity):
+    name = 'screen'
+    screen_flag = None
+
     def __init__(self, stdscr):
-        super().__init__(name='screen', screen_flag=None, main=stdscr)
+        super().__init__(main=stdscr)
 
         curses.init_pair(Colors.Red.value, curses.COLOR_RED, curses.COLOR_BLACK)
         curses.init_pair(Colors.Green.value, curses.COLOR_GREEN, curses.COLOR_BLACK)
