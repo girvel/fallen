@@ -7,6 +7,10 @@ from src.lib.vector import up, down, left, right, Vector
 from src.systems.acting.attack import Attack
 from src.systems.acting.move import Move
 
+import logging
+
+log = logging.getLogger(__name__)
+
 
 class Controller(OwnedEntity):
     name = 'controller'
@@ -14,45 +18,60 @@ class Controller(OwnedEntity):
     mode = Move
     controller_flag = None
 
-    def __init__(self, controls):
-        super().__init__(controls=controls)
+    def __init__(self):
+        self.hotkeys = generate_default_hotkeys()
 
-        class _hotkey:
-            def __init__(hk, *hotkeys):
-                hk.hotkeys = hotkeys
+    def wait_for_input(self, screen, subject, vision):
+        while True:
+            hotkey = screen.main.getkey()
+            if hotkey in self.hotkeys:
+                break
+            log.debug(f"Ignored: [{hotkey}]")
 
-            def __call__(hk, f):
-                for hotkey in hk.hotkeys:
-                    self.hotkeys[hotkey] = f
+        log.debug(f"[{hotkey}]")
+        return self.hotkeys[hotkey](subject, vision, self, screen)
 
-        def generate_movement_function(keys, direction):
-            @_hotkey(*keys)
-            def _(vision, screen):
-                if vision.get(self.controls.p + direction) is None:
-                    act = Move
-                else:
-                    act = self.mode
 
-                return act(direction)
+def generate_default_hotkeys():
+    result = {}
 
-        for keys, direction in {
-            ("w", ): up,
-            ("s", ): down,
-            ("a", ): left,
-            ("d", ): right,
-        }.items():
-            generate_movement_function(keys, direction)
+    class _hotkey:
+        def __init__(self, *hotkeys):
+            self.hotkeys = hotkeys
 
-        @_hotkey("Q")
-        def quit_(vision, screen):
-            sys.exit()
+        def __call__(self, f):
+            for hotkey in self.hotkeys:
+                result[hotkey] = f
 
-        @_hotkey("r")
-        def change_mode(vision, screen):
-            self.mode = (self.mode == Move) and Attack or Move
+    def generate_movement_function(keys, direction):
+        @_hotkey(*keys)
+        def _(subject, vision, controller, screen):
+            if vision.get(subject.p + direction) is None:
+                act = Move
+            else:
+                act = controller.mode
 
-        @_hotkey("KEY_MOUSE")
-        def inspect(vision, screen):
-            _, mx, my, _, _ = curses.getmouse()
-            self.controls.inspects = vision.get(screen.virtual_p + Vector(mx, my))  # TODO inspects as an act
+            return act(direction)
 
+    for keys, direction in {
+        ("w", ): up,
+        ("s", ): down,
+        ("a", ): left,
+        ("d", ): right,
+    }.items():
+        generate_movement_function(keys, direction)
+
+    @_hotkey("Q")
+    def quit_(subject, vision, controller, screen):
+        sys.exit()
+
+    @_hotkey("r")
+    def change_mode(subject, vision, controller, screen):
+        controller.mode = (controller.mode == Move) and Attack or Move
+
+    @_hotkey("KEY_MOUSE")
+    def inspect(subject, vision, controller, screen):
+        _, mx, my, _, _ = curses.getmouse()
+        subject.inspects = vision.get(screen.virtual_p + Vector(mx, my))  # TODO inspects as an act
+
+    return result

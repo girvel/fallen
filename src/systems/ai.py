@@ -3,7 +3,7 @@ from dataclasses import dataclass
 from enum import Enum
 from math import copysign
 
-from ecs import create_system
+from ecs import create_system, OwnedEntity
 
 from src.lib.toolkit import sign
 from src.lib.vector import Vector, one, up, down, left, right
@@ -20,6 +20,12 @@ class Senses:
     hearing: int
     smell: int
 
+@dataclass
+class Perception:
+    vision: dict[Vector, OwnedEntity]
+    hearing: dict[Vector, int]
+    smell: dict[Vector, OwnedEntity]
+
 @create_system
 def think(subject: 'make_decision', level: 'level_grid'):
     if "senses" in subject:
@@ -32,15 +38,16 @@ def think(subject: 'make_decision', level: 'level_grid'):
                     vision |= {
                         p + d for d in [ up, down, left, right, ] if d != (subject.p - p).minimize()
                     }  # TODO bottleneck
-        vision = {p: p.get_in(level.level_grid) for p in vision}
-        hearing = None
-        smell = None
-    else:
-        vision = None
-        hearing = None
-        smell = None
 
-    subject.act = subject.make_decision(vision, hearing, smell)
+        perception = Perception(
+            {p: p.get_in(level.level_grid) for p in vision},
+            None,
+            None,
+        )
+    else:
+        perception = Perception(None, None, None)
+
+    subject.act = subject.make_decision(perception)
 
     # start = subject.p - subject.vision * one
     # end = subject.p + subject.vision * one

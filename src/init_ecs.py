@@ -7,7 +7,6 @@ from src.entities.special.controller import Controller
 from src.entities.special.level import Level
 from src.entities.special.screen import Screen
 from src.systems.ai import think
-from src.systems.camera_following import camera_follow
 from src.systems.display import display_canvas, resize_windows, display_systems
 from src.systems.input import read_input
 from src.systems.acting import act
@@ -31,7 +30,6 @@ def init(stdscr):
         hades.entities_to_destroy.clear()
 
     for system in [
-        camera_follow,
         *display_systems,
         read_input,
         think,
@@ -44,11 +42,14 @@ def init(stdscr):
     # Entities
     ms.create(name='hades', entities_to_destroy=[])
 
+    controller = ms.add(Controller())
+    screen = ms.add(Screen(stdscr))
+
     level = ms.add(Level())
     player = level.load(ms, Path("assets/level.txt"))
 
-    ms.add(Controller(player))
-    player.screen = ms.add(Screen(stdscr))
+    player.initialize(controller, screen)
+    screen.refresh_level_size(level.size)
 
     # Game cycle
     log.info("Starting game cycle")
