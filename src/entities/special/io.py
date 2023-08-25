@@ -10,6 +10,7 @@ from src.lib.vector import Vector, zero, up, down, left, right
 import logging
 
 from src.systems.acting.attack import Attack
+from src.systems.acting.inspect import Inspect
 from src.systems.acting.move import Move
 
 log = logging.getLogger(__name__)
@@ -118,7 +119,9 @@ class IO(OwnedEntity):
                 p_on_screen.y, p_on_screen.x,
                 entity and entity.character or ".",
                 get_color_pair(entity) | (
-                    entity and entity == subject.inspects and curses.A_REVERSE or 0
+                    entity and isinstance(subject.act, Inspect) and subject.act.subject == entity
+                        and curses.A_REVERSE
+                        or 0
                 )
             )
 
@@ -143,8 +146,8 @@ class IO(OwnedEntity):
         else:
             self.gui.addstr(8, 2, "ATTACK", Colors.WhiteOnRed.format())
 
-        if subject.inspects:
-            self.gui.addstr(10, 2, f"Inspects {subject.inspects.name}")
+        if isinstance(subject.act, Inspect):
+            self.gui.addstr(10, 2, f"Inspects {subject.act.subject.name}")
 
         self.gui.refresh()
 
@@ -199,6 +202,6 @@ def generate_default_hotkeys():
     @_hotkey("KEY_MOUSE")
     def inspect(subject, vision, io):
         _, mx, my, _, _ = curses.getmouse()
-        subject.inspects = vision.get(io.virtual_p + Vector(mx, my))  # TODO inspects as an act
+        return Inspect(vision.get(io.virtual_p + Vector(mx, my)))
 
     return result

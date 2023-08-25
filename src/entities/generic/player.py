@@ -7,9 +7,7 @@ from src.systems.ai import Kind, Senses
 class Player(OwnedEntity):
     name = 'Sir Aethan'
     character = '@'
-    solid_flag = None
-
-    inspects = None
+    act = None
 
     senses = Senses(25, 40, 1)
 
