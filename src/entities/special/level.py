@@ -1,3 +1,4 @@
+from importlib.util import spec_from_file_location, module_from_spec
 from pathlib import Path
 
 from ecs import OwnedEntity
@@ -8,6 +9,7 @@ from src.entities.generic.slash_wall import SlashWall
 from src.entities.generic.thick_wall import ThickWall
 from src.entities.generic.tree import Tree
 from src.entities.generic.water import Water
+from src.lib.toolkit import to_camel_case
 from src.lib.vector import Vector, zero
 
 
@@ -22,10 +24,16 @@ class Level(OwnedEntity):
         movable.v = zero
         return movable
 
-    palette = {cls.character: cls for cls in [
-        Bush, Player, SlashWall, ThickWall, Tree, Water,
-        # TODO auto import?
-    ]}
+    palette = {}
+    for p in Path("src/entities/generic").iterdir():
+        if p.suffix != '.py': continue
+
+        spec = spec_from_file_location(p.stem, p)
+        module = module_from_spec(spec)
+        spec.loader.exec_module(module)
+
+        cls = getattr(module, to_camel_case(p.stem))
+        palette[cls.character] = cls
 
     def load(self, metasystem, path: Path):
         player = None
