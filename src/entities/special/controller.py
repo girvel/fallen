@@ -28,7 +28,7 @@ class Controller(OwnedEntity):
         def generate_movement_function(keys, direction):
             @_hotkey(*keys)
             def _(vision, screen):
-                if vision[self.controls.p + direction] is None:
+                if vision.get(self.controls.p + direction) is None:
                     act = Move
                 else:
                     act = self.mode

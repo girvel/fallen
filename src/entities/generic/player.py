@@ -29,6 +29,7 @@ def get_color_pair(entity):
 class Player(OwnedEntity):
     name = 'Sir Aethan'
     character = '@'
+    solid_flag = None
 
     inspects = None
     screen = None

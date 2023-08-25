@@ -50,6 +50,11 @@ class Vector:
     def is_minimal(self):
         return abs(self.x) + abs(self.y) == 1
 
+    def minimize(self):
+        if abs(self.x) > abs(self.y):
+            return Vector(sign(self.x), 0)
+        return Vector(0, sign(self.y))
+
     def integer_normalize(self):
         return Vector(sign(self.x), sign(self.y))
 

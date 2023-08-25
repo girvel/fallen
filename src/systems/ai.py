@@ -24,17 +24,14 @@ class Senses:
 def think(subject: 'make_decision', level: 'level_grid'):
     if "senses" in subject:
         # TODO optimize
-        vision = {subject.p}
-        for _ in range(subject.senses.vision):
+        vision = {subject.p, subject.p + up, subject.p + down, subject.p + left, subject.p + right}
+        for _ in range(subject.senses.vision - 1):
             for p in vision.copy():
                 entity = p.get_in(level.level_grid)
                 if not entity or "solid_flag" not in entity:
                     vision |= {
-                        p + up,
-                        p + down,
-                        p + left,
-                        p + right,
-                    }
+                        p + d for d in [ up, down, left, right, ] if d != (subject.p - p).minimize()
+                    }  # TODO bottleneck
         vision = {p: p.get_in(level.level_grid) for p in vision}
         hearing = None
         smell = None

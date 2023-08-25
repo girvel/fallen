@@ -8,6 +8,7 @@ class AbstractWall(OwnedEntity):
     name = 'AbstractWall'
     character = None
     color = Colors.Yellow
+    solid_flag = None
 
     def __init__(self):
         self.health = Health(2000, ArmorKind.Wood)
