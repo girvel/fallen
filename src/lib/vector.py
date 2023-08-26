@@ -133,9 +133,10 @@ class Vector:
 
 
 zero = Vector(0, 0)
-one = Vector(1, 1)
+one  = Vector(1, 1)
 
 up    = Vector( 0, -1)
 down  = Vector( 0,  1)
 right = Vector( 1,  0)
 left  = Vector(-1,  0)
+

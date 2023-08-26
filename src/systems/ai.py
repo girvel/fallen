@@ -1,14 +1,13 @@
-import random
 from dataclasses import dataclass
 from enum import Enum
-from math import copysign
 
 from ecs import create_system, OwnedEntity
 
-from src.lib.toolkit import sign
-from src.lib.vector import Vector, one, up, down, left, right
-from src.systems.acting.attack import Attack
-from src.systems.acting.move import Move
+from src.lib.vector import Vector, up, down, left, right, one
+
+import logging
+
+log = logging.getLogger(__name__)
 
 
 class Kind(Enum):
@@ -26,51 +25,49 @@ class Perception:
     hearing: dict[Vector, int]
     smell: dict[Vector, OwnedEntity]
 
+def calculate_vision(level_grid, start, r):
+    vision = {start, start + up, start + down, start + left, start + right}
+    vision_border = {start + up, start + down, start + left, start + right}
+
+    ray_directions = [
+        [ up, left, right, ],
+        [ up, down, right, ],
+        [ down, left, right, ],
+        [ up, down, left, ],
+    ]
+
+    for _ in range(r - 1):
+        next_vision_border = set()
+        for p in vision_border:
+            entity = p.get_in(level_grid)
+            if entity and "solid_flag" in entity: continue
+
+            direction = p - start
+            if direction.y <= -abs(direction.x):
+                direction = ray_directions[0]
+            elif direction.x >= abs(direction.y):
+                direction = ray_directions[1]
+            elif direction.y >= abs(direction.x):
+                direction = ray_directions[2]
+            else:
+                direction = ray_directions[3]
+
+            for d in direction:
+                next_vision_border.add(p + d)
+                vision.add(p + d)
+
+        vision_border = next_vision_border
+
+    return {p: p.get_in(level_grid) for p in vision}
+
 @create_system
 def think(subject: 'ai', level: 'level_grid'):
-    if "senses" in subject:
-        # TODO optimize
-        vision = {subject.p, subject.p + up, subject.p + down, subject.p + left, subject.p + right}
-        vision_border = {subject.p + up, subject.p + down, subject.p + left, subject.p + right}
-
-        ray_directions = [
-            [ up, left, right, ],
-            [ up, down, right, ],
-            [ down, left, right, ],
-            [ up, down, left, ],
-        ]
-
-        for _ in range(subject.senses.vision - 1):
-            next_vision_border = set()
-            for p in vision_border:
-                entity = p.get_in(level.level_grid)
-                if entity and "solid_flag" in entity: continue
-
-                direction = p - subject.p
-                if direction.y <= -abs(direction.x):
-                    direction = ray_directions[0]
-                elif direction.x >= abs(direction.y):
-                    direction = ray_directions[1]
-                elif direction.y >= abs(direction.x):
-                    direction = ray_directions[2]
-                else:
-                    direction = ray_directions[3]
-
-                for d in direction:
-                    next_vision_border.add(p + d)
-                    vision.add(p + d)
-
-            vision_border = next_vision_border
-
-        perception = Perception(
-            {p: p.get_in(level.level_grid) for p in vision},
-            None,
-            None,
-        )
-    else:
-        perception = Perception(None, None, None)
-
-    subject.act = subject.ai.make_decision(subject, perception)
+    subject.act = subject.ai.make_decision(
+        subject,
+        "senses" in subject
+            and Perception(calculate_vision(level.level_grid, subject.p, subject.senses.vision), None, None)
+            or Perception(None, None, None),
+    )
 
     # start = subject.p - subject.vision * one
     # end = subject.p + subject.vision * one
