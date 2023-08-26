@@ -89,8 +89,11 @@ def calculate_vision(level_grid, start, r):
             if entity is not None and "solid_flag" in entity:
                 vision[sub((x, y), edge)] = -1
 
-    vision[r][r] = 0
-    project_rays(vision, r, r, r, r, r)
+    vision[r][r] = r
+    project_rays(vision, r + 1, r, r - 1, r, r)
+    project_rays(vision, r - 1, r, r - 1, r, r)
+    project_rays(vision, r, r + 1, r - 1, r, r)
+    project_rays(vision, r, r - 1, r - 1, r, r)
 
     result = {}
     for y in range(max(edge[1], 0), min(edge[1] + d, level_h)):
