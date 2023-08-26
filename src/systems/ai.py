@@ -25,40 +25,62 @@ class Perception:
     hearing: dict[Vector, int]
     smell: dict[Vector, OwnedEntity]
 
+def project_rays(vision, x, y, power, w, h):
+    if x < 0 or y < 0 or x >= w or y >= h:
+        return
+
+    value = vision[y][x]
+    if value >= power:
+        return
+
+    if value == -1:
+        vision[y][x] = 1000
+        return
+
+    vision[y][x] = power
+
+    power -= 1
+
+    dx = x - w // 2
+    dy = y - h // 2
+
+    if dy <= -abs(dx):
+        project_rays(vision, x, y - 1, power, w, h)
+        project_rays(vision, x - 1, y, power, w, h)
+        project_rays(vision, x + 1, y, power, w, h)
+    elif dx >= abs(dy):
+        project_rays(vision, x, y - 1, power, w, h)
+        project_rays(vision, x, y + 1, power, w, h)
+        project_rays(vision, x + 1, y, power, w, h)
+    elif dy >= abs(dx):
+        project_rays(vision, x, y + 1, power, w, h)
+        project_rays(vision, x - 1, y, power, w, h)
+        project_rays(vision, x + 1, y, power, w, h)
+    else:
+        project_rays(vision, x, y - 1, power, w, h)
+        project_rays(vision, x, y + 1, power, w, h)
+        project_rays(vision, x - 1, y, power, w, h)
+
 def calculate_vision(level_grid, start, r):
-    vision = {start, start + up, start + down, start + left, start + right}
-    vision_border = {start + up, start + down, start + left, start + right}
+    size = one * (2 * r + 1)
+    edge = start - one * r
+    vision = []  # TODO generator?
 
-    ray_directions = [
-        [ up, left, right, ],
-        [ up, down, right, ],
-        [ down, left, right, ],
-        [ up, down, left, ],
-    ]
+    for vy in range(0, size.y):
+        line = []
+        for vx in range(0, size.x):
+            entity = (edge + Vector(vx, vy)).get_in(level_grid)
+            line.append(entity and "solid_flag" in entity and -1 or 0)
+        vision.append(line)
 
-    for _ in range(r - 1):
-        next_vision_border = set()
-        for p in vision_border:
-            entity = p.get_in(level_grid)
-            if entity and "solid_flag" in entity: continue
-
-            direction = p - start
-            if direction.y <= -abs(direction.x):
-                direction = ray_directions[0]
-            elif direction.x >= abs(direction.y):
-                direction = ray_directions[1]
-            elif direction.y >= abs(direction.x):
-                direction = ray_directions[2]
-            else:
-                direction = ray_directions[3]
-
-            for d in direction:
-                next_vision_border.add(p + d)
-                vision.add(p + d)
-
-        vision_border = next_vision_border
-
-    return {p: p.get_in(level_grid) for p in vision}
+    vision[r][r] = 0
+    project_rays(vision, r, r, r + 1, size.x, size.y)
+    return {
+        p: p.get_in(level_grid)
+        for y, line in enumerate(vision)
+        for x, v in enumerate(line)
+        if v > 0 and (p := Vector(x, y) + edge)
+    }
 
 @create_system
 def think(subject: 'ai', level: 'level_grid'):
