@@ -15,7 +15,9 @@ damage_kinds:
   Radiant:
 
 armor_kinds:
-  Organic: [[], [Acid, Cold, Crushing, Fire, Lightning, Piercing, Slashing, Thunder]]
-  Wood: [[Cold, Piercing], [Fire, Lightning]]
-  Steel: [[Slashing], [Fire, Lightning]]
-  Stone: [[Acid, Slashing, Piercing], [Crushing]]
+  Organic: [[], [Acid]]
+  Steel: [[Slashing], []]
+
+  Glass: [[Acid], [Crushing, Piercing, Slashing, Thunder]]
+  Wood: [[Cold, Piercing], [Fire]]
+  Stone: [[Acid, Cold, Fire, Lightning, Piercing, Slashing, Thunder], []]
