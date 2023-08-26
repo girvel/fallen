@@ -52,10 +52,12 @@ class IO(OwnedEntity):
     # output
     mode = Move
 
-    def __init__(self, stdscr):
+    def __init__(self, stdscr, debug_track=None):
         self.main = stdscr
         self.game = curses.newwin(1, 1, 0, 0)
         self.gui = curses.newwin(1, 1, 0, 0)
+
+        self.debug_track = iter(debug_track)
 
         self.hotkeys = generate_default_hotkeys()
 
@@ -153,7 +155,11 @@ class IO(OwnedEntity):
 
     def wait_for_input(self, subject, vision):
         while True:
-            hotkey = self.main.getkey()
+            if self.debug_track is not None:
+                hotkey = next(self.debug_track)
+            else:
+                hotkey = self.main.getkey()
+
             if hotkey in self.hotkeys:
                 break
             log.debug(f"Ignored: [{hotkey}]")

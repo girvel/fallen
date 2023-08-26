@@ -3,6 +3,7 @@ from pathlib import Path
 
 from ecs import Metasystem, create_system
 
+from assets.debug_track import track
 from src.entities.special.level import Level
 from src.entities.special.io import IO
 from src.systems.ai import think
@@ -39,7 +40,7 @@ def init(stdscr):
     # Entities
     ms.create(name='hades', entities_to_destroy=[])
 
-    io = ms.add(IO(stdscr))
+    io = ms.add(IO(stdscr, debug_track=track))
 
     level = ms.add(Level())
     player = level.load(ms, Path("assets/level.txt"))
