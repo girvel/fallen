@@ -40,7 +40,7 @@ def init(stdscr):
     # Entities
     ms.create(name='hades', entities_to_destroy=[])
 
-    io = ms.add(IO(stdscr, debug_track=track))
+    io = ms.add(IO(stdscr))
 
     level = ms.add(Level())
     player = level.load(ms, Path("assets/level.txt"))
