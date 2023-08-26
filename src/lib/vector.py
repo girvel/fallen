@@ -36,9 +36,9 @@ def unsafe_set(grid, p, value):
     assert ge(p, zero) and lt(p, size), f"Can not set grid cell at {p} outside of (0, 0) - {size}"
     array[p[1]][p[0]] = value
 
-def safe_get(grid, p):
+def safe_get(grid, p, default=None):
     array, size = grid
     return (ge(p, zero) and lt(p, size)
         and array[p[1]][p[0]]
-        or None
+        or default
     )

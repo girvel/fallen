@@ -3,7 +3,6 @@ from pathlib import Path
 
 from ecs import Metasystem, create_system
 
-from assets.debug_track import track
 from src.entities.special.level import Level
 from src.entities.special.io import IO
 from src.lib.vector import unsafe_set
@@ -47,7 +46,7 @@ def init(stdscr):
     player = level.load(ms, Path("assets/level.txt"))
 
     player.ai = io
-    io.refresh_level_size(level.size)
+    io.connect_to_level(level)
 
     # Game cycle
     log.info("Starting game cycle")

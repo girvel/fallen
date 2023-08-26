@@ -5,7 +5,7 @@ from statistics import median
 
 from ecs import OwnedEntity
 
-from src.lib.vector import zero, up, down, left, right, add, le, lt, floordiv, sub
+from src.lib.vector import zero, up, down, left, right, add, le, lt, floordiv, sub, safe_get
 
 import logging
 
@@ -47,7 +47,7 @@ class IO(OwnedEntity):
     virtual_p = (0, 0)
     following_offset = (0, 0)  # modified on resize
     gui_w = 35
-    level_size = None
+    level = None
 
     # output
     mode = Move
@@ -70,8 +70,8 @@ class IO(OwnedEntity):
         curses.init_pair(Colors.Yellow.value, curses.COLOR_YELLOW, curses.COLOR_BLACK)
         curses.init_pair(Colors.WhiteOnRed.value, curses.COLOR_WHITE, curses.COLOR_RED)
 
-    def refresh_level_size(self, level_size):
-        self.level_size = level_size
+    def connect_to_level(self, level):
+        self.level = level
 
     def make_decision(self, subject, perception):
         self.resize_windows()
@@ -97,14 +97,14 @@ class IO(OwnedEntity):
                 subject.p[0] - w + self.following_offset[0],
                 self.virtual_p[0],
                 subject.p[0] - self.following_offset[0],
-                self.level_size[0] - w,
+                self.level.size[0] - w,
             )),
             median((
                 0,
                 subject.p[1] - h + self.following_offset[1],
                 self.virtual_p[1],
                 subject.p[1] - self.following_offset[1],
-                self.level_size[1] - h,
+                self.level.size[1] - h,
             ))
         )
 
@@ -117,15 +117,23 @@ class IO(OwnedEntity):
             p_on_screen = sub(p, self.virtual_p)
             if not (le(zero, p_on_screen) and lt(p_on_screen, screen_size)): continue
 
-            self.game.addch(
-                p_on_screen[1], p_on_screen[0],
-                entity and entity.character or ".",
-                get_color_pair(entity) | (
-                    entity and isinstance(subject.act, Inspect) and subject.act.subject == entity
-                        and curses.A_REVERSE
-                        or 0
+            if entity is not None:
+                self.game.addch(
+                    p_on_screen[1], p_on_screen[0],
+                    entity.character,
+                    get_color_pair(entity) | (
+                        entity and isinstance(subject.act, Inspect) and subject.act.subject == entity
+                            and curses.A_REVERSE
+                            or 0
+                    ) | curses.A_BOLD
                 )
-            )
+            else:
+                tile = safe_get(self.level.tile_grid, p)
+                self.game.addch(
+                    p_on_screen[1], p_on_screen[0],
+                    tile and tile.character or ".",
+                    (tile and tile.color or Colors.Default).format()
+                )
 
         self.game.refresh()
 
