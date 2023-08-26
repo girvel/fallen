@@ -1,7 +1,10 @@
 from dataclasses import dataclass
 from enum import Enum
 
+import numba as numba
+import numpy
 from ecs import create_system, OwnedEntity
+from line_profiler import profile
 
 from src.lib.vector import Vector, up, down, left, right, one
 
@@ -25,19 +28,21 @@ class Perception:
     hearing: dict[Vector, int]
     smell: dict[Vector, OwnedEntity]
 
+
+@numba.njit(parallel=True)
 def project_rays(vision, x, y, power, w, h):
     if x < 0 or y < 0 or x >= w or y >= h:
         return
 
-    value = vision[y][x]
+    value = vision[x, y]
     if value >= power:
         return
 
     if value == -1:
-        vision[y][x] = 1000
+        vision[x, y] = 1000
         return
 
-    vision[y][x] = power
+    vision[x, y] = power
 
     power -= 1
 
@@ -61,24 +66,23 @@ def project_rays(vision, x, y, power, w, h):
         project_rays(vision, x, y + 1, power, w, h)
         project_rays(vision, x - 1, y, power, w, h)
 
+@profile
 def calculate_vision(level_grid, start, r):
     size = one * (2 * r + 1)
     edge = start - one * r
-    vision = []  # TODO generator?
+    vision = numpy.full((size.x, size.y), 0)
 
     for vy in range(0, size.y):
-        line = []
         for vx in range(0, size.x):
             entity = (edge + Vector(vx, vy)).get_in(level_grid)
-            line.append(entity and "solid_flag" in entity and -1 or 0)
-        vision.append(line)
+            if entity and "solid_flag" in entity:
+                vision[vx, vy] = -1
 
     vision[r][r] = 0
     project_rays(vision, r, r, r + 1, size.x, size.y)
     return {
         p: p.get_in(level_grid)
-        for y, line in enumerate(vision)
-        for x, v in enumerate(line)
+        for (x, y), v in numpy.ndenumerate(vision)
         if v > 0 and (p := Vector(x, y) + edge)
     }
 

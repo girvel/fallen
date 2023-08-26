@@ -2,4 +2,5 @@
 /fallen.iml
 /.last.log
 /.profile
+/*.lprof
 **/__pycache__
