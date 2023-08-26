@@ -6,7 +6,7 @@ import numpy
 from ecs import create_system, OwnedEntity
 from line_profiler import profile
 
-from src.lib.vector import Vector, up, down, left, right, one
+from src.lib.vector import Vector, up, down, left, right, one, add, sub
 
 import logging
 
@@ -29,8 +29,8 @@ class Perception:
     smell: dict[Vector, OwnedEntity]
 
 
-@numba.njit(parallel=True)
-def project_rays(vision, x, y, power, w, h):
+@numba.njit
+def project_rays(vision, x, y, power, w, h):  # TODO remove w, h?
     if x < 0 or y < 0 or x >= w or y >= h:
         return
 
@@ -68,23 +68,36 @@ def project_rays(vision, x, y, power, w, h):
 
 @profile
 def calculate_vision(level_grid, start, r):
-    size = one * (2 * r + 1)
-    edge = start - one * r
-    vision = numpy.full((size.x, size.y), 0)
+    d = 2 * r + 1
+    level_w = len(level_grid[0])
+    level_h = len(level_grid)
 
-    for vy in range(0, size.y):
-        for vx in range(0, size.x):
-            entity = (edge + Vector(vx, vy)).get_in(level_grid)
-            if entity and "solid_flag" in entity:
-                vision[vx, vy] = -1
+    edge = (start.x - r, start.y - r)
+    vision = numpy.full((d, d), 0)  # TODO crop it to not intersect level borders
+
+    for y in range(max(edge[1], 0), min(edge[1] + d, level_h)):
+        for x in range(max(edge[0], 0), min(edge[0] + d, level_w)):
+            entity = level_grid[y][x]
+            if entity is not None and "solid_flag" in entity:
+                vision[sub((x, y), edge)] = -1
 
     vision[r][r] = 0
-    project_rays(vision, r, r, r + 1, size.x, size.y)
-    return {
-        p: p.get_in(level_grid)
-        for (x, y), v in numpy.ndenumerate(vision)
-        if v > 0 and (p := Vector(x, y) + edge)
-    }
+    project_rays(vision, r, r, r + 1, d, d)
+
+    result = {}
+    for y in range(max(edge[1], 0), min(edge[1] + d, level_h)):
+        for x in range(max(edge[0], 0), min(edge[0] + d, level_w)):
+            if vision[x - edge[0], y - edge[1]] <= 0: continue
+
+            p = Vector(x, y)
+            result[p] = level_grid[y][x]
+
+    return result
+    # return {
+    #     p: p.get_in(level_grid)
+    #     for (x, y), v in numpy.ndenumerate(vision)
+    #     if v > 0 and (p := Vector(*add((x, y), edge)))
+    # }
 
 @create_system
 def think(subject: 'ai', level: 'level_grid'):
