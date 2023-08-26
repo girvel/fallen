@@ -29,7 +29,7 @@ class Perception:
     smell: dict[Vector, OwnedEntity]
 
 
-@numba.njit
+@numba.njit(parallel=True)
 def project_rays(vision, x, y, power, w, h):  # TODO remove w, h?
     if x < 0 or y < 0 or x >= w or y >= h:
         return
@@ -50,23 +50,33 @@ def project_rays(vision, x, y, power, w, h):  # TODO remove w, h?
     dy = y - h // 2
 
     if dy <= -abs(dx):
-        project_rays(vision, x, y - 1, power, w, h)
-        project_rays(vision, x - 1, y, power, w, h)
-        project_rays(vision, x + 1, y, power, w, h)
+        dirs = (
+            (x, y - 1),
+            (x - 1, y),
+            (x + 1, y),
+        )
     elif dx >= abs(dy):
-        project_rays(vision, x, y - 1, power, w, h)
-        project_rays(vision, x, y + 1, power, w, h)
-        project_rays(vision, x + 1, y, power, w, h)
+        dirs = (
+            (x, y - 1),
+            (x, y + 1),
+            (x + 1, y),
+        )
     elif dy >= abs(dx):
-        project_rays(vision, x, y + 1, power, w, h)
-        project_rays(vision, x - 1, y, power, w, h)
-        project_rays(vision, x + 1, y, power, w, h)
+        dirs = (
+            (x, y + 1),
+            (x - 1, y),
+            (x + 1, y),
+        )
     else:
-        project_rays(vision, x, y - 1, power, w, h)
-        project_rays(vision, x, y + 1, power, w, h)
-        project_rays(vision, x - 1, y, power, w, h)
+        dirs = (
+            (x, y - 1),
+            (x, y + 1),
+            (x - 1, y),
+        )
 
-@profile
+    for i in range(3):
+        project_rays(vision, *dirs[i], power, w, h)
+
 def calculate_vision(level_grid, start, r):
     d = 2 * r + 1
     level_w = len(level_grid[0])
