@@ -57,7 +57,7 @@ class IO(OwnedEntity):
         self.game = curses.newwin(1, 1, 0, 0)
         self.gui = curses.newwin(1, 1, 0, 0)
 
-        self.debug_track = iter(debug_track)
+        self.debug_track = debug_track and iter(debug_track)
 
         self.hotkeys = generate_default_hotkeys()
 

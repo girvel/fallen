@@ -29,11 +29,8 @@ class Perception:
     smell: dict[Vector, OwnedEntity]
 
 
-@numba.njit(parallel=True)
-def project_rays(vision, x, y, power, w, h):  # TODO remove w, h?
-    if x < 0 or y < 0 or x >= w or y >= h:
-        return
-
+@numba.njit
+def project_rays(vision, x, y, power, cx, cy):
     value = vision[x, y]
     if value >= power:
         return
@@ -46,8 +43,8 @@ def project_rays(vision, x, y, power, w, h):  # TODO remove w, h?
 
     power -= 1
 
-    dx = x - w // 2
-    dy = y - h // 2
+    dx = x - cx
+    dy = y - cy
 
     if dy <= -abs(dx):
         dirs = (
@@ -75,7 +72,8 @@ def project_rays(vision, x, y, power, w, h):  # TODO remove w, h?
         )
 
     for i in range(3):
-        project_rays(vision, *dirs[i], power, w, h)
+        d = dirs[i]
+        project_rays(vision, d[0], d[1], power, cx, cy)
 
 def calculate_vision(level_grid, start, r):
     d = 2 * r + 1
@@ -92,7 +90,7 @@ def calculate_vision(level_grid, start, r):
                 vision[sub((x, y), edge)] = -1
 
     vision[r][r] = 0
-    project_rays(vision, r, r, r + 1, d, d)
+    project_rays(vision, r, r, r, r, r)
 
     result = {}
     for y in range(max(edge[1], 0), min(edge[1] + d, level_h)):
