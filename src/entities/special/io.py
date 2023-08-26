@@ -202,6 +202,7 @@ def generate_default_hotkeys():
     @_hotkey("KEY_MOUSE")
     def inspect(subject, vision, io):
         _, mx, my, _, _ = curses.getmouse()
-        return Inspect(vision.get(io.virtual_p + Vector(mx, my)))
+        target = vision.get(io.virtual_p + Vector(mx, my))
+        return target and Inspect(target)
 
     return result

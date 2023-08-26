@@ -31,13 +31,36 @@ def think(subject: 'ai', level: 'level_grid'):
     if "senses" in subject:
         # TODO optimize
         vision = {subject.p, subject.p + up, subject.p + down, subject.p + left, subject.p + right}
+        vision_border = {subject.p + up, subject.p + down, subject.p + left, subject.p + right}
+
+        ray_directions = [
+            [ up, left, right, ],
+            [ up, down, right, ],
+            [ down, left, right, ],
+            [ up, down, left, ],
+        ]
+
         for _ in range(subject.senses.vision - 1):
-            for p in vision.copy():
+            next_vision_border = set()
+            for p in vision_border:
                 entity = p.get_in(level.level_grid)
-                if not entity or "solid_flag" not in entity:
-                    vision |= {
-                        p + d for d in [ up, down, left, right, ] if d != (subject.p - p).minimize()
-                    }  # TODO bottleneck
+                if entity and "solid_flag" in entity: continue
+
+                direction = p - subject.p
+                if direction.y <= -abs(direction.x):
+                    direction = ray_directions[0]
+                elif direction.x >= abs(direction.y):
+                    direction = ray_directions[1]
+                elif direction.y >= abs(direction.x):
+                    direction = ray_directions[2]
+                else:
+                    direction = ray_directions[3]
+
+                for d in direction:
+                    next_vision_border.add(p + d)
+                    vision.add(p + d)
+
+            vision_border = next_vision_border
 
         perception = Perception(
             {p: p.get_in(level.level_grid) for p in vision},
