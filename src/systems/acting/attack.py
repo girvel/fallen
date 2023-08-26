@@ -7,6 +7,8 @@ from ecs import Entity
 
 import logging
 
+from src.lib.vector import add, safe_get
+
 log = logging.getLogger(__name__)
 
 
@@ -14,12 +16,8 @@ class Attack(namedtuple("AttackBase", "v")):
     def execute(self, actor, level, hades):
         actor.act = None
 
-        next_p = actor.p + self.v
-        if next_p.get_in(level.level_grid) is None: return
-
-        enemy = next_p.get_in(level.level_grid)
-
-        if "health" not in enemy: return
+        enemy = safe_get(level.physical_grid, add(actor.p, self.v))
+        if enemy is None or "health" not in enemy: return
 
         armor = armor_data[enemy.health.armor_kind]
         if actor.weapon.damage_kind in armor.resistance:

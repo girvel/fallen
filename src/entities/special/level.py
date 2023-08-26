@@ -4,16 +4,20 @@ from pathlib import Path
 from ecs import OwnedEntity
 
 from src.lib.toolkit import to_camel_case
-from src.lib.vector import Vector, zero
+from src.lib.vector import unsafe_set, create_grid
+
+import logging
+
+log = logging.getLogger(__name__)
 
 
 class Level(OwnedEntity):
     name = 'level_container'
     size = None
-    level_grid = None
+    physical_grid = None
 
     def put(self, movable, p):
-        p.set_in(self.level_grid, movable)
+        unsafe_set(self.physical_grid, p, movable)
         movable.p = p
         return movable
 
@@ -32,8 +36,8 @@ class Level(OwnedEntity):
         player = None
 
         level_lines = path.read_text().split('\n')
-        self.size = Vector(max(len(l) for l in level_lines), len(level_lines))
-        self.level_grid = self.size.create_grid(None)
+        self.size = (max(len(l) for l in level_lines), len(level_lines))
+        self.physical_grid = create_grid(self.size, lambda: None)
 
         for y, line in enumerate(level_lines):
             for x, c in enumerate(line):
@@ -41,7 +45,7 @@ class Level(OwnedEntity):
                     continue
 
                 assert c in self.palette
-                e = self.put(metasystem.add(self.palette[c]()), Vector(x, y))
+                e = self.put(metasystem.add(self.palette[c]()), (x, y))
 
                 if c == "@":
                     player = e

@@ -4,9 +4,8 @@ from enum import Enum
 import numba as numba
 import numpy
 from ecs import create_system, OwnedEntity
-from line_profiler import profile
 
-from src.lib.vector import Vector, up, down, left, right, one, add, sub
+from src.lib.vector import sub
 
 import logging
 
@@ -24,9 +23,9 @@ class Senses:
 
 @dataclass
 class Perception:
-    vision: dict[Vector, OwnedEntity]
-    hearing: dict[Vector, int]
-    smell: dict[Vector, OwnedEntity]
+    vision: dict[tuple[int, int], OwnedEntity]
+    hearing: dict[tuple[int, int], int]
+    smell: dict[tuple[int, int], OwnedEntity]
 
 
 @numba.njit
@@ -75,17 +74,16 @@ def project_rays(vision, x, y, power, cx, cy):
         d = dirs[i]
         project_rays(vision, d[0], d[1], power, cx, cy)
 
-def calculate_vision(level_grid, start, r):
+def calculate_vision(physical_grid, start, r):
     d = 2 * r + 1
-    level_w = len(level_grid[0])
-    level_h = len(level_grid)
+    array, (level_w, level_h) = physical_grid
 
-    edge = (start.x - r, start.y - r)
+    edge = (start[0] - r, start[1] - r)
     vision = numpy.full((d, d), 0)  # TODO crop it to not intersect level borders
 
     for y in range(max(edge[1], 0), min(edge[1] + d, level_h)):
         for x in range(max(edge[0], 0), min(edge[0] + d, level_w)):
-            entity = level_grid[y][x]
+            entity = array[y][x]
             if entity is not None and "solid_flag" in entity:
                 vision[sub((x, y), edge)] = -1
 
@@ -99,23 +97,16 @@ def calculate_vision(level_grid, start, r):
     for y in range(max(edge[1], 0), min(edge[1] + d, level_h)):
         for x in range(max(edge[0], 0), min(edge[0] + d, level_w)):
             if vision[x - edge[0], y - edge[1]] <= 0: continue
-
-            p = Vector(x, y)
-            result[p] = level_grid[y][x]
+            result[x, y] = array[y][x]
 
     return result
-    # return {
-    #     p: p.get_in(level_grid)
-    #     for (x, y), v in numpy.ndenumerate(vision)
-    #     if v > 0 and (p := Vector(*add((x, y), edge)))
-    # }
 
 @create_system
-def think(subject: 'ai', level: 'level_grid'):
+def think(subject: 'ai', level: 'physical_grid'):
     subject.act = subject.ai.make_decision(
         subject,
         "senses" in subject
-            and Perception(calculate_vision(level.level_grid, subject.p, subject.senses.vision), None, None)
+            and Perception(calculate_vision(level.physical_grid, subject.p, subject.senses.vision), None, None)
             or Perception(None, None, None),
     )
 
@@ -126,7 +117,7 @@ def think(subject: 'ai', level: 'level_grid'):
     #
     # for y in range(start.y, end.y + 1):
     #     for x in range(start.x, end.x + 1):
-    #         e = level.level_grid[y][x]
+    #         e = level.physical_grid[y][x]
     #
     #         if e:
     #             possible_targets.append(e)
@@ -144,9 +135,9 @@ def think(subject: 'ai', level: 'level_grid'):
     #         v1 = Vector(sign(v.x), 0)
     #         v2 = Vector(0, sign(v.y))
     #
-    #         if (subject.p + v1).get_in(level.level_grid) is not None:
+    #         if (subject.p + v1).get_in(level.physical_grid) is not None:
     #             subject.act = Move(v2)
-    #         elif (subject.p + v2).get_in(level.level_grid) is not None:
+    #         elif (subject.p + v2).get_in(level.physical_grid) is not None:
     #             subject.act = Move(v1)
     #         else:
     #             subject.act = Move(random.choice([v1, v2]))

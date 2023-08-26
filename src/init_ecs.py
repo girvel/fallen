@@ -6,6 +6,7 @@ from ecs import Metasystem, create_system
 from assets.debug_track import track
 from src.entities.special.level import Level
 from src.entities.special.io import IO
+from src.lib.vector import unsafe_set
 from src.systems.ai import think
 from src.systems.input import read_input
 from src.systems.acting import act
@@ -19,10 +20,10 @@ def init(stdscr):
 
     # Systems
     @create_system
-    def destruction(hades: 'entities_to_destroy', level: 'level_grid'):
+    def destruction(hades: 'entities_to_destroy', level: 'physical_grid'):
         for e in hades.entities_to_destroy:
             if "p" in e:
-                e.p.set_in(level.level_grid, None)
+                unsafe_set(level.physical_grid, e.p, None)
 
             ms.delete(e)
 
