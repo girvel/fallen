@@ -1,5 +1,0 @@
-track = (
-    "wwwwwaaassasdddddwwwwssaaassddddssaawwwsdwdaasddwasdsdsdssddddssswwasdsdddasawsdsadddddadwsddssdsdwad"
-    "asdwadsdwasadsddsdsdddddawasssssdddaawwwwaaassadsdsaawdasdsdsddddddddddddsdadwdasdasdawdasswasdwsdsds"
-    "asawassdsdsddddddsaawasawwwwwwssssdddddddaaaaaaaddddddddsssssddwwwwaaawasaaaasssddddwwaaasssssdddssaQ"
-)

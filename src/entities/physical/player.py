@@ -9,7 +9,7 @@ class Player(OwnedEntity):
     character = '@'
     act = None
 
-    senses = Senses(25, 40, 1)
+    senses = Senses(24, 40, 1)
 
     def __init__(self):
         self.weapon = Weapon(15, DamageKind.Slashing)

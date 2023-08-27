@@ -41,6 +41,7 @@ def project_rays(vision, x, y, power, cx, cy):
     vision[x, y] = power
 
     power -= 1
+    if power == 0: return
 
     dx = x - cx
     dy = y - cy
@@ -87,11 +88,11 @@ def calculate_vision(physical_grid, start, r):
             if entity is not None and "solid_flag" in entity:
                 vision[sub2((x, y), edge)] = -1
 
-    vision[r][r] = r
-    project_rays(vision, r + 1, r, r - 1, r, r)
-    project_rays(vision, r - 1, r, r - 1, r, r)
-    project_rays(vision, r, r + 1, r - 1, r, r)
-    project_rays(vision, r, r - 1, r - 1, r, r)
+    vision[r][r] = r + 1
+    project_rays(vision, r + 1, r, r, r, r)
+    project_rays(vision, r - 1, r, r, r, r)
+    project_rays(vision, r, r + 1, r, r, r)
+    project_rays(vision, r, r - 1, r, r, r)
 
     result = {}
     for y in range(max(edge[1], 0), min(edge[1] + d, level_h)):

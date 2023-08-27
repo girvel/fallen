@@ -12,7 +12,7 @@ from src.systems.temporal_components import remove_temporals
 
 log = logging.getLogger(__name__)
 
-def init(stdscr):
+def init(stdscr, track=None):
     log.info("Creating & filling the metasystem")
     ms = Metasystem()
 
@@ -39,7 +39,7 @@ def init(stdscr):
     ms.create(name='hades', entities_to_destroy=[])
 
     level = ms.add(Level(ms, Path("assets/level.txt")))
-    io = IO(stdscr)
+    io = IO(stdscr, debug_track=track)
     level.player.ai = io
     io.connect_to_level(level)
 
