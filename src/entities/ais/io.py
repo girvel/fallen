@@ -9,9 +9,9 @@ from src.lib.vector import zero, up, down, left, right, add2, le2, lt2, floordiv
 
 import logging
 
-from src.systems.acting.attack import Attack
-from src.systems.acting.inspect import Inspect
-from src.systems.acting.move import Move
+from src.systems.acting.actions.attack import Attack
+from src.systems.acting.actions.inspect import Inspect
+from src.systems.acting.actions.move import Move
 
 log = logging.getLogger(__name__)
 
@@ -121,7 +121,7 @@ class IO(OwnedEntity):
             if entity is not None:
                 character = entity.character
                 color = get_color_pair(entity) | (
-                    entity and isinstance(subject.act, Inspect) and subject.act.subject == entity
+                    "act" in subject and isinstance(subject.act, Inspect) and subject.act.subject == entity
                         and curses.A_REVERSE
                         or 0
                 ) | curses.A_BOLD
@@ -158,7 +158,7 @@ class IO(OwnedEntity):
         else:
             self.gui.addstr(8, 2, "ATTACK", Colors.WhiteOnRed.format())
 
-        if isinstance(subject.act, Inspect):
+        if "act" in subject and isinstance(subject.act, Inspect):
             self.gui.addstr(10, 2, f"Inspects {subject.act.subject.name}")
 
         self.gui.refresh()

@@ -1,0 +1,13 @@
+from collections import namedtuple
+
+import logging
+
+from src.systems.acting.damage import inflict_damage
+
+log = logging.getLogger(__name__)
+
+
+class Attack(namedtuple("AttackBase", "target")):
+    def execute(self, actor, level, hades):
+        if self.target is None or "health" not in self.target: return
+        inflict_damage(self.target, actor.weapon, hades)

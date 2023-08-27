@@ -1,13 +1,12 @@
 from ecs import OwnedEntity
 
-from src.systems.acting.attack import DamageKind, ArmorKind, Weapon, Health
+from src.systems.acting.damage import DamageKind, ArmorKind, Weapon, Health
 from src.systems.ai import Kind, Senses
 
 
 class Player(OwnedEntity):
     name = 'Sir Aethan'
     character = '@'
-    act = None
 
     senses = Senses(24, 40, 1)
 

@@ -21,7 +21,7 @@ def main(track_file: str=None):
 
     logging.getLogger('numba').setLevel(logging.WARNING)
 
-    curses.wrapper(init_ecs.init, track=Path(track_file).read_text().replace("\n", ""))
+    curses.wrapper(init_ecs.init, track=track_file and Path(track_file).read_text().replace("\n", ""))
 
 
 if __name__ == '__main__':

@@ -4,7 +4,7 @@ from pathlib import Path
 import yaml
 from ecs import OwnedEntity
 
-from src.systems.acting.attack import Health, ArmorKind
+from src.systems.acting.damage import Health, ArmorKind
 from src.systems.ai import Kind
 
 names = yaml.safe_load(Path("assets/names.yaml").read_text())

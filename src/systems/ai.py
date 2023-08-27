@@ -5,7 +5,7 @@ import numba as numba
 import numpy
 from ecs import create_system, OwnedEntity
 
-from src.lib.vector import sub2
+from src.lib.vector import sub2, add2, safe_get2
 
 import logging
 
@@ -75,14 +75,14 @@ def project_rays(vision, x, y, power, cx, cy):
         d = dirs[i]
         project_rays(vision, d[0], d[1], power, cx, cy)
 
-def calculate_vision(physical_grid, start, r):
+def calculate_vision(physical_grid, p, r):
     d = 2 * r + 1
     array, (level_w, level_h) = physical_grid
 
-    edge = (start[0] - r, start[1] - r)
+    edge = (p[0] - r, p[1] - r)
     vision = numpy.full((d, d), 0)  # TODO crop it to not intersect level borders
 
-    for y in range(max(edge[1], 0), min(edge[1] + d, level_h)):
+    for y in range(max(edge[1], 0), min(edge[1] + d, level_h)):  # TODO diamond-shape iteration
         for x in range(max(edge[0], 0), min(edge[0] + d, level_w)):
             entity = array[y][x]
             if entity is not None and "solid_flag" in entity:
@@ -102,14 +102,24 @@ def calculate_vision(physical_grid, start, r):
 
     return result
 
+def calculate_smell(physical_grid, p, r):
+    result = {}
+
+    for dy in range(-r, r + 1):  # TODO optimize for level borders
+        for dx in range(abs(dy) - r, r - abs(dy) + 1):
+            p = add2(p, (dx, dy))
+            if (entity := safe_get2(physical_grid, p)) is not None:
+                result[p] = entity
+
+    return result
+
 @create_system
 def think(subject: 'ai', level: 'physical_grid'):
-    subject.act = subject.ai.make_decision(
-        subject,
-        "senses" in subject
-            and Perception(calculate_vision(level.physical_grid, subject.p, subject.senses.vision), None, None)
-            or Perception(None, None, None),
-    )
+    subject.act = subject.ai.make_decision(subject, Perception(
+        subject.senses.vision > 0 and calculate_vision(level.physical_grid, subject.p, subject.senses.vision),
+        None,
+        subject.senses.smell > 0 and calculate_smell(level.physical_grid, subject.p, subject.senses.smell),
+    ))
 
     # start = subject.p - subject.vision * one
     # end = subject.p + subject.vision * one

@@ -2,7 +2,7 @@ import random
 
 from ecs import OwnedEntity
 
-from src.systems.acting.attack import DamageKind, ArmorKind, Health, Weapon
+from src.systems.acting.damage import DamageKind, ArmorKind, Health, Weapon
 from src.systems.ai import Kind
 
 

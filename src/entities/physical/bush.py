@@ -1,7 +1,7 @@
 from ecs import OwnedEntity
 
 from src.entities.ais.io import Colors
-from src.systems.acting.attack import ArmorKind, Health
+from src.systems.acting.damage import Health, ArmorKind
 
 
 class Bush(OwnedEntity):
