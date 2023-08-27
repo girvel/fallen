@@ -11,11 +11,6 @@ log = logging.getLogger(__name__)
 
 class Level(OwnedEntity):
     name = 'level_container'
-    size = None
-
-    tile_grid = None
-    physical_grid = None
-    effect_grid = None
 
     def put_tile(self, p, tile):
         unsafe_set2(self.tile_grid, p, tile)
@@ -36,15 +31,15 @@ class Level(OwnedEntity):
     physical_palette = load_palette_from(Path("src/entities/physical"))
     effect_palette = load_palette_from(Path("src/entities/effects"))
 
-    def load(self, metasystem, path: Path):
+    def __init__(self, metasystem, path: Path):
         player = None
 
         level_lines = path.read_text().split('\n')
-        self.size = (max(len(l) for l in level_lines), len(level_lines))  # TODO move to size2(physical_grid)
+        size = (max(len(l) for l in level_lines), len(level_lines))
 
-        self.tile_grid = create_grid(self.size, lambda: None)
-        self.physical_grid = create_grid(self.size, lambda: None)
-        self.effect_grid = create_grid(self.size, lambda: None)
+        self.tile_grid = create_grid(size, lambda: None)
+        self.physical_grid = create_grid(size, lambda: None)
+        self.effect_grid = create_grid(size, lambda: None)
 
         for y, line in enumerate(level_lines):
             for x, c in enumerate(line):
@@ -59,9 +54,7 @@ class Level(OwnedEntity):
                     if c in palette:
                         e = put((x, y), metasystem.add(palette[c]()))
                         if c == "@":
-                            player = e
+                            self.player = e
                         break
                 else:
                     log.warning(f"Ignored unknown entity `{c}` at {(x, y)}")
-
-        return player

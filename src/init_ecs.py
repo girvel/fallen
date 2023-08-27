@@ -38,12 +38,9 @@ def init(stdscr):
     # Entities
     ms.create(name='hades', entities_to_destroy=[])
 
-    io = ms.add(IO(stdscr))
-
-    level = ms.add(Level())
-    player = level.load(ms, Path("assets/level.txt"))
-
-    player.ai = io
+    level = ms.add(Level(ms, Path("assets/level.txt")))
+    io = IO(stdscr)
+    level.player.ai = io
     io.connect_to_level(level)
 
     # Game cycle

@@ -47,3 +47,6 @@ def safe_get2(grid: (list[list[T]], int2), p: int2, default: T = None) -> T:
         and array[p[1]][p[0]]
         or default
     )
+
+def size2(grid: (list[list[T]], int2)) -> int2:
+    return grid[1]

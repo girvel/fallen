@@ -5,7 +5,7 @@ from statistics import median
 
 from ecs import OwnedEntity
 
-from src.lib.vector import zero, up, down, left, right, add2, le2, lt2, floordiv2, sub2, safe_get2
+from src.lib.vector import zero, up, down, left, right, add2, le2, lt2, floordiv2, sub2, safe_get2, size2
 
 import logging
 
@@ -89,22 +89,23 @@ class IO(OwnedEntity):
         self.gui.mvwin(0, w - self.gui_w)
 
     def move_camera(self, subject):
-        h, w = self.game.getmaxyx()
+        screen_h, screen_w = self.game.getmaxyx()
+        level_w, level_h = size2(self.level.physical_grid)
 
         self.virtual_p = (
             median((
                 0,
-                subject.p[0] - w + self.following_offset[0],
+                subject.p[0] - screen_w + self.following_offset[0],
                 self.virtual_p[0],
                 subject.p[0] - self.following_offset[0],
-                self.level.size[0] - w,
+                level_w - screen_w,
             )),
             median((
                 0,
-                subject.p[1] - h + self.following_offset[1],
+                subject.p[1] - screen_h + self.following_offset[1],
                 self.virtual_p[1],
                 subject.p[1] - self.following_offset[1],
-                self.level.size[1] - h,
+                level_h - screen_h,
             ))
         )
 
