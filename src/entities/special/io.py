@@ -191,12 +191,13 @@ def generate_default_hotkeys():
     def generate_movement_function(keys, direction):
         @_hotkey(*keys)
         def _(subject, vision, io):
-            if vision.get(add(subject.p, direction)) is None:
-                act = Move
-            else:
-                act = io.mode
+            if io.mode == Move:
+                return Move(direction)
 
-            return act(direction)
+            if io.mode == Attack:
+                if (target := vision.get(add(subject.p, direction))) is not None:
+                    return Attack(target)
+                return Move(direction)
 
     for keys, direction in {
         ("w", ): up,
