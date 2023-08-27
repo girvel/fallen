@@ -41,7 +41,7 @@ def unsafe_set2(grid: (list[list[T]], int2), p: int2, value: T):
     assert ge2(p, zero) and lt2(p, size), f"Can not set grid cell at {p} outside of (0, 0) - {size}"
     array[p[1]][p[0]] = value
 
-def safe_get2(grid: (list[list[T]], int2), p: int2, default: T = None):
+def safe_get2(grid: (list[list[T]], int2), p: int2, default: T = None) -> T:
     array, size = grid
     return (ge2(p, zero) and lt2(p, size)
         and array[p[1]][p[0]]
