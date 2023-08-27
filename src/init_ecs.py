@@ -3,10 +3,9 @@ from pathlib import Path
 
 from ecs import Metasystem, create_system
 
-from src.entities.effects.fire import Fire
 from src.entities.special.level import Level
-from src.entities.special.io import IO
-from src.lib.vector import unsafe_set, add, right
+from src.entities.ais.io import IO
+from src.lib.vector import unsafe_set
 from src.systems.ai import think
 from src.systems.acting import act
 from src.systems.temporal_components import remove_temporals
@@ -46,8 +45,6 @@ def init(stdscr):
 
     player.ai = io
     io.connect_to_level(level)
-
-    unsafe_set(level.effects_grid, add(player.p, right), ms.add(Fire()))
 
     # Game cycle
     log.info("Starting game cycle")

@@ -124,7 +124,7 @@ class IO(OwnedEntity):
                         and curses.A_REVERSE
                         or 0
                 ) | curses.A_BOLD
-            elif (effect := safe_get(self.level.effects_grid, p)) is not None:
+            elif (effect := safe_get(self.level.effect_grid, p)) is not None:
                 character = effect.character
                 color = effect.color.format()
             elif (tile := safe_get(self.level.tile_grid, p)) is not None:

@@ -11,6 +11,6 @@ class Move(namedtuple("MoveBase", "v")):
             return
 
         unsafe_set(level.physical_grid, actor.p, None)
-        level.put(actor, next_p)
+        level.put(next_p, actor)
 
         actor.act = None

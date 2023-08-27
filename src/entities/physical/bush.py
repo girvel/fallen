@@ -1,6 +1,6 @@
-from ecs import OwnedEntity, Entity
+from ecs import OwnedEntity
 
-from src.entities.special.io import Colors
+from src.entities.ais.io import Colors
 from src.systems.acting.attack import ArmorKind, Health
 
 
