@@ -5,7 +5,7 @@ from src.systems.acting.attack import Health, ArmorKind
 
 
 class AbstractWall(OwnedEntity):
-    name = 'AbstractWall'
+    name = 'Wall'
     character = None
     color = Colors.Yellow
     solid_flag = None

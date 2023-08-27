@@ -4,7 +4,7 @@ from src.systems.acting.attack import Health, ArmorKind
 
 
 class Window(OwnedEntity):
-    name = 'bed'
+    name = 'Window'
     character = '='
 
     def __init__(self):
