@@ -8,7 +8,6 @@ from src.entities.special.level import Level
 from src.entities.special.io import IO
 from src.lib.vector import unsafe_set, add, right
 from src.systems.ai import think
-from src.systems.input import read_input
 from src.systems.acting import act
 from src.systems.temporal_components import remove_temporals
 
