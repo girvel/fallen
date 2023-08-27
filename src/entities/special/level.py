@@ -1,12 +1,10 @@
-from importlib.util import spec_from_file_location, module_from_spec
+import logging
 from pathlib import Path
 
 from ecs import OwnedEntity
 
-from src.lib.toolkit import to_camel_case, load_palette_from
+from src.lib.toolkit import load_palette_from
 from src.lib.vector import unsafe_set, create_grid
-
-import logging
 
 log = logging.getLogger(__name__)
 
@@ -16,8 +14,9 @@ class Level(OwnedEntity):
     size = None
     physical_grid = None
     tile_grid = None
+    effects_grid = None
 
-    def put(self, movable, p):
+    def put(self, movable, p):  # TODO 3d stuff?
         unsafe_set(self.physical_grid, p, movable)
         movable.p = p
         return movable
@@ -32,6 +31,7 @@ class Level(OwnedEntity):
         self.size = (max(len(l) for l in level_lines), len(level_lines))
         self.physical_grid = create_grid(self.size, lambda: None)
         self.tile_grid = create_grid(self.size, lambda: None)
+        self.effects_grid = create_grid(self.size, lambda: None)
 
         for y, line in enumerate(level_lines):
             for x, c in enumerate(line):

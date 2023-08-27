@@ -118,22 +118,23 @@ class IO(OwnedEntity):
             if not (le(zero, p_on_screen) and lt(p_on_screen, screen_size)): continue
 
             if entity is not None:
-                self.game.addch(
-                    p_on_screen[1], p_on_screen[0],
-                    entity.character,
-                    get_color_pair(entity) | (
-                        entity and isinstance(subject.act, Inspect) and subject.act.subject == entity
-                            and curses.A_REVERSE
-                            or 0
-                    ) | curses.A_BOLD
-                )
+                character = entity.character
+                color = get_color_pair(entity) | (
+                    entity and isinstance(subject.act, Inspect) and subject.act.subject == entity
+                        and curses.A_REVERSE
+                        or 0
+                ) | curses.A_BOLD
+            elif (effect := safe_get(self.level.effects_grid, p)) is not None:
+                character = effect.character
+                color = effect.color.format()
+            elif (tile := safe_get(self.level.tile_grid, p)) is not None:
+                character = tile.character
+                color = tile.color.format() | curses.A_BOLD
             else:
-                tile = safe_get(self.level.tile_grid, p)
-                self.game.addch(
-                    p_on_screen[1], p_on_screen[0],
-                    tile and tile.character or ".",
-                    (tile and tile.color or Colors.Default).format()
-                )
+                character = "."
+                color = Colors.Default.format()
+
+            self.game.addch(p_on_screen[1], p_on_screen[0], character, color)
 
         self.game.refresh()
 
