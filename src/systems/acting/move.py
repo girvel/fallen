@@ -1,16 +1,16 @@
 from collections import namedtuple
 
-from src.lib.vector import zero, add, unsafe_set, safe_get
+from src.lib.vector import zero, add2, unsafe_set2, safe_get2
 
 
 class Move(namedtuple("MoveBase", "v")):
     def execute(self, actor, level, hades):
-        next_p = add(actor.p, self.v)
-        if safe_get(level.physical_grid, next_p) is not None:
+        next_p = add2(actor.p, self.v)
+        if safe_get2(level.physical_grid, next_p) is not None:
             actor.v = zero
             return
 
-        unsafe_set(level.physical_grid, actor.p, None)
+        unsafe_set2(level.physical_grid, actor.p, None)
         level.put(next_p, actor)
 
         actor.act = None

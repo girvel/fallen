@@ -5,7 +5,7 @@ import numba as numba
 import numpy
 from ecs import create_system, OwnedEntity
 
-from src.lib.vector import sub
+from src.lib.vector import sub2
 
 import logging
 
@@ -85,7 +85,7 @@ def calculate_vision(physical_grid, start, r):
         for x in range(max(edge[0], 0), min(edge[0] + d, level_w)):
             entity = array[y][x]
             if entity is not None and "solid_flag" in entity:
-                vision[sub((x, y), edge)] = -1
+                vision[sub2((x, y), edge)] = -1
 
     vision[r][r] = r
     project_rays(vision, r + 1, r, r - 1, r, r)

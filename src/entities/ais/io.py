@@ -5,7 +5,7 @@ from statistics import median
 
 from ecs import OwnedEntity
 
-from src.lib.vector import zero, up, down, left, right, add, le, lt, floordiv, sub, safe_get
+from src.lib.vector import zero, up, down, left, right, add2, le2, lt2, floordiv2, sub2, safe_get2
 
 import logging
 
@@ -84,7 +84,7 @@ class IO(OwnedEntity):
         # TODO as a reaction to event, not on update
         h, w = self.main.getmaxyx()
         self.game.resize(h - 1, w - self.gui_w)
-        self.following_offset = floordiv((w - self.gui_w, h - 1), 3)
+        self.following_offset = floordiv2((w - self.gui_w, h - 1), 3)
         self.gui.resize(h - 1, self.gui_w)
         self.gui.mvwin(0, w - self.gui_w)
 
@@ -114,8 +114,8 @@ class IO(OwnedEntity):
         screen_size = (w - 1, h)
 
         for p, entity in perception.vision.items():
-            p_on_screen = sub(p, self.virtual_p)
-            if not (le(zero, p_on_screen) and lt(p_on_screen, screen_size)): continue
+            p_on_screen = sub2(p, self.virtual_p)
+            if not (le2(zero, p_on_screen) and lt2(p_on_screen, screen_size)): continue
 
             if entity is not None:
                 character = entity.character
@@ -124,10 +124,10 @@ class IO(OwnedEntity):
                         and curses.A_REVERSE
                         or 0
                 ) | curses.A_BOLD
-            elif (effect := safe_get(self.level.effect_grid, p)) is not None:
+            elif (effect := safe_get2(self.level.effect_grid, p)) is not None:
                 character = effect.character
                 color = effect.color.format()
-            elif (tile := safe_get(self.level.tile_grid, p)) is not None:
+            elif (tile := safe_get2(self.level.tile_grid, p)) is not None:
                 character = tile.character
                 color = tile.color.format() | curses.A_BOLD
             else:
@@ -195,7 +195,7 @@ def generate_default_hotkeys():
                 return Move(direction)
 
             if io.mode == Attack:
-                if (target := vision.get(add(subject.p, direction))) is not None:
+                if (target := vision.get(add2(subject.p, direction))) is not None:
                     return Attack(target)
                 return Move(direction)
 
@@ -218,7 +218,7 @@ def generate_default_hotkeys():
     @_hotkey("KEY_MOUSE")
     def inspect(subject, vision, io):
         _, mx, my, _, _ = curses.getmouse()
-        target = vision.get(add(io.virtual_p, (mx, my)))
+        target = vision.get(add2(io.virtual_p, (mx, my)))
         return target and Inspect(target)
 
     return result

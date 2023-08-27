@@ -4,7 +4,7 @@ from pathlib import Path
 from ecs import OwnedEntity
 
 from src.lib.toolkit import load_palette_from
-from src.lib.vector import unsafe_set, create_grid
+from src.lib.vector import unsafe_set2, create_grid
 
 log = logging.getLogger(__name__)
 
@@ -18,17 +18,17 @@ class Level(OwnedEntity):
     effect_grid = None
 
     def put_tile(self, p, tile):
-        unsafe_set(self.tile_grid, p, tile)
+        unsafe_set2(self.tile_grid, p, tile)
         tile.tile_p = p
         return tile
 
     def put(self, p, movable):
-        unsafe_set(self.physical_grid, p, movable)
+        unsafe_set2(self.physical_grid, p, movable)
         movable.p = p
         return movable
 
     def put_effect(self, p, effect):
-        unsafe_set(self.effect_grid, p, effect)
+        unsafe_set2(self.effect_grid, p, effect)
         effect.effect_p = p
         return effect
 

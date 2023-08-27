@@ -5,7 +5,7 @@ from ecs import Metasystem, create_system
 
 from src.entities.special.level import Level
 from src.entities.ais.io import IO
-from src.lib.vector import unsafe_set
+from src.lib.vector import unsafe_set2
 from src.systems.ai import think
 from src.systems.acting import act
 from src.systems.temporal_components import remove_temporals
@@ -21,7 +21,7 @@ def init(stdscr):
     def destruction(hades: 'entities_to_destroy', level: 'physical_grid'):
         for e in hades.entities_to_destroy:
             if "p" in e:
-                unsafe_set(level.physical_grid, e.p, None)
+                unsafe_set2(level.physical_grid, e.p, None)
 
             ms.delete(e)
 
