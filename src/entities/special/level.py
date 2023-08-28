@@ -34,7 +34,7 @@ class Level(OwnedEntity):
     def __init__(self, metasystem, path: Path):
         player = None
 
-        level_lines = path.read_text().split('\n')
+        level_lines = (path / "grid.txt").read_text().split('\n')
         size = (max(len(l) for l in level_lines), len(level_lines))
 
         self.tile_grid = create_grid(size, lambda: None)
