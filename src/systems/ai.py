@@ -26,6 +26,7 @@ class Perception:
     vision: dict[tuple[int, int], OwnedEntity]
     hearing: dict[tuple[int, int], int]
     smell: dict[tuple[int, int], OwnedEntity]
+    free_cache: numpy.ndarray
 
 
 @numba.njit
@@ -88,6 +89,8 @@ def calculate_vision(physical_grid, p, r):
             if entity is not None and "solid_flag" in entity:
                 vision[sub2((x, y), edge)] = -1
 
+    free_cache = vision + 1
+
     vision[r][r] = r + 1
     project_rays(vision, r + 1, r, r, r, r)
     project_rays(vision, r - 1, r, r, r, r)
@@ -100,7 +103,7 @@ def calculate_vision(physical_grid, p, r):
             if vision[x - edge[0], y - edge[1]] <= 0: continue
             result[x, y] = array[y][x]
 
-    return result
+    return result, free_cache
 
 def calculate_smell(physical_grid, p, r):
     result = {}
@@ -115,10 +118,16 @@ def calculate_smell(physical_grid, p, r):
 
 @create_system
 def think(subject: 'ai', level: 'physical_grid'):
+    vision, free_cache = (subject.senses.vision > 0
+        and calculate_vision(level.physical_grid, subject.p, subject.senses.vision)
+        or (None, None)
+    )
+
     subject.act = subject.ai.make_decision(subject, Perception(
-        subject.senses.vision > 0 and calculate_vision(level.physical_grid, subject.p, subject.senses.vision),
+        vision,
         None,
         subject.senses.smell > 0 and calculate_smell(level.physical_grid, subject.p, subject.senses.smell),
+        free_cache
     ))
 
     # start = subject.p - subject.vision * one

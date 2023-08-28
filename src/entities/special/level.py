@@ -1,8 +1,10 @@
 import logging
 from pathlib import Path
 
-from ecs import OwnedEntity
+import toml as toml
+from ecs import OwnedEntity, Entity
 
+from src.entities.special.house import House
 from src.lib.toolkit import load_palette_from
 from src.lib.vector import unsafe_set2, create_grid
 
@@ -30,12 +32,15 @@ class Level(OwnedEntity):
     tile_palette = load_palette_from(Path("src/entities/tiles"))
     physical_palette = load_palette_from(Path("src/entities/physical"))
     effect_palette = load_palette_from(Path("src/entities/effects"))
+    markup = None
 
     def __init__(self, metasystem, path: Path):
         player = None
 
         level_lines = (path / "grid.txt").read_text().split('\n')
         size = (max(len(l) for l in level_lines), len(level_lines))
+
+        after_loads = []
 
         self.tile_grid = create_grid(size, lambda: None)
         self.physical_grid = create_grid(size, lambda: None)
@@ -53,8 +58,17 @@ class Level(OwnedEntity):
                 ):
                     if c in palette:
                         e = put((x, y), metasystem.add(palette[c]()))
+                        if "after_load" in e:
+                            after_loads.append(e.after_load)
+
                         if c == "@":
                             self.player = e
                         break
                 else:
                     log.warning(f"Ignored unknown entity `{c}` at {(x, y)}")
+
+        raw_markup = toml.loads((path / "markup.toml").read_text())
+        self.markup = Entity(houses=[metasystem.add(House(**h)) for h in raw_markup["houses"]])
+
+        for after_load in after_loads:
+            after_load(self)

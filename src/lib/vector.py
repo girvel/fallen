@@ -1,5 +1,7 @@
 from typing import Callable, TypeVar
 
+from src.lib.toolkit import sign
+
 zero = (0, 0)
 one  = (1, 1)
 
@@ -22,6 +24,12 @@ def sub2(v1: int2, v2: int2) -> int2:
 def floordiv2(v: int2, k: int) -> int2:
     return v[0] // k, v[1] // k
 
+def abs2(v: int2) -> int:
+    return abs(v[0]) + abs(v[1])
+
+def sign2(v: int2) -> int2:
+    return sign(v[0]), sign(v[1])
+
 def area2(v: int2) -> int:
     return v[0] * v[1]
 
@@ -40,6 +48,11 @@ def le2(v1: int2, v2: int2) -> int2:
 T = TypeVar('T')
 def create_grid(size: int2, filler: Callable[[], T]) -> (list[list[T]], int2):
     return [[filler() for _ in range(size[0])] for _ in range(size[1])], size
+
+R = TypeVar('R')
+def map_grid(grid: (list[list[T]], int2), f: Callable[[T], R]) -> (list[list[R]], int2):
+    array, size = grid
+    return [[f(e) for e in row] for row in array], size
 
 def unsafe_set2(grid: (list[list[T]], int2), p: int2, value: T):
     array, size = grid
