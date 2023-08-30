@@ -14,6 +14,10 @@ log = logging.getLogger(__name__)
 
 class Kind(Enum):
     Animate = 0
+    Table = 1
+
+def classified_as(entity, kind):
+    return "classifiers" in entity and kind in entity.classifiers
 
 @dataclass
 class Senses:
