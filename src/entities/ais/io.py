@@ -47,19 +47,24 @@ class IO(OwnedEntity):
     virtual_p = (0, 0)
     following_offset = (0, 0)  # modified on resize
     gui_w = 35
+    monitor_h = 8
     level = None
 
     # output
     mode = Move
 
-    def __init__(self, stdscr, debug_track=None):
+    def __init__(self, stdscr, debug_track, debug_mode):
         self.main = stdscr
         self.game = curses.newwin(1, 1, 0, 0)
         self.gui = curses.newwin(1, 1, 0, 0)
+        self.debug_monitor = curses.newwin(1, 1, 0, 0)
+        self.console = curses.newwin(1, 1, 0, 0)
+        self.console_visible = False
 
         self.debug_track = debug_track and iter(debug_track)
+        self.debug_mode = debug_mode
 
-        self.hotkeys = generate_default_hotkeys()
+        self.action_hotkeys, self.other_hotkeys = generate_default_hotkeys()
 
         log.info(f"Initalized mouse with {curses.mousemask(curses.ALL_MOUSE_EVENTS)}")
         print('\033[?1003h')
@@ -74,21 +79,40 @@ class IO(OwnedEntity):
         self.level = level
 
     def make_decision(self, subject, perception):
-        self.resize_windows()
-        self.move_camera(subject)
-        self.display_perception(subject, perception)
-        self.display_gui(subject)
-        return self.wait_for_input(subject, perception.vision)
+        self.render(subject, perception)
+        return self._wait_for_input(subject, perception)
 
-    def resize_windows(self):
+    def render(self, subject, perception):
+        self._resize_windows()
+        self._move_camera(subject)
+        self._display_perception(subject, perception)
+        self._display_gui(subject)
+
+        if self.debug_mode:
+            self._display_debug_monitor()
+            if self.console_visible:
+                self._display_console()
+
+    # STAGES #
+
+    def _resize_windows(self):
         # TODO as a reaction to event, not on update
         h, w = self.main.getmaxyx()
+
         self.game.resize(h - 1, w - self.gui_w)
         self.following_offset = floordiv2((w - self.gui_w, h - 1), 3)
+
         self.gui.resize(h - 1, self.gui_w)
         self.gui.mvwin(0, w - self.gui_w)
 
-    def move_camera(self, subject):
+        if self.debug_mode:
+            self.debug_monitor.resize(self.monitor_h, self.gui_w)
+            self.debug_monitor.mvwin(0, 0)
+
+            self.console.resize(h - 1, self.gui_w)
+            self.console.mvwin(0, w - self.gui_w)
+
+    def _move_camera(self, subject):
         screen_h, screen_w = self.game.getmaxyx()
         level_w, level_h = size2(self.level.physical_grid)
 
@@ -109,7 +133,7 @@ class IO(OwnedEntity):
             ))
         )
 
-    def display_perception(self, subject, perception):
+    def _display_perception(self, subject, perception):
         self.game.clear()
         h, w = self.game.getmaxyx()
         screen_size = (w - 1, h)
@@ -139,7 +163,7 @@ class IO(OwnedEntity):
 
         self.game.refresh()
 
-    def display_gui(self, subject):
+    def _display_gui(self, subject):
         self.gui.clear()
         self.gui.border()
 
@@ -163,40 +187,57 @@ class IO(OwnedEntity):
 
         self.gui.refresh()
 
-    def wait_for_input(self, subject, vision):
+    def _display_debug_monitor(self):
+        self.debug_monitor.clear()
+        self.debug_monitor.border()
+
+        self.debug_monitor.refresh()
+
+    def _display_console(self):
+        self.console.clear()
+        self.console.border()
+
+        self.console.refresh()
+
+    def _wait_for_input(self, subject, perception):
         while True:
             if self.debug_track is not None:
                 hotkey = next(self.debug_track)
             else:
                 hotkey = self.main.getkey()
 
-            if hotkey in self.hotkeys:
+            if hotkey in self.action_hotkeys:
+                log.debug(f"[{hotkey}] -> {self.action_hotkeys[hotkey].__name__}")
                 break
-            log.debug(f"Ignored: [{hotkey}]")
 
-        log.debug(f"[{hotkey}]")
-        return self.hotkeys[hotkey](subject, vision, self)
+            if hotkey in self.other_hotkeys:
+                log.debug(f"[{hotkey}] -> no action")
+                self.other_hotkeys[hotkey](subject, perception, self)
+
+        return self.action_hotkeys[hotkey](subject, perception, self)
 
 
 def generate_default_hotkeys():
-    result = {}
+    action_hotkeys = {}
+    other_hotkeys = {}
 
     class _hotkey:
-        def __init__(self, *hotkeys):
-            self.hotkeys = hotkeys
+        def __init__(self, *keys, non_action=False):
+            self.keys = keys
+            self.non_action = non_action
 
         def __call__(self, f):
-            for hotkey in self.hotkeys:
-                result[hotkey] = f
+            for hotkey in self.keys:
+                (self.non_action and other_hotkeys or action_hotkeys)[hotkey] = f
 
     def generate_movement_function(keys, direction):
         @_hotkey(*keys)
-        def _(subject, vision, io):
+        def move(subject, perception, io):
             if io.mode == Move:
                 return Move(direction)
 
             if io.mode == Attack:
-                if (target := vision.get(add2(subject.p, direction))) is not None:
+                if (target := perception.vision.get(add2(subject.p, direction))) is not None:
                     return Attack(target)
                 return Move(direction)
 
@@ -209,17 +250,22 @@ def generate_default_hotkeys():
         generate_movement_function(keys, direction)
 
     @_hotkey("Q")
-    def quit_(subject, vision, io):
+    def quit_(subject, perception, io):
         sys.exit()
 
     @_hotkey("r")
-    def change_mode(subject, vision, io):
+    def change_mode(subject, perception, io):
         io.mode = (io.mode == Move) and Attack or Move
 
     @_hotkey("KEY_MOUSE")
-    def inspect(subject, vision, io):
+    def inspect(subject, perception, io):
         _, mx, my, _, _ = curses.getmouse()
-        target = vision.get(add2(io.virtual_p, (mx, my)))
+        target = perception.vision.get(add2(io.virtual_p, (mx, my)))
         return target and Inspect(target)
 
-    return result
+    @_hotkey("`", non_action=True)
+    def show_debug_console(subject, perception, io):
+        io.console_visible ^= True
+        io.render(subject, perception)
+
+    return action_hotkeys, other_hotkeys

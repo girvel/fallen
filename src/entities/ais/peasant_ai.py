@@ -1,9 +1,5 @@
-import logging
-import os
 import random
-import sys
 from enum import Enum
-from pathlib import Path
 
 import numpy
 
@@ -36,8 +32,6 @@ class PeasantAi:
     def make_decision(self, subject, perception):
         free_directions = [d for d in directions if perception.vision.get(add2(subject.p, d)) is None]
         if len(free_directions) == 0: return
-        log.debug(len(self.path) or self.mode)
-        log.debug(self.going_to)
 
         if self.going_to is not None:
             if len(self.path) > 0:
@@ -45,7 +39,6 @@ class PeasantAi:
                 if perception.vision.get(go_to) is None:
                     return Move(sub2(go_to, subject.p))
 
-            log.debug([self.going_to, subject.p])
             if self.going_to == subject.p:  # path never contains the destination in the middle
                 self.going_to = None
                 return
