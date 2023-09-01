@@ -4,7 +4,8 @@ from pathlib import Path
 import toml as toml
 from ecs import OwnedEntity, Entity
 
-from src.entities.special.house import House
+from src.entities.markup.house import House
+from src.entities.markup.zone import Zone
 from src.lib.toolkit import load_palette_from
 from src.lib.vector import unsafe_set2, create_grid
 
@@ -68,7 +69,10 @@ class Level(OwnedEntity):
                     log.warning(f"Ignored unknown entity `{c}` at {(x, y)}")
 
         raw_markup = toml.loads((path / "markup.toml").read_text())
-        self.markup = Entity(houses=[metasystem.add(House(**h)) for h in raw_markup["houses"]])
+        self.markup = Entity(
+            houses=[metasystem.add(House(**h)) for h in raw_markup["houses"]],
+            zones=[metasystem.add(Zone(**h)) for h in raw_markup["zones"]],
+        )
 
         for after_load in after_loads:
             after_load(self)

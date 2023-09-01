@@ -2,3 +2,11 @@
 start = [57, 31]
 end = [71, 37]
 entrance = [70, 33]
+
+[[zones]]
+name = "Fishing shack"
+center = [83, 11]
+
+[[zones]]
+name = "Tavern hall"
+center = [121, 24]

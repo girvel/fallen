@@ -35,3 +35,4 @@ class Peasant(OwnedEntity):
 
         self.ai.spacial_memory = map_grid(level.physical_grid, lambda e: e is None and "." or e.character)
         # TODO remove magic character
+        self.ai.favourite_zones = level.markup.zones

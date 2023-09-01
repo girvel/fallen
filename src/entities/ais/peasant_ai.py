@@ -16,8 +16,6 @@ from tcod.path import Pathfinder, SimpleGraph
 
 import logging
 
-from src.systems.ai import classified_as, Kind
-
 log = logging.getLogger(__name__)
 
 
@@ -27,8 +25,10 @@ Mode = Enum("Mode", "GoHome GoToTable WorkAtTable GoOutside Wandering")
 class PeasantAi:
     spacial_memory = None
     going_to = None
-    action_period = RandomPeriod(8, 13)
-    mode = Mode.GoHome
+    working_period = RandomPeriod(8, 13)
+    wandering_period = RandomPeriod(14, 23)
+    mode = Mode.GoOutside
+    favourite_zones = []
 
     def __init__(self):
         self.path = []
@@ -36,6 +36,8 @@ class PeasantAi:
     def make_decision(self, subject, perception):
         free_directions = [d for d in directions if perception.vision.get(add2(subject.p, d)) is None]
         if len(free_directions) == 0: return
+        log.debug(len(self.path) or self.mode)
+        log.debug(self.going_to)
 
         if self.going_to is not None:
             if len(self.path) > 0:
@@ -43,6 +45,7 @@ class PeasantAi:
                 if perception.vision.get(go_to) is None:
                     return Move(sub2(go_to, subject.p))
 
+            log.debug([self.going_to, subject.p])
             if self.going_to == subject.p:  # path never contains the destination in the middle
                 self.going_to = None
                 return
@@ -84,13 +87,14 @@ class PeasantAi:
                     self.mode = Mode.GoOutside
 
             case Mode.WorkAtTable:
-                if self.action_period.step():
+                if self.working_period.step():
                     self.mode = Mode.GoOutside
 
             case Mode.GoOutside:
+                self.going_to = random.choice(self.favourite_zones).center
                 self.mode = Mode.Wandering
 
             case Mode.Wandering:
-                if not self.action_period.step():
+                if not self.wandering_period.step():
                     return Move(random.choice(free_directions))
                 self.mode = Mode.GoHome
