@@ -64,6 +64,8 @@ class IO(OwnedEntity):
         self.debug_track = debug_track and iter(debug_track)
         self.debug_mode = debug_mode
 
+        self.monitor_values = {"demo": lambda: self.main.getmaxyx()}
+
         self.action_hotkeys, self.other_hotkeys = generate_default_hotkeys()
 
         log.info(f"Initalized mouse with {curses.mousemask(curses.ALL_MOUSE_EVENTS)}")
@@ -190,6 +192,13 @@ class IO(OwnedEntity):
     def _display_debug_monitor(self):
         self.debug_monitor.clear()
         self.debug_monitor.border()
+
+        for i, (header, f) in enumerate(self.monitor_values.items()):
+            self.debug_monitor.addstr(1 + i, 1, f"{header}:")
+            self.debug_monitor.addstr(1 + i, 1 + len(header) + 2, repr(f()), Colors.Yellow.format())
+
+            if i >= self.monitor_h - 2:
+                break
 
         self.debug_monitor.refresh()
 
