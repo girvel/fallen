@@ -11,7 +11,7 @@ def sign(n):
         return -1
     return 1
 
-def load_palette_from(path):
+def load_palette_from(path):  # TODO move to level
     result = {}
 
     for p in path.iterdir():
@@ -25,3 +25,6 @@ def load_palette_from(path):
         result[cls.character] = cls
 
     return result
+
+def cut_by_length(string, length):
+    return [string[i:i + length] for i in range(0, len(string), length)]

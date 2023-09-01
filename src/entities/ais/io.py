@@ -5,6 +5,7 @@ from statistics import median
 
 from ecs import OwnedEntity
 
+from src.lib.toolkit import cut_by_length
 from src.lib.vector import zero, up, down, left, right, add2, le2, lt2, floordiv2, sub2, safe_get2, size2
 
 import logging
@@ -65,6 +66,7 @@ class IO(OwnedEntity):
         self.debug_mode = debug_mode
 
         self.monitor_values = {"demo": lambda: self.main.getmaxyx()}
+        self.console_buffer = ""
 
         self.action_hotkeys, self.other_hotkeys = generate_default_hotkeys()
 
@@ -206,6 +208,11 @@ class IO(OwnedEntity):
         self.console.clear()
         self.console.border()
 
+        for i, string in enumerate(
+            sum(map(lambda s: cut_by_length(s, self.gui_w - 2), self.console_buffer.split("\n")), start=[])
+        ):
+            self.console.addstr(1 + i, 1, string)
+
         self.console.refresh()
 
     def _wait_for_input(self, subject, perception):
@@ -222,6 +229,9 @@ class IO(OwnedEntity):
             if hotkey in self.other_hotkeys:
                 log.debug(f"[{hotkey}] -> no action")
                 self.other_hotkeys[hotkey](subject, perception, self)
+                continue
+
+            log.debug(f"Ignored [{hotkey}]")
 
         return self.action_hotkeys[hotkey](subject, perception, self)
 
@@ -275,6 +285,30 @@ def generate_default_hotkeys():
     @_hotkey("`", non_action=True)
     def show_debug_console(subject, perception, io):
         io.console_visible ^= True
+        if not io.console_visible: return
+
+        while True:
+            io.render(subject, perception)
+            if (hotkey := io.main.getkey()) == "CTL_ENTER": break
+
+            if len(hotkey) != 1: continue
+            if hotkey == "":
+                io.console_buffer = io.console_buffer[:-1]
+            else:
+                io.console_buffer += hotkey
+
+        def enclose_monitor_function(buffer):
+            def monitor_function():
+                try:
+                    return eval(buffer)
+                except Exception as ex:
+                    return ex
+            return monitor_function
+
+        log.info(f"Adding monitor function:\n```py\n{io.console_buffer}\n```")
+        io.monitor_values[str(len(io.monitor_values))] = enclose_monitor_function(io.console_buffer)
+        io.console_buffer = ""
+        io.console_visible = False
         io.render(subject, perception)
 
     return action_hotkeys, other_hotkeys
