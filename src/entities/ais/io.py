@@ -237,7 +237,7 @@ def generate_default_hotkeys():
 
         def __call__(self, f):
             for hotkey in self.keys:
-                (self.non_action and other_hotkeys or action_hotkeys)[hotkey] = f
+                (other_hotkeys if self.non_action else action_hotkeys)[hotkey] = f
 
     def generate_movement_function(keys, direction):
         @_hotkey(*keys)
