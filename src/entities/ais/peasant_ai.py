@@ -25,8 +25,8 @@ Mode = Enum("Mode", "GoHome GoToTable WorkAtTable GoOutside Wandering")
 class PeasantAi:
     spacial_memory = None
     going_to = None
-    working_period = RandomPeriod(8, 13)
-    wandering_period = RandomPeriod(14, 23)
+    working_period = RandomPeriod(30, 46)
+    wandering_period = RandomPeriod(20, 36)
     mode = Mode.GoOutside
     favourite_zones = []
 

@@ -3,6 +3,38 @@ start = [57, 31]
 end = [71, 37]
 entrance = [70, 33]
 
+[[houses]]
+start = [146, 7]
+end = [166, 13]
+entrance = [155, 14]
+
+[[houses]]
+start = [161, 29]
+end = [168, 34]
+entrance = [163, 29]
+
+[[houses]]
+start = [149, 29]
+end = [162, 34]
+entrance = [157, 29]
+
+[[houses]]
+start = [98, 44]
+end = [176, 53]
+entrance = [101, 44]
+
+[[houses]]
+start = [147, 44]
+end = [168, 62]
+entrance = [150, 44]
+
+[[houses]]
+start = [184, 44]
+end = [211, 61]
+entrance = [189, 48]
+
+
+
 [[zones]]
 name = "Fishing shack"
 center = [83, 11]
@@ -10,3 +42,15 @@ center = [83, 11]
 [[zones]]
 name = "Tavern hall"
 center = [121, 24]
+
+[[zones]]
+name = "House ruins"
+center = [18, 46]
+
+[[zones]]
+name = "Bushes behind the tavern"
+center = [202, 10]
+
+[[zones]]
+name = "The forest"
+center = [25, 16]
