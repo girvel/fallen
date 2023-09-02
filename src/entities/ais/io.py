@@ -3,7 +3,7 @@ import sys
 from enum import Enum
 from statistics import median
 
-from ecs import OwnedEntity
+from ecs import OwnedEntity, Entity
 
 from src.lib.toolkit import cut_by_length, curses_wrong_characters
 from src.lib.vector import zero, up, down, left, right, add2, le2, lt2, floordiv2, sub2, safe_get2, size2
@@ -65,7 +65,7 @@ class IO(OwnedEntity):
         self.debug_track = debug_track and iter(debug_track)
         self.debug_mode = debug_mode
 
-        self.monitor_values = {"demo": lambda: self.main.getmaxyx()}
+        self.monitor_values = Entity()
         self.console_buffer = ""
 
         self.action_hotkeys, self.other_hotkeys = generate_default_hotkeys()
@@ -195,9 +195,15 @@ class IO(OwnedEntity):
         self.debug_monitor.clear()
         self.debug_monitor.border()
 
-        for i, (header, f) in enumerate(self.monitor_values.items()):
+        for i, (header, f) in enumerate(self.monitor_values):
             self.debug_monitor.addstr(1 + i, 1, f"{header}:")
-            self.debug_monitor.addstr(1 + i, 1 + len(header) + 2, repr(f()), Colors.Yellow.format())
+
+            try:
+                value = f()
+            except Exception as ex:
+                value = ex
+
+            self.debug_monitor.addstr(1 + i, 1 + len(header) + 2, repr(value), Colors.Yellow.format())
 
             if i >= self.monitor_h - 2:
                 break
@@ -302,13 +308,18 @@ def generate_default_hotkeys():
                 io.console_buffer += hotkey
 
         def enclose_console_code(subject, perception, io):
+            def tracker(f):
+                io.monitor_values[f.__name__] = f
+
             try:
                 exec(io.console_buffer, {
-                    "it": isinstance(subject.act, Inspect) and subject.act.subject or None,
+                    "it": lambda: (isinstance(subject.act, Inspect) and subject.act.subject or None),
                     "monitor": io.monitor_values,
                     "subject": subject,
                     "perception": perception,
                     "io": io,
+                    "tracker": tracker,
+                    "level": io.level,
                 })
             except Exception as ex:
                 log.info(f"Exception when executing console code: {ex}")
