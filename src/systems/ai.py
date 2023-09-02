@@ -9,7 +9,6 @@ from src.lib.vector import sub2, add2, safe_get2, unsafe_set2
 
 import logging
 
-log = logging.getLogger(__name__)
 
 
 class Kind(Enum):

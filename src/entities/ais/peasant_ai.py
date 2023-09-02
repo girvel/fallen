@@ -13,7 +13,6 @@ from tcod.path import Pathfinder, SimpleGraph
 
 import logging
 
-log = logging.getLogger(__name__)
 
 
 Mode = Enum("Mode", "GoHome GoToTable WorkAtTable GoOutside Wandering")

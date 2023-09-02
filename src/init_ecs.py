@@ -11,10 +11,9 @@ from src.systems import acting
 from src.systems.ai import think
 from src.systems.death_by_chance import death_by_chance
 
-log = logging.getLogger(__name__)
 
 def init(stdscr, track, debug_mode):
-    log.info("Creating & filling the metasystem")
+    logging.info("Creating & filling the metasystem")
     ms = Metasystem()
 
     # Systems
@@ -25,7 +24,7 @@ def init(stdscr, track, debug_mode):
                 unsafe_set2(level.grids[e.layer], e.p, None)
 
             ms.delete(e)
-            log.info(f"Destroyed entity {e}")
+            logging.info(f"Destroyed entity {e}")
 
         hades.entities_to_destroy.clear()
 
@@ -46,11 +45,11 @@ def init(stdscr, track, debug_mode):
     level.put((51, 3), ms.add(fire))
 
     # Game cycle
-    log.info("Starting game cycle")
+    logging.info("Starting game cycle")
     try:
         while True:
             ms.update()
     except Exception as ex:
-        log.exception(ex)
+        logging.exception(ex)
     finally:
-        log.info("Finishing game cycle")
+        logging.info("Finishing game cycle")

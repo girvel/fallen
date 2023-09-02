@@ -74,7 +74,7 @@ class IO(OwnedEntity):
 
         self.action_hotkeys, self.other_hotkeys = generate_default_hotkeys()
 
-        log.info(f"Initalized mouse with {curses.mousemask(curses.ALL_MOUSE_EVENTS)}")
+        logging.info(f"Initalized mouse with {curses.mousemask(curses.ALL_MOUSE_EVENTS)}")
         print('\033[?1003h')
 
         curses.init_pair(Colors.Red.value, curses.COLOR_RED, curses.COLOR_BLACK)
@@ -240,15 +240,15 @@ class IO(OwnedEntity):
                 hotkey = self.main.getkey()
 
             if hotkey in self.action_hotkeys:
-                log.debug(f"[{hotkey}] -> {self.action_hotkeys[hotkey].__name__}")
+                logging.debug(f"[{hotkey}] -> {self.action_hotkeys[hotkey].__name__}")
                 break
 
             if hotkey in self.other_hotkeys:
-                log.debug(f"[{hotkey}] -> no action")
+                logging.debug(f"[{hotkey}] -> no action")
                 self.other_hotkeys[hotkey](subject, perception, self)
                 continue
 
-            log.debug(f"Ignored [{hotkey}]")
+            logging.debug(f"Ignored [{hotkey}]")
 
         return self.action_hotkeys[hotkey](subject, perception, self)
 
@@ -339,10 +339,10 @@ def generate_default_hotkeys():
                     "level": io.level,
                 })
             except Exception as ex:
-                log.warning(f"Exception when executing console code")
-                log.exception(ex)
+                logging.warning(f"Exception when executing console code")
+                logging.exception(ex)
 
-        log.info(f"Executing console code:\n```py\n{io.console_buffer}\n```")
+        logging.info(f"Executing console code:\n```py\n{io.console_buffer}\n```")
         enclose_console_code(subject, perception, io)
         io.console_buffer = ""
         io.console_visible = False

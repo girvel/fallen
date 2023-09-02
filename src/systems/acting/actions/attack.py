@@ -4,7 +4,6 @@ import logging
 
 from src.systems.acting.damage import inflict_damage
 
-log = logging.getLogger(__name__)
 
 
 class Attack(namedtuple("AttackBase", "target")):

@@ -8,7 +8,6 @@ from src.systems.ai import classified_as, Kind
 
 import logging
 
-log = logging.getLogger(__name__)
 
 
 class RabidAi:

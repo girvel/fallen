@@ -10,7 +10,6 @@ from src.entities.markup.zone import Zone
 from src.lib.toolkit import to_camel_case
 from src.lib.vector import unsafe_set2, create_grid
 
-log = logging.getLogger(__name__)
 
 
 def load_palette_from(path):
@@ -72,7 +71,7 @@ class Level(OwnedEntity):
                         e.ai = io
                     break
                 else:
-                    log.warning(f"Ignored unknown entity `{c}` at {(x, y)}")
+                    logging.warning(f"Ignored unknown entity `{c}` at {(x, y)}")
 
         raw_markup = toml.loads((path / "markup.toml").read_text())
         self.markup = Entity(

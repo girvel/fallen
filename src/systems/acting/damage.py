@@ -6,7 +6,6 @@ from ecs import Entity
 
 import logging
 
-log = logging.getLogger(__name__)
 
 
 def inflict_damage(target, weapon, hades):
@@ -18,7 +17,7 @@ def inflict_damage(target, weapon, hades):
     else:
         modifier = 1
 
-    log.info(
+    logging.info(
         f"{target.name} is damaged w/ {weapon.power} * {modifier} "
         f"({weapon.damage_kind} on {target.health.armor_kind})"
     )
@@ -26,7 +25,7 @@ def inflict_damage(target, weapon, hades):
     target.health.value -= weapon.power * modifier
     target.receives_damage = True
     if target.health.value <= 0:
-        log.info(f"{target.name} is killed")
+        logging.info(f"{target.name} is killed")
         hades.entities_to_destroy.append(target)
 
 

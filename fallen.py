@@ -7,7 +7,6 @@ import fire
 
 from src import init_ecs
 
-log = logging.getLogger(__name__)
 
 class PrettyFormatter(logging.Formatter):
     short_levels = {
@@ -44,7 +43,7 @@ def main(track_file: Optional[str] = None, debug_mode: bool = False):
 
     logging.basicConfig(handlers=[file_handler], encoding='utf-8', level=logging.DEBUG)
 
-    log.info("Started")
+    logging.info("Started")
 
     logging.getLogger('numba').setLevel(logging.WARNING)
 
