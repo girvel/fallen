@@ -1,4 +1,5 @@
 import logging
+from importlib.util import spec_from_file_location, module_from_spec
 from pathlib import Path
 
 import toml as toml
@@ -6,11 +7,26 @@ from ecs import OwnedEntity, Entity
 
 from src.entities.markup.house import House
 from src.entities.markup.zone import Zone
-from src.lib.toolkit import load_palette_from
+from src.lib.toolkit import to_camel_case
 from src.lib.vector import unsafe_set2, create_grid
 
 log = logging.getLogger(__name__)
 
+
+def load_palette_from(path):
+    result = {}
+
+    for p in path.iterdir():
+        if p.suffix != '.py': continue
+
+        spec = spec_from_file_location(p.stem, p)
+        module = module_from_spec(spec)
+        spec.loader.exec_module(module)
+
+        cls = getattr(module, to_camel_case(p.stem))
+        result[cls.character] = cls
+
+    return result
 
 class Level(OwnedEntity):
     name = 'level_container'
