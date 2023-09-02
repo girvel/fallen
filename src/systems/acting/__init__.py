@@ -6,7 +6,7 @@ def remove_temporals(container: "receives_damage"):
     del container.receives_damage
 
 @create_system
-def act(actor: 'act', level: 'physical_grid', hades: 'entities_to_destroy'):
+def act(actor: 'act', level: 'grids', hades: 'entities_to_destroy'):
     if actor.act is None: return
     actor.act.execute(actor, level, hades)
 

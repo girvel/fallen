@@ -121,9 +121,9 @@ def calculate_smell(physical_grid, p, r):
     return result
 
 @create_system
-def think(subject: 'ai', level: 'physical_grid'):
+def think(subject: 'ai', level: 'grids'):
     vision, free_cache = (subject.senses.vision > 0
-        and calculate_vision(level.physical_grid, subject.p, subject.senses.vision)
+        and calculate_vision(level.grids.physical, subject.p, subject.senses.vision)
         or (None, None)
     )
 
@@ -134,6 +134,6 @@ def think(subject: 'ai', level: 'physical_grid'):
     subject.act = subject.ai.make_decision(subject, Perception(
         vision,
         None,
-        subject.senses.smell > 0 and calculate_smell(level.physical_grid, subject.p, subject.senses.smell),
+        subject.senses.smell > 0 and calculate_smell(level.grids.physical, subject.p, subject.senses.smell),
         free_cache
     ))

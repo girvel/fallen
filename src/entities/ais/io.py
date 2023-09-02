@@ -16,7 +16,7 @@ from src.systems.acting.actions.attack import Attack
 from src.systems.acting.actions.inspect import Inspect
 from src.systems.acting.actions.move import Move
 
-log = logging.getLogger(__name__)
+log = logging.getLogger(__name__)  # TODO remove these
 
 
 def _get_color_pair(entity):
@@ -123,7 +123,7 @@ class IO(OwnedEntity):
 
     def _move_camera(self, subject):
         screen_h, screen_w = self.game.getmaxyx()
-        level_w, level_h = size2(self.level.physical_grid)
+        level_w, level_h = size2(self.level.grids.physical)
 
         self.virtual_p = (
             median((
@@ -163,10 +163,10 @@ class IO(OwnedEntity):
                         and curses.A_REVERSE
                         or 0
                 ) | curses.A_BOLD
-            elif (effect := safe_get2(self.level.effect_grid, p)) is not None:
+            elif (effect := safe_get2(self.level.grids.effects, p)) is not None:
                 character = effect.character
                 color = effect.color.format()
-            elif (tile := safe_get2(self.level.tile_grid, p)) is not None:
+            elif (tile := safe_get2(self.level.grids.tiles, p)) is not None:
                 character = tile.character
                 color = tile.color.format() | curses.A_BOLD
             else:

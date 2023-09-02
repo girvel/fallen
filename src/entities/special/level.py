@@ -31,27 +31,19 @@ def load_palette_from(path):
 class Level(OwnedEntity):
     name = 'level_container'
 
-    def put_tile(self, p, tile):
-        unsafe_set2(self.tile_grid, p, tile)
-        tile.tile_p = p
-        return tile
+    def put(self, p, entity):
+        unsafe_set2(self.grids[entity.layer], p, entity)
+        entity.p = p
+        return entity
 
-    def put(self, p, movable):
-        unsafe_set2(self.physical_grid, p, movable)
-        movable.p = p
-        return movable
+    layers = ["tiles", "physical", "effects"]
+    palettes = Entity(**{
+        l: load_palette_from(Path("src/entities") / l) for l in layers
+    })
 
-    def put_effect(self, p, effect):
-        unsafe_set2(self.effect_grid, p, effect)
-        effect.effect_p = p
-        return effect
-
-    tile_palette = load_palette_from(Path("src/entities/tiles"))
-    physical_palette = load_palette_from(Path("src/entities/physical"))
-    effect_palette = load_palette_from(Path("src/entities/effects"))
     markup = None
 
-    def __init__(self, metasystem, path: Path, io):
+    def __init__(self, ms, path: Path, io):
         player = None
 
         level_lines = (path / "grid.txt").read_text().split('\n')
@@ -59,23 +51,20 @@ class Level(OwnedEntity):
 
         after_loads = []
 
-        self.tile_grid = create_grid(size, lambda: None)
-        self.physical_grid = create_grid(size, lambda: None)
-        self.effect_grid = create_grid(size, lambda: None)
+        self.grids = Entity(**{l: create_grid(size, lambda: None) for l in self.layers})
 
         for y, line in enumerate(level_lines):
             for x, c in enumerate(line):
                 if c == ".":
                     continue
 
-                for palette, put in (
-                    (self.physical_palette, self.put),
-                    (self.tile_palette, self.put_tile),
-                    (self.effect_palette, self.put_effect),
-                ):
+                for layer, palette in self.palettes:
                     if c not in palette: continue
 
-                    e = put((x, y), metasystem.add(palette[c]()))
+                    e = ms.add(palette[c]())
+                    e.layer = layer
+                    self.put((x, y), e)
+
                     if "after_load" in e:
                         after_loads.append(e.after_load)
 
@@ -87,8 +76,8 @@ class Level(OwnedEntity):
 
         raw_markup = toml.loads((path / "markup.toml").read_text())
         self.markup = Entity(
-            houses=[metasystem.add(House(**h)) for h in raw_markup["houses"]],
-            zones=[metasystem.add(Zone(**h)) for h in raw_markup["zones"]],
+            houses=[ms.add(House(**h)) for h in raw_markup["houses"]],
+            zones=[ms.add(Zone(**h)) for h in raw_markup["zones"]],
         )
 
         for after_load in after_loads:

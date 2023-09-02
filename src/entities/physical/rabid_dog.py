@@ -25,4 +25,4 @@ class RabidDog(OwnedEntity):
         self.senses = Senses(10, 0, 5)
 
     def after_load(self, level):
-        self.spacial_memory = map_grid(level.physical_grid, lambda _: None)
+        self.spacial_memory = map_grid(level.grids.physical, lambda _: None)
