@@ -1,4 +1,4 @@
-# Fallen - detail-oriented mini-RPG game
+# Fallen: detail-oriented mini-RPG game
 
 I always wanted to create my own RPG, here it is.
 
@@ -26,3 +26,13 @@ pip install -r requirements.txt
 ```shell
 python fallen.py
 ```
+
+# Development section
+
+## Documentation
+
+See `docs/`
+
+## Makefile
+
+Basically a container for most use cases. `make` to run the game, `make debug` to run the game with debug utilities, `make profile` to run profiler, `make line_profile` to run line profiler.
