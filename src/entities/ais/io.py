@@ -98,10 +98,13 @@ class IO(OwnedEntity):
         self._display_perception(subject, perception)
         self._display_gui(subject)
 
-        if self.debug_mode:
+        if not self.debug_mode: return
+
+        if len(self.monitor_values) > 0:
             self._display_debug_monitor()
-            if self.console_visible:
-                self._display_console()
+
+        if self.console_visible:
+            self._display_console()
 
     # STAGES #
 
