@@ -146,6 +146,11 @@ class IO(OwnedEntity):
         h, w = self.game.getmaxyx()
         screen_size = (w - 1, h)
 
+        for rx in range(0, screen_size[0]):
+            for ry in range(0, screen_size[1]):
+                character = safe_get2(self.spacial_memory, add2((rx, ry), self.virtual_p))
+                self.game.addch(ry, rx, character not in {None, "."} and character or " ")
+
         for p, entity in perception.vision.items():
             p_on_screen = sub2(p, self.virtual_p)
             if not (le2(zero, p_on_screen) and lt2(p_on_screen, screen_size)): continue
