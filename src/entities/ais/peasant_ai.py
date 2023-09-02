@@ -65,7 +65,11 @@ class PeasantAi:
                     self.mode = Mode.GoOutside
 
             case Mode.GoOutside:
-                self.pather.going_to = random.choice(self.favourite_zones).center
+                self.pather.going_to = random.choices(
+                    self.favourite_zones,
+                    [zone.attractiveness for zone in self.favourite_zones]
+                )[0].center
+
                 self.mode = Mode.Wandering
 
             case Mode.Wandering:

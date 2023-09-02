@@ -38,19 +38,24 @@ entrance = [189, 48]
 [[zones]]
 name = "Fishing shack"
 center = [83, 11]
+attractiveness = 10
 
 [[zones]]
 name = "Tavern hall"
 center = [121, 24]
+attractiveness = 30
 
 [[zones]]
 name = "House ruins"
 center = [18, 46]
+attractiveness = 5
 
 [[zones]]
 name = "Bushes behind the tavern"
 center = [202, 10]
+attractiveness = 5
 
 [[zones]]
 name = "The forest"
 center = [25, 16]
+attractiveness = 5
