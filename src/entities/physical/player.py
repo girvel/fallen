@@ -1,5 +1,6 @@
 from ecs import OwnedEntity
 
+from src.lib.vector import map_grid
 from src.systems.acting.damage import DamageKind, ArmorKind, Weapon, Health
 from src.systems.ai import Kind, Senses
 
@@ -14,3 +15,6 @@ class Player(OwnedEntity):
         self.weapon = Weapon(15, DamageKind.Slashing)
         self.health = Health(100, ArmorKind.Steel)
         self.classifiers = {Kind.Animate}
+
+    def after_load(self, level):
+        self.spacial_memory = map_grid(level.physical_grid, lambda _: None)

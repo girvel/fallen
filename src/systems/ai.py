@@ -129,7 +129,7 @@ def think(subject: 'ai', level: 'physical_grid'):
 
     if vision is not None:
         for p, entity in vision.items():
-            unsafe_set2(subject.ai.spacial_memory, p, entity is not None and entity.character or ".")
+            unsafe_set2(subject.spacial_memory, p, entity is not None and entity.character or ".")
 
     subject.act = subject.ai.make_decision(subject, Perception(
         vision,

@@ -84,7 +84,6 @@ class IO(OwnedEntity):
 
     def connect_to_level(self, level):
         self.level = level
-        self.spacial_memory = map_grid(level.physical_grid, lambda x: None)
 
     def make_decision(self, subject, perception):
         self.render(subject, perception)
@@ -148,7 +147,7 @@ class IO(OwnedEntity):
 
         for rx in range(0, screen_size[0]):
             for ry in range(0, screen_size[1]):
-                character = safe_get2(self.spacial_memory, add2((rx, ry), self.virtual_p))
+                character = safe_get2(subject.spacial_memory, add2((rx, ry), self.virtual_p))
                 self.game.addch(ry, rx, character not in {None, "."} and character or " ")
 
         for p, entity in perception.vision.items():

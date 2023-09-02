@@ -19,7 +19,6 @@ Mode = Enum("Mode", "GoHome GoToTable WorkAtTable GoOutside Wandering")
 
 
 class PeasantAi:
-    spacial_memory = None
     going_to = None
     working_period = RandomPeriod(30, 46)
     wandering_period = RandomPeriod(20, 36)
@@ -44,7 +43,7 @@ class PeasantAi:
                 self.going_to = None
                 return
 
-            grid = map_grid(self.spacial_memory, lambda c: c == "." and 1 or 0)
+            grid = map_grid(subject.spacial_memory, lambda c: c == "." and 1 or 0)
             unsafe_set2(grid, subject.p, 1)
 
             pathfinder = Pathfinder(SimpleGraph(cost=numpy.array(grid[0]).transpose(), cardinal=1, diagonal=0))
@@ -66,12 +65,12 @@ class PeasantAi:
                         (x, y)
                         for x in range(subject.house.house_borders[0][0], subject.house.house_borders[1][0])
                         for y in range(subject.house.house_borders[0][1], subject.house.house_borders[1][1])
-                        if safe_get2(self.spacial_memory, (x, y)) == Table.character
+                        if safe_get2(subject.spacial_memory, (x, y)) == Table.character
                     ])) is not None
                     and
                     (destination := next((
                         p for v in directions
-                        if (p := add2(table_p, v)) and safe_get2(self.spacial_memory, p) == "."
+                        if (p := add2(table_p, v)) and safe_get2(subject.spacial_memory, p) == "."
                         # TODO remove magic character
                     ), None)) is not None
                 ):

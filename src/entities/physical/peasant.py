@@ -33,6 +33,6 @@ class Peasant(OwnedEntity):
                 [area2(sub2(h.house_borders[1], h.house_borders[0])) for h in level.markup.houses]
             )
 
-        self.ai.spacial_memory = map_grid(level.physical_grid, lambda e: e is None and "." or e.character)
+        self.spacial_memory = map_grid(level.physical_grid, lambda e: e is None and "." or e.character)
         # TODO remove magic character
         self.ai.favourite_zones = level.markup.zones
