@@ -84,6 +84,8 @@ class IO(OwnedEntity):
         curses.init_pair(Colors.WhiteOnRed.value, curses.COLOR_WHITE, curses.COLOR_RED)
         curses.init_pair(Colors.Magenta.value, curses.COLOR_MAGENTA, curses.COLOR_BLACK)
 
+        self.resize()
+
     def connect_to_level(self, level):
         self.level = level
 
@@ -92,7 +94,6 @@ class IO(OwnedEntity):
         return self._wait_for_input(subject, perception)
 
     def render(self, subject, perception):
-        self._resize_windows()
         self._move_camera(subject)
         self._display_perception(subject, perception)
         self._display_gui(subject)
@@ -104,7 +105,7 @@ class IO(OwnedEntity):
 
     # STAGES #
 
-    def _resize_windows(self):
+    def resize(self):
         # TODO as a reaction to event, not on update
         h, w = self.main.getmaxyx()
 
@@ -298,6 +299,11 @@ def generate_default_hotkeys():
         _, mx, my, _, _ = curses.getmouse()
         target = perception.vision.get(add2(io.virtual_p, (mx, my)))
         return target and Inspect(target)
+
+    @_hotkey("KEY_RESIZE", non_action=True)
+    def resize_gui(subject, perception, io):
+        io.resize()
+        io.render(subject, perception)
 
     @_hotkey("`", non_action=True)
     def show_debug_console(subject, perception, io):

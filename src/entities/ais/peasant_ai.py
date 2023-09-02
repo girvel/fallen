@@ -1,17 +1,11 @@
 import random
 from enum import Enum
 
-import numpy
-
 from src.entities.ais.components.pather import Pather
 from src.entities.physical.table import Table
 from src.lib.period.random_period import RandomPeriod
-from src.lib.vector import directions, add2, sub2, map_grid, unsafe_set2, safe_get2
+from src.lib.vector import directions, add2, safe_get2
 from src.systems.acting.actions.move import Move
-
-from tcod.path import Pathfinder, SimpleGraph
-
-import logging
 
 
 
@@ -28,7 +22,7 @@ class PeasantAi:
     def __init__(self):
         self.pather = Pather()
 
-    # It is possible to extract ModalAi parent
+    # It is possible to extract ModalAi parent/component?
     def make_decision(self, subject, perception):
         if action := self.pather.go(subject, perception): return action
 
