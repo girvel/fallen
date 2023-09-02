@@ -1,3 +1,5 @@
+import logging
+import random
 from importlib.util import spec_from_file_location, module_from_spec
 
 
@@ -35,3 +37,10 @@ curses_wrong_characters = {
     530: "'",
     529: "CTL_ENTER",
 }
+
+def death_chance_from_half_life(half_life):
+    logging.debug([half_life, 1 - .5 ** (1 / half_life)])
+    return 1 - .5 ** (1 / half_life)
+
+def chance(p):
+    return random.random() <= p

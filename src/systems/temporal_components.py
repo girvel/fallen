@@ -1,6 +1,6 @@
 from ecs import create_system
 
-def generate_removal(component):
+def generate_removal(component):  # TODO move to acting
     @create_system
     def result(container: component):
         delattr(container, component)

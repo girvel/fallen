@@ -1,6 +1,6 @@
 from collections import namedtuple
 
-from src.lib.vector import add2, unsafe_set2, safe_get2, fits_in_grid
+from src.lib.vector import add2, unsafe_set2, safe_get2
 
 
 class Move(namedtuple("MoveBase", "v")):
