@@ -1,4 +1,5 @@
 import curses
+import re
 import sys
 from enum import Enum
 from statistics import median
@@ -306,6 +307,12 @@ def generate_default_hotkeys():
                 io.console_buffer = io.console_buffer[:-1]
             elif isinstance(hotkey, str):
                 io.console_buffer += hotkey
+
+            if hotkey == "\n":
+                last_line_i = io.console_buffer.rfind("\n", 0, -1)
+                last_line_i = last_line_i if last_line_i != -1 else 0
+                last_indent = re.match(r"^(\s*)", io.console_buffer[last_line_i:]).group(1)
+                io.console_buffer += last_indent
 
         def enclose_console_code(subject, perception, io):
             def tracker(f):
