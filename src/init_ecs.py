@@ -31,6 +31,7 @@ def init(stdscr, track, debug_mode):
                 unsafe_set2(level.effect_grid, e.effect_p, None)
 
             ms.delete(e)
+            log.info(f"Destroyed entity {e}")
 
         hades.entities_to_destroy.clear()
 
