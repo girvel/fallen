@@ -19,7 +19,6 @@ class Pather:
         if len(self.free_directions) == 0: return
 
         if self.going_to is not None:
-            if subject.name == "Rabid dog": logging.debug(self.going_to)
             if len(self.path) > 0:
                 go_to = self.path.pop()
                 if perception.vision.get(go_to) is None:

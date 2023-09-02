@@ -39,7 +39,6 @@ curses_wrong_characters = {
 }
 
 def death_chance_from_half_life(half_life):
-    logging.debug([half_life, 1 - .5 ** (1 / half_life)])
     return 1 - .5 ** (1 / half_life)
 
 def chance(p):

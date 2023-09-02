@@ -339,7 +339,8 @@ def generate_default_hotkeys():
                     "level": io.level,
                 })
             except Exception as ex:
-                log.info(f"Exception when executing console code: {ex}")
+                log.warning(f"Exception when executing console code")
+                log.exception(ex)
 
         log.info(f"Executing console code:\n```py\n{io.console_buffer}\n```")
         enclose_console_code(subject, perception, io)
