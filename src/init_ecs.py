@@ -7,10 +7,9 @@ from src.entities.effects.fire import Fire
 from src.entities.special.level import Level
 from src.entities.ais.io import IO
 from src.lib.vector import unsafe_set2
+from src.systems import acting
 from src.systems.ai import think
-from src.systems.acting import act
 from src.systems.death_by_chance import death_by_chance
-from src.systems.temporal_components import remove_temporals
 
 log = logging.getLogger(__name__)
 
@@ -37,8 +36,7 @@ def init(stdscr, track, debug_mode):
 
     for system in [
         think,
-        *remove_temporals,  # TODO these should be separate functions
-        act,
+        *acting.sequence,
         death_by_chance,
         destruction,
     ]:
