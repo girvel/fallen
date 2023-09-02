@@ -92,6 +92,7 @@ class IO(OwnedEntity):
         return self._wait_for_input(subject, perception)
 
     def render(self, subject, perception):
+        self.main.refresh()
         self._move_camera(subject)
         self._display_perception(subject, perception)
         self._display_gui(subject)
