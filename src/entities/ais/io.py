@@ -7,7 +7,8 @@ from statistics import median
 from ecs import OwnedEntity, Entity
 
 from src.lib.toolkit import cut_by_length, curses_wrong_characters
-from src.lib.vector import zero, up, down, left, right, add2, le2, lt2, floordiv2, sub2, safe_get2, size2
+from src.lib.vector import zero, up, down, left, right, add2, le2, lt2, floordiv2, sub2, safe_get2, size2, create_grid, \
+    map_grid
 
 import logging
 
@@ -44,6 +45,7 @@ class Colors(Enum):
 
 class IO(OwnedEntity):
     name = 'Input/Output'
+    spacial_memory = None
 
     # input
     virtual_p = (0, 0)
@@ -82,6 +84,7 @@ class IO(OwnedEntity):
 
     def connect_to_level(self, level):
         self.level = level
+        self.spacial_memory = map_grid(level.physical_grid, lambda x: None)
 
     def make_decision(self, subject, perception):
         self.render(subject, perception)

@@ -5,7 +5,7 @@ import numba as numba
 import numpy
 from ecs import create_system, OwnedEntity
 
-from src.lib.vector import sub2, add2, safe_get2
+from src.lib.vector import sub2, add2, safe_get2, unsafe_set2
 
 import logging
 
@@ -126,6 +126,10 @@ def think(subject: 'ai', level: 'physical_grid'):
         and calculate_vision(level.physical_grid, subject.p, subject.senses.vision)
         or (None, None)
     )
+
+    if vision is not None:
+        for p, entity in vision.items():
+            unsafe_set2(subject.ai.spacial_memory, p, entity is not None and entity.character or ".")
 
     subject.act = subject.ai.make_decision(subject, Perception(
         vision,

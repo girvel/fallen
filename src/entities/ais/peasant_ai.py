@@ -29,6 +29,7 @@ class PeasantAi:
     def __init__(self):
         self.path = []
 
+    # It is possible to extract ModalAi parent
     def make_decision(self, subject, perception):
         free_directions = [d for d in directions if perception.vision.get(add2(subject.p, d)) is None]
         if len(free_directions) == 0: return
