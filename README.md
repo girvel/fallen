@@ -2,6 +2,8 @@
 
 I always wanted to create my own RPG, here it is.
 
+![(Here should have been a screenshot, I don't know what went wrong)](assets/screenshot.png)
+
 ## Installation
 
 1. Install [Git](https://git-scm.com/) and [Python](https://www.python.org/downloads/) (3.10+)
