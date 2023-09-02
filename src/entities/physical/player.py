@@ -10,6 +10,7 @@ class Player(OwnedEntity):
     character = '@'
 
     senses = Senses(24, 40, 1)
+    ai = None  # set to IO on level loading
 
     def __init__(self):
         self.weapon = Weapon(15, DamageKind.Slashing)
@@ -18,3 +19,4 @@ class Player(OwnedEntity):
 
     def after_load(self, level):
         self.spacial_memory = map_grid(level.physical_grid, lambda _: None)
+        self.ai.connect_to_level(level)

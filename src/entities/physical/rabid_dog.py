@@ -2,24 +2,27 @@ import random
 
 from ecs import OwnedEntity
 
+from src.entities.ais.io import Colors
+from src.entities.ais.rabid_ai import RabidAi
+from src.lib.vector import map_grid
 from src.systems.acting.damage import DamageKind, ArmorKind, Health, Weapon
-from src.systems.ai import Kind
+from src.systems.ai import Kind, Senses
 
 
 class RabidDog(OwnedEntity):
     name = 'Rabid dog'
     character = 'd'
+    color = Colors.Magenta
     vision = 10
+
+    spacial_memory = None
 
     def __init__(self):
         self.weapon = Weapon(3, DamageKind.Piercing)
         self.health = Health(20, ArmorKind.Organic)
         self.classifiers = {Kind.Animate}
+        self.ai = RabidAi()
+        self.senses = Senses(10, 0, 5)
 
-    def choose_target(self, visible_targets):
-        filtered_targets = [
-            t for t in visible_targets
-            if t != self and "classifiers" in t and Kind.Animate in t.classifiers
-        ]
-
-        return len(filtered_targets) > 0 and random.choice(filtered_targets) or None
+    def after_load(self, level):
+        self.spacial_memory = map_grid(level.physical_grid, lambda _: None)

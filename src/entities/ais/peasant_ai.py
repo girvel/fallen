@@ -3,6 +3,7 @@ from enum import Enum
 
 import numpy
 
+from src.entities.ais.components.pather import Pather
 from src.entities.physical.table import Table
 from src.lib.period.random_period import RandomPeriod
 from src.lib.vector import directions, add2, sub2, map_grid, unsafe_set2, safe_get2
@@ -26,34 +27,15 @@ class PeasantAi:
     favourite_zones = []
 
     def __init__(self):
-        self.path = []
+        self.pather = Pather()
 
     # It is possible to extract ModalAi parent
     def make_decision(self, subject, perception):
-        free_directions = [d for d in directions if perception.vision.get(add2(subject.p, d)) is None]
-        if len(free_directions) == 0: return
-
-        if self.going_to is not None:
-            if len(self.path) > 0:
-                go_to = self.path.pop()
-                if perception.vision.get(go_to) is None:
-                    return Move(sub2(go_to, subject.p))
-
-            if self.going_to == subject.p:  # path never contains the destination in the middle
-                self.going_to = None
-                return
-
-            grid = map_grid(subject.spacial_memory, lambda c: c == "." and 1 or 0)
-            unsafe_set2(grid, subject.p, 1)
-
-            pathfinder = Pathfinder(SimpleGraph(cost=numpy.array(grid[0]).transpose(), cardinal=1, diagonal=0))
-            pathfinder.add_root(subject.p)
-            self.path = list(map(tuple, pathfinder.path_to(self.going_to)))[1:][::-1]
-            return
+        if action := self.pather.go(subject, perception): return action
 
         match self.mode:
             case Mode.GoHome:
-                self.going_to = subject.house.entrance
+                self.pather.going_to = subject.house.entrance
                 self.mode = Mode.GoToTable
 
             case Mode.GoToTable:
@@ -74,7 +56,7 @@ class PeasantAi:
                         # TODO remove magic character
                     ), None)) is not None
                 ):
-                    self.going_to = destination
+                    self.pather.going_to = destination
                     self.mode = Mode.WorkAtTable
                 else:
                     self.mode = Mode.GoOutside
@@ -84,10 +66,10 @@ class PeasantAi:
                     self.mode = Mode.GoOutside
 
             case Mode.GoOutside:
-                self.going_to = random.choice(self.favourite_zones).center
+                self.pather.going_to = random.choice(self.favourite_zones).center
                 self.mode = Mode.Wandering
 
             case Mode.Wandering:
                 if not self.wandering_period.step():
-                    return Move(random.choice(free_directions))
+                    return Move(random.choice(self.pather.free_directions))
                 self.mode = Mode.GoHome

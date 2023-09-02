@@ -38,6 +38,7 @@ class Colors(Enum):
     WhiteOnBlue = 3
     Yellow = 4
     WhiteOnRed = 5
+    Magenta = 6
 
     def format(self):
         return curses.color_pair(self.value)
@@ -81,6 +82,7 @@ class IO(OwnedEntity):
         curses.init_pair(Colors.WhiteOnBlue.value, curses.COLOR_WHITE, curses.COLOR_BLUE)
         curses.init_pair(Colors.Yellow.value, curses.COLOR_YELLOW, curses.COLOR_BLACK)
         curses.init_pair(Colors.WhiteOnRed.value, curses.COLOR_WHITE, curses.COLOR_RED)
+        curses.init_pair(Colors.Magenta.value, curses.COLOR_MAGENTA, curses.COLOR_BLACK)
 
     def connect_to_level(self, level):
         self.level = level

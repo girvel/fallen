@@ -137,35 +137,3 @@ def think(subject: 'ai', level: 'physical_grid'):
         subject.senses.smell > 0 and calculate_smell(level.physical_grid, subject.p, subject.senses.smell),
         free_cache
     ))
-
-    # start = subject.p - subject.vision * one
-    # end = subject.p + subject.vision * one
-    #
-    # possible_targets = []
-    #
-    # for y in range(start.y, end.y + 1):
-    #     for x in range(start.x, end.x + 1):
-    #         e = level.physical_grid[y][x]
-    #
-    #         if e:
-    #             possible_targets.append(e)
-    #
-    # target = subject.choose_target(possible_targets)
-    # if not target: return
-    #
-    # v = target.p - subject.p
-    # if v.is_minimal():
-    #     subject.act = Attack(v)
-    # else:
-    #     if v.x * v.y == 0:
-    #         subject.act = Move(v.integer_normalize())
-    #     else:
-    #         v1 = Vector(sign(v.x), 0)
-    #         v2 = Vector(0, sign(v.y))
-    #
-    #         if (subject.p + v1).get_in(level.physical_grid) is not None:
-    #             subject.act = Move(v2)
-    #         elif (subject.p + v2).get_in(level.physical_grid) is not None:
-    #             subject.act = Move(v1)
-    #         else:
-    #             subject.act = Move(random.choice([v1, v2]))

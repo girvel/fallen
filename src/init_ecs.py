@@ -38,10 +38,7 @@ def init(stdscr, track, debug_mode):
     # Entities
     ms.create(name='hades', entities_to_destroy=[])
 
-    level = ms.add(Level(ms, Path("assets/levels/main")))
-    io = IO(stdscr, debug_track=track, debug_mode=debug_mode)
-    level.player.ai = io
-    io.connect_to_level(level)
+    level = ms.add(Level(ms, Path("assets/levels/main"), IO(stdscr, debug_track=track, debug_mode=debug_mode)))
 
     # Game cycle
     log.info("Starting game cycle")

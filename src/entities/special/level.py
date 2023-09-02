@@ -35,7 +35,7 @@ class Level(OwnedEntity):
     effect_palette = load_palette_from(Path("src/entities/effects"))
     markup = None
 
-    def __init__(self, metasystem, path: Path):
+    def __init__(self, metasystem, path: Path, io):
         player = None
 
         level_lines = (path / "grid.txt").read_text().split('\n')
@@ -57,14 +57,15 @@ class Level(OwnedEntity):
                     (self.tile_palette, self.put_tile),
                     (self.effect_palette, self.put_effect),
                 ):
-                    if c in palette:
-                        e = put((x, y), metasystem.add(palette[c]()))
-                        if "after_load" in e:
-                            after_loads.append(e.after_load)
+                    if c not in palette: continue
 
-                        if c == "@":
-                            self.player = e
-                        break
+                    e = put((x, y), metasystem.add(palette[c]()))
+                    if "after_load" in e:
+                        after_loads.append(e.after_load)
+
+                    if c == "@":
+                        e.ai = io
+                    break
                 else:
                     log.warning(f"Ignored unknown entity `{c}` at {(x, y)}")
 
