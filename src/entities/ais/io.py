@@ -16,8 +16,6 @@ from src.systems.acting.actions.attack import Attack
 from src.systems.acting.actions.inspect import Inspect
 from src.systems.acting.actions.move import Move
 
-log = logging.getLogger(__name__)  # TODO remove these
-
 
 def _get_color_pair(entity):
     if entity is None:
