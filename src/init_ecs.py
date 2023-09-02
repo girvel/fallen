@@ -40,9 +40,7 @@ def init(stdscr, track, debug_mode):
     ms.create(name='hades', entities_to_destroy=[])
 
     level = ms.add(Level(ms, Path("assets/levels/main"), IO(stdscr, debug_track=track, debug_mode=debug_mode)))
-    fire = Fire(2)
-    fire.layer = "effects"
-    level.put((51, 3), ms.add(fire))
+    level.put((51, 3), ms.add(Fire(2), layer="effects"))
 
     # Game cycle
     logging.info("Starting game cycle")
