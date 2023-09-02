@@ -28,3 +28,10 @@ def load_palette_from(path):  # TODO move to level
 
 def cut_by_length(string, length):
     return [string[i:i + length] for i in range(0, len(string), length)]
+
+curses_wrong_characters = {
+    0: "]",
+    460: '"',
+    530: "'",
+    529: "CTL_ENTER",
+}

@@ -5,7 +5,7 @@ from statistics import median
 
 from ecs import OwnedEntity
 
-from src.lib.toolkit import cut_by_length
+from src.lib.toolkit import cut_by_length, curses_wrong_characters
 from src.lib.vector import zero, up, down, left, right, add2, le2, lt2, floordiv2, sub2, safe_get2, size2
 
 import logging
@@ -289,24 +289,32 @@ def generate_default_hotkeys():
 
         while True:
             io.render(subject, perception)
-            if (hotkey := io.main.getkey()) == "CTL_ENTER": break
+            if (
+                (hotkey := io.main.get_wch()) and
+                (hotkey := curses_wrong_characters.get(
+                    isinstance(hotkey, int) and hotkey or ord(hotkey), hotkey)
+                ) == "CTL_ENTER"
+            ): break
 
-            if len(hotkey) != 1: continue
             if hotkey == "":
                 io.console_buffer = io.console_buffer[:-1]
-            else:
+            elif isinstance(hotkey, str):
                 io.console_buffer += hotkey
 
-        def enclose_monitor_function(buffer):
-            def monitor_function():
-                try:
-                    return eval(buffer)
-                except Exception as ex:
-                    return ex
-            return monitor_function
+        def enclose_console_code(subject, perception, io):
+            try:
+                exec(io.console_buffer, {
+                    "it": isinstance(subject.act, Inspect) and subject.act.subject or None,
+                    "monitor": io.monitor_values,
+                    "subject": subject,
+                    "perception": perception,
+                    "io": io,
+                })
+            except Exception as ex:
+                log.info(f"Exception when executing console code: {ex}")
 
-        log.info(f"Adding monitor function:\n```py\n{io.console_buffer}\n```")
-        io.monitor_values[str(len(io.monitor_values))] = enclose_monitor_function(io.console_buffer)
+        log.info(f"Executing console code:\n```py\n{io.console_buffer}\n```")
+        enclose_console_code(subject, perception, io)
         io.console_buffer = ""
         io.console_visible = False
         io.render(subject, perception)
