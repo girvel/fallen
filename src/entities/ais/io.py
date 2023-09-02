@@ -188,7 +188,8 @@ class IO(OwnedEntity):
             self.gui.addstr(8, 2, "ATTACK", Colors.WhiteOnRed.format())
 
         if "act" in subject and isinstance(subject.act, Inspect):
-            self.gui.addstr(10, 2, f"Inspects {subject.act.subject.name}")
+            self.gui.addstr(10, 2, f"Inspects")
+            self.gui.addstr(10, 11, subject.act.subject.name, Colors.Yellow.format())
 
         self.gui.refresh()
 
