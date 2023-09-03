@@ -11,6 +11,7 @@ class Player(OwnedEntity):
 
     senses = Senses(24, 40, 1)
     ai = None  # set to IO on level loading
+    act = None
 
     def __init__(self):
         self.weapon = Weapon(15, DamageKind.Slashing)

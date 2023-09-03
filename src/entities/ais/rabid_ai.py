@@ -18,7 +18,7 @@ class RabidAi:
         if action := self.pather.go(subject, perception): return action
 
         possible_targets = [
-            e for e in perception.vision.values()
+            e for e in perception.vision.physical.values()
             if e is not None and e is not subject and classified_as(e, Kind.Animate)
         ]
         if len(possible_targets) == 0: return Move(random.choice(self.pather.free_directions))

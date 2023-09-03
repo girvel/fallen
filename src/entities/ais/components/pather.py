@@ -15,13 +15,13 @@ class Pather:
         self.free_directions = None
 
     def go(self, subject, perception):
-        self.free_directions = [d for d in directions if perception.vision.get(add2(subject.p, d)) is None]
+        self.free_directions = [d for d in directions if perception.vision[subject.layer].get(add2(subject.p, d)) is None]
         if len(self.free_directions) == 0: return
 
         if self.going_to is not None:
             if len(self.path) > 0:
                 go_to = self.path.pop()
-                if perception.vision.get(go_to) is None:
+                if perception.vision[subject.layer].get(go_to) is None:
                     return Move(sub2(go_to, subject.p))
 
             if abs2(sub2(self.going_to, subject.p)) <= 1:  # path never contains the destination in the middle

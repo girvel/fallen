@@ -3,7 +3,7 @@ from enum import Enum
 
 import numba as numba
 import numpy
-from ecs import create_system, OwnedEntity
+from ecs import create_system, OwnedEntity, Entity
 
 from src.lib.vector import sub2, add2, safe_get2, unsafe_set2
 
@@ -79,9 +79,9 @@ def project_rays(vision, x, y, power, cx, cy):
         d = dirs[i]
         project_rays(vision, d[0], d[1], power, cx, cy)
 
-def calculate_vision(physical_grid, p, r):
+def calculate_vision(grids, p, r):
     d = 2 * r + 1
-    array, (level_w, level_h) = physical_grid
+    array, (level_w, level_h) = grids.physical
 
     edge = (p[0] - r, p[1] - r)
     vision = numpy.full((d, d), 0)  # TODO crop it to not intersect level borders
@@ -100,11 +100,13 @@ def calculate_vision(physical_grid, p, r):
     project_rays(vision, r, r + 1, r, r, r)
     project_rays(vision, r, r - 1, r, r, r)
 
-    result = {}
+    result = Entity(**{l: {} for l, _ in grids})
     for y in range(max(edge[1], 0), min(edge[1] + d, level_h)):
         for x in range(max(edge[0], 0), min(edge[0] + d, level_w)):
             if vision[x - edge[0], y - edge[1]] <= 0: continue
-            result[x, y] = array[y][x]
+
+            for l, grid in grids:
+                result[l][x, y] = grid[0][y][x]
 
     return result, free_cache
 
@@ -122,12 +124,12 @@ def calculate_smell(physical_grid, p, r):
 @create_system
 def think(subject: 'ai', level: 'grids'):
     vision, free_cache = (subject.senses.vision > 0
-        and calculate_vision(level.grids.physical, subject.p, subject.senses.vision)
+        and calculate_vision(level.grids, subject.p, subject.senses.vision)
         or (None, None)
     )
 
     if vision is not None:
-        for p, entity in vision.items():
+        for p, entity in vision.physical.items():
             unsafe_set2(subject.spacial_memory, p, entity is not None and entity.character or ".")
 
     subject.act = subject.ai.make_decision(subject, Perception(

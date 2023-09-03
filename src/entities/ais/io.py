@@ -1,6 +1,7 @@
 import curses
 import re
 import sys
+from collections import ChainMap
 from statistics import median
 
 from ecs import OwnedEntity, Entity
@@ -115,6 +116,8 @@ class IO(OwnedEntity):
             ))
         )
 
+    layers_display_order = ["physical", "effects", "tiles"]
+
     def _display_perception(self, subject, perception):
         self.game.clear()
         h, w = self.game.getmaxyx()
@@ -125,23 +128,21 @@ class IO(OwnedEntity):
                 character = safe_get2(subject.spacial_memory, add2((rx, ry), self.virtual_p))
                 self.game.addch(ry, rx, character not in {None, "."} and character or " ")
 
-        for p, entity in perception.vision.items():
+        inspected = isinstance(subject.act, Inspect) and subject.act.subject
+        for p, entity in perception.vision.physical.items():
             p_on_screen = sub2(p, self.virtual_p)
             if not (le2(zero, p_on_screen) and lt2(p_on_screen, screen_size)): continue
 
-            if entity is not None:
+            for layer in self.layers_display_order:
+                if (entity := safe_get2(self.level.grids[layer], p)) is None: continue
+
                 character = entity.character
                 color = get_color_pair(entity) | (
-                    "act" in subject and isinstance(subject.act, Inspect) and subject.act.subject == entity
+                    inspected == entity
                         and curses.A_REVERSE
                         or 0
-                ) | curses.A_BOLD
-            elif (effect := safe_get2(self.level.grids.effects, p)) is not None:
-                character = effect.character
-                color = effect.color.format()
-            elif (tile := safe_get2(self.level.grids.tiles, p)) is not None:
-                character = tile.character
-                color = tile.color.format() | curses.A_BOLD
+                )
+                break
             else:
                 character = "."
                 color = Colors.Default.format()
@@ -254,7 +255,7 @@ def generate_default_hotkeys():
                 return Move(direction)
 
             if io.mode == Attack:
-                if (target := perception.vision.get(add2(subject.p, direction))) is not None:
+                if (target := perception.vision[subject.layer].get(add2(subject.p, direction))) is not None:
                     return Attack(target)
                 return Move(direction)
 
@@ -286,7 +287,10 @@ def generate_default_hotkeys():
     @_hotkey("KEY_MOUSE")
     def inspect(subject, perception, io):
         _, mx, my, _, _ = curses.getmouse()
-        target = perception.vision.get(add2(io.virtual_p, (mx, my)))
+        target = next((
+            e for l in io.layers_display_order
+            if (e := perception.vision[l].get(add2(io.virtual_p, (mx, my)))) is not None
+        ), None)
         return target and Inspect(target)
 
     @_hotkey("KEY_RESIZE", non_action=True)

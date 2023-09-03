@@ -35,4 +35,9 @@ def _get_color_pair(entity):
 
 
 def get_color_pair(entity):
-    return curses.color_pair(_get_color_pair(entity).value)
+    color = curses.color_pair(_get_color_pair(entity).value)
+
+    if entity.layer == "physical":
+        color |= curses.A_BOLD
+
+    return color
