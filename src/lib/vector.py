@@ -21,6 +21,9 @@ def add2(v1: int2, v2: int2) -> int2:
 def sub2(v1: int2, v2: int2) -> int2:
     return v1[0] - v2[0], v1[1] - v2[1]
 
+def mul2(v: int2, k: int) -> int2:
+    return v[0] * k, v[1] * k
+
 def floordiv2(v: int2, k: int) -> int2:
     return v[0] // k, v[1] // k
 
@@ -32,6 +35,9 @@ def sign2(v: int2) -> int2:
 
 def area2(v: int2) -> int:
     return v[0] * v[1]
+
+def flip2(v: int2) -> int2:
+    return v[1], v[0]
 
 def gt2(v1: int2, v2: int2) -> int2:
     return v1[0] > v2[0] and v1[1] > v2[1]

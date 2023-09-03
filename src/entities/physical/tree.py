@@ -2,7 +2,7 @@ import random
 
 from ecs import OwnedEntity
 
-from src.entities.ais.io import Colors
+from src.entities.ais.iolib.colors import Colors
 from src.systems.acting.damage import Health, ArmorKind
 
 

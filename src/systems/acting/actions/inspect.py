@@ -2,5 +2,5 @@ from collections import namedtuple
 
 
 class Inspect(namedtuple("InspectBase", "subject")):
-    def execute(self, actor, level, hades):
+    def execute(self, actor, level, hades, genesis):
         pass

@@ -17,11 +17,13 @@ Basically naming convention is:
 
 ### General terms
 
-| Term | Meaning  |
-|---|---|
-| p | position |
-| v | direction of movement |
-| ms | metasystem (from ecs.Metasystem) |
+| Term    | Meaning                                               |
+|---------|-------------------------------------------------------|
+| p       | position                                              |
+| v       | direction of movement                                 |
+| ms      | metasystem (from ecs.Metasystem)                      |
+| hades   | entity-container that manages destruction of entities |
+| genesis | entity-container that manages creation of entities    |
 
 ### Terms borrowed from math
 

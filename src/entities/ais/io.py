@@ -1,45 +1,20 @@
 import curses
 import re
 import sys
-from enum import Enum
 from statistics import median
 
 from ecs import OwnedEntity, Entity
 
+from src.entities.ais.iolib.colors import Colors, get_color_pair
 from src.lib.toolkit import cut_by_length, curses_wrong_characters
-from src.lib.vector import zero, up, down, left, right, add2, le2, lt2, floordiv2, sub2, safe_get2, size2, create_grid, \
-    map_grid
+from src.lib.vector import zero, up, down, left, right, add2, le2, lt2, floordiv2, sub2, safe_get2, size2
 
 import logging
 
 from src.systems.acting.actions.attack import Attack
+from src.systems.acting.actions.cast_fire_flow import CastFireFlow
 from src.systems.acting.actions.inspect import Inspect
 from src.systems.acting.actions.move import Move
-
-
-def _get_color_pair(entity):
-    if entity is None:
-        return Colors.Default
-
-    if getattr(entity, "receives_damage", None):
-        return Colors.Red
-
-    return getattr(entity, "color", Colors.Default)
-
-def get_color_pair(entity):
-    return curses.color_pair(_get_color_pair(entity).value)
-
-class Colors(Enum):
-    Default = 0
-    Red = 1
-    Green = 2
-    WhiteOnBlue = 3
-    Yellow = 4
-    WhiteOnRed = 5
-    Magenta = 6
-
-    def format(self):
-        return curses.color_pair(self.value)
 
 
 class IO(OwnedEntity):
@@ -75,12 +50,7 @@ class IO(OwnedEntity):
         logging.info(f"Initalized mouse with {curses.mousemask(curses.ALL_MOUSE_EVENTS)}")
         print('\033[?1003h')
 
-        curses.init_pair(Colors.Red.value, curses.COLOR_RED, curses.COLOR_BLACK)
-        curses.init_pair(Colors.Green.value, curses.COLOR_GREEN, curses.COLOR_BLACK)
-        curses.init_pair(Colors.WhiteOnBlue.value, curses.COLOR_WHITE, curses.COLOR_BLUE)
-        curses.init_pair(Colors.Yellow.value, curses.COLOR_YELLOW, curses.COLOR_BLACK)
-        curses.init_pair(Colors.WhiteOnRed.value, curses.COLOR_WHITE, curses.COLOR_RED)
-        curses.init_pair(Colors.Magenta.value, curses.COLOR_MAGENTA, curses.COLOR_BLACK)
+        Colors.initialize()
 
         self.resize()
 
@@ -269,8 +239,8 @@ def generate_default_hotkeys():
             for hotkey in self.keys:
                 (other_hotkeys if self.non_action else action_hotkeys)[hotkey] = f
 
-    def generate_movement_function(keys, direction):
-        @_hotkey(*keys)
+    def generate_movement_function(key, direction):
+        @_hotkey(key)
         def move(subject, perception, io):
             if io.mode == Move:
                 return Move(direction)
@@ -280,13 +250,15 @@ def generate_default_hotkeys():
                     return Attack(target)
                 return Move(direction)
 
-    for keys, direction in {
-        ("w", ): up,
-        ("s", ): down,
-        ("a", ): left,
-        ("d", ): right,
-    }.items():
-        generate_movement_function(keys, direction)
+    directions_by_key = {
+        "w": up,
+        "s": down,
+        "a": left,
+        "d": right,
+    }
+
+    for key, direction in directions_by_key.items():
+        generate_movement_function(key, direction)
 
     @_hotkey("Q")
     def quit_(subject, perception, io):
@@ -295,6 +267,11 @@ def generate_default_hotkeys():
     @_hotkey("r")
     def change_mode(subject, perception, io):
         io.mode = (io.mode == Move) and Attack or Move
+
+    @_hotkey("1")
+    def cast_fire_flow(subject, perception, io):
+        while not isinstance((hotkey := io.main.get_wch()), str) or hotkey not in "wasd": pass
+        return CastFireFlow(directions_by_key[hotkey])
 
     @_hotkey("KEY_MOUSE")
     def inspect(subject, perception, io):

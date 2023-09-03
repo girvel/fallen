@@ -17,6 +17,7 @@ def init(stdscr, track, debug_mode):
     ms = Metasystem()
 
     # Systems
+    # TODO move out
     @create_system
     def destruction(hades: 'entities_to_destroy', level: 'grids'):
         for e in hades.entities_to_destroy:
@@ -28,16 +29,26 @@ def init(stdscr, track, debug_mode):
 
         hades.entities_to_destroy.clear()
 
+    @create_system
+    def creation(genesis: 'entities_to_create'):
+        for e in genesis.entities_to_create:
+            ms.add(e)
+            logging.info(f"Created entity {e}")
+
+        genesis.entities_to_create.clear()
+
     for system in [
         think,
         *acting.sequence,
         death_by_chance,
         destruction,
+        creation,
     ]:
         ms.add(system)
 
     # Entities
     ms.create(name='hades', entities_to_destroy=[])
+    ms.create(name='genesis', entities_to_create=[])
 
     level = ms.add(Level(ms, Path("assets/levels/main"), IO(stdscr, debug_track=track, debug_mode=debug_mode)))
     level.put((51, 3), ms.add(Fire(2), layer="effects"))
