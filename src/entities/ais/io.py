@@ -129,9 +129,9 @@ class IO(OwnedEntity):
                 self.game.addch(ry, rx, character not in {None, "."} and character or " ")
 
         inspected = isinstance(subject.act, Inspect) and subject.act.subject
-        for p, entity in perception.vision.physical.items():
-            p_on_screen = sub2(p, self.virtual_p)
-            if not (le2(zero, p_on_screen) and lt2(p_on_screen, screen_size)): continue
+        for p in perception.vision.physical:
+            rp = sub2(p, self.virtual_p)
+            if not (le2(zero, rp) and lt2(rp, screen_size)): continue
 
             for layer in self.layers_display_order:
                 if (entity := safe_get2(self.level.grids[layer], p)) is None: continue
@@ -147,7 +147,7 @@ class IO(OwnedEntity):
                 character = "."
                 color = Colors.Default.format()
 
-            self.game.addch(p_on_screen[1], p_on_screen[0], character, color)
+            self.game.addch(rp[1], rp[0], character, color)
 
         self.game.refresh()
 
