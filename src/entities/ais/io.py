@@ -278,7 +278,9 @@ def generate_default_hotkeys():
 
     @_hotkey("1")
     def cast_fire_flow(subject, perception, io):
-        while not isinstance((hotkey := io.main.get_wch()), str) or hotkey not in "wasd": pass
+        while not isinstance((hotkey := io.main.get_wch()), str) or hotkey not in "wasd":
+            if hotkey == "":
+                return
         return CastFireFlow(directions_by_key[hotkey])
 
     @_hotkey("KEY_MOUSE")
