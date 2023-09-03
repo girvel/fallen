@@ -173,8 +173,13 @@ class IO(OwnedEntity):
             self.gui.addstr(8, 2, "ATTACK", Colors.WhiteOnRed.format())
 
         if "act" in subject and isinstance(subject.act, Inspect):
+            inspected = subject.act.subject
+
             self.gui.addstr(10, 2, f"Inspects")
-            self.gui.addstr(10, 11, subject.act.subject.name, Colors.Yellow.format())
+            self.gui.addstr(10, 11, inspected.name, Colors.Yellow.format())
+
+            if "health" in inspected and inspected.health.amount.current <= inspected.health.amount.maximum / 2:
+                self.gui.addstr(11, 2, "Looks hurt", Colors.Yellow.format())
 
         self.gui.refresh()
 
