@@ -1,12 +1,12 @@
 import curses
 import re
 import sys
-from collections import ChainMap
 from statistics import median
 
 from ecs import OwnedEntity, Entity
 
 from src.entities.ais.iolib.colors import Colors, get_color_pair
+from src.entities.ais.iolib.gui import Gui
 from src.lib.toolkit import cut_by_length, curses_wrong_characters
 from src.lib.vector import zero, up, down, left, right, add2, le2, lt2, floordiv2, sub2, safe_get2, size2
 
@@ -33,11 +33,14 @@ class IO(OwnedEntity):
     mode = Move
 
     def __init__(self, stdscr, debug_track, debug_mode):
+        self.gui = Gui(stdscr, debug_mode)
+        self.gui.resize()
         self.main = stdscr
-        self.game = curses.newwin(1, 1, 0, 0)
-        self.gui = curses.newwin(1, 1, 0, 0)
-        self.debug_monitor = curses.newwin(1, 1, 0, 0)
-        self.console = curses.newwin(1, 1, 0, 0)
+
+        # self.game = curses.newwin(1, 1, 0, 0)
+        # self.gui = curses.newwin(1, 1, 0, 0)
+        # self.debug_monitor = curses.newwin(1, 1, 0, 0)
+        # self.console = curses.newwin(1, 1, 0, 0)
         self.console_visible = False
 
         self.debug_track = debug_track and iter(debug_track)
@@ -53,7 +56,7 @@ class IO(OwnedEntity):
 
         Colors.initialize()
 
-        self.resize()
+        # self.resize()
 
     def connect_to_level(self, level):
         self.level = level
@@ -63,27 +66,27 @@ class IO(OwnedEntity):
         return self._wait_for_input(subject, perception)
 
     def render(self, subject, perception):
-        self.main.refresh()
-        self._move_camera(subject)
-        self._display_perception(subject, perception)
-        self._display_gui(subject)
-
-        if not self.debug_mode: return
-
-        if len(self.monitor_values) > 0:
-            self._display_debug_monitor()
-
-        if self.console_visible:
-            self._display_console()
+        self.gui.render(subject, perception, self.level)
+        # # self.main.refresh()
+        # # self._move_camera(subject)
+        # # self._display_perception(subject, perception)
+        # # self._display_gui(subject)
+        #
+        # # if not self.debug_mode: return
+        #
+        # if len(self.monitor_values) > 0:
+        #     self._display_debug_monitor()
+        #
+        # if self.console_visible:
+        #     self._display_console()
 
     # STAGES #
 
     def resize(self):
-        # TODO as a reaction to event, not on update
-        h, w = self.main.getmaxyx()
+        # h, w = self.main.getmaxyx()
 
-        self.game.resize(h - 1, w - self.gui_w)
-        self.following_offset = floordiv2((w - self.gui_w, h - 1), 3)
+        # self.game.resize(h - 1, w - self.gui_w)
+        # self.following_offset = floordiv2((w - self.gui_w, h - 1), 3)
 
         self.gui.resize(h - 1, self.gui_w)
         self.gui.mvwin(0, w - self.gui_w)
@@ -95,61 +98,61 @@ class IO(OwnedEntity):
             self.console.resize(h - 1, self.gui_w)
             self.console.mvwin(0, w - self.gui_w)
 
-    def _move_camera(self, subject):
-        screen_h, screen_w = self.game.getmaxyx()
-        level_w, level_h = size2(self.level.grids.physical)
-
-        self.virtual_p = (
-            median((
-                0,
-                subject.p[0] - screen_w + self.following_offset[0],
-                self.virtual_p[0],
-                subject.p[0] - self.following_offset[0],
-                level_w - screen_w,
-            )),
-            median((
-                0,
-                subject.p[1] - screen_h + self.following_offset[1],
-                self.virtual_p[1],
-                subject.p[1] - self.following_offset[1],
-                level_h - screen_h,
-            ))
-        )
-
-    layers_display_order = ["physical", "effects", "tiles"]
-
-    def _display_perception(self, subject, perception):
-        self.game.clear()
-        h, w = self.game.getmaxyx()
-        screen_size = (w - 1, h)
-
-        for rx in range(0, screen_size[0]):
-            for ry in range(0, screen_size[1]):
-                character = safe_get2(subject.spacial_memory, add2((rx, ry), self.virtual_p))
-                self.game.addch(ry, rx, character not in {None, "."} and character or " ")
-
-        inspected = isinstance(subject.act, Inspect) and subject.act.subject
-        for p in perception.vision.physical:
-            rp = sub2(p, self.virtual_p)
-            if not (le2(zero, rp) and lt2(rp, screen_size)): continue
-
-            for layer in self.layers_display_order:
-                if (entity := safe_get2(self.level.grids[layer], p)) is None: continue
-
-                character = entity.character
-                color = get_color_pair(entity) | (
-                    inspected == entity
-                        and curses.A_REVERSE
-                        or 0
-                )
-                break
-            else:
-                character = "."
-                color = Colors.Default.format()
-
-            self.game.addch(rp[1], rp[0], character, color)
-
-        self.game.refresh()
+    # def _move_camera(self, subject):
+    #     screen_h, screen_w = self.game.getmaxyx()
+    #     level_w, level_h = size2(self.level.grids.physical)
+    #
+    #     self.virtual_p = (
+    #         median((
+    #             0,
+    #             subject.p[0] - screen_w + self.following_offset[0],
+    #             self.virtual_p[0],
+    #             subject.p[0] - self.following_offset[0],
+    #             level_w - screen_w,
+    #         )),
+    #         median((
+    #             0,
+    #             subject.p[1] - screen_h + self.following_offset[1],
+    #             self.virtual_p[1],
+    #             subject.p[1] - self.following_offset[1],
+    #             level_h - screen_h,
+    #         ))
+    #     )
+    #
+    # layers_display_order = ["physical", "effects", "tiles"]
+    #
+    # def _display_perception(self, subject, perception):
+    #     self.game.clear()
+    #     h, w = self.game.getmaxyx()
+    #     screen_size = (w - 1, h)
+    #
+    #     for rx in range(0, screen_size[0]):
+    #         for ry in range(0, screen_size[1]):
+    #             character = safe_get2(subject.spacial_memory, add2((rx, ry), self.virtual_p))
+    #             self.game.addch(ry, rx, character not in {None, "."} and character or " ")
+    #
+    #     inspected = isinstance(subject.act, Inspect) and subject.act.subject
+    #     for p in perception.vision.physical:
+    #         rp = sub2(p, self.virtual_p)
+    #         if not (le2(zero, rp) and lt2(rp, screen_size)): continue
+    #
+    #         for layer in self.layers_display_order:
+    #             if (entity := safe_get2(self.level.grids[layer], p)) is None: continue
+    #
+    #             character = entity.character
+    #             color = get_color_pair(entity) | (
+    #                 inspected == entity
+    #                     and curses.A_REVERSE
+    #                     or 0
+    #             )
+    #             break
+    #         else:
+    #             character = "."
+    #             color = Colors.Default.format()
+    #
+    #         self.game.addch(rp[1], rp[0], character, color)
+    #
+    #     self.game.refresh()
 
     def _display_gui(self, subject):
         self.gui.clear()
@@ -295,7 +298,7 @@ def generate_default_hotkeys():
 
     @_hotkey("KEY_RESIZE", non_action=True)
     def resize_gui(subject, perception, io):
-        io.resize()
+        io.gui.resize()
         io.render(subject, perception)
 
     @_hotkey("`", non_action=True)
