@@ -6,6 +6,7 @@ from ecs import Entity
 
 import logging
 
+from src.lib.limited import Limited
 
 
 def inflict_damage(target, weapon, hades):
@@ -22,9 +23,9 @@ def inflict_damage(target, weapon, hades):
         f"({weapon.damage_kind} on {target.health.armor_kind})"
     )
 
-    target.health.value -= weapon.power * modifier
+    target.health.amount.move(-weapon.power * modifier)
     target.receives_damage = True
-    if target.health.value <= 0:
+    if target.health.amount.current <= 0:
         logging.info(f"{target.name} is killed")
         hades.entities_to_destroy.append(target)
 
@@ -36,8 +37,12 @@ class Weapon:
 
 @dataclass
 class Health:
-    value: int
+    amount: Limited
     armor_kind: str
+
+    def __init__(self, amount: int, armor_kind: str):
+        self.amount = Limited(amount)
+        self.armor_kind = armor_kind
 
 
 db = yaml.safe_load(Path("assets/damage_and_armor.yaml").read_text())

@@ -158,7 +158,10 @@ class IO(OwnedEntity):
 
         self.gui.addstr(1, 2, " " * ((self.gui_w - 2 - len(name_tag)) // 2) + name_tag, curses.A_BOLD)
         self.gui.addstr(4, 2, f"Health: ")
-        self.gui.addstr(4, 10, str(subject.health.value), Colors.Yellow.format())
+        self.gui.addstr(4, 10,
+            f"{subject.health.amount.current}/{subject.health.amount.maximum}",
+            Colors.Yellow.format()
+        )
         self.gui.addstr(5, 2, f"Armor: ")
         self.gui.addstr(5, 10, subject.health.armor_kind, Colors.Yellow.format())
         self.gui.addstr(6, 2, f"Damage: ")
