@@ -41,7 +41,7 @@ class Health:
     armor_kind: str
 
     def __init__(self, amount: int, armor_kind: str):
-        self.amount = Limited(amount)
+        self.amount = Limited(amount + 1)
         self.armor_kind = armor_kind
 
 
