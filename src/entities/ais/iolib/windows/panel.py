@@ -11,9 +11,10 @@ from src.systems.acting.actions.move import Move
 class Panel:
     mode = Move
 
-    def __init__(self, w):
+    def __init__(self, w, io):
         self._window = curses.newwin(1, 1, 0, 0)
         self.w = w
+        self.io = io
         self.panes = [
             self._stats,
             self._controls,
@@ -72,5 +73,20 @@ class Panel:
                 self._window.addstr(11, 2, "Looks hurt", Colors.Yellow.format())
 
     def _controls(self, subject, perception, level):
-        self._window.addstr(1, 2, "Hello world!")
+        self._window.addstr(1, 2, "ACTION HOTKEYS")
+
+        for i, (hotkey, f) in enumerate(self.io.action_hotkeys.items()):
+            name = from_snake_case(f.__name__).capitalize()
+            self._window.addstr(3 + i, 2, name)
+            self._window.addstr(3 + i, 3 + len(name), hotkey, Colors.Yellow.format())
+
+        start_y = 5 + len(self.io.action_hotkeys)
+        self._window.addstr(start_y, 2, "OTHER HOTKEYS")
+
+        for i, (hotkey, f) in enumerate(self.io.other_hotkeys.items()):
+            if hotkey == "KEY_RESIZE": continue
+
+            name = from_snake_case(f.__name__).capitalize()
+            self._window.addstr(start_y + 2 + i, 2, name)
+            self._window.addstr(start_y + 2 + i, 4 + len(name), hotkey, Colors.Yellow.format())
 

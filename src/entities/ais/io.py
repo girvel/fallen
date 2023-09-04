@@ -20,7 +20,7 @@ class IO(OwnedEntity):
     level = None
 
     def __init__(self, stdscr, debug_track, debug_mode):
-        self.gui = Gui(stdscr, debug_mode)
+        self.gui = Gui(stdscr, debug_mode, self)
         self.gui.resize()
         self.main = stdscr
 

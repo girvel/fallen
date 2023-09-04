@@ -5,11 +5,11 @@ from src.entities.ais.iolib.windows.panel import Panel
 
 
 class Gui:
-    def __init__(self, stdscr, debug_mode):
+    def __init__(self, stdscr, debug_mode, io):
         panel_w = 35
         self.main = stdscr
         self.game = Game(panel_w)
-        self.panel = Panel(panel_w)
+        self.panel = Panel(panel_w, io)
 
         self.execution_order = [self.game, self.panel]
 
