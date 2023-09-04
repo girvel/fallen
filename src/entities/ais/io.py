@@ -1,17 +1,14 @@
 import curses
+import logging
 import re
 import sys
-from statistics import median
 
-from ecs import OwnedEntity, Entity
+from ecs import OwnedEntity
 
-from src.entities.ais.iolib.colors import Colors, get_color_pair
+from src.entities.ais.iolib.colors import Colors
 from src.entities.ais.iolib.gui import Gui
-from src.lib.toolkit import cut_by_length, curses_wrong_characters
-from src.lib.vector import zero, up, down, left, right, add2, le2, lt2, floordiv2, sub2, safe_get2, size2
-
-import logging
-
+from src.lib.toolkit import curses_wrong_characters
+from src.lib.vector import up, down, left, right, add2
 from src.systems.acting.actions.attack import Attack
 from src.systems.acting.actions.cast_fire_flow import CastFireFlow
 from src.systems.acting.actions.inspect import Inspect
@@ -20,33 +17,14 @@ from src.systems.acting.actions.move import Move
 
 class IO(OwnedEntity):
     name = 'Input/Output'
-
-    # input
-    # virtual_p = (0, 0)
-    # following_offset = (0, 0)  # modified on resize
-    # gui_w = 35
-    # monitor_h = 8
     level = None
-
-    # output
-    # mode = Move
 
     def __init__(self, stdscr, debug_track, debug_mode):
         self.gui = Gui(stdscr, debug_mode)
         self.gui.resize()
         self.main = stdscr
 
-        # self.game = curses.newwin(1, 1, 0, 0)
-        # self.gui = curses.newwin(1, 1, 0, 0)
-        # self.debug_monitor = curses.newwin(1, 1, 0, 0)
-        # self.console = curses.newwin(1, 1, 0, 0)
-        # self.console_visible = False
-
         self.debug_track = debug_track and iter(debug_track)
-        # self.debug_mode = debug_mode
-
-        # self.monitor_values = Entity()
-        # self.console_buffer = ""
 
         self.action_hotkeys, self.other_hotkeys = generate_default_hotkeys(debug_mode)
 
@@ -54,8 +32,6 @@ class IO(OwnedEntity):
         print('\033[?1003h')
 
         Colors.initialize()
-
-        # self.resize()
 
     def connect_to_level(self, level):
         self.level = level
@@ -66,155 +42,6 @@ class IO(OwnedEntity):
 
     def render(self, subject, perception):
         self.gui.render(subject, perception, self.level)
-        # # self.main.refresh()
-        # # self._move_camera(subject)
-        # # self._display_perception(subject, perception)
-        # # self._display_gui(subject)
-        #
-        # # if not self.debug_mode: return
-        #
-        # if len(self.monitor_values) > 0:
-        #     self._display_debug_monitor()
-        #
-        # if self.console_visible:
-        #     self._display_console()
-
-    # STAGES #
-
-    # def resize(self):
-        # h, w = self.main.getmaxyx()
-
-        # self.game.resize(h - 1, w - self.gui_w)
-        # self.following_offset = floordiv2((w - self.gui_w, h - 1), 3)
-
-        # self.gui.resize(h - 1, self.gui_w)
-        # self.gui.mvwin(0, w - self.gui_w)
-        #
-        # if self.debug_mode:
-        #     # self.debug_monitor.resize(self.monitor_h, self.gui_w)
-        #     # self.debug_monitor.mvwin(0, 0)
-        #
-        #     self.console.resize(h - 1, self.gui_w)
-        #     self.console.mvwin(0, w - self.gui_w)
-
-    # def _move_camera(self, subject):
-    #     screen_h, screen_w = self.game.getmaxyx()
-    #     level_w, level_h = size2(self.level.grids.physical)
-    #
-    #     self.virtual_p = (
-    #         median((
-    #             0,
-    #             subject.p[0] - screen_w + self.following_offset[0],
-    #             self.virtual_p[0],
-    #             subject.p[0] - self.following_offset[0],
-    #             level_w - screen_w,
-    #         )),
-    #         median((
-    #             0,
-    #             subject.p[1] - screen_h + self.following_offset[1],
-    #             self.virtual_p[1],
-    #             subject.p[1] - self.following_offset[1],
-    #             level_h - screen_h,
-    #         ))
-    #     )
-    #
-    # layers_display_order = ["physical", "effects", "tiles"]
-    #
-    # def _display_perception(self, subject, perception):
-    #     self.game.clear()
-    #     h, w = self.game.getmaxyx()
-    #     screen_size = (w - 1, h)
-    #
-    #     for rx in range(0, screen_size[0]):
-    #         for ry in range(0, screen_size[1]):
-    #             character = safe_get2(subject.spacial_memory, add2((rx, ry), self.virtual_p))
-    #             self.game.addch(ry, rx, character not in {None, "."} and character or " ")
-    #
-    #     inspected = isinstance(subject.act, Inspect) and subject.act.subject
-    #     for p in perception.vision.physical:
-    #         rp = sub2(p, self.virtual_p)
-    #         if not (le2(zero, rp) and lt2(rp, screen_size)): continue
-    #
-    #         for layer in self.layers_display_order:
-    #             if (entity := safe_get2(self.level.grids[layer], p)) is None: continue
-    #
-    #             character = entity.character
-    #             color = get_color_pair(entity) | (
-    #                 inspected == entity
-    #                     and curses.A_REVERSE
-    #                     or 0
-    #             )
-    #             break
-    #         else:
-    #             character = "."
-    #             color = Colors.Default.format()
-    #
-    #         self.game.addch(rp[1], rp[0], character, color)
-    #
-    #     self.game.refresh()
-
-    # def _display_gui(self, subject):
-    #     self.gui.clear()
-    #     self.gui.border()
-    #
-    #     name_tag = f"\__ {subject.name} __/"
-    #
-    #     self.gui.addstr(1, 2, " " * ((self.gui_w - 2 - len(name_tag)) // 2) + name_tag, curses.A_BOLD)
-    #     self.gui.addstr(4, 2, f"Health: ")
-    #     self.gui.addstr(4, 10,
-    #         f"{subject.health.amount.current}/{subject.health.amount.maximum}",
-    #         Colors.Yellow.format()
-    #     )
-    #     self.gui.addstr(5, 2, f"Armor: ")
-    #     self.gui.addstr(5, 10, subject.health.armor_kind, Colors.Yellow.format())
-    #     self.gui.addstr(6, 2, f"Damage: ")
-    #     self.gui.addstr(6, 10, f"{subject.weapon.power} {subject.weapon.damage_kind}", Colors.Yellow.format())
-    #
-    #     if self.mode == Move:
-    #         self.gui.addstr(8, 2, "MOVE")
-    #     else:
-    #         self.gui.addstr(8, 2, "ATTACK", Colors.WhiteOnRed.format())
-    #
-    #     if "act" in subject and isinstance(subject.act, Inspect):
-    #         inspected = subject.act.subject
-    #
-    #         self.gui.addstr(10, 2, f"Inspects")
-    #         self.gui.addstr(10, 11, inspected.name, Colors.Yellow.format())
-    #
-    #         if "health" in inspected and inspected.health.amount.current <= inspected.health.amount.maximum / 2:
-    #             self.gui.addstr(11, 2, "Looks hurt", Colors.Yellow.format())
-    #
-    #     self.gui.refresh()
-    #
-    # def _display_debug_monitor(self):
-    #     self.debug_monitor.clear()
-    #     self.debug_monitor.border()
-    #
-    #     for i, (header, f) in enumerate(self.monitor_values):
-    #         self.debug_monitor.addstr(1 + i, 1, f"{header}:")
-    #
-    #         try:
-    #             value = f()
-    #         except Exception as ex:
-    #             value = ex
-    #
-    #         self.debug_monitor.addstr(1 + i, 1 + len(header) + 2, repr(value), Colors.Yellow.format())
-    #
-    #         if i >= self.monitor_h - 2:
-    #             break
-    #
-    #     self.debug_monitor.refresh()
-    #
-    # def _display_console(self):
-    #     self.console.clear()
-    #     self.console.border()
-    #
-    #     for i, string in enumerate(
-    #         sum(map(lambda s: cut_by_length(s, self.gui_w - 2), self.console_buffer.split("\n")), start=[])
-    #     ):
-    #         self.console.addstr(1 + i, 1, string)
-    #
-    #     self.console.refresh()
 
     def _wait_for_input(self, subject, perception):
         while True:
