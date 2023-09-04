@@ -1,5 +1,4 @@
 import curses
-import logging
 
 from src.entities.ais.iolib.colors import Colors
 from src.lib.limited import Limited

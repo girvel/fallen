@@ -1,0 +1,20 @@
+<div>
+    <center>\__ {{subject.name}} __/</center>
+</div>
+<div>
+    Health: <b>{{subject.health.amount.current}}/{{subject.health.amount.maximum - 1}}</b>
+    Armor: <b>{{subject.health.armor_kind}}</b>
+    Damage: <b>{{subject.weapon.power}} {{subject.weapon.damage_kind}}</b>
+</div>
+<div>
+    {{ mode }}
+</div>
+{% if inspects %}
+<div>
+    Inspects <b>{{ subject.act.subject.name }}</b>
+
+    {% if looks_sick %}
+    <b>Looks hurt</b>
+    {% endif %}
+</div>
+{% endif %}
