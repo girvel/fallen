@@ -1,6 +1,7 @@
 from ecs import Entity
 
 from src.entities.ais.iolib.windows.game import Game
+from src.entities.ais.iolib.windows.panel import Panel
 
 
 class Gui:
@@ -9,7 +10,7 @@ class Gui:
         self.main = stdscr
         self.windows = Entity(
             game=Game(panel_w),
-            # panel=Panel(),
+            panel=Panel(panel_w),
         )
         # self.windows.debug_monitor = DebugMonitor(debug_mode)
         # self.windows.console = Console(debug_mode)

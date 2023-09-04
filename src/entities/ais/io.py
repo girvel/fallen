@@ -20,17 +20,16 @@ from src.systems.acting.actions.move import Move
 
 class IO(OwnedEntity):
     name = 'Input/Output'
-    spacial_memory = None
 
     # input
-    virtual_p = (0, 0)
-    following_offset = (0, 0)  # modified on resize
-    gui_w = 35
-    monitor_h = 8
+    # virtual_p = (0, 0)
+    # following_offset = (0, 0)  # modified on resize
+    # gui_w = 35
+    # monitor_h = 8
     level = None
 
     # output
-    mode = Move
+    # mode = Move
 
     def __init__(self, stdscr, debug_track, debug_mode):
         self.gui = Gui(stdscr, debug_mode)
@@ -88,8 +87,8 @@ class IO(OwnedEntity):
         # self.game.resize(h - 1, w - self.gui_w)
         # self.following_offset = floordiv2((w - self.gui_w, h - 1), 3)
 
-        self.gui.resize(h - 1, self.gui_w)
-        self.gui.mvwin(0, w - self.gui_w)
+        # self.gui.resize(h - 1, self.gui_w)
+        # self.gui.mvwin(0, w - self.gui_w)
 
         if self.debug_mode:
             self.debug_monitor.resize(self.monitor_h, self.gui_w)
@@ -154,38 +153,38 @@ class IO(OwnedEntity):
     #
     #     self.game.refresh()
 
-    def _display_gui(self, subject):
-        self.gui.clear()
-        self.gui.border()
-
-        name_tag = f"\__ {subject.name} __/"
-
-        self.gui.addstr(1, 2, " " * ((self.gui_w - 2 - len(name_tag)) // 2) + name_tag, curses.A_BOLD)
-        self.gui.addstr(4, 2, f"Health: ")
-        self.gui.addstr(4, 10,
-            f"{subject.health.amount.current}/{subject.health.amount.maximum}",
-            Colors.Yellow.format()
-        )
-        self.gui.addstr(5, 2, f"Armor: ")
-        self.gui.addstr(5, 10, subject.health.armor_kind, Colors.Yellow.format())
-        self.gui.addstr(6, 2, f"Damage: ")
-        self.gui.addstr(6, 10, f"{subject.weapon.power} {subject.weapon.damage_kind}", Colors.Yellow.format())
-
-        if self.mode == Move:
-            self.gui.addstr(8, 2, "MOVE")
-        else:
-            self.gui.addstr(8, 2, "ATTACK", Colors.WhiteOnRed.format())
-
-        if "act" in subject and isinstance(subject.act, Inspect):
-            inspected = subject.act.subject
-
-            self.gui.addstr(10, 2, f"Inspects")
-            self.gui.addstr(10, 11, inspected.name, Colors.Yellow.format())
-
-            if "health" in inspected and inspected.health.amount.current <= inspected.health.amount.maximum / 2:
-                self.gui.addstr(11, 2, "Looks hurt", Colors.Yellow.format())
-
-        self.gui.refresh()
+    # def _display_gui(self, subject):
+    #     self.gui.clear()
+    #     self.gui.border()
+    #
+    #     name_tag = f"\__ {subject.name} __/"
+    #
+    #     self.gui.addstr(1, 2, " " * ((self.gui_w - 2 - len(name_tag)) // 2) + name_tag, curses.A_BOLD)
+    #     self.gui.addstr(4, 2, f"Health: ")
+    #     self.gui.addstr(4, 10,
+    #         f"{subject.health.amount.current}/{subject.health.amount.maximum}",
+    #         Colors.Yellow.format()
+    #     )
+    #     self.gui.addstr(5, 2, f"Armor: ")
+    #     self.gui.addstr(5, 10, subject.health.armor_kind, Colors.Yellow.format())
+    #     self.gui.addstr(6, 2, f"Damage: ")
+    #     self.gui.addstr(6, 10, f"{subject.weapon.power} {subject.weapon.damage_kind}", Colors.Yellow.format())
+    #
+    #     if self.mode == Move:
+    #         self.gui.addstr(8, 2, "MOVE")
+    #     else:
+    #         self.gui.addstr(8, 2, "ATTACK", Colors.WhiteOnRed.format())
+    #
+    #     if "act" in subject and isinstance(subject.act, Inspect):
+    #         inspected = subject.act.subject
+    #
+    #         self.gui.addstr(10, 2, f"Inspects")
+    #         self.gui.addstr(10, 11, inspected.name, Colors.Yellow.format())
+    #
+    #         if "health" in inspected and inspected.health.amount.current <= inspected.health.amount.maximum / 2:
+    #             self.gui.addstr(11, 2, "Looks hurt", Colors.Yellow.format())
+    #
+    #     self.gui.refresh()
 
     def _display_debug_monitor(self):
         self.debug_monitor.clear()
@@ -254,10 +253,10 @@ def generate_default_hotkeys():
     def generate_movement_function(key, direction):
         @_hotkey(key)
         def move(subject, perception, io):
-            if io.mode == Move:
+            if io.gui.windows.panel.mode == Move:
                 return Move(direction)
 
-            if io.mode == Attack:
+            if io.gui.windows.panel.mode == Attack:
                 if (target := perception.vision[subject.layer].get(add2(subject.p, direction))) is not None:
                     return Attack(target)
                 return Move(direction)
@@ -278,7 +277,7 @@ def generate_default_hotkeys():
 
     @_hotkey("r")
     def change_mode(subject, perception, io):
-        io.mode = (io.mode == Move) and Attack or Move
+        io.gui.windows.panel.mode = (io.gui.windows.panel.mode == Move) and Attack or Move
 
     @_hotkey("1")
     def cast_fire_flow(subject, perception, io):
@@ -291,8 +290,8 @@ def generate_default_hotkeys():
     def inspect(subject, perception, io):
         _, mx, my, _, _ = curses.getmouse()
         target = next((
-            e for l in io.layers_display_order
-            if (e := perception.vision[l].get(add2(io.virtual_p, (mx, my)))) is not None
+            e for l in io.gui.windows.game.layers_display_order
+            if (e := perception.vision[l].get(add2(io.gui.windows.game.virtual_p, (mx, my)))) is not None
         ), None)
         return target and Inspect(target)
 
