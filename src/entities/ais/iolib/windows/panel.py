@@ -3,17 +3,10 @@ import logging
 
 from src.entities.ais.iolib.colors import Colors
 from src.lib.limited import Limited
+from src.lib.toolkit import from_snake_case
 from src.systems.acting.actions.inspect import Inspect
 from src.systems.acting.actions.move import Move
 
-
-class named:
-    def __init__(self, name):
-        self.name = name
-
-    def __call__(self, f):
-        f.name = self.name
-        return f
 
 class Panel:
     mode = Move
@@ -22,8 +15,8 @@ class Panel:
         self._window = curses.newwin(1, 1, 0, 0)
         self.w = w
         self.panes = [
-            self._main_pane,
-            self._controls_pane,
+            self._stats,
+            self._controls,
         ]
         self.pane_i = Limited(len(self.panes), 0, 0)
 
@@ -41,23 +34,22 @@ class Panel:
 
         if not self.pane_i.is_min():
             self._window.addstr(h - 2, 2, "<", Colors.Yellow.format())
-            self._window.addstr(h - 2, 4, self.panes[self.pane_i.current - 1].name)
+            self._window.addstr(h - 2, 4, from_snake_case(self.panes[self.pane_i.current - 1].__name__).capitalize())
 
         if not self.pane_i.is_max():
-            name = self.panes[self.pane_i.current - 1].name
+            name = from_snake_case(self.panes[self.pane_i.current - 1].__name__).capitalize()
             self._window.addstr(h - 2, w - 3, ">", Colors.Yellow.format())
             self._window.addstr(h - 2, w - 4 - len(name), name)
 
         self._window.refresh()
 
-    @named("Stats")
-    def _main_pane(self, subject, perception, level):
+    def _stats(self, subject, perception, level):
         name_tag = f"\__ {subject.name} __/"
 
         self._window.addstr(1, 2, " " * ((self.w - 2 - len(name_tag)) // 2) + name_tag, curses.A_BOLD)
         self._window.addstr(4, 2, f"Health: ")
         self._window.addstr(4, 10,
-            f"{subject.health.amount.current}/{subject.health.amount.maximum}",
+            f"{subject.health.amount.current}/{subject.health.amount.maximum - 1}",
             Colors.Yellow.format()
         )
         self._window.addstr(5, 2, f"Armor: ")
@@ -79,7 +71,6 @@ class Panel:
             if "health" in inspected and inspected.health.amount.current <= inspected.health.amount.maximum / 2:
                 self._window.addstr(11, 2, "Looks hurt", Colors.Yellow.format())
 
-    @named("Stats")
-    def _controls_pane(self, subject, perception, level):
+    def _controls(self, subject, perception, level):
         self._window.addstr(1, 2, "Hello world!")
 

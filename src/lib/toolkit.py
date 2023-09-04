@@ -1,10 +1,11 @@
-import logging
 import random
-from importlib.util import spec_from_file_location, module_from_spec
 
 
 def to_camel_case(snake_str):
     return "".join(x.capitalize() for x in snake_str.lower().split("_"))
+
+def from_snake_case(snake_str: str):
+    return snake_str.strip("_").replace("_", " ")
 
 def sign(n):
     if n == 0:

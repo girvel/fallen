@@ -57,6 +57,7 @@ class IO(OwnedEntity):
             if hotkey in self.other_hotkeys:
                 logging.debug(f"[{hotkey}] -> no action")
                 self.other_hotkeys[hotkey](subject, perception, self)
+                self.render(subject, perception)
                 continue
 
             logging.debug(f"Ignored [{hotkey}]")
@@ -113,6 +114,14 @@ def generate_default_hotkeys(debug_mode):
                 return
         return CastFireFlow(directions_by_key[hotkey])
 
+    @_hotkey("KEY_LEFT", non_action=True)
+    def previous_pane(subject, perception, io):
+        io.gui.panel.pane_i.move(-1)
+
+    @_hotkey("KEY_RIGHT", non_action=True)
+    def previous_pane(subject, perception, io):
+        io.gui.panel.pane_i.move(1)
+
     @_hotkey("KEY_MOUSE")
     def inspect(subject, perception, io):
         _, mx, my, _, _ = curses.getmouse()
@@ -125,7 +134,6 @@ def generate_default_hotkeys(debug_mode):
     @_hotkey("KEY_RESIZE", non_action=True)
     def resize_gui(subject, perception, io):
         io.gui.resize()
-        io.render(subject, perception)
 
     if debug_mode:
         @_hotkey("`", non_action=True)
@@ -175,6 +183,5 @@ def generate_default_hotkeys(debug_mode):
             enclose_console_code(subject, perception, io)
             io.gui.console.buffer = ""
             io.gui.console.visible = False
-            io.render(subject, perception)
 
     return action_hotkeys, other_hotkeys
