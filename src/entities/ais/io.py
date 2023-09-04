@@ -43,12 +43,12 @@ class IO(OwnedEntity):
         self.console_visible = False
 
         self.debug_track = debug_track and iter(debug_track)
-        self.debug_mode = debug_mode
+        # self.debug_mode = debug_mode
 
-        self.monitor_values = Entity()
+        # self.monitor_values = Entity()
         self.console_buffer = ""
 
-        self.action_hotkeys, self.other_hotkeys = generate_default_hotkeys()
+        self.action_hotkeys, self.other_hotkeys = generate_default_hotkeys(debug_mode)
 
         logging.info(f"Initalized mouse with {curses.mousemask(curses.ALL_MOUSE_EVENTS)}")
         print('\033[?1003h')
@@ -185,25 +185,25 @@ class IO(OwnedEntity):
     #             self.gui.addstr(11, 2, "Looks hurt", Colors.Yellow.format())
     #
     #     self.gui.refresh()
-
-    def _display_debug_monitor(self):
-        self.debug_monitor.clear()
-        self.debug_monitor.border()
-
-        for i, (header, f) in enumerate(self.monitor_values):
-            self.debug_monitor.addstr(1 + i, 1, f"{header}:")
-
-            try:
-                value = f()
-            except Exception as ex:
-                value = ex
-
-            self.debug_monitor.addstr(1 + i, 1 + len(header) + 2, repr(value), Colors.Yellow.format())
-
-            if i >= self.monitor_h - 2:
-                break
-
-        self.debug_monitor.refresh()
+    #
+    # def _display_debug_monitor(self):
+    #     self.debug_monitor.clear()
+    #     self.debug_monitor.border()
+    #
+    #     for i, (header, f) in enumerate(self.monitor_values):
+    #         self.debug_monitor.addstr(1 + i, 1, f"{header}:")
+    #
+    #         try:
+    #             value = f()
+    #         except Exception as ex:
+    #             value = ex
+    #
+    #         self.debug_monitor.addstr(1 + i, 1 + len(header) + 2, repr(value), Colors.Yellow.format())
+    #
+    #         if i >= self.monitor_h - 2:
+    #             break
+    #
+    #     self.debug_monitor.refresh()
 
     def _display_console(self):
         self.console.clear()
@@ -237,7 +237,7 @@ class IO(OwnedEntity):
         return self.action_hotkeys[hotkey](subject, perception, self)
 
 
-def generate_default_hotkeys():
+def generate_default_hotkeys(debug_mode):
     action_hotkeys = {}
     other_hotkeys = {}
 
@@ -253,10 +253,10 @@ def generate_default_hotkeys():
     def generate_movement_function(key, direction):
         @_hotkey(key)
         def move(subject, perception, io):
-            if io.gui.windows.panel.mode == Move:
+            if io.gui.panel.mode == Move:
                 return Move(direction)
 
-            if io.gui.windows.panel.mode == Attack:
+            if io.gui.panel.mode == Attack:
                 if (target := perception.vision[subject.layer].get(add2(subject.p, direction))) is not None:
                     return Attack(target)
                 return Move(direction)
@@ -277,7 +277,7 @@ def generate_default_hotkeys():
 
     @_hotkey("r")
     def change_mode(subject, perception, io):
-        io.gui.windows.panel.mode = (io.gui.windows.panel.mode == Move) and Attack or Move
+        io.gui.panel.mode = (io.gui.panel.mode == Move) and Attack or Move
 
     @_hotkey("1")
     def cast_fire_flow(subject, perception, io):
@@ -290,8 +290,8 @@ def generate_default_hotkeys():
     def inspect(subject, perception, io):
         _, mx, my, _, _ = curses.getmouse()
         target = next((
-            e for l in io.gui.windows.game.layers_display_order
-            if (e := perception.vision[l].get(add2(io.gui.windows.game.virtual_p, (mx, my)))) is not None
+            e for l in io.gui.game.layers_display_order
+            if (e := perception.vision[l].get(add2(io.gui.game.virtual_p, (mx, my)))) is not None
         ), None)
         return target and Inspect(target)
 
@@ -300,53 +300,54 @@ def generate_default_hotkeys():
         io.gui.resize()
         io.render(subject, perception)
 
-    @_hotkey("`", non_action=True)
-    def show_debug_console(subject, perception, io):
-        io.console_visible ^= True
-        if not io.console_visible: return
+    if debug_mode:
+        @_hotkey("`", non_action=True)
+        def show_debug_console(subject, perception, io):
+            io.console_visible ^= True
+            if not io.console_visible: return
 
-        while True:
+            while True:
+                io.render(subject, perception)
+                if (
+                    (hotkey := io.main.get_wch()) and
+                    (hotkey := curses_wrong_characters.get(
+                        isinstance(hotkey, int) and hotkey or ord(hotkey), hotkey)
+                    ) == "CTL_ENTER"
+                ): break
+
+                if hotkey == "":
+                    io.console_buffer = io.console_buffer[:-1]
+                elif isinstance(hotkey, str):
+                    io.console_buffer += hotkey
+
+                if hotkey == "\n":
+                    last_line_i = io.console_buffer.rfind("\n", 0, -1)
+                    last_line_i = last_line_i if last_line_i != -1 else 0
+                    last_indent = re.match(r"^(\s*)", io.console_buffer[last_line_i:]).group(1)
+                    io.console_buffer += last_indent
+
+            def enclose_console_code(subject, perception, io):
+                def tracker(f):
+                    io.monitor_values[f.__name__] = f
+
+                try:
+                    exec(io.console_buffer, {
+                        "it": lambda: (isinstance(subject.act, Inspect) and subject.act.subject or None),
+                        "monitor": io.monitor_values,
+                        "subject": subject,
+                        "perception": perception,
+                        "io": io,
+                        "tracker": tracker,
+                        "level": io.level,
+                    })
+                except Exception as ex:
+                    logging.warning(f"Exception when executing console code")
+                    logging.exception(ex)
+
+            logging.info(f"Executing console code:\n```py\n{io.console_buffer}\n```")
+            enclose_console_code(subject, perception, io)
+            io.console_buffer = ""
+            io.console_visible = False
             io.render(subject, perception)
-            if (
-                (hotkey := io.main.get_wch()) and
-                (hotkey := curses_wrong_characters.get(
-                    isinstance(hotkey, int) and hotkey or ord(hotkey), hotkey)
-                ) == "CTL_ENTER"
-            ): break
-
-            if hotkey == "":
-                io.console_buffer = io.console_buffer[:-1]
-            elif isinstance(hotkey, str):
-                io.console_buffer += hotkey
-
-            if hotkey == "\n":
-                last_line_i = io.console_buffer.rfind("\n", 0, -1)
-                last_line_i = last_line_i if last_line_i != -1 else 0
-                last_indent = re.match(r"^(\s*)", io.console_buffer[last_line_i:]).group(1)
-                io.console_buffer += last_indent
-
-        def enclose_console_code(subject, perception, io):
-            def tracker(f):
-                io.monitor_values[f.__name__] = f
-
-            try:
-                exec(io.console_buffer, {
-                    "it": lambda: (isinstance(subject.act, Inspect) and subject.act.subject or None),
-                    "monitor": io.monitor_values,
-                    "subject": subject,
-                    "perception": perception,
-                    "io": io,
-                    "tracker": tracker,
-                    "level": io.level,
-                })
-            except Exception as ex:
-                logging.warning(f"Exception when executing console code")
-                logging.exception(ex)
-
-        logging.info(f"Executing console code:\n```py\n{io.console_buffer}\n```")
-        enclose_console_code(subject, perception, io)
-        io.console_buffer = ""
-        io.console_visible = False
-        io.render(subject, perception)
 
     return action_hotkeys, other_hotkeys
