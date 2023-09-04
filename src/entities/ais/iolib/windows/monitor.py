@@ -8,7 +8,7 @@ from src.entities.ais.iolib.colors import Colors
 class Monitor:
     def __init__(self, h, w):
         self._window = curses.newwin(1, 1, 0, 0)
-        self.values = Entity(demo=lambda: "Hello world!")
+        self.values = Entity()
         self.h = h
         self.w = w
 
