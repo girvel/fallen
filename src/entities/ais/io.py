@@ -40,13 +40,13 @@ class IO(OwnedEntity):
         # self.gui = curses.newwin(1, 1, 0, 0)
         # self.debug_monitor = curses.newwin(1, 1, 0, 0)
         # self.console = curses.newwin(1, 1, 0, 0)
-        self.console_visible = False
+        # self.console_visible = False
 
         self.debug_track = debug_track and iter(debug_track)
         # self.debug_mode = debug_mode
 
         # self.monitor_values = Entity()
-        self.console_buffer = ""
+        # self.console_buffer = ""
 
         self.action_hotkeys, self.other_hotkeys = generate_default_hotkeys(debug_mode)
 
@@ -81,7 +81,7 @@ class IO(OwnedEntity):
 
     # STAGES #
 
-    def resize(self):
+    # def resize(self):
         # h, w = self.main.getmaxyx()
 
         # self.game.resize(h - 1, w - self.gui_w)
@@ -89,13 +89,13 @@ class IO(OwnedEntity):
 
         # self.gui.resize(h - 1, self.gui_w)
         # self.gui.mvwin(0, w - self.gui_w)
-
-        if self.debug_mode:
-            self.debug_monitor.resize(self.monitor_h, self.gui_w)
-            self.debug_monitor.mvwin(0, 0)
-
-            self.console.resize(h - 1, self.gui_w)
-            self.console.mvwin(0, w - self.gui_w)
+        #
+        # if self.debug_mode:
+        #     # self.debug_monitor.resize(self.monitor_h, self.gui_w)
+        #     # self.debug_monitor.mvwin(0, 0)
+        #
+        #     self.console.resize(h - 1, self.gui_w)
+        #     self.console.mvwin(0, w - self.gui_w)
 
     # def _move_camera(self, subject):
     #     screen_h, screen_w = self.game.getmaxyx()
@@ -204,17 +204,17 @@ class IO(OwnedEntity):
     #             break
     #
     #     self.debug_monitor.refresh()
-
-    def _display_console(self):
-        self.console.clear()
-        self.console.border()
-
-        for i, string in enumerate(
-            sum(map(lambda s: cut_by_length(s, self.gui_w - 2), self.console_buffer.split("\n")), start=[])
-        ):
-            self.console.addstr(1 + i, 1, string)
-
-        self.console.refresh()
+    #
+    # def _display_console(self):
+    #     self.console.clear()
+    #     self.console.border()
+    #
+    #     for i, string in enumerate(
+    #         sum(map(lambda s: cut_by_length(s, self.gui_w - 2), self.console_buffer.split("\n")), start=[])
+    #     ):
+    #         self.console.addstr(1 + i, 1, string)
+    #
+    #     self.console.refresh()
 
     def _wait_for_input(self, subject, perception):
         while True:
@@ -303,8 +303,8 @@ def generate_default_hotkeys(debug_mode):
     if debug_mode:
         @_hotkey("`", non_action=True)
         def show_debug_console(subject, perception, io):
-            io.console_visible ^= True
-            if not io.console_visible: return
+            io.gui.console.visible ^= True
+            if not io.gui.console.visible: return
 
             while True:
                 io.render(subject, perception)
@@ -316,24 +316,24 @@ def generate_default_hotkeys(debug_mode):
                 ): break
 
                 if hotkey == "":
-                    io.console_buffer = io.console_buffer[:-1]
+                    io.gui.console.buffer = io.gui.console.buffer[:-1]
                 elif isinstance(hotkey, str):
-                    io.console_buffer += hotkey
+                    io.gui.console.buffer += hotkey
 
                 if hotkey == "\n":
-                    last_line_i = io.console_buffer.rfind("\n", 0, -1)
+                    last_line_i = io.gui.console.buffer.rfind("\n", 0, -1)
                     last_line_i = last_line_i if last_line_i != -1 else 0
-                    last_indent = re.match(r"^(\s*)", io.console_buffer[last_line_i:]).group(1)
-                    io.console_buffer += last_indent
+                    last_indent = re.match(r"^(\s*)", io.gui.console.buffer[last_line_i:]).group(1)
+                    io.gui.console.buffer += last_indent
 
             def enclose_console_code(subject, perception, io):
                 def tracker(f):
                     io.monitor_values[f.__name__] = f
 
                 try:
-                    exec(io.console_buffer, {
+                    exec(io.gui.console.buffer, {
                         "it": lambda: (isinstance(subject.act, Inspect) and subject.act.subject or None),
-                        "monitor": io.monitor_values,
+                        "monitor": io.gui.monitor.values,
                         "subject": subject,
                         "perception": perception,
                         "io": io,
@@ -344,10 +344,10 @@ def generate_default_hotkeys(debug_mode):
                     logging.warning(f"Exception when executing console code")
                     logging.exception(ex)
 
-            logging.info(f"Executing console code:\n```py\n{io.console_buffer}\n```")
+            logging.info(f"Executing console code:\n```py\n{io.gui.console.buffer}\n```")
             enclose_console_code(subject, perception, io)
-            io.console_buffer = ""
-            io.console_visible = False
+            io.gui.console.buffer = ""
+            io.gui.console.visible = False
             io.render(subject, perception)
 
     return action_hotkeys, other_hotkeys

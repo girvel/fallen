@@ -1,6 +1,5 @@
-from ecs import Entity
-
-from src.entities.ais.iolib.windows.debug_monitor import DebugMonitor
+from src.entities.ais.iolib.windows.console import Console
+from src.entities.ais.iolib.windows.monitor import Monitor
 from src.entities.ais.iolib.windows.game import Game
 from src.entities.ais.iolib.windows.panel import Panel
 
@@ -15,9 +14,9 @@ class Gui:
         self.execution_order = [self.game, self.panel]
 
         if not debug_mode: return
-        self.debug_monitor = DebugMonitor(10, panel_w)
-        # self.console = Console()
-        self.execution_order += [self.debug_monitor]
+        self.monitor = Monitor(10, panel_w)
+        self.console = Console(panel_w)
+        self.execution_order += [self.monitor, self.console]
 
     def resize(self):
         h, w = self.main.getmaxyx()

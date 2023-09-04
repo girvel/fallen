@@ -5,7 +5,7 @@ from ecs import Entity
 from src.entities.ais.iolib.colors import Colors
 
 
-class DebugMonitor:
+class Monitor:
     def __init__(self, h, w):
         self._window = curses.newwin(1, 1, 0, 0)
         self.values = Entity(demo=lambda: "Hello world!")
