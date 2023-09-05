@@ -10,7 +10,7 @@
     <p>Damage: <b>{{subject.weapon.power}} {{subject.weapon.damage_kind}}</b></p>
 </div>
 <div>
-    <p>{{ mode }}</p>
+    <p>{{ mode|safe }}</p>
 </div>
 <div>
     {% if inspects %}

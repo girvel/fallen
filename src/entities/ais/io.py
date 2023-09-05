@@ -119,7 +119,7 @@ def generate_default_hotkeys(debug_mode):
         io.gui.panel.pane_i.move(-1)
 
     @_hotkey("KEY_RIGHT", non_action=True)
-    def previous_pane(subject, perception, io):
+    def next_pane(subject, perception, io):
         io.gui.panel.pane_i.move(1)
 
     @_hotkey("KEY_MOUSE")

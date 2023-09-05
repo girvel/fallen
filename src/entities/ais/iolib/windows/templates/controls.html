@@ -1,0 +1,18 @@
+<div>
+    <p>ACTION HOTKEYS</p>
+</div>
+<div>
+    {% for name, hotkey in action_hotkeys %}
+    <p>{{ name }}: <y>{{ hotkey }}</y></p>
+    {% endfor %}
+</div>
+<div>
+    <p>OTHER HOTKEYS</p>
+</div>
+<div>
+    {% for name, hotkey in other_hotkeys %}
+    {% if not hotkey == "KEY_RESIZE" %}
+    <p>{{ name }}: <y>{{ hotkey }}</y></p>
+    {% endif %}
+    {% endfor %}
+</div>
