@@ -10,3 +10,6 @@ profile:
 
 line_profile:
 	kernprof.exe -lv fallen.py
+
+stats:
+	cat `find . -name "*.py"` | wc -l
