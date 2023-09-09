@@ -1,4 +1,4 @@
-from typing import Callable, TypeVar
+from typing import Callable, TypeVar, Tuple
 
 from src.lib.toolkit import sign
 
@@ -13,7 +13,7 @@ left  = (-1,  0)
 directions = [up, down, right, left]
 
 
-int2 = (int, int)
+int2 = Tuple[int, int]
 
 def add2(v1: int2, v2: int2) -> int2:
     return v1[0] + v2[0], v1[1] + v2[1]

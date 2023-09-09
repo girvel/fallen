@@ -2,7 +2,7 @@ import logging
 
 from ecs import OwnedEntity
 
-from src.engine.ai.follower import Follower
+from src.engine.ai.follower import Follower, TargetChange
 from src.engine.ai.pather import Pather
 
 
@@ -12,6 +12,7 @@ class KnightAi(OwnedEntity):
         self.follower = Follower(3)
 
     def make_decision(self, subject, perception):
-        # noinspection PySimplifyBooleanCheck
-        if (target := self.follower.try_producing_target(subject, perception)) != False: self.pather.going_to = target
+        match self.follower.try_producing_target(subject, perception):
+            case TargetChange.To(p): self.pather.going_to = p
+
         if (action := self.pather.try_going(subject, perception)) is not None: return action
