@@ -1,7 +1,7 @@
 from typing import Optional
 
 from src.lib.period.period import Period
-from src.lib.rust_enum import enum, Case
+from rust_enum import enum, Case
 from src.lib.vector import abs2, sub2, int2
 
 
