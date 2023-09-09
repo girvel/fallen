@@ -5,7 +5,6 @@ from src.engine.acting.actions.move import Move
 from src.lib.vector import directions, sub2, map_grid, unsafe_set2, add2, abs2
 
 
-
 class Pather:
     going_to = None
 

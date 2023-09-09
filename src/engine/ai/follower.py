@@ -1,28 +1,14 @@
-import logging
-from dataclasses import dataclass
 from typing import Optional
 
 from src.lib.period.period import Period
+from src.lib.rust_enum import enum
 from src.lib.vector import abs2, sub2, int2
 
 
-# @enum
-# class TargetChange:
-#     Nothing: {}
-#     To: {"target": int2}
-
-class TargetChange: pass
-
-@dataclass
-class Nothing(TargetChange): pass
-
-@dataclass
-class To(TargetChange):
-    target: Optional[int2]
-
-TargetChange.Nothing = Nothing
-TargetChange.To = To
-del Nothing, To
+@enum
+class TargetChange:
+    Nothing = {}
+    To = {"target": Optional[int2]}
 
 
 class Follower:
