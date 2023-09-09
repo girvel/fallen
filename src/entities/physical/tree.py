@@ -2,8 +2,9 @@ import random
 
 from ecs import OwnedEntity
 
-from src.entities.ais.iolib.colors import Colors
-from src.systems.acting.damage import Health, ArmorKind
+from src.engine.acting.damage import Health, ArmorKind
+from src.engine.io.colors import Colors
+
 
 
 class Tree(OwnedEntity):

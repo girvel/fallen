@@ -1,6 +1,6 @@
 from ecs import OwnedEntity
 
-from src.systems.acting.damage import Health, ArmorKind
+from src.engine.acting.damage import ArmorKind, Health
 
 
 class Window(OwnedEntity):

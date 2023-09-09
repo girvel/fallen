@@ -5,14 +5,18 @@ import sys
 
 from ecs import OwnedEntity
 
-from src.entities.ais.iolib.colors import Colors
-from src.entities.ais.iolib.gui import Gui
+from src.engine.acting.actions.attack import Attack
+from src.engine.acting.actions.cast_fire_flow import CastFireFlow
+from src.engine.acting.actions.inspect import Inspect
+from src.engine.acting.actions.move import Move
+from src.engine.io.colors import Colors
+from src.engine.io.gui import Gui
 from src.lib.toolkit import curses_wrong_characters
 from src.lib.vector import up, down, left, right, add2
-from src.systems.acting.actions.attack import Attack
-from src.systems.acting.actions.cast_fire_flow import CastFireFlow
-from src.systems.acting.actions.inspect import Inspect
-from src.systems.acting.actions.move import Move
+
+
+
+
 
 
 class IO(OwnedEntity):

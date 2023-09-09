@@ -1,9 +1,10 @@
 import curses
 from statistics import median
 
-from src.entities.ais.iolib.colors import get_color_pair, Colors
+from src.engine.acting.actions.inspect import Inspect
+from src.engine.io.colors import get_color_pair, Colors
 from src.lib.vector import floordiv2, size2, safe_get2, sub2, le2, zero, lt2, add2
-from src.systems.acting.actions.inspect import Inspect
+
 
 
 class Game:

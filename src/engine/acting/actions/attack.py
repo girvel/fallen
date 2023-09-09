@@ -1,7 +1,6 @@
 from collections import namedtuple
 
-from src.systems.acting.damage import inflict_damage
-
+from src.engine.acting.damage import inflict_damage
 
 
 class Attack(namedtuple("AttackBase", "target")):

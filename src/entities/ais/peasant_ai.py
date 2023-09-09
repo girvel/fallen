@@ -1,11 +1,12 @@
 import random
 from enum import Enum
 
-from src.entities.ais.components.pather import Pather
+from src.engine.acting.actions.move import Move
+from src.engine.ai.pather import Pather
 from src.entities.physical.table import Table
 from src.lib.period.random_period import RandomPeriod
 from src.lib.vector import directions, add2, safe_get2
-from src.systems.acting.actions.move import Move
+
 
 
 

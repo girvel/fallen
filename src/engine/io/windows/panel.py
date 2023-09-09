@@ -1,13 +1,15 @@
 import curses
 
-from jinja2 import Environment, PackageLoader, select_autoescape
+from jinja2 import Environment, PackageLoader
 
-from src.entities.ais.iolib.colors import Colors
-from src.entities.ais.iolib.html import CursesHtmlRenderer
+from src.engine.acting.actions.inspect import Inspect
+from src.engine.acting.actions.move import Move
+from src.engine.io.colors import Colors
+from src.engine.io.html import CursesHtmlRenderer
 from src.lib.limited import Limited
 from src.lib.toolkit import from_snake_case
-from src.systems.acting.actions.inspect import Inspect
-from src.systems.acting.actions.move import Move
+
+
 
 
 class Panel:

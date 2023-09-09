@@ -2,7 +2,7 @@ import curses
 
 from ecs import Entity
 
-from src.entities.ais.iolib.colors import Colors
+from src.engine.io.colors import Colors
 
 
 class Monitor:

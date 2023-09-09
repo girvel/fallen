@@ -1,7 +1,8 @@
 from ecs import OwnedEntity
 
-from src.entities.ais.iolib.colors import Colors
-from src.systems.acting.damage import Health, ArmorKind
+from src.engine.acting.damage import ArmorKind, Health
+from src.engine.io.colors import Colors
+
 from src.systems.ai import Kind
 
 

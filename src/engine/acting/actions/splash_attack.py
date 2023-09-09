@@ -1,8 +1,7 @@
-import logging
 from collections import namedtuple
 
 from src.lib.vector import safe_get2, add2
-from src.systems.acting.damage import inflict_damage
+from src.engine.acting.damage import inflict_damage
 
 
 class SplashAttack(namedtuple("SplashAttackBase", "position, r")):

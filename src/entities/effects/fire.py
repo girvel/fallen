@@ -1,9 +1,10 @@
 from ecs import OwnedEntity
 
+from src.engine.acting.damage import Weapon, DamageKind
 from src.entities.ais.fire_ai import FireAi
-from src.entities.ais.iolib.colors import Colors
+from src.engine.io.colors import Colors
 from src.lib.toolkit import death_chance_from_half_life
-from src.systems.acting.damage import Weapon, DamageKind
+
 from src.systems.ai import Senses
 
 

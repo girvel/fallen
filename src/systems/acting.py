@@ -1,4 +1,3 @@
-# TODO move from ugly __init__.py
 from ecs import create_system
 
 

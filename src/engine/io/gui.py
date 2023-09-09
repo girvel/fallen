@@ -1,7 +1,7 @@
-from src.entities.ais.iolib.windows.console import Console
-from src.entities.ais.iolib.windows.monitor import Monitor
-from src.entities.ais.iolib.windows.game import Game
-from src.entities.ais.iolib.windows.panel import Panel
+from src.engine.io.windows.console import Console
+from src.engine.io.windows.monitor import Monitor
+from src.engine.io.windows.game import Game
+from src.engine.io.windows.panel import Panel
 
 
 class Gui:

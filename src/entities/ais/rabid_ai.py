@@ -1,13 +1,12 @@
 import random
 
-from src.entities.ais.components.pather import Pather
+from src.engine.acting.actions.attack import Attack
+from src.engine.acting.actions.move import Move
+from src.engine.ai.pather import Pather
 from src.lib.vector import sub2, abs2
-from src.systems.acting.actions.attack import Attack
-from src.systems.acting.actions.move import Move
+
+
 from src.systems.ai import classified_as, Kind
-
-import logging
-
 
 
 class RabidAi:

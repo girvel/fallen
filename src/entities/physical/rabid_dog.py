@@ -1,11 +1,10 @@
-import random
-
 from ecs import OwnedEntity
 
-from src.entities.ais.iolib.colors import Colors
+from src.engine.acting.damage import Weapon, Health, DamageKind, ArmorKind
+from src.engine.io.colors import Colors
 from src.entities.ais.rabid_ai import RabidAi
 from src.lib.vector import map_grid
-from src.systems.acting.damage import DamageKind, ArmorKind, Health, Weapon
+
 from src.systems.ai import Kind, Senses
 
 

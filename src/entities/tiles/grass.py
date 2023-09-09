@@ -1,6 +1,6 @@
 from ecs import OwnedEntity
 
-from src.entities.ais.iolib.colors import Colors
+from src.engine.io.colors import Colors
 
 
 class Grass(OwnedEntity):

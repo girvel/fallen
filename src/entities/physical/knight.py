@@ -2,11 +2,12 @@ import random
 
 from ecs import OwnedEntity
 
+from src.engine.acting.damage import Health, Weapon, ArmorKind, DamageKind
 from src.engine.assets import names
-from src.entities.ais.iolib.colors import Colors
+from src.engine.io.colors import Colors
 from src.entities.ais.knight_ai import KnightAi
 from src.lib.vector import map_grid
-from src.systems.acting.damage import Health, ArmorKind, Weapon, DamageKind
+
 from src.systems.ai import Kind, Senses
 
 

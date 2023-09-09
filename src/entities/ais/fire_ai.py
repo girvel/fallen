@@ -1,4 +1,4 @@
-from src.systems.acting.actions.splash_attack import SplashAttack
+from src.engine.acting.actions.splash_attack import SplashAttack
 
 
 class FireAi:
