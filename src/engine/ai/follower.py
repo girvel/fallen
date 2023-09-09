@@ -1,14 +1,14 @@
 from typing import Optional
 
 from src.lib.period.period import Period
-from src.lib.rust_enum import enum
+from src.lib.rust_enum import enum, Case
 from src.lib.vector import abs2, sub2, int2
 
 
 @enum
 class TargetChange:
-    Nothing = {}
-    To = {"target": Optional[int2]}
+    Nothing = Case()
+    To = Case(target=Optional[int2])
 
 
 class Follower:
