@@ -25,7 +25,7 @@ class PeasantAi:
 
     # It is possible to extract ModalAi parent/component?
     def make_decision(self, subject, perception):
-        if action := self.pather.go(subject, perception): return action
+        if action := self.pather.try_going(subject, perception): return action
 
         match self.mode:
             case Mode.GoHome:

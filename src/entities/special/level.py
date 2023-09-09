@@ -41,10 +41,9 @@ class Level(OwnedEntity):
     })
 
     markup = None
+    player = None
 
     def __init__(self, ms, path: Path, io):
-        player = None
-
         level_lines = (path / "grid.txt").read_text().split('\n')
         size = (max(len(l) for l in level_lines), len(level_lines))
 
@@ -68,6 +67,7 @@ class Level(OwnedEntity):
                         after_loads.append(e.after_load)
 
                     if c == "@":
+                        self.player = e
                         e.ai = io
                     break
                 else:

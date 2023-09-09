@@ -14,7 +14,7 @@ class RabidAi:
         self.pather = Pather()
 
     def make_decision(self, subject, perception):
-        if action := self.pather.go(subject, perception): return action
+        if action := self.pather.try_going(subject, perception): return action
 
         possible_targets = [
             e for e in perception.vision.physical.values()

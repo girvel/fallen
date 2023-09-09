@@ -13,7 +13,7 @@ class Pather:
         self.path = []
         self.free_directions = None
 
-    def go(self, subject, perception):
+    def try_going(self, subject, perception):
         self.free_directions = [d for d in directions if perception.vision[subject.layer].get(add2(subject.p, d)) is None]
         if len(self.free_directions) == 0: return
 
