@@ -1,8 +1,7 @@
-import logging
-
 from ecs import OwnedEntity
+from rust_enum import Option
 
-from src.engine.ai.follower import Follower, TargetChange
+from src.engine.ai.follower import Follower
 from src.engine.ai.pather import Pather
 
 
@@ -13,6 +12,6 @@ class KnightAi(OwnedEntity):
 
     def make_decision(self, subject, perception):
         match self.follower.try_producing_target(subject, perception):
-            case TargetChange.To(p): self.pather.going_to = p
+            case Option.Some(p): self.pather.going_to = p
 
         if (action := self.pather.try_going(subject, perception)) is not None: return action
