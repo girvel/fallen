@@ -1,3 +1,5 @@
+import logging
+
 from ecs import OwnedEntity
 
 from src.engine.ai.attacker import Attacker
@@ -17,11 +19,11 @@ class KnightAi(OwnedEntity):
         if attack := self.attacker.try_attacking(subject, perception, self.fight_or_flight.current_target).unwrap_or():
             return attack
 
-        if p := (
+        if path_target := (
             self.fight_or_flight.try_producing_target(subject, perception).unwrap_or() or
             self.follower.try_producing_target(subject, perception).unwrap_or()
         ):
-            self.pather.going_to = p
+            self.pather.going_to = path_target
 
-        if action := self.pather.try_going(subject, perception):
+        if action := self.pather.try_going(subject, perception).unwrap_or():
             return action

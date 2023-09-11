@@ -2,7 +2,7 @@ import random
 
 from src.engine.acting.actions.attack import Attack
 from src.engine.acting.actions.move import Move
-from src.engine.ai.pather import Pather
+from src.engine.ai.pather import Pather, PathTarget
 from src.lib.vector import sub2, abs2
 
 
@@ -14,7 +14,7 @@ class RabidAi:
         self.pather = Pather()
 
     def make_decision(self, subject, perception):
-        if action := self.pather.try_going(subject, perception): return action
+        if action := self.pather.try_going(subject, perception).unwrap_or(): return action
 
         possible_targets = [
             e for e in perception.vision.physical.values()
@@ -28,4 +28,4 @@ class RabidAi:
         if abs2(v) == 1:
             return Attack(target)
         else:
-            self.pather.going_to = target.p
+            self.pather.going_to = PathTarget.Some(target.p)

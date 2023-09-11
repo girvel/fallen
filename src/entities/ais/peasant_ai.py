@@ -2,7 +2,7 @@ import random
 from enum import Enum
 
 from src.engine.acting.actions.move import Move
-from src.engine.ai.pather import Pather
+from src.engine.ai.pather import Pather, PathTarget
 from src.entities.physical.table import Table
 from src.lib.period.random_period import RandomPeriod
 from src.lib.vector import directions, add2, safe_get2
@@ -14,7 +14,6 @@ Mode = Enum("Mode", "GoHome GoToTable WorkAtTable GoOutside Wandering")
 
 
 class PeasantAi:
-    going_to = None
     working_period = RandomPeriod(30, 46)
     wandering_period = RandomPeriod(20, 36)
     mode = Mode.GoOutside
@@ -25,11 +24,11 @@ class PeasantAi:
 
     # It is possible to extract ModalAi parent/component?
     def make_decision(self, subject, perception):
-        if action := self.pather.try_going(subject, perception): return action
+        if action := self.pather.try_going(subject, perception).unwrap_or(): return action
 
         match self.mode:
             case Mode.GoHome:
-                self.pather.going_to = subject.house.entrance
+                self.pather.going_to = PathTarget.Some(subject.house.entrance)
                 self.mode = Mode.GoToTable
 
             case Mode.GoToTable:
@@ -50,7 +49,7 @@ class PeasantAi:
                         # TODO remove magic character
                     ), None)) is not None
                 ):
-                    self.pather.going_to = destination
+                    self.pather.going_to = PathTarget.Some(destination)
                     self.mode = Mode.WorkAtTable
                 else:
                     self.mode = Mode.GoOutside
@@ -60,10 +59,10 @@ class PeasantAi:
                     self.mode = Mode.GoOutside
 
             case Mode.GoOutside:
-                self.pather.going_to = random.choices(
+                self.pather.going_to = PathTarget.Some(random.choices(
                     self.favourite_zones,
                     [zone.attractiveness for zone in self.favourite_zones]
-                )[0].center
+                )[0].center)
 
                 self.mode = Mode.Wandering
 

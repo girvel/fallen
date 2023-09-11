@@ -3,8 +3,8 @@ import random
 from ecs import OwnedEntity, exists
 from rust_enum import Option
 
+from src.engine.ai.pather import PathTarget
 from src.engine.reputation import demeanor_towards
-from src.lib.vector import int2
 from src.systems.ai import Perception
 
 
@@ -16,10 +16,11 @@ class FightOrFlight:
 
     def try_producing_target(
         self, subject: OwnedEntity, perception: Perception
-    ) -> Option[int2]:
+    ) -> Option[PathTarget]:
 
         if target := self.current_target.unwrap_or():
-            if exists(target) and target.p in perception.vision.physical: return Option.Some(target.p)
+            if exists(target) and target.p in perception.vision.physical:
+                return Option.Some(PathTarget.Some(target.p))
 
             self.current_target = Option.Nothing()
 
@@ -28,6 +29,6 @@ class FightOrFlight:
 
         if self.prefer_fight:
             self.current_target = Option.Some(random.choice(enemies))
-            return self.current_target.map(lambda t: t.p)
+            return self.current_target.map(lambda t: PathTarget.Some(t.p))
         else:
             assert False
