@@ -2,6 +2,7 @@ from ecs import OwnedEntity
 
 from src.engine.acting.damage import Weapon, Health, DamageKind, ArmorKind
 from src.engine.io.colors import Colors
+from src.engine.reputation import Faction
 from src.entities.ais.rabid_ai import RabidAi
 from src.lib.vector import map_grid
 
@@ -14,6 +15,7 @@ class RabidDog(OwnedEntity):
     color = Colors.Magenta
     vision = 10
 
+    faction = Faction.Predators
     spacial_memory = None
 
     def __init__(self):

@@ -1,3 +1,4 @@
+import math
 import random
 
 
@@ -29,3 +30,6 @@ def death_chance_from_half_life(half_life):
 
 def chance(p):
     return random.random() <= p
+
+def random_round(number: float) -> int:
+    return math.floor(number) + (chance(number % 1) and 1 or 0)

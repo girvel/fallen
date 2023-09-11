@@ -26,7 +26,7 @@ class Senses:
 
 @dataclass
 class Perception:
-    vision: dict[tuple[int, int], OwnedEntity]
+    vision: Entity
     hearing: dict[tuple[int, int], int]
     smell: dict[tuple[int, int], OwnedEntity]
     free_cache: numpy.ndarray
