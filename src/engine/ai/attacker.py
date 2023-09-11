@@ -1,0 +1,27 @@
+import random
+
+from ecs import OwnedEntity, exists
+from rust_enum import Option
+
+from src.engine.acting.actions.attack import Attack
+from src.engine.reputation import demeanor_towards
+from src.lib.vector import directions, add2, abs2, sub2
+from src.systems.ai import Perception
+
+
+class Attacker:
+    def try_attacking(
+        self, subject: OwnedEntity, perception: Perception, current_target: Option[OwnedEntity] = Option.Nothing()
+    ) -> Option[Attack]:
+
+        if (target := current_target.unwrap_or()) and exists(target):
+            return (abs2(sub2(subject.p, target.p)) <= 1
+                and Option.Some(Attack(target))
+                or Option.Nothing())
+
+        enemies = [
+            e for d in directions
+            if (e := perception.vision.physical.get(add2(subject.p, d))) is not None
+            and demeanor_towards(subject, e) < 0
+        ]
+        return len(enemies) > 0 and Option.Some(Attack(random.choice(enemies))) or Option.Nothing()

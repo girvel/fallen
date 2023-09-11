@@ -1,5 +1,6 @@
 from ecs import OwnedEntity
 
+from src.engine.ai.attacker import Attacker
 from src.engine.ai.fight_or_flight import FightOrFlight
 from src.engine.ai.follower import Follower
 from src.engine.ai.pather import Pather
@@ -10,8 +11,12 @@ class KnightAi(OwnedEntity):
         self.pather = Pather()
         self.follower = Follower(3)
         self.fight_or_flight = FightOrFlight(True)
+        self.attacker = Attacker()
 
     def make_decision(self, subject, perception):
+        if attack := self.attacker.try_attacking(subject, perception, self.fight_or_flight.current_target).unwrap_or():
+            return attack
+
         if p := (
             self.fight_or_flight.try_producing_target(subject, perception).unwrap_or() or
             self.follower.try_producing_target(subject, perception).unwrap_or()
