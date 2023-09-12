@@ -21,23 +21,24 @@ class Pather:
         self.free_directions = None
 
     def try_going(self, subject: OwnedEntity, perception: Perception) -> Option[Move]:
+        # Update public self.free_directions
         self.free_directions = [
             d for d in directions if perception.vision[subject.layer].get(add2(subject.p, d)) is None
         ]
 
-        if len(self.free_directions) == 0: return Option.Nothing()
+        # Don't move if there are nowhere to go
+        if (
+            len(self.free_directions) == 0 or
+            not (destination := self.going_to.unwrap_or())
+        ):
+            return Option.Nothing()
 
-        if destination := self.going_to.unwrap_or():
-            # Move if there is a path
-            if len(self.path) > 0:
-                # Reset path if the target is changed
-                if self.path[0] != destination:
-                    self.path = []
-                else:
-                    go_to = self.path.pop()
-                    if perception.vision[subject.layer].get(go_to) is None:
-                        return Option.Some(Move(sub2(go_to, subject.p)))
-
+        # Try to build path if there isn't one
+        if (
+            len(self.path) == 0 or
+            self.path[0] != destination or
+            perception.vision[subject.layer].get(self.path[-1]) is not None
+        ):
             # Create grid for calculations, escaping the beginning and the end
             grid = map_grid(subject.spacial_memory, lambda c: c == "." and 1 or 0)
             unsafe_set2(grid, subject.p, 1)
@@ -47,6 +48,8 @@ class Pather:
             pathfinder = Pathfinder(SimpleGraph(cost=numpy.array(grid[0]).transpose(), cardinal=1, diagonal=0))
             pathfinder.add_root(subject.p)
             self.path = list(map(tuple, pathfinder.path_to(destination)))[1:][::-1]
-            return Option.Nothing()
 
-        return Option.Nothing()
+            # If the generated path is invalid there is no purpose in continuing
+            if len(self.path) == 0: return Option.Nothing()
+
+        return Option.Some(Move(sub2(self.path.pop(), subject.p)))
