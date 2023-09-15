@@ -63,12 +63,12 @@ def map_grid(grid: (list[list[T]], int2), f: Callable[[T], R]) -> (list[list[R]]
 def fits_in_grid(grid: (list[list[T]], int2), p: int2) -> bool:
     return ge2(p, zero) and lt2(p, size2(grid))
 
-def unsafe_set2(grid: (list[list[T]], int2), p: int2, value: T):
+def unsafe_set2(grid: (list[list[T]], int2), p: int2, value: T):  # TODO rename
     array, size = grid
     assert ge2(p, zero) and lt2(p, size), f"Can not set grid cell at {p} outside of (0, 0) - {size}"
     array[p[1]][p[0]] = value
 
-def safe_get2(grid: (list[list[T]], int2), p: int2, default: T = None) -> T:
+def safe_get2(grid: tuple[list[list[T]], int2], p: int2, default: T = None) -> T:
     array, size = grid
     return array[p[1]][p[0]] if fits_in_grid(grid, p) else default
 

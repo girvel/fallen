@@ -1,14 +1,21 @@
-from collections import namedtuple
+from dataclasses import dataclass
 
+from ecs import OwnedEntity
+
+from src.engine.acting.action import Action
 from src.entities.effects.fire import Fire
 from src.entities.special.genesis import Genesis
 from src.entities.special.hades import Hades
+from src.entities.special.level import Level
 from src.lib.toolkit import chance
-from src.lib.vector import add2, mul2, flip2, safe_get2
+from src.lib.vector import add2, mul2, flip2, safe_get2, int2
 
 
-class CastFireFlow(namedtuple("CastFireFlowBase", "v")):
-    def execute(self, actor, level, hades: Hades, genesis: Genesis):
+@dataclass
+class CastFireFlow(Action):
+    v: int2
+
+    def execute(self, actor: OwnedEntity, level: Level, hades: Hades, genesis: Genesis) -> object:
         length = 18
 
         for dv in range(0, length):

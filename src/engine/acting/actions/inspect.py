@@ -1,6 +1,16 @@
-from collections import namedtuple
+from dataclasses import dataclass
+
+from ecs import OwnedEntity
+
+from src.engine.acting.action import Action
+from src.entities.special.genesis import Genesis
+from src.entities.special.hades import Hades
+from src.entities.special.level import Level
 
 
-class Inspect(namedtuple("InspectBase", "subject")):
-    def execute(self, actor, level, hades, genesis):
+@dataclass
+class Inspect(Action):
+    subject: OwnedEntity
+
+    def execute(self, actor: OwnedEntity, level: Level, hades: Hades, genesis: Genesis):
         pass
