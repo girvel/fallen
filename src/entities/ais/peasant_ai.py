@@ -5,7 +5,7 @@ from src.engine.acting.actions.move import Move
 from src.engine.ai.pather import Pather, PathTarget
 from src.entities.physical.table import Table
 from src.lib.period.random_period import RandomPeriod
-from src.lib.vector import directions, add2, safe_get2
+from src.lib.vector import directions, add2, grid_get
 
 
 
@@ -40,12 +40,12 @@ class PeasantAi:
                         (x, y)
                         for x in range(subject.house.house_borders[0][0], subject.house.house_borders[1][0])
                         for y in range(subject.house.house_borders[0][1], subject.house.house_borders[1][1])
-                        if safe_get2(subject.spacial_memory, (x, y)) == Table.character
+                        if grid_get(subject.spacial_memory, (x, y)) == Table.character
                     ])) is not None
                     and
                     (destination := next((
                         p for v in directions
-                        if (p := add2(table_p, v)) and safe_get2(subject.spacial_memory, p) == "."
+                        if (p := add2(table_p, v)) and grid_get(subject.spacial_memory, p) == "."
                         # TODO remove magic character
                     ), None)) is not None
                 ):
@@ -68,5 +68,5 @@ class PeasantAi:
 
             case Mode.Wandering:
                 if not self.wandering_period.step():
-                    return Move(random.choice(self.pather.free_directions))
+                    return len(self.pather.free_directions) > 0 and (random.choice(self.pather.free_directions)) or None
                 self.mode = Mode.GoHome

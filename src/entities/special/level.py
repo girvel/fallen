@@ -8,7 +8,7 @@ from ecs import OwnedEntity, Entity
 from src.entities.markup.house import House
 from src.entities.markup.zone import Zone
 from src.lib.toolkit import to_camel_case
-from src.lib.vector import unsafe_set2, create_grid
+from src.lib.vector import grid_set, create_grid
 
 
 
@@ -31,7 +31,7 @@ class Level(OwnedEntity):
     name = 'level_container'
 
     def put(self, p, entity):
-        unsafe_set2(self.grids[entity.layer], p, entity)
+        grid_set(self.grids[entity.layer], p, entity)
         entity.p = p
         return entity
 

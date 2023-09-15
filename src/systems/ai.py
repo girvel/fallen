@@ -5,7 +5,7 @@ import numba as numba
 import numpy
 from ecs import create_system, OwnedEntity, Entity
 
-from src.lib.vector import sub2, add2, safe_get2, unsafe_set2
+from src.lib.vector import sub2, add2, grid_get, grid_set
 
 import logging
 
@@ -116,7 +116,7 @@ def calculate_smell(physical_grid, p, r):
     for dy in range(-r, r + 1):  # TODO optimize for level borders
         for dx in range(abs(dy) - r, r - abs(dy) + 1):
             p = add2(p, (dx, dy))
-            if (entity := safe_get2(physical_grid, p)) is not None:
+            if (entity := grid_get(physical_grid, p)) is not None:
                 result[p] = entity
 
     return result
@@ -130,7 +130,7 @@ def think(subject: 'ai', level: 'grids'):
 
     if vision is not None:
         for p, entity in vision.physical.items():
-            unsafe_set2(subject.spacial_memory, p, entity is not None and entity.character or ".")
+            grid_set(subject.spacial_memory, p, entity is not None and entity.character or ".")
 
     subject.act = subject.ai.make_decision(subject, Perception(
         vision,

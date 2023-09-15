@@ -2,7 +2,7 @@ import logging
 
 from ecs import create_system, Metasystem
 
-from src.lib.vector import unsafe_set2
+from src.lib.vector import grid_set
 
 
 def generate(ms: Metasystem):
@@ -10,7 +10,7 @@ def generate(ms: Metasystem):
     def destruction(hades: 'entities_to_destroy', level: 'grids'):
         for e in hades.entities_to_destroy:
             if "p" in e:
-                unsafe_set2(level.grids[e.layer], e.p, None)
+                grid_set(level.grids[e.layer], e.p, None)
 
             ms.delete(e)
             logging.info(f"Destroyed entity {e}")

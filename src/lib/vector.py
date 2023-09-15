@@ -52,25 +52,25 @@ def le2(v1: int2, v2: int2) -> int2:
     return ge2(v2, v1)
 
 T = TypeVar('T')
-def create_grid(size: int2, filler: Callable[[], T]) -> (list[list[T]], int2):
+def create_grid(size: int2, filler: Callable[[], T]) -> tuple[list[list[T]], int2]:
     return [[filler() for _ in range(size[0])] for _ in range(size[1])], size
 
 R = TypeVar('R')
-def map_grid(grid: (list[list[T]], int2), f: Callable[[T], R]) -> (list[list[R]], int2):
+def map_grid(grid: tuple[list[list[T]], int2], f: Callable[[T], R]) -> tuple[list[list[R]], int2]:
     array, size = grid
     return [[f(e) for e in row] for row in array], size
 
-def fits_in_grid(grid: (list[list[T]], int2), p: int2) -> bool:
-    return ge2(p, zero) and lt2(p, size2(grid))
+def fits_in_grid(grid: tuple[list[list[T]], int2], p: int2) -> bool:
+    return ge2(p, zero) and lt2(p, grid_size(grid))
 
-def unsafe_set2(grid: (list[list[T]], int2), p: int2, value: T):  # TODO rename
+def grid_set(grid: tuple[list[list[T]], int2], p: int2, value: T):
     array, size = grid
     assert ge2(p, zero) and lt2(p, size), f"Can not set grid cell at {p} outside of (0, 0) - {size}"
     array[p[1]][p[0]] = value
 
-def safe_get2(grid: tuple[list[list[T]], int2], p: int2, default: T = None) -> T:
+def grid_get(grid: tuple[list[list[T]], int2], p: int2, default: T = None) -> T:
     array, size = grid
     return array[p[1]][p[0]] if fits_in_grid(grid, p) else default
 
-def size2(grid: (list[list[T]], int2)) -> int2:
+def grid_size(grid: tuple[list[list[T]], int2]) -> int2:
     return grid[1]

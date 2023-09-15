@@ -7,7 +7,7 @@ import numpy
 from tcod.path import Pathfinder, SimpleGraph
 
 from src.engine.acting.actions.move import Move
-from src.lib.vector import directions, sub2, map_grid, unsafe_set2, add2, abs2, int2
+from src.lib.vector import directions, sub2, map_grid, grid_set, add2, abs2, int2
 from src.systems.ai import Perception
 
 
@@ -41,8 +41,8 @@ class Pather:
         ):
             # Create grid for calculations, escaping the beginning and the end
             grid = map_grid(subject.spacial_memory, lambda c: c == "." and 1 or 0)
-            unsafe_set2(grid, subject.p, 1)
-            unsafe_set2(grid, destination, 1)
+            grid_set(grid, subject.p, 1)
+            grid_set(grid, destination, 1)
 
             # Resort to external library to construct the path
             pathfinder = Pathfinder(SimpleGraph(cost=numpy.array(grid[0]).transpose(), cardinal=1, diagonal=0))

@@ -8,7 +8,7 @@ from src.entities.special.genesis import Genesis
 from src.entities.special.hades import Hades
 from src.entities.special.level import Level
 from src.lib.toolkit import chance
-from src.lib.vector import add2, mul2, flip2, safe_get2, int2
+from src.lib.vector import add2, mul2, flip2, grid_get, int2
 
 
 @dataclass
@@ -24,7 +24,7 @@ class CastFireFlow(Action):
                 p = add2(add2(mul2(self.v, dv), mul2(flip2(self.v), du)), actor.p)
 
                 if (
-                    safe_get2(level.grids.effects, p, object()) is not None or
+                    grid_get(level.grids.effects, p, object()) is not None or
                     not chance((1 - dv / length) * (1 - abs(du) / r))
                 ):
                     continue

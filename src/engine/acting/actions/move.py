@@ -1,4 +1,4 @@
-from src.lib.vector import add2, unsafe_set2, safe_get2, int2
+from src.lib.vector import add2, grid_set, grid_get, int2
 
 from dataclasses import dataclass
 from ecs import OwnedEntity
@@ -14,7 +14,7 @@ class Move(Action):
 
     def execute(self, actor: OwnedEntity, level: Level, hades: Hades, genesis: Genesis):
         next_p = add2(actor.p, self.v)
-        if safe_get2(level.grids.physical, next_p, object()) is not None: return
+        if grid_get(level.grids.physical, next_p, object()) is not None: return
 
-        unsafe_set2(level.grids.physical, actor.p, None)
+        grid_set(level.grids.physical, actor.p, None)
         level.put(next_p, actor)

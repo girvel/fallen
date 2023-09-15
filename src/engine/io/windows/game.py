@@ -3,7 +3,7 @@ from statistics import median
 
 from src.engine.acting.actions.inspect import Inspect
 from src.engine.io.colors import get_color_pair, Colors
-from src.lib.vector import floordiv2, size2, safe_get2, sub2, le2, zero, lt2, add2
+from src.lib.vector import floordiv2, grid_size, grid_get, sub2, le2, zero, lt2, add2
 
 
 
@@ -27,7 +27,7 @@ class Game:
 
     def _move_camera(self, subject, level):
         screen_h, screen_w = self._window.getmaxyx()
-        level_w, level_h = size2(level.grids.physical)
+        level_w, level_h = grid_size(level.grids.physical)
 
         self.virtual_p = (
             median((
@@ -53,7 +53,7 @@ class Game:
 
         for rx in range(0, screen_size[0]):
             for ry in range(0, screen_size[1]):
-                character = safe_get2(subject.spacial_memory, add2((rx, ry), self.virtual_p))
+                character = grid_get(subject.spacial_memory, add2((rx, ry), self.virtual_p))
                 self._window.addch(ry, rx, character not in {None, "."} and character or " ")
 
         inspected = isinstance(subject.act, Inspect) and subject.act.subject
@@ -62,7 +62,7 @@ class Game:
             if not (le2(zero, rp) and lt2(rp, screen_size)): continue
 
             for layer in self.layers_display_order:
-                if (entity := safe_get2(level.grids[layer], p)) is None: continue
+                if (entity := grid_get(level.grids[layer], p)) is None: continue
 
                 character = entity.character
                 color = get_color_pair(entity) | (
