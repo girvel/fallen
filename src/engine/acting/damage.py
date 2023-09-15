@@ -6,6 +6,7 @@ from ecs import Entity, OwnedEntity
 
 import logging
 
+from src.entities.special.hades import Hades
 from src.lib.limited import Limited
 
 
@@ -24,7 +25,7 @@ class Health:
         self.armor_kind = armor_kind
 
 
-def inflict_damage(target: OwnedEntity, weapon: Weapon, hades: OwnedEntity):
+def inflict_damage(target: OwnedEntity, weapon: Weapon, hades: Hades):
     if "health" not in target: return
 
     armor = armor_data[target.health.armor_kind]

@@ -1,13 +1,12 @@
 import logging
 from pathlib import Path
 
-from ecs import Metasystem, create_system
-
-from src.entities.effects.fire import Fire
+from ecs import Metasystem
+from src.entities.special.genesis import Genesis
+from src.entities.special.hades import Hades
 from src.entities.special.level import Level
 from src.entities.ais.io import IO
-from src.lib.vector import unsafe_set2
-from src.systems import acting
+from src.systems import acting, destruction_and_creation
 from src.systems.ai import think
 from src.systems.death_by_chance import death_by_chance
 
@@ -16,45 +15,24 @@ def init(stdscr, track, debug_mode):
     logging.info("Creating & filling the metasystem")
     ms = Metasystem()
 
-    # Systems
-    # TODO move out
-    @create_system
-    def destruction(hades: 'entities_to_destroy', level: 'grids'):
-        for e in hades.entities_to_destroy:
-            if "p" in e:
-                unsafe_set2(level.grids[e.layer], e.p, None)
-
-            ms.delete(e)
-            logging.info(f"Destroyed entity {e}")
-
-        hades.entities_to_destroy.clear()
-
-    @create_system
-    def creation(genesis: 'entities_to_create'):
-        for e in genesis.entities_to_create:
-            ms.add(e)
-            logging.info(f"Created entity {e}")
-
-        genesis.entities_to_create.clear()
+    logging.info("Initializing systems")
 
     for system in [
         think,
         *acting.sequence,
         death_by_chance,
-        destruction,
-        creation,
+        *destruction_and_creation.generate(ms),
     ]:
         ms.add(system)
 
-    # Entities
-    ms.create(name='hades', entities_to_destroy=[])  # TODO class
-    ms.create(name='genesis', entities_to_create=[])
+    logging.info("Creating special entities")
 
-    level = ms.add(Level(ms, Path("assets/levels/main"), IO(stdscr, debug_track=track, debug_mode=debug_mode)))
-    level.put((51, 3), ms.add(Fire(2), layer="effects"))
+    ms.add(Hades())
+    ms.add(Genesis())
+    ms.add(Level(ms, Path("assets/levels/main"), IO(stdscr, debug_track=track, debug_mode=debug_mode)))
 
-    # Game cycle
     logging.info("Starting game cycle")
+
     try:
         while True:
             ms.update()

@@ -15,10 +15,6 @@ from src.lib.toolkit import curses_wrong_characters
 from src.lib.vector import up, down, left, right, add2
 
 
-
-
-
-
 class IO(OwnedEntity):
     name = 'Input/Output'
     level = None
