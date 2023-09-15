@@ -1,11 +1,15 @@
-from collections import namedtuple
+from dataclasses import dataclass
 
-from ecs import exists
+from ecs import OwnedEntity
 
+from src.engine.acting.action import Action
 from src.engine.acting.damage import inflict_damage
+from src.entities.special.level import Level
 
 
-class Attack(namedtuple("AttackBase", "target")):
-    def execute(self, actor, level, hades, genesis):
-        if self.target is None or not exists(self.target) or "health" not in self.target: return
+@dataclass
+class Attack(Action):
+    target: OwnedEntity  # never None, always exists
+
+    def execute(self, actor: OwnedEntity, level: Level, hades: OwnedEntity, genesis: OwnedEntity):
         inflict_damage(self.target, actor.weapon, hades)

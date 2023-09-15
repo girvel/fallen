@@ -36,9 +36,6 @@ class Level(OwnedEntity):
         return entity
 
     layers = ["tiles", "physical", "effects"]
-    palettes = Entity(**{
-        l: load_palette_from(Path("src/entities") / l) for l in layers
-    })
 
     markup = None
     player = None
@@ -50,6 +47,9 @@ class Level(OwnedEntity):
         after_loads = []
 
         self.grids = Entity(**{l: create_grid(size, lambda: None) for l in self.layers})
+        self.palettes = Entity(**{
+            l: load_palette_from(Path("src/entities") / l) for l in self.layers
+        })
 
         for y, line in enumerate(level_lines):
             for x, c in enumerate(line):

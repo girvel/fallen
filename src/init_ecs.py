@@ -47,7 +47,7 @@ def init(stdscr, track, debug_mode):
         ms.add(system)
 
     # Entities
-    ms.create(name='hades', entities_to_destroy=[])
+    ms.create(name='hades', entities_to_destroy=[])  # TODO class
     ms.create(name='genesis', entities_to_create=[])
 
     level = ms.add(Level(ms, Path("assets/levels/main"), IO(stdscr, debug_track=track, debug_mode=debug_mode)))
