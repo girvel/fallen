@@ -4,7 +4,6 @@ from ecs import OwnedEntity, exists
 from rust_enum import Option
 
 from src.engine.acting.actions.attack import Attack
-from src.engine.reputation import demeanor_towards
 from src.lib.vector import directions, add2, abs2, sub2
 from src.systems.ai import Perception
 
@@ -22,6 +21,6 @@ class Attacker:
         enemies = [
             e for d in directions
             if (e := perception.vision.physical.get(add2(subject.p, d))) is not None
-            and demeanor_towards(subject, e) < 0
+            and subject.attitude.get(e) < 0
         ]
         return len(enemies) > 0 and Option.Some(Attack(random.choice(enemies))) or Option.Nothing()

@@ -2,7 +2,7 @@ from ecs import OwnedEntity
 
 from src.engine.acting.damage import Weapon, Health, DamageKind, ArmorKind
 from src.engine.io.colors import Colors
-from src.engine.reputation import Faction
+from src.engine.attitude.implementation import Faction
 from src.entities.ais.rabid_ai import RabidAi
 from src.lib.vector import map_grid
 

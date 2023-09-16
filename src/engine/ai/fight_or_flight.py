@@ -4,7 +4,6 @@ from ecs import OwnedEntity, exists
 from rust_enum import Option
 
 from src.engine.ai.pather import PathTarget
-from src.engine.reputation import demeanor_towards
 from src.systems.ai import Perception
 
 
@@ -24,7 +23,7 @@ class FightOrFlight:
 
             self.current_target = Option.Nothing()
 
-        enemies = [e for e in perception.vision.physical.values() if e is not None and demeanor_towards(subject, e) < 0]
+        enemies = [e for e in perception.vision.physical.values() if e is not None and subject.attitude.get(e) < 0]
         if len(enemies) == 0: return Option.Nothing()
 
         if self.prefer_fight:
