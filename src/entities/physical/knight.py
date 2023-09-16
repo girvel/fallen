@@ -30,9 +30,8 @@ class Knight(OwnedEntity):
         self.ai = KnightAi()
         self.spacial_memory = None
 
-        self.faction_relations = defaultdict(int)
-        self.faction_relations["Predators"] = -100
-        self.personal_relations = defaultdict(int)
+        self.faction_relations = {"Predators": -100}
+        self.personal_relations = {}
 
     def after_load(self, level):
         self.spacial_memory = map_grid(level.grids.physical, lambda _: None)

@@ -8,10 +8,7 @@ from src.lib.period.random_period import RandomPeriod
 from src.lib.vector import directions, add2, grid_get
 
 
-
-
 Mode = Enum("Mode", "GoHome GoToTable WorkAtTable GoOutside Wandering")
-
 
 class PeasantAi:
     working_period = RandomPeriod(30, 46)
