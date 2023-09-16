@@ -4,6 +4,7 @@ from pathlib import Path
 from ecs import Metasystem
 from src.entities.special.genesis import Genesis
 from src.entities.special.hades import Hades
+from src.entities.special.infosphere import Infosphere
 from src.entities.special.level import Level
 from src.entities.ais.io import IO
 from src.systems import acting, destruction_and_creation
@@ -30,6 +31,7 @@ def init(stdscr, track, debug_mode):
     ms.add(Hades())
     ms.add(Genesis())
     ms.add(Level(ms, Path("assets/levels/main"), IO(stdscr, debug_track=track, debug_mode=debug_mode)))
+    ms.add(Infosphere())
 
     logging.info("Starting game cycle")
 

@@ -1,3 +1,4 @@
+from src.entities.special.infosphere import Infosphere
 from src.lib.vector import add2, grid_set, grid_get, int2
 
 from dataclasses import dataclass
@@ -12,7 +13,7 @@ from src.entities.special.level import Level
 class Move(Action):
     v: int2
 
-    def execute(self, actor: OwnedEntity, level: Level, hades: Hades, genesis: Genesis):
+    def execute(self, actor: OwnedEntity, level: Level, infosphere: Infosphere, hades: Hades, genesis: Genesis):
         next_p = add2(actor.p, self.v)
         if grid_get(level.grids.physical, next_p, object()) is not None: return
 

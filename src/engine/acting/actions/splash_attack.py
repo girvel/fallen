@@ -14,7 +14,7 @@ class SplashAttack(Action):
     position: int2
     r: int
 
-    def execute(self, actor: OwnedEntity, level: Level, hades: Hades, genesis: Genesis):
+    def execute(self, actor: OwnedEntity, level: Level, infosphere, hades: Hades, genesis: Genesis):
         for dy in range(-self.r, self.r + 1):
             for dx in range(abs(dy) - self.r, self.r - abs(dy) + 1):
                 if (target := grid_get(level.grids.physical, add2(self.position, (dx, dy)))) is not None:

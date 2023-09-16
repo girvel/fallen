@@ -12,5 +12,5 @@ from src.entities.special.level import Level
 class Inspect(Action):
     subject: OwnedEntity
 
-    def execute(self, actor: OwnedEntity, level: Level, hades: Hades, genesis: Genesis):
+    def execute(self, actor: OwnedEntity, level: Level, infosphere, hades: Hades, genesis: Genesis):
         pass

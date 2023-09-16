@@ -1,3 +1,4 @@
+from collections import defaultdict
 from dataclasses import dataclass
 from enum import Enum
 
@@ -5,7 +6,9 @@ import numba as numba
 import numpy
 from ecs import create_system, OwnedEntity, Entity
 
-from src.lib.vector import sub2, add2, grid_get, grid_set
+from src.entities.special.infosphere import Infosphere
+from src.entities.special.level import Level
+from src.lib.vector import sub2, add2, grid_get, grid_set, int2
 
 import logging
 
@@ -79,7 +82,7 @@ def project_rays(vision, x, y, power, cx, cy):
         d = dirs[i]
         project_rays(vision, d[0], d[1], power, cx, cy)
 
-def calculate_vision(grids, p, r):
+def calculate_vision(grids: OwnedEntity, information_grid: defaultdict[list[OwnedEntity]], p: int2, r: int):
     d = 2 * r + 1
     array, (level_w, level_h) = grids.physical
 
@@ -101,12 +104,16 @@ def calculate_vision(grids, p, r):
     project_rays(vision, r, r - 1, r, r, r)
 
     result = Entity(**{l: {} for l, _ in grids})
+    result.information = {}
+
     for y in range(max(edge[1], 0), min(edge[1] + d, level_h)):
         for x in range(max(edge[0], 0), min(edge[0] + d, level_w)):
             if vision[x - edge[0], y - edge[1]] <= 0: continue
 
             for l, grid in grids:
                 result[l][x, y] = grid[0][y][x]
+
+            result.information[x, y] = information_grid[x, y]
 
     return result, free_cache
 
@@ -122,9 +129,9 @@ def calculate_smell(physical_grid, p, r):
     return result
 
 @create_system
-def think(subject: 'ai', level: 'grids'):
+def think(subject: 'ai', level: 'grids', infosphere: 'information_grid'):
     vision, free_cache = (subject.senses.vision > 0
-        and calculate_vision(level.grids, subject.p, subject.senses.vision)
+        and calculate_vision(level.grids, infosphere.information_grid, subject.p, subject.senses.vision)
         or (None, None)
     )
 
