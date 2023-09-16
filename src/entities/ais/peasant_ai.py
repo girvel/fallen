@@ -68,5 +68,8 @@ class PeasantAi:
 
             case Mode.Wandering:
                 if not self.wandering_period.step():
-                    return len(self.pather.free_directions) > 0 and (random.choice(self.pather.free_directions)) or None
+                    if len(self.pather.free_directions) > 0:
+                        return Move(random.choice(self.pather.free_directions))
+                    return
+
                 self.mode = Mode.GoHome
