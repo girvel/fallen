@@ -3,6 +3,7 @@ from ecs import OwnedEntity
 from src.engine.ai.attacker import Attacker
 from src.engine.ai.fight_or_flight import FightOrFlight
 from src.engine.ai.follower import Follower
+from src.engine.ai.morale import Morale
 from src.engine.ai.pather import Pather
 from src.systems.ai import Perception
 
@@ -13,22 +14,10 @@ class KnightAi(OwnedEntity):
         self.follower = Follower(3)
         self.fight_or_flight = FightOrFlight(True)
         self.attacker = Attacker()
+        self.morale = Morale()
 
     def make_decision(self, subject, perception: Perception):
-        # TODO Morale class
-        aggressives = [
-            e for e in perception.vision.physical.values()
-            if hasattr(e, "act")
-            and hasattr(e.act, "target")
-            and hasattr(e.act.target, "faction")
-            and e.act.target.faction == subject.faction
-
-            # TODO query syntax:
-            # (~Query(e).act.target.faction).unwrap_or() == (~Query(subject).faction).unwrap_or()
-        ]
-
-        for e in aggressives:
-            subject.attitude.move(e, -max(1, subject.attitude.get(e)))
+        self.morale.update(subject, perception)
 
         if attack := self.attacker.try_attacking(subject, perception, self.fight_or_flight.current_target).unwrap_or():
             return attack
