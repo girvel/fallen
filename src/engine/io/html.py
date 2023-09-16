@@ -33,7 +33,7 @@ class CursesHtmlRenderer(HTMLParser):
         match tag:
             case "center":
                 self.centering = False
-            case "y"|"rw":
+            case "y" | "rw":
                 self.color_stack.pop()
             case "div" | "p":
                 self.y += 1
