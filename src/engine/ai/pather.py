@@ -33,6 +33,13 @@ class Pather:
         ):
             return Option.Nothing()
 
+        if (
+            destination == subject.p or
+            abs2(sub2(destination, subject.p)) == 1 and perception.vision[subject.layer].get(destination) is not None
+        ):
+            self.going_to = PathTarget.Nothing()
+            return Option.Nothing()
+
         # Try to build path if there isn't one
         if (
             len(self.path) == 0 or

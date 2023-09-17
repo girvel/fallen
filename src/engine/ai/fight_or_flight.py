@@ -4,6 +4,7 @@ from ecs import OwnedEntity, exists
 from rust_enum import Option
 
 from src.engine.ai.pather import PathTarget
+from src.lib.vector import abs2, sub2
 from src.systems.ai import Perception
 
 
@@ -30,4 +31,7 @@ class FightOrFlight:
             self.current_target = Option.Some(random.choice(enemies))
             return self.current_target.map(lambda t: PathTarget.Some(t.p))
         else:
-            assert False
+            return Option.Some(PathTarget.Some(max(
+                (p for p, e in perception.vision.physical.items() if e is None),
+                key=lambda p: sum(abs2(sub2(p, e.p)) for e in enemies),
+            )))

@@ -1,7 +1,9 @@
+import logging
 import random
 from enum import Enum
 
 from src.engine.acting.actions.move import Move
+from src.engine.ai.fight_or_flight import FightOrFlight
 from src.engine.ai.pather import Pather, PathTarget
 from src.entities.physical.table import Table
 from src.lib.period.random_period import RandomPeriod
@@ -18,9 +20,13 @@ class PeasantAi:
 
     def __init__(self):
         self.pather = Pather()
+        self.fight_or_flight = FightOrFlight(False)
 
     # It is possible to extract ModalAi parent/component?
     def make_decision(self, subject, perception):
+        if target := self.fight_or_flight.try_producing_target(subject, perception).unwrap_or():
+            self.pather.going_to = target
+
         if action := self.pather.try_going(subject, perception).unwrap_or(): return action
 
         match self.mode:

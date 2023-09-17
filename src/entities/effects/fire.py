@@ -1,6 +1,7 @@
 from ecs import OwnedEntity
 
 from src.engine.acting.damage import Weapon, DamageKind
+from src.engine.attitude.implementation import Faction
 from src.entities.ais.fire_ai import FireAi
 from src.engine.io.colors import Colors
 from src.lib.toolkit import death_chance_from_half_life
@@ -14,6 +15,7 @@ class Fire(OwnedEntity):
     color = Colors.Red
 
     layer = "effects"
+    faction = Faction.Disaster
 
     def __init__(self, half_life=float('inf'), heat=5):
         self.weapon = Weapon(heat, DamageKind.Fire)
