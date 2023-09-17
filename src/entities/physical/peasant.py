@@ -4,6 +4,7 @@ from ecs import OwnedEntity
 from src.engine.acting.damage import Weapon, Health, DamageKind, ArmorKind
 from src.engine.assets import names
 from src.entities.ais.peasant_ai import PeasantAi
+from src.entities.tiles.body import body_factory
 from src.lib.vector import sub2, area2, map_grid
 
 from src.systems.ai import Kind, Senses
@@ -13,6 +14,8 @@ class Peasant(OwnedEntity):
     character = 'p'
 
     house = None
+
+    on_death = body_factory
 
     def __init__(self):
         self.sex = random.choice(["male", "female"])

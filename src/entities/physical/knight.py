@@ -7,6 +7,7 @@ from src.engine.assets import names
 from src.engine.io.colors import Colors
 from src.engine.attitude.implementation import Faction, common_attitude
 from src.entities.ais.knight_ai import KnightAi
+from src.entities.tiles.body import body_factory
 from src.lib.vector import map_grid
 
 from src.systems.ai import Kind, Senses
@@ -18,6 +19,8 @@ class Knight(OwnedEntity):
     color = Colors.Cyan
 
     faction = Faction.Church
+
+    on_death = body_factory
 
     def __init__(self):
         self.name = "Sir " + random.choice(names["last"])

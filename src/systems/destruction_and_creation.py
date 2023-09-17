@@ -7,10 +7,13 @@ from src.lib.vector import grid_set
 
 def generate(ms: Metasystem):
     @create_system
-    def destruction(hades: 'entities_to_destroy', level: 'grids'):
+    def destruction(hades: 'entities_to_destroy', genesis: 'entities_to_create', level: 'grids'):
         for e in hades.entities_to_destroy:
-            if "p" in e:
+            if hasattr(e, "p"):
                 grid_set(level.grids[e.layer], e.p, None)
+
+            if hasattr(e, "on_death"):
+                e.on_death(hades, genesis, level)
 
             ms.delete(e)
             logging.info(f"Destroyed entity {e}")
