@@ -4,9 +4,8 @@ from ecs import OwnedEntity
 
 from src.engine.acting.damage import Health, Weapon, ArmorKind, DamageKind
 from src.engine.assets import names
-from src.engine.attitude.abstract import Attitude
 from src.engine.io.colors import Colors
-from src.engine.attitude.implementation import Faction
+from src.engine.attitude.implementation import Faction, common_attitude
 from src.entities.ais.knight_ai import KnightAi
 from src.lib.vector import map_grid
 
@@ -30,7 +29,8 @@ class Knight(OwnedEntity):
         self.ai = KnightAi()
         self.spacial_memory = None
 
-        self.attitude = Attitude()
+        self.attitude = common_attitude()
+        self.attitude.relations[Faction.Church] = 100
 
     def after_load(self, level):
         self.spacial_memory = map_grid(level.grids.physical, lambda _: None)

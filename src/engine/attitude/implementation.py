@@ -1,4 +1,4 @@
-from src.engine.attitude.abstract import Attitude
+from src.engine.attitude.attitude import Attitude
 
 
 class Faction:
@@ -6,4 +6,4 @@ class Faction:
     Church = "Church"
 
 def common_attitude():
-    return Attitude(factional={Faction.Predators: -100})
+    return Attitude({Faction.Predators: -100})

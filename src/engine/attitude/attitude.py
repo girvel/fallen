@@ -7,7 +7,7 @@ from src.lib.toolkit import random_round
 
 @dataclass
 class Attitude:
-    relations: dict[OwnedEntity, int] = field(default_factory=dict)
+    relations: dict[OwnedEntity | str, int] = field(default_factory=dict)
 
     def copy(self):
         return Attitude(

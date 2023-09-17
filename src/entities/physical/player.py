@@ -4,6 +4,7 @@ from ecs import OwnedEntity
 
 from src.engine.acting.damage import Weapon, Health, DamageKind, ArmorKind
 from src.engine.assets import strange_names
+from src.engine.attitude.implementation import Faction
 from src.lib.vector import map_grid
 
 from src.systems.ai import Kind, Senses
@@ -14,6 +15,7 @@ class Player(OwnedEntity):
 
     ai = None  # set to IO on level loading
     act = None
+    faction = Faction.Church
 
     def __init__(self):
         self.name = "Sir " + " ".join(random.choice(collection) for collection in strange_names)

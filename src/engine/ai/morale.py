@@ -1,9 +1,14 @@
+from dataclasses import dataclass
+
 from ecs import OwnedEntity
 from src.engine.acting.action import Action
 from src.systems.ai import Perception
 
 
+@dataclass
 class Morale:
+    aggression_cost: float = 35
+
     def update(self, subject: OwnedEntity, perception: Perception) -> Action:
         aggressives = [
             e for e in perception.vision.physical.values()
@@ -17,4 +22,4 @@ class Morale:
         ]
 
         for e in aggressives:
-            subject.attitude.move(e, -max(1, subject.attitude.get(e)))
+            subject.attitude.move(e, -self.aggression_cost)
