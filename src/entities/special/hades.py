@@ -5,4 +5,4 @@ class Hades(OwnedEntity):
     name = 'hades'
 
     def __init__(self):
-        self.entities_to_destroy = []
+        self.entities_to_destroy = set()

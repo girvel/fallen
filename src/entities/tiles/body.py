@@ -24,4 +24,4 @@ def body_factory(base: OwnedEntity, hades: Hades, genesis: Genesis, level: Level
     if hasattr(base, "weapon"):
         items.append(base.weapon)
 
-    genesis.entities_to_create.append(level.put(base.p, Body(name=f"Body of {base.name}", items=items)))
+    genesis.entities_to_create.add(level.put(base.p, Body(name=f"Body of {base.name}", items=items)))

@@ -5,4 +5,4 @@ class Genesis(OwnedEntity):
     name = 'genesis'
 
     def __init__(self):
-        self.entities_to_create = []
+        self.entities_to_create = set()

@@ -46,7 +46,7 @@ def inflict_damage(target: OwnedEntity, weapon: Weapon, hades: Hades):
 
     if target.health.amount.current <= 0:
         logging.info(f"{target.name} is killed")
-        hades.entities_to_destroy.append(target)
+        hades.entities_to_destroy.add(target)
 
 
 db = yaml.safe_load(Path("assets/damage_and_armor.yaml").read_text())
