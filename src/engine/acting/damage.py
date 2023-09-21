@@ -37,7 +37,7 @@ def inflict_damage(target: OwnedEntity, weapon: Weapon, hades: Hades):
         modifier = 1
 
     logging.info(
-        f"{target.name} is damaged w/ {weapon.power} * {modifier} "
+        f"{target.name} is damaged w/ {weapon.power * modifier} = {weapon.power} * {modifier} "
         f"({weapon.damage_kind} on {target.health.armor_kind})"
     )
 
