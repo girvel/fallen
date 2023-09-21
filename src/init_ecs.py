@@ -6,8 +6,9 @@ from src.entities.special.genesis import Genesis
 from src.entities.special.hades import Hades
 from src.entities.special.level import Level
 from src.entities.ais.io import IO
-from src.systems import acting, destruction_and_creation
-from src.systems.ai import think
+from src.entities.special.transparency_cache import TransparencyCache
+from src.lib.vector import grid_size
+from src.systems import acting, destruction_and_creation, ai
 from src.systems.death_by_chance import death_by_chance
 
 
@@ -18,7 +19,7 @@ def init(stdscr, track, debug_mode):
     logging.info("Initializing systems")
 
     for system in [
-        think,
+        *ai.sequence,
         *acting.sequence,
         death_by_chance,
         *destruction_and_creation.generate(ms),
@@ -29,7 +30,8 @@ def init(stdscr, track, debug_mode):
 
     ms.add(Hades())
     ms.add(Genesis())
-    ms.add(Level(ms, Path("assets/levels/main"), IO(stdscr, debug_track=track, debug_mode=debug_mode)))
+    level = ms.add(Level(ms, Path("assets/levels/main"), IO(stdscr, debug_track=track, debug_mode=debug_mode)))
+    ms.add(TransparencyCache(grid_size(level.grids.physical)))
 
     logging.info("Starting game cycle")
 

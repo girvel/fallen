@@ -18,7 +18,7 @@ class Morale:
             and e.act.target.faction == subject.faction
 
             # TODO query syntax:
-            # (~Query(e).act.target.faction).unwrap_or() == (~Query(subject).faction).unwrap_or()
+            # ~Query(e).act.target.faction == ~Query(subject).faction
         ]
 
         for e in aggressives:

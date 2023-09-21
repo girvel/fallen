@@ -3,7 +3,9 @@ from enum import Enum
 
 import numba as numba
 import numpy
+import tcod.map
 from ecs import create_system, OwnedEntity, Entity
+from line_profiler import profile
 
 from src.lib.vector import sub2, add2, grid_get, grid_set
 
@@ -110,6 +112,24 @@ def calculate_vision(grids, p, r):
 
     return result, free_cache
 
+@profile
+def calculate_vision_tcod(grids, transparency, p, r):
+    d = 2 * r + 1
+    array, (level_w, level_h) = grids.physical
+
+    edge = (p[0] - r, p[1] - r)
+    fov = tcod.map.compute_fov(transparency, p, r)
+
+    result = Entity(**{l: {} for l, _ in grids})
+    for y in range(max(edge[1], 0), min(edge[1] + d, level_h)):
+        for x in range(max(edge[0], 0), min(edge[0] + d, level_w)):
+            if not fov[x, y]: continue
+
+            for l, grid in grids:
+                result[l][x, y] = grid[0][y][x]
+
+    return result, transparency
+
 def calculate_smell(physical_grid, p, r):
     result = {}
 
@@ -121,10 +141,18 @@ def calculate_smell(physical_grid, p, r):
 
     return result
 
+
 @create_system
-def think(subject: 'ai', level: 'grids'):
+def update_transparency_cache(cache: 'transparency_array', level: 'grids'):
+    for y, line in enumerate(level.grids.physical[0]):
+        for x, e in enumerate(line):
+            cache.transparency_array[x, y] = int(e is None or not hasattr(e, "solid_flag"))
+
+
+@create_system
+def think(subject: 'ai', level: 'grids', cache: 'transparency_array'):
     vision, free_cache = (subject.senses.vision > 0
-        and calculate_vision(level.grids, subject.p, subject.senses.vision)
+        and calculate_vision_tcod(level.grids, cache.transparency_array, subject.p, subject.senses.vision)
         or (None, None)
     )
 
@@ -138,3 +166,8 @@ def think(subject: 'ai', level: 'grids'):
         subject.senses.smell > 0 and calculate_smell(level.grids.physical, subject.p, subject.senses.smell),
         free_cache
     ))
+
+sequence = [
+    update_transparency_cache,
+    think,
+]
