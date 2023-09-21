@@ -2,6 +2,7 @@ from dataclasses import dataclass
 
 from ecs import OwnedEntity
 from src.engine.acting.action import Action
+from src.lib.query import Query
 from src.systems.ai import Perception
 
 
@@ -12,13 +13,7 @@ class Morale:
     def update(self, subject: OwnedEntity, perception: Perception) -> Action:
         aggressives = [
             e for e in perception.vision.physical.values()
-            if hasattr(e, "act")
-            and hasattr(e.act, "target")
-            and hasattr(e.act.target, "faction")
-            and e.act.target.faction == subject.faction
-
-            # TODO query syntax:
-            # ~Query(e).act.target.faction == ~Query(subject).faction
+            if ~Query(e).act.target.faction == subject.faction
         ]
 
         for e in aggressives:
