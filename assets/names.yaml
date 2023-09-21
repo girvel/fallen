@@ -4,7 +4,7 @@ first:
   - John
   - Ben
   - Arthur
-  - Hugh
+  #- Hugh
   - Bill
   - Oliver
 
