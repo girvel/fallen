@@ -8,6 +8,7 @@ import logging
 
 from src.entities.special.hades import Hades
 from src.lib.limited import Limited
+from src.lib.toolkit import random_round
 
 
 @dataclass
@@ -36,12 +37,14 @@ def inflict_damage(target: OwnedEntity, weapon: Weapon, hades: Hades):
     else:
         modifier = 1
 
+    total_damage = random_round(weapon.power * modifier)
+
     logging.info(
-        f"{target.name} is damaged w/ {weapon.power * modifier} = {weapon.power} * {modifier} "
+        f"{target.name} is damaged w/ {total_damage} = {weapon.power} * {modifier} "
         f"({weapon.damage_kind} on {target.health.armor_kind})"
     )
 
-    target.health.amount.move(-weapon.power * modifier)
+    target.health.amount.move(-total_damage)
     target.receives_damage = True
 
     if target.health.amount.current <= 0:
