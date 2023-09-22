@@ -33,7 +33,7 @@ class Panel:
         self._window.resize(h - 1, self.w)
         self._window.mvwin(0, w - self.w)
 
-    def render(self, subject, perception, level):
+    def render(self, subject, perception, level, memory):
         h, w = self._window.getmaxyx()
 
         self._window.clear()

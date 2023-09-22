@@ -2,6 +2,8 @@ import curses
 import logging
 import re
 import sys
+from dataclasses import dataclass, field
+from typing import Optional
 
 from ecs import OwnedEntity
 
@@ -11,9 +13,14 @@ from src.engine.acting.actions.inspect import Inspect
 from src.engine.acting.actions.move import Move
 from src.engine.io.colors import Colors
 from src.engine.io.gui import Gui
+from src.entities.special.sound import Sound
 from src.lib.toolkit import curses_wrong_characters
 from src.lib.vector import up, down, left, right, add2
 
+
+@dataclass
+class Memory:
+    current_sound: Optional[Sound] = field(default=None)
 
 class IO(OwnedEntity):
     name = 'Input/Output'
@@ -21,8 +28,14 @@ class IO(OwnedEntity):
 
     def __init__(self, stdscr, debug_track, debug_mode):
         self.gui = Gui(stdscr, debug_mode, self)
+
+        # TODO rename gui to output
+        # TODO input class
+        # TODO hotkey is actionable if it returns True
+
         self.gui.resize()
         self.main = stdscr
+        self.memory = Memory()
 
         self.debug_track = debug_track and iter(debug_track)
 
@@ -37,11 +50,19 @@ class IO(OwnedEntity):
         self.level = level
 
     def make_decision(self, subject, perception):
+        self.form_memory(subject, perception)
         self.render(subject, perception)
         return self._wait_for_input(subject, perception)
 
+    def form_memory(self, subject, perception):
+        self.memory.current_sound = next((
+            sound
+            for sound in perception.hearing.values()
+            if sound is not None
+        ), None)
+
     def render(self, subject, perception):
-        self.gui.render(subject, perception, self.level)
+        self.gui.render(subject, perception, self.level, self.memory)
 
     def _wait_for_input(self, subject, perception):
         while True:

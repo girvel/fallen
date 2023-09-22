@@ -6,7 +6,6 @@ from src.engine.io.colors import get_color_pair, Colors
 from src.lib.vector import floordiv2, grid_size, grid_get, sub2, le2, zero, lt2, add2
 
 
-
 class Game:
     virtual_p = (0, 0)
     following_offset = (0, 0)  # modified on resize
@@ -21,9 +20,9 @@ class Game:
         self._window.resize(h - 1, w - self.panel_w)
         self.following_offset = floordiv2((w - self.panel_w, h - 1), 3)
 
-    def render(self, subject, perception, level):
+    def render(self, subject, perception, level, memory):
         self._move_camera(subject, level)
-        self._display_perception(subject, perception, level)
+        self._display_perception(subject, perception, level, memory)
 
     def _move_camera(self, subject, level):
         screen_h, screen_w = self._window.getmaxyx()
@@ -46,7 +45,7 @@ class Game:
             ))
         )
 
-    def _display_perception(self, subject, perception, level):
+    def _display_perception(self, subject, perception, level, memory):
         self._window.clear()
         h, w = self._window.getmaxyx()
         screen_size = (w - 1, h)
@@ -69,6 +68,10 @@ class Game:
                     inspected == entity
                         and curses.A_REVERSE
                         or 0
+                ) | (
+                    curses.A_BLINK
+                    if memory.current_sound is not None and memory.current_sound is perception.hearing.get(p)
+                    else 0
                 )
                 break
             else:

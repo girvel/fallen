@@ -2,14 +2,14 @@ import logging
 from pathlib import Path
 
 from ecs import Metasystem
+
+from src.entities.ais.io import IO
 from src.entities.special.genesis import Genesis
 from src.entities.special.hades import Hades
 from src.entities.special.level import Level
-from src.entities.ais.io import IO
 from src.entities.special.transparency_cache import TransparencyCache
 from src.lib.vector import grid_size
-from src.systems import acting, destruction_and_creation, ai
-from src.systems.death_by_chance import death_by_chance
+from src.systems import acting, destruction_and_creation, ai, death
 
 
 def init(stdscr, track, debug_mode):
@@ -21,7 +21,7 @@ def init(stdscr, track, debug_mode):
     for system in [
         *ai.sequence,
         *acting.sequence,
-        death_by_chance,
+        *death.sequence,
         *destruction_and_creation.generate(ms),
     ]:
         ms.add(system)

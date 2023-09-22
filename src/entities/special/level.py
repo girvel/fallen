@@ -1,6 +1,7 @@
 import logging
 from importlib.util import spec_from_file_location, module_from_spec
 from pathlib import Path
+from typing import TypeVar
 
 import toml as toml
 from ecs import OwnedEntity, Entity
@@ -8,8 +9,7 @@ from ecs import OwnedEntity, Entity
 from src.entities.markup.house import House
 from src.entities.markup.zone import Zone
 from src.lib.toolkit import to_camel_case
-from src.lib.vector import grid_set, create_grid
-
+from src.lib.vector import grid_set, create_grid, int2
 
 
 def load_palette_from(path):
@@ -30,12 +30,14 @@ def load_palette_from(path):
 class Level(OwnedEntity):
     name = 'level_container'
 
-    def put(self, p, entity):
+    T = TypeVar('T')
+    def put(self, p: int2, entity: T) -> T:
         grid_set(self.grids[entity.layer], p, entity)
         entity.p = p
         return entity
 
-    layers = ["tiles", "physical", "effects"]
+    layers = ["tiles", "physical", "effects", "sounds"]
+    invisible_layers = {"sounds"}
 
     markup = None
     player = None
@@ -48,7 +50,9 @@ class Level(OwnedEntity):
 
         self.grids = Entity(**{l: create_grid(size, lambda: None) for l in self.layers})
         self.palettes = Entity(**{
-            l: load_palette_from(Path("src/entities") / l) for l in self.layers
+            l: load_palette_from(Path("src/entities") / l)
+            for l in self.layers
+            if l not in self.invisible_layers
         })
 
         for y, line in enumerate(level_lines):

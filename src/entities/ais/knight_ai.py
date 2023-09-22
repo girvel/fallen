@@ -1,5 +1,6 @@
 from ecs import OwnedEntity
 
+from src.engine.acting.actions.say import Say
 from src.engine.ai.attacker import Attacker
 from src.engine.ai.fight_or_flight import FightOrFlight
 from src.engine.ai.follower import Follower
@@ -9,6 +10,8 @@ from src.systems.ai import Perception
 
 
 class KnightAi(OwnedEntity):
+    greeting_switch = False
+
     def __init__(self):
         self.pather = Pather()
         self.follower = Follower(3)
@@ -17,6 +20,10 @@ class KnightAi(OwnedEntity):
         self.morale = Morale()
 
     def make_decision(self, subject, perception: Perception):
+        if not self.greeting_switch and (target := self.follower.subject) in perception.vision.physical.values():
+            self.greeting_switch ^= True
+            return Say(f"Hello, {target.name}", target)
+
         self.morale.update(subject, perception)
 
         if attack := self.attacker.try_attacking(subject, perception, self.fight_or_flight.current_target).unwrap_or():

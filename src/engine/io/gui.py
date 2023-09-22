@@ -1,4 +1,5 @@
 from src.engine.io.windows.console import Console
+from src.engine.io.windows.dialogue_line import DialogueLine
 from src.engine.io.windows.monitor import Monitor
 from src.engine.io.windows.game import Game
 from src.engine.io.windows.panel import Panel
@@ -10,8 +11,9 @@ class Gui:
         self.main = stdscr
         self.game = Game(panel_w)
         self.panel = Panel(panel_w, io)
+        self.dialogue_line = DialogueLine()
 
-        self.execution_order = [self.game, self.panel]
+        self.execution_order = [self.game, self.panel, self.dialogue_line]
 
         if not debug_mode: return
         self.monitor = Monitor(10, panel_w)
@@ -24,8 +26,8 @@ class Gui:
         for window in self.execution_order:
             window.resize(h, w)
 
-    def render(self, subject, perception, level):
+    def render(self, subject, perception, level, memory):
         self.main.refresh()
 
         for window in self.execution_order:
-            window.render(subject, perception, level)
+            window.render(subject, perception, level, memory)

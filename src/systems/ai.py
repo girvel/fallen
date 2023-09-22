@@ -135,9 +135,9 @@ def calculate_smell(physical_grid, p, r):
 
     for dy in range(-r, r + 1):  # TODO optimize for level borders
         for dx in range(abs(dy) - r, r - abs(dy) + 1):
-            p = add2(p, (dx, dy))
-            if (entity := grid_get(physical_grid, p)) is not None:
-                result[p] = entity
+            smell_p = add2(p, (dx, dy))
+            if (entity := grid_get(physical_grid, smell_p)) is not None:
+                result[smell_p] = entity
 
     return result
 
@@ -162,7 +162,7 @@ def think(subject: 'ai', level: 'grids', cache: 'transparency_array'):
 
     subject.act = subject.ai.make_decision(subject, Perception(
         vision,
-        None,
+        subject.senses.hearing > 0 and calculate_smell(level.grids.sounds, subject.p, subject.senses.hearing),
         subject.senses.smell > 0 and calculate_smell(level.grids.physical, subject.p, subject.senses.smell),
         free_cache
     ))

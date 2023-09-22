@@ -16,7 +16,7 @@ class Monitor:
         self._window.resize(self.h, self.w)
         self._window.mvwin(0, 0)
 
-    def render(self, subject, perception, level):
+    def render(self, subject, perception, level, memory):
         if len(self.values) == 0: return
 
         self._window.clear()
