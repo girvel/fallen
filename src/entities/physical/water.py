@@ -1,6 +1,6 @@
 from ecs import OwnedEntity
 
-from src.engine.io.colors import Colors
+from src.engine.output.colors import Colors
 
 
 class Water(OwnedEntity):

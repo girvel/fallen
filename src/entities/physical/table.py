@@ -1,7 +1,7 @@
 from ecs import OwnedEntity
 
 from src.engine.acting.damage import ArmorKind, Health
-from src.engine.io.colors import Colors
+from src.engine.output.colors import Colors
 
 from src.systems.ai import Kind
 

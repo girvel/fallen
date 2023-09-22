@@ -1,6 +1,6 @@
 from html.parser import HTMLParser
 
-from src.engine.io.colors import Colors
+from src.engine.output.colors import Colors
 
 
 class CursesHtmlRenderer(HTMLParser):

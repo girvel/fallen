@@ -4,7 +4,7 @@ from ecs import OwnedEntity
 
 from src.engine.acting.damage import Health, Weapon, ArmorKind, DamageKind
 from src.engine.assets import names
-from src.engine.io.colors import Colors
+from src.engine.output.colors import Colors
 from src.engine.attitude.implementation import Faction, common_attitude
 from src.entities.ais.knight_ai import KnightAi
 from src.entities.tiles.body import body_factory

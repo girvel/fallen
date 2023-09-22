@@ -2,7 +2,7 @@ import curses
 from statistics import median
 
 from src.engine.acting.actions.inspect import Inspect
-from src.engine.io.colors import get_color_pair, Colors
+from src.engine.output.colors import get_color_pair, Colors
 from src.lib.vector import floordiv2, grid_size, grid_get, sub2, le2, zero, lt2, add2
 
 

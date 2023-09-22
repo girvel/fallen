@@ -1,7 +1,7 @@
 import curses
 import logging
 
-from src.engine.io.colors import Colors
+from src.engine.output.colors import Colors
 from src.lib.query import Query
 from src.lib.toolkit import cut_by_length
 

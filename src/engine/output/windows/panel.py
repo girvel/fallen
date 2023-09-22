@@ -4,8 +4,8 @@ from jinja2 import Environment, PackageLoader
 
 from src.engine.acting.actions.inspect import Inspect
 from src.engine.acting.actions.move import Move
-from src.engine.io.colors import Colors
-from src.engine.io.html import CursesHtmlRenderer
+from src.engine.output.colors import Colors
+from src.engine.output.html import CursesHtmlRenderer
 from src.lib.limited import Limited
 from src.lib.toolkit import from_snake_case
 

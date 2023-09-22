@@ -1,8 +1,8 @@
-from src.engine.io.windows.console import Console
-from src.engine.io.windows.dialogue_line import DialogueLine
-from src.engine.io.windows.monitor import Monitor
-from src.engine.io.windows.game import Game
-from src.engine.io.windows.panel import Panel
+from src.engine.output.windows.console import Console
+from src.engine.output.windows.dialogue_line import DialogueLine
+from src.engine.output.windows.monitor import Monitor
+from src.engine.output.windows.game import Game
+from src.engine.output.windows.panel import Panel
 
 
 class Output:

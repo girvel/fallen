@@ -11,8 +11,8 @@ from src.engine.acting.actions.attack import Attack
 from src.engine.acting.actions.cast_fire_flow import CastFireFlow
 from src.engine.acting.actions.inspect import Inspect
 from src.engine.acting.actions.move import Move
-from src.engine.io.colors import Colors
-from src.engine.io.output import Output
+from src.engine.output.colors import Colors
+from src.engine.output.output import Output
 from src.entities.special.sound import Sound
 from src.lib.toolkit import curses_wrong_characters
 from src.lib.vector import up, down, left, right, add2

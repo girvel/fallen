@@ -2,7 +2,7 @@ from typing import Any
 
 from ecs import OwnedEntity
 
-from src.engine.io.colors import Colors
+from src.engine.output.colors import Colors
 from src.entities.special.genesis import Genesis
 from src.entities.special.hades import Hades
 from src.entities.special.level import Level

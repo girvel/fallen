@@ -3,7 +3,7 @@ from ecs import OwnedEntity
 from src.engine.acting.damage import Weapon, DamageKind
 from src.engine.attitude.implementation import Faction
 from src.entities.ais.fire_ai import FireAi
-from src.engine.io.colors import Colors
+from src.engine.output.colors import Colors
 from src.lib.toolkit import death_chance_from_half_life
 
 from src.systems.ai import Senses
