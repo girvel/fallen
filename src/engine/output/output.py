@@ -1,3 +1,4 @@
+from src.engine.output.colors import Colors
 from src.engine.output.windows.console import Console
 from src.engine.output.windows.dialogue_line import DialogueLine
 from src.engine.output.windows.monitor import Monitor
@@ -19,6 +20,8 @@ class Output:
         self.monitor = Monitor(10, panel_w)
         self.console = Console(panel_w)
         self.execution_order += [self.monitor, self.console]
+
+        Colors.initialize()
 
     def resize(self):
         h, w = self.main.getmaxyx()
