@@ -150,7 +150,21 @@ def update_transparency_cache(cache: 'transparency_array', level: 'grids'):
 
 
 @create_system
+def run_rails(rails: 'rails_flag', level: 'grids', hades: 'entities_to_destroy'):
+    for effect in rails.run():
+        level.rails_effect = effect or {}
+        yield
+
+    hades.entities_to_destroy.add(rails)
+    level.rails_effect = {}
+
+
+@create_system
 def think(subject: 'ai', level: 'grids', cache: 'transparency_array'):
+    if subject in level.rails_effect:
+        subject.act = level.rails_effect[subject]
+        return
+
     vision, free_cache = (subject.senses.vision > 0
         and calculate_vision_tcod(level.grids, cache.transparency_array, subject.p, subject.senses.vision)
         or (None, None)
@@ -169,5 +183,6 @@ def think(subject: 'ai', level: 'grids', cache: 'transparency_array'):
 
 sequence = [
     update_transparency_cache,
+    run_rails,
     think,
 ]

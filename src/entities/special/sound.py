@@ -6,6 +6,5 @@ class Sound(OwnedEntity):
     layer = 'sounds'
     sound_flag = None
 
-    def __init__(self, content, target=None):
+    def __init__(self, content):
         self.content = content
-        self.target = target

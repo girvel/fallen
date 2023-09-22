@@ -1,14 +1,15 @@
 import logging
 from importlib.util import spec_from_file_location, module_from_spec
 from pathlib import Path
-from typing import TypeVar
+from typing import TypeVar, Callable
 
 import toml as toml
 from ecs import OwnedEntity, Entity
+from rust_enum import Option
 
 from src.entities.markup.house import House
 from src.entities.markup.zone import Zone
-from src.lib.toolkit import to_camel_case
+from src.lib.toolkit import to_camel_case, import_module
 from src.lib.vector import grid_set, create_grid, int2
 
 
@@ -18,11 +19,7 @@ def load_palette_from(path):
     for p in path.iterdir():
         if p.suffix != '.py': continue
 
-        spec = spec_from_file_location(p.stem, p)
-        module = module_from_spec(spec)
-        spec.loader.exec_module(module)
-
-        cls = getattr(module, to_camel_case(p.stem))
+        cls = getattr(import_module(p), to_camel_case(p.stem))
         result[cls.character] = cls
 
     return result
@@ -85,3 +82,18 @@ class Level(OwnedEntity):
 
         for after_load in after_loads:
             after_load(self)
+
+        rails_path = path / "rails.py"
+        if rails_path.exists():
+            ms.add(import_module(rails_path).Rails(self))
+
+        self.rails_effect = {}
+
+    def query(self, request: Callable[[OwnedEntity], bool]) -> Option[OwnedEntity]:
+        return next((  # TODO Option.next?
+            Option.Some(e)
+            for _, layer in self.grids
+            for row in layer[0]
+            for e in row
+            if e and request(e)
+        ), Option.Nothing())
