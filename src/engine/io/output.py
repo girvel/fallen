@@ -5,7 +5,7 @@ from src.engine.io.windows.game import Game
 from src.engine.io.windows.panel import Panel
 
 
-class Gui:
+class Output:
     def __init__(self, stdscr, debug_mode, io):
         panel_w = 35
         self.main = stdscr

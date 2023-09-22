@@ -12,7 +12,7 @@ from src.engine.acting.actions.cast_fire_flow import CastFireFlow
 from src.engine.acting.actions.inspect import Inspect
 from src.engine.acting.actions.move import Move
 from src.engine.io.colors import Colors
-from src.engine.io.gui import Gui
+from src.engine.io.output import Output
 from src.entities.special.sound import Sound
 from src.lib.toolkit import curses_wrong_characters
 from src.lib.vector import up, down, left, right, add2
@@ -27,13 +27,12 @@ class IO(OwnedEntity):
     level = None
 
     def __init__(self, stdscr, debug_track, debug_mode):
-        self.gui = Gui(stdscr, debug_mode, self)
+        self.output = Output(stdscr, debug_mode, self)
 
-        # TODO rename gui to output
         # TODO input class
         # TODO hotkey is actionable if it returns True
 
-        self.gui.resize()
+        self.output.resize()
         self.main = stdscr
         self.memory = Memory()
 
@@ -62,7 +61,7 @@ class IO(OwnedEntity):
         ), None)
 
     def render(self, subject, perception):
-        self.gui.render(subject, perception, self.level, self.memory)
+        self.output.render(subject, perception, self.level, self.memory)
 
     def _wait_for_input(self, subject, perception):
         while True:
@@ -102,10 +101,10 @@ def generate_default_hotkeys(debug_mode):
     def generate_movement_function(key, direction):
         @_hotkey(key)
         def move(subject, perception, io):
-            if io.gui.panel.mode == Move:
+            if io.output.panel.mode == Move:
                 return Move(direction)
 
-            if io.gui.panel.mode == Attack:
+            if io.output.panel.mode == Attack:
                 if (target := perception.vision[subject.layer].get(add2(subject.p, direction))) is not None:
                     return Attack(target)
                 return Move(direction)
@@ -126,7 +125,7 @@ def generate_default_hotkeys(debug_mode):
 
     @_hotkey("r")
     def change_mode(subject, perception, io):
-        io.gui.panel.mode = (io.gui.panel.mode == Move) and Attack or Move
+        io.output.panel.mode = (io.output.panel.mode == Move) and Attack or Move
 
     @_hotkey("1")
     def cast_fire_flow(subject, perception, io):
@@ -137,30 +136,30 @@ def generate_default_hotkeys(debug_mode):
 
     @_hotkey("KEY_LEFT", non_action=True)
     def previous_pane(subject, perception, io):
-        io.gui.panel.pane_i.move(-1)
+        io.output.panel.pane_i.move(-1)
 
     @_hotkey("KEY_RIGHT", non_action=True)
     def next_pane(subject, perception, io):
-        io.gui.panel.pane_i.move(1)
+        io.output.panel.pane_i.move(1)
 
     @_hotkey("KEY_MOUSE")
     def inspect(subject, perception, io):
         _, mx, my, _, _ = curses.getmouse()
         target = next((
-            e for l in io.gui.game.layers_display_order
-            if (e := perception.vision[l].get(add2(io.gui.game.virtual_p, (mx, my)))) is not None
+            e for l in io.output.game.layers_display_order
+            if (e := perception.vision[l].get(add2(io.output.game.virtual_p, (mx, my)))) is not None
         ), None)
         return target and Inspect(target)
 
     @_hotkey("KEY_RESIZE", non_action=True)
     def resize_gui(subject, perception, io):
-        io.gui.resize()
+        io.output.resize()
 
     if debug_mode:
         @_hotkey("`", non_action=True)
         def show_debug_console(subject, perception, io):
-            io.gui.console.visible ^= True
-            if not io.gui.console.visible: return
+            io.output.console.visible ^= True
+            if not io.output.console.visible: return
 
             while True:
                 io.render(subject, perception)
@@ -172,24 +171,24 @@ def generate_default_hotkeys(debug_mode):
                 ): break
 
                 if hotkey == "":
-                    io.gui.console.buffer = io.gui.console.buffer[:-1]
+                    io.output.console.buffer = io.output.console.buffer[:-1]
                 elif isinstance(hotkey, str):
-                    io.gui.console.buffer += hotkey
+                    io.output.console.buffer += hotkey
 
                 if hotkey == "\n":
-                    last_line_i = io.gui.console.buffer.rfind("\n", 0, -1)
+                    last_line_i = io.output.console.buffer.rfind("\n", 0, -1)
                     last_line_i = last_line_i if last_line_i != -1 else 0
-                    last_indent = re.match(r"^(\s*)", io.gui.console.buffer[last_line_i:]).group(1)
-                    io.gui.console.buffer += last_indent
+                    last_indent = re.match(r"^(\s*)", io.output.console.buffer[last_line_i:]).group(1)
+                    io.output.console.buffer += last_indent
 
             def enclose_console_code(subject, perception, io):
                 def tracker(f):
                     io.monitor_values[f.__name__] = f
 
                 try:
-                    exec(io.gui.console.buffer, {
+                    exec(io.output.console.buffer, {
                         "it": lambda: (isinstance(subject.act, Inspect) and subject.act.subject or None),
-                        "monitor": io.gui.monitor.values,
+                        "monitor": io.output.monitor.values,
                         "subject": subject,
                         "perception": perception,
                         "io": io,
@@ -200,9 +199,9 @@ def generate_default_hotkeys(debug_mode):
                     logging.warning(f"Exception when executing console code")
                     logging.exception(ex)
 
-            logging.info(f"Executing console code:\n```py\n{io.gui.console.buffer}\n```")
+            logging.info(f"Executing console code:\n```py\n{io.output.console.buffer}\n```")
             enclose_console_code(subject, perception, io)
-            io.gui.console.buffer = ""
-            io.gui.console.visible = False
+            io.output.console.buffer = ""
+            io.output.console.visible = False
 
     return action_hotkeys, other_hotkeys
