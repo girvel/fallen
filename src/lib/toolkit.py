@@ -1,5 +1,7 @@
 import math
 import random
+from importlib.util import spec_from_file_location, module_from_spec
+from pathlib import Path
 
 
 def to_camel_case(snake_str):
@@ -33,3 +35,9 @@ def chance(p):
 
 def random_round(number: float) -> int:
     return math.floor(number) + (chance(number % 1) and 1 or 0)
+
+def import_module(p: Path):
+    spec = spec_from_file_location(p.stem, p)
+    module = module_from_spec(spec)
+    spec.loader.exec_module(module)
+    return module
