@@ -3,7 +3,7 @@ import logging
 from ecs import create_system, Metasystem
 
 from src.lib.query import Query
-from src.lib.vector import grid_set
+from src.lib.vector import grid_set, grid_get
 
 
 def generate(ms: Metasystem):
@@ -25,6 +25,9 @@ def generate(ms: Metasystem):
     def creation(genesis: 'entities_to_create', level: 'grids'):
         for e in genesis.entities_to_create:
             if hasattr(e, "p"):
+                if (replaced := grid_get(level.grids[e.layer], e.p)) is not None:
+                    logging.warning(f"Replacing {~Query(replaced).name} in {e.layer} at {e.p}")
+
                 level.put(e.p, e)
 
             ms.add(e)

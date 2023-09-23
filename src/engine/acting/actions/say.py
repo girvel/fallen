@@ -15,7 +15,5 @@ class Say(Action):
     content: str
 
     def execute(self, actor: OwnedEntity, level: Level, hades: Hades, genesis: Genesis):
-        sound = Sound(self.content)
-        sound.p = actor.p  # TODO Entity | dict
-        genesis.entities_to_create.add(sound)
+        genesis.entities_to_create.add(Sound(self.content, actor.p))
         logging.info(f"{actor.name} says '{self.content}'")

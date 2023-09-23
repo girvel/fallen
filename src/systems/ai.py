@@ -186,6 +186,7 @@ def think(subject: 'ai', level: 'grids', cache: 'transparency_array'):
     if not is_railed:
         subject.act = act
 
+
 sequence = [
     update_transparency_cache,
     run_rails,
