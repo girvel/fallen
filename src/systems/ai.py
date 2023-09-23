@@ -180,7 +180,7 @@ def think(subject: 'ai', level: 'grids', cache: 'transparency_array'):
         vision,
         subject.senses.hearing > 0 and calculate_smell(level.grids.sounds, subject.p, subject.senses.hearing),
         subject.senses.smell > 0 and calculate_smell(level.grids.physical, subject.p, subject.senses.smell),
-        free_cache
+        free_cache,
     ))
 
     if not is_railed:

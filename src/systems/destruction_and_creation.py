@@ -22,8 +22,11 @@ def generate(ms: Metasystem):
         hades.entities_to_destroy.clear()
 
     @create_system
-    def creation(genesis: 'entities_to_create'):
+    def creation(genesis: 'entities_to_create', level: 'grids'):
         for e in genesis.entities_to_create:
+            if hasattr(e, "p"):
+                level.put(e.p, e)
+
             ms.add(e)
             logging.info(f"Created entity {~Query(e).name}")
 
