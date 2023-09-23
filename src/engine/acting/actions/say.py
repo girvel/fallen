@@ -13,7 +13,8 @@ from src.entities.special.sound import Sound
 @dataclass
 class Say(Action):
     content: str
+    is_internal: bool = False
 
     def execute(self, actor: OwnedEntity, level: Level, hades: Hades, genesis: Genesis):
-        genesis.entities_to_create.add(Sound(self.content, actor.p))
+        genesis.entities_to_create.add(Sound(self.content, self.is_internal, actor.p))
         logging.info(f"{actor.name} says '{self.content}'")

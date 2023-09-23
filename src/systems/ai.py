@@ -7,6 +7,7 @@ import tcod.map
 from ecs import create_system, OwnedEntity, Entity
 from line_profiler import profile
 
+from src.lib.query import Query
 from src.lib.vector import sub2, add2, grid_get, grid_set
 
 import logging
@@ -130,14 +131,25 @@ def calculate_vision_tcod(grids, transparency, p, r):
 
     return result, transparency
 
-def calculate_smell(physical_grid, p, r):
+def calculate_smell(grid, p, r):
     result = {}
 
     for dy in range(-r, r + 1):  # TODO optimize for level borders
         for dx in range(abs(dy) - r, r - abs(dy) + 1):
             smell_p = add2(p, (dx, dy))
-            if (entity := grid_get(physical_grid, smell_p)) is not None:
+            if (entity := grid_get(grid, smell_p)) is not None:
                 result[smell_p] = entity
+
+    return result
+
+def calculate_hearing(grid, p, r):
+    result = {}
+
+    for dy in range(-r, r + 1):  # TODO optimize for level borders
+        for dx in range(abs(dy) - r, r - abs(dy) + 1):
+            smell_p = add2(p, (dx, dy))
+            if (sound := grid_get(grid, smell_p)) is not None and (not ~Query(sound).is_internal or smell_p == p):
+                result[smell_p] = sound
 
     return result
 
@@ -179,7 +191,7 @@ def think(subject: 'ai', level: 'grids', cache: 'transparency_array'):
     act = subject.ai.make_decision(subject, Perception(
         vision,
         subject.senses.hearing > 0 and calculate_smell(level.grids.sounds, subject.p, subject.senses.hearing),
-        subject.senses.smell > 0 and calculate_smell(level.grids.physical, subject.p, subject.senses.smell),
+        subject.senses.smell > 0 and calculate_hearing(level.grids.physical, subject.p, subject.senses.smell),
         free_cache,
     ))
 

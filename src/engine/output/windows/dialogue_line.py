@@ -25,7 +25,12 @@ class DialogueLine:
         self._window.clear()
         self._window.border()
 
-        self._window.addstr(1, 6, ~Query(perception.vision.physical.get(memory.current_sound.p)).name or "???", Colors.Yellow.format())
+        if not memory.current_sound.is_internal:
+            self._window.addstr(
+                1, 6,
+                ~Query(perception.vision.physical.get(memory.current_sound.p)).name or "???",
+                Colors.Yellow.format()
+            )
 
         add_multiline_string(self._window, 2, 2, h, w, memory.current_sound.content)
 

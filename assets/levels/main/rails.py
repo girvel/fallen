@@ -29,7 +29,7 @@ class Rails(RailsBase):
         p = self.positions
         memory = self.player.ai.memory
 
-        memory.in_cutscene = True  # TODO cinematic mode
+        yield from self.start_cutscene()
 
         # yield {c.mother: Say("Хью, нам пора идти.")}
         # yield {c.brother: Say("О, секунду, совсем забыл об одной замечательной вещице.")}
@@ -47,9 +47,8 @@ class Rails(RailsBase):
         # yield {c.brother: Say("Вот, смотри.")}
         # yield {self.player: Say("В твоих руках оказывается длинный свёрток льняной ткани.")}  # TODO mind
 
-        memory.options = {"Развязать бечёвку": None, "Поорать": Say("ААААААА!!!")}
-        yield
+        yield from self.options({"Развязать бечёвку": None, "Поорать": Say("ААААААА!!!")})
 
-        yield from self.player_say("Это меч. Очень красивый.")  # TODO mind
+        yield {self.player: Say("Это меч. Очень красивый.", True)}
 
-        memory.in_cutscene = False
+        yield from self.end_cutscene()

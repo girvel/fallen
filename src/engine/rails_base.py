@@ -1,7 +1,5 @@
 from ecs import OwnedEntity
 
-from src.engine.acting.actions.say import Say
-
 
 class RailsBase(OwnedEntity):
     name = "Rails"
@@ -10,6 +8,14 @@ class RailsBase(OwnedEntity):
     def __init__(self, level):
         self.player = level.player
 
-    def player_say(self, line):
-        yield {self.player: Say(line)}
+    def options(self, options):
+        self.player.ai.memory.options = options
         yield
+
+    def start_cutscene(self):
+        yield from []
+        self.player.ai.memory.in_cutscene = True
+
+    def end_cutscene(self):
+        yield
+        self.player.ai.memory.in_cutscene = False
