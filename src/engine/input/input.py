@@ -90,7 +90,7 @@ def generate_default_hotkeys(debug_mode):
 
     @_hotkey("1")
     def cast_fire_flow(subject, perception, io):
-        while not isinstance((hotkey := io.main.get_wch()), str) or hotkey not in "wasd":
+        while not isinstance((hotkey := io.input.main.get_wch()), str) or hotkey not in "wasd":
             if hotkey == "":
                 return
         return CastFireFlow(directions_by_key[hotkey])
@@ -125,7 +125,7 @@ def generate_default_hotkeys(debug_mode):
             while True:
                 io.render(subject, perception)
                 if (
-                    (hotkey := io.main.get_wch()) and
+                    (hotkey := io.input.main.get_wch()) and
                     (hotkey := curses_wrong_characters.get(
                         isinstance(hotkey, int) and hotkey or ord(hotkey), hotkey)
                     ) == "CTL_ENTER"
