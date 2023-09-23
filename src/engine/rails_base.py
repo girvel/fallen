@@ -9,6 +9,7 @@ class RailsBase(OwnedEntity):
         self.player = level.player
 
     def options(self, options):
+        yield  # TODO should this be needed? Investigate.
         self.player.ai.memory.options = options
         yield
 
