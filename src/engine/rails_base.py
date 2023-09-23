@@ -1,5 +1,7 @@
 from ecs import OwnedEntity
 
+from src.lib.vector import floordiv2, sub2
+
 
 class RailsBase(OwnedEntity):
     name = "Rails"
@@ -21,3 +23,8 @@ class RailsBase(OwnedEntity):
     def end_cutscene(self):
         yield
         self.player.ai.memory.in_cutscene = False
+
+    def center_camera(self):
+        h, w = self.player.ai.output.game._window.getmaxyx()
+        self.player.ai.output.game.virtual_p = sub2(self.player.p, floordiv2((w, h), 2))
+        yield

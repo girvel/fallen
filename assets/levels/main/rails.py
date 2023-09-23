@@ -30,6 +30,7 @@ class Rails(RailsBase):
         memory = self.player.ai.memory
 
         yield from self.start_cutscene()
+        yield from self.center_camera()
 
         yield {c.mother: Say("Хью, нам пора идти.")}
         yield {c.brother: Say("О, секунду, совсем забыл об одной замечательной вещице.")}
