@@ -2,6 +2,7 @@ import curses
 import logging
 import re
 import sys
+import time
 
 from src.engine.acting.actions.attack import Attack
 from src.engine.acting.actions.cast_fire_flow import CastFireFlow
@@ -10,6 +11,11 @@ from src.engine.acting.actions.move import Move
 from src.lib.toolkit import curses_wrong_characters
 from src.lib.vector import add2, up, down, left, right
 from src.systems.ai import Perception
+
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from src.entities.ais.io import Memory
 
 
 class Input:
@@ -24,7 +30,15 @@ class Input:
         logging.info(f"Initalized mouse with {curses.mousemask(curses.ALL_MOUSE_EVENTS)}")
         print('\033[?1003h')
 
-    def wait_for_input(self, subject, perception: Perception):
+    def wait_for_input(self, subject, perception: Perception, memory: "Memory"):
+        if memory.in_cutscene:
+            if memory.current_sound is not None:
+                while (key := self.main.getkey()) not in {"\n", " "}: pass
+                return
+
+            time.sleep(0.2)  # TODO flexible
+            return
+
         while True:
             if self.debug_track is not None:
                 hotkey = next(self.debug_track)

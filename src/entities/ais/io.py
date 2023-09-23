@@ -34,7 +34,7 @@ class IO(OwnedEntity):
     def make_decision(self, subject, perception):
         self.form_memory(subject, perception)
         self.render(subject, perception)
-        return self.input.wait_for_input(subject, perception)
+        return self.input.wait_for_input(subject, perception, self.memory)
 
     def form_memory(self, subject, perception):
         self.memory.current_sound = next((

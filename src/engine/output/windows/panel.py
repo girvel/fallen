@@ -34,6 +34,8 @@ class Panel:
         self._window.mvwin(0, w - self.w)
 
     def render(self, subject, perception, level, memory):
+        if memory.in_cutscene: return
+
         h, w = self._window.getmaxyx()
 
         self._window.clear()
