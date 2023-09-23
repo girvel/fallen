@@ -26,14 +26,29 @@ class Input:
         self.io = io
 
         self.action_hotkeys, self.other_hotkeys = generate_default_hotkeys(debug_mode)
+        self.option_hotkeys = generate_option_hotkeys()
+        self.submit_hotkey = {"\n", " ", "e", "E"}
 
         logging.info(f"Initalized mouse with {curses.mousemask(curses.ALL_MOUSE_EVENTS)}")
         print('\033[?1003h')
 
     def wait_for_input(self, subject, perception: Perception, memory: "Memory"):
         if memory.in_cutscene:
+            if memory.options:
+                while (key := self.main.getkey()) not in self.submit_hotkey:
+                    if (f := self.option_hotkeys.get(key)) is not None:
+                        f(memory)
+                        self.io.render(subject, perception)
+                    else:
+                        logging.debug([self.option_hotkeys, key])
+
+                result = list(memory.options.values())[memory.selected_option_i]
+                memory.options = None
+                memory.selected_option_i = 0
+                return result
+
             if memory.current_sound is not None:
-                while (key := self.main.getkey()) not in {"\n", " "}: pass
+                while self.main.getkey() not in self.submit_hotkey: pass
                 return
 
             time.sleep(0.2)  # TODO flexible
@@ -128,7 +143,7 @@ def generate_default_hotkeys(debug_mode):
 
     @_hotkey("KEY_RESIZE", non_action=True)
     def resize_gui(subject, perception, io):
-        io.output.resize()
+        io.output.resize(io.memory)
 
     if debug_mode:
         @_hotkey("`", non_action=True)
@@ -180,3 +195,25 @@ def generate_default_hotkeys(debug_mode):
             io.output.console.visible = False
 
     return action_hotkeys, other_hotkeys
+
+
+def generate_option_hotkeys():
+    result = {}
+
+    class _hotkey:
+        def __init__(self, *keys):
+            self.keys = keys
+
+        def __call__(self, f):
+            for hotkey in self.keys:
+                result[hotkey] = f
+
+    @_hotkey("w", "KEY_UP")
+    def move_cursor_up(memory):
+        memory.selected_option_i = (memory.selected_option_i - 1) % len(memory.options)
+
+    @_hotkey("s", "KEY_DOWN")
+    def move_cursor_down(memory):
+        memory.selected_option_i = (memory.selected_option_i + 1) % len(memory.options)
+
+    return result

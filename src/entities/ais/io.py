@@ -14,6 +14,7 @@ from src.entities.special.sound import Sound
 class Memory:
     current_sound: Optional[Sound] = None
     options: Optional[dict[str, Optional[Action]]] = None
+    selected_option_i: int = 0
     in_cutscene: bool = False
 
 class IO(OwnedEntity):
@@ -25,8 +26,8 @@ class IO(OwnedEntity):
         self.output = Output(stdscr, debug_mode, self)
         self.input = Input(stdscr, debug_track, debug_mode, self)
 
-        self.output.resize()
         self.memory = Memory()
+        self.output.resize(self.memory)
 
     def connect_to_level(self, level):
         self.level = level

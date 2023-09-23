@@ -16,7 +16,7 @@ class Game:
         self._window = curses.newwin(1, 1, 0, 0)
         self.panel_w = panel_w
 
-    def resize(self, h, w):
+    def resize(self, h, w, memory):
         self._window.resize(h - 1, w - self.panel_w)
         self.following_offset = floordiv2((w - self.panel_w, h - 1), 3)
 

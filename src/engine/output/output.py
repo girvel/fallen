@@ -3,6 +3,7 @@ from src.engine.output.windows.console import Console
 from src.engine.output.windows.dialogue_line import DialogueLine
 from src.engine.output.windows.monitor import Monitor
 from src.engine.output.windows.game import Game
+from src.engine.output.windows.option_picker import OptionPicker
 from src.engine.output.windows.panel import Panel
 
 
@@ -13,8 +14,9 @@ class Output:
         self.game = Game(panel_w)
         self.panel = Panel(panel_w, io)
         self.dialogue_line = DialogueLine()
+        self.option_picker = OptionPicker()
 
-        self.execution_order = [self.game, self.panel, self.dialogue_line]
+        self.execution_order = [self.game, self.panel, self.dialogue_line, self.option_picker]
 
         if not debug_mode: return
         self.monitor = Monitor(10, panel_w)
@@ -23,11 +25,11 @@ class Output:
 
         Colors.initialize()
 
-    def resize(self):
+    def resize(self, memory):
         h, w = self.main.getmaxyx()
 
         for window in self.execution_order:
-            window.resize(h, w)
+            window.resize(h, w, memory)
 
     def render(self, subject, perception, level, memory):
         self.main.refresh()

@@ -12,7 +12,7 @@ class Monitor:
         self.h = h
         self.w = w
 
-    def resize(self, h, w):
+    def resize(self, h, w, memory):
         self._window.resize(self.h, self.w)
         self._window.mvwin(0, 0)
 

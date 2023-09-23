@@ -29,7 +29,7 @@ class Panel:
         self.stats_template = env.get_template("stats.html")
         self.controls_template = env.get_template("controls.html")
 
-    def resize(self, h, w):
+    def resize(self, h, w, memory):
         self._window.resize(h - 1, self.w)
         self._window.mvwin(0, w - self.w)
 

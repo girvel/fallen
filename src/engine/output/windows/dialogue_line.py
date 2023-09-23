@@ -10,7 +10,7 @@ class DialogueLine:
     def __init__(self):
         self._window = curses.newwin(1, 1, 0, 0)
 
-    def resize(self, h, w):
+    def resize(self, h, w, memory):
         this_w = min(80, w - 20)
         this_h = 7
 
@@ -27,6 +27,6 @@ class DialogueLine:
 
         self._window.addstr(1, 6, ~Query(perception.vision.physical.get(memory.current_sound.p)).name or "???", Colors.Yellow.format())
 
-        add_multiline_string(self._window, 2, 2, w, h, memory.current_sound.content)
+        add_multiline_string(self._window, 2, 2, h, w, memory.current_sound.content)
 
         self._window.refresh()
