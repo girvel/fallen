@@ -92,3 +92,6 @@ class Rails(RailsBase):
         yield from wait_for(10)
 
         yield from self.end_cutscene()
+
+        # TODO make them leave the level
+        # TODO scene begins when the player comes to the hall?
