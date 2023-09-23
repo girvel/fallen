@@ -153,7 +153,6 @@ def update_transparency_cache(cache: 'transparency_array', level: 'grids'):
 def run_rails(rails: 'rails_flag', level: 'grids', hades: 'entities_to_destroy'):
     for effect in rails.run():
         level.rails_effect = effect or {}
-        logging.debug(level.rails_effect)
         yield
 
     hades.entities_to_destroy.add(rails)
@@ -162,9 +161,11 @@ def run_rails(rails: 'rails_flag', level: 'grids', hades: 'entities_to_destroy')
 
 @create_system
 def think(subject: 'ai', level: 'grids', cache: 'transparency_array'):
-    if subject in level.rails_effect:
+    is_railed = subject in level.rails_effect
+
+    if is_railed:
         subject.act = level.rails_effect[subject]
-        return
+        if not hasattr(subject.ai, "cutscene_aware_flag"): return
 
     vision, free_cache = (subject.senses.vision > 0
         and calculate_vision_tcod(level.grids, cache.transparency_array, subject.p, subject.senses.vision)
@@ -175,12 +176,15 @@ def think(subject: 'ai', level: 'grids', cache: 'transparency_array'):
         for p, entity in vision.physical.items():
             grid_set(subject.spacial_memory, p, entity is not None and entity.character or ".")
 
-    subject.act = subject.ai.make_decision(subject, Perception(
+    act = subject.ai.make_decision(subject, Perception(
         vision,
         subject.senses.hearing > 0 and calculate_smell(level.grids.sounds, subject.p, subject.senses.hearing),
         subject.senses.smell > 0 and calculate_smell(level.grids.physical, subject.p, subject.senses.smell),
         free_cache
     ))
+
+    if not is_railed:
+        subject.act = act
 
 sequence = [
     update_transparency_cache,

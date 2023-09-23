@@ -37,15 +37,15 @@ class Rails(RailsBase):
 
         c.mother.ai.pather.going_to = PathTarget.Some(p.street)
 
-        yield from self.player_say(
+        yield {self.player: Say(
             "Вы стоите в обшарпанной деревянной прихожей; цветочные горшки усеивают каждую горизонтальную поверхность;"
             " странное жёсткое чувство упирается в кадык."
-        )  # TODO mind
+        )}  # TODO mind
 
         yield from wait_for(5)
 
-        yield {c.brother: Say("Вот, смотри.")}  # TODO fix this
-        yield from self.player_say("В твоих руках оказывается длинный свёрток льняной ткани.")  # TODO mind
+        yield {c.brother: Say("Вот, смотри.")}
+        yield {self.player: Say("В твоих руках оказывается длинный свёрток льняной ткани.")}  # TODO mind
 
         memory.options = {"Развязать бечёвку": None}
         yield

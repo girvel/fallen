@@ -2,6 +2,7 @@ import logging
 
 from ecs import create_system, Metasystem
 
+from src.lib.query import Query
 from src.lib.vector import grid_set
 
 
@@ -16,7 +17,7 @@ def generate(ms: Metasystem):
                 e.on_death(hades, genesis, level)
 
             ms.delete(e)
-            logging.info(f"Destroyed entity {e}")
+            logging.info(f"Destroyed entity {~Query(e).name}")
 
         hades.entities_to_destroy.clear()
 
@@ -24,7 +25,7 @@ def generate(ms: Metasystem):
     def creation(genesis: 'entities_to_create'):
         for e in genesis.entities_to_create:
             ms.add(e)
-            logging.info(f"Created entity {e}")
+            logging.info(f"Created entity {~Query(e).name}")
 
         genesis.entities_to_create.clear()
 
