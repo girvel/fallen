@@ -1,0 +1,27 @@
+Cool things:
+- bool(x) is 100x slower than x is not None
+- I/O as AI
+- Metasystem
+- Annotation-based ECS
+- Think-Act architecture pattern
+x Rust style enums
+- Rust style Option-s, Option.next
+
+Rust style enums:
+- Post on girvel.xyz
+- Post on habr
+x Publish as a library
+x Docstrings
+x README
+- Diffbot for girvel.xyz
+- Option and Result as issue
+
+Structure:
+- Problematic case
+- Why rust enums are appropriate
+- Inability to find any rust enum libraries for python
+- Raw solution
+- Solution with library
+- Link to library
+- Link to girvel.xyz post
+- Option & Result in the future
