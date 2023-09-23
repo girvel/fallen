@@ -45,7 +45,7 @@ class SafeFileHandler(logging.FileHandler):
 
 
 def init_logging():
-    handler = SafeFileHandler('.last.log')
+    handler = SafeFileHandler('.last.log', encoding='utf-8')
     handler.setFormatter(PrettyFormatter(
         fmt="[%(levelname)s %(asctime)s]  %(pathname)s:%(lineno)d  %(message)s",
         datefmt="%H:%M:%S",
