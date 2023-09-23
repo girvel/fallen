@@ -14,3 +14,11 @@ Makefile  -- development scripts
 README.md
 requirements.txt  -- python user-side requirements
 ```
+
+
+# Dependency graph
+
+```
+engine <-> systems <-> entities
+engine, systems, entities <- lib
+```
