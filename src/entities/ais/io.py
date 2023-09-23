@@ -44,5 +44,12 @@ class IO(OwnedEntity):
             if sound is not None
         ), None)
 
+    last_render_input = None
+
     def render(self, subject, perception):
+        self.last_render_input = [subject, perception]
         self.output.render(subject, perception, self.level, self.memory)
+
+    def rerender(self):
+        assert self.last_render_input is not None, "You can rerender only after you render at least once"
+        return self.render(*self.last_render_input)

@@ -48,7 +48,6 @@ class Rails(RailsBase):
         yield {self.player: Say("В твоих руках оказывается длинный свёрток льняной ткани.")}
 
         yield from self.options({"Развязать бечёвку": None})  # TODO option not to look straight away
-        # TODO stretch game window to the whole screen
 
         yield {self.player: Say("Это меч. Очень красивый.", True)}
 

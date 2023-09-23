@@ -15,12 +15,22 @@ class Game:
     def __init__(self, panel_w):
         self._window = curses.newwin(1, 1, 0, 0)
         self.panel_w = panel_w
+        self.last_parent_h = None
+        self.last_parent_w = None
 
     def resize(self, h, w, memory):
-        self._window.resize(h - 1, w - self.panel_w)
-        self.following_offset = floordiv2((w - self.panel_w, h - 1), 3)
+        self.last_parent_h = h
+        self.last_parent_w = w
+
+        if memory.in_cutscene:
+            self._window.resize(h - 1, w)
+            self.following_offset = floordiv2((w, h - 1), 3)
+        else:
+            self._window.resize(h - 1, w - self.panel_w)
+            self.following_offset = floordiv2((w - self.panel_w, h - 1), 3)
 
     def render(self, subject, perception, level, memory):
+        self.resize(self.last_parent_h, self.last_parent_w, memory)
         self._move_camera(subject, level)
         self._display_perception(subject, perception, level, memory)
 

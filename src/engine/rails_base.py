@@ -13,8 +13,9 @@ class RailsBase(OwnedEntity):
         yield
 
     def start_cutscene(self):
-        yield from []
         self.player.ai.memory.in_cutscene = True
+        yield
+        self.player.ai.rerender()
 
     def end_cutscene(self):
         yield
