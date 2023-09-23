@@ -13,10 +13,11 @@ from src.lib.query import Query
 
 class Rails(RailsBase):
     def __init__(self, level):
+        super().__init__(level)
+
         self.characters = Entity(
             mother=level.query(lambda e: ~Query(e).character == Mother.character).unwrap(),
             brother=level.query(lambda e: ~Query(e).character == Brother.character).unwrap(),
-            player=level.player,
         )
 
         self.positions = Entity(
@@ -26,28 +27,29 @@ class Rails(RailsBase):
     def run(self):
         c = self.characters
         p = self.positions
-        memory = c.player.ai.memory
+        memory = self.player.ai.memory
 
-        memory.cinematic_mode = True  # TODO cinematic mode
+        memory.in_cutscene = True  # TODO cinematic mode
 
         yield {c.mother: Say("Хью, нам пора идти.")}
         yield {c.brother: Say("О, секунду, совсем забыл об одной замечательной вещице.")}
-        yield {c.brother: Say("Мам, иди вперёд, я догоню.")}
+        yield {c.brother: Say("Мам, иди вперёд, я догоню.")}  # TODO fix this
 
         c.mother.ai.pather.going_to = PathTarget.Some(p.street)
 
-        yield from ({c.player: Say(
+        yield from self.player_say(
             "Вы стоите в обшарпанной деревянной прихожей; цветочные горшки усеивают каждую горизонтальную поверхность;"
             " странное жёсткое чувство упирается в кадык."
-        )} for _ in range(5))  # TODO mind
-        # TODO fix that line
+        )  # TODO mind
 
-        yield {c.brother: Say("Вот, смотри.")}
-        yield {c.player: Say("В твоих руках оказывается длинный свёрток льняной ткани.")}  # TODO mind
+        yield from wait_for(5)
+
+        yield {c.brother: Say("Вот, смотри.")}  # TODO fix this
+        yield from self.player_say("В твоих руках оказывается длинный свёрток льняной ткани.")  # TODO mind
 
         memory.options = {"Развязать бечёвку": None}
         yield
 
-        yield {c.player: Say("Это меч. Очень красивый.")}  # TODO mind
+        yield from self.player_say("Это меч. Очень красивый.")  # TODO mind
 
-        memory.cinematic_mode = False
+        memory.in_cutscene = False
