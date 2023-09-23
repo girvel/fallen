@@ -39,13 +39,14 @@ class Rails(RailsBase):
 
         yield {self.player: Say(
             "Вы стоите в обшарпанной деревянной прихожей; цветочные горшки усеивают каждую горизонтальную поверхность;"
-            " странное жёсткое чувство упирается в кадык."
+            " странное жёсткое чувство упирается в кадык.",
+            True
         )}
 
         yield from wait_for(5)
 
         yield {c.brother: Say("Вот, смотри.")}
-        yield {self.player: Say("В твоих руках оказывается длинный свёрток льняной ткани.")}
+        yield {self.player: Say("В твоих руках оказывается длинный свёрток льняной ткани.", True)}
 
         yield from self.options({"Развязать бечёвку": None})  # TODO option not to look straight away
 
