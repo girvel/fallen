@@ -21,9 +21,9 @@ class Player(OwnedEntity):
     on_death = body_factory
 
     def __init__(self):
-        self.name = "Sir " + " ".join(random.choice(collection) for collection in strange_names)
-        self.weapon = Weapon(15, DamageKind.Slashing)
-        self.health = Health(100, ArmorKind.Steel)
+        self.name = "Майк"
+        self.weapon = Weapon(1, DamageKind.Crushing)
+        self.health = Health(10, ArmorKind.Organic)
         self.classifiers = {Kind.Animate}
         self.senses = Senses(24, 40, 0)
 
