@@ -3,7 +3,7 @@ import logging
 
 from src.engine.output.colors import Colors
 from src.lib.query import Query
-from src.lib.toolkit import cut_by_length
+from src.lib.toolkit import cut_by_length, add_multiline_string
 
 
 class DialogueLine:
@@ -27,12 +27,6 @@ class DialogueLine:
 
         self._window.addstr(1, 6, ~Query(perception.vision.physical.get(memory.current_sound.p)).name or "???", Colors.Yellow.format())
 
-        # TODO add_multiline_string(window, y, padding_w, line)
-        for i, line in enumerate(cut_by_length(memory.current_sound.content, w - 4)):
-            if 2 + i >= w:
-                logging.warning(f"The line is too long to display: '{memory.current_sound.content}'")
-                return
-
-            self._window.addstr(2 + i, 2, line)
+        add_multiline_string(self._window, 2, 2, w, h, memory.current_sound.content)
 
         self._window.refresh()

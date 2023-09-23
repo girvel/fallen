@@ -1,3 +1,4 @@
+import logging
 import math
 import random
 from importlib.util import spec_from_file_location, module_from_spec
@@ -41,3 +42,13 @@ def import_module(p: Path):
     module = module_from_spec(spec)
     spec.loader.exec_module(module)
     return module
+
+def add_multiline_string(window, y: int, padding_w: int, w: int, h: int, line: str) -> int:
+    for i, line in enumerate(cut_by_length(line, w - padding_w * 2)):
+        if y + i >= h:
+            logging.warning(f"The line is too long to display: '{line}'")
+            return y + i
+
+        window.addstr(y + i, 2, line)
+
+    return y + i + 1
