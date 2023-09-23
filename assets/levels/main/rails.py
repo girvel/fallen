@@ -31,23 +31,24 @@ class Rails(RailsBase):
 
         yield from self.start_cutscene()
 
-        # yield {c.mother: Say("Хью, нам пора идти.")}
-        # yield {c.brother: Say("О, секунду, совсем забыл об одной замечательной вещице.")}
-        # yield {c.brother: Say("Мам, иди вперёд, я догоню.")}  # TODO fix this
-        #
-        # c.mother.ai.pather.going_to = PathTarget.Some(p.street)
-        #
-        # yield {self.player: Say(
-        #     "Вы стоите в обшарпанной деревянной прихожей; цветочные горшки усеивают каждую горизонтальную поверхность;"
-        #     " странное жёсткое чувство упирается в кадык."
-        # )}  # TODO mind
-        #
-        # yield from wait_for(5)
-        #
-        # yield {c.brother: Say("Вот, смотри.")}
-        # yield {self.player: Say("В твоих руках оказывается длинный свёрток льняной ткани.")}  # TODO mind
+        yield {c.mother: Say("Хью, нам пора идти.")}
+        yield {c.brother: Say("О, секунду, совсем забыл об одной замечательной вещице.")}
+        yield {c.brother: Say("Мам, иди вперёд, я догоню.")}
 
-        yield from self.options({"Развязать бечёвку": None, "Поорать": Say("ААААААА!!!")})
+        c.mother.ai.pather.going_to = PathTarget.Some(p.street)
+
+        yield {self.player: Say(
+            "Вы стоите в обшарпанной деревянной прихожей; цветочные горшки усеивают каждую горизонтальную поверхность;"
+            " странное жёсткое чувство упирается в кадык."
+        )}
+
+        yield from wait_for(5)
+
+        yield {c.brother: Say("Вот, смотри.")}
+        yield {self.player: Say("В твоих руках оказывается длинный свёрток льняной ткани.")}
+
+        yield from self.options({"Развязать бечёвку": None})  # TODO option not to look straight away
+        # TODO stretch game window to the whole screen
 
         yield {self.player: Say("Это меч. Очень красивый.", True)}
 
