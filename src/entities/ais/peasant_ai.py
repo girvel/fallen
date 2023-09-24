@@ -6,6 +6,7 @@ from src.engine.acting.actions.move import Move
 from src.engine.ai.fight_or_flight import FightOrFlight
 from src.engine.ai.pather import Pather, PathTarget
 from src.entities.physical.table import Table
+from src.lib.period.period import Period
 from src.lib.period.random_period import RandomPeriod
 from src.lib.vector import directions, add2, grid_get
 
@@ -13,18 +14,22 @@ from src.lib.vector import directions, add2, grid_get
 Mode = Enum("Mode", "GoHome GoToTable WorkAtTable GoOutside Wandering")
 
 class PeasantAi:
-    working_period = RandomPeriod(30, 46)
-    wandering_period = RandomPeriod(20, 36)
     mode = Mode.GoOutside
     favourite_zones = []
 
     def __init__(self):
+        self.working_period = RandomPeriod(30, 46)
+        self.wandering_period = RandomPeriod(20, 36)
         self.pather = Pather()
         self.fight_or_flight = FightOrFlight(False)
+        self.fight_or_flight_period = Period(5)
 
     # It is possible to extract ModalAi parent/component?
     def make_decision(self, subject, perception):
-        if target := self.fight_or_flight.try_producing_target(subject, perception).unwrap_or():
+        if (
+            self.fight_or_flight_period.step()
+            and (target := self.fight_or_flight.try_producing_target(subject, perception).unwrap_or())
+        ):
             self.pather.going_to = target
 
         if action := self.pather.try_going(subject, perception).unwrap_or(): return action
