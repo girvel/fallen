@@ -2,6 +2,7 @@ import logging
 
 from ecs import Entity
 
+from src.engine.acting.actions.leave import Leave
 from src.engine.acting.actions.say import Say
 from src.engine.acting.damage import Weapon, DamageKind
 from src.engine.ai.pather import PathTarget
@@ -103,6 +104,8 @@ class Rails(RailsBase):
         d2(e.p, self.positions.away) <= 3 for e in [self.characters.brother, self.characters.mother]
     ))
     def brother_and_mother_leave(self):
+        c = self.characters
+
         self.scenes["brother_and_mother_leave"].enabled = False  # TODO more portable way to do it
-        logging.debug("Brother and mother leave")
-        yield
+
+        yield {c.mother: Leave(), c.brother: Leave()}
