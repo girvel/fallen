@@ -30,7 +30,6 @@ class Input:
         self.submit_hotkey = {"\n", " ", "e", "E"}
 
         logging.info(f"Initalized mouse with {curses.mousemask(curses.ALL_MOUSE_EVENTS)}")
-        print('\033[?1003h')
 
     def wait_for_input(self, subject, perception: Perception, memory: "Memory"):
         if memory.in_cutscene:

@@ -9,6 +9,8 @@ from src.engine.output.windows.panel import Panel
 
 class Output:
     def __init__(self, stdscr, debug_mode, io):
+        Colors.initialize()
+
         panel_w = 35
         self.main = stdscr
         self.game = Game(panel_w)
@@ -22,8 +24,6 @@ class Output:
         self.monitor = Monitor(10, panel_w)
         self.console = Console(panel_w)
         self.execution_order += [self.monitor, self.console]
-
-        Colors.initialize()
 
     def resize(self, memory):
         h, w = self.main.getmaxyx()

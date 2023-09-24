@@ -18,6 +18,7 @@ class Colors(Enum):
 
     @classmethod
     def initialize(cls):
+        print('\033[?1003h')  # magical value to enable colors
         curses.init_pair(cls.Red.value, curses.COLOR_RED, curses.COLOR_BLACK)
         curses.init_pair(cls.Green.value, curses.COLOR_GREEN, curses.COLOR_BLACK)
         curses.init_pair(cls.WhiteOnBlue.value, curses.COLOR_WHITE, curses.COLOR_BLUE)
