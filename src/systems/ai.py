@@ -153,7 +153,7 @@ def think(subject: 'ai', level: 'grids', cache: 'transparency_array'):
             subject.senses.hearing, subject.p, grid_size(level.grids.sounds)
         )),
         subject.senses.smell > 0 and GridProxy(level.grids.physical, create_square_rhombus(
-            subject.senses.hearing, subject.p, grid_size(level.grids.smell)
+            subject.senses.hearing, subject.p, grid_size(level.grids.physical)
         )),
     ))
 
