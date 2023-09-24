@@ -12,8 +12,6 @@ from src.lib.query import Query
 from src.lib.toolkit import from_snake_case
 
 
-
-
 class Panel:
     mode = Move
 
@@ -22,10 +20,10 @@ class Panel:
         self.w = w
         self.io = io
         self.panes = [
-            self._stats,
             self._controls,
+            self._stats,
         ]
-        self.pane_i = Limited(len(self.panes), 0, 0)
+        self.pane_i = Limited(len(self.panes), 0, 1)
         env = Environment(loader=PackageLoader(__name__), autoescape=True)
         self.html_renderer = CursesHtmlRenderer()
         self.stats_template = env.get_template("stats.html")
@@ -68,8 +66,8 @@ class Panel:
 
     pretty_hotkeys = {
         "KEY_MOUSE": "Mouse",
-        "KEY_LEFT": "<-",
-        "KEY_RIGHT": "->",
+        "KEY_LEFT": "←",
+        "KEY_RIGHT": "→",
     }
 
     def _controls(self, subject, perception, level):
@@ -90,6 +88,6 @@ class Panel:
             subject=subject,
             perception=perception,
             level=level,
-            action_hotkeys=reduce_hotkeys(self.io.action_hotkeys),
-            other_hotkeys=reduce_hotkeys(self.io.other_hotkeys),
+            action_hotkeys=reduce_hotkeys(self.io.input.action_hotkeys),
+            other_hotkeys=reduce_hotkeys(self.io.input.other_hotkeys),
         )
