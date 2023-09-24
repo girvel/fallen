@@ -36,3 +36,8 @@ See `docs/`
 ## Makefile
 
 Basically a container for most use cases. `make` to run the game, `make debug` to run the game with debug utilities, `make profile` to run profiler, `make line_profile` to run line profiler.
+
+## Credits
+
+- Creator: [Nikita Dobrynin / girvel](https://github.com/girvel)
+- Game design/testing: [Alexlosos](https://github.com/potekhinavas)
