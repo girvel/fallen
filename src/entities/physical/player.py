@@ -5,6 +5,7 @@ from ecs import OwnedEntity
 from src.engine.acting.damage import Weapon, Health, DamageKind, ArmorKind
 from src.engine.assets import strange_names
 from src.engine.attitude.implementation import Faction
+from src.engine.traits import Traits
 from src.entities.tiles.body import body_factory
 from src.lib.vector import map_grid
 
@@ -19,6 +20,8 @@ class Player(OwnedEntity):
     faction = Faction.Church
 
     on_death = body_factory
+
+    traits = Traits()
 
     def __init__(self):
         self.name = "Майк"

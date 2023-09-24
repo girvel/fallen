@@ -45,6 +45,7 @@ class Input:
                     memory.selected_option_i = 0
 
                 result = list(memory.options.values())[memory.selected_option_i]
+                memory.last_selected_option = list(memory.options.keys())[memory.selected_option_i]
                 memory.options = None
                 memory.selected_option_i = 0
                 return result

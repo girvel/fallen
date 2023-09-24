@@ -13,8 +13,11 @@ from src.entities.special.sound import Sound
 @dataclass
 class Memory:
     current_sound: Optional[Sound] = None
+
     options: Optional[dict[str, Optional[Action]]] = None
     selected_option_i: int = 0
+    last_selected_option: Optional[str] = None
+
     in_cutscene: bool = False
     is_skipping: bool = False
 

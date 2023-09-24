@@ -58,41 +58,73 @@ class Rails(RailsBase):
 
         yield {c.brother: Say("Вот, смотри.")}
         yield {self.player: Say("В твоих руках оказывается длинный свёрток льняной ткани.", True)}
-
-        yield from self.options({"Развязать бечёвку": None})  # TODO option not to look straight away
-
         self.player.weapon = Weapon(5, DamageKind.Slashing)
-        yield {self.player: Say("Это меч. Очень красивый.", True)}
 
-        yield {c.brother: Say("Кавалерийская шашка. Настоящая.")}
-        yield {c.brother: Say("Это вещь.")}
+        yield from self.options({
+            (look := "Развязать бечёвку"): None,
+            "Укоризненно смотреть на брата": None,
+        })
 
-        yield {self.player: Say("Это вещь.")}
-        yield {self.player: Say("Где ты его достал?")}
+        if memory.last_selected_option == look:
+            self.player.traits.naivity += 1
+            yield {self.player: Say("Это меч. Очень красивый.", True)}
 
-        yield {c.brother: Say("Не спрашивай.")}
-        yield {c.brother: Say("И не показывай маме.")}
+            yield {c.brother: Say("Кавалерийская шашка. Настоящая.")}
+            yield {c.brother: Say("Это вещь.")}
 
-        yield {c.mother: Say("Хью!")}
+            yield {self.player: Say("Это вещь.")}
+            yield {self.player: Say("Где ты его достал?")}
 
-        yield {c.brother: Say("Это я!")}
-        yield {c.brother: Say("Приглядывай пока за хозяйством, а?")}
+            yield {c.brother: Say("Не спрашивай.")}
+            yield {c.brother: Say("И не показывай маме.")}
 
-        c.brother.ai.pather.going_to = PathTarget.Some(p.away)
-        yield
+            yield {c.mother: Say("Хью!")}
 
-        yield {self.player: Say(
-            "Брат подскакивает и, блеснув зелёными глазами и одной рукой придерживая кожаную сумку, бежит в сторону речки.",
-            True
-        )}
-        yield from wait_for(3)
+            yield {c.brother: Say("Это я!")}
+            yield {c.brother: Say("Приглядывай пока за хозяйством, а?")}
 
-        yield {self.player: Say("Ты проглатываешь подступившую слабость и снова смотришь на меч.", True)}
-        yield from wait_for(3)
+            c.brother.ai.pather.going_to = PathTarget.Some(p.away)
+            yield
 
-        c.mother.ai.follower.subject = c.brother
+            yield {self.player: Say(
+                "Брат подскакивает и, блеснув зелёными глазами и одной рукой придерживая кожаную сумку, бежит в сторону речки.",
+                True
+            )}
+            yield from wait_for(3)
 
-        yield {self.player: Say("Он красиво блестит.", True)}
+            yield {self.player: Say("Ты проглатываешь подступившую слабость и снова смотришь на меч.", True)}
+            yield from wait_for(3)
+
+            c.mother.ai.follower.subject = c.brother
+
+            yield {self.player: Say("Он красиво блестит.", True)}
+        else:
+            self.player.traits.pain += 1
+
+            yield {c.brother: Say("Это шашка...")}
+            yield {self.player: Say("Брат морщится, пряча взгляд.", True)}
+
+            yield {c.brother: Say("Мне надо это сделать.")}
+            yield {c.brother: Say("")}
+            yield {c.brother: Say("Не смотри на меня так.")}
+            yield {c.brother: Say("")}
+            yield {c.brother: Say("Ты не знаешь, о чём говоришь. Я тебе потом объясню.")}
+
+            yield {c.mother: Say("Хью!")}
+            yield {c.brother: Say("Это я!")}
+
+            c.brother.ai.pather.going_to = PathTarget.Some(p.away)
+            yield
+            yield {self.player: Say("Брат поворачивается и уходит, растерянно взмахнув рукой.", True)}
+
+            yield from wait_for(2)
+            yield {self.player: Say("В его глазах видна боль.", True)}
+
+            c.mother.ai.follower.subject = c.brother
+
+            yield from self.options({"Развязать бечёвку": None})
+            yield {self.player: Say("Это меч. Очень красивый.", True)}
+
         yield from wait_for(10)
 
         yield from self.end_cutscene()
