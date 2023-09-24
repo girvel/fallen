@@ -27,10 +27,10 @@ Basically naming convention is:
 
 ### Terms borrowed from math
 
-| Term | Meaning                              |
-|---|--------------------------------------|
-| x, y | coordinates                          |
+| Term   | Meaning                              |
+|--------|--------------------------------------|
+| x, y   | coordinates                          |
 | dx, dy | dx = x1 - x0, dy = y1 - y0           |
 | rx, ry | coordinates relative to current base |
-| d | diameter or distance                 |
-| r | radius                               |
+| d      | diameter or distance                 |
+| r      | radius                               |
