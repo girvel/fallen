@@ -67,5 +67,5 @@ class IO(OwnedEntity):
         self.output.main.refresh()
 
     def rerender(self):
-        assert self.last_render_input is not None, "You can rerender only after you render at least once"
+        if self.last_render_input is None: return
         return self.render(*self.last_render_input)
