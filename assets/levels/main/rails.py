@@ -1,5 +1,3 @@
-import logging
-
 from ecs import Entity
 
 from src.engine.acting.actions.say import Say
@@ -10,7 +8,7 @@ from src.entities.physical.brother import Brother
 from src.entities.physical.mother import Mother
 from src.lib.concurrency import wait_for, wait_while
 from src.lib.query import Query
-from src.lib.vector import abs2, sub2
+from src.lib.vector import d2
 
 
 class Rails(RailsBase):
@@ -27,6 +25,7 @@ class Rails(RailsBase):
             away=(1, 5),
         )
 
+    # @scene(lambda self: True)
     def run(self):
         c = self.characters
         p = self.positions
@@ -50,7 +49,7 @@ class Rails(RailsBase):
             True
         )}
 
-        yield from wait_while(lambda: abs2(sub2(c.mother.p, c.brother.p)) < 7)
+        yield from wait_while(lambda: d2(c.mother.p, c.brother.p) < 7)
 
         yield {c.brother: Say("Вот, смотри.")}
         yield {self.player: Say("В твоих руках оказывается длинный свёрток льняной ткани.", True)}
@@ -95,3 +94,5 @@ class Rails(RailsBase):
 
         # TODO make them leave the level
         # TODO scene begins when the player comes to the hall?
+
+    # @scene(lambda self: all())

@@ -1,13 +1,10 @@
-import logging
-
+import numpy
 from ecs import OwnedEntity
 from rust_enum import Option
-
-import numpy
 from tcod.path import Pathfinder, SimpleGraph
 
 from src.engine.acting.actions.move import Move
-from src.lib.vector import directions, sub2, map_grid, grid_set, add2, abs2, int2
+from src.lib.vector import directions, sub2, map_grid, grid_set, add2, int2, d2
 from src.systems.ai import Perception
 
 
@@ -35,7 +32,7 @@ class Pather:
 
         if (
             destination == subject.p or
-            abs2(sub2(destination, subject.p)) == 1 and perception.vision[subject.layer].get(destination) is not None
+            d2(destination, subject.p) == 1 and perception.vision[subject.layer].get(destination) is not None
         ):
             self.going_to = PathTarget.Nothing()
             return Option.Nothing()

@@ -51,6 +51,11 @@ def lt2(v1: int2, v2: int2) -> int2:
 def le2(v1: int2, v2: int2) -> int2:
     return ge2(v2, v1)
 
+
+def d2(v1: int2, v2: int2) -> int2:
+    return abs2(sub2(v1, v2))
+
+
 T = TypeVar('T')
 def create_grid(size: int2, filler: Callable[[], T]) -> tuple[list[list[T]], int2]:
     return [[filler() for _ in range(size[0])] for _ in range(size[1])], size
