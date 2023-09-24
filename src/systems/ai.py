@@ -1,14 +1,17 @@
 import logging
 from dataclasses import dataclass
 from enum import Enum
+from typing import Any, TypeVar
 
+import numpy
 import tcod.map
 from ecs import create_system, OwnedEntity, Entity
 from line_profiler import profile
+from numpy import ndarray, dtype
 
 from src.entities.special.sound import Sound
 from src.lib.query import Query
-from src.lib.vector import add2, grid_get, grid_set, int2
+from src.lib.vector import add2, grid_get, grid_set, int2, fits_in_grid, grid_unsafe_get, grid_size
 
 
 class Kind(Enum):
@@ -29,6 +32,42 @@ class Perception:
     vision: Entity
     hearing: {int2: Sound}
     smell: {int2: OwnedEntity}
+
+@dataclass
+class GridProxy:
+    _grid: tuple[list[list[OwnedEntity]], int2]
+    _avaliability_mask: ndarray[Any, dtype[bool]]
+
+    T = TypeVar('T')
+    def get(self, key: int2, default: T = None) -> OwnedEntity | T:
+        if not fits_in_grid(self._grid, key) or not self._avaliability_mask[key]:
+            return default
+
+        return grid_unsafe_get(self._grid, key)
+
+    def values(self):
+        return (
+            grid_unsafe_get(self._grid, p)
+            for p, available in numpy.ndenumerate(self._avaliability_mask)
+            if available
+        )
+
+    def items(self):
+        return (
+            (p, grid_unsafe_get(self._grid, p))
+            for p, available in numpy.ndenumerate(self._avaliability_mask)
+            if available
+        )
+
+    def __iter__(self):
+        return (
+            p
+            for p, available in numpy.ndenumerate(self._avaliability_mask)
+            if available
+        )
+
+    def __contains__(self, item: int2) -> bool:
+        return fits_in_grid(self._grid, item) and self._avaliability_mask[item]
 
 @profile
 def calculate_vision(grids, transparency, p, r):
@@ -59,16 +98,12 @@ def calculate_smell(grid, p, r):
 
     return result
 
-def calculate_hearing(grid, p, r):
-    result = {}
 
-    for dy in range(-r, r + 1):  # TODO optimize for level borders
-        for dx in range(abs(dy) - r, r - abs(dy) + 1):
-            smell_p = add2(p, (dx, dy))
-            if (sound := grid_get(grid, smell_p)) is not None and (not ~Query(sound).is_internal or smell_p == p):
-                result[smell_p] = sound
-
-    return result
+def create_square_rhombus(radius, position, field_size):
+    return numpy.fromfunction(
+        lambda x, y: abs(x - position[0]) + abs(y - position[1]) <= radius,
+        field_size
+    )
 
 
 @create_system
@@ -111,7 +146,9 @@ def think(subject: 'ai', level: 'grids', cache: 'transparency_array'):
 
     act = subject.ai.make_decision(subject, Perception(
         vision,
-        subject.senses.hearing > 0 and calculate_smell(level.grids.sounds, subject.p, subject.senses.hearing),
+        subject.senses.hearing > 0 and GridProxy(level.grids.sounds, create_square_rhombus(
+            subject.senses.hearing, subject.p, grid_size(level.grids.sounds)
+        )),
         subject.senses.smell > 0 and calculate_hearing(level.grids.physical, subject.p, subject.senses.smell),
     ))
 
