@@ -1,17 +1,14 @@
+import logging
 from dataclasses import dataclass
 from enum import Enum
 
-import numba as numba
-import numpy
 import tcod.map
 from ecs import create_system, OwnedEntity, Entity
 from line_profiler import profile
 
+from src.entities.special.sound import Sound
 from src.lib.query import Query
-from src.lib.vector import sub2, add2, grid_get, grid_set
-
-import logging
-
+from src.lib.vector import add2, grid_get, grid_set, int2
 
 
 class Kind(Enum):
@@ -30,91 +27,11 @@ class Senses:
 @dataclass
 class Perception:
     vision: Entity
-    hearing: dict[tuple[int, int], int]
-    smell: dict[tuple[int, int], OwnedEntity]
-    free_cache: numpy.ndarray
-
-
-@numba.njit
-def project_rays(vision, x, y, power, cx, cy):
-    value = vision[x, y]
-    if value >= power:
-        return
-
-    if value == -1:
-        vision[x, y] = 1000
-        return
-
-    vision[x, y] = power
-
-    power -= 1
-    if power == 0: return
-
-    dx = x - cx
-    dy = y - cy
-
-    if dy <= -abs(dx):
-        dirs = (
-            (x, y - 1),
-            (x - 1, y),
-            (x + 1, y),
-        )
-    elif dx >= abs(dy):
-        dirs = (
-            (x, y - 1),
-            (x, y + 1),
-            (x + 1, y),
-        )
-    elif dy >= abs(dx):
-        dirs = (
-            (x, y + 1),
-            (x - 1, y),
-            (x + 1, y),
-        )
-    else:
-        dirs = (
-            (x, y - 1),
-            (x, y + 1),
-            (x - 1, y),
-        )
-
-    for i in range(3):
-        d = dirs[i]
-        project_rays(vision, d[0], d[1], power, cx, cy)
-
-def calculate_vision(grids, p, r):
-    d = 2 * r + 1
-    array, (level_w, level_h) = grids.physical
-
-    edge = (p[0] - r, p[1] - r)
-    vision = numpy.full((d, d), 0)  # TODO crop it to not intersect level borders
-
-    for y in range(max(edge[1], 0), min(edge[1] + d, level_h)):  # TODO diamond-shape iteration
-        for x in range(max(edge[0], 0), min(edge[0] + d, level_w)):
-            entity = array[y][x]
-            if entity is not None and "solid_flag" in entity:
-                vision[sub2((x, y), edge)] = -1
-
-    free_cache = vision + 1
-
-    vision[r][r] = r + 1
-    project_rays(vision, r + 1, r, r, r, r)
-    project_rays(vision, r - 1, r, r, r, r)
-    project_rays(vision, r, r + 1, r, r, r)
-    project_rays(vision, r, r - 1, r, r, r)
-
-    result = Entity(**{l: {} for l, _ in grids})
-    for y in range(max(edge[1], 0), min(edge[1] + d, level_h)):
-        for x in range(max(edge[0], 0), min(edge[0] + d, level_w)):
-            if vision[x - edge[0], y - edge[1]] <= 0: continue
-
-            for l, grid in grids:
-                result[l][x, y] = grid[0][y][x]
-
-    return result, free_cache
+    hearing: {int2: Sound}
+    smell: {int2: OwnedEntity}
 
 @profile
-def calculate_vision_tcod(grids, transparency, p, r):
+def calculate_vision(grids, transparency, p, r):
     d = 2 * r + 1
     array, (level_w, level_h) = grids.physical
 
@@ -129,7 +46,7 @@ def calculate_vision_tcod(grids, transparency, p, r):
             for l, grid in grids:
                 result[l][x, y] = grid[0][y][x]
 
-    return result, transparency
+    return result
 
 def calculate_smell(grid, p, r):
     result = {}
@@ -183,9 +100,9 @@ def think(subject: 'ai', level: 'grids', cache: 'transparency_array'):
         subject.act = level.rails_effect[subject]
         if not hasattr(subject.ai, "cutscene_aware_flag"): return
 
-    vision, free_cache = (subject.senses.vision > 0
-        and calculate_vision_tcod(level.grids, cache.transparency_array, subject.p, subject.senses.vision)
-        or (None, None)
+    vision = (subject.senses.vision > 0
+        and calculate_vision(level.grids, cache.transparency_array, subject.p, subject.senses.vision)
+        or None
     )
 
     if vision is not None:
@@ -196,7 +113,6 @@ def think(subject: 'ai', level: 'grids', cache: 'transparency_array'):
         vision,
         subject.senses.hearing > 0 and calculate_smell(level.grids.sounds, subject.p, subject.senses.hearing),
         subject.senses.smell > 0 and calculate_hearing(level.grids.physical, subject.p, subject.senses.smell),
-        free_cache,
     ))
 
     if not is_railed:
