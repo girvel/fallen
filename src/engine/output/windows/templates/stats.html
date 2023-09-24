@@ -12,13 +12,15 @@
 <div>
     <p>{{ mode|safe }}</p>
 </div>
+{% if inspection %}
 <div>
-    {% if inspects %}
-    <p>Inspects <y>{{ subject.act.subject.name }}</y></p>
-
-    {% if looks_hurt %}
-    <p><y>Looks hurt</y></p>
+    {% for key, value in inspection.items() %}
+    {% if value == True %}
+    <p><y>{{ key }}</y></p>
+    {% elif not value %}
+    {% else %}
+    <p>{{ key }}: <y>{{ value }}</y></p>
     {% endif %}
-
-    {% endif %}
+    {% endfor %}
 </div>
+{% endif %}

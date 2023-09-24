@@ -4,9 +4,11 @@ from jinja2 import Environment, PackageLoader
 
 from src.engine.acting.actions.inspect import Inspect
 from src.engine.acting.actions.move import Move
+from src.engine.inspect import inspect
 from src.engine.output.colors import Colors
 from src.engine.output.html import CursesHtmlRenderer
 from src.lib.limited import Limited
+from src.lib.query import Query
 from src.lib.toolkit import from_snake_case
 
 
@@ -61,9 +63,7 @@ class Panel:
             perception=perception,
             level=level,
             mode="MOVE" if self.mode == Move else "<rw>ATTACK</rw>",
-            inspects=bool(inspected),
-            looks_hurt=inspected and "health" in inspected and
-            inspected.health.amount.current <= inspected.health.amount.maximum / 2,
+            inspection=(subject := ~Query(subject).act.subject) and inspect(subject),
         )
 
     pretty_hotkeys = {

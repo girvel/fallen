@@ -3,6 +3,7 @@ from typing import TypeVar, Generic, Any
 
 T = TypeVar('T')
 
+# TODO ~Query(subject).act[Inspect].subject
 @dataclass
 class Query(Generic[T]):
     """Allows to remove long walls of hasattrs from the code.

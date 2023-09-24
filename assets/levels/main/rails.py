@@ -28,7 +28,7 @@ class Rails(RailsBase):
             away=(1, 5),
         )
 
-    @scene(lambda self: True)
+    @scene(lambda self: False)
     def introduction(self):
         self.scene_by_name("introduction").enabled = False
 
