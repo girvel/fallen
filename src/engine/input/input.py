@@ -29,16 +29,20 @@ class Input:
         self.option_hotkeys = generate_option_hotkeys()
         self.submit_hotkey = {"\n", "e", "E"}
         self.next_hotkey = {" "}
+        self.skip_hotkey = {""}
 
         logging.info(f"Initalized mouse with {curses.mousemask(curses.ALL_MOUSE_EVENTS)}")
 
     def wait_for_input(self, subject, perception: Perception, memory: "Memory"):
         if memory.in_cutscene:
             if memory.options:
-                while (key := self.main.getkey()) not in self.submit_hotkey:
-                    if (f := self.option_hotkeys.get(key)) is not None:
-                        f(memory)
-                        self.io.render(subject, perception)
+                if not memory.is_skipping or len(memory.options) != 1:
+                    while (key := self.main.getkey()) not in self.submit_hotkey:
+                        if (f := self.option_hotkeys.get(key)) is not None:
+                            f(memory)
+                            self.io.render(subject, perception)
+                else:
+                    memory.selected_option_i = 0
 
                 result = list(memory.options.values())[memory.selected_option_i]
                 memory.options = None
@@ -46,10 +50,11 @@ class Input:
                 return result
 
             if memory.current_sound is not None:
-                while self.main.getkey() not in self.next_hotkey: pass
+                while not memory.is_skipping and (key := self.main.getkey()) not in self.next_hotkey:
+                    if key in self.skip_hotkey: memory.is_skipping = True
                 return
 
-            time.sleep(0.2)  # TODO flexible
+            if not memory.is_skipping: time.sleep(0.2)  # TODO flexible
             return
 
         while True:

@@ -16,6 +16,7 @@ class Memory:
     options: Optional[dict[str, Optional[Action]]] = None
     selected_option_i: int = 0
     in_cutscene: bool = False
+    is_skipping: bool = False
 
 class IO(OwnedEntity):
     name = 'Input/Output'
@@ -34,7 +35,12 @@ class IO(OwnedEntity):
 
     def make_decision(self, subject, perception):
         self.form_memory(subject, perception)
-        self.render(subject, perception)
+
+        if not self.memory.is_skipping or (self.memory.options and len(self.memory.options) != 1):
+            self.render(subject, perception)
+        else:
+            self.render_empty()
+
         return self.input.wait_for_input(subject, perception, self.memory)
 
     def form_memory(self, subject, perception):
@@ -44,11 +50,18 @@ class IO(OwnedEntity):
             if sound is not None
         ), None)
 
+        if not self.memory.in_cutscene:
+            self.memory.is_skipping = False
+
     last_render_input = None
 
     def render(self, subject, perception):
         self.last_render_input = [subject, perception]
         self.output.render(subject, perception, self.level, self.memory)
+
+    def render_empty(self):
+        self.output.main.clear()
+        self.output.main.refresh()
 
     def rerender(self):
         assert self.last_render_input is not None, "You can rerender only after you render at least once"
