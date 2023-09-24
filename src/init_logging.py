@@ -15,7 +15,8 @@ class PrettyFormatter(logging.Formatter):
 
     def format(self, record: logging.LogRecord) -> str:
         record.levelname = self.short_levels[record.levelname]
-        record.pathname = str(Path(record.pathname).relative_to(root_directory))
+        path = Path(record.pathname)
+        record.pathname = str(path.is_absolute() and path.relative_to(root_directory) or path)
         return super().format(record)
         # return (
         #     f"[{self.short_levels[record.levelname]} {record.asctime}] {record.filename}:{record.lineno} "

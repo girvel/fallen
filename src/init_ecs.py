@@ -38,6 +38,8 @@ def init(stdscr, track, debug_mode):
     try:
         while True:
             ms.update()
+    except KeyboardInterrupt:
+        pass
     except Exception as ex:
         logging.exception(ex)
     finally:

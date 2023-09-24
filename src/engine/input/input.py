@@ -115,7 +115,7 @@ def generate_default_hotkeys(debug_mode):
 
     @_hotkey("Q")
     def quit_(subject, perception, io):
-        sys.exit()
+        raise KeyboardInterrupt
 
     @_hotkey("r")
     def change_mode(subject, perception, io):

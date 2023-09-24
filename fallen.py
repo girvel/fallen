@@ -3,6 +3,7 @@
 import curses
 import logging
 from pathlib import Path
+from time import time
 from typing import Optional
 
 import fire
@@ -22,10 +23,19 @@ def main(track_file: Optional[str] = None, debug_mode: bool = False):
     init_logging()
     logging.info("Started")
 
+    track = track_file and Path(track_file).read_text().replace("\n", "")
+    logging.info(bool(track))
+    if track:
+        t = time()
+
     curses.wrapper(init_ecs.init,
-        track=track_file and Path(track_file).read_text().replace("\n", ""),
+        track=track,
         debug_mode=debug_mode
     )
+
+    if track:
+        t = time() - t
+        logging.info(f"FPS: {len(track) / t:.2f}")
 
 
 if __name__ == '__main__':
