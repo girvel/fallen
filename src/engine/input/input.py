@@ -27,7 +27,8 @@ class Input:
 
         self.action_hotkeys, self.other_hotkeys = generate_default_hotkeys(debug_mode)
         self.option_hotkeys = generate_option_hotkeys()
-        self.submit_hotkey = {"\n", " ", "e", "E"}
+        self.submit_hotkey = {"\n", "e", "E"}
+        self.next_hotkey = {" "}
 
         logging.info(f"Initalized mouse with {curses.mousemask(curses.ALL_MOUSE_EVENTS)}")
 
@@ -38,8 +39,6 @@ class Input:
                     if (f := self.option_hotkeys.get(key)) is not None:
                         f(memory)
                         self.io.render(subject, perception)
-                    else:
-                        logging.debug([self.option_hotkeys, key])
 
                 result = list(memory.options.values())[memory.selected_option_i]
                 memory.options = None
@@ -47,7 +46,7 @@ class Input:
                 return result
 
             if memory.current_sound is not None:
-                while self.main.getkey() not in self.submit_hotkey: pass
+                while self.main.getkey() not in self.next_hotkey: pass
                 return
 
             time.sleep(0.2)  # TODO flexible
