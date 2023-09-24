@@ -13,9 +13,11 @@ class Follower:
         self.period = Period(d)
 
     def try_producing_target(self, subject, perception) -> Option[PathTarget]:
+        if not self.period.step(): return
+
         if self.subject is None or self.subject.p not in perception.vision.physical: return Option.Nothing()
         if d2(subject.p, self.subject.p) <= self.d: return Option.Some(PathTarget.Nothing())
 
-        if self.period.step(): return Option.Some(PathTarget.Some(self.subject.p))
+        return Option.Some(PathTarget.Some(self.subject.p))
 
         return Option.Nothing()
