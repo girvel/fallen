@@ -163,11 +163,10 @@ def update_transparency_cache(cache: 'transparency_array', level: 'grids'):
 
 @create_system
 def run_rails(rails: 'rails_flag', level: 'grids', hades: 'entities_to_destroy'):
-    for effect in rails.run():
+    for effect in next((s.run() for s in rails.scenes.values() if s.enabled and s.start_predicate()), []):
         level.rails_effect = effect or {}
         yield
 
-    hades.entities_to_destroy.add(rails)
     level.rails_effect = {}
 
 

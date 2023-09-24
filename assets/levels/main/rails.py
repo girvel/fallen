@@ -1,9 +1,11 @@
+import logging
+
 from ecs import Entity
 
 from src.engine.acting.actions.say import Say
 from src.engine.acting.damage import Weapon, DamageKind
 from src.engine.ai.pather import PathTarget
-from src.engine.rails_base import RailsBase
+from src.engine.rails_base import RailsBase, scene
 from src.entities.physical.brother import Brother
 from src.entities.physical.mother import Mother
 from src.lib.concurrency import wait_for, wait_while
@@ -25,8 +27,10 @@ class Rails(RailsBase):
             away=(1, 5),
         )
 
-    # @scene(lambda self: True)
-    def run(self):
+    @scene(lambda self: True)
+    def introduction(self):
+        self.scenes["introduction"].enabled = False
+
         c = self.characters
         p = self.positions
         memory = self.player.ai.memory
@@ -95,4 +99,10 @@ class Rails(RailsBase):
         # TODO make them leave the level
         # TODO scene begins when the player comes to the hall?
 
-    # @scene(lambda self: all())
+    @scene(lambda self: all(
+        d2(e.p, self.positions.away) <= 3 for e in [self.characters.brother, self.characters.mother]
+    ))
+    def brother_and_mother_leave(self):
+        self.scenes["brother_and_mother_leave"].enabled = False  # TODO more portable way to do it
+        logging.debug("Brother and mother leave")
+        yield
