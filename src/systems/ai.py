@@ -47,23 +47,26 @@ class GridProxy:
 
     def values(self):
         return (
-            grid_unsafe_get(self._grid, p)
-            for p, available in numpy.ndenumerate(self._avaliability_mask)
-            if available
+            e
+            for y, row in enumerate(self._grid[0])
+            for x, e in enumerate(row)
+            if self._avaliability_mask[x, y]
         )
 
     def items(self):
         return (
-            (p, grid_unsafe_get(self._grid, p))
-            for p, available in numpy.ndenumerate(self._avaliability_mask)
-            if available
+            ((x, y), e)
+            for y, row in enumerate(self._grid[0])
+            for x, e in enumerate(row)
+            if self._avaliability_mask[x, y]
         )
 
     def __iter__(self):
         return (
-            p
-            for p, available in numpy.ndenumerate(self._avaliability_mask)
-            if available
+            (x, y)
+            for y, row in enumerate(self._grid[0])
+            for x, e in enumerate(row)
+            if self._avaliability_mask[x, y]
         )
 
     def __contains__(self, item: int2) -> bool:
@@ -135,21 +138,23 @@ def think(subject: 'ai', level: 'grids', cache: 'transparency_array'):
         subject.act = level.rails_effect[subject]
         if not hasattr(subject.ai, "cutscene_aware_flag"): return
 
-    vision = (subject.senses.vision > 0
-        and calculate_vision(level.grids, cache.transparency_array, subject.p, subject.senses.vision)
-        or None
-    )
+    if subject.senses.vision > 0:
+        fov = tcod.map.compute_fov(cache.transparency_array, subject.p, subject.senses.vision)
+        vision = Entity(**{layer: GridProxy(grid, fov) for layer, grid in level.grids})
 
-    if vision is not None:
         for p, entity in vision.physical.items():
             grid_set(subject.spacial_memory, p, entity is not None and entity.character or ".")
+    else:
+        vision = None
 
     act = subject.ai.make_decision(subject, Perception(
         vision,
         subject.senses.hearing > 0 and GridProxy(level.grids.sounds, create_square_rhombus(
             subject.senses.hearing, subject.p, grid_size(level.grids.sounds)
         )),
-        subject.senses.smell > 0 and calculate_hearing(level.grids.physical, subject.p, subject.senses.smell),
+        subject.senses.smell > 0 and GridProxy(level.grids.physical, create_square_rhombus(
+            subject.senses.hearing, subject.p, grid_size(level.grids.smell)
+        )),
     ))
 
     if not is_railed:
