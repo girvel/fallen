@@ -15,13 +15,13 @@ class RailsBase(OwnedEntity):
 
     def __init__(self, level):
         self.player = level.player
-        self.scenes = {
-            p.name: Scene(functools.partial(p.run, self), functools.partial(p.start_predicate, self), p.enabled)
+        self.scenes = [
+            Scene(p.name, functools.partial(p.run, self), functools.partial(p.start_predicate, self), p.enabled)
             for p in vars(type(self)).values()
             if isinstance(p, PreScene)
-        }
+        ]
 
-        logging.info(f"Initialized rails with scenes {list(self.scenes)}")
+        logging.info(f"Initialized rails with scenes {[s.name for s in self.scenes]}")
 
     def options(self, options):
         yield  # TODO should this be needed? Investigate.
@@ -42,9 +42,13 @@ class RailsBase(OwnedEntity):
         self.player.ai.output.game.virtual_p = sub2(self.player.p, floordiv2((w, h), 2))
         yield
 
+    def scene_by_name(self, name):
+        return next(s for s in self.scenes if s.name == name)
+
 
 @dataclass
 class Scene:
+    name: str
     run: Callable[[], None]
     start_predicate: Callable[[], bool]
     enabled: True

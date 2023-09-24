@@ -30,7 +30,7 @@ class Rails(RailsBase):
 
     @scene(lambda self: True)
     def introduction(self):
-        self.scenes["introduction"].enabled = False
+        self.scene_by_name("introduction").enabled = False
 
         c = self.characters
         p = self.positions
@@ -106,6 +106,6 @@ class Rails(RailsBase):
     def brother_and_mother_leave(self):
         c = self.characters
 
-        self.scenes["brother_and_mother_leave"].enabled = False  # TODO more portable way to do it
+        self.scene_by_name("brother_and_mother_leave").enabled = False  # TODO more portable way to do it
 
         yield {c.mother: Leave(), c.brother: Leave()}

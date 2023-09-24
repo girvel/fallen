@@ -162,12 +162,17 @@ def update_transparency_cache(cache: 'transparency_array', level: 'grids'):
 
 
 @create_system
-def run_rails(rails: 'rails_flag', level: 'grids', hades: 'entities_to_destroy'):  # TODO logs
-    for effect in next((s.run() for s in rails.scenes.values() if s.enabled and s.start_predicate()), []):
+def run_rails(rails: 'rails_flag', level: 'grids', hades: 'entities_to_destroy'):
+    current_scene = next((s for s in rails.scenes if s.enabled and s.start_predicate()), None)
+    if current_scene is None: return
+
+    logging.info(f"Starting the scene '{current_scene.name}'")
+    for effect in current_scene.run():
         level.rails_effect = effect or {}
         yield
 
     level.rails_effect = {}
+    logging.info(f"Finished the scene '{current_scene.name}'")
 
 
 @create_system
