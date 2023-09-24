@@ -15,13 +15,13 @@ class Fire(OwnedEntity):
     color = Colors.Red
 
     layer = "effects"
-    faction = Faction.Disaster
 
     def __init__(self, half_life=float('inf'), heat=5, p=None):
         self.weapon = Weapon(heat, DamageKind.Fire)
         self.senses = Senses(0, 0, 0)
         self.ai = FireAi()
         self.death_chance = death_chance_from_half_life(half_life)
+        self.faction = None if half_life == float('inf') else Faction.Disaster
 
         if p is not None:
             self.p = p
