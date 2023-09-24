@@ -1,3 +1,4 @@
+import functools
 import logging
 import math
 import random
@@ -57,3 +58,13 @@ def add_multiline_string(
         window.addstr(y + i, 2, l, color.format())
 
     return y + i + 1
+
+def crash_safe(f):
+    @functools.wraps(f)
+    def result(*args, **kwargs):
+        try:
+            return f(*args, **kwargs)
+        except Exception as ex:
+            logging.exception(ex)
+
+    return result
