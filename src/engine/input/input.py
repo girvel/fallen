@@ -24,8 +24,13 @@ class Input:
         stdscr.nodelay(1)
 
         self.main = stdscr
-        self.debug_track = debug_track and iter(debug_track)
         self.io = io
+
+        if debug_track:
+            self.debug_track = iter(debug_track)
+            logging.info(f"Debug track: '{debug_track}'")
+        else:
+            self.debug_track = None
 
         self.action_hotkeys, self.other_hotkeys = generate_default_hotkeys(debug_mode)
         self.option_hotkeys = generate_option_hotkeys()
@@ -62,22 +67,22 @@ class Input:
 
         while True:
             if self.debug_track is not None:
-                hotkey = next(self.debug_track)
+                hotkey = ord(next(self.debug_track))
             else:
                 hotkey = self.main.getch()
 
             if hotkey in self.action_hotkeys:
-                logging.debug(f"[{hotkey}] -> {self.action_hotkeys[hotkey].__name__}")
+                logging.debug(f"[{chr(hotkey)}] -> {self.action_hotkeys[hotkey].__name__}")
                 break
 
             if hotkey in self.other_hotkeys:
-                logging.debug(f"[{hotkey}] -> no action")
+                logging.debug(f"[{chr(hotkey)}] -> no action")
                 self.other_hotkeys[hotkey](subject, perception, self.io)
                 self.io.render(subject, perception)
                 continue
 
             if hotkey != -1:
-                logging.debug(f"Ignored [{hotkey}]")
+                logging.debug(f"Ignored [{chr(hotkey)}]")
 
         return self.action_hotkeys[hotkey](subject, perception, self.io)
 

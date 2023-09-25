@@ -1,7 +1,7 @@
 import logging
 from importlib.util import spec_from_file_location, module_from_spec
 from pathlib import Path
-from typing import TypeVar, Callable
+from typing import TypeVar, Callable, TYPE_CHECKING
 
 import toml as toml
 from ecs import DynamicEntity, Entity
@@ -11,6 +11,9 @@ from src.entities.markup.house import House
 from src.entities.markup.zone import Zone
 from src.lib.toolkit import to_camel_case, import_module
 from src.lib.vector import grid_set, create_grid, int2
+
+if TYPE_CHECKING:
+    from src.entities.ais.io import IO
 
 
 def load_palette_from(path):
@@ -39,7 +42,7 @@ class Level(DynamicEntity):
     markup = None
     player = None
 
-    def __init__(self, ms, path: Path, io):
+    def __init__(self, ms, path: Path, io: "IO", no_rails: bool):
         level_lines = (path / "grid.txt").read_text().split('\n')
         size = (max(len(l) for l in level_lines), len(level_lines))
 
@@ -83,9 +86,10 @@ class Level(DynamicEntity):
         for after_load in after_loads:
             after_load(self)
 
-        rails_path = path / "rails.py"
-        if rails_path.exists():
-            ms.add(import_module(rails_path).Rails(self))
+        if not no_rails:
+            rails_path = path / "rails.py"
+            if rails_path.exists():
+                ms.add(import_module(rails_path).Rails(self))
 
         self.rails_effect = {}
 

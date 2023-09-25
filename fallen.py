@@ -16,6 +16,7 @@ def main(
     track_file: Optional[str] = None,
     debug_mode: bool = False,
     no_render: bool = False,
+    no_rails: bool = False,
 ):
     """
     Launch the Fallen RPG
@@ -24,6 +25,7 @@ def main(
         track_file: file to redirect input from
         debug_mode: whether to enable debug console & utilities
         no_render: whether to disable render
+        no_rails: disable level's rails
     """
 
     init_logging()
@@ -37,6 +39,7 @@ def main(
         track=track,
         debug_mode=debug_mode,
         no_render=no_render,
+        no_rails=no_rails,
     )
 
     if track:
