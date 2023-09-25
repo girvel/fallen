@@ -5,7 +5,7 @@ debug:
 	py.exe -3.10 fallen.py -d $(FLAGS)
 
 profile:
-	py.exe -3.10 -m cProfile -o .profile fallen.py -d -t assets/benchmark_tracks/vision.txt $(FLAGS)
+	py.exe -3.10 -m cProfile -o .profile fallen.py -d -t assets/benchmark_tracks/vision.txt --no-rails $(FLAGS)
 	echo "sort cumtime\nstats" | py.exe -3.10 -m pstats .profile | less
 
 line_profile:
