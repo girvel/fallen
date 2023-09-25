@@ -11,6 +11,11 @@ from src.entities.special.sound import Sound
 
 
 @dataclass
+class Quest:
+    description: str
+
+
+@dataclass
 class Memory:
     current_sound: Optional[Sound] = None
 
@@ -20,6 +25,16 @@ class Memory:
 
     in_cutscene: bool = False
     is_skipping: bool = False
+
+    _quests: list[Quest] = field(default_factory=lambda: [Quest("Hang out")])
+    _new_quests: list[Quest] = field(default_factory=list)
+
+    def add_quest(self, quest: Quest):
+        self._new_quests.append(quest)
+
+    def complete_quest(self, quest: Quest):
+        if quest in self._new_quests: self._new_quests.remove(quest)
+        if quest in self._quests: self._quests.remove(quest)
 
 class IO(DynamicEntity):
     name = 'Input/Output'

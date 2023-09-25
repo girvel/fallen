@@ -19,15 +19,22 @@ class Panel:
         self._window = curses.newwin(1, 1, 0, 0)
         self.w = w
         self.io = io
+
         self.panes = [
             self._controls,
             self._stats,
+            self._quests,
         ]
+
         self.pane_i = Limited(len(self.panes), 0, 1)
-        env = Environment(loader=PackageLoader(__name__), autoescape=True)
+
         self.html_renderer = CursesHtmlRenderer()
+
+        env = Environment(loader=PackageLoader(__name__), autoescape=True)
+
         self.stats_template = env.get_template("stats.html")
         self.controls_template = env.get_template("controls.html")
+        self.quests_template = env.get_template("quests.html")
 
     def resize(self, h, w, memory):
         self._window.resize(h - 1, self.w)
@@ -41,20 +48,20 @@ class Panel:
         self._window.clear()
         self._window.border()
 
-        self.panes[self.pane_i.current](subject, perception, level)
+        self.panes[self.pane_i.current](subject, perception, level, memory)
 
         if not self.pane_i.is_min():
             self._window.addstr(h - 2, 2, "<", Colors.Yellow.format())
             self._window.addstr(h - 2, 4, from_snake_case(self.panes[self.pane_i.current - 1].__name__).capitalize())
 
         if not self.pane_i.is_max():
-            name = from_snake_case(self.panes[self.pane_i.current - 1].__name__).capitalize()
+            name = from_snake_case(self.panes[self.pane_i.current + 1].__name__).capitalize()
             self._window.addstr(h - 2, w - 3, ">", Colors.Yellow.format())
             self._window.addstr(h - 2, w - 4 - len(name), name)
 
         self._window.refresh()
 
-    def _stats(self, subject, perception, level):
+    def _stats(self, subject, perception, level, memory):
         inspected = "act" in subject and isinstance(subject.act, Inspect) and subject.act.subject or None
         self.html_renderer.render_template(self._window, 1, 2, self.stats_template,
             subject=subject,
@@ -70,7 +77,7 @@ class Panel:
         curses.KEY_RIGHT: "→",
     }
 
-    def _controls(self, subject, perception, level):
+    def _controls(self, subject, perception, level, memory):
         def reduce_hotkeys(hotkey_collection):
             result = {}
 
@@ -90,4 +97,9 @@ class Panel:
             level=level,
             action_hotkeys=reduce_hotkeys(self.io.input.action_hotkeys),
             other_hotkeys=reduce_hotkeys(self.io.input.other_hotkeys),
+        )
+
+    def _quests(self, subject, perception, level, memory):
+        self.html_renderer.render_template(self._window, 1, 2, self.quests_template,
+            quests=memory._quests,
         )
