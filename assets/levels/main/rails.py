@@ -23,7 +23,8 @@ class Rails(RailsBase):
 
         self.positions = Entity(
             street=(181, 42),
-            away=(1, 5),
+            before_away=(93, 28),
+            away=(139, 0),
         )
 
     @scene(lambda self: True)
@@ -81,7 +82,7 @@ class Rails(RailsBase):
             yield {c.brother: Say("Это я!")}
             yield {c.brother: Say("Приглядывай пока за хозяйством, а?")}
 
-            c.brother.ai.pather.going_to = PathTarget.Some(p.away)
+            c.brother.ai.pather.going_to = PathTarget.Some(p.before_away)
             yield
 
             yield {self.player: Say(
@@ -111,7 +112,7 @@ class Rails(RailsBase):
             yield {c.mother: Say("Хью!")}
             yield {c.brother: Say("Это я!")}
 
-            c.brother.ai.pather.going_to = PathTarget.Some(p.away)
+            c.brother.ai.pather.going_to = PathTarget.Some(p.before_away)
             yield
             yield {self.player: Say("Брат поворачивается и уходит, растерянно взмахнув рукой.", True)}
 
@@ -127,8 +128,49 @@ class Rails(RailsBase):
 
         yield from self.end_cutscene()
 
-        # TODO make them leave the level
         # TODO scene begins when the player comes to the hall?
+
+
+    @scene(lambda self: d2(self.characters.brother.p, self.positions.before_away) <= 2)
+    def brother_path_middlepoint(self):
+        self.characters.brother.ai.pather.going_to = PathTarget.Some(self.positions.away)
+        yield
+
+
+    @scene(lambda self:
+        d2(self.characters.brother.p, self.positions.away) <= 20
+        and d2(self.characters.brother.p, self.player.p) <= self.player.senses.vision
+    )
+    def brother_stops_player(self):
+        c = self.characters
+        p = self.positions
+
+        self.scene_by_name("brother_stops_player").enabled = False
+        yield from self.start_cutscene()
+        yield from self.center_camera()
+
+        c.mother.ai.follower.subject = None
+        c.brother.ai.pather.going_to = PathTarget.Some(self.player.p)
+        c.brother.ai.follower.subject = self.player
+
+        yield from wait_while(lambda: d2(self.characters.brother.p, self.player.p) > 5 or c.brother.act is not None)
+
+        yield {c.brother: Say("Перестань.")}
+        yield {c.brother: Say("Я не могу взять тебя с собой.")}
+        yield {c.brother: Say("Иди домой.")}
+
+        self.player.traits.naivity += 1
+        self.player.traits.pain += 1
+        self.player.traits.chaos += 1
+
+        c.brother.ai.follower.subject = None
+        c.brother.ai.pather.going_to = PathTarget.Some(p.away)
+        c.mother.ai.follower.subject = c.brother
+
+        yield from wait_while(lambda: d2(self.characters.brother.p, self.player.p) <= self.player.senses.vision + 10)
+
+        yield from self.end_cutscene()
+
 
     @scene(lambda self: all(
         d2(e.p, self.positions.away) <= 3 for e in [self.characters.brother, self.characters.mother]
