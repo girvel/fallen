@@ -10,7 +10,7 @@ from src.entities.special.level import Level
 from src.entities.special.transparency_cache import TransparencyCache
 from src.lib.toolkit import crash_safe
 from src.lib.vector import grid_size
-from src.systems import acting, destruction_and_creation, ai, death
+from src.systems import acting, destruction_and_creation, ai, death, regeneration
 
 
 def init(stdscr, track, debug_mode, no_render):
@@ -20,6 +20,7 @@ def init(stdscr, track, debug_mode, no_render):
     logging.info("Initializing systems")
 
     for system in [
+        *regeneration.sequence,
         *ai.sequence,
         *acting.sequence,
         *death.sequence,

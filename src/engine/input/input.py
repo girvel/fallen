@@ -192,7 +192,7 @@ def generate_default_hotkeys(debug_mode):
                     exec(io.output.console.buffer, {
                         "it": lambda: (isinstance(subject.act, Inspect) and subject.act.subject or None),
                         "monitor": io.output.monitor.values,
-                        "subject": subject,
+                        "player": subject,
                         "perception": perception,
                         "io": io,
                         "tracker": tracker,
