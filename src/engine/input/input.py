@@ -21,15 +21,17 @@ if TYPE_CHECKING:
 class Input:
     def __init__(self, stdscr, debug_track, debug_mode, io):
         # TODO hotkey is actionable if it returns True
+        stdscr.nodelay(1)
+
         self.main = stdscr
         self.debug_track = debug_track and iter(debug_track)
         self.io = io
 
         self.action_hotkeys, self.other_hotkeys = generate_default_hotkeys(debug_mode)
         self.option_hotkeys = generate_option_hotkeys()
-        self.submit_hotkey = {"\n", "e", "E"}
-        self.next_hotkey = {" "}
-        self.skip_hotkey = {""}
+        self.submit_hotkey = {ord("\n"), ord("e")}
+        self.next_hotkey = {ord(" ")}
+        self.skip_hotkey = {ord("")}
 
         logging.info(f"Initalized mouse with {curses.mousemask(curses.ALL_MOUSE_EVENTS)}")
 
@@ -37,7 +39,7 @@ class Input:
         if memory.in_cutscene:
             if memory.options:
                 if not memory.is_skipping or len(memory.options) != 1:
-                    while (key := self.main.getkey()) not in self.submit_hotkey:
+                    while (key := self.main.getch()) not in self.submit_hotkey:
                         if (f := self.option_hotkeys.get(key)) is not None:
                             f(memory)
                             self.io.render(subject, perception)
@@ -51,7 +53,7 @@ class Input:
                 return result
 
             if memory.current_sound is not None:
-                while not memory.is_skipping and (key := self.main.getkey()) not in self.next_hotkey:
+                while not memory.is_skipping and (key := self.main.getch()) not in self.next_hotkey:
                     if key in self.skip_hotkey: memory.is_skipping = True
                 return
 
@@ -62,7 +64,7 @@ class Input:
             if self.debug_track is not None:
                 hotkey = next(self.debug_track)
             else:
-                hotkey = self.main.getkey()
+                hotkey = self.main.getch()
 
             if hotkey in self.action_hotkeys:
                 logging.debug(f"[{hotkey}] -> {self.action_hotkeys[hotkey].__name__}")
@@ -74,7 +76,8 @@ class Input:
                 self.io.render(subject, perception)
                 continue
 
-            logging.debug(f"Ignored [{hotkey}]")
+            if hotkey != -1:
+                logging.debug(f"Ignored [{hotkey}]")
 
         return self.action_hotkeys[hotkey](subject, perception, self.io)
 
@@ -90,7 +93,9 @@ def generate_default_hotkeys(debug_mode):
 
         def __call__(self, f):
             for hotkey in self.keys:
-                (other_hotkeys if self.non_action else action_hotkeys)[hotkey] = f
+                (other_hotkeys if self.non_action else action_hotkeys)[
+                    ord(hotkey) if isinstance(hotkey, str) else hotkey
+                ] = f
 
     def generate_movement_function(key, direction):
         @_hotkey(key)
@@ -123,20 +128,24 @@ def generate_default_hotkeys(debug_mode):
 
     @_hotkey("1")
     def cast_fire_flow(subject, perception, io):
-        while not isinstance((hotkey := io.input.main.get_wch()), str) or hotkey not in "wasd":
-            if hotkey == "":
-                return
+        while True:
+            while (hotkey := io.input.main.getch()) == -1: pass
+            hotkey = chr(hotkey)
+
+            if hotkey in "wasd": break
+            if hotkey == "": return
+
         return CastFireFlow(directions_by_key[hotkey])
 
-    @_hotkey("KEY_LEFT", non_action=True)
+    @_hotkey(curses.KEY_LEFT, non_action=True)
     def previous_pane(subject, perception, io):
         io.output.panel.pane_i.move(-1)
 
-    @_hotkey("KEY_RIGHT", non_action=True)
+    @_hotkey(curses.KEY_RIGHT, non_action=True)
     def next_pane(subject, perception, io):
         io.output.panel.pane_i.move(1)
 
-    @_hotkey("KEY_MOUSE")
+    @_hotkey(curses.KEY_MOUSE)
     def inspect(subject, perception, io):
         _, mx, my, _, _ = curses.getmouse()
         target = next((
@@ -145,7 +154,7 @@ def generate_default_hotkeys(debug_mode):
         ), None)
         return target and Inspect(target)
 
-    @_hotkey("KEY_RESIZE", non_action=True)
+    @_hotkey(curses.KEY_RESIZE, non_action=True)
     def resize_gui(subject, perception, io):
         io.output.resize(io.memory)
 
@@ -157,12 +166,12 @@ def generate_default_hotkeys(debug_mode):
 
             while True:
                 io.render(subject, perception)
-                if (
-                    (hotkey := io.input.main.get_wch()) and
-                    (hotkey := curses_wrong_characters.get(
-                        isinstance(hotkey, int) and hotkey or ord(hotkey), hotkey)
-                    ) == "CTL_ENTER"
-                ): break
+                while (hotkey := io.input.main.getch()) == -1: pass
+
+                if hotkey == curses.CTL_ENTER: break
+                if hotkey == curses.KEY_MOUSE: continue
+
+                hotkey = curses_wrong_characters.get(hotkey, chr(hotkey))
 
                 if hotkey == "":
                     io.output.console.buffer = io.output.console.buffer[:-1]
@@ -210,13 +219,13 @@ def generate_option_hotkeys():
 
         def __call__(self, f):
             for hotkey in self.keys:
-                result[hotkey] = f
+                result[ord(hotkey) if isinstance(hotkey, str) else hotkey] = f
 
-    @_hotkey("w", "KEY_UP")
+    @_hotkey("w", curses.KEY_UP)
     def move_cursor_up(memory):
         memory.selected_option_i = (memory.selected_option_i - 1) % len(memory.options)
 
-    @_hotkey("s", "KEY_DOWN")
+    @_hotkey("s", curses.KEY_DOWN)
     def move_cursor_down(memory):
         memory.selected_option_i = (memory.selected_option_i + 1) % len(memory.options)
 
