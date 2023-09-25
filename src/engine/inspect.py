@@ -23,6 +23,10 @@ def faction(subject: DynamicEntity) -> str | bool | None:
     return ~Query(subject).faction
 
 @metrics.append
+def armor(subject: DynamicEntity) -> str | bool | None:
+    return ~Query(subject).health.armor_kind
+
+@metrics.append
 def hurt(subject: DynamicEntity) -> str | bool | None:
     return (health := ~Query(subject).health) and health.amount.current <= (health.amount.maximum - 1) / 2
 
