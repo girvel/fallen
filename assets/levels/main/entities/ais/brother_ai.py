@@ -25,11 +25,14 @@ class BrotherAi(DummyAi):
         super().__init__()
 
     def make_decision(self, subject: DynamicEntity, perception: Perception) -> Action:
-        if (neighbour := next((
-            e for e in perception.vision.physical.values()
-            if ~Query(e).faction == Faction.Villagers
-            and e not in self.said_bye_to
-        ), None)):
+        if (
+            len(self.bye_lines) > 0 and
+            (neighbour := next((
+                e for e in perception.vision.physical.values()
+                if ~Query(e).faction == Faction.Villagers
+                and e not in self.said_bye_to
+            ), None))
+        ):
             self.said_bye_to.add(neighbour)
 
             line = random.choice(self.bye_lines)

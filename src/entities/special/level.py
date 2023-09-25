@@ -55,6 +55,11 @@ class Level(DynamicEntity):
             if l not in self.invisible_layers
         })
 
+        for layer, palette in self.palettes:
+            local_palette_path = path / "entities" / layer
+            if local_palette_path.exists():
+                palette.update(load_palette_from(local_palette_path))
+
         for y, line in enumerate(level_lines):
             for x, c in enumerate(line):
                 if c == ".":

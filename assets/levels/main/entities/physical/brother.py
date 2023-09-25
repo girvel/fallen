@@ -1,7 +1,7 @@
 from ecs import DynamicEntity
 
 from src.engine.acting.damage import Health, Weapon, ArmorKind, DamageKind
-from src.engine.ai.brother_ai import BrotherAi
+from assets.levels.main.entities.ais.brother_ai import BrotherAi
 from src.engine.output.colors import Colors
 from src.entities.tiles.body import body_factory
 from src.lib.vector import map_grid

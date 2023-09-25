@@ -1,5 +1,3 @@
-import logging
-
 from ecs import Entity
 
 from src.engine.acting.actions.leave import Leave
@@ -7,8 +5,8 @@ from src.engine.acting.actions.say import Say
 from src.engine.acting.damage import Weapon, DamageKind
 from src.engine.ai.pather import PathTarget
 from src.engine.rails_base import RailsBase, scene
-from src.entities.physical.brother import Brother
-from src.entities.physical.mother import Mother
+from assets.levels.main.entities.physical.brother import Brother
+from assets.levels.main.entities.physical.mother import Mother
 from src.lib.concurrency import wait_for, wait_while
 from src.lib.query import Query
 from src.lib.vector import d2
