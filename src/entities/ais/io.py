@@ -14,6 +14,10 @@ from src.entities.special.sound import Sound
 class Quest:
     description: str
 
+@dataclass
+class Notification:
+    header: str
+    content: str
 
 @dataclass
 class Memory:
@@ -26,15 +30,18 @@ class Memory:
     in_cutscene: bool = False
     is_skipping: bool = False
 
-    _quests: list[Quest] = field(default_factory=lambda: [Quest("Hang out")])
-    _new_quests: list[Quest] = field(default_factory=list)
+    _quests: list[Quest] = field(default_factory=list)
+    _notifications: list[Notification] = field(default_factory=list)
 
     def add_quest(self, quest: Quest):
-        self._new_quests.append(quest)
+        self._quests.append(quest)
+        self._notifications.append(Notification("Новая задача", quest.description))
 
     def complete_quest(self, quest: Quest):
-        if quest in self._new_quests: self._new_quests.remove(quest)
         if quest in self._quests: self._quests.remove(quest)
+
+    def pop_notification(self):
+        return self._notifications.pop() if len(self._notifications) > 0 else None
 
 class IO(DynamicEntity):
     name = 'Input/Output'
@@ -46,7 +53,7 @@ class IO(DynamicEntity):
         self.input = Input(stdscr, debug_track, debug_mode, self)
 
         self.memory = Memory()
-        self.output.resize(self.memory)
+        self.output.resize()
 
     def connect_to_level(self, level):
         self.level = level

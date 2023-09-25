@@ -65,6 +65,10 @@ class Input:
             if not memory.is_skipping: time.sleep(0.2)  # TODO flexible
             return
 
+        if self.io.output.notification.visible:
+            while (key := self.main.getch()) not in self.submit_hotkey: pass
+            self.io.rerender()
+
         while True:
             if self.debug_track is not None:
                 hotkey = ord(next(self.debug_track))
@@ -161,7 +165,7 @@ def generate_default_hotkeys(debug_mode):
 
     @_hotkey(curses.KEY_RESIZE, non_action=True)
     def resize_gui(subject, perception, io):
-        io.output.resize(io.memory)
+        io.output.resize()
 
     if debug_mode:
         @_hotkey("`", non_action=True)

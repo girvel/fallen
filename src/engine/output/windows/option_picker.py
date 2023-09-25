@@ -12,11 +12,13 @@ class OptionPicker:
         self.last_parent_h = None
         self.last_parent_w = None
 
-    def resize(self, h, w, memory):
+    def resize(self, h, w):
         self.last_parent_h = h
         self.last_parent_w = w
 
-        if memory.options is None: return
+    def responsive_resize(self, memory):
+        h = self.last_parent_h
+        w = self.last_parent_w
 
         own_w = min(40, w - 1)
         own_h = min(h, 2 + sum(math.ceil(len(o) / (own_w - 2)) for o in memory.options))
@@ -27,7 +29,7 @@ class OptionPicker:
     def render(self, subject, perception, level, memory):
         if memory.options is None: return
 
-        self.resize(self.last_parent_h, self.last_parent_w, memory)
+        self.responsive_resize(memory)
         h, w = self._window.getmaxyx()
 
         self._window.clear()

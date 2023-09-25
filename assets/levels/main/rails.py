@@ -7,6 +7,7 @@ from src.engine.ai.pather import PathTarget
 from src.engine.rails_base import RailsBase, scene
 from assets.levels.main.entities.physical.brother import Brother
 from assets.levels.main.entities.physical.mother import Mother
+from src.entities.ais.io import Quest
 from src.lib.concurrency import wait_for, wait_while
 from src.lib.query import Query
 from src.lib.vector import d2
@@ -27,10 +28,15 @@ class Rails(RailsBase):
             away=(139, 0),
         )
 
+        self.quests = Entity(
+            find_someone_to_fight=Quest("Найти что-нибудь порубить")
+        )
+
     @scene(lambda self: True)
     def introduction(self):
         c = self.characters
         p = self.positions
+        q = self.quests
         memory = self.player.ai.memory
 
         self.disable_current_scene()
@@ -124,6 +130,7 @@ class Rails(RailsBase):
             yield {self.player: Say("Это меч. Очень красивый.", True)}
 
         yield from wait_for(10)
+        memory.add_quest(q.find_someone_to_fight)
 
         yield from self.end_cutscene()
 

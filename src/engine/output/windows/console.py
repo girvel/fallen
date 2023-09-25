@@ -10,7 +10,7 @@ class Console:
         self.buffer = ""
         self.w = w
 
-    def resize(self, h, w, memory):
+    def resize(self, h, w):
         self._window.resize(h - 1, self.w)
         self._window.mvwin(0, w - self.w)
 

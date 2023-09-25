@@ -10,7 +10,7 @@ class DialogueLine:
     def __init__(self):
         self._window = curses.newwin(1, 1, 0, 0)
 
-    def resize(self, h, w, memory):
+    def resize(self, h, w):
         this_w = min(80, w - 20)
         this_h = 7
 
