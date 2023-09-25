@@ -3,7 +3,7 @@ from ecs import DynamicEntity
 
 from src.engine.acting.damage import Weapon, Health, DamageKind, ArmorKind
 from src.engine.assets import names
-from src.engine.attitude.implementation import common_attitude
+from src.engine.attitude.implementation import common_attitude, Faction
 from src.entities.ais.peasant_ai import PeasantAi
 from src.entities.tiles.body import body_factory
 from src.lib.vector import sub2, area2, map_grid
@@ -15,6 +15,7 @@ class Peasant(DynamicEntity):
     character = 'p'
     house = None
     on_death = body_factory
+    faction = Faction.Villagers
 
     def __init__(self):
         self.sex = random.choice(["male", "female"])
