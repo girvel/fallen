@@ -26,8 +26,8 @@ class IO(OwnedEntity):
     level = None
     cutscene_aware_flag = None
 
-    def __init__(self, stdscr, debug_track, debug_mode):
-        self.output = Output(stdscr, debug_mode, self)
+    def __init__(self, stdscr, debug_track, debug_mode, no_render):
+        self.output = Output(stdscr, debug_mode, no_render, self)
         self.input = Input(stdscr, debug_track, debug_mode, self)
 
         self.memory = Memory()

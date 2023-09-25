@@ -13,7 +13,7 @@ from src.lib.vector import grid_size
 from src.systems import acting, destruction_and_creation, ai, death
 
 
-def init(stdscr, track, debug_mode):
+def init(stdscr, track, debug_mode, no_render):
     logging.info("Creating & filling the metasystem")
     ms = Metasystem()
 
@@ -34,7 +34,12 @@ def init(stdscr, track, debug_mode):
 
     ms.add(Hades())
     ms.add(Genesis())
-    level = ms.add(Level(ms, Path("assets/levels/main"), IO(stdscr, debug_track=track, debug_mode=debug_mode)))
+
+    level = ms.add(Level(
+        ms, Path("assets/levels/main"),
+        IO(stdscr, debug_track=track, debug_mode=debug_mode, no_render=no_render)
+    ))
+
     ms.add(TransparencyCache(grid_size(level.grids.physical)))
 
     logging.info("Starting game cycle")

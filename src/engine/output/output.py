@@ -8,10 +8,11 @@ from src.engine.output.windows.panel import Panel
 
 
 class Output:
-    def __init__(self, stdscr, debug_mode, io):
+    def __init__(self, stdscr, debug_mode, no_render, io):
         Colors.initialize()
 
         panel_w = 35
+        self.no_render = no_render
         self.main = stdscr
         self.game = Game(panel_w)
         self.panel = Panel(panel_w, io)
@@ -33,6 +34,8 @@ class Output:
 
     def render(self, subject, perception, level, memory):
         self.main.refresh()
+
+        if self.no_render: return
 
         for window in self.execution_order:
             window.render(subject, perception, level, memory)

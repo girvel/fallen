@@ -12,25 +12,31 @@ from src import init_ecs
 from src.init_logging import init_logging
 
 
-def main(track_file: Optional[str] = None, debug_mode: bool = False):
+def main(
+    track_file: Optional[str] = None,
+    debug_mode: bool = False,
+    no_render: bool = False,
+):
     """
     Launch the Fallen RPG
 
     Args:
         track_file: file to redirect input from
-        debug_mode: whether to enable debug console
+        debug_mode: whether to enable debug console & utilities
+        no_render: whether to disable render
     """
+
     init_logging()
     logging.info("Started")
 
     track = track_file and Path(track_file).read_text().replace("\n", "")
-    logging.info(bool(track))
     if track:
         t = time()
 
     curses.wrapper(init_ecs.init,
         track=track,
-        debug_mode=debug_mode
+        debug_mode=debug_mode,
+        no_render=no_render,
     )
 
     if track:
