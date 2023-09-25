@@ -12,6 +12,7 @@ from src.lib.vector import floordiv2, sub2
 class RailsBase(DynamicEntity):
     name = "Rails"
     rails_flag = None
+    current_scene = None
 
     def __init__(self, level):
         self.player = level.player
@@ -44,6 +45,10 @@ class RailsBase(DynamicEntity):
 
     def scene_by_name(self, name):
         return next(s for s in self.scenes if s.name == name)
+
+    def disable_current_scene(self):
+        if self.current_scene is None: return
+        self.current_scene.enabled = False
 
 
 @dataclass

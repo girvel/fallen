@@ -29,12 +29,11 @@ class Rails(RailsBase):
 
     @scene(lambda self: True)
     def introduction(self):
-        self.scene_by_name("introduction").enabled = False
-
         c = self.characters
         p = self.positions
         memory = self.player.ai.memory
 
+        self.disable_current_scene()
         yield from self.start_cutscene()
         yield from self.center_camera()
 
@@ -133,6 +132,7 @@ class Rails(RailsBase):
 
     @scene(lambda self: d2(self.characters.brother.p, self.positions.before_away) <= 2)
     def brother_path_middlepoint(self):
+        self.disable_current_scene()
         self.characters.brother.ai.pather.going_to = PathTarget.Some(self.positions.away)
         yield
 
@@ -145,7 +145,7 @@ class Rails(RailsBase):
         c = self.characters
         p = self.positions
 
-        self.scene_by_name("brother_stops_player").enabled = False
+        self.disable_current_scene()
         yield from self.start_cutscene()
         yield from self.center_camera()
 
@@ -178,6 +178,6 @@ class Rails(RailsBase):
     def brother_and_mother_leave(self):
         c = self.characters
 
-        self.scene_by_name("brother_and_mother_leave").enabled = False  # TODO more portable way to do it
+        self.disable_current_scene()
 
         yield {c.mother: Leave(), c.brother: Leave()}
