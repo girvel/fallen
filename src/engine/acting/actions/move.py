@@ -1,7 +1,7 @@
 from src.lib.vector import add2, grid_set, grid_get, int2
 
 from dataclasses import dataclass
-from ecs import OwnedEntity
+from ecs import DynamicEntity
 from src.engine.acting.action import Action
 from src.entities.special.genesis import Genesis
 from src.entities.special.hades import Hades
@@ -12,7 +12,7 @@ from src.entities.special.level import Level
 class Move(Action):
     v: int2
 
-    def execute(self, actor: OwnedEntity, level: Level, hades: Hades, genesis: Genesis):
+    def execute(self, actor: DynamicEntity, level: Level, hades: Hades, genesis: Genesis):
         next_p = add2(actor.p, self.v)
         if grid_get(level.grids.physical, next_p, object()) is not None: return
 

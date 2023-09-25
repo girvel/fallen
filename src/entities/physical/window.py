@@ -1,9 +1,9 @@
-from ecs import OwnedEntity
+from ecs import DynamicEntity
 
 from src.engine.acting.damage import ArmorKind, Health
 
 
-class Window(OwnedEntity):
+class Window(DynamicEntity):
     name = 'Window'
     character = '='
 

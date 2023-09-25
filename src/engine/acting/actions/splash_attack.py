@@ -2,7 +2,7 @@ from src.lib.vector import grid_get, add2, int2
 from src.engine.acting.damage import inflict_damage
 
 from dataclasses import dataclass
-from ecs import OwnedEntity
+from ecs import DynamicEntity
 from src.engine.acting.action import Action
 from src.entities.special.genesis import Genesis
 from src.entities.special.hades import Hades
@@ -14,7 +14,7 @@ class SplashAttack(Action):
     position: int2
     r: int
 
-    def execute(self, actor: OwnedEntity, level: Level, hades: Hades, genesis: Genesis):
+    def execute(self, actor: DynamicEntity, level: Level, hades: Hades, genesis: Genesis):
         for dy in range(-self.r, self.r + 1):
             for dx in range(abs(dy) - self.r, self.r - abs(dy) + 1):
                 if (target := grid_get(level.grids.physical, add2(self.position, (dx, dy)))) is not None:

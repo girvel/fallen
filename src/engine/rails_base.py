@@ -4,12 +4,12 @@ from collections import namedtuple
 from dataclasses import dataclass
 from typing import Callable, Any
 
-from ecs import OwnedEntity
+from ecs import DynamicEntity
 
 from src.lib.vector import floordiv2, sub2
 
 
-class RailsBase(OwnedEntity):
+class RailsBase(DynamicEntity):
     name = "Rails"
     rails_flag = None
 

@@ -1,6 +1,6 @@
 import random
 
-from ecs import OwnedEntity
+from ecs import DynamicEntity
 
 from src.engine.acting.damage import Health, Weapon, ArmorKind, DamageKind
 from src.engine.assets import names
@@ -13,7 +13,7 @@ from src.lib.vector import map_grid
 from src.systems.ai import Kind, Senses
 
 
-class Knight(OwnedEntity):
+class Knight(DynamicEntity):
     name = 'knight'
     character = 'k'
     color = Colors.Cyan

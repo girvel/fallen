@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 
-from ecs import OwnedEntity
+from ecs import DynamicEntity
 
 from src.engine.acting.action import Action
 from src.entities.effects.fire import Fire
@@ -15,7 +15,7 @@ from src.lib.vector import add2, mul2, flip2, grid_get, int2
 class CastFireFlow(Action):
     v: int2
 
-    def execute(self, actor: OwnedEntity, level: Level, hades: Hades, genesis: Genesis) -> object:
+    def execute(self, actor: DynamicEntity, level: Level, hades: Hades, genesis: Genesis) -> object:
         length = 18
 
         for dv in range(0, length):

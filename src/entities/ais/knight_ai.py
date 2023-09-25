@@ -1,4 +1,4 @@
-from ecs import OwnedEntity
+from ecs import DynamicEntity
 
 from src.engine.acting.actions.say import Say
 from src.engine.ai.attacker import Attacker
@@ -9,7 +9,7 @@ from src.engine.ai.pather import Pather
 from src.systems.ai import Perception
 
 
-class KnightAi(OwnedEntity):
+class KnightAi(DynamicEntity):
     def __init__(self):
         self.pather = Pather()
         self.follower = Follower(3)

@@ -1,7 +1,7 @@
-from ecs import OwnedEntity
+from ecs import DynamicEntity
 
 
-class Sound(OwnedEntity):
+class Sound(DynamicEntity):
     name = 'Sound'
     layer = 'sounds'
     sound_flag = None

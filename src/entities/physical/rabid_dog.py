@@ -1,4 +1,4 @@
-from ecs import OwnedEntity
+from ecs import DynamicEntity
 
 from src.engine.acting.damage import Weapon, Health, DamageKind, ArmorKind
 from src.engine.output.colors import Colors
@@ -10,7 +10,7 @@ from src.lib.vector import map_grid
 from src.systems.ai import Kind, Senses
 
 
-class RabidDog(OwnedEntity):
+class RabidDog(DynamicEntity):
     name = 'Rabid dog'
     character = 'd'
     color = Colors.Magenta

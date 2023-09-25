@@ -1,11 +1,11 @@
-from ecs import OwnedEntity
+from ecs import DynamicEntity
 
 from src.engine.acting.damage import Health, ArmorKind
 from src.engine.output.colors import Colors
 
 
 
-class ThickWall(OwnedEntity):
+class ThickWall(DynamicEntity):
     name = 'Thick wall'
     character = '#'
     color = Colors.Yellow

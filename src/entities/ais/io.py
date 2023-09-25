@@ -2,7 +2,7 @@ import logging
 from dataclasses import dataclass, field
 from typing import Optional
 
-from ecs import OwnedEntity
+from ecs import DynamicEntity
 
 from src.engine.acting.action import Action
 from src.engine.input.input import Input
@@ -21,7 +21,7 @@ class Memory:
     in_cutscene: bool = False
     is_skipping: bool = False
 
-class IO(OwnedEntity):
+class IO(DynamicEntity):
     name = 'Input/Output'
     level = None
     cutscene_aware_flag = None

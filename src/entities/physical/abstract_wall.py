@@ -1,11 +1,11 @@
-from ecs import OwnedEntity
+from ecs import DynamicEntity
 
 from src.engine.acting.damage import Health, ArmorKind
 from src.engine.output.colors import Colors
 
 
 
-class AbstractWall(OwnedEntity):
+class AbstractWall(DynamicEntity):
     name = 'Wall'
     character = None
     color = Colors.Yellow

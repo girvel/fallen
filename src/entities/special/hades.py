@@ -1,7 +1,7 @@
-from ecs import OwnedEntity
+from ecs import DynamicEntity
 
 
-class Hades(OwnedEntity):
+class Hades(DynamicEntity):
     name = 'hades'
 
     def __init__(self):

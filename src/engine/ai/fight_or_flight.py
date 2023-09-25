@@ -1,6 +1,6 @@
 import random
 
-from ecs import OwnedEntity, exists
+from ecs import DynamicEntity, exists
 from rust_enum import Option
 
 from src.engine.ai.pather import PathTarget
@@ -9,13 +9,13 @@ from src.systems.ai import Perception
 
 
 class FightOrFlight:
-    current_target: Option[OwnedEntity] = Option.Nothing()
+    current_target: Option[DynamicEntity] = Option.Nothing()
 
     def __init__(self, prefer_fight: bool):
         self.prefer_fight = prefer_fight
 
     def try_producing_target(
-        self, subject: OwnedEntity, perception: Perception
+        self, subject: DynamicEntity, perception: Perception
     ) -> Option[PathTarget]:
 
         if target := self.current_target.unwrap_or():

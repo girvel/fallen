@@ -1,6 +1,6 @@
 from typing import Any, Optional
 
-from ecs import OwnedEntity
+from ecs import DynamicEntity
 
 from src.engine.output.colors import Colors
 from src.entities.special.genesis import Genesis
@@ -9,7 +9,7 @@ from src.entities.special.level import Level
 from src.lib.vector import int2
 
 
-class Body(OwnedEntity):
+class Body(DynamicEntity):
     character = '&'
     color = Colors.Red
     layer = "tiles"
@@ -22,7 +22,7 @@ class Body(OwnedEntity):
             self.p = p
 
 
-def body_factory(base: OwnedEntity, hades: Hades, genesis: Genesis, level: Level):
+def body_factory(base: DynamicEntity, hades: Hades, genesis: Genesis, level: Level):
     items = []
 
     if hasattr(base, "weapon"):

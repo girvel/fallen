@@ -1,7 +1,7 @@
-from ecs import OwnedEntity
+from ecs import DynamicEntity
 
 
-class Genesis(OwnedEntity):
+class Genesis(DynamicEntity):
     name = 'genesis'
 
     def __init__(self):

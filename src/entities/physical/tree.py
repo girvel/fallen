@@ -1,13 +1,13 @@
 import random
 
-from ecs import OwnedEntity
+from ecs import DynamicEntity
 
 from src.engine.acting.damage import Health, ArmorKind
 from src.engine.output.colors import Colors
 
 
 
-class Tree(OwnedEntity):
+class Tree(DynamicEntity):
     name = 'Tree'
     character = 'T'
     color = Colors.Green

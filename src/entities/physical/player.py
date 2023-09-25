@@ -1,6 +1,6 @@
 import random
 
-from ecs import OwnedEntity
+from ecs import DynamicEntity
 
 from src.engine.acting.damage import Weapon, Health, DamageKind, ArmorKind
 from src.engine.assets import strange_names
@@ -12,7 +12,7 @@ from src.lib.vector import map_grid
 from src.systems.ai import Kind, Senses
 
 
-class Player(OwnedEntity):
+class Player(DynamicEntity):
     character = '@'
 
     ai = None  # set to IO on level loading

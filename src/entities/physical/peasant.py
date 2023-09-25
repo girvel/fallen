@@ -1,5 +1,5 @@
 import random
-from ecs import OwnedEntity
+from ecs import DynamicEntity
 
 from src.engine.acting.damage import Weapon, Health, DamageKind, ArmorKind
 from src.engine.assets import names
@@ -11,7 +11,7 @@ from src.lib.vector import sub2, area2, map_grid
 from src.systems.ai import Kind, Senses
 
 
-class Peasant(OwnedEntity):
+class Peasant(DynamicEntity):
     character = 'p'
     house = None
     on_death = body_factory

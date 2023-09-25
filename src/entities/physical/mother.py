@@ -1,4 +1,4 @@
-from ecs import OwnedEntity
+from ecs import DynamicEntity
 
 from src.engine.acting.damage import Health, Weapon, ArmorKind, DamageKind
 from src.engine.output.colors import Colors
@@ -8,7 +8,7 @@ from src.lib.vector import map_grid
 from src.systems.ai import Kind, Senses
 
 
-class Mother(OwnedEntity):
+class Mother(DynamicEntity):
     character = 'm'
     color = Colors.Blue
     on_death = body_factory

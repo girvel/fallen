@@ -1,7 +1,7 @@
-from ecs import OwnedEntity
+from ecs import DynamicEntity
 
 
-class Zone(OwnedEntity):
+class Zone(DynamicEntity):
     def __init__(self, name, center, attractiveness):
         self.name = name
         self.center = tuple(center)  # TODO figure out how to do this at loading markup

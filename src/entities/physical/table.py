@@ -1,4 +1,4 @@
-from ecs import OwnedEntity
+from ecs import DynamicEntity
 
 from src.engine.acting.damage import ArmorKind, Health
 from src.engine.output.colors import Colors
@@ -6,7 +6,7 @@ from src.engine.output.colors import Colors
 from src.systems.ai import Kind
 
 
-class Table(OwnedEntity):
+class Table(DynamicEntity):
     name = 'Table'
     character = '"'
     color = Colors.Yellow

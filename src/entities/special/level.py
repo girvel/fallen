@@ -4,7 +4,7 @@ from pathlib import Path
 from typing import TypeVar, Callable
 
 import toml as toml
-from ecs import OwnedEntity, Entity
+from ecs import DynamicEntity, Entity
 from rust_enum import Option
 
 from src.entities.markup.house import House
@@ -24,7 +24,7 @@ def load_palette_from(path):
 
     return result
 
-class Level(OwnedEntity):
+class Level(DynamicEntity):
     name = 'level_container'
 
     T = TypeVar('T')
@@ -89,7 +89,7 @@ class Level(OwnedEntity):
 
         self.rails_effect = {}
 
-    def query(self, request: Callable[[OwnedEntity], bool]) -> Option[OwnedEntity]:
+    def query(self, request: Callable[[DynamicEntity], bool]) -> Option[DynamicEntity]:
         return next((  # TODO Option.next?
             Option.Some(e)
             for _, layer in self.grids

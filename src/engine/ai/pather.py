@@ -1,5 +1,5 @@
 import numpy
-from ecs import OwnedEntity
+from ecs import DynamicEntity
 from rust_enum import Option
 from tcod.path import Pathfinder, SimpleGraph
 
@@ -17,7 +17,7 @@ class Pather:
         self.path = []
         self.free_directions = None
 
-    def try_going(self, subject: OwnedEntity, perception: Perception) -> Option[Move]:
+    def try_going(self, subject: DynamicEntity, perception: Perception) -> Option[Move]:
         # Update public self.free_directions
         self.free_directions = [
             d for d in directions if perception.vision[subject.layer].get(add2(subject.p, d)) is None

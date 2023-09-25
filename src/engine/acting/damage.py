@@ -2,7 +2,7 @@ from dataclasses import dataclass
 from pathlib import Path
 
 import yaml
-from ecs import Entity, OwnedEntity
+from ecs import Entity, DynamicEntity
 
 import logging
 
@@ -26,7 +26,7 @@ class Health:
         self.armor_kind = armor_kind
 
 
-def inflict_damage(target: OwnedEntity, weapon: Weapon, hades: Hades):
+def inflict_damage(target: DynamicEntity, weapon: Weapon, hades: Hades):
     if "health" not in target: return
 
     armor = armor_data[target.health.armor_kind]

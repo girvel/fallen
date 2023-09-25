@@ -1,26 +1,26 @@
 from dataclasses import dataclass, field
 
-from ecs import OwnedEntity
+from ecs import DynamicEntity
 
 from src.lib.toolkit import random_round
 
 
 @dataclass
 class Attitude:
-    relations: dict[OwnedEntity | str, int] = field(default_factory=dict)
+    relations: dict[DynamicEntity | str, int] = field(default_factory=dict)
 
     def copy(self):
         return Attitude(
             relations=self.relations.copy(),
         )
 
-    def get(self, target: OwnedEntity) -> int:
+    def get(self, target: DynamicEntity) -> int:
         return (
             self.relations.get(target, 0) +
             (self.relations.get(target.faction, 0) if hasattr(target, "faction") else 0)
         )
 
-    def move(self, target: OwnedEntity, shift: int | float, personalization_k: float = .5):
+    def move(self, target: DynamicEntity, shift: int | float, personalization_k: float = .5):
         if target not in self.relations:
             self.relations[target] = 0
 

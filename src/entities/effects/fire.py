@@ -1,4 +1,4 @@
-from ecs import OwnedEntity
+from ecs import DynamicEntity
 
 from src.engine.acting.damage import Weapon, DamageKind
 from src.engine.attitude.implementation import Faction
@@ -9,7 +9,7 @@ from src.lib.toolkit import death_chance_from_half_life
 from src.systems.ai import Senses
 
 
-class Fire(OwnedEntity):
+class Fire(DynamicEntity):
     name = 'fire'
     character = '*'
     color = Colors.Red

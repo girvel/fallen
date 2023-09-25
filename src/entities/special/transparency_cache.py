@@ -1,10 +1,10 @@
 import logging
 
 import numpy
-from ecs import OwnedEntity
+from ecs import DynamicEntity
 
 
-class TransparencyCache(OwnedEntity):
+class TransparencyCache(DynamicEntity):
     name = 'Transparency Cache'
 
     def __init__(self, size):

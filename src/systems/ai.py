@@ -5,7 +5,7 @@ from typing import Any, TypeVar
 
 import numpy
 import tcod.map
-from ecs import create_system, OwnedEntity, Entity
+from ecs import create_system, DynamicEntity, Entity
 from line_profiler import profile
 from numpy import ndarray, dtype
 
@@ -31,15 +31,15 @@ class Senses:
 class Perception:
     vision: Entity
     hearing: {int2: Sound}
-    smell: {int2: OwnedEntity}
+    smell: {int2: DynamicEntity}
 
 @dataclass
 class GridProxy:
-    _grid: tuple[list[list[OwnedEntity]], int2]
+    _grid: tuple[list[list[DynamicEntity]], int2]
     _avaliability_mask: ndarray[Any, dtype[bool]]
 
     T = TypeVar('T')
-    def get(self, key: int2, default: T = None) -> OwnedEntity | T:
+    def get(self, key: int2, default: T = None) -> DynamicEntity | T:
         if not fits_in_grid(self._grid, key) or not self._avaliability_mask[key]:
             return default
 

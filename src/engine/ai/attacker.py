@@ -1,6 +1,6 @@
 import random
 
-from ecs import OwnedEntity, exists
+from ecs import DynamicEntity, exists
 from rust_enum import Option
 
 from src.engine.acting.actions.attack import Attack
@@ -10,7 +10,7 @@ from src.systems.ai import Perception
 
 class Attacker:
     def try_attacking(
-        self, subject: OwnedEntity, perception: Perception, current_target: Option[OwnedEntity] = Option.Nothing()
+        self, subject: DynamicEntity, perception: Perception, current_target: Option[DynamicEntity] = Option.Nothing()
     ) -> Option[Attack]:
 
         if (target := current_target.unwrap_or()) and exists(target):

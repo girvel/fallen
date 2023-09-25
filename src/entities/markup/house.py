@@ -1,7 +1,7 @@
-from ecs import OwnedEntity
+from ecs import DynamicEntity
 
 
-class House(OwnedEntity):
+class House(DynamicEntity):
     name = 'house'
 
     def __init__(self, start, end, entrance):
