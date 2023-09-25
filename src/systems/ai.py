@@ -6,12 +6,10 @@ from typing import Any, TypeVar
 import numpy
 import tcod.map
 from ecs import create_system, DynamicEntity, Entity
-from line_profiler import profile
 from numpy import ndarray, dtype
 
 from src.entities.special.sound import Sound
-from src.lib.query import Query
-from src.lib.vector import add2, grid_get, grid_set, int2, fits_in_grid, grid_unsafe_get, grid_size
+from src.lib.vector import grid_set, int2, fits_in_grid, grid_unsafe_get, grid_size
 
 
 class Kind(Enum):
@@ -37,6 +35,8 @@ class Perception:
 class GridProxy:
     _grid: tuple[list[list[DynamicEntity]], int2]
     _avaliability_mask: ndarray[Any, dtype[bool]]
+    _start: int2
+    _end: int2
 
     T = TypeVar('T')
     def get(self, key: int2, default: T = None) -> DynamicEntity | T:
@@ -47,65 +47,43 @@ class GridProxy:
 
     def values(self):
         return (
-            e
-            for y, row in enumerate(self._grid[0])
-            for x, e in enumerate(row)
+            grid_unsafe_get(self._grid, (x, y))
+            for x in range(self._start[0], self._end[0])
+            for y in range(self._start[1], self._end[1])
             if self._avaliability_mask[x, y]
         )
 
     def items(self):
         return (
-            ((x, y), e)
-            for y, row in enumerate(self._grid[0])
-            for x, e in enumerate(row)
+            ((x, y), grid_unsafe_get(self._grid, (x, y)))
+            for x in range(self._start[0], self._end[0])
+            for y in range(self._start[1], self._end[1])
             if self._avaliability_mask[x, y]
         )
 
     def __iter__(self):
         return (
             (x, y)
-            for y, row in enumerate(self._grid[0])
-            for x, e in enumerate(row)
+            for x in range(self._start[0], self._end[0])
+            for y in range(self._start[1], self._end[1])
             if self._avaliability_mask[x, y]
         )
 
     def __contains__(self, item: int2) -> bool:
         return fits_in_grid(self._grid, item) and self._avaliability_mask[item]
 
-@profile
-def calculate_vision(grids, transparency, p, r):
-    d = 2 * r + 1
-    array, (level_w, level_h) = grids.physical
 
-    edge = (p[0] - r, p[1] - r)
-    fov = tcod.map.compute_fov(transparency, p, r)
-
-    result = Entity(**{l: {} for l, _ in grids})
-    for y in range(max(edge[1], 0), min(edge[1] + d, level_h)):
-        for x in range(max(edge[0], 0), min(edge[0] + d, level_w)):
-            if not fov[x, y]: continue
-
-            for l, grid in grids:
-                result[l][x, y] = grid[0][y][x]
-
-    return result
-
-def calculate_smell(grid, p, r):
-    result = {}
-
-    for dy in range(-r, r + 1):  # TODO optimize for level borders
-        for dx in range(abs(dy) - r, r - abs(dy) + 1):
-            smell_p = add2(p, (dx, dy))
-            if (entity := grid_get(grid, smell_p)) is not None:
-                result[smell_p] = entity
-
-    return result
-
-
-def create_square_rhombus(radius, position, field_size):
+def create_square_rhombus(position, radius, field_size):
     return numpy.fromfunction(
         lambda x, y: abs(x - position[0]) + abs(y - position[1]) <= radius,
         field_size
+    )
+
+
+def borders_from_radius(p: int2, r: int, size: int2) -> tuple[int2, int2]:
+    return (
+        (max(0, p[0] - r), max(0, p[1] - r)),
+        (min(size[0], p[0] + r + 1), min(size[1], p[1] + r + 1)),
     )
 
 
@@ -138,9 +116,15 @@ def think(subject: 'ai', level: 'grids', cache: 'transparency_array'):
         subject.act = level.rails_effect[subject]
         if not hasattr(subject.ai, "cutscene_aware_flag"): return
 
-    if subject.senses.vision > 0:
-        fov = tcod.map.compute_fov(cache.transparency_array, subject.p, subject.senses.vision)
-        vision = Entity(**{layer: GridProxy(grid, fov) for layer, grid in level.grids})
+    if (r := subject.senses.vision) > 0:
+        fov = tcod.map.compute_fov(cache.transparency_array, subject.p, r)
+        vision = Entity(**{
+            layer: GridProxy(
+                grid, fov,
+                *borders_from_radius(subject.p, r, grid_size(level.grids.physical))
+            )
+            for layer, grid in level.grids
+        })  # TODO level.size
 
         for p, entity in vision.physical.items():
             grid_set(subject.spacial_memory, p, entity is not None and entity.character or ".")
@@ -149,12 +133,16 @@ def think(subject: 'ai', level: 'grids', cache: 'transparency_array'):
 
     act = subject.ai.make_decision(subject, Perception(
         vision,
-        subject.senses.hearing > 0 and GridProxy(level.grids.sounds, create_square_rhombus(
-            subject.senses.hearing, subject.p, grid_size(level.grids.sounds)
-        )),
-        subject.senses.smell > 0 and GridProxy(level.grids.physical, create_square_rhombus(
-            subject.senses.hearing, subject.p, grid_size(level.grids.physical)
-        )),
+        (r := subject.senses.hearing) > 0 and GridProxy(
+            level.grids.sounds,
+            create_square_rhombus(subject.p, r, grid_size(level.grids.sounds)),
+            *borders_from_radius(subject.p, r, grid_size(level.grids.sounds)),
+        ),
+        (r := subject.senses.smell) > 0 and GridProxy(
+            level.grids.physical,
+            create_square_rhombus(subject.p, r, grid_size(level.grids.physical)),
+            *borders_from_radius(subject.p, r, grid_size(level.grids.physical)),
+        ),
     ))
 
     if not is_railed:
