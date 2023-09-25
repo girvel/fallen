@@ -20,12 +20,15 @@ class PeasantAi:
     def __init__(self):
         self.working_period = RandomPeriod(30, 46)
         self.wandering_period = RandomPeriod(20, 36)
+        self.lagging_period = RandomPeriod(4, 11)
         self.pather = Pather()
         self.fight_or_flight = FightOrFlight(False)
         self.fight_or_flight_period = Period(5)
 
     # It is possible to extract ModalAi parent/component?
     def make_decision(self, subject, perception):
+        if self.lagging_period.step(): return
+
         if (
             self.fight_or_flight_period.step()
             and (target := self.fight_or_flight.try_producing_target(subject, perception).unwrap_or())
