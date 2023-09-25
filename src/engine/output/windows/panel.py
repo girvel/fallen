@@ -65,9 +65,9 @@ class Panel:
         )
 
     pretty_hotkeys = {
-        "KEY_MOUSE": "Mouse",
-        "KEY_LEFT": "←",
-        "KEY_RIGHT": "→",
+        curses.KEY_MOUSE: "🐭",
+        curses.KEY_LEFT: "←",
+        curses.KEY_RIGHT: "→",
     }
 
     def _controls(self, subject, perception, level):
@@ -78,9 +78,9 @@ class Panel:
                 name = from_snake_case(f.__name__).capitalize()
 
                 if name in result:
-                    result[name] += ", " + self.pretty_hotkeys.get(hotkey, hotkey)
+                    result[name] += ", " + self.pretty_hotkeys.get(hotkey, chr(hotkey))
                 else:
-                    result[name] = self.pretty_hotkeys.get(hotkey, hotkey)
+                    result[name] = self.pretty_hotkeys.get(hotkey, chr(hotkey))
 
             return list(result.items())
 
