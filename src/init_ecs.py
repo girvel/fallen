@@ -1,5 +1,6 @@
 import logging
 from pathlib import Path
+from time import time
 
 from ecs import Metasystem
 
@@ -46,12 +47,18 @@ def init(stdscr, track, debug_mode, no_render, no_rails):
 
     logging.info("Starting game cycle")
 
+    t = time()
+    update_counter = 0
     try:
         while True:
             ms.update()
+            update_counter += 1
     except KeyboardInterrupt:
         pass
     except Exception as ex:
         logging.exception(ex)
     finally:
+        t = time() - t
+
         logging.info("Finishing game cycle")
+        logging.info(f"FPS: {update_counter / t:.2f}")

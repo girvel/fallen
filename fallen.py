@@ -32,8 +32,6 @@ def main(
     logging.info("Started")
 
     track = track_file and Path(track_file).read_text().replace("\n", "")
-    if track:
-        t = time()
 
     curses.wrapper(init_ecs.init,
         track=track,
@@ -41,10 +39,6 @@ def main(
         no_render=no_render,
         no_rails=no_rails,
     )
-
-    if track:
-        t = time() - t
-        logging.info(f"FPS: {len(track) / t:.2f}")
 
 
 if __name__ == '__main__':
