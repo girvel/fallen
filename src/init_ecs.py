@@ -20,7 +20,7 @@ def init(stdscr, track, debug_mode, no_render, no_rails):
     logging.info("Initializing systems")
 
     for system in [
-        *regeneration.sequence,
+        # *regeneration.sequence,
         *ai.sequence,
         *acting.sequence,
         *death.sequence,
