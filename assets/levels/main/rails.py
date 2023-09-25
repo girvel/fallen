@@ -1,4 +1,4 @@
-from ecs import Entity
+from ecs import Entity, exists
 
 from src.engine.acting.actions.leave import Leave
 from src.engine.acting.actions.say import Say
@@ -170,16 +170,19 @@ class Rails(RailsBase):
         self.player.traits.pain += 1
         self.player.traits.chaos += 1
 
-        c.brother.ai.follower.subject = None
-        c.brother.ai.pather.going_to = PathTarget.Some(p.away)
-        c.mother.ai.follower.subject = c.brother
+        c.brother.ai.follower.subject = c.mother
+        c.brother.ai.pather.going_to = PathTarget.Some(c.mother.p)
+        c.mother.ai.pather.going_to = PathTarget.Some(p.away)
 
-        yield from wait_while(lambda: d2(self.characters.brother.p, self.player.p) <= self.player.senses.vision + 10)
+        yield from wait_while(lambda:
+            d2(self.characters.brother.p, self.positions.away) > 3
+            and d2(self.characters.brother.p, self.player.p) <= self.player.senses.vision + 10
+        )
 
         yield from self.end_cutscene()
 
 
-    @scene(lambda self: all(
+    @scene(lambda self: any(
         d2(e.p, self.positions.away) <= 3 for e in [self.characters.brother, self.characters.mother]
     ))
     def brother_and_mother_leave(self):

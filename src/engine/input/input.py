@@ -1,8 +1,8 @@
 import curses
 import logging
 import re
-import sys
 import time
+from typing import TYPE_CHECKING
 
 from src.engine.acting.actions.attack import Attack
 from src.engine.acting.actions.cast_fire_flow import CastFireFlow
@@ -11,8 +11,6 @@ from src.engine.acting.actions.move import Move
 from src.lib.toolkit import curses_wrong_characters
 from src.lib.vector import add2, up, down, left, right
 from src.systems.ai import Perception
-
-from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
     from src.entities.ais.io import Memory
