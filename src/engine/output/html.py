@@ -43,7 +43,7 @@ class CursesHtmlRenderer(HTMLParser):
         _, w = self.window.getmaxyx()
 
         if self.centering:
-            self.x += (w - self.padding_x - len(data)) // 2
+            self.x += (w - self.padding_x * 2 - len(data)) // 2
 
         data = data.lstrip(" ")
         if len(data) == 0: return

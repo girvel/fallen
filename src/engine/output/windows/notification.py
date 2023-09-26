@@ -1,18 +1,11 @@
-import curses
 import math
 
-from jinja2 import PackageLoader, Environment
-
-from src.engine.output.html import CursesHtmlRenderer
+from src.engine.output.html_window import HtmlWindow
 
 
-class Notification:
+class Notification(HtmlWindow):
     def __init__(self):
-        self._window = curses.newwin(1, 1, 0, 0)
-
-        self.html_renderer = CursesHtmlRenderer()
-        env = Environment(loader=PackageLoader(__name__), autoescape=True)
-        self.template = env.get_template("notification.html")
+        super().__init__(__name__, "notification.html")
         self.visible = False
 
     def resize(self, h, w):
@@ -34,12 +27,4 @@ class Notification:
         if not self.visible: return
 
         self.responsive_resize(notification)
-
-        self._window.clear()
-        self._window.border()
-
-        self.html_renderer.render_template(self._window, 1, 2, self.template,
-            notification=notification,
-        )
-
-        self._window.refresh()
+        self.render_template(notification=notification,)
