@@ -26,6 +26,12 @@ Iterates over all entities that have required fields in all possible combination
 
 Allows to remove long walls of hasattrs from the code. `~Query(e).a.b` returns None if any of the `e`, `e.a`, `e.a.b` is None or else returns the value of `e.a.b`.
 
+```python
+@metrics.append
+def name(subject: DynamicEntity) -> str | bool | None:
+    return ~Query(subject).name
+```
+
 # Rust enums
 
 Just a straightforward copy of Rust enums. Works nicely with new Python's match statement and walrus operator. Has `Option`s with `.unwrap()`, `.unwrap_or()` and everything. Even has a nice wrapper for built-in `next()`, `Option.next()`, which never raises an exception and instead returns `Option.Nothing` if nothing was found or else `Option.Some(value)`. It is really useful because you get a lot of `None`-related errors near `next`s because you forgot to specify what should happen if `None` is returned. Also options are fairly useful in AI modules, where you have to process a bunch of submodules, and each of them conditionally returns something.
@@ -33,3 +39,11 @@ Just a straightforward copy of Rust enums. Works nicely with new Python's match 
 # HTML + Jinja GUI
 
 GUI is rendered from HTML! How cool is that?
+
+```html
+<div>
+    <p>Health: <y>{{subject.health.amount.current}}/{{subject.health.amount.maximum - 1}}</y></p>
+    <p>Armor: <y>{{subject.health.armor_kind}}</y></p>
+    <p>Damage: <y>{{subject.weapon.power}} {{subject.weapon.damage_kind}}</y></p>
+</div>
+```
