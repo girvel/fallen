@@ -32,6 +32,6 @@ class DialogueLine:
                 Colors.Yellow.format()
             )
 
-        add_multiline_string(self._window, 2, 2, h, w, memory.current_sound.content)
+        add_multiline_string(self._window, 2, 2, 1, 2, h, w, memory.current_sound.content)
 
         self._window.refresh()

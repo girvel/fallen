@@ -47,17 +47,23 @@ def import_module(p: Path):
     return module
 
 def add_multiline_string(
-    window, y: int, padding_w: int, h: int, w: int, line: str, color: Colors = Colors.Default,
-) -> int:
-    i = -1
-    for i, l in enumerate(cut_by_length(line, w - padding_w * 2)):
-        if y + i >= h:
-            logging.warning(f"The line is too long to display: '{line}'")
-            return y + i
+    window, y: int, x: int, padding_y: int, padding_x: int, h: int, w: int, text: str, color: Colors = Colors.Default,
+) -> tuple[int, int]:
+    while True:
+        if y >= h - padding_y:
+            logging.warning(f"Cut the text '{text}'")
+            return y, x
 
-        window.addstr(y + i, 2, l, color.format())
+        line = text[:w - padding_x - x]
+        text = text[len(line):]
 
-    return y + i + 1
+        window.addstr(y, x, line, color.format())
+
+        if text == "":
+            return y, x
+
+        y += 1
+        x = padding_x
 
 def crash_safe(f):
     @functools.wraps(f)
