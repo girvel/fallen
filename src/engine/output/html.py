@@ -1,6 +1,7 @@
 from html.parser import HTMLParser
 
 from src.engine.output.colors import Colors
+from src.lib.toolkit import add_multiline_string
 
 
 class CursesHtmlRenderer(HTMLParser):
@@ -11,12 +12,14 @@ class CursesHtmlRenderer(HTMLParser):
     color_stack = [Colors.Default]
     centering = False
 
-    def render_template(self, window, start_y, start_x, template, **kwargs):
+    def render_template(self, window, padding_y, padding_x, template, **kwargs):
         self.window = window
-        self.start_y = start_y
-        self.y = start_y
-        self.x = start_x
-        self.padding_x = start_x
+
+        self.y = padding_y
+        self.x = padding_x
+
+        self.padding_y = padding_y
+        self.padding_x = padding_x
 
         self.feed(template.render(**kwargs).replace("\n", ""))
 
@@ -40,13 +43,18 @@ class CursesHtmlRenderer(HTMLParser):
                 self.x = self.padding_x
 
     def handle_data(self, data):
-        _, w = self.window.getmaxyx()
+        h, w = self.window.getmaxyx()
 
         if self.centering:
-            self.x += (w - self.padding_x * 2 - len(data)) // 2
+            self.x += (w - self.padding_x * 2 - len(data)) // 2  # TODO multiline
 
         data = data.lstrip(" ")
         if len(data) == 0: return
 
-        self.window.addstr(self.y, self.x, data, self.color_stack[-1].format())
-        self.x += len(data)
+        self.y, self.x = add_multiline_string(
+            self.window,
+            self.y, self.x,
+            self.padding_y, self.padding_x,
+            h, w,
+            data, self.color_stack[-1],
+        )

@@ -58,6 +58,7 @@ def add_multiline_string(
         text = text[len(line):]
 
         window.addstr(y, x, line, color.format())
+        x += len(line)
 
         if text == "":
             return y, x
