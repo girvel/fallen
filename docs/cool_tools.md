@@ -29,3 +29,7 @@ Allows to remove long walls of hasattrs from the code. `~Query(e).a.b` returns N
 # Rust enums
 
 Just a straightforward copy of Rust enums. Works nicely with new Python's match statement and walrus operator. Has `Option`s with `.unwrap()`, `.unwrap_or()` and everything. Even has a nice wrapper for built-in `next()`, `Option.next()`, which never raises an exception and instead returns `Option.Nothing` if nothing was found or else `Option.Some(value)`. It is really useful because you get a lot of `None`-related errors near `next`s because you forgot to specify what should happen if `None` is returned. Also options are fairly useful in AI modules, where you have to process a bunch of submodules, and each of them conditionally returns something.
+
+# HTML + Jinja GUI
+
+GUI is rendered from HTML! How cool is that?
