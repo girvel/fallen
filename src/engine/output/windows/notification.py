@@ -34,7 +34,6 @@ class Notification:
         if not self.visible: return
 
         self.responsive_resize(notification)
-        h, w = self._window.getmaxyx()
 
         self._window.clear()
         self._window.border()
