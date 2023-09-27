@@ -26,6 +26,7 @@ class Peasant(DynamicEntity):
         self.senses = Senses(8, 0, 0)
         self.ai = PeasantAi()
         self.attitude = common_attitude()
+        self.attitude.relations[Faction.Villagers] = 50
 
     def after_load(self, level):
         if len(level.markup.houses) > 0:

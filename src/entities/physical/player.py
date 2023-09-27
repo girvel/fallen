@@ -17,7 +17,7 @@ class Player(DynamicEntity):
 
     ai = None  # set to IO on level loading
     act = None
-    faction = Faction.Church
+    faction = None
 
     on_death = body_factory
 

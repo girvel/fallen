@@ -4,6 +4,7 @@ from enum import Enum
 
 from src.engine.acting.actions.move import Move
 from src.engine.ai.fight_or_flight import FightOrFlight
+from src.engine.ai.morale import Morale
 from src.engine.ai.pather import Pather, PathTarget
 from src.entities.physical.table import Table
 from src.lib.period.period import Period
@@ -24,13 +25,16 @@ class PeasantAi:
         self.pather = Pather()
         self.fight_or_flight = FightOrFlight(False)
         self.fight_or_flight_period = Period(5)
+        self.morale = Morale()
 
     # It is possible to extract ModalAi parent/component?
     def make_decision(self, subject, perception):
         if self.lagging_period.step(): return
 
+        is_aggression_around = self.morale.update(subject, perception)
+
         if (
-            self.fight_or_flight_period.step()
+            (is_aggression_around or self.fight_or_flight_period.step())
             and (target := self.fight_or_flight.try_producing_target(subject, perception).unwrap_or())
         ):
             self.pather.going_to = target
