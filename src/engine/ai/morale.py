@@ -13,13 +13,13 @@ class Morale:
     aggression_cost: float = 35
 
     def update(self, subject: DynamicEntity, perception: Perception):
-        aggressives = [
-            e for e in perception.vision.physical.values()
+        attitude_changes = [
+            (e, -self.aggression_cost) for e in perception.vision.physical.values()
             if isinstance(~Query(e).act, Attack) and subject.attitude.get(e.act.target) >= 0
         ]
 
-        for e in aggressives:
-            subject.attitude.move(e, -self.aggression_cost)
-            logging.info(f"{subject.name} does not like what {e.name} is doing (-{self.aggression_cost})")
+        for e, offset in attitude_changes:
+            subject.attitude.move(e, offset)
+            logging.info(f"{subject.name} does not like what {e.name} is doing ({offset} -> {subject.attitude.get(e)})")
 
-        return len(aggressives) > 0
+        return attitude_changes

@@ -1,14 +1,9 @@
-import random
-
 from ecs import DynamicEntity
 
 from src.engine.acting.damage import Weapon, Health, DamageKind, ArmorKind
-from src.engine.assets import strange_names
-from src.engine.attitude.implementation import Faction
 from src.engine.traits import Traits
 from src.entities.tiles.body import body_factory
 from src.lib.vector import map_grid
-
 from src.systems.ai import Kind, Senses
 
 

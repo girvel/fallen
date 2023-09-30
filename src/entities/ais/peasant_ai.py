@@ -3,12 +3,15 @@ import random
 from enum import Enum
 
 from src.engine.acting.actions.move import Move
+from src.engine.acting.actions.say import Say
 from src.engine.ai.fight_or_flight import FightOrFlight
 from src.engine.ai.morale import Morale
 from src.engine.ai.pather import Pather, PathTarget
+from src.engine.meme import Meme
 from src.entities.physical.table import Table
 from src.lib.period.period import Period
 from src.lib.period.random_period import RandomPeriod
+from src.lib.query import Query
 from src.lib.vector import directions, add2, grid_get
 
 
@@ -25,21 +28,38 @@ class PeasantAi:
         self.pather = Pather()
         self.fight_or_flight = FightOrFlight(False)
         self.fight_or_flight_period = Period(5)
+        self.chat_period = RandomPeriod(5, 11)
         self.morale = Morale()
+        self.messages = []
 
     # It is possible to extract ModalAi parent/component?
     def make_decision(self, subject, perception):
         if self.lagging_period.step(): return
 
-        is_aggression_around = self.morale.update(subject, perception)
+        aggressives = self.morale.update(subject, perception)
+
+        for e, offset in aggressives:
+            self.messages.append(Say(f"<Выражает недовольство {e.name}>", meme=Meme.MoraleChange(e, offset)))
 
         if (
-            (is_aggression_around or self.fight_or_flight_period.step())
+            (len(aggressives) > 0 or self.fight_or_flight_period.step())
             and (target := self.fight_or_flight.try_producing_target(subject, perception).unwrap_or())
         ):
             self.pather.going_to = target
 
         if action := self.pather.try_going(subject, perception).unwrap_or(): return action
+
+        if (
+            self.chat_period.step_without_reset()
+            and len(self.messages) > 0
+            and any(
+                ~Query(e).faction == subject.faction
+                for e in perception.vision.physical.values()
+            )
+        ):
+            self.chat_period.reset()
+            message, *self.messages = self.messages
+            return message
 
         match self.mode:
             case Mode.GoHome:
