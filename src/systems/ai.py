@@ -9,7 +9,7 @@ from ecs import create_system, DynamicEntity, Entity
 from numpy import ndarray, dtype
 
 from src.entities.special.sound import Sound
-from src.lib.vector import grid_set, int2, fits_in_grid, grid_unsafe_get, grid_size
+from src.lib.vector import grid_set, int2, fits_in_grid, grid_unsafe_get
 
 
 class Kind(Enum):
@@ -121,10 +121,10 @@ def think(subject: 'ai', level: 'grids', cache: 'transparency_array'):
         vision = Entity(**{
             layer: GridProxy(
                 grid, fov,
-                *borders_from_radius(subject.p, r, grid_size(level.grids.physical))
+                *borders_from_radius(subject.p, r, level.size)
             )
             for layer, grid in level.grids
-        })  # TODO level.size
+        })
 
         for p, entity in vision.physical.items():
             grid_set(subject.spacial_memory, p, entity is not None and entity.character or ".")
@@ -135,13 +135,13 @@ def think(subject: 'ai', level: 'grids', cache: 'transparency_array'):
         vision,
         (r := subject.senses.hearing) > 0 and GridProxy(
             level.grids.sounds,
-            create_square_rhombus(subject.p, r, grid_size(level.grids.sounds)),
-            *borders_from_radius(subject.p, r, grid_size(level.grids.sounds)),
+            create_square_rhombus(subject.p, r, level.size),
+            *borders_from_radius(subject.p, r, level.size),
         ),
         (r := subject.senses.smell) > 0 and GridProxy(
             level.grids.physical,
-            create_square_rhombus(subject.p, r, grid_size(level.grids.physical)),
-            *borders_from_radius(subject.p, r, grid_size(level.grids.physical)),
+            create_square_rhombus(subject.p, r, level.size),
+            *borders_from_radius(subject.p, r, level.size),
         ),
     ))
 

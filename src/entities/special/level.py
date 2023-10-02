@@ -44,11 +44,11 @@ class Level(DynamicEntity):
 
     def __init__(self, ms, path: Path, io: "IO", no_rails: bool):
         level_lines = (path / "grid.txt").read_text().split('\n')
-        size = (max(len(l) for l in level_lines), len(level_lines))
+        self.size = (max(len(l) for l in level_lines), len(level_lines))
 
         after_loads = []
 
-        self.grids = Entity(**{l: create_grid(size, lambda: None) for l in self.layers})
+        self.grids = Entity(**{l: create_grid(self.size, lambda: None) for l in self.layers})
         self.palettes = Entity(**{
             l: load_palette_from(Path("src/entities") / l)
             for l in self.layers
@@ -82,11 +82,15 @@ class Level(DynamicEntity):
                 else:
                     logging.warning(f"Ignored unknown entity `{c}` at {(x, y)}")
 
-        raw_markup = toml.loads((path / "markup.toml").read_text())
-        self.markup = Entity(
-            houses=[ms.add(House(**h)) for h in raw_markup["houses"]],
-            zones=[ms.add(Zone(**h)) for h in raw_markup["zones"]],
-        )
+        markup_path = path / "markup.toml"
+        if markup_path.exists():
+            raw_markup = toml.loads(markup_path.read_text())
+            self.markup = Entity(
+                houses=[ms.add(House(**h)) for h in raw_markup["houses"]],
+                zones=[ms.add(Zone(**h)) for h in raw_markup["zones"]],
+            )
+        else:
+            self.markup = None
 
         for after_load in after_loads:
             after_load(self)

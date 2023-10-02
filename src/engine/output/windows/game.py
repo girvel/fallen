@@ -3,7 +3,7 @@ from statistics import median
 
 from src.engine.acting.actions.inspect import Inspect
 from src.engine.output.colors import get_color_pair, Colors
-from src.lib.vector import floordiv2, grid_size, grid_get, sub2, le2, zero, lt2, add2
+from src.lib.vector import floordiv2, grid_get, sub2, le2, zero, lt2, add2
 
 
 class Game:
@@ -40,7 +40,6 @@ class Game:
 
     def _move_camera(self, subject, level):
         screen_h, screen_w = self._window.getmaxyx()
-        level_w, level_h = grid_size(level.grids.physical)
 
         self.virtual_p = (
             median((
@@ -48,14 +47,14 @@ class Game:
                 subject.p[0] - screen_w + self.following_offset[0],
                 self.virtual_p[0],
                 subject.p[0] - self.following_offset[0],
-                level_w - screen_w,
+                level.size[0] - screen_w,
             )),
             median((
                 0,
                 subject.p[1] - screen_h + self.following_offset[1],
                 self.virtual_p[1],
                 subject.p[1] - self.following_offset[1],
-                level_h - screen_h,
+                level.size[1] - screen_h,
             ))
         )
 

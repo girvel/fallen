@@ -10,8 +10,7 @@ from src.entities.special.hades import Hades
 from src.entities.special.level import Level
 from src.entities.special.transparency_cache import TransparencyCache
 from src.lib.toolkit import crash_safe
-from src.lib.vector import grid_size
-from src.systems import acting, destruction_and_creation, ai, death, regeneration
+from src.systems import acting, destruction_and_creation, ai, death
 
 
 def init(stdscr, track, debug_mode, no_render, no_rails):
@@ -43,7 +42,13 @@ def init(stdscr, track, debug_mode, no_render, no_rails):
         no_rails,
     ))
 
-    ms.add(TransparencyCache(grid_size(level.grids.physical)))
+    # vision_level = ms.add(Level(
+    #     ms, Path("assets/levels/vision"),
+    #     None,
+    #     no_rails,
+    # ))
+
+    ms.add(TransparencyCache(level.size))
 
     logging.info("Starting game cycle")
 
