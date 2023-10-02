@@ -96,6 +96,8 @@ def update_transparency_cache(level: 'grids'):
 
 @create_system
 def run_rails(level: 'grids', hades: 'entities_to_destroy'):
+    if level.rails is None: return
+
     level.rails.current_scene = next((s for s in level.rails.scenes if s.enabled and s.start_predicate()), None)
     if level.rails.current_scene is None: return
 
