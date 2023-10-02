@@ -17,7 +17,7 @@ class DialogueLine:
         self._window.resize(this_h, this_w)
         self._window.mvwin(h - this_h - 2, (w - this_w) // 2)
 
-    def render(self, subject, perception, level, memory):
+    def render(self, subject, perception, memory):
         if memory.current_sound is None: return
 
         h, w = self._window.getmaxyx()

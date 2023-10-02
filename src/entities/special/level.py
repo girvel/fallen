@@ -43,7 +43,7 @@ class Level(DynamicEntity):
     markup = None
     player = None
 
-    def __init__(self, ms, path: Path, io: "IO", no_rails: bool):
+    def __init__(self, ms, path: Path, no_rails: bool):
         level_lines = (path / "grid.txt").read_text().split('\n')
         self.size = (max(len(l) for l in level_lines), len(level_lines))
 
@@ -75,10 +75,6 @@ class Level(DynamicEntity):
 
                     if "after_load" in e:
                         after_loads.append(e.after_load)
-
-                    if c == "@":
-                        self.player = e
-                        e.ai = io
                     break
                 else:
                     logging.warning(f"Ignored unknown entity `{c}` at {(x, y)}")

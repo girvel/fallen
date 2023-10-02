@@ -14,7 +14,7 @@ class Console:
         self._window.resize(h - 1, self.w)
         self._window.mvwin(0, w - self.w)
 
-    def render(self, subject, perception, level, memory):
+    def render(self, subject, perception, memory):
         if not self.visible: return
 
         self._window.clear()

@@ -40,7 +40,7 @@ class Panel:
         self._window.resize(h - 1, self.w)
         self._window.mvwin(0, w - self.w)
 
-    def render(self, subject, perception, level, memory):
+    def render(self, subject, perception, memory):
         if memory.in_cutscene: return
 
         h, w = self._window.getmaxyx()
@@ -48,7 +48,7 @@ class Panel:
         self._window.clear()
         self._window.border()
 
-        self.panes[self.pane_i.current](subject, perception, level, memory)
+        self.panes[self.pane_i.current](subject, perception, memory)
 
         if not self.pane_i.is_min():
             self._window.addstr(h - 2, 2, "<", Colors.Yellow.format())
@@ -61,12 +61,10 @@ class Panel:
 
         self._window.refresh()
 
-    def _stats(self, subject, perception, level, memory):
+    def _stats(self, subject, perception, memory):
         inspected = "act" in subject and isinstance(subject.act, Inspect) and subject.act.subject or None
         self.html_renderer.render_template(self._window, 1, 2, self.stats_template,
             subject=subject,
-            perception=perception,
-            level=level,
             mode="MOVE" if self.mode == Move else "<rw>ATTACK</rw>",
             inspection=(subject := ~Query(subject).act.subject) and inspect(subject),
         )
@@ -77,7 +75,7 @@ class Panel:
         curses.KEY_RIGHT: "→",
     }
 
-    def _controls(self, subject, perception, level, memory):
+    def _controls(self, subject, perception, memory):
         def reduce_hotkeys(hotkey_collection):
             result = {}
 
@@ -92,9 +90,6 @@ class Panel:
             return list(result.items())
 
         self.html_renderer.render_template(self._window, 1, 2, self.controls_template,
-            subject=subject,
-            perception=perception,
-            level=level,
             action_hotkeys=reduce_hotkeys(self.io.input.action_hotkeys),
             other_hotkeys=reduce_hotkeys(self.io.input.other_hotkeys),
         )

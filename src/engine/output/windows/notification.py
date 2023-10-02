@@ -22,7 +22,7 @@ class Notification(HtmlWindow):
         self._window.resize(own_h, own_w)
         self._window.mvwin((h - own_h) // 2, (w - own_w) // 2)
 
-    def render(self, subject, perception, level, memory):
+    def render(self, subject, perception, memory):
         self.visible = (notification := memory.pop_notification()) is not None
         if not self.visible: return
 

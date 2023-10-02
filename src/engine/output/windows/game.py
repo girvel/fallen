@@ -33,12 +33,12 @@ class Game:
             self._window.resize(h - 1, w - self.panel_w)
             self.following_offset = floordiv2((w - self.panel_w, h - 1), 3)
 
-    def render(self, subject, perception, level, memory):
+    def render(self, subject, perception, memory):
         self._responsive_resize(memory)
-        self._move_camera(subject, level)
-        self._display_perception(subject, perception, level, memory)
+        self._move_camera(subject)
+        self._display_perception(subject, perception, memory)
 
-    def _move_camera(self, subject, level):
+    def _move_camera(self, subject):
         screen_h, screen_w = self._window.getmaxyx()
 
         self.virtual_p = (
@@ -47,18 +47,18 @@ class Game:
                 subject.p[0] - screen_w + self.following_offset[0],
                 self.virtual_p[0],
                 subject.p[0] - self.following_offset[0],
-                level.size[0] - screen_w,
+                subject.level.size[0] - screen_w,
             )),
             median((
                 0,
                 subject.p[1] - screen_h + self.following_offset[1],
                 self.virtual_p[1],
                 subject.p[1] - self.following_offset[1],
-                level.size[1] - screen_h,
+                subject.level.size[1] - screen_h,
             ))
         )
 
-    def _display_perception(self, subject, perception, level, memory):
+    def _display_perception(self, subject, perception, memory):
         self._window.clear()
         h, w = self._window.getmaxyx()
         screen_size = (w - 1, h)
@@ -74,7 +74,7 @@ class Game:
             if not (le2(zero, rp) and lt2(rp, screen_size)): continue
 
             for layer in self.layers_display_order:
-                if (entity := grid_get(level.grids[layer], p)) is None: continue
+                if (entity := grid_get(subject.level.grids[layer], p)) is None: continue
 
                 character = entity.character
                 color = get_color_pair(entity) | (

@@ -18,6 +18,7 @@ class Rails(RailsBase):
         super().__init__(level)
 
         self.characters = Entity(
+            player=self.get_player(),
             mother=level.query(lambda e: ~Query(e).character == Mother.character).unwrap(),
             brother=level.query(lambda e: ~Query(e).character == Brother.character).unwrap(),
         )
@@ -37,14 +38,14 @@ class Rails(RailsBase):
         c = self.characters
         p = self.positions
         q = self.quests
-        memory = self.player.ai.memory
+        memory = self.get_player().ai.memory
 
         self.disable_current_scene()
         yield from self.start_cutscene()
         yield from self.center_camera()
 
         yield {c.brother: Say("О, секунду, совсем забыл.")}
-        yield {self.player: Say("Улыбка брата излучает теплоту.", True)}
+        yield {c.player: Say("Улыбка брата излучает теплоту.", True)}
         yield {c.mother: Say("Хью, нам пора идти.")}
         yield {c.brother: Say("Мам, иди вперёд, я догоню.")}
 
@@ -52,7 +53,7 @@ class Rails(RailsBase):
 
         yield from wait_for(2)
 
-        yield {self.player: Say(
+        yield {c.player: Say(
             "Вы стоите в обшарпанной деревянной прихожей; цветочные горшки усеивают каждую горизонтальную поверхность;"
             " странное жёсткое чувство упирается в кадык.",
             True
@@ -61,8 +62,8 @@ class Rails(RailsBase):
         yield from wait_while(lambda: d2(c.mother.p, c.brother.p) < 7)
 
         yield {c.brother: Say("Вот, смотри.")}
-        yield {self.player: Say("В твоих руках оказывается длинный свёрток льняной ткани.", True)}
-        self.player.weapon = Weapon(5, DamageKind.Slashing)
+        yield {c.player: Say("В твоих руках оказывается длинный свёрток льняной ткани.", True)}
+        c.player.weapon = Weapon(5, DamageKind.Slashing)
 
         yield from self.options({
             (look := "Развязать бечёвку"): None,
@@ -70,14 +71,14 @@ class Rails(RailsBase):
         })
 
         if memory.last_selected_option == look:
-            self.player.traits.naivity += 1
-            yield {self.player: Say("Это меч. Очень красивый.", True)}
+            c.player.traits.naivity += 1
+            yield {c.player: Say("Это меч. Очень красивый.", True)}
 
             yield {c.brother: Say("Кавалерийская шашка. Настоящая.")}
             yield {c.brother: Say("Это вещь.")}
 
-            yield {self.player: Say("Это вещь.")}
-            yield {self.player: Say("Где ты его достал?")}
+            yield {c.player: Say("Это вещь.")}
+            yield {c.player: Say("Где ты его достал?")}
 
             yield {c.brother: Say("Не спрашивай.")}
             yield {c.brother: Say("И не показывай маме.")}
@@ -90,23 +91,23 @@ class Rails(RailsBase):
             c.brother.ai.pather.going_to = PathTarget.Some(p.before_away)
             yield
 
-            yield {self.player: Say(
+            yield {c.player: Say(
                 "Брат подскакивает и, блеснув зелёными глазами и одной рукой придерживая кожаную сумку, бежит в сторону речки.",
                 True
             )}
             yield from wait_for(3)
 
-            yield {self.player: Say("Ты проглатываешь подступившую слабость и снова смотришь на меч.", True)}
+            yield {c.player: Say("Ты проглатываешь подступившую слабость и снова смотришь на меч.", True)}
             yield from wait_for(3)
 
             c.mother.ai.follower.subject = c.brother
 
-            yield {self.player: Say("Он красиво блестит.", True)}
+            yield {c.player: Say("Он красиво блестит.", True)}
         else:
-            self.player.traits.pain += 1
+            c.player.traits.pain += 1
 
             yield {c.brother: Say("Это шашка...")}
-            yield {self.player: Say("Брат морщится, пряча взгляд.", True)}
+            yield {c.player: Say("Брат морщится, пряча взгляд.", True)}
 
             yield {c.brother: Say("Мне надо это сделать.")}
             yield {c.brother: Say("")}
@@ -119,15 +120,15 @@ class Rails(RailsBase):
 
             c.brother.ai.pather.going_to = PathTarget.Some(p.before_away)
             yield
-            yield {self.player: Say("Брат поворачивается и уходит, растерянно взмахнув рукой.", True)}
+            yield {c.player: Say("Брат поворачивается и уходит, растерянно взмахнув рукой.", True)}
 
             yield from wait_for(2)
-            yield {self.player: Say("В его глазах видна боль.", True)}
+            yield {c.player: Say("В его глазах видна боль.", True)}
 
             c.mother.ai.follower.subject = c.brother
 
             yield from self.options({"Развязать бечёвку": None})
-            yield {self.player: Say("Это меч. Очень красивый.", True)}
+            yield {c.player: Say("Это меч. Очень красивый.", True)}
 
         yield from wait_for(10)
         memory.add_quest(q.find_someone_to_fight)
@@ -157,18 +158,18 @@ class Rails(RailsBase):
         yield from self.center_camera()
 
         c.mother.ai.follower.subject = None
-        c.brother.ai.pather.going_to = PathTarget.Some(self.player.p)
-        c.brother.ai.follower.subject = self.player
+        c.brother.ai.pather.going_to = PathTarget.Some(c.player.p)
+        c.brother.ai.follower.subject = c.player
 
-        yield from wait_while(lambda: d2(self.characters.brother.p, self.player.p) > 5 or c.brother.act is not None)
+        yield from wait_while(lambda: d2(self.characters.brother.p, c.player.p) > 5 or c.brother.act is not None)
 
         yield {c.brother: Say("Перестань.")}
         yield {c.brother: Say("Я не могу взять тебя с собой.")}
         yield {c.brother: Say("Иди домой.")}
 
-        self.player.traits.naivity += 1
-        self.player.traits.pain += 1
-        self.player.traits.chaos += 1
+        c.player.traits.naivity += 1
+        c.player.traits.pain += 1
+        c.player.traits.chaos += 1
 
         c.brother.ai.follower.subject = c.mother
         c.brother.ai.pather.going_to = PathTarget.Some(c.mother.p)
@@ -176,7 +177,7 @@ class Rails(RailsBase):
 
         yield from wait_while(lambda:
             d2(self.characters.brother.p, self.positions.away) > 3
-            and d2(self.characters.brother.p, self.player.p) <= self.player.senses.vision + 10
+            and d2(self.characters.brother.p, c.player.p) <= c.player.senses.vision + 10
         )
 
         yield from self.end_cutscene()

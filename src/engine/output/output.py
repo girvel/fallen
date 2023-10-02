@@ -34,10 +34,10 @@ class Output:
         for window in self.execution_order:
             window.resize(h, w)
 
-    def render(self, subject, perception, level, memory):
+    def render(self, subject, perception, memory):
         self.main.refresh()
 
         if self.no_render: return
 
         for window in self.execution_order:
-            window.render(subject, perception, level, memory)
+            window.render(subject, perception, memory)

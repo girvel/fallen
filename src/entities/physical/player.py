@@ -27,4 +27,3 @@ class Player(DynamicEntity):
 
     def after_load(self, level):
         self.spacial_memory = map_grid(level.grids.physical, lambda _: None)
-        self.ai.connect_to_level(level)

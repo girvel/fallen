@@ -15,32 +15,35 @@ class RailsBase(DynamicEntity):
     current_scene = None
 
     def __init__(self, level):
-        self.player = level.player
         self.scenes = [
             Scene(p.name, functools.partial(p.run, self), functools.partial(p.start_predicate, self), p.enabled)
             for p in vars(type(self)).values()
             if isinstance(p, PreScene)
         ]
+        self.level = level
 
         logging.info(f"Initialized rails with scenes {[s.name for s in self.scenes]}")
 
+    def get_player(self):
+        return self.level.query(lambda e: e.character == "@").unwrap_or()
+
     def options(self, options):
         yield  # TODO should this be needed? Investigate.
-        self.player.ai.memory.options = options
+        self.get_player().ai.memory.options = options
         yield
 
     def start_cutscene(self):
-        self.player.ai.memory.in_cutscene = True
+        self.get_player().ai.memory.in_cutscene = True
         yield
-        self.player.ai.rerender()
+        self.get_player().ai.rerender()
 
     def end_cutscene(self):
         yield
-        self.player.ai.memory.in_cutscene = False
+        self.get_player().ai.memory.in_cutscene = False
 
     def center_camera(self):
-        h, w = self.player.ai.output.game._window.getmaxyx()
-        self.player.ai.output.game.virtual_p = sub2(self.player.p, floordiv2((w, h), 2))
+        h, w = self.get_player().ai.output.game._window.getmaxyx()
+        self.get_player().ai.output.game.virtual_p = sub2(self.get_player().p, floordiv2((w, h), 2))
         yield
 
     def scene_by_name(self, name):

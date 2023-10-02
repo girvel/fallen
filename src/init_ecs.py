@@ -37,13 +37,15 @@ def init(stdscr, track, debug_mode, no_render, no_rails):
 
     level = ms.add(Level(
         ms, Path("assets/levels/main"),
-        IO(stdscr, debug_track=track, debug_mode=debug_mode, no_render=no_render),
         no_rails,
     ))
 
+    level.query(lambda e: e.character == "@").unwrap().ai = (
+        IO(stdscr, debug_track=track, debug_mode=debug_mode, no_render=no_render)
+    )
+
     vision_level = ms.add(Level(
         ms, Path("assets/levels/vision"),
-        None,
         no_rails,
     ))
 

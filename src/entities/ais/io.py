@@ -45,7 +45,6 @@ class Memory:
 
 class IO(DynamicEntity):
     name = 'Input/Output'
-    level = None
     cutscene_aware_flag = None
 
     def __init__(self, stdscr, debug_track, debug_mode, no_render):
@@ -54,9 +53,6 @@ class IO(DynamicEntity):
 
         self.memory = Memory()
         self.output.resize()
-
-    def connect_to_level(self, level):
-        self.level = level
 
     def make_decision(self, subject, perception):
         self.form_memory(subject, perception)
@@ -82,7 +78,7 @@ class IO(DynamicEntity):
 
     def render(self, subject, perception):
         self.last_render_input = [subject, perception]
-        self.output.render(subject, perception, self.level, self.memory)
+        self.output.render(subject, perception, self.memory)
 
     def render_empty(self):
         self.output.main.clear()

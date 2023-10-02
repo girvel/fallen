@@ -28,7 +28,7 @@ class OptionPicker:
         self._window.resize(own_h, own_w)
         self._window.mvwin((h - own_h) // 2, (w - own_w) // 2)
 
-    def render(self, subject, perception, level, memory):
+    def render(self, subject, perception, memory):
         if memory.options is None: return
 
         self.responsive_resize(memory)
