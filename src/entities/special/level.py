@@ -34,7 +34,7 @@ class Level(DynamicEntity):
     def put(self, p: int2, entity: T) -> T:
         grid_set(self.grids[entity.layer], p, entity)
         entity.p = p
-        # entity.level = self
+        entity.level = self
         return entity
 
     layers = ["tiles", "physical", "effects", "sounds"]

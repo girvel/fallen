@@ -109,21 +109,21 @@ def run_rails(level: 'grids', hades: 'entities_to_destroy'):
 
 
 @create_system
-def think(subject: 'ai', level: 'grids'):
-    is_railed = subject in level.rails_effect
+def think(subject: 'ai'):
+    is_railed = subject in subject.level.rails_effect
 
     if is_railed:
-        subject.act = level.rails_effect[subject]
+        subject.act = subject.level.rails_effect[subject]
         if not hasattr(subject.ai, "cutscene_aware_flag"): return
 
     if (r := subject.senses.vision) > 0:
-        fov = tcod.map.compute_fov(level.transparency_cache, subject.p, r)
+        fov = tcod.map.compute_fov(subject.level.transparency_cache, subject.p, r)
         vision = Entity(**{
             layer: GridProxy(
                 grid, fov,
-                *borders_from_radius(subject.p, r, level.size)
+                *borders_from_radius(subject.p, r, subject.level.size)
             )
-            for layer, grid in level.grids
+            for layer, grid in subject.level.grids
         })
 
         for p, entity in vision.physical.items():
@@ -134,14 +134,14 @@ def think(subject: 'ai', level: 'grids'):
     act = subject.ai.make_decision(subject, Perception(
         vision,
         (r := subject.senses.hearing) > 0 and GridProxy(
-            level.grids.sounds,
-            create_square_rhombus(subject.p, r, level.size),
-            *borders_from_radius(subject.p, r, level.size),
+            subject.level.grids.sounds,
+            create_square_rhombus(subject.p, r, subject.level.size),
+            *borders_from_radius(subject.p, r, subject.level.size),
         ),
         (r := subject.senses.smell) > 0 and GridProxy(
-            level.grids.physical,
-            create_square_rhombus(subject.p, r, level.size),
-            *borders_from_radius(subject.p, r, level.size),
+            subject.level.grids.physical,
+            create_square_rhombus(subject.p, r, subject.level.size),
+            *borders_from_radius(subject.p, r, subject.level.size),
         ),
     ))
 
