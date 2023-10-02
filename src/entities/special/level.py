@@ -1,5 +1,4 @@
 import logging
-from importlib.util import spec_from_file_location, module_from_spec
 from pathlib import Path
 from typing import TypeVar, Callable, TYPE_CHECKING
 
@@ -35,6 +34,7 @@ class Level(DynamicEntity):
     def put(self, p: int2, entity: T) -> T:
         grid_set(self.grids[entity.layer], p, entity)
         entity.p = p
+        # entity.level = self
         return entity
 
     layers = ["tiles", "physical", "effects", "sounds"]
@@ -99,9 +99,12 @@ class Level(DynamicEntity):
         if not no_rails:
             rails_path = path / "rails.py"
             if rails_path.exists():
-                ms.add(import_module(rails_path).Rails(self))
+                self.rails = import_module(rails_path).Rails(self)
+            else:
+                self.rails = None
 
         self.rails_effect = {}
+
         self.transparency_cache = numpy.full(self.size, 1)
 
     def query(self, request: Callable[[DynamicEntity], bool]) -> Option[DynamicEntity]:

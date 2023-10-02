@@ -95,17 +95,17 @@ def update_transparency_cache(level: 'grids'):
 
 
 @create_system
-def run_rails(rails: 'rails_flag', level: 'grids', hades: 'entities_to_destroy'):
-    rails.current_scene = next((s for s in rails.scenes if s.enabled and s.start_predicate()), None)
-    if rails.current_scene is None: return
+def run_rails(level: 'grids', hades: 'entities_to_destroy'):
+    level.rails.current_scene = next((s for s in level.rails.scenes if s.enabled and s.start_predicate()), None)
+    if level.rails.current_scene is None: return
 
-    logging.info(f"Starting the scene '{rails.current_scene.name}'")
-    for effect in rails.current_scene.run():
+    logging.info(f"Starting the scene '{level.rails.current_scene.name}'")
+    for effect in level.rails.current_scene.run():
         level.rails_effect = effect or {}
         yield
 
     level.rails_effect = {}
-    logging.info(f"Finished the scene '{rails.current_scene.name}'")
+    logging.info(f"Finished the scene '{level.rails.current_scene.name}'")
 
 
 @create_system
