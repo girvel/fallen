@@ -8,7 +8,6 @@ from src.entities.ais.io import IO
 from src.entities.special.genesis import Genesis
 from src.entities.special.hades import Hades
 from src.entities.special.level import Level
-from src.entities.special.transparency_cache import TransparencyCache
 from src.lib.toolkit import crash_safe
 from src.systems import acting, destruction_and_creation, ai, death
 
@@ -47,8 +46,6 @@ def init(stdscr, track, debug_mode, no_render, no_rails):
     #     None,
     #     no_rails,
     # ))
-
-    ms.add(TransparencyCache(level.size))
 
     logging.info("Starting game cycle")
 

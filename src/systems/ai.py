@@ -88,10 +88,10 @@ def borders_from_radius(p: int2, r: int, size: int2) -> tuple[int2, int2]:
 
 
 @create_system
-def update_transparency_cache(cache: 'transparency_array', level: 'grids'):
+def update_transparency_cache(level: 'grids'):
     for y, line in enumerate(level.grids.physical[0]):
         for x, e in enumerate(line):
-            cache.transparency_array[x, y] = int(e is None or not hasattr(e, "solid_flag"))
+            level.transparency_cache[x, y] = int(e is None or not hasattr(e, "solid_flag"))
 
 
 @create_system
@@ -109,7 +109,7 @@ def run_rails(rails: 'rails_flag', level: 'grids', hades: 'entities_to_destroy')
 
 
 @create_system
-def think(subject: 'ai', level: 'grids', cache: 'transparency_array'):
+def think(subject: 'ai', level: 'grids'):
     is_railed = subject in level.rails_effect
 
     if is_railed:
@@ -117,7 +117,7 @@ def think(subject: 'ai', level: 'grids', cache: 'transparency_array'):
         if not hasattr(subject.ai, "cutscene_aware_flag"): return
 
     if (r := subject.senses.vision) > 0:
-        fov = tcod.map.compute_fov(cache.transparency_array, subject.p, r)
+        fov = tcod.map.compute_fov(level.transparency_cache, subject.p, r)
         vision = Entity(**{
             layer: GridProxy(
                 grid, fov,
