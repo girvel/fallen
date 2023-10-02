@@ -95,7 +95,7 @@ class Level(DynamicEntity):
         if not no_rails:
             rails_path = path / "rails.py"
             if rails_path.exists():
-                self.rails = import_module(rails_path).Rails(self)
+                self.rails = import_module(rails_path).Rails(self, ms)
 
         self.rails_effect = {}
 

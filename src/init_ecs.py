@@ -44,11 +44,6 @@ def init(stdscr, track, debug_mode, no_render, no_rails):
         IO(stdscr, debug_track=track, debug_mode=debug_mode, no_render=no_render)
     )
 
-    vision_level = ms.add(Level(
-        ms, Path("assets/levels/vision"),
-        no_rails,
-    ))
-
     logging.info("Starting game cycle")
 
     t = time()

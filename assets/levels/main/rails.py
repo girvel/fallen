@@ -1,3 +1,6 @@
+import logging
+from pathlib import Path
+
 from ecs import Entity, exists
 
 from src.engine.acting.actions.leave import Leave
@@ -8,13 +11,14 @@ from src.engine.rails_base import RailsBase, scene
 from assets.levels.main.entities.physical.brother import Brother
 from assets.levels.main.entities.physical.mother import Mother
 from src.entities.ais.io import Quest
+from src.entities.special.level import Level
 from src.lib.concurrency import wait_for, wait_while
 from src.lib.query import Query
-from src.lib.vector import d2
+from src.lib.vector import d2, grid_set, map_grid
 
 
 class Rails(RailsBase):
-    def __init__(self, level):
+    def __init__(self, level, ms):
         super().__init__(level)
 
         self.characters = Entity(
@@ -33,7 +37,11 @@ class Rails(RailsBase):
             find_someone_to_fight=Quest("Найти что-нибудь порубить")
         )
 
-    @scene(lambda self: True)
+        self.levels = Entity(
+            vision=ms.add(Level(ms, Path("assets/levels/vision"), False)),
+        )
+
+    # @scene(lambda self: True)
     def introduction(self):
         c = self.characters
         p = self.positions
@@ -192,3 +200,18 @@ class Rails(RailsBase):
         self.disable_current_scene()
 
         yield {c.mother: Leave(), c.brother: Leave()}
+
+
+    @scene(lambda self: True)
+    def test_level_switch(self):
+        c = self.characters
+        l = self.levels
+
+        grid_set(c.player.level.grids[c.player.layer], c.player.p, None)
+        c.player.level = l.vision
+        c.player.level.put((0, 0), c.player)
+        c.player.spacial_memory = map_grid(c.player.level.grids.physical, lambda _: None)
+        logging.debug(c.player.spacial_memory[1])
+        # TODO level-dependent spacial memory
+
+        yield

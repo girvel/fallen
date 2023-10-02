@@ -128,6 +128,8 @@ def think(subject: 'ai'):
             for layer, grid in subject.level.grids
         })
 
+        logging.debug(borders_from_radius(subject.p, r, subject.level.size))
+        logging.debug(subject.level.size)
         for p, entity in vision.physical.items():
             grid_set(subject.spacial_memory, p, entity is not None and entity.character or ".")
     else:
