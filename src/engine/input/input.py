@@ -73,18 +73,12 @@ class Input:
             else:
                 hotkey = self.main.getch()
 
-            if hotkey in self.action_hotkeys:
-                logging.debug(f"[{chr(hotkey)}] -> {self.action_hotkeys[hotkey].__name__}")
-                break
+            if hotkey in self.action_hotkeys: break
 
             if hotkey in self.other_hotkeys:
-                logging.debug(f"[{chr(hotkey)}] -> no action")
                 self.other_hotkeys[hotkey](subject, perception, self.io)
                 self.io.render(subject, perception)
                 continue
-
-            if hotkey != -1:
-                logging.debug(f"Ignored [{chr(hotkey)}]")
 
         return self.action_hotkeys[hotkey](subject, perception, self.io)
 
