@@ -38,6 +38,7 @@ class Rails(RailsBase):
         )
 
         self.levels = Entity(
+            main=level,
             vision=ms.add(Level(ms, Path("assets/levels/vision"), False)),
         )
 
@@ -202,11 +203,11 @@ class Rails(RailsBase):
         yield {c.mother: Leave(), c.brother: Leave()}
 
 
-    @scene(lambda self: True)
+    @scene(lambda self: self.characters.player.p == (205, 54))
     def test_level_switch(self):
         c = self.characters
         l = self.levels
 
-        self.disable_current_scene()
-
         Level.change(c.player, l.vision, (0, 0))
+        yield from wait_for(5)
+        Level.change(c.player, l.main, (212, 11))

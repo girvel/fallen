@@ -75,12 +75,12 @@ class PeasantAi:
                         (x, y)
                         for x in range(subject.house.house_borders[0][0], subject.house.house_borders[1][0])
                         for y in range(subject.house.house_borders[0][1], subject.house.house_borders[1][1])
-                        if grid_get(subject.spacial_memory, (x, y)) == Table.character
+                        if grid_get(subject.spacial_memory[subject.level], (x, y)) == Table.character
                     ])) is not None
                     and
                     (destination := next((
                         p for v in directions
-                        if (p := add2(table_p, v)) and grid_get(subject.spacial_memory, p) == "."
+                        if (p := add2(table_p, v)) and grid_get(subject.spacial_memory[subject.level], p) == "."
                         # TODO remove magic character
                     ), None)) is not None
                 ):

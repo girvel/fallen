@@ -63,9 +63,10 @@ class Game:
         h, w = self._window.getmaxyx()
         screen_size = (w - 1, h)
 
+        spacial_memory = subject.spacial_memory[subject.level]
         for rx in range(0, screen_size[0]):
             for ry in range(0, screen_size[1]):
-                character = grid_get(subject.spacial_memory, add2((rx, ry), self.virtual_p))
+                character = grid_get(spacial_memory, add2((rx, ry), self.virtual_p))
                 self._window.addch(ry, rx, character not in {None, "."} and character or " ")
 
         inspected = isinstance(subject.act, Inspect) and subject.act.subject

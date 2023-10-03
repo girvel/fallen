@@ -42,8 +42,6 @@ class Level(DynamicEntity):
         grid_set(entity.level.grids[entity.layer], entity.p, None)
         entity.level = target
         target.put(p, entity)
-        entity.spacial_memory = map_grid(target.grids.physical, lambda _: None)
-        # TODO level-dependent spacial memory
 
     layers = ["tiles", "physical", "effects", "sounds"]
     invisible_layers = {"sounds"}

@@ -129,7 +129,7 @@ def think(subject: 'ai'):
         })
 
         for p, entity in vision.physical.items():
-            grid_set(subject.spacial_memory, p, entity is not None and entity.character or ".")
+            grid_set(subject.spacial_memory[subject.level], p, entity is not None and entity.character or ".")
     else:
         vision = None
 

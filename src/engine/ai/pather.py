@@ -44,7 +44,7 @@ class Pather:
             perception.vision[subject.layer].get(self.path[-1]) is not None
         ):
             # Create grid for calculations, escaping the beginning and the end
-            grid = map_grid(subject.spacial_memory, lambda c: c == "." and 1 or 0)
+            grid = map_grid(subject.spacial_memory[subject.level], lambda c: c == "." and 1 or 0)
             grid_set(grid, subject.p, 1)
             grid_set(grid, destination, 1)
 

@@ -3,6 +3,7 @@ import random
 from ecs import DynamicEntity
 
 from src.engine.acting.damage import Health, Weapon, ArmorKind, DamageKind
+from src.engine.ai.spacial_memory import SpacialMemory
 from src.engine.assets import names
 from src.engine.output.colors import Colors
 from src.engine.attitude.implementation import Faction, common_attitude
@@ -30,11 +31,7 @@ class Knight(DynamicEntity):
         self.classifiers = {Kind.Animate}
         self.senses = Senses(18, 40, 0)
         self.ai = KnightAi()
-        self.spacial_memory = None
+        self.spacial_memory = SpacialMemory()  # TODO move spacial_memory to AI
 
         self.attitude = common_attitude()
         self.attitude.relations[Faction.Church] = 100
-
-    def after_load(self, level):
-        self.spacial_memory = map_grid(level.grids.physical, lambda _: None)
-        self.ai.follower.subject = level.player

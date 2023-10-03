@@ -1,9 +1,9 @@
 from ecs import DynamicEntity
 
 from src.engine.acting.damage import Weapon, Health, DamageKind, ArmorKind
+from src.engine.ai.spacial_memory import SpacialMemory
 from src.engine.traits import Traits
 from src.entities.tiles.body import body_factory
-from src.lib.vector import map_grid
 from src.systems.ai import Kind, Senses
 
 
@@ -24,6 +24,4 @@ class Player(DynamicEntity):
         self.health = Health(10, ArmorKind.Organic)
         self.classifiers = {Kind.Animate}
         self.senses = Senses(24, 40, 0)
-
-    def after_load(self, level):
-        self.spacial_memory = map_grid(level.grids.physical, lambda _: None)
+        self.spacial_memory = SpacialMemory()
