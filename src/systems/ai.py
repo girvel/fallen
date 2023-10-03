@@ -9,6 +9,7 @@ from ecs import create_system, DynamicEntity, Entity
 from numpy import ndarray, dtype
 
 from src.entities.special.sound import Sound
+from src.lib.query import Query
 from src.lib.vector import grid_set, int2, fits_in_grid, grid_unsafe_get
 
 
@@ -118,12 +119,21 @@ def think(subject: 'ai'):
         subject.act = subject.level.rails_effect[subject]
         if not hasattr(subject.ai, "cutscene_aware_flag"): return
 
-    if (r := subject.senses.vision) > 0:
-        fov = tcod.map.compute_fov(subject.level.transparency_cache, subject.p, r)
+    if (senses := ~Query(subject).senses) is not None:
+        vision_r = subject.senses.vision
+        hearing_r = subject.senses.hearing
+        smell_r = subject.senses.smell
+    else:
+        vision_r = 0
+        hearing_r = 0
+        smell_r = 0
+
+    if vision_r > 0:
+        fov = tcod.map.compute_fov(subject.level.transparency_cache, subject.p, vision_r)
         vision = Entity(**{
             layer: GridProxy(
                 grid, fov,
-                *borders_from_radius(subject.p, r, subject.level.size)
+                *borders_from_radius(subject.p, vision_r, subject.level.size)
             )
             for layer, grid in subject.level.grids
         })
@@ -132,15 +142,15 @@ def think(subject: 'ai'):
 
     act = subject.ai.make_decision(subject, Perception(
         vision,
-        (r := subject.senses.hearing) > 0 and GridProxy(
+        hearing_r > 0 and GridProxy(
             subject.level.grids.sounds,
-            create_square_rhombus(subject.p, r, subject.level.size),
-            *borders_from_radius(subject.p, r, subject.level.size),
+            create_square_rhombus(subject.p, hearing_r, subject.level.size),
+            *borders_from_radius(subject.p, hearing_r, subject.level.size),
         ),
-        (r := subject.senses.smell) > 0 and GridProxy(
+        smell_r > 0 and GridProxy(
             subject.level.grids.physical,
-            create_square_rhombus(subject.p, r, subject.level.size),
-            *borders_from_radius(subject.p, r, subject.level.size),
+            create_square_rhombus(subject.p, smell_r, subject.level.size),
+            *borders_from_radius(subject.p, smell_r, subject.level.size),
         ),
     ))
 
