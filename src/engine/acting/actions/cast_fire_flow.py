@@ -28,4 +28,4 @@ class CastFireFlow(Action):
                 ):
                     continue
 
-                genesis.entities_to_create.add(Fire(half_life=18, heat=10, p=p))
+                genesis.entities_to_create.add(Fire(half_life=18, heat=10, p=p, level=actor.level))

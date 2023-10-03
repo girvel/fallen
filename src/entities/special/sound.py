@@ -6,10 +6,9 @@ class Sound(DynamicEntity):
     layer = 'sounds'
     sound_flag = None
 
-    def __init__(self, content, is_internal, meme, p=None):
+    def __init__(self, content, is_internal, meme, **attributes):
         self.content = content
         self.is_internal = is_internal
         self.meme = meme
 
-        if p is not None:
-            self.p = p
+        super().__init__(**attributes)

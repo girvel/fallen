@@ -15,7 +15,6 @@ class Move(Action):
 
     def execute(self, actor: DynamicEntity, hades: Hades, genesis: Genesis):
         next_p = add2(actor.p, self.v)
-        logging.debug(next_p)
         if grid_get(actor.level.grids[actor.layer], next_p, object()) is not None: return
 
         grid_set(actor.level.grids[actor.layer], actor.p, None)

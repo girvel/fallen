@@ -1,12 +1,10 @@
-from typing import Any, Optional
+from typing import Any
 
 from ecs import DynamicEntity
 
 from src.engine.output.colors import Colors
 from src.entities.special.genesis import Genesis
 from src.entities.special.hades import Hades
-from src.entities.special.level import Level
-from src.lib.vector import int2
 
 
 class Body(DynamicEntity):
@@ -14,18 +12,22 @@ class Body(DynamicEntity):
     color = Colors.Red
     layer = "tiles"
 
-    def __init__(self, name: str = "Body", items: list[Any] = None, p: Optional[int2] = None):
+    def __init__(
+        self, name: str = "Body", items: list[Any] = None,
+        **attributes,
+    ):
         self.name = name
         self.items = items or []
 
-        if p is not None:
-            self.p = p
+        super().__init__(**attributes)
 
 
-def body_factory(base: DynamicEntity, hades: Hades, genesis: Genesis, level: Level):
+def body_factory(base: DynamicEntity, hades: Hades, genesis: Genesis):
     items = []
 
     if hasattr(base, "weapon"):
         items.append(base.weapon)
 
-    genesis.entities_to_create.add(Body(name=f"Body of {base.name}", items=items, p=base.p))
+    genesis.entities_to_create.add(Body(
+        name=f"Body of {base.name}", items=items, p=base.p, level=base.level
+    ))

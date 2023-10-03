@@ -16,12 +16,11 @@ class Fire(DynamicEntity):
 
     layer = "effects"
 
-    def __init__(self, half_life=float('inf'), heat=5, p=None):
+    def __init__(self, half_life=float('inf'), heat=5, **attributes):
         self.weapon = Weapon(heat, DamageKind.Fire)
         self.senses = Senses(0, 0, 0)
         self.ai = FireAi()
         self.death_chance = death_chance_from_half_life(half_life)
         self.faction = None if half_life == float('inf') else Faction.Disaster
 
-        if p is not None:
-            self.p = p
+        super().__init__(**attributes)

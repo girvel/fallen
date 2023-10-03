@@ -8,13 +8,13 @@ from src.lib.vector import grid_set, grid_get
 
 def generate(ms: Metasystem):
     @create_system
-    def destruction(hades: 'entities_to_destroy', genesis: 'entities_to_create', level: 'grids'):
+    def destruction(hades: 'entities_to_destroy', genesis: 'entities_to_create'):
         for e in hades.entities_to_destroy:
-            if hasattr(e, "p"):
-                grid_set(level.grids[e.layer], e.p, None)
+            if hasattr(e, "level"):
+                grid_set(e.level.grids[e.layer], e.p, None)
 
             if hasattr(e, "on_death"):
-                e.on_death(hades, genesis, level)
+                e.on_death(hades, genesis)
 
             ms.delete(e)
             logging.info(f"Destroyed entity {~Query(e).name}")
@@ -22,13 +22,13 @@ def generate(ms: Metasystem):
         hades.entities_to_destroy.clear()
 
     @create_system
-    def creation(genesis: 'entities_to_create', level: 'grids'):
+    def creation(genesis: 'entities_to_create'):
         for e in genesis.entities_to_create:
-            if hasattr(e, "p"):
-                if (replaced := grid_get(level.grids[e.layer], e.p)) is not None:
+            if hasattr(e, "level"):
+                if (replaced := grid_get(e.level.grids[e.layer], e.p)) is not None:
                     logging.warning(f"Replacing {~Query(replaced).name} in {e.layer} at {e.p}")
 
-                level.put(e.p, e)
+                e.level.put(e.p, e)
 
             ms.add(e)
             logging.info(f"Created entity {~Query(e).name}")
