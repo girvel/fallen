@@ -1,7 +1,6 @@
 from ecs import DynamicEntity
 
 from src.engine.acting.damage import Weapon, Health, DamageKind, ArmorKind
-from src.engine.ai.spacial_memory import SpacialMemory
 from src.engine.attitude.implementation import Faction
 from src.engine.output.colors import Colors
 from src.entities.ais.rabid_ai import RabidAi
@@ -25,4 +24,3 @@ class RabidDog(DynamicEntity):
         self.classifiers = {Kind.Animate}
         self.ai = RabidAi()
         self.senses = Senses(10, 0, 5)
-        self.spacial_memory = SpacialMemory()

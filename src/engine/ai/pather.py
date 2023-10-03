@@ -4,6 +4,7 @@ from rust_enum import Option
 from tcod.path import Pathfinder, SimpleGraph
 
 from src.engine.acting.actions.move import Move
+from src.engine.ai.spacial_memory import SpacialMemory
 from src.lib.vector import directions, sub2, map_grid, grid_set, add2, int2, d2
 from src.systems.ai import Perception
 
@@ -17,7 +18,7 @@ class Pather:
         self.path = []
         self.free_directions = None
 
-    def try_going(self, subject: DynamicEntity, perception: Perception) -> Option[Move]:
+    def try_going(self, subject: DynamicEntity, perception: Perception, spacial_memory: SpacialMemory) -> Option[Move]:
         # Update public self.free_directions
         self.free_directions = [
             d for d in directions if perception.vision[subject.layer].get(add2(subject.p, d)) is None
@@ -44,7 +45,7 @@ class Pather:
             perception.vision[subject.layer].get(self.path[-1]) is not None
         ):
             # Create grid for calculations, escaping the beginning and the end
-            grid = map_grid(subject.spacial_memory[subject.level], lambda c: c == "." and 1 or 0)
+            grid = map_grid(spacial_memory[subject.level], lambda c: c == "." and 1 or 0)
             grid_set(grid, subject.p, 1)
             grid_set(grid, destination, 1)
 

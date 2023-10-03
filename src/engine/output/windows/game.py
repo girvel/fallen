@@ -63,7 +63,7 @@ class Game:
         h, w = self._window.getmaxyx()
         screen_size = (w - 1, h)
 
-        spacial_memory = subject.spacial_memory[subject.level]
+        spacial_memory = memory.spacial_memory[subject.level]
         for rx in range(0, screen_size[0]):
             for ry in range(0, screen_size[1]):
                 character = grid_get(spacial_memory, add2((rx, ry), self.virtual_p))

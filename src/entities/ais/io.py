@@ -5,6 +5,7 @@ from typing import Optional
 from ecs import DynamicEntity
 
 from src.engine.acting.action import Action
+from src.engine.ai.spacial_memory import SpacialMemory
 from src.engine.input.input import Input
 from src.engine.output.output import Output
 from src.entities.special.sound import Sound
@@ -21,6 +22,8 @@ class Notification:
 
 @dataclass
 class Memory:
+    spacial_memory: SpacialMemory = field(default_factory=SpacialMemory)
+
     current_sound: Optional[Sound] = None
 
     options: Optional[dict[str, Optional[Action]]] = None
@@ -65,6 +68,8 @@ class IO(DynamicEntity):
         return self.input.wait_for_input(subject, perception, self.memory)
 
     def form_memory(self, subject, perception):
+        self.memory.spacial_memory.push(subject, perception)
+
         self.memory.current_sound = next((
             sound
             for sound in perception.hearing.values()

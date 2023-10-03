@@ -7,6 +7,7 @@ from src.engine.acting.actions.say import Say
 from src.engine.ai.fight_or_flight import FightOrFlight
 from src.engine.ai.morale import Morale
 from src.engine.ai.pather import Pather, PathTarget
+from src.engine.ai.spacial_memory import SpacialMemory
 from src.engine.meme import Meme
 from src.entities.physical.table import Table
 from src.lib.period.period import Period
@@ -25,6 +26,7 @@ class PeasantAi:
         self.working_period = RandomPeriod(30, 46)
         self.wandering_period = RandomPeriod(20, 36)
         self.lagging_period = RandomPeriod(4, 11)
+        self.spacial_memory = SpacialMemory()
         self.pather = Pather()
         self.fight_or_flight = FightOrFlight(False)
         self.fight_or_flight_period = Period(5)
@@ -34,6 +36,7 @@ class PeasantAi:
 
     # It is possible to extract ModalAi parent/component?
     def make_decision(self, subject, perception):
+        self.spacial_memory.push(subject, perception)
         if self.lagging_period.step(): return
 
         aggressives = self.morale.update(subject, perception)
@@ -47,7 +50,7 @@ class PeasantAi:
         ):
             self.pather.going_to = target
 
-        if action := self.pather.try_going(subject, perception).unwrap_or(): return action
+        if action := self.pather.try_going(subject, perception, self.spacial_memory).unwrap_or(): return action
 
         if (
             self.chat_period.step_without_reset()
@@ -75,12 +78,12 @@ class PeasantAi:
                         (x, y)
                         for x in range(subject.house.house_borders[0][0], subject.house.house_borders[1][0])
                         for y in range(subject.house.house_borders[0][1], subject.house.house_borders[1][1])
-                        if grid_get(subject.spacial_memory[subject.level], (x, y)) == Table.character
+                        if grid_get(self.spacial_memory[subject.level], (x, y)) == Table.character
                     ])) is not None
                     and
                     (destination := next((
                         p for v in directions
-                        if (p := add2(table_p, v)) and grid_get(subject.spacial_memory[subject.level], p) == "."
+                        if (p := add2(table_p, v)) and grid_get(self.spacial_memory[subject.level], p) == "."
                         # TODO remove magic character
                     ), None)) is not None
                 ):

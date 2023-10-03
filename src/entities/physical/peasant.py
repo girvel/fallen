@@ -28,7 +28,6 @@ class Peasant(DynamicEntity):
         self.ai = PeasantAi()
         self.attitude = common_attitude()
         self.attitude.relations[Faction.Villagers] = 50
-        self.spacial_memory = SpacialMemory()
 
     def after_load(self, level):
         if len(level.markup.houses) > 0:
@@ -37,6 +36,6 @@ class Peasant(DynamicEntity):
                 [area2(sub2(h.house_borders[1], h.house_borders[0])) for h in level.markup.houses]
             )
 
-        self.spacial_memory[level] = map_grid(level.grids.physical, lambda e: e is None and "." or e.character)
+        self.ai.spacial_memory[level] = map_grid(level.grids.physical, lambda e: e is None and "." or e.character)
         # TODO remove magic character
         self.ai.favourite_zones = level.markup.zones
