@@ -31,7 +31,7 @@ class Rails(RailsBase):
             street=(181, 42),
             before_away=(93, 28),
             away=(139, 0),
-            vision_start=(19, 11),
+            vision_start=(19, 15),
         )
 
         self.quests = Entity(
