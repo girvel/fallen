@@ -1,3 +1,5 @@
+import logging
+
 from src.lib.vector import add2, grid_set, grid_get, int2
 
 from dataclasses import dataclass
@@ -14,6 +16,7 @@ class Move(Action):
 
     def execute(self, actor: DynamicEntity, level: Level, hades: Hades, genesis: Genesis):
         next_p = add2(actor.p, self.v)
+        logging.debug(next_p)
         if grid_get(level.grids.physical, next_p, object()) is not None: return
 
         grid_set(level.grids.physical, actor.p, None)

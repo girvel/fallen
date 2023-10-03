@@ -207,11 +207,13 @@ class Rails(RailsBase):
         c = self.characters
         l = self.levels
 
+        self.disable_current_scene()
+
         grid_set(c.player.level.grids[c.player.layer], c.player.p, None)
         c.player.level = l.vision
         c.player.level.put((0, 0), c.player)
         c.player.spacial_memory = map_grid(c.player.level.grids.physical, lambda _: None)
-        logging.debug(c.player.spacial_memory[1])
         # TODO level-dependent spacial memory
+        # TODO refactor interdimensional travel
 
         yield
