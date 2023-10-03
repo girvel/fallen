@@ -5,12 +5,11 @@ from ecs import DynamicEntity
 from src.engine.acting.action import Action
 from src.entities.special.genesis import Genesis
 from src.entities.special.hades import Hades
-from src.entities.special.level import Level
 
 
 @dataclass
 class Inspect(Action):
     subject: DynamicEntity
 
-    def execute(self, actor: DynamicEntity, level: Level, hades: Hades, genesis: Genesis):
+    def execute(self, actor: DynamicEntity, hades: Hades, genesis: Genesis):
         pass

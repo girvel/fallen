@@ -13,5 +13,5 @@ from src.entities.special.level import Level
 class Attack(Action):
     target: DynamicEntity  # never None, always exists
 
-    def execute(self, actor: DynamicEntity, level: Level, hades: Hades, genesis: Genesis):
+    def execute(self, actor: DynamicEntity, hades: Hades, genesis: Genesis):
         inflict_damage(self.target, actor.weapon, hades)
