@@ -12,6 +12,7 @@ class Colors(Enum):
     Magenta = 6
     Cyan = 7
     Blue = 8
+    BlueOnWhite = 9
 
     def format(self):
         return curses.color_pair(self.value)
@@ -27,6 +28,7 @@ class Colors(Enum):
         curses.init_pair(cls.Magenta.value, curses.COLOR_MAGENTA, curses.COLOR_BLACK)
         curses.init_pair(cls.Cyan.value, curses.COLOR_CYAN, curses.COLOR_BLACK)
         curses.init_pair(cls.Blue.value, curses.COLOR_BLUE, curses.COLOR_BLACK)
+        curses.init_pair(cls.BlueOnWhite.value, curses.COLOR_BLUE, curses.COLOR_WHITE)
 
 
 def _get_color_pair(entity):

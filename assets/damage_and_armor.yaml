@@ -21,3 +21,4 @@ armor_kinds:
   Glass: [[Acid], [Crushing, Piercing, Slashing, Thunder]]
   Wood: [[Cold, Piercing], [Fire]]
   Stone: [[Acid, Cold, Fire, Lightning, Piercing, Slashing, Thunder], []]
+  Ice: [[Acid, Cold], [Crushing, Thunder, Fire]]
