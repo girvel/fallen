@@ -19,7 +19,7 @@ from src.lib.vector import d2, grid_set, map_grid
 
 class Rails(RailsBase):
     def __init__(self, level, ms):
-        super().__init__(level)
+        super().__init__(level, ms)
 
         self.characters = Entity(
             player=self.get_player(),
@@ -38,10 +38,7 @@ class Rails(RailsBase):
             find_someone_to_fight=Quest("Найти что-нибудь порубить")
         )
 
-        self.levels = Entity(
-            main=level,
-            vision=ms.add(Level(ms, Path("assets/levels/vision"), False)),
-        )
+        self.vision_level = None
 
     @scene(lambda self: True)
     def introduction(self):
@@ -208,12 +205,13 @@ class Rails(RailsBase):
     @scene(lambda self: self.characters.player.health.amount.current <= 0)
     def player_dies(self):
         c = self.characters
-        l = self.levels
         p = self.positions
 
         self.disable_current_scene()
 
         c.player.health.amount.reset_to_max()
-        Level.change(c.player, l.vision, p.vision_start)
+
+        self.vision_level = self.ms.add(Level(self.ms, Path("assets/levels/vision"), False))
+        Level.change(c.player, self.vision_level, p.vision_start)
 
         yield

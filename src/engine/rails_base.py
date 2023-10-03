@@ -14,13 +14,14 @@ class RailsBase(DynamicEntity):
     rails_flag = None
     current_scene = None
 
-    def __init__(self, level):
+    def __init__(self, level, ms):
         self.scenes = [
             Scene(p.name, functools.partial(p.run, self), functools.partial(p.start_predicate, self), p.enabled)
             for p in vars(type(self)).values()
             if isinstance(p, PreScene)
         ]
         self.level = level
+        self.ms = ms
 
         logging.info(f"Initialized rails with scenes {[s.name for s in self.scenes]}")
 
