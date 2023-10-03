@@ -150,7 +150,7 @@ class Rails(RailsBase):
     def brother_path_middlepoint(self):
         self.disable_current_scene()
         self.characters.brother.ai.pather.going_to = PathTarget.Some(self.positions.away)
-        yield
+        yield  # TODO non-async scenes
 
 
     @scene(lambda self:
@@ -209,11 +209,4 @@ class Rails(RailsBase):
 
         self.disable_current_scene()
 
-        grid_set(c.player.level.grids[c.player.layer], c.player.p, None)
-        c.player.level = l.vision
-        c.player.level.put((0, 0), c.player)
-        c.player.spacial_memory = map_grid(c.player.level.grids.physical, lambda _: None)
-        # TODO level-dependent spacial memory
-        # TODO refactor interdimensional travel
-
-        yield
+        Level.change(c.player, l.vision, (0, 0))
