@@ -142,8 +142,6 @@ class Rails(RailsBase):
 
         yield from self.end_cutscene()
 
-        # TODO scene begins when the player comes to the hall?
-
 
     @scene(lambda self: d2(self.characters.brother.p, self.positions.before_away) <= 2)
     def brother_path_middlepoint(self):
@@ -209,9 +207,8 @@ class Rails(RailsBase):
 
         self.disable_current_scene()
 
-        c.player.health.amount.reset_to_max()
-
         self.vision_level = self.ms.add(Level(self.ms, Path("assets/levels/vision"), False))
-        Level.change(c.player, self.vision_level, p.vision_start)
-
         yield
+
+        c.player.health.amount.reset_to_max()
+        Level.change(c.player, self.vision_level, p.vision_start)
