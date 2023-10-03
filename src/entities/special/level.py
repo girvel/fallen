@@ -1,6 +1,6 @@
 import logging
 from pathlib import Path
-from typing import TypeVar, Callable, TYPE_CHECKING
+from typing import TypeVar, Callable
 
 import numpy
 import toml as toml
@@ -10,10 +10,7 @@ from rust_enum import Option
 from src.entities.markup.house import House
 from src.entities.markup.zone import Zone
 from src.lib.toolkit import to_camel_case, import_module
-from src.lib.vector import grid_set, create_grid, int2, map_grid
-
-if TYPE_CHECKING:
-    from src.entities.ais.io import IO
+from src.lib.vector import grid_set, create_grid, int2
 
 
 def load_palette_from(path):

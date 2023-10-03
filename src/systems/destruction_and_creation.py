@@ -14,9 +14,11 @@ def generate(ms: Metasystem):
                 grid_set(e.level.grids[e.layer], e.p, None)
 
             if hasattr(e, "on_death"):
-                e.on_death(hades, genesis)
+                if e.on_death(hades, genesis):
+                    ms.delete(e)
+            else:
+                ms.delete(e)
 
-            ms.delete(e)
             logging.info(f"Destroyed entity {~Query(e).name}")
 
         hades.entities_to_destroy.clear()

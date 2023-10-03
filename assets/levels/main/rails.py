@@ -31,6 +31,7 @@ class Rails(RailsBase):
             street=(181, 42),
             before_away=(93, 28),
             away=(139, 0),
+            vision_start=(19, 11),
         )
 
         self.quests = Entity(
@@ -42,7 +43,7 @@ class Rails(RailsBase):
             vision=ms.add(Level(ms, Path("assets/levels/vision"), False)),
         )
 
-    # @scene(lambda self: True)
+    @scene(lambda self: True)
     def introduction(self):
         c = self.characters
         p = self.positions
@@ -155,8 +156,9 @@ class Rails(RailsBase):
 
 
     @scene(lambda self:
-        d2(self.characters.brother.p, self.positions.away) <= 20
-        and d2(self.characters.brother.p, self.player.p) <= self.player.senses.vision
+        self.characters.brother.level is self.characters.player.level
+        and d2(self.characters.brother.p, self.positions.away) <= 20
+        and d2(self.characters.brother.p, self.characters.player.p) <= self.characters.player.senses.vision
     )
     def brother_stops_player(self):
         c = self.characters
@@ -203,11 +205,15 @@ class Rails(RailsBase):
         yield {c.mother: Leave(), c.brother: Leave()}
 
 
-    @scene(lambda self: self.characters.player.p == (205, 54))
-    def test_level_switch(self):
+    @scene(lambda self: self.characters.player.health.amount.current <= 0)
+    def player_dies(self):
         c = self.characters
         l = self.levels
+        p = self.positions
 
-        Level.change(c.player, l.vision, (0, 0))
-        yield from wait_for(5)
-        Level.change(c.player, l.main, (212, 11))
+        self.disable_current_scene()
+
+        c.player.health.amount.reset_to_max()
+        Level.change(c.player, l.vision, p.vision_start)
+
+        yield

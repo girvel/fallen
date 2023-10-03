@@ -31,3 +31,5 @@ def body_factory(base: DynamicEntity, hades: Hades, genesis: Genesis):
     genesis.entities_to_create.add(Body(
         name=f"Body of {base.name}", items=items, p=base.p, level=base.level
     ))
+
+    return True

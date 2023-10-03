@@ -3,6 +3,7 @@ import random
 from src.engine.acting.actions.attack import Attack
 from src.engine.acting.actions.move import Move
 from src.engine.ai.pather import Pather, PathTarget
+from src.engine.ai.spacial_memory import SpacialMemory
 from src.lib.vector import sub2, abs2
 
 
@@ -12,8 +13,10 @@ from src.systems.ai import classified_as, Kind
 class RabidAi:
     def __init__(self):
         self.pather = Pather()
+        self.spacial_memory = SpacialMemory()
 
     def make_decision(self, subject, perception):
+        self.spacial_memory.push(subject, perception)
         if action := self.pather.try_going(subject, perception, self.spacial_memory).unwrap_or(): return action
 
         possible_targets = [

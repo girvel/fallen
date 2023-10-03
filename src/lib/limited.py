@@ -15,3 +15,6 @@ class Limited:
 
     def is_max(self):
         return self.current == self.maximum - 1
+
+    def reset_to_max(self):
+        self.current = self.maximum - 1
