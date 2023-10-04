@@ -13,6 +13,6 @@ class Leave(Action):
         if hasattr(actor, "on_death"):
             # del actor.on_death
             # TODO investigate why this causes an error
-            actor.on_death = lambda *args, **kwargs: None
+            actor.on_death = lambda *args, **kwargs: True
 
         hades.entities_to_destroy.add(actor)

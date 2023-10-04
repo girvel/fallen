@@ -151,7 +151,8 @@ class Rails(RailsBase):
 
 
     @scene(lambda self:
-        self.characters.brother.level is self.characters.player.level
+        exists(self.characters.brother)
+        and self.characters.brother.level is self.characters.player.level
         and d2(self.characters.brother.p, self.positions.away) <= 20
         and d2(self.characters.brother.p, self.characters.player.p) <= self.characters.player.senses.vision
     )
