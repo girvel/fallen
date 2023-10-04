@@ -17,6 +17,7 @@ class Peasant(DynamicEntity):
     house = None
     on_death = body_factory
     faction = Faction.Villagers
+    layer = "physical"
 
     def __init__(self):
         self.sex = random.choice(["male", "female"])

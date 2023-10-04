@@ -12,6 +12,7 @@ class Brother(DynamicEntity):
     character = 'B'
     color = Colors.Blue
     on_death = body_factory
+    layer = "physical"
 
     def __init__(self):
         self.sex = "male"

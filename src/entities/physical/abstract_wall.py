@@ -10,6 +10,7 @@ class AbstractWall(DynamicEntity):
     character = None
     color = Colors.Yellow
     solid_flag = None
+    layer = "physical"
 
     def __init__(self):
         self.health = Health(2000, ArmorKind.Wood)

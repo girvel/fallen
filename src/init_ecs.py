@@ -9,7 +9,7 @@ from src.entities.special.genesis import Genesis
 from src.entities.special.hades import Hades
 from src.entities.special.level import Level
 from src.lib.toolkit import crash_safe
-from src.systems import acting, destruction_and_creation, ai, death
+from src.systems import acting, destruction_and_creation, ai, death, nature
 
 
 def init(stdscr, track, debug_mode, no_render, no_rails):
@@ -20,6 +20,7 @@ def init(stdscr, track, debug_mode, no_render, no_rails):
 
     for system in [
         # *regeneration.sequence,
+        *nature.sequence,
         *ai.sequence,
         *acting.sequence,
         *death.sequence,

@@ -7,3 +7,4 @@ class Water(DynamicEntity):
     name = 'Water'
     character = '~'
     color = Colors.WhiteOnBlue
+    layer = "physical"

@@ -7,3 +7,4 @@ class WoodenFloor(DynamicEntity):
     name = 'Wooden floor'
     character = '_'
     color = Colors.Yellow
+    layer = "tiles"

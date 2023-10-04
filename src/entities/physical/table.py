@@ -11,6 +11,7 @@ class Table(DynamicEntity):
     character = '"'
     color = Colors.Yellow
     classifiers = {Kind.Table}
+    layer = "physical"
 
     def __init__(self):
         self.health = Health(35, ArmorKind.Wood)

@@ -10,6 +10,7 @@ class ThickWall(DynamicEntity):
     character = '#'
     color = Colors.Yellow
     solid_flag = None
+    layer = "physical"
 
     def __init__(self):
         self.health = Health(10000, ArmorKind.Stone)

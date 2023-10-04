@@ -10,8 +10,8 @@ def generate(ms: Metasystem):
     @create_system
     def destruction(hades: 'entities_to_destroy', genesis: 'entities_to_create'):
         for e in hades.entities_to_destroy:
-            if hasattr(e, "level"):
-                grid_set(e.level.grids[e.layer], e.p, None)
+            if (level := ~Query(e).level) is not None:
+                grid_set(level.grids[e.layer], e.p, None)
 
             if hasattr(e, "on_death"):
                 if e.on_death(hades, genesis):
@@ -24,11 +24,12 @@ def generate(ms: Metasystem):
         hades.entities_to_destroy.clear()
 
     @create_system
-    def creation(genesis: 'entities_to_create'):
+    def creation(hades: 'entities_to_destroy', genesis: 'entities_to_create'):
         for e in genesis.entities_to_create:
             if hasattr(e, "level"):
                 if (replaced := grid_get(e.level.grids[e.layer], e.p)) is not None:
-                    logging.warning(f"Replacing {~Query(replaced).name} in {e.layer} at {e.p}")
+                    hades.entities_to_destroy.add(replaced)
+                    replaced.level = None
 
                 e.level.put(e.p, e)
 
@@ -37,4 +38,4 @@ def generate(ms: Metasystem):
 
         genesis.entities_to_create.clear()
 
-    return destruction, creation
+    return creation, destruction

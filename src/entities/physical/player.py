@@ -11,6 +11,7 @@ class Player(DynamicEntity):
     ai = None  # set to IO on level loading
     act = None
     faction = None
+    layer = "physical"
 
     on_death = lambda *_, **__: None
 

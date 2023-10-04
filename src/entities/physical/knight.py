@@ -15,6 +15,7 @@ class Knight(DynamicEntity):
     name = 'knight'
     character = 'k'
     color = Colors.Cyan
+    layer = "physical"
 
     faction = Faction.Church
 

@@ -8,6 +8,7 @@ class Ice(DynamicEntity):
     name = 'Ice'
     character = 'I'
     color = Colors.BlueOnWhite
+    layer = "physical"
 
     def __init__(self):
         self.health = Health(1000, ArmorKind.Ice)

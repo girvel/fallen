@@ -7,3 +7,4 @@ class Grass(DynamicEntity):
     name = 'Grass'
     character = ','
     color = Colors.Green
+    layer = "tiles"

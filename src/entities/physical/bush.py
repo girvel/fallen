@@ -10,6 +10,7 @@ class Bush(DynamicEntity):
     character = 'b'
     color = Colors.Green
     solid_flag = None
+    layer = "physical"
 
     def __init__(self):
         self.health = Health(20, ArmorKind.Organic)

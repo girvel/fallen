@@ -12,7 +12,7 @@ class RabidDog(DynamicEntity):
     name = 'Rabid dog'
     character = 'd'
     color = Colors.Magenta
-    vision = 10
+    layer = "physical"
 
     faction = Faction.Predators
 

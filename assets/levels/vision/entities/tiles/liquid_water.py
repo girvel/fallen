@@ -3,8 +3,9 @@ from ecs import DynamicEntity
 from src.engine.output.colors import Colors
 
 
-class DynamicWater(DynamicEntity):
+class LiquidWater(DynamicEntity):
     name = 'Water'
     character = '~'
     color = Colors.Blue
-    flow_height = 5
+    liquid_height = 10
+    layer = "tiles"

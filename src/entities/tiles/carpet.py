@@ -7,3 +7,4 @@ class Carpet(DynamicEntity):
     name = 'Carpet'
     character = '`'
     color = Colors.Magenta
+    layer = "tiles"

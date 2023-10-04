@@ -1,4 +1,5 @@
 import logging
+from functools import reduce
 from pathlib import Path
 from typing import TypeVar, Callable
 
@@ -41,7 +42,7 @@ class Level(DynamicEntity):
         target.put(p, entity)
 
     layers = ["tiles", "physical", "effects", "sounds"]
-    invisible_layers = {"sounds"}
+    invisible_layers = {"sounds"}  # TODO maybe as a separate thing instead of subset?
 
     markup = None
     player = None
@@ -53,32 +54,30 @@ class Level(DynamicEntity):
         after_loads = []
 
         self.grids = Entity(**{l: create_grid(self.size, lambda: None) for l in self.layers})
-        self.palettes = Entity(**{
-            l: load_palette_from(Path("src/entities") / l)
+        self.palette = reduce(lambda a, b: a | b, (
+            load_palette_from(Path("src/entities") / l)
             for l in self.layers
             if l not in self.invisible_layers
-        })
+        ))
 
-        for layer, palette in self.palettes:
+        for layer in self.layers:
+            if layer in self.invisible_layers: continue
+
             local_palette_path = path / "entities" / layer
             if local_palette_path.exists():
-                palette.update(load_palette_from(local_palette_path))
+                self.palette.update(load_palette_from(local_palette_path))
 
         for y, line in enumerate(level_lines):
             for x, c in enumerate(line):
                 if c == ".":
                     continue
 
-                for layer, palette in self.palettes:
-                    if c not in palette: continue
-
-                    e = ms.add(palette[c]())
-                    e.layer = layer
+                if c in self.palette:
+                    e = ms.add(self.palette[c]())
                     self.put((x, y), e)
 
                     if "after_load" in e:
                         after_loads.append(e.after_load)
-                    break
                 else:
                     logging.warning(f"Ignored unknown entity `{c}` at {(x, y)}")
 
