@@ -15,11 +15,10 @@ class Player(DynamicEntity):
 
     on_death = lambda *_, **__: None
 
-    traits = Traits()
-
     def __init__(self):
         self.name = "Майк"
         self.weapon = Weapon(1, DamageKind.Crushing)
         self.health = Health(10, ArmorKind.Organic)
         self.classifiers = {Kind.Animate}
         self.senses = Senses(24, 40, 0)
+        self.traits = Traits()
