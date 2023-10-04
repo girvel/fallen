@@ -13,4 +13,4 @@ class Flower(DynamicEntity):
 
     def __init__(self):
         self.health = Health(1, ArmorKind.Organic)
-        self.color = random.choice([Colors.Cyan, Colors.Default, Colors.Magenta])
+        self.color = random.choice([Colors.Cyan, Colors.Red, Colors.Magenta])
