@@ -14,7 +14,7 @@ from src.lib.vector import add2, up, down, left, right
 
 
 def generate_hotkeys(debug_mode):
-    result = Entity(game={}, options={}, notification={}, dialog_line={})
+    result = Entity(global_={}, game={}, options={}, notification={}, dialog_line={})
 
     class _hotkey:
         def __init__(self, mode, keys):
@@ -24,6 +24,15 @@ def generate_hotkeys(debug_mode):
         def __call__(self, f):
             for hotkey in self.keys:
                 result[self.mode][ord(hotkey) if isinstance(hotkey, str) else hotkey] = f
+
+
+    @_hotkey("global_", ["Q"])
+    def quit_(io, subject, perception, memory):
+        raise KeyboardInterrupt
+
+    @_hotkey("global_", [curses.KEY_RESIZE])
+    def resize_gui(io, subject, perception, memory):
+        io.output.resize()
 
     def generate_movement_function(key, direction):
         @_hotkey("game", [key])
@@ -45,10 +54,6 @@ def generate_hotkeys(debug_mode):
 
     for key, direction in directions_by_key.items():
         generate_movement_function(key, direction)
-
-    @_hotkey("game", ["Q"])
-    def quit_(io, subject, perception, memory):
-        raise KeyboardInterrupt
 
     @_hotkey("game", ["r"])
     def change_mode(io, subject, perception, memory):
@@ -77,10 +82,6 @@ def generate_hotkeys(debug_mode):
             if (e := perception.vision[l].get(add2(io.output.game.virtual_p, (mx, my)))) is not None
         ), None)
         return target and Inspect(target)
-
-    @_hotkey("game", [curses.KEY_RESIZE])
-    def resize_gui(io, subject, perception, memory):
-        io.output.resize()
 
     if debug_mode:
         @_hotkey("game", ["`"])

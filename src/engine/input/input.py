@@ -57,9 +57,11 @@ class Input:
             if mode == "dialog_line":
                 return NoAction()
 
+        hotkeys = self.hotkeys.global_ | self.hotkeys[mode]
+
         while (
-            (key := self.read_key()) not in self.hotkeys[mode]
-            or (action := self.hotkeys[mode][key](self.io, subject, perception, memory)) is None
+            (key := self.read_key()) not in hotkeys
+            or (action := hotkeys[key](self.io, subject, perception, memory)) is None
         ):
             self.io.rerender()
 
