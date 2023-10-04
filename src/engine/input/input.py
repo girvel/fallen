@@ -201,7 +201,6 @@ def generate_default_hotkeys(debug_mode):
                         "perception": perception,
                         "io": io,
                         "tracker": tracker,
-                        "level": io.level,
                     })
                 except Exception as ex:
                     logging.warning(f"Exception when executing console code")
