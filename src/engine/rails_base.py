@@ -13,14 +13,17 @@ from src.lib.vector import floordiv2, sub2
 class RailsBase(DynamicEntity):
     name = "Rails"
     rails_flag = None
-    current_scene = None
+    current_scenes = []
 
     def __init__(self, level, ms):
-        self.scenes = [
-            Scene(p.name, functools.partial(p.run, self), functools.partial(p.start_predicate, self), p.enabled)
-            for p in vars(type(self)).values()
-            if isinstance(p, PreScene)
-        ]
+        self.scenes = []
+
+        for p in vars(type(self)).values():
+            if not isinstance(p, PreScene): continue
+            s = Scene(p.name, None, functools.partial(p.start_predicate, self), p.enabled)
+            s.run = functools.partial(p.run, self, s)
+            self.scenes.append(s)
+
         self.level = level
         self.ms = ms
         self.player = self.level.query(lambda e: e.character == "@").unwrap_or()
@@ -51,9 +54,13 @@ class RailsBase(DynamicEntity):
     def scene_by_name(self, name):
         return next(s for s in self.scenes if s.name == name)
 
-    def disable_current_scene(self):
-        if self.current_scene is None: return
-        self.current_scene.enabled = False
+    def run_subscene(self, f):
+        @functools.wraps(f)
+        def task():
+            yield from f()
+            # TODO disable
+
+        self.scenes.append(Scene(f.__name__, functools.partial(f, self), lambda self: True))
 
 
 @dataclass
@@ -61,7 +68,7 @@ class Scene:
     name: str
     run: Callable[[], None]
     start_predicate: Callable[[], bool]
-    enabled: True
+    enabled: bool = True
 
 PreScene = namedtuple("PreScene", "name, run, start_predicate, enabled")
 

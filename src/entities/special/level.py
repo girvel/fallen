@@ -104,10 +104,16 @@ class Level(DynamicEntity):
         self.transparency_cache = numpy.full(self.size, 1)
 
     def query(self, request: Callable[[DynamicEntity], bool]) -> Option[DynamicEntity]:
-        return next((  # TODO Option.next?
-            Option.Some(e)
+        return Option.next(self.query_raw(request))
+
+    def query_all(self, request: Callable[[DynamicEntity], bool]) -> Option[DynamicEntity]:
+        return list(self.query_raw(request))
+
+    def query_raw(self, request: Callable[[DynamicEntity], bool]) -> Option[DynamicEntity]:
+        return (
+            e
             for _, layer in self.grids
             for row in layer[0]
             for e in row
             if e and request(e)
-        ), Option.Nothing())
+        )

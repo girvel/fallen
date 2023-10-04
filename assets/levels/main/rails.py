@@ -3,6 +3,7 @@ from pathlib import Path
 
 from ecs import Entity, exists
 
+from assets.levels.vision.entities.physical.soldier import Soldier
 from src.engine.acting.actions.leave import Leave
 from src.engine.acting.actions.no_action import NoAction
 from src.engine.acting.actions.say import Say
@@ -26,6 +27,7 @@ class Rails(RailsBase):
             player=self.player,
             mother=level.query(lambda e: ~Query(e).character == Mother.character).unwrap(),
             brother=level.query(lambda e: ~Query(e).character == Brother.character).unwrap(),
+            soldiers=level.query_all(lambda e: ~Query(e).character == Soldier.character),
         )
 
         self.positions = Entity(
@@ -41,14 +43,14 @@ class Rails(RailsBase):
 
         self.vision_level = None
 
-    @scene(lambda self: True)
-    def introduction(self):
+    # @scene(lambda self: True)  TODO
+    def introduction(self, scene):
         c = self.characters
         p = self.positions
         q = self.quests
         memory = c.player.ai.memory
 
-        self.disable_current_scene()
+        scene.enabled = False
         yield from self.start_cutscene()
         yield from self.center_camera()
 
@@ -145,8 +147,8 @@ class Rails(RailsBase):
 
 
     @scene(lambda self: d2(self.characters.brother.p, self.positions.before_away) <= 2)
-    def brother_path_middlepoint(self):
-        self.disable_current_scene()
+    def brother_path_middlepoint(self, scene):
+        scene.enabled = False
         self.characters.brother.ai.pather.going_to = PathTarget.Some(self.positions.away)
         yield  # TODO non-async scenes
 
@@ -157,11 +159,11 @@ class Rails(RailsBase):
         and d2(self.characters.brother.p, self.positions.away) <= 20
         and d2(self.characters.brother.p, self.characters.player.p) <= self.characters.player.senses.vision
     )
-    def brother_stops_player(self):
+    def brother_stops_player(self, scene):
         c = self.characters
         p = self.positions
 
-        self.disable_current_scene()
+        scene.enabled = False
         yield from self.start_cutscene()
         yield from self.center_camera()
 
@@ -194,28 +196,39 @@ class Rails(RailsBase):
     @scene(lambda self: any(
         d2(e.p, self.positions.away) <= 3 for e in [self.characters.brother, self.characters.mother]
     ))
-    def brother_and_mother_leave(self):
+    def brother_and_mother_leave(self, scene):
         c = self.characters
 
-        self.disable_current_scene()
+        scene.enabled = False
 
         yield {c.mother: Leave(), c.brother: Leave()}
 
 
     @scene(lambda self: self.characters.player.health.amount.current <= 0)
-    def player_dies(self):
+    def player_dies(self, scene):
         c = self.characters
         p = self.positions
 
-        self.disable_current_scene()
+        scene.enabled = False
+        logging.debug(0)
         yield from self.start_cutscene()
 
         self.vision_level = self.ms.add(Level(self.ms, Path("assets/levels/vision"), False))
+        logging.debug(1)
         yield
 
         c.player.health.amount.reset_to_max()
         Level.change(c.player, self.vision_level, p.vision_start)
 
+        soldier = c.soldiers[0]
+        start_point = soldier.p
 
+        @self.run_subscene
+        def run_lap():  # TODO closure
+            soldier.ai.pather.going_to = PathTarget.Some((94, 17))
+            yield from wait_while(lambda: soldier.ai.is_busy)
+
+            soldier.ai.pather.going_to = PathTarget.Some(start_point)
+            yield from wait_while(lambda: soldier.ai.is_busy)
 
         yield from self.end_cutscene()

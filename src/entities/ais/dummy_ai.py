@@ -11,8 +11,13 @@ class DummyAi(DynamicEntity):
         self.pather = Pather()
         self.follower = Follower(2)
         self.spacial_memory = SpacialMemory()
+        self.is_busy = False
 
     def make_decision(self, subject: DynamicEntity, perception: Perception) -> Action:
+        self.is_busy = True
+
         self.spacial_memory.push(subject, perception)
         if target := self.follower.try_producing_target(subject, perception).unwrap_or(): self.pather.going_to = target
         if move := self.pather.try_going(subject, perception, self.spacial_memory).unwrap_or(): return move
+
+        self.is_busy = False

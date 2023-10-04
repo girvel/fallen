@@ -95,20 +95,28 @@ def update_transparency_cache(level: 'grids'):
             level.transparency_cache[x, y] = int(e is None or not hasattr(e, "solid_flag"))
 
 
+stop_signal = object()
+
 @create_system
 def run_rails(level: 'grids', hades: 'entities_to_destroy'):
     if not hasattr(level, "rails"): return
 
-    level.rails.current_scene = next((s for s in level.rails.scenes if s.enabled and s.start_predicate()), None)
-    if level.rails.current_scene is None: return
+    started_scenes = []
+    for s in level.rails.scenes:
+        if s.enabled and s.start_predicate():
+            started_scenes.append(s.run())
+            logging.info(f"Starting the scene '{s.name}'")
 
-    logging.info(f"Starting the scene '{level.rails.current_scene.name}'")
-    for effect in level.rails.current_scene.run():
-        level.rails_effect = effect or {}
-        yield
+    level.rails.current_scenes += started_scenes
 
     level.rails_effect = {}
-    logging.info(f"Finished the scene '{level.rails.current_scene.name}'")
+    current_scenes_clone = level.rails.current_scenes.copy()
+
+    for scene in current_scenes_clone:
+        if (effect := next(scene, stop_signal)) is not stop_signal:
+            level.rails_effect |= effect or []
+        else:
+            level.rails.current_scenes.remove(scene)
 
 
 @create_system
