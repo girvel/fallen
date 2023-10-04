@@ -4,6 +4,7 @@ from pathlib import Path
 from ecs import Entity, exists
 
 from src.engine.acting.actions.leave import Leave
+from src.engine.acting.actions.no_action import NoAction
 from src.engine.acting.actions.say import Say
 from src.engine.acting.damage import Weapon, DamageKind
 from src.engine.ai.pather import PathTarget
@@ -73,8 +74,8 @@ class Rails(RailsBase):
         c.player.weapon = Weapon(5, DamageKind.Slashing)
 
         yield from self.options({
-            (look := "Развязать бечёвку"): None,
-            "Укоризненно смотреть на брата": None,
+            (look := "Развязать бечёвку"): NoAction(),
+            "Укоризненно смотреть на брата": NoAction(),
         })
 
         if memory.last_selected_option == look:
@@ -134,7 +135,7 @@ class Rails(RailsBase):
 
             c.mother.ai.follower.subject = c.brother
 
-            yield from self.options({"Развязать бечёвку": None})
+            yield from self.options({"Развязать бечёвку": NoAction()})
             yield {c.player: Say("Это меч. Очень красивый.", True)}
 
         yield from wait_for(10)

@@ -2,21 +2,13 @@
     <p><center>\__ Controls __/</center></p>
 </div>
 
+{% for mode, collection in hotkeys.items() %}
 <div>
-    <p>ACTION HOTKEYS</p>
+    <center><p>{{ mode }}</p></center>
 </div>
 <div>
-    {% for name, hotkey in action_hotkeys %}
+    {% for name, hotkey in collection.items() %}
     <p>{{ name }}: <y>{{ hotkey }}</y></p>
     {% endfor %}
 </div>
-<div>
-    <p>OTHER HOTKEYS</p>
-</div>
-<div>
-    {% for name, hotkey in other_hotkeys %}
-    {% if not hotkey == "KEY_RESIZE" %}
-    <p>{{ name }}: <y>{{ hotkey }}</y></p>
-    {% endif %}
-    {% endfor %}
-</div>
+{% endfor %}

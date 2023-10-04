@@ -73,6 +73,11 @@ class Panel:
         curses.KEY_MOUSE: "🐭",
         curses.KEY_LEFT: "←",
         curses.KEY_RIGHT: "→",
+        curses.KEY_UP: "↑",
+        curses.KEY_DOWN: "↓",
+        ord(" "): "␣",
+        ord("\n"): "⏎",
+        ord(""): "Esc",
     }
 
     def _controls(self, subject, perception, memory):
@@ -87,11 +92,10 @@ class Panel:
                 else:
                     result[name] = self.pretty_hotkeys.get(hotkey, chr(hotkey))
 
-            return list(result.items())
+            return result
 
         self.html_renderer.render_template(self._window, 1, 2, self.controls_template,
-            action_hotkeys=reduce_hotkeys(self.io.input.action_hotkeys),
-            other_hotkeys=reduce_hotkeys(self.io.input.other_hotkeys),
+            hotkeys={from_snake_case(mode).capitalize(): reduce_hotkeys(collection) for mode, collection in self.io.input.hotkeys}
         )
 
     def _quests(self, subject, perception, memory):

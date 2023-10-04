@@ -46,6 +46,12 @@ class Memory:
     def pop_notification(self):
         return self._notifications.pop() if len(self._notifications) > 0 else None
 
+    def select_option(self):
+        self.last_selected_option, result = list(self.options.items())[self.selected_option_i]
+        self.options = None
+        self.selected_option_i = 0
+        return result
+
 class IO(DynamicEntity):
     name = 'Input/Output'
     cutscene_aware_flag = None

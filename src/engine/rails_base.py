@@ -6,6 +6,7 @@ from typing import Callable, Any
 
 from ecs import DynamicEntity
 
+from src.engine.acting.action import Action
 from src.lib.vector import floordiv2, sub2
 
 
@@ -28,7 +29,9 @@ class RailsBase(DynamicEntity):
     def get_player(self):
         return self.level.query(lambda e: e.character == "@").unwrap_or()
 
-    def options(self, options):
+    def options(self, options: dict[str, Action]):
+        assert all(options.values()), "Only actions are allowed; for no action use NoAction"
+
         yield  # TODO should this be needed? Investigate.
         self.get_player().ai.memory.options = options
         yield
