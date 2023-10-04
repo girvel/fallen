@@ -45,11 +45,15 @@ class Input:
 
         logging.info(f"Initalized mouse with {curses.mousemask(curses.ALL_MOUSE_EVENTS)}")
 
+    def read_key(self):
+        while (hotkey := self.main.getch()) == -1: pass
+        return hotkey
+
     def wait_for_input(self, subject, perception: Perception, memory: "Memory"):
         if memory.in_cutscene:
             if memory.options:
                 if not memory.is_skipping or len(memory.options) != 1:
-                    while (key := self.main.getch()) not in self.submit_hotkey:
+                    while (key := self.read_key()) not in self.submit_hotkey:
                         if (f := self.option_hotkeys.get(key)) is not None:
                             f(memory)
                             self.io.render(subject, perception)
@@ -63,7 +67,7 @@ class Input:
                 return result
 
             if memory.current_sound is not None:
-                while not memory.is_skipping and (key := self.main.getch()) not in self.next_hotkey:
+                while not memory.is_skipping and (key := self.read_key()) not in self.next_hotkey:
                     if key in self.skip_hotkey: memory.is_skipping = True
                 return
 
@@ -71,14 +75,14 @@ class Input:
             return
 
         if self.io.output.notification.visible:
-            while (key := self.main.getch()) not in self.submit_hotkey: pass
+            while (key := self.read_key()) not in self.submit_hotkey: pass
             self.io.rerender()
 
         while True:
             if self.debug_track is not None:
                 hotkey = ord(next(self.debug_track))
             else:
-                hotkey = self.main.getch()
+                hotkey = self.read_key()
 
             if (
                 hotkey in self.game_hotkeys
@@ -133,11 +137,7 @@ def generate_default_hotkeys(debug_mode):
 
     @_hotkey("1")
     def cast_fire_flow(subject, perception, io):
-        while True:
-            while (hotkey := io.input.main.getch()) == -1: pass  # TODO io.read_key()
-            hotkey = chr(hotkey)
-
-            if hotkey in "wasd": break
+        while (hotkey := chr(io.input.read_key())) not in "wasd":
             if hotkey == "": return
 
         return CastFireFlow(directions_by_key[hotkey])
@@ -171,7 +171,7 @@ def generate_default_hotkeys(debug_mode):
 
             while True:
                 io.render(subject, perception)
-                while (hotkey := io.input.main.getch()) == -1: pass
+                while (hotkey := io.input.read_key()) == -1: pass
 
                 if hotkey == curses.CTL_ENTER: break
                 if hotkey == curses.KEY_MOUSE: continue
