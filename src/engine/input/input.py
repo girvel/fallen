@@ -14,6 +14,7 @@ if TYPE_CHECKING:
 class Input:
     def __init__(self, stdscr, debug_track, debug_mode, io):
         stdscr.nodelay(1)
+        logging.info(f"Initalized mouse with {curses.mousemask(curses.ALL_MOUSE_EVENTS)}")
 
         self.main = stdscr
         self.io = io
@@ -25,14 +26,13 @@ class Input:
             self.debug_track = None
 
         self.hotkeys = generate_hotkeys(debug_mode)
+        self.last_t = time.time()
 
-        logging.info(f"Initalized mouse with {curses.mousemask(curses.ALL_MOUSE_EVENTS)}")
-
-    def read_key(self):
+    def read_key(self, allow_empty=False):
         if self.debug_track is not None:
             hotkey = ord(next(self.debug_track))
         else:
-            while (hotkey := self.main.getch()) == -1: pass
+            while (hotkey := self.main.getch()) == -1 and not allow_empty: pass
         return hotkey
 
     def wait_for_input(self, subject, perception: Perception, memory: "Memory"):
@@ -44,8 +44,10 @@ class Input:
             elif memory.current_sound is not None:
                 mode = "dialog_line"
             else:
-                if not memory.is_skipping: time.sleep(0.2)  # TODO flexible
-                return NoAction()
+                if not memory.is_skipping:
+                    time.sleep(max(0, .2 - time.time() + self.last_t))
+                    self.last_t = time.time()
+                return self.hotkeys.global_.get(self.read_key(True), NoAction())
         else:
             mode = "game"
 
