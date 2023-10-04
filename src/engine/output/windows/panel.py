@@ -94,7 +94,7 @@ class Panel:
             other_hotkeys=reduce_hotkeys(self.io.input.other_hotkeys),
         )
 
-    def _quests(self, subject, perception, level, memory):
+    def _quests(self, subject, perception, memory):
         self.html_renderer.render_template(self._window, 1, 2, self.quests_template,
             quests=memory._quests,
         )
