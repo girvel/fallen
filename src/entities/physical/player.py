@@ -13,8 +13,9 @@ class Player(Human):
 
     on_death = lambda *_, **__: None
 
-    def __init__(self):
+    def __post_init__(self):
         self.name = "Майк"
+        self.sex = "male"
         self.weapon = Weapon(1, DamageKind.Crushing)
         self.health = Health(10, ArmorKind.Organic)
         self.senses = Senses(24, 40, 0)

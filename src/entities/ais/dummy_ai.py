@@ -1,4 +1,5 @@
 from ecs import DynamicEntity
+
 from src.engine.acting.action import Action
 from src.engine.ai.follower import Follower
 from src.engine.ai.pather import Pather

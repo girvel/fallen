@@ -2,7 +2,7 @@ import functools
 import logging
 from collections import namedtuple
 from dataclasses import dataclass
-from typing import Callable, Any
+from typing import Callable
 
 from ecs import DynamicEntity
 
@@ -13,10 +13,10 @@ from src.lib.vector import floordiv2, sub2
 class RailsBase(DynamicEntity):
     name = "Rails"
     rails_flag = None
-    current_scenes = []
 
     def __init__(self, level, ms):
         self.scenes = []
+        self.current_scenes = []
 
         for p in vars(type(self)).values():
             if not isinstance(p, PreScene): continue
@@ -54,16 +54,23 @@ class RailsBase(DynamicEntity):
     def scene_by_name(self, name):
         return next(s for s in self.scenes if s.name == name)
 
-    def run_subscene(self, f):
-        @functools.wraps(f)
-        def task():
-            yield from f()
-            # TODO disable
+    def run_subscene(self, *args, **kwargs):
+        def decorator(f):
+            s = Scene(f.__name__, None, lambda: True)
 
-        self.scenes.append(Scene(f.__name__, functools.partial(f, self), lambda self: True))
+            @functools.wraps(f)
+            def task(self, scene):
+                scene.enabled = False
+                yield from f(*args, **kwargs)
+                self.scenes.remove(scene)
+
+            s.run = functools.partial(task, self, s)
+            self.scenes.append(s)
+
+        return decorator
 
 
-@dataclass
+@dataclass(eq=False)
 class Scene:
     name: str
     run: Callable[[], None]

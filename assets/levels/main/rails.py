@@ -66,7 +66,7 @@ class Rails(RailsBase):
         yield {c.player: Say(
             "Вы стоите в обшарпанной деревянной прихожей; цветочные горшки усеивают каждую горизонтальную поверхность;"
             " странное жёсткое чувство упирается в кадык.",
-            True
+            True,
         )}
 
         yield from wait_while(lambda: d2(c.mother.p, c.brother.p) < 7)
@@ -210,25 +210,10 @@ class Rails(RailsBase):
         p = self.positions
 
         scene.enabled = False
-        logging.debug(0)
         yield from self.start_cutscene()
 
         self.vision_level = self.ms.add(Level(self.ms, Path("assets/levels/vision"), False))
-        logging.debug(1)
         yield
 
         c.player.health.amount.reset_to_max()
         Level.change(c.player, self.vision_level, p.vision_start)
-
-        soldier = c.soldiers[0]
-        start_point = soldier.p
-
-        @self.run_subscene
-        def run_lap():  # TODO closure
-            soldier.ai.pather.going_to = PathTarget.Some((94, 17))
-            yield from wait_while(lambda: soldier.ai.is_busy)
-
-            soldier.ai.pather.going_to = PathTarget.Some(start_point)
-            yield from wait_while(lambda: soldier.ai.is_busy)
-
-        yield from self.end_cutscene()

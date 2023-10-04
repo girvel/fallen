@@ -1,3 +1,5 @@
+import logging
+
 import numpy
 from ecs import DynamicEntity
 from rust_enum import Option
