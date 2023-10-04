@@ -4,6 +4,8 @@ import re
 import time
 from typing import TYPE_CHECKING
 
+from ecs import Entity
+
 from src.engine.acting.actions.attack import Attack
 from src.engine.acting.actions.cast_fire_flow import CastFireFlow
 from src.engine.acting.actions.inspect import Inspect
@@ -18,7 +20,6 @@ if TYPE_CHECKING:
 
 class Input:
     def __init__(self, stdscr, debug_track, debug_mode, io):
-        # TODO hotkey is actionable if it returns True
         stdscr.nodelay(1)
 
         self.main = stdscr
@@ -30,7 +31,13 @@ class Input:
         else:
             self.debug_track = None
 
-        self.action_hotkeys, self.other_hotkeys = generate_default_hotkeys(debug_mode)
+        # action_hotkeys, other_hotkeys = generate_default_hotkeys(debug_mode)
+        # self.hotkeys = Entity(
+        #     action=action_hotkeys,
+        #     other=other_hotkeys,
+        # )
+
+        self.game_hotkeys = generate_default_hotkeys(debug_mode)
         self.option_hotkeys = generate_option_hotkeys()
         self.submit_hotkey = {ord("\n"), ord("e")}
         self.next_hotkey = {ord(" ")}
@@ -73,28 +80,25 @@ class Input:
             else:
                 hotkey = self.main.getch()
 
-            if hotkey in self.action_hotkeys: break
+            if (
+                hotkey in self.game_hotkeys
+                and (action := self.game_hotkeys[hotkey](subject, perception, self.io)) is not None
+            ):
+                return action
 
-            if hotkey in self.other_hotkeys:
-                self.other_hotkeys[hotkey](subject, perception, self.io)
-                self.io.render(subject, perception)
-                continue
-
-        return self.action_hotkeys[hotkey](subject, perception, self.io)
+            self.io.render(subject, perception)
 
 
 def generate_default_hotkeys(debug_mode):
-    action_hotkeys = {}
-    other_hotkeys = {}
+    result = {}
 
     class _hotkey:
-        def __init__(self, *keys, non_action=False):
+        def __init__(self, *keys):
             self.keys = keys
-            self.non_action = non_action
 
         def __call__(self, f):
             for hotkey in self.keys:
-                (other_hotkeys if self.non_action else action_hotkeys)[
+                result[
                     ord(hotkey) if isinstance(hotkey, str) else hotkey
                 ] = f
 
@@ -130,7 +134,7 @@ def generate_default_hotkeys(debug_mode):
     @_hotkey("1")
     def cast_fire_flow(subject, perception, io):
         while True:
-            while (hotkey := io.input.main.getch()) == -1: pass
+            while (hotkey := io.input.main.getch()) == -1: pass  # TODO io.read_key()
             hotkey = chr(hotkey)
 
             if hotkey in "wasd": break
@@ -138,11 +142,11 @@ def generate_default_hotkeys(debug_mode):
 
         return CastFireFlow(directions_by_key[hotkey])
 
-    @_hotkey(curses.KEY_LEFT, non_action=True)
+    @_hotkey(curses.KEY_LEFT)
     def previous_pane(subject, perception, io):
         io.output.panel.pane_i.move(-1)
 
-    @_hotkey(curses.KEY_RIGHT, non_action=True)
+    @_hotkey(curses.KEY_RIGHT)
     def next_pane(subject, perception, io):
         io.output.panel.pane_i.move(1)
 
@@ -155,12 +159,12 @@ def generate_default_hotkeys(debug_mode):
         ), None)
         return target and Inspect(target)
 
-    @_hotkey(curses.KEY_RESIZE, non_action=True)
+    @_hotkey(curses.KEY_RESIZE)
     def resize_gui(subject, perception, io):
         io.output.resize()
 
     if debug_mode:
-        @_hotkey("`", non_action=True)
+        @_hotkey("`")
         def show_debug_console(subject, perception, io):
             io.output.console.visible ^= True
             if not io.output.console.visible: return
@@ -208,7 +212,7 @@ def generate_default_hotkeys(debug_mode):
             io.output.console.buffer = ""
             io.output.console.visible = False
 
-    return action_hotkeys, other_hotkeys
+    return result
 
 
 def generate_option_hotkeys():
