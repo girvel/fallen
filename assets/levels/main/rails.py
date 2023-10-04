@@ -23,7 +23,7 @@ class Rails(RailsBase):
         super().__init__(level, ms)
 
         self.characters = Entity(
-            player=self.get_player(),
+            player=self.player,
             mother=level.query(lambda e: ~Query(e).character == Mother.character).unwrap(),
             brother=level.query(lambda e: ~Query(e).character == Brother.character).unwrap(),
         )
@@ -32,7 +32,7 @@ class Rails(RailsBase):
             street=(181, 42),
             before_away=(93, 28),
             away=(139, 0),
-            vision_start=(19, 15),
+            vision_start=(33, 19),
         )
 
         self.quests = Entity(
@@ -46,7 +46,7 @@ class Rails(RailsBase):
         c = self.characters
         p = self.positions
         q = self.quests
-        memory = self.get_player().ai.memory
+        memory = c.player.ai.memory
 
         self.disable_current_scene()
         yield from self.start_cutscene()
@@ -208,9 +208,14 @@ class Rails(RailsBase):
         p = self.positions
 
         self.disable_current_scene()
+        yield from self.start_cutscene()
 
         self.vision_level = self.ms.add(Level(self.ms, Path("assets/levels/vision"), False))
         yield
 
         c.player.health.amount.reset_to_max()
         Level.change(c.player, self.vision_level, p.vision_start)
+
+
+
+        yield from self.end_cutscene()
