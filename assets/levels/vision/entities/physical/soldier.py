@@ -3,6 +3,7 @@ import random
 from src.engine.acting.damage import Health, DamageKind, ArmorKind, Weapon
 from src.engine.assets import names
 from src.engine.attitude.implementation import Faction, common_attitude
+from src.engine.output.colors import Colors
 from src.entities.abstract.human import Human
 from src.entities.ais.dummy_ai import DummyAi
 from src.lib.vector import map_grid
@@ -12,6 +13,7 @@ from src.systems.ai import Senses
 class Soldier(Human):
     name = 'Soldier'
     character = 's'
+    color = Colors.Cyan
     faction = Faction.Church
 
     def __post_init__(self):

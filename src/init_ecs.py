@@ -5,6 +5,7 @@ from time import time
 from ecs import Metasystem
 
 from src.entities.ais.io import IO
+from src.entities.physical.player import Player
 from src.entities.special.genesis import Genesis
 from src.entities.special.hades import Hades
 from src.entities.special.level import Level
@@ -41,7 +42,7 @@ def init(stdscr, track, debug_mode, no_render, no_rails):
         no_rails,
     ))
 
-    level.query(lambda e: e.character == "@").unwrap().ai = (
+    next(level.find(Player)).ai = (
         IO(stdscr, debug_track=track, debug_mode=debug_mode, no_render=no_render)
     )
 

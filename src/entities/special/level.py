@@ -1,7 +1,7 @@
 import logging
 from functools import reduce
 from pathlib import Path
-from typing import TypeVar, Callable
+from typing import TypeVar, Callable, Any
 
 import numpy
 import toml as toml
@@ -103,13 +103,7 @@ class Level(DynamicEntity):
 
         self.transparency_cache = numpy.full(self.size, 1)
 
-    def query(self, request: Callable[[DynamicEntity], bool]) -> Option[DynamicEntity]:
-        return Option.next(self.query_raw(request))
-
-    def query_all(self, request: Callable[[DynamicEntity], bool]) -> Option[DynamicEntity]:
-        return list(self.query_raw(request))
-
-    def query_raw(self, request: Callable[[DynamicEntity], bool]) -> Option[DynamicEntity]:
+    def query(self, request: Callable[[DynamicEntity], bool]):
         return (
             e
             for _, layer in self.grids
@@ -117,3 +111,6 @@ class Level(DynamicEntity):
             for e in row
             if e and request(e)
         )
+
+    def find(self, entity_type: Any):
+        return self.query(lambda e: e.character == entity_type.character)

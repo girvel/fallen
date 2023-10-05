@@ -2,9 +2,12 @@ import logging
 
 from ecs import Entity
 
+from assets.levels.vision.entities.physical.kaledeii import Kaledeii
 from assets.levels.vision.entities.physical.soldier import Soldier
+from src.engine.acting.actions.say import Say
 from src.engine.ai.pather import PathTarget
 from src.engine.rails_base import RailsBase, scene
+from src.entities.ais.dummy_ai import wait_finish
 from src.entities.physical.player import Player
 from src.lib.concurrency import wait_while, wait_for
 from src.lib.query import Query
@@ -15,28 +18,42 @@ class Rails(RailsBase):
         super().__init__(level, ms)
 
         self.characters = Entity(
-            soldiers=level.query_all(lambda e: ~Query(e).character == Soldier.character),
+            soldiers=list(level.find(Soldier)),
+            kaledeii=next(level.find(Kaledeii)),
         )
 
-        self.positions = Entity()
+        self.positions = Entity(
+            entrance=(87, 17),
+            kaledeii_entrance=(16, 17),
+        )
+
         self.quests = Entity()
 
     @scene(lambda self: True)
     def start_vision(self, scene):
         c = self.characters
+        p = self.positions
 
         scene.enabled = False
 
         yield
-        self.player = self.level.query(lambda e: ~Query(e).character == Player.character).unwrap()
+        self.player = next(self.level.find(Player))
 
-        for soldier in c.soldiers:
-            @self.run_subscene(soldier)
-            def run_lap(soldier):
-                start_point = soldier.p
-                soldier.ai.pather.going_to = PathTarget.Some((94, 17))
-                yield
-                yield from wait_while(lambda: soldier.ai.is_busy)
+        c.kaledeii.ai.pather.going_to = PathTarget.Some(p.kaledeii_entrance)
+        yield from wait_finish(c.kaledeii)
 
-                soldier.ai.pather.going_to = PathTarget.Some(start_point)
-                yield from wait_while(lambda: soldier.ai.is_busy)
+        yield {c.kaledeii: Say("За мной.")}
+        yield from wait_for(2)
+
+        for s in c.soldiers:
+            s.ai.follower.subject = c.kaledeii
+
+        logging.debug(1)
+
+        c.kaledeii.ai.pather.going_to = PathTarget.Some(p.entrance)
+        yield from wait_finish(c.kaledeii)
+
+        logging.debug(1)
+
+        for s in c.soldiers:
+            s.ai.follower.subject = None

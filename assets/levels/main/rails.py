@@ -25,9 +25,9 @@ class Rails(RailsBase):
 
         self.characters = Entity(
             player=self.player,
-            mother=level.query(lambda e: ~Query(e).character == Mother.character).unwrap(),
-            brother=level.query(lambda e: ~Query(e).character == Brother.character).unwrap(),
-            soldiers=level.query_all(lambda e: ~Query(e).character == Soldier.character),
+            mother=next(level.find(Mother)),
+            brother=next(level.find(Brother)),
+            soldiers=list(level.find(Soldier)),
         )
 
         self.positions = Entity(
@@ -204,7 +204,8 @@ class Rails(RailsBase):
         yield {c.mother: Leave(), c.brother: Leave()}
 
 
-    @scene(lambda self: self.characters.player.health.amount.current <= 0)
+    # @scene(lambda self: self.characters.player.health.amount.current <= 0)
+    @scene(lambda self: True)
     def player_dies(self, scene):
         c = self.characters
         p = self.positions

@@ -7,6 +7,7 @@ from typing import Callable
 from ecs import DynamicEntity
 
 from src.engine.acting.action import Action
+from src.entities.physical.player import Player
 from src.lib.vector import floordiv2, sub2
 
 
@@ -26,7 +27,7 @@ class RailsBase(DynamicEntity):
 
         self.level = level
         self.ms = ms
-        self.player = self.level.query(lambda e: e.character == "@").unwrap_or()
+        self.player = next(self.level.find(Player), None)
 
         logging.info(f"Initialized rails with scenes {[s.name for s in self.scenes]}")
 
