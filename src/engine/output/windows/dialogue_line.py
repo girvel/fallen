@@ -1,7 +1,7 @@
 import curses
 import logging
 
-from src.engine.output.colors import Colors
+from src.engine.output.colors import ColorPair, yellow
 from src.lib.query import Query
 from src.lib.toolkit import cut_by_length, add_multiline_string
 
@@ -29,7 +29,7 @@ class DialogueLine:
             self._window.addstr(
                 1, 6,
                 ~Query(perception.vision.physical.get(memory.current_sound.p)).name or "???",
-                Colors.Yellow.format()
+                ColorPair(yellow).to_curses()
             )
 
         add_multiline_string(self._window, 2, 2, 1, 2, h, w, memory.current_sound.content)

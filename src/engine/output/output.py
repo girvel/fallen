@@ -1,4 +1,4 @@
-from src.engine.output.colors import Colors
+from src.engine.output.colors import ColorPair
 from src.engine.output.windows.console import Console
 from src.engine.output.windows.dialogue_line import DialogueLine
 from src.engine.output.windows.monitor import Monitor
@@ -10,7 +10,7 @@ from src.engine.output.windows.panel import Panel
 
 class Output:
     def __init__(self, stdscr, debug_mode, no_render, io):
-        Colors.initialize()
+        ColorPair.initialize()
 
         panel_w = 35
         self.no_render = no_render

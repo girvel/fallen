@@ -2,7 +2,7 @@ import curses
 import logging
 import math
 
-from src.engine.output.colors import Colors
+from src.engine.output.colors import ColorPair, yellow
 from src.engine.output.html_window import HtmlWindow
 from src.lib.toolkit import add_multiline_string
 
@@ -41,7 +41,7 @@ class OptionPicker:
         for i, o in enumerate(memory.options):
             cursor_y = add_multiline_string(
                 self._window, cursor_y, 1, 1, 1, h, w, o,
-                Colors.Yellow if i == memory.selected_option_i else Colors.Default
+                ColorPair(yellow) if i == memory.selected_option_i else ColorPair()
             )[0] + 1
 
         self._window.refresh()

@@ -1,50 +1,29 @@
 import curses
+from dataclasses import dataclass
 from enum import Enum
 
 
-class Colors(Enum):
-    Default = 0
-    Red = 1
-    Green = 2
-    WhiteOnBlue = 3
-    Yellow = 4
-    WhiteOnRed = 5
-    Magenta = 6
-    Cyan = 7
-    Blue = 8
-    BlueOnWhite = 9
+white = curses.COLOR_WHITE
+black = curses.COLOR_BLACK
+red = curses.COLOR_RED
+green = curses.COLOR_GREEN
+blue = curses.COLOR_BLUE
+yellow = curses.COLOR_YELLOW
+cyan = curses.COLOR_CYAN
+magenta = curses.COLOR_MAGENTA
 
-    def format(self):
-        return curses.color_pair(self.value)
+@dataclass
+class ColorPair:
+    fg: int = curses.COLOR_WHITE
+    bg: int = curses.COLOR_BLACK
 
     @classmethod
     def initialize(cls):
         print('\033[?1003h')  # magical value to enable colors
-        curses.init_pair(cls.Red.value, curses.COLOR_RED, curses.COLOR_BLACK)
-        curses.init_pair(cls.Green.value, curses.COLOR_GREEN, curses.COLOR_BLACK)
-        curses.init_pair(cls.WhiteOnBlue.value, curses.COLOR_WHITE, curses.COLOR_BLUE)
-        curses.init_pair(cls.Yellow.value, curses.COLOR_YELLOW, curses.COLOR_BLACK)
-        curses.init_pair(cls.WhiteOnRed.value, curses.COLOR_WHITE, curses.COLOR_RED)
-        curses.init_pair(cls.Magenta.value, curses.COLOR_MAGENTA, curses.COLOR_BLACK)
-        curses.init_pair(cls.Cyan.value, curses.COLOR_CYAN, curses.COLOR_BLACK)
-        curses.init_pair(cls.Blue.value, curses.COLOR_BLUE, curses.COLOR_BLACK)
-        curses.init_pair(cls.BlueOnWhite.value, curses.COLOR_BLUE, curses.COLOR_WHITE)
+        for fg_i in range(8):
+            for bg_i in range(8):
+                if fg_i == 0 and bg_i == 0: continue
+                curses.init_pair(fg_i * 8 + bg_i, fg_i, bg_i)
 
-
-def _get_color_pair(entity):
-    if entity is None:
-        return Colors.Default
-
-    if getattr(entity, "receives_damage", None):
-        return Colors.Red
-
-    return getattr(entity, "color", Colors.Default)
-
-
-def get_color_pair(entity):
-    color = curses.color_pair(_get_color_pair(entity).value)
-
-    if entity.layer == "physical":
-        color |= curses.A_BOLD
-
-    return color
+    def to_curses(self):
+        return curses.color_pair(self.fg * 8 + self.bg)

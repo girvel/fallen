@@ -1,8 +1,8 @@
 from ecs import DynamicEntity
 
-from src.engine.acting.damage import Health, Weapon, ArmorKind, DamageKind
 from assets.levels.main.entities.ais.brother_ai import BrotherAi
-from src.engine.output.colors import Colors
+from src.engine.acting.damage import Health, Weapon, ArmorKind, DamageKind
+from src.engine.output.colors import ColorPair, blue
 from src.entities.tiles.body import body_factory
 from src.lib.vector import map_grid
 from src.systems.ai import Kind, Senses
@@ -10,7 +10,7 @@ from src.systems.ai import Kind, Senses
 
 class Brother(DynamicEntity):
     character = 'B'
-    color = Colors.Blue
+    color = ColorPair(blue)
     on_death = body_factory
     layer = "physical"
 

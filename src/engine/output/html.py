@@ -1,6 +1,6 @@
 from html.parser import HTMLParser
 
-from src.engine.output.colors import Colors
+from src.engine.output.colors import ColorPair, yellow, white, red
 from src.lib.toolkit import add_multiline_string
 
 
@@ -9,7 +9,7 @@ class CursesHtmlRenderer(HTMLParser):
     y = None
     x = None
     padding_x = None
-    color_stack = [Colors.Default]
+    color_stack = [ColorPair()]
     centering = False
 
     def render_template(self, window, padding_y, padding_x, template, **kwargs):
@@ -28,9 +28,9 @@ class CursesHtmlRenderer(HTMLParser):
             case "center":
                 self.centering = True
             case "y":
-                self.color_stack.append(Colors.Yellow)
+                self.color_stack.append(ColorPair(yellow))
             case "rw":
-                self.color_stack.append(Colors.WhiteOnRed)
+                self.color_stack.append(ColorPair(white, red))
 
     def handle_endtag(self, tag):
         match tag:

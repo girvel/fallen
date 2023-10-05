@@ -58,6 +58,7 @@ def init(stdscr, track, debug_mode, no_render, no_rails):
         pass
     except Exception as ex:
         logging.exception(ex)
+        if debug_mode: raise ex
     finally:
         t = time() - t
 

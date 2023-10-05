@@ -2,7 +2,7 @@ import curses
 
 from ecs import Entity
 
-from src.engine.output.colors import Colors
+from src.engine.output.colors import ColorPair, yellow
 
 
 class Monitor:
@@ -30,7 +30,7 @@ class Monitor:
             except Exception as ex:
                 value = ex
 
-            self._window.addstr(1 + i, 1 + len(header) + 2, repr(value), Colors.Yellow.format())
+            self._window.addstr(1 + i, 1 + len(header) + 2, repr(value), ColorPair(yellow).to_curses())
 
             if i >= self.h - 2:
                 break

@@ -2,7 +2,7 @@ import curses
 from statistics import median
 
 from src.engine.acting.actions.inspect import Inspect
-from src.engine.output.colors import get_color_pair, Colors
+from src.engine.output.colors import ColorPair, red
 from src.lib.vector import floordiv2, grid_get, sub2, le2, zero, lt2, add2
 
 
@@ -90,8 +90,27 @@ class Game:
                 break
             else:
                 character = "."
-                color = Colors.Default.format()
+                color = ColorPair().to_curses()
 
             self._window.addch(rp[1], rp[0], character, color)
 
         self._window.refresh()
+
+
+def _get_color_pair(entity):
+    if entity is None:
+        return ColorPair()
+
+    if getattr(entity, "receives_damage", None):
+        return ColorPair(red)
+
+    return getattr(entity, "color", ColorPair())
+
+
+def get_color_pair(entity):  # TODO refactor
+    color = _get_color_pair(entity).to_curses()
+
+    if entity.layer == "physical":
+        color |= curses.A_BOLD
+
+    return color

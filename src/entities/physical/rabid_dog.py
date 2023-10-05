@@ -2,7 +2,7 @@ from ecs import DynamicEntity
 
 from src.engine.acting.damage import Weapon, Health, DamageKind, ArmorKind
 from src.engine.attitude.implementation import Faction
-from src.engine.output.colors import Colors
+from src.engine.output.colors import magenta, ColorPair
 from src.entities.ais.rabid_ai import RabidAi
 from src.entities.tiles.body import body_factory
 from src.systems.ai import Kind, Senses
@@ -11,7 +11,7 @@ from src.systems.ai import Kind, Senses
 class RabidDog(DynamicEntity):
     name = 'Rabid dog'
     character = 'd'
-    color = Colors.Magenta
+    color = ColorPair(magenta)
     layer = "physical"
 
     faction = Faction.Predators

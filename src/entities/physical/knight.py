@@ -5,7 +5,7 @@ from ecs import DynamicEntity
 from src.engine.acting.damage import Health, Weapon, ArmorKind, DamageKind
 from src.engine.assets import names
 from src.engine.attitude.implementation import Faction, common_attitude
-from src.engine.output.colors import Colors
+from src.engine.output.colors import cyan, ColorPair
 from src.entities.abstract.human import Human
 from src.entities.ais.knight_ai import KnightAi
 from src.entities.tiles.body import body_factory
@@ -14,7 +14,7 @@ from src.systems.ai import Kind, Senses
 
 class Knight(Human):
     character = 'k'
-    color = Colors.Cyan
+    color = ColorPair(cyan)
 
     faction = Faction.Church
 

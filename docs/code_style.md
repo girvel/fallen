@@ -24,6 +24,7 @@ Basically naming convention is:
 | ms      | metasystem (from ecs.Metasystem)                      |
 | hades   | entity-container that manages destruction of entities |
 | genesis | entity-container that manages creation of entities    |
+| bg, fg  | background, foreground                                |
 
 ### Terms borrowed from math
 

@@ -1,6 +1,6 @@
 from src.engine.acting.damage import Weapon, DamageKind, ArmorKind, Health
 from src.engine.attitude.implementation import Faction
-from src.engine.output.colors import Colors
+from src.engine.output.colors import ColorPair, cyan
 from src.entities.abstract.human import Human
 from src.entities.ais.dummy_ai import DummyAi
 from src.lib.vector import map_grid
@@ -11,7 +11,7 @@ class Kaledeii(Human):
     name = 'Каледей'
     sex = "male"
     character = 'K'
-    color = Colors.Cyan
+    color = ColorPair(cyan)
 
     faction = Faction.Church
 

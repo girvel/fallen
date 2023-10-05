@@ -3,7 +3,7 @@ import random
 from ecs import DynamicEntity
 
 from src.engine.acting.damage import Health, ArmorKind
-from src.engine.output.colors import Colors
+from src.engine.output.colors import ColorPair, cyan, red, magenta
 
 
 class Flower(DynamicEntity):
@@ -13,4 +13,4 @@ class Flower(DynamicEntity):
 
     def __init__(self):
         self.health = Health(1, ArmorKind.Organic)
-        self.color = random.choice([Colors.Cyan, Colors.Red, Colors.Magenta])
+        self.color = random.choice([ColorPair(cyan), ColorPair(red), ColorPair(magenta)])

@@ -2,14 +2,14 @@ from typing import Any
 
 from ecs import DynamicEntity
 
-from src.engine.output.colors import Colors
+from src.engine.output.colors import ColorPair, red
 from src.entities.special.genesis import Genesis
 from src.entities.special.hades import Hades
 
 
 class Body(DynamicEntity):
     character = '&'
-    color = Colors.Red
+    color = ColorPair(red)
     layer = "tiles"
 
     def __init__(

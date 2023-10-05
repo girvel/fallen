@@ -1,10 +1,10 @@
 from ecs import DynamicEntity
 
-from src.engine.output.colors import Colors
+from src.engine.output.colors import magenta, ColorPair
 
 
 class Carpet(DynamicEntity):
     name = 'Carpet'
     character = '`'
-    color = Colors.Magenta
+    color = ColorPair(magenta)
     layer = "tiles"

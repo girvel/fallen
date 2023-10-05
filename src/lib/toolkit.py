@@ -5,7 +5,7 @@ import random
 from importlib.util import spec_from_file_location, module_from_spec
 from pathlib import Path
 
-from src.engine.output.colors import Colors
+from src.engine.output.colors import ColorPair
 
 
 def to_camel_case(snake_str):
@@ -47,7 +47,7 @@ def import_module(p: Path):
     return module
 
 def add_multiline_string(
-    window, y: int, x: int, padding_y: int, padding_x: int, h: int, w: int, text: str, color: Colors = Colors.Default,
+    window, y: int, x: int, padding_y: int, padding_x: int, h: int, w: int, text: str, color: ColorPair = ColorPair(),
 ) -> tuple[int, int]:
     while True:
         if y >= h - padding_y:
@@ -57,7 +57,7 @@ def add_multiline_string(
         line = text[:w - padding_x - x]
         text = text[len(line):]
 
-        window.addstr(y, x, line, color.format())
+        window.addstr(y, x, line, color.to_curses())
         x += len(line)
 
         if text == "":

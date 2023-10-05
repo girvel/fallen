@@ -5,7 +5,7 @@ from jinja2 import Environment, PackageLoader
 from src.engine.acting.actions.inspect import Inspect
 from src.engine.acting.actions.move import Move
 from src.engine.inspect import inspect
-from src.engine.output.colors import Colors
+from src.engine.output.colors import ColorPair, yellow
 from src.engine.output.html import CursesHtmlRenderer
 from src.lib.limited import Limited
 from src.lib.query import Query
@@ -51,12 +51,12 @@ class Panel:
         self.panes[self.pane_i.current](subject, perception, memory)
 
         if not self.pane_i.is_min():
-            self._window.addstr(h - 2, 2, "<", Colors.Yellow.format())
+            self._window.addstr(h - 2, 2, "<", ColorPair(yellow).to_curses())
             self._window.addstr(h - 2, 4, from_snake_case(self.panes[self.pane_i.current - 1].__name__).capitalize())
 
         if not self.pane_i.is_max():
             name = from_snake_case(self.panes[self.pane_i.current + 1].__name__).capitalize()
-            self._window.addstr(h - 2, w - 3, ">", Colors.Yellow.format())
+            self._window.addstr(h - 2, w - 3, ">", ColorPair(yellow).to_curses())
             self._window.addstr(h - 2, w - 4 - len(name), name)
 
         self._window.refresh()

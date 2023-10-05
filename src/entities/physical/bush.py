@@ -1,14 +1,13 @@
 from ecs import DynamicEntity
 
 from src.engine.acting.damage import Health, ArmorKind
-from src.engine.output.colors import Colors
-
+from src.engine.output.colors import ColorPair, green
 
 
 class Bush(DynamicEntity):
     name = 'Bush'
     character = 'b'
-    color = Colors.Green
+    color = ColorPair(green)
     solid_flag = None
     layer = "physical"
 

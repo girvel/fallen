@@ -204,8 +204,7 @@ class Rails(RailsBase):
         yield {c.mother: Leave(), c.brother: Leave()}
 
 
-    # @scene(lambda self: self.characters.player.health.amount.current <= 0)
-    @scene(lambda self: True)
+    @scene(lambda self: self.characters.player.health.amount.current <= 0)
     def player_dies(self, scene):
         c = self.characters
         p = self.positions
