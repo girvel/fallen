@@ -1,6 +1,7 @@
 import curses
 import logging
 import time
+from collections import defaultdict
 from typing import TYPE_CHECKING
 
 from src.engine.acting.actions.no_action import NoAction
@@ -27,14 +28,27 @@ class Input:
 
         self.hotkeys = generate_hotkeys(debug_mode)
         self.last_t = time.time()
-        # self.key_queue = []
+        self._key_queue = []
 
-    def read_key(self, allow_empty=False):
+    def read_key(self, mode=None, allow_empty=False):
+        hotkeys = self.hotkeys.global_ | self.hotkeys[mode]
+
+        if len(self._key_queue) > 0 and self._key_queue[0] in hotkeys:
+            hotkey, *self._key_queue = self._key_queue
+            return hotkey
+
         if self.debug_track is not None:
             hotkey = ord(next(self.debug_track))
         else:
-            while (hotkey := self.main.getch()) == -1 and not allow_empty: pass
-        return hotkey
+            while (hotkey := self.main.getch()) == -1 and mode != "cutscene": pass  # TODO remove hardcoded values
+
+        if hotkey not in (-1, curses.KEY_MOUSE):
+            self._key_queue.clear()
+
+        if mode is None or hotkey in hotkeys:
+            return hotkey
+
+        self._key_queue.append(hotkey)
 
     def wait_for_input(self, subject, perception: Perception, memory: "Memory"):
         if memory.in_cutscene:
@@ -57,6 +71,6 @@ class Input:
             if mode == "dialog_line":
                 return NoAction()
 
-        return ((self.hotkeys.global_ | self.hotkeys[mode])
-            .get(self.read_key(mode == "cutscene"), lambda *_: None)
-            (self.io, subject, perception, memory))
+        key = self.read_key(mode)
+        if (f := (self.hotkeys.global_ | self.hotkeys[mode]).get(key)) is not None:
+            return f(self.io, subject, perception, memory)
