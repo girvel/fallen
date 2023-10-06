@@ -31,6 +31,15 @@ class CursesHtmlRenderer(HTMLParser):
                 self.color_stack.append(ColorPair(yellow))
             case "rw":
                 self.color_stack.append(ColorPair(white, red))
+            case "li":
+                h, w = self.window.getmaxyx()
+                self.y, self.x = add_multiline_string(
+                    self.window,
+                    self.y, self.x,
+                    self.padding_y, self.padding_x,
+                    h, w,
+                    "- ", ColorPair(yellow),
+                )
 
     def handle_endtag(self, tag):
         match tag:
@@ -38,7 +47,7 @@ class CursesHtmlRenderer(HTMLParser):
                 self.centering = False
             case "y" | "rw":
                 self.color_stack.pop()
-            case "div" | "p":
+            case "div" | "p" | "li":
                 self.y += 1
                 self.x = self.padding_x
 

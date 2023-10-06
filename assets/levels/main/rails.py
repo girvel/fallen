@@ -41,7 +41,7 @@ class Rails(RailsBase):
 
         self.vision_level = None
 
-    # @scene(lambda self: True)  TODO
+    @scene(lambda self: True)
     def introduction(self, scene):
         c = self.characters
         p = self.positions
