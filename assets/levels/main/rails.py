@@ -1,8 +1,9 @@
-import logging
 from pathlib import Path
 
 from ecs import Entity, exists
 
+from assets.levels.main.entities.physical.brother import Brother
+from assets.levels.main.entities.physical.mother import Mother
 from assets.levels.vision.entities.physical.soldier import Soldier
 from src.engine.acting.actions.leave import Leave
 from src.engine.acting.actions.no_action import NoAction
@@ -10,13 +11,10 @@ from src.engine.acting.actions.say import Say
 from src.engine.acting.damage import Weapon, DamageKind
 from src.engine.ai.pather import PathTarget
 from src.engine.rails_base import RailsBase, scene
-from assets.levels.main.entities.physical.brother import Brother
-from assets.levels.main.entities.physical.mother import Mother
 from src.entities.ais.io import Quest
 from src.entities.special.level import Level
-from src.lib.concurrency import wait_for, wait_while
-from src.lib.query import Query
-from src.lib.vector import d2, grid_set, map_grid
+from src.lib.concurrency import wait_for, wait_while, wait_seconds
+from src.lib.vector import d2
 
 
 class Rails(RailsBase):
@@ -208,9 +206,14 @@ class Rails(RailsBase):
     def player_dies(self, scene):
         c = self.characters
         p = self.positions
+        memory = c.player.ai.memory
 
         scene.enabled = False
         yield from self.start_cutscene()
+
+        memory.is_vision_disabled = True
+        yield from wait_seconds(2)
+        memory.is_vision_disabled = False
 
         self.vision_level = self.ms.add(Level(self.ms, Path("assets/levels/vision"), False))
         yield

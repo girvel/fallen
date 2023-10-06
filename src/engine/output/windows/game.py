@@ -110,7 +110,7 @@ def _get_color_pair(entity):
 def get_color_pair(entity):  # TODO refactor
     color = _get_color_pair(entity).to_curses()
 
-    if entity.layer == "physical":
+    if entity.layer in {"physical", "effects"}:
         color |= curses.A_BOLD
 
     return color

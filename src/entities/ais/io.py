@@ -32,6 +32,7 @@ class Memory:
 
     in_cutscene: bool = False
     is_skipping: bool = False
+    is_vision_disabled: bool = False
 
     _quests: list[Quest] = field(default_factory=list)
     _notifications: list[Notification] = field(default_factory=list)
@@ -88,6 +89,8 @@ class IO(DynamicEntity):
     last_render_input = None
 
     def render(self, subject, perception):
+        if self.memory.is_vision_disabled: return self.render_empty()
+
         self.last_render_input = [subject, perception]
         self.output.render(subject, perception, self.memory)
 
