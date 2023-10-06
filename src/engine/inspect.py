@@ -11,12 +11,13 @@ def inspect(subject: DynamicEntity) -> {str: str | bool | None}:
 metrics = []
 
 @metrics.append
-def name(subject: DynamicEntity) -> str | bool | None:
-    return ~Query(subject).name
-
-@metrics.append
-def sex(subject: DynamicEntity) -> str | bool | None:
-    return ~Query(subject).sex
+def _(subject: DynamicEntity) -> str | bool | None:
+    return {
+        "male": "♂ ",
+        "female": "♀ ",
+        "mercury": "☿ ",
+        None: "",
+    }[~Query(subject).sex] + ~Query(subject).name or ""
 
 @metrics.append
 def faction(subject: DynamicEntity) -> str | bool | None:

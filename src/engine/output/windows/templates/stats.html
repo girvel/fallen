@@ -16,6 +16,8 @@
     {% if value == True %}
     <p><y>{{ key }}</y></p>
     {% elif not value %}
+    {% elif not key %}
+    <p><y>{{ value }}</y></p>
     {% else %}
     <p>{{ key }}: <y>{{ value }}</y></p>
     {% endif %}
