@@ -1,6 +1,7 @@
 import curses
 import logging
 import re
+import time
 
 from ecs import Entity
 
@@ -14,7 +15,8 @@ from src.lib.vector import add2, up, down, left, right
 
 
 def generate_hotkeys(debug_mode):
-    result = Entity(global_={}, game={}, options={}, notification={}, dialog_line={})
+    result = Entity(global_={}, game={}, options={}, notification={}, dialog_line={}, cutscene={})
+    # TODO mode as string enum
 
     class _hotkey:
         def __init__(self, mode, keys):
@@ -24,6 +26,7 @@ def generate_hotkeys(debug_mode):
         def __call__(self, f):
             for hotkey in self.keys:
                 result[self.mode][ord(hotkey) if isinstance(hotkey, str) else hotkey] = f
+            return f
 
 
     @_hotkey("global_", ["Q"])
@@ -152,8 +155,16 @@ def generate_hotkeys(debug_mode):
         return NoAction()
 
     @_hotkey("dialog_line", [""])
+    @_hotkey("cutscene", [""])
     def skip(io, subject, perception, memory):
         memory.is_skipping = True
+        return NoAction()
+
+    @_hotkey("cutscene", [-1])
+    def watch(io, subject, perception, memory):
+        if not memory.is_skipping:
+            time.sleep(max(0, .2 - time.time() + io.input.last_t))
+            io.input.last_t = time.time()
         return NoAction()
 
     return result

@@ -44,10 +44,7 @@ class Input:
             elif memory.current_sound is not None:
                 mode = "dialog_line"
             else:
-                if not memory.is_skipping:
-                    time.sleep(max(0, .2 - time.time() + self.last_t))
-                    self.last_t = time.time()
-                return self.hotkeys.global_.get(self.read_key(True), NoAction())
+                mode = "cutscene"
         else:
             mode = "game"
 
@@ -62,7 +59,7 @@ class Input:
         hotkeys = self.hotkeys.global_ | self.hotkeys[mode]
 
         while (
-            (key := self.read_key()) not in hotkeys
+            (key := self.read_key(mode == "cutscene")) not in hotkeys
             or (action := hotkeys[key](self.io, subject, perception, memory)) is None
         ):
             self.io.rerender()
