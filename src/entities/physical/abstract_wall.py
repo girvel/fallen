@@ -8,7 +8,6 @@ class AbstractWall(DynamicEntity):
     name = 'Wall'
     character = None
     color = ColorPair(yellow)
-    solid_flag = None
     layer = "physical"
 
     def __init__(self):
