@@ -4,7 +4,7 @@ from ecs import Entity, exists
 
 from assets.levels.main.entities.physical.brother import Brother
 from assets.levels.main.entities.physical.mother import Mother
-from assets.levels.vision.entities.physical.soldier import Soldier
+from src.entities.physical.soldier import Soldier
 from src.engine.acting.actions.leave import Leave
 from src.engine.acting.actions.no_action import NoAction
 from src.engine.acting.actions.say import Say

@@ -17,6 +17,7 @@ damage_kinds:
 armor_kinds:
   Organic: [[], [Acid]]
   Steel: [[Slashing, Crushing, Piercing], []]
+  LightSteel: [[Slashing], []]
   Leather: [[], []]
 
   Glass: [[Acid], [Crushing, Piercing, Slashing, Thunder]]

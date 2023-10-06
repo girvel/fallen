@@ -11,7 +11,7 @@ from src.systems.ai import Perception
 class DummyAi(DynamicEntity):
     def __init__(self):
         self.pather = Pather()
-        self.follower = Follower(2)
+        self.follower = Follower(3)
         self.spacial_memory = SpacialMemory()
         self.is_busy = False
 
@@ -24,6 +24,6 @@ class DummyAi(DynamicEntity):
 
         self.is_busy = False
 
-def wait_finish(dummy):
+def wait_finish(*dummies, threshold=0):
     yield
-    yield from wait_while(lambda: dummy.ai.is_busy)
+    yield from wait_while(lambda: sum(int(dummy.ai.is_busy) for dummy in dummies) > threshold)

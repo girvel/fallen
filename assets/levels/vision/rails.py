@@ -2,15 +2,14 @@ import logging
 
 from ecs import Entity
 
-from assets.levels.vision.entities.physical.kaledeii import Kaledeii
-from assets.levels.vision.entities.physical.soldier import Soldier
+from src.entities.physical.kaledeii import Kaledeii
+from src.entities.physical.soldier import Soldier
 from src.engine.acting.actions.say import Say
 from src.engine.ai.pather import PathTarget
 from src.engine.rails_base import RailsBase, scene
 from src.entities.ais.dummy_ai import wait_finish
 from src.entities.physical.player import Player
-from src.lib.concurrency import wait_while, wait_for
-from src.lib.query import Query
+from src.lib.concurrency import wait_for
 
 
 class Rails(RailsBase):
@@ -48,12 +47,10 @@ class Rails(RailsBase):
         for s in c.soldiers:
             s.ai.follower.subject = c.kaledeii
 
-        logging.debug(1)
-
         c.kaledeii.ai.pather.going_to = PathTarget.Some(p.entrance)
-        yield from wait_finish(c.kaledeii)
-
-        logging.debug(1)
+        yield from wait_finish(c.kaledeii, *c.soldiers)
 
         for s in c.soldiers:
             s.ai.follower.subject = None
+
+        yield from self.end_cutscene()
