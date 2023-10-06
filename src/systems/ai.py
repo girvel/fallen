@@ -9,7 +9,7 @@ from ecs import create_system, DynamicEntity, Entity
 from numpy import ndarray, dtype
 
 from src.entities.special.sound import Sound
-from src.lib.query import Query
+from src.lib.query import Q
 from src.lib.vector import grid_set, int2, fits_in_grid, grid_unsafe_get
 
 
@@ -127,7 +127,7 @@ def think(subject: 'ai'):
         subject.act = subject.level.rails_effect[subject]
         if not hasattr(subject.ai, "cutscene_aware_flag"): return
 
-    if (senses := ~Query(subject).senses) is not None:
+    if (senses := ~Q(subject).senses) is not None:
         vision_r = subject.senses.vision
         hearing_r = subject.senses.hearing
         smell_r = subject.senses.smell

@@ -12,7 +12,7 @@ from src.engine.meme import Meme
 from src.entities.physical.table import Table
 from src.lib.period.period import Period
 from src.lib.period.random_period import RandomPeriod
-from src.lib.query import Query
+from src.lib.query import Q
 from src.lib.vector import directions, add2, grid_get
 
 
@@ -56,7 +56,7 @@ class PeasantAi:
             self.chat_period.step_without_reset()
             and len(self.messages) > 0
             and any(
-                ~Query(e).faction == subject.faction
+                ~Q(e).faction == subject.faction
                 for e in perception.vision.physical.values()
             )
         ):

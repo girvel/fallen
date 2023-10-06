@@ -4,7 +4,7 @@ from dataclasses import dataclass
 from ecs import DynamicEntity
 
 from src.engine.acting.actions.attack import Attack
-from src.lib.query import Query
+from src.lib.query import Q
 from src.systems.ai import Perception
 
 
@@ -15,7 +15,7 @@ class Morale:
     def update(self, subject: DynamicEntity, perception: Perception):
         attitude_changes = [
             (e, -self.aggression_cost) for e in perception.vision.physical.values()
-            if isinstance(~Query(e).act, Attack) and subject.attitude.get(e.act.target) >= 0
+            if isinstance(~Q(e).act, Attack) and subject.attitude.get(e.act.target) >= 0
         ]
 
         for e, offset in attitude_changes:

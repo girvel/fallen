@@ -8,7 +8,7 @@ from src.engine.inspect import inspect
 from src.engine.output.colors import ColorPair, yellow
 from src.engine.output.html import CursesHtmlRenderer
 from src.lib.limited import Limited
-from src.lib.query import Query
+from src.lib.query import Q
 from src.lib.toolkit import from_snake_case
 
 
@@ -62,11 +62,10 @@ class Panel:
         self._window.refresh()
 
     def _stats(self, subject, perception, memory):
-        inspected = "act" in subject and isinstance(subject.act, Inspect) and subject.act.subject or None
         self.html_renderer.render_template(self._window, 1, 2, self.stats_template,
             subject=subject,
             mode="MOVE" if self.mode == Move else "<rw>ATTACK</rw>",
-            inspection=(subject := ~Query(subject).act.subject) and inspect(subject),
+            inspection=(subject := ~Q(subject).act[Inspect].subject) and inspect(subject),
         )
 
     pretty_hotkeys = {

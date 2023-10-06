@@ -6,7 +6,7 @@ from src.engine.acting.action import Action
 from src.engine.acting.actions.say import Say
 from src.engine.attitude.implementation import Faction
 from src.entities.ais.dummy_ai import DummyAi
-from src.lib.query import Query
+from src.lib.query import Q
 from src.systems.ai import Perception
 
 
@@ -29,7 +29,7 @@ class BrotherAi(DummyAi):
             len(self.bye_lines) > 0 and
             (neighbour := next((
                 e for e in perception.vision.physical.values()
-                if ~Query(e).faction == Faction.Villagers
+                if ~Q(e).faction == Faction.Villagers
                 and e not in self.said_bye_to
             ), None))
         ):

@@ -9,6 +9,7 @@ from src.engine.ai.spacial_memory import SpacialMemory
 from src.engine.input.input import Input
 from src.engine.output.output import Output
 from src.entities.special.sound import Sound
+from src.lib.query import Q
 
 
 @dataclass
@@ -68,11 +69,10 @@ class IO(DynamicEntity):
         self.form_memory(subject, perception)
 
         while True:
-            # if self.memory.is_skipping and ~len(Q(self.memory.options)) == 1: TODO
-            if not self.memory.is_skipping or (self.memory.options and len(self.memory.options) != 1):
-                self.render(subject, perception)
-            else:
+            if self.memory.is_skipping and ~Q(self.memory.options).q_len() in (None, 1):
                 self.render_empty()
+            else:
+                self.render(subject, perception)
 
             if (action := self.input.wait_for_input(subject, perception, self.memory)) is not None:
                 return action

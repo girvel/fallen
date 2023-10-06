@@ -2,7 +2,7 @@ import logging
 
 from ecs import create_system, Metasystem
 
-from src.lib.query import Query
+from src.lib.query import Q
 from src.lib.vector import grid_set, grid_get
 
 
@@ -10,7 +10,7 @@ def generate(ms: Metasystem):
     @create_system
     def destruction(hades: 'entities_to_destroy', genesis: 'entities_to_create'):
         for e in hades.entities_to_destroy:
-            if (level := ~Query(e).level) is not None:
+            if (level := ~Q(e).level) is not None:
                 grid_set(level.grids[e.layer], e.p, None)
 
             if hasattr(e, "on_death"):
@@ -20,7 +20,7 @@ def generate(ms: Metasystem):
                 ms.delete(e)
 
             if not hasattr(e, "sound_flag"):
-                logging.info(f'-"{~Query(e).name or e}"')
+                logging.info(f'-"{~Q(e).name or e}"')
 
         hades.entities_to_destroy.clear()
 
@@ -36,7 +36,7 @@ def generate(ms: Metasystem):
 
             ms.add(e)
             if not hasattr(e, "sound_flag"):
-                logging.info(f'+"{~Query(e).name or e}"')
+                logging.info(f'+"{~Q(e).name or e}"')
 
         genesis.entities_to_create.clear()
 
