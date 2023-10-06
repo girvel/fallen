@@ -27,6 +27,7 @@ class Input:
 
         self.hotkeys = generate_hotkeys(debug_mode)
         self.last_t = time.time()
+        # self.key_queue = []
 
     def read_key(self, allow_empty=False):
         if self.debug_track is not None:
@@ -56,12 +57,6 @@ class Input:
             if mode == "dialog_line":
                 return NoAction()
 
-        hotkeys = self.hotkeys.global_ | self.hotkeys[mode]
-
-        while (
-            (key := self.read_key(mode == "cutscene")) not in hotkeys
-            or (action := hotkeys[key](self.io, subject, perception, memory)) is None
-        ):
-            self.io.rerender()
-
-        return action
+        return ((self.hotkeys.global_ | self.hotkeys[mode])
+            .get(self.read_key(mode == "cutscene"), lambda *_: None)
+            (self.io, subject, perception, memory))

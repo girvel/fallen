@@ -67,12 +67,15 @@ class IO(DynamicEntity):
     def make_decision(self, subject, perception):
         self.form_memory(subject, perception)
 
-        if not self.memory.is_skipping or (self.memory.options and len(self.memory.options) != 1):
-            self.render(subject, perception)
-        else:
-            self.render_empty()
+        while True:
+            # if self.memory.is_skipping and ~len(Q(self.memory.options)) == 1: TODO
+            if not self.memory.is_skipping or (self.memory.options and len(self.memory.options) != 1):
+                self.render(subject, perception)
+            else:
+                self.render_empty()
 
-        return self.input.wait_for_input(subject, perception, self.memory)
+            if (action := self.input.wait_for_input(subject, perception, self.memory)) is not None:
+                return action
 
     def form_memory(self, subject, perception):
         self.memory.spacial_memory.push(subject, perception)
