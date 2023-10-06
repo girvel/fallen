@@ -19,7 +19,8 @@ def generate(ms: Metasystem):
             else:
                 ms.delete(e)
 
-            logging.info(f"Destroyed entity {~Query(e).name}")
+            if not hasattr(e, "sound_flag"):
+                logging.info(f'-"{~Query(e).name or e}"')
 
         hades.entities_to_destroy.clear()
 
@@ -34,7 +35,8 @@ def generate(ms: Metasystem):
                 e.level.put(e.p, e)
 
             ms.add(e)
-            logging.info(f"Created entity {~Query(e).name}")
+            if not hasattr(e, "sound_flag"):
+                logging.info(f'+"{~Query(e).name or e}"')
 
         genesis.entities_to_create.clear()
 

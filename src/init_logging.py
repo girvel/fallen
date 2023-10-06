@@ -18,10 +18,6 @@ class PrettyFormatter(logging.Formatter):
         path = Path(record.pathname)
         record.pathname = str(path.is_absolute() and path.relative_to(root_directory) or path)
         return super().format(record)
-        # return (
-        #     f"[{self.short_levels[record.levelname]} {record.asctime}] {record.filename}:{record.lineno} "
-        #     f"{record.message}"
-        # )
 
 
 class SafeFileHandler(logging.FileHandler):
