@@ -1,8 +1,11 @@
 import logging
+import os
 import sys
 from pathlib import Path
 
 root_directory = Path(__file__).parent.parent
+
+repetition_signal = object()
 
 class PrettyFormatter(logging.Formatter):
     short_levels = {
@@ -21,6 +24,11 @@ class PrettyFormatter(logging.Formatter):
 
 
 class SafeFileHandler(logging.FileHandler):
+    def __init__(self, *args, **kwargs):
+        self.last_message_content = None
+        self.repetitions_n = 1
+        super().__init__(*args, **kwargs)
+
     def handleError(self, record: logging.LogRecord) -> None:
         ex_type, ex, traceback = sys.exc_info()
         try:
@@ -39,6 +47,34 @@ class SafeFileHandler(logging.FileHandler):
                 (root_directory / ".backup.log").write_text(message)
             except Exception as ex3:
                 sys.stderr.write(f"3rd degree logging exception: {ex3}\n\n" + message)
+
+    def emit(self, record):
+        if self.stream is None:
+            if self.mode != 'w' or not self._closed:
+                self.stream = self._open()
+
+        try:
+            message = self.format(record)
+            stream = self.stream
+            # issue 35046: merged two stream.writes into one.
+
+            if (content := message[16:]) == self.last_message_content:
+                self.repetitions_n += 1
+            else:
+                if self.repetitions_n > 1:
+                    stream.write(f"{message[:16]}  ~ ({self.repetitions_n}){self.terminator}")
+
+                self.last_message_content = content
+                self.repetitions_n = 1
+
+                stream.write(message + self.terminator)
+
+            self.flush()
+
+        except RecursionError:  # See issue 36272
+            raise
+        except Exception:
+            self.handleError(record)
 
 
 def init_logging():
