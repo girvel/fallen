@@ -30,22 +30,20 @@ class Input:
         self.last_t = time.time()
         self._key_queue = []
 
-    def read_key(self, mode=None, allow_empty=False):
-        hotkeys = self.hotkeys.global_ | self.hotkeys[mode]
-
-        if len(self._key_queue) > 0 and self._key_queue[0] in hotkeys:
+    def read_key(self, hotkeys=None, allow_empty=False):
+        if len(self._key_queue) > 0 and (hotkeys is None or self._key_queue[0] in hotkeys):
             hotkey, *self._key_queue = self._key_queue
             return hotkey
 
         if self.debug_track is not None:
             hotkey = ord(next(self.debug_track))
         else:
-            while (hotkey := self.main.getch()) == -1 and mode != "cutscene": pass  # TODO remove hardcoded values
+            while (hotkey := self.main.getch()) == -1 and not allow_empty: pass
 
         if hotkey not in (-1, curses.KEY_MOUSE):
             self._key_queue.clear()
 
-        if mode is None or hotkey in hotkeys:
+        if hotkeys is None or hotkey in hotkeys:
             return hotkey
 
         self._key_queue.append(hotkey)
@@ -71,6 +69,7 @@ class Input:
             if mode == "dialog_line":
                 return NoAction()
 
-        key = self.read_key(mode)
-        if (f := (self.hotkeys.global_ | self.hotkeys[mode]).get(key)) is not None:
+        hotkeys = self.hotkeys.global_ | self.hotkeys[mode]
+        key = self.read_key(hotkeys, mode == "cutscene")  # TODO remove hardcoded values
+        if (f := hotkeys.get(key)) is not None:
             return f(self.io, subject, perception, memory)
