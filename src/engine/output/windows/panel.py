@@ -85,11 +85,12 @@ class Panel:
 
             for (hotkey, f) in hotkey_collection.items():
                 name = from_snake_case(f.__name__).capitalize()
+                entry = self.pretty_hotkeys.get(hotkey, chr(hotkey) if hotkey != -1 else " ")
 
                 if name in result:
-                    result[name] += ", " + self.pretty_hotkeys.get(hotkey, chr(hotkey))
+                    result[name] += ", " + entry
                 else:
-                    result[name] = self.pretty_hotkeys.get(hotkey, chr(hotkey))
+                    result[name] = entry
 
             return result
 
