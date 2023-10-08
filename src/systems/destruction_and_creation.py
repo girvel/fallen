@@ -19,7 +19,7 @@ def generate(ms: Metasystem):
             else:
                 ms.delete(e)
 
-            if not hasattr(e, "sound_flag"):
+            if not hasattr(e, "sound_flag") and not hasattr(e, "boring_flag"):
                 logging.info(f'-"{~Q(e).name or e}"')
 
         hades.entities_to_destroy.clear()
@@ -35,7 +35,7 @@ def generate(ms: Metasystem):
                 e.level.put(e.p, e)
 
             ms.add(e)
-            if not hasattr(e, "sound_flag"):
+            if not hasattr(e, "sound_flag") and not hasattr(e, "boring_flag"):
                 logging.info(f'+"{~Q(e).name or e}"')
 
         genesis.entities_to_create.clear()

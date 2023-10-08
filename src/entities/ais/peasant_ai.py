@@ -8,6 +8,7 @@ from src.engine.ai.fight_or_flight import FightOrFlight
 from src.engine.ai.morale import Morale
 from src.engine.ai.pather import Pather, PathTarget
 from src.engine.ai.spacial_memory import SpacialMemory
+from src.engine.ai.wanderer import Wanderer
 from src.engine.meme import Meme
 from src.entities.physical.table import Table
 from src.lib.period.period import Period
@@ -26,12 +27,15 @@ class PeasantAi:
         self.working_period = RandomPeriod(30, 46)
         self.wandering_period = RandomPeriod(20, 36)
         self.lagging_period = RandomPeriod(4, 11)
+        self.fight_or_flight_period = Period(5)
+        self.chat_period = RandomPeriod(5, 11)
+
         self.spacial_memory = SpacialMemory()
         self.pather = Pather()
         self.fight_or_flight = FightOrFlight(False)
-        self.fight_or_flight_period = Period(5)
-        self.chat_period = RandomPeriod(5, 11)
         self.morale = Morale()
+        self.wanderer = Wanderer()
+
         self.messages = []
 
     # It is possible to extract ModalAi parent/component?
@@ -106,8 +110,6 @@ class PeasantAi:
 
             case Mode.Wandering:
                 if not self.wandering_period.step():
-                    if len(self.pather.free_directions) > 0:
-                        return Move(random.choice(self.pather.free_directions))
-                    return
+                    return self.wanderer.wander(subject, perception, self.pather.free_directions).unwrap_or()
 
                 self.mode = Mode.GoHome

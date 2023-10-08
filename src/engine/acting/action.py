@@ -7,6 +7,8 @@ from src.entities.special.hades import Hades
 
 
 class Action(ABC):
+    succeeded: bool = True
+
     @abstractmethod
     def execute(self, actor: DynamicEntity, hades: Hades, genesis: Genesis):
         pass

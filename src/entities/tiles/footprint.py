@@ -8,3 +8,4 @@ class Footprint(DynamicEntity):
     layer = "tiles"
     character = ","
     death_chance = death_chance_from_half_life(100)
+    boring_flag = None
