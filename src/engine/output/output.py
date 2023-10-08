@@ -1,4 +1,5 @@
 import curses
+import logging
 
 from src.engine.output.colors import ColorPair
 from src.engine.output.windows.console import Console
@@ -35,7 +36,10 @@ class Output:
         h, w = self.main.getmaxyx()
 
         for window in self.execution_order:
-            window.resize(h, w)
+            try:
+                window.resize(h, w)
+            except Exception as ex:
+                logging.error(f"Exception when resizing {window}", exc_info=ex)
 
     def render(self, subject, perception, memory):
         self.main.refresh()
@@ -43,4 +47,7 @@ class Output:
         if self.no_render: return
 
         for window in self.execution_order:
-            window.render(subject, perception, memory)
+            try:
+                window.render(subject, perception, memory)
+            except Exception as ex:
+                logging.error(f"Exception when rendering {window}", exc_info=ex)
