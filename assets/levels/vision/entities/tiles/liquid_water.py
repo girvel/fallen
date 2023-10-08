@@ -1,5 +1,6 @@
 from ecs import DynamicEntity
 
+from src.engine.attitude.implementation import Faction
 from src.engine.output.colors import ColorPair, blue
 
 
@@ -9,3 +10,4 @@ class LiquidWater(DynamicEntity):
     color = ColorPair(blue)
     liquid_height = 10
     layer = "tiles"
+    faction = Faction.Water
