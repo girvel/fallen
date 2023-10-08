@@ -64,7 +64,7 @@ def generate_hotkeys(debug_mode):
 
     @_hotkey("game", ["1"])
     def cast_fire_flow(io, subject, perception, memory):
-        while (hotkey := chr(io.input.read_key())) not in "wasd":
+        while (hotkey := chr(io.input.key_queue.read_key())) not in "wasd":
             if hotkey == "": return
 
         return CastFireFlow(directions_by_key[hotkey])
@@ -94,7 +94,7 @@ def generate_hotkeys(debug_mode):
 
             while True:
                 io.render(subject, perception)
-                while (hotkey := io.input.read_key()) == -1: pass
+                hotkey = io.input.key_queue.read_key()
 
                 if hotkey == curses.CTL_ENTER: break
                 if hotkey == curses.KEY_MOUSE: continue

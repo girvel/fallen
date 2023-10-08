@@ -6,6 +6,7 @@ from typing import TYPE_CHECKING
 
 from src.engine.acting.actions.no_action import NoAction
 from src.engine.input.hotkeys import generate_hotkeys
+from src.engine.input.key_queue import KeyQueue
 from src.systems.ai import Perception
 
 if TYPE_CHECKING:
@@ -17,36 +18,13 @@ class Input:
         stdscr.nodelay(1)
         logging.info(f"Initalized mouse with {curses.mousemask(curses.ALL_MOUSE_EVENTS)}")
 
-        self.main = stdscr
         self.io = io
-
-        if debug_track:
-            self.debug_track = iter(debug_track)
-            logging.info(f"Debug track: '{debug_track}'")
-        else:
-            self.debug_track = None
-
         self.hotkeys = generate_hotkeys(debug_mode)
         self.last_t = time.time()
-        self._key_queue = []
+        self.key_queue = KeyQueue(stdscr, debug_track and iter(debug_track))
 
-    def read_key(self, hotkeys=None, allow_empty=False):
-        if len(self._key_queue) > 0 and (hotkeys is None or self._key_queue[0] in hotkeys):
-            hotkey, *self._key_queue = self._key_queue
-            return hotkey
-
-        if self.debug_track is not None:
-            hotkey = ord(next(self.debug_track))
-        else:
-            while (hotkey := self.main.getch()) == -1 and not allow_empty: pass
-
-        if hotkey not in (-1, curses.KEY_MOUSE):
-            self._key_queue.clear()
-
-        if hotkeys is None or hotkey in hotkeys:
-            return hotkey
-
-        self._key_queue.append(hotkey)
+        if debug_track:
+            logging.info(f"Debug track: '{debug_track}'")
 
     def wait_for_input(self, subject, perception: Perception, memory: "Memory"):
         if memory.in_cutscene:
@@ -70,6 +48,6 @@ class Input:
                 return NoAction()
 
         hotkeys = self.hotkeys.global_ | self.hotkeys[mode]
-        key = self.read_key(hotkeys, mode == "cutscene")  # TODO remove hardcoded values
+        key = self.key_queue.read_key(hotkeys, mode == "cutscene")  # TODO remove hardcoded values
         if (f := hotkeys.get(key)) is not None:
             return f(self.io, subject, perception, memory)
