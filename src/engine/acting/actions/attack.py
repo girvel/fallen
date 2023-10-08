@@ -3,10 +3,9 @@ from dataclasses import dataclass
 from ecs import DynamicEntity
 
 from src.engine.acting.action import Action
-from src.engine.acting.damage import inflict_damage
+from src.engine.acting.damage import attack
 from src.entities.special.genesis import Genesis
 from src.entities.special.hades import Hades
-from src.entities.special.level import Level
 
 
 @dataclass
@@ -14,4 +13,4 @@ class Attack(Action):
     target: DynamicEntity  # never None, always exists
 
     def execute(self, actor: DynamicEntity, hades: Hades, genesis: Genesis):
-        inflict_damage(self.target, actor.weapon, hades)
+        attack(actor, self.target, hades)

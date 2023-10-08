@@ -71,7 +71,7 @@ class Rails(RailsBase):
 
         yield {c.brother: Say("Вот, смотри.")}
         yield {c.player: Say("В твоих руках оказывается длинный свёрток льняной ткани.", True)}
-        c.player.weapon = Weapon(5, DamageKind.Slashing)
+        c.player.weapon = Weapon(8, DamageKind.Slashing)
 
         yield from self.options({
             (look := "Развязать бечёвку"): NoAction(),

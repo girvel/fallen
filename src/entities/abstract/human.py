@@ -11,6 +11,7 @@ class Human(DynamicEntity):
 
     def __init__(self, *args, **kwargs):
         self.classifiers = {Kind.Animate}
+        self.skill = {}
 
         self.__post_init__(*args, **kwargs)
         if len(missing_attributes := [a for a in required_attributes if not hasattr(self, a)]) > 0:

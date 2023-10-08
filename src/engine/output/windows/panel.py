@@ -4,6 +4,7 @@ from jinja2 import Environment, PackageLoader
 
 from src.engine.acting.actions.inspect import Inspect
 from src.engine.acting.actions.move import Move
+from src.engine.acting.damage import potential_damage
 from src.engine.inspect import inspect
 from src.engine.output.colors import ColorPair, yellow
 from src.engine.output.html import CursesHtmlRenderer
@@ -64,6 +65,7 @@ class Panel:
     def _stats(self, subject, perception, memory):
         self.html_renderer.render_template(self._window, 1, 2, self.stats_template,
             subject=subject,
+            potential_damage=int(potential_damage(subject)),
             mode="MOVE" if self.mode == Move else "<rw>ATTACK</rw>",
             inspection=(subject := ~Q(subject).act[Inspect].subject) and inspect(subject),
         )

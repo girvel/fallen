@@ -1,13 +1,13 @@
+import logging
 from dataclasses import dataclass
 from pathlib import Path
 
 import yaml
 from ecs import Entity, DynamicEntity
 
-import logging
-
 from src.entities.special.hades import Hades
 from src.lib.limited import Limited
+from src.lib.query import Q
 from src.lib.toolkit import random_round
 
 
@@ -26,28 +26,39 @@ class Health:
         self.armor_kind = armor_kind
 
 
-def inflict_damage(target: DynamicEntity, weapon: Weapon, hades: Hades):
-    if "health" not in target: return
+def attack(source: DynamicEntity, target: DynamicEntity, hades: Hades):
+    if (weapon := ~Q(source).weapon) is None: return
 
-    armor = armor_data[target.health.armor_kind]
-    if weapon.damage_kind in armor.resistance:
+    return inflict_damage(
+        target, potential_damage(source), weapon.damage_kind, hades,
+    )
+
+
+def potential_damage(source: DynamicEntity):
+    return source.weapon.power * ((~Q(source).skill).get(source.weapon.damage_kind) or .5)
+
+
+def inflict_damage(target: DynamicEntity, power: float, damage_kind: str, hades: Hades):
+    if (health := ~Q(target).health) is None: return
+
+    armor = armor_data[health.armor_kind]
+    if damage_kind in armor.resistance:
         modifier = 0.5
-    elif weapon.damage_kind in armor.vulnerability:
+    elif damage_kind in armor.vulnerability:
         modifier = 2
     else:
         modifier = 1
 
-    total_damage = random_round(weapon.power * modifier)
+    total_damage = random_round(power * modifier)
 
     logging.info(
-        f"{target.name} is damaged w/ {total_damage} = {weapon.power} * {modifier} "
-        f"({weapon.damage_kind} on {target.health.armor_kind})"
+        f"Damage to {target.name}: {total_damage} = {power} * {modifier} ({damage_kind} on {health.armor_kind})"
     )
 
-    target.health.amount.move(-total_damage)
+    health.amount.move(-total_damage)
     target.receives_damage = True
 
-    if target.health.amount.current <= 0:
+    if health.amount.current <= 0:
         logging.info(f"{target.name} is killed")
         hades.entities_to_destroy.add(target)
 
