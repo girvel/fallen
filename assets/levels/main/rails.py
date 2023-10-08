@@ -162,6 +162,7 @@ class Rails(RailsBase):
         p = self.positions
 
         scene.enabled = False
+        self.scene_by_name("brother_and_mother_leave").enabled = False
         yield from self.start_cutscene()
         yield from self.center_camera()
 
@@ -183,10 +184,9 @@ class Rails(RailsBase):
         c.brother.ai.pather.going_to = PathTarget.Some(c.mother.p)
         c.mother.ai.pather.going_to = PathTarget.Some(p.away)
 
-        yield from wait_while(lambda:
-            d2(self.characters.brother.p, self.positions.away) > 3
-            and d2(self.characters.brother.p, c.player.p) <= c.player.senses.vision + 10
-        )
+        self.scene_by_name("brother_and_mother_leave").enabled = True
+
+        yield from wait_while(lambda: exists(c.brother))
 
         yield from self.end_cutscene()
 

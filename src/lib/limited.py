@@ -1,8 +1,13 @@
 from statistics import median
-from typing import Optional
+from typing import Optional, Callable
 
 
 class Limited:
+    def __class_getitem__(cls, item: slice) -> Callable[[Optional[int]], "Limited"]:
+        def factory(value: Optional[int] = None):
+            return Limited(item.start, item.stop, value)
+        return factory
+
     def __init__(self, maximum: int, minimum: int = 0, current: Optional[int] = None):
         self.maximum: int = maximum
         self.minimum: int = minimum
