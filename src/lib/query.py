@@ -1,7 +1,8 @@
 from dataclasses import dataclass
-from typing import TypeVar, Generic, Any, Optional
+from typing import TypeVar, Generic, Any, Optional, Type
 
 T = TypeVar('T')
+R = TypeVar("R")
 
 @dataclass(frozen=True)
 class Q(Generic[T]):
@@ -21,5 +22,5 @@ class Q(Generic[T]):
     def __invert__(self) -> T:
         return self.__object
 
-    def __getitem__(self, cast_type: type) -> "Q[Any]":
+    def __getitem__(self, cast_type: Type[R]) -> "Q[R]":
         return Q(self.__object if isinstance(self.__object, cast_type) else None)
