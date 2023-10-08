@@ -2,6 +2,7 @@ import logging
 
 from ecs import Entity
 
+from src.engine.acting.actions.build import Build
 from src.entities.physical.kaledeii import Kaledeii
 from src.entities.physical.soldier import Soldier
 from src.engine.acting.actions.say import Say
@@ -9,6 +10,7 @@ from src.engine.ai.pather import PathTarget
 from src.engine.rails_base import RailsBase, scene
 from src.entities.ais.dummy_ai import wait_finish
 from src.entities.physical.player import Player
+from src.entities.physical.thick_wall import ThickWall
 from src.lib.concurrency import wait_for
 
 
@@ -35,7 +37,6 @@ class Rails(RailsBase):
 
         scene.enabled = False
 
-        yield
         self.player = next(self.level.find(Player))  # TODO make this automatic
         c.player = self.player
 
@@ -43,6 +44,7 @@ class Rails(RailsBase):
         yield from wait_finish(c.kaledeii)
 
         yield {c.kaledeii: Say("За мной.")}
+        yield {c.kaledeii: Build((31, 17), ThickWall)}
         yield from wait_for(2)
 
         for s in c.soldiers:

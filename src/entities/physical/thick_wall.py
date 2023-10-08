@@ -11,5 +11,6 @@ class ThickWall(DynamicEntity):
     solid_flag = None
     layer = "physical"
 
-    def __init__(self):
+    def __init__(self, **attributes):
         self.health = Health(10000, ArmorKind.Stone)
+        super().__init__(**attributes)

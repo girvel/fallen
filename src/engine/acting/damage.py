@@ -35,7 +35,12 @@ def attack(source: DynamicEntity, target: DynamicEntity, hades: Hades):
 
 
 def potential_damage(source: DynamicEntity):
-    return source.weapon.power * ((~Q(source).skill).get(source.weapon.damage_kind) or .5)
+    if (skill := ~Q(source).skill) is not None:
+        skill_k = skill.get(source.weapon.damage_kind) or .5
+    else:
+        skill_k = 1
+
+    return source.weapon.power * skill_k
 
 
 def inflict_damage(target: DynamicEntity, power: float, damage_kind: str, hades: Hades):

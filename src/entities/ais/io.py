@@ -71,7 +71,7 @@ class IO(DynamicEntity):
         self.form_memory(subject, perception)
 
         while True:
-            if self.memory.is_skipping and ~Q(self.memory.options).q_len() in (None, 1):
+            if self.memory.is_skipping and ~Q(self.memory.options).Q_len() in (None, 1):
                 self.render_empty()
             else:
                 self.render(subject, perception)
