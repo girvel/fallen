@@ -126,8 +126,7 @@ def generate_hotkeys(debug_mode):
                         "tracker": tracker,
                     })
                 except Exception as ex:
-                    logging.warning(f"Exception when executing console code")
-                    logging.exception(ex)
+                    logging.error(f"Exception when executing console code", exc_info=ex)
 
             logging.info(f"Executing console code:\n```py\n{io.output.console.buffer}\n```")
             enclose_console_code(subject, perception, io)

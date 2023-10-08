@@ -72,6 +72,6 @@ def crash_safe(f):
         try:
             return f(*args, **kwargs)
         except Exception as ex:
-            logging.exception(ex)
+            logging.error(f"System {f} crashed with {args=}; {kwargs=}", exc_info=ex)
 
     return result

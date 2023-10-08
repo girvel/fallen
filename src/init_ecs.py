@@ -57,7 +57,7 @@ def init(stdscr, track, debug_mode, no_render, no_rails):
     except KeyboardInterrupt:
         pass
     except Exception as ex:
-        logging.exception(ex)
+        logging.error("Uncaught error on Metasystem.update", exc_info=ex)
         if debug_mode: raise ex
     finally:
         t = time() - t

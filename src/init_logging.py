@@ -32,8 +32,7 @@ class SafeFileHandler(logging.FileHandler):
     def handleError(self, record: logging.LogRecord) -> None:
         ex_type, ex, traceback = sys.exc_info()
         try:
-            logging.error("Exception while logging:")
-            logging.exception(ex)
+            logging.error("Exception while logging:", exc_info=ex)
         except Exception as ex2:
             try:
                 message = (
