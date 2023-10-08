@@ -12,14 +12,11 @@ class CursesHtmlRenderer(HTMLParser):
     color_stack = [ColorPair()]
     centering = False
 
-    def render_template(self, window, padding_y, padding_x, template, **kwargs):
+    def render_template(self, window, template, **kwargs):
         self.window = window
 
-        self.y = padding_y
-        self.x = padding_x
-
-        self.padding_y = padding_y
-        self.padding_x = padding_x
+        self.y = 0
+        self.x = 0
 
         self.feed(template.render(**kwargs).replace("\n", ""))
 
