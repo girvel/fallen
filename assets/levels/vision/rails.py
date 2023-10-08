@@ -4,6 +4,7 @@ from ecs import Entity
 
 from src.engine.acting.actions.build import Build
 from src.engine.acting.actions.cast_fire_storm import CastFireStorm
+from src.engine.acting.actions.cast_stone_stomp import CastStoneStomp
 from src.entities.physical.kaledeii import Kaledeii
 from src.entities.physical.soldier import Soldier
 from src.engine.acting.actions.say import Say
@@ -12,6 +13,7 @@ from src.engine.rails_base import RailsBase, scene
 from src.entities.ais.dummy_ai import wait_finish
 from src.entities.physical.player import Player
 from src.entities.physical.thick_wall import ThickWall
+from src.lib import vector
 from src.lib.concurrency import wait_for, wait_seconds
 
 
@@ -45,7 +47,7 @@ class Rails(RailsBase):
         yield from wait_finish(c.kaledeii)
 
         yield {c.kaledeii: Say("За мной.")}
-        yield {c.kaledeii: CastFireStorm()}
+        yield {c.kaledeii: CastStoneStomp(vector.down)}
         yield from wait_seconds(10)
         # yield from wait_for(2)
         #

@@ -10,5 +10,4 @@ def wait_while(predicate: Callable[[], bool]):
     while predicate(): yield
 
 def wait_seconds(seconds: float):
-    t = time.time()
-    while time.time() - t < seconds: yield
+    yield from wait_for(seconds * 5)
