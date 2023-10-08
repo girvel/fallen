@@ -6,6 +6,7 @@ from ecs import DynamicEntity
 from src.engine.acting.action import Action
 from src.entities.special.genesis import Genesis
 from src.entities.special.hades import Hades
+from src.entities.tiles.footprint import Footprint
 from src.lib.vector import add2, grid_set, grid_get, int2
 
 
@@ -15,7 +16,10 @@ class Move(Action):
 
     def execute(self, actor: DynamicEntity, hades: Hades, genesis: Genesis):
         next_p = add2(actor.p, self.v)
-        if grid_get(actor.level.grids[actor.layer], next_p, object()) is not None: return
+        if grid_get(actor.level.grids[actor.layer], next_p, False) is not None: return
+
+        if grid_get(actor.level.grids.tiles, actor.p, False) is None:
+            genesis.entities_to_create.add(Footprint(p=actor.p, level=actor.level))
 
         grid_set(actor.level.grids[actor.layer], actor.p, None)
         actor.level.put(next_p, actor)
