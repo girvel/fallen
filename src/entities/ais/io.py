@@ -76,11 +76,10 @@ class IO(DynamicEntity):
             else:
                 self.render(subject, perception)
 
-            if (action := self.dummy.make_decision(subject, perception)) is not None:
-                return action
+            dummy_action = self.dummy.make_decision(subject, perception)
+            player_action = self.input.wait_for_input(subject, perception, self.memory)
 
-            if (action := self.input.wait_for_input(subject, perception, self.memory)) is not None:
-                return action
+            return dummy_action or player_action
 
     def form_memory(self, subject, perception):
         self.memory.spacial_memory.push(subject, perception)

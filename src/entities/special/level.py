@@ -114,3 +114,8 @@ class Level(DynamicEntity):
 
     def find(self, entity_type: Any):
         return self.query(lambda e: e.character == entity_type.character)
+
+    def iter_square(self, p: int2, r: int):
+        for y in range(max(0, p[1] - r), min(self.size[1], p[1] + r + 1)):
+            for x in range(max(0, p[0] - r), min(self.size[0], p[0] + r + 1)):
+                yield x, y
