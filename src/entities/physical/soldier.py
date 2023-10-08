@@ -21,7 +21,7 @@ class Soldier(Human):
         self.name = random.choice(names["first"][self.sex])
         self.health = Health(40, ArmorKind.Leather)
         self.weapon = Weapon(5, DamageKind.Slashing)
-        self.senses = Senses(8, 0, 0)
+        self.senses = Senses(16, 0, 0)
         self.ai = DummyAi()
 
         self.attitude = common_attitude()

@@ -56,4 +56,6 @@ class Rails(RailsBase):
         for s in c.soldiers:
             s.ai.follower.subject = None
 
+        c.player.ai.dummy.follower.subject = None
+
         yield from self.end_cutscene()

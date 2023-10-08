@@ -18,7 +18,7 @@ class Kaledeii(Human):
     def __init__(self):
         self.health = Health(80, ArmorKind.Steel)
         self.weapon = Weapon(15, DamageKind.Slashing)
-        self.senses = Senses(18, 40, 0)
+        self.senses = Senses(24, 40, 0)
         self.ai = DummyAi()
 
     def after_load(self, level):
