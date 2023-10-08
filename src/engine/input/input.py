@@ -1,7 +1,6 @@
 import curses
 import logging
 import time
-from collections import defaultdict
 from typing import TYPE_CHECKING
 
 from src.engine.acting.actions.no_action import NoAction
@@ -16,7 +15,7 @@ if TYPE_CHECKING:
 class Input:
     def __init__(self, stdscr, debug_track, debug_mode, io):
         stdscr.nodelay(1)
-        logging.info(f"Initalized mouse with {curses.mousemask(curses.ALL_MOUSE_EVENTS)}")
+        logging.info(f"Initialized mouse with {curses.mousemask(curses.ALL_MOUSE_EVENTS)}")
 
         self.io = io
         self.hotkeys = generate_hotkeys(debug_mode)

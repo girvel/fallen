@@ -36,7 +36,8 @@ class Rails(RailsBase):
         scene.enabled = False
 
         yield
-        self.player = next(self.level.find(Player))
+        self.player = next(self.level.find(Player))  # TODO make this automatic
+        c.player = self.player
 
         c.kaledeii.ai.pather.going_to = PathTarget.Some(p.kaledeii_entrance)
         yield from wait_finish(c.kaledeii)
@@ -46,6 +47,8 @@ class Rails(RailsBase):
 
         for s in c.soldiers:
             s.ai.follower.subject = c.kaledeii
+
+        c.player.ai.dummy.follower.subject = c.kaledeii
 
         c.kaledeii.ai.pather.going_to = PathTarget.Some(p.entrance)
         yield from wait_finish(c.kaledeii, *c.soldiers)

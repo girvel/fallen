@@ -8,6 +8,7 @@ from src.engine.acting.action import Action
 from src.engine.ai.spacial_memory import SpacialMemory
 from src.engine.input.input import Input
 from src.engine.output.output import Output
+from src.entities.ais.dummy_ai import DummyAi
 from src.entities.special.sound import Sound
 from src.lib.query import Q
 
@@ -63,6 +64,7 @@ class IO(DynamicEntity):
         self.input = Input(stdscr, debug_track, debug_mode, self)
 
         self.memory = Memory()
+        self.dummy = DummyAi()
         self.output.resize()
 
     def make_decision(self, subject, perception):
@@ -73,6 +75,9 @@ class IO(DynamicEntity):
                 self.render_empty()
             else:
                 self.render(subject, perception)
+
+            if (action := self.dummy.make_decision(subject, perception)) is not None:
+                return action
 
             if (action := self.input.wait_for_input(subject, perception, self.memory)) is not None:
                 return action
