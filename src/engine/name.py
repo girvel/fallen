@@ -1,9 +1,22 @@
 from dataclasses import dataclass
+from functools import singledispatchmethod
 
 
 @dataclass
 class Name:
     cases: dict
+
+    @singledispatchmethod
+    def __init__(self, arg):
+        raise TypeError(f"Name({type(arg)}) is impossible")
+
+    @__init__.register
+    def _(self, text: str):
+        self.cases = {"им": text}
+
+    @__init__.register
+    def _(self, cases: dict):
+        self.cases = cases
 
     def __str__(self):
         return self.cases["им"]

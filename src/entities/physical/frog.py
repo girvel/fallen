@@ -1,13 +1,14 @@
 from ecs import DynamicEntity
 
 from src.engine.acting.damage import Health, ArmorKind
+from src.engine.name import Name
 from src.engine.output.colors import ColorPair, green
 from src.entities.ais.frog_ai import FrogAi
 from src.systems.ai import Kind
 
 
 class Frog(DynamicEntity):
-    name = "Frog"
+    name = Name("Frog")
     layer = "physical"
     character = "f"
     color = ColorPair(green)

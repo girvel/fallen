@@ -1,11 +1,12 @@
 from ecs import DynamicEntity
 
 from src.engine.acting.damage import Health, ArmorKind
+from src.engine.name import Name
 from src.engine.output.colors import ColorPair, yellow
 
 
 class AbstractWall(DynamicEntity):
-    name = 'Wall'
+    name = Name("Стена")
     character = None
     color = ColorPair(yellow)
     layer = "physical"

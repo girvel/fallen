@@ -1,5 +1,6 @@
 from src.engine.acting.damage import Weapon, DamageKind, ArmorKind, Health
 from src.engine.attitude.implementation import Faction
+from src.engine.name import Name
 from src.engine.output.colors import ColorPair, cyan
 from src.entities.abstract.human import Human
 from src.entities.ais.dummy_ai import DummyAi
@@ -8,7 +9,7 @@ from src.systems.ai import Senses
 
 
 class Kaledeii(Human):
-    name = 'Каледей'
+    name = Name("Каледей")
     sex = "male"
     character = 'K'
     color = ColorPair(cyan)

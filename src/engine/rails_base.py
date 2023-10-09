@@ -7,12 +7,13 @@ from typing import Callable
 from ecs import DynamicEntity
 
 from src.engine.acting.action import Action
+from src.engine.name import Name
 from src.entities.physical.player import Player
 from src.lib.vector import floordiv2, sub2
 
 
 class RailsBase(DynamicEntity):
-    name = "Rails"
+    name = Name("Rails")
     rails_flag = None
 
     def __init__(self, level, ms):

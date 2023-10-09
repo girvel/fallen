@@ -12,12 +12,14 @@ metrics = []
 
 @metrics.append
 def _(subject: DynamicEntity) -> str | bool | None:
-    return {
+    prefix = {
         "male": "♂ ",
         "female": "♀ ",
         "mercury": "☿ ",
         None: "",
-    }[~Q(subject).sex] + ~Q(subject).name or ""
+    }[~Q(subject).sex]
+
+    return f"{prefix}{~Q(subject).name or ''}"
 
 @metrics.append
 def faction(subject: DynamicEntity) -> str | bool | None:

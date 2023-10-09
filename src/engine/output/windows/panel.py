@@ -5,7 +5,7 @@ from jinja2 import Environment, PackageLoader
 from src.engine.acting.actions.inspect import Inspect
 from src.engine.acting.actions.move import Move
 from src.engine.acting.damage import potential_damage
-from src.engine.inspect import inspect
+from src.engine.inspection import inspect
 from src.engine.output.colors import ColorPair, yellow
 from src.engine.output.html import CursesHtmlRenderer
 from src.lib.limited import Limited
@@ -41,7 +41,7 @@ class Panel:
         self._window.resize(h - 1, self.w)
         self._window.mvwin(0, w - self.w)
 
-    def render(self, subject, perception, memory):
+    def render(self, subject, perception, memory):  # TODO should be (self, io, subject, perception)
         if memory.in_cutscene: return
 
         h, w = self._window.getmaxyx()

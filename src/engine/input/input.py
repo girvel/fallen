@@ -13,12 +13,12 @@ if TYPE_CHECKING:
 
 
 class Input:
-    def __init__(self, stdscr, debug_track, debug_mode, io):
+    def __init__(self, stdscr, debug_track, io):
         stdscr.nodelay(1)
         logging.info(f"Initialized mouse with {curses.mousemask(curses.ALL_MOUSE_EVENTS)}")
 
         self.io = io
-        self.hotkeys = generate_hotkeys(debug_mode)
+        self.hotkeys = generate_hotkeys(io.debug_mode)
         self.last_t = time.time()
         self.key_queue = KeyQueue(stdscr, debug_track and iter(debug_track))
 
@@ -26,6 +26,8 @@ class Input:
             logging.info(f"Debug track: '{debug_track}'")
 
     def wait_for_input(self, subject, perception: Perception, memory: "Memory"):
+        # TODO should be (self, io, subject, perception)
+
         if memory.in_cutscene:
             if memory.options:
                 mode = "options"

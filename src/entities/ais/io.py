@@ -7,6 +7,7 @@ from ecs import DynamicEntity
 from src.engine.acting.action import Action
 from src.engine.ai.spacial_memory import SpacialMemory
 from src.engine.input.input import Input
+from src.engine.name import Name
 from src.engine.output.output import Output
 from src.entities.ais.dummy_ai import DummyAi
 from src.entities.special.sound import Sound
@@ -56,12 +57,14 @@ class Memory:
         return result
 
 class IO(DynamicEntity):
-    name = 'Input/Output'
+    name = Name("Input/Output")
     cutscene_aware_flag = None
 
     def __init__(self, stdscr, debug_track, debug_mode, no_render):
-        self.output = Output(stdscr, debug_mode, no_render, self)
-        self.input = Input(stdscr, debug_track, debug_mode, self)
+        self.debug_mode = debug_mode
+
+        self.output = Output(stdscr, no_render, self)
+        self.input = Input(stdscr, debug_track, self)
 
         self.memory = Memory()
         self.dummy = DummyAi()

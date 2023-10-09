@@ -6,6 +6,8 @@ Cool things:
 - Think-Act architecture pattern
 x Rust style enums
 - Rust style Option-s, Option.next
+- Results of rust style enums experiment
+- Q()
 
 Rust style enums:
 - Post on girvel.xyz

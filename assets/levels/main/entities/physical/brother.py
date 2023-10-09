@@ -2,6 +2,8 @@ from ecs import DynamicEntity
 
 from assets.levels.main.entities.ais.brother_ai import BrotherAi
 from src.engine.acting.damage import Health, Weapon, ArmorKind, DamageKind
+from src.engine.assets import reserved_names
+from src.engine.name import Name, CompositeName
 from src.engine.output.colors import ColorPair, blue
 from src.entities.tiles.body import body_factory
 from src.lib.vector import map_grid
@@ -15,8 +17,9 @@ class Brother(DynamicEntity):
     layer = "physical"
 
     def __init__(self):
+        self.name = CompositeName(reserved_names.mike, reserved_names.kinds_male)
+
         self.sex = "male"
-        self.name = "Брат"
         self.health = Health(30, ArmorKind.Organic)
         self.weapon = Weapon(4, DamageKind.Slashing)
         self.classifiers = {Kind.Animate}

@@ -2,6 +2,7 @@ import random
 
 from src.engine.acting.damage import Health, DamageKind, ArmorKind, Weapon
 from src.engine.attitude.implementation import Faction, common_attitude
+from src.engine.name import Name
 from src.engine.output.colors import ColorPair, yellow
 from src.entities.abstract.human import Human
 from src.entities.ais.dummy_ai import DummyAi
@@ -10,7 +11,7 @@ from src.systems.ai import Senses
 
 
 class LordBishop(Human):
-    name = 'Лорд Натаниэль'
+    name = Name("Лорд Натаниэль")
     sex = "male"
     character = 'B'
     color = ColorPair(yellow)

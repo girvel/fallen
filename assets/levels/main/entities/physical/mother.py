@@ -1,6 +1,7 @@
 from ecs import DynamicEntity
 
 from src.engine.acting.damage import Health, Weapon, ArmorKind, DamageKind
+from src.engine.assets import reserved_names
 from src.engine.name import CompositeName, Name
 from src.engine.output.colors import ColorPair, blue
 from src.entities.ais.dummy_ai import DummyAi
@@ -17,17 +18,7 @@ class Mother(DynamicEntity):
 
     def __init__(self):
         self.sex = "female"
-        self.name = CompositeName(
-            Name({
-                "им": "Лилия",
-                "ро": "Лилии",
-                "да": "Лилии",
-                "ви": "Лилию",
-                "тв": "Лилией",
-                "пр": "Лилии",
-            }),
-            Name({"им": "Кайндс"}),
-        )
+        self.name = CompositeName(reserved_names.lilia, reserved_names.kinds_female)
 
         self.health = Health(50, ArmorKind.Organic)
         self.weapon = Weapon(4, DamageKind.Slashing)

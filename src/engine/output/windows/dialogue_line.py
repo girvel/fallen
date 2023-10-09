@@ -28,7 +28,7 @@ class DialogueLine:
         if not memory.current_sound.is_internal:
             self._window.addstr(
                 1, 6,
-                ~Q(perception.vision.physical.get(memory.current_sound.p)).name or "???",
+                str(~Q(perception.vision.physical.get(memory.current_sound.p)).name or "???"),
                 ColorPair(yellow).to_curses()
             )
 

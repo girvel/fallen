@@ -1,11 +1,12 @@
 from ecs import DynamicEntity
 
 from src.engine.attitude.implementation import Faction
+from src.engine.name import Name
 from src.engine.output.colors import blue, white, ColorPair
 
 
 class Water(DynamicEntity):
-    name = 'Water'
+    name = Name("Water")
     character = '~'
     color = ColorPair(white, blue)
     layer = "physical"

@@ -1,8 +1,10 @@
 from ecs import DynamicEntity
 
+from src.engine.name import Name
+
 
 class Sound(DynamicEntity):
-    name = 'Sound'
+    name = Name("Sound")
     layer = 'sounds'
     sound_flag = None
 

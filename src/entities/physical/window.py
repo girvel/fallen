@@ -1,10 +1,11 @@
 from ecs import DynamicEntity
 
 from src.engine.acting.damage import ArmorKind, Health
+from src.engine.name import Name
 
 
 class Window(DynamicEntity):
-    name = 'Window'
+    name = Name("Окно")
     character = '='
     layer = "physical"
 

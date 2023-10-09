@@ -1,10 +1,12 @@
-from typing import Any
+from typing import Any, Optional
 
 from ecs import DynamicEntity
 
+from src.engine.name import Name, CompositeName
 from src.engine.output.colors import ColorPair, red
 from src.entities.special.genesis import Genesis
 from src.entities.special.hades import Hades
+from src.lib.query import Q
 
 
 class Body(DynamicEntity):
@@ -13,10 +15,18 @@ class Body(DynamicEntity):
     layer = "tiles"
 
     def __init__(
-        self, name: str = "Body", items: list[Any] = None,
+        self, parent_name: Name, items: list[Any] = None,
         **attributes,
     ):
-        self.name = name
+        self.name = CompositeName(Name({
+            "им": "тело",
+            "ро": "тела",
+            "да": "тело",
+            "ви": "тела",
+            "тв": "телом",
+            "пр": "теле",
+        }), Name(f"{parent_name:ро}"))
+
         self.items = items or []
 
         super().__init__(**attributes)
@@ -29,7 +39,7 @@ def body_factory(base: DynamicEntity, hades: Hades, genesis: Genesis):
         items.append(base.weapon)
 
     genesis.entities_to_create.add(Body(
-        name=f"Body of {base.name}", items=items, p=base.p, level=base.level
+        base.name, items=items, sex=~Q(base).sex, p=base.p, level=base.level
     ))
 
     return True
