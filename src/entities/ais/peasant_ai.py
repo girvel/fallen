@@ -46,7 +46,7 @@ class PeasantAi:
         aggressives = self.morale.update(subject, perception)
 
         for e, offset in aggressives:
-            self.messages.append(Say(f"<Выражает недовольство {e.name}>", meme=Meme.MoraleChange(e, offset)))
+            self.messages.append(Say(f"<Выражает недовольство {e.name:тв}>", meme=Meme.MoraleChange(e, offset)))
 
         if (
             (len(aggressives) > 0 or self.fight_or_flight_period.step())

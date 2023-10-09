@@ -3,6 +3,7 @@ from ecs import DynamicEntity
 from src.engine.acting.damage import Weapon, Health, DamageKind, ArmorKind
 from src.engine.attitude.attitude import Attitude
 from src.engine.attitude.implementation import Faction
+from src.engine.name import Name
 from src.engine.output.colors import magenta, ColorPair
 from src.entities.ais.rabid_ai import RabidAi
 from src.entities.tiles.body import body_factory
@@ -10,7 +11,6 @@ from src.systems.ai import Kind, Senses
 
 
 class RabidDog(DynamicEntity):
-    name = 'Rabid dog'
     character = 'd'
     color = ColorPair(magenta)
     layer = "physical"
@@ -20,6 +20,15 @@ class RabidDog(DynamicEntity):
     on_death = body_factory
 
     def __init__(self):
+        self.name = Name({
+            "им": "Бешеный пёс",
+            "ро": "Бешеного пса",
+            "да": "Бешеному псу",
+            "ви": "Бешеного пса",
+            "тв": "Бешеным псом",
+            "пр": "Бешеном псе",
+        })
+
         self.weapon = Weapon(3, DamageKind.Piercing)
         self.health = Health(20, ArmorKind.Organic)
         self.classifiers = {Kind.Animate}

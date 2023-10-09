@@ -1,8 +1,18 @@
+import random
 from pathlib import Path
 
-import yaml
+import toml
 
-assets_folder = Path("assets")
+from src.engine.name import Name, CompositeName
 
-names = yaml.safe_load((assets_folder / "names.yaml").read_text())
-strange_names = yaml.safe_load((assets_folder / "strange_names.yaml").read_text())
+
+def _read_asset(name):
+    return (Path("assets") / name).read_text(encoding="utf-8")
+
+
+first_names = {sex: list(map(Name, cases)) for sex, cases in toml.loads(_read_asset("first_names.toml")).items()}
+last_names  = {sex: list(map(Name, cases)) for sex, cases in toml.loads(_read_asset("last_names.toml" )).items()}
+
+
+def random_composite_name(sex):
+    return CompositeName(random.choice(first_names[sex]), random.choice(last_names[sex]))

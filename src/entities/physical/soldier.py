@@ -1,7 +1,7 @@
 import random
 
 from src.engine.acting.damage import Health, DamageKind, ArmorKind, Weapon
-from src.engine.assets import names
+from src.engine.assets import random_composite_name
 from src.engine.attitude.implementation import Faction, common_attitude
 from src.engine.output.colors import ColorPair, cyan
 from src.entities.abstract.human import Human
@@ -18,7 +18,7 @@ class Soldier(Human):
 
     def __post_init__(self):
         self.sex = random.choices(["male", "female"], [85, 15])[0]
-        self.name = random.choice(names["first"][self.sex])
+        self.name = random_composite_name(self.sex)
         self.health = Health(40, ArmorKind.Leather)
         self.weapon = Weapon(5, DamageKind.Slashing)
         self.senses = Senses(16, 0, 0)

@@ -1,15 +1,11 @@
 import random
 
-from ecs import DynamicEntity
-
 from src.engine.acting.damage import Health, Weapon, ArmorKind, DamageKind
-from src.engine.assets import names
 from src.engine.attitude.implementation import Faction, common_attitude
 from src.engine.output.colors import cyan, ColorPair
 from src.entities.abstract.human import Human
 from src.entities.ais.knight_ai import KnightAi
-from src.entities.tiles.body import body_factory
-from src.systems.ai import Kind, Senses
+from src.systems.ai import Senses
 
 
 class Knight(Human):
@@ -19,7 +15,8 @@ class Knight(Human):
     faction = Faction.Church
 
     def __init__(self):
-        self.name = "Sir " + random.choice(names["last"])
+        raise NotImplementedError
+        # self.name =
         self.sex = random.choices(["male", "female"], [85, 15])[0]
         self.health = Health(70, ArmorKind.Steel)
         self.weapon = Weapon(15, DamageKind.Slashing)

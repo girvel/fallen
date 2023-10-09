@@ -1,20 +1,13 @@
-import logging
-
 from ecs import Entity
 
-from src.engine.acting.actions.build import Build
-from src.engine.acting.actions.cast_fire_storm import CastFireStorm
-from src.engine.acting.actions.cast_stone_stomp import CastStoneStomp
-from src.entities.physical.kaledeii import Kaledeii
-from src.entities.physical.soldier import Soldier
 from src.engine.acting.actions.say import Say
 from src.engine.ai.pather import PathTarget
 from src.engine.rails_base import RailsBase, scene
 from src.entities.ais.dummy_ai import wait_finish
+from src.entities.physical.kaledeii import Kaledeii
 from src.entities.physical.player import Player
-from src.entities.physical.thick_wall import ThickWall
-from src.lib import vector
-from src.lib.concurrency import wait_for, wait_seconds
+from src.entities.physical.soldier import Soldier
+from src.lib.concurrency import wait_for
 
 
 class Rails(RailsBase):
@@ -46,22 +39,24 @@ class Rails(RailsBase):
         c.kaledeii.ai.pather.going_to = PathTarget.Some(p.kaledeii_entrance)
         yield from wait_finish(c.kaledeii)
 
+        yield from wait_for(1000)
+
         yield {c.kaledeii: Say("За мной.")}
-        yield {c.kaledeii: CastStoneStomp(vector.down)}
-        yield from wait_seconds(10)
-        # yield from wait_for(2)
-        #
-        # for s in c.soldiers:
-        #     s.ai.follower.subject = c.kaledeii
-        #
-        # c.player.ai.dummy.follower.subject = c.kaledeii
-        #
-        # c.kaledeii.ai.pather.going_to = PathTarget.Some(p.entrance)
-        # yield from wait_finish(c.kaledeii, *c.soldiers)
-        #
-        # for s in c.soldiers:
-        #     s.ai.follower.subject = None
-        #
-        # c.player.ai.dummy.follower.subject = None
+        yield from wait_for(2)
+
+        for s in c.soldiers:
+            s.ai.follower.subject = c.kaledeii
+
+        c.player.ai.dummy.follower.subject = c.kaledeii
+
+        c.kaledeii.ai.pather.going_to = PathTarget.Some(p.entrance)
+        yield from wait_finish(c.kaledeii, *c.soldiers, threshold=2)
+
+        for s in c.soldiers:
+            s.ai.follower.subject = None
+
+        c.player.ai.dummy.follower.subject = None
+
+        # yield {c.kaledeii: "{c.soldiers[0].name} {}"}
 
         yield from self.end_cutscene()

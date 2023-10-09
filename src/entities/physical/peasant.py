@@ -1,7 +1,7 @@
 import random
 
 from src.engine.acting.damage import Weapon, Health, DamageKind, ArmorKind
-from src.engine.assets import names
+from src.engine.assets import random_composite_name
 from src.engine.attitude.implementation import common_attitude, Faction
 from src.entities.abstract.human import Human
 from src.entities.ais.peasant_ai import PeasantAi
@@ -16,7 +16,7 @@ class Peasant(Human):
 
     def __post_init__(self):
         self.sex = random.choice(["male", "female"])
-        self.name = " ".join([random.choice(names["first"][self.sex]), random.choice(names["last"])])
+        self.name = random_composite_name(self.sex)
         self.health = Health(random.randrange(10, 25) + (self.sex == "male" and 10 or 0), ArmorKind.Organic)
         self.weapon = Weapon(4, DamageKind.Slashing)
         self.senses = Senses(8, 0, 0)
