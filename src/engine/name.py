@@ -1,22 +1,15 @@
 from dataclasses import dataclass
-from functools import singledispatchmethod
 
 
-@dataclass
+@dataclass(frozen=True, init=False)
 class Name:
     cases: dict
 
-    @singledispatchmethod
-    def __init__(self, arg):
-        raise TypeError(f"Name({type(arg)}) is impossible")
-
-    @__init__.register
-    def _(self, text: str):
-        self.cases = {"им": text}
-
-    @__init__.register
-    def _(self, cases: dict):
-        self.cases = cases
+    def __init__(self, source: str | dict):
+        match source:
+            case str(text): object.__setattr__(self, "cases", {"им": text})
+            case dict(cases): object.__setattr__(self, "cases", cases)
+            case arg: raise TypeError(f"Name({type(arg)}) is impossible")
 
     def __str__(self):
         return self.cases["им"]
@@ -25,7 +18,7 @@ class Name:
         return self.cases.get(format_spec, self.cases["им"])
 
 
-@dataclass
+@dataclass(frozen=True)
 class CompositeName:
     first: Name
     last: Name
