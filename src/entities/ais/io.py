@@ -57,7 +57,7 @@ class Memory:
         return result
 
 class IO(DynamicEntity):
-    name = Name("Input/Output")
+    name = Name("Ввод/Вывод")
     cutscene_aware_flag = None
 
     def __init__(self, stdscr, debug_track, debug_mode, no_render):

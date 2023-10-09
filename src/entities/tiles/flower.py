@@ -8,7 +8,7 @@ from src.engine.output.colors import ColorPair, cyan, red, magenta
 
 
 class Flower(DynamicEntity):
-    name = Name("Flower")
+    name = Name("Цветок")
     character = 'F'
     layer = "tiles"
 

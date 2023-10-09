@@ -13,7 +13,7 @@ from src.lib.vector import floordiv2, sub2
 
 
 class RailsBase(DynamicEntity):
-    name = Name("Rails")
+    name = Name("Рельсы")
     rails_flag = None
 
     def __init__(self, level, ms):

@@ -4,7 +4,7 @@ from src.engine.name import Name
 
 
 class Genesis(DynamicEntity):
-    name = Name("genesis")
+    name = Name("Генезис")
 
     def __init__(self):
         self.entities_to_create = set()

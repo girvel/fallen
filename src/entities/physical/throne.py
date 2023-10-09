@@ -6,7 +6,7 @@ from src.engine.output.colors import ColorPair, yellow
 
 
 class Throne(DynamicEntity):
-    name = Name("Throne")
+    name = Name("Трон")
     layer = "physical"
     character = 't'
     color = ColorPair(yellow)

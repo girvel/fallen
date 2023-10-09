@@ -10,7 +10,7 @@ from src.lib.toolkit import death_chance_from_half_life
 
 
 class Fire(DynamicEntity):
-    name = Name("fire")
+    name = Name("Огонь")
     character = '*'
     color = ColorPair(red)
 

@@ -8,7 +8,7 @@ from src.engine.output.colors import ColorPair, green, yellow
 
 
 class Tree(DynamicEntity):
-    name = Name("Tree")
+    name = Name("Дерево")
     character = 'T'
     color = ColorPair(yellow, green)
     solid_flag = None

@@ -1,14 +1,8 @@
-from ecs import DynamicEntity
-
-from src.engine.attitude.implementation import Faction
-from src.engine.name import Name
 from src.engine.output.colors import ColorPair, blue
+from src.entities.physical.water import Water
 
 
-class LiquidWater(DynamicEntity):
-    name = Name("Вода")
-    character = '~'
+class LiquidWater(Water):
     color = ColorPair(blue)
     liquid_height = 10
     layer = "tiles"
-    faction = Faction.Water

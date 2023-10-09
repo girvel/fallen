@@ -4,7 +4,7 @@ from src.engine.name import Name
 
 
 class Sound(DynamicEntity):
-    name = Name("Sound")
+    name = Name("Звук")
     layer = 'sounds'
     sound_flag = None
 

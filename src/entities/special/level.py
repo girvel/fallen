@@ -27,7 +27,7 @@ def load_palette_from(path):
     return result
 
 class Level(DynamicEntity):
-    name = Name("level_container")
+    name = Name("Уровень")
 
     T = TypeVar('T')
     def put(self, p: int2, entity: T) -> T:
