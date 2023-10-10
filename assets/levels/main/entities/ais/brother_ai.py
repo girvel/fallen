@@ -22,6 +22,7 @@ class BrotherAi(DummyAi):
 
     def __init__(self):
         self.said_bye_to = set()
+        self.speech_enabled = False
         super().__init__()
 
     def make_decision(self, subject: DynamicEntity, perception: Perception) -> Action:

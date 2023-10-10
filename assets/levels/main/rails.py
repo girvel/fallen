@@ -138,6 +138,7 @@ class Rails(RailsBase):
             yield from self.options({"Развязать бечёвку": NoAction()})
             yield {c.player: Say("Это меч. Очень красивый.", True)}
 
+        c.brother.ai.enable_speech = True
         yield from wait_for(10)
         memory.add_quest(q.find_someone_to_fight)
 
@@ -163,6 +164,7 @@ class Rails(RailsBase):
 
         scene.enabled = False
         self.scene_by_name("brother_and_mother_leave").enabled = False
+        c.brother.ai.enable_speech = False
         yield from self.start_cutscene()
         yield from self.center_camera()
 
