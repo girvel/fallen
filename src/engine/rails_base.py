@@ -68,6 +68,7 @@ class RailsBase(DynamicEntity):
 
             s.run = functools.partial(task, self, s)
             self.scenes.append(s)
+            return f
 
         return decorator
 

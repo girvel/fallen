@@ -202,8 +202,8 @@ class Rails(RailsBase):
         yield {c.mother: Leave(), c.brother: Leave()}
 
 
-    # @scene(lambda self: True)
-    @scene(lambda self: self.characters.player.health.amount.current <= 0)
+    @scene(lambda self: True)
+    # @scene(lambda self: self.characters.player.health.amount.current <= 0)
     def player_dies(self, scene):
         c = self.characters
         p = self.positions
@@ -217,6 +217,7 @@ class Rails(RailsBase):
         memory.is_vision_disabled = False
 
         self.vision_level = self.ms.add(Level(self.ms, Path("assets/levels/vision"), False))
+        self.vision_level.rails.parent_level = c.player.level
         yield
 
         c.player.health.amount.reset_to_max()

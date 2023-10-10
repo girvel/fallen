@@ -11,11 +11,15 @@ class Follower:
     def __init__(self, d):
         self.d = d
         self.period = Period(d)
+        self.active = False
 
     def try_producing_target(self, subject, perception) -> Option[PathTarget]:
+        self.active = False
+
         if not self.period.step(): return Option.Nothing()
 
         if self.subject is None or self.subject.p not in perception.vision.physical: return Option.Nothing()
         if d2(subject.p, self.subject.p) <= self.d: return Option.Some(PathTarget.Nothing())
 
+        self.active = True
         return Option.Some(PathTarget.Some(self.subject.p))
