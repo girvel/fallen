@@ -9,7 +9,19 @@ x Rust style enums
 - Results of rust style enums experiment
 - Q()
 
-Rust style enums:
+
+RESULTS OF RUST STYLE ENUMS EXPERIMENT
+
+Points:
+- Enums are worthless, all the possible cases converge to Options
+- Without the static type checking & exhaustive matches there is basically no difference between forgetting to unwrap an
+   Option or forgetting to check an Optional.
+- All the advanced manipulations s.a. .map & .and_then were replaced by Q()
+- Still, there is some interest in rust enums in python & there is now a library
+
+
+RUST STYLE ENUMS
+
 - Post on girvel.xyz
 - Post on habr
 x Publish as a library
