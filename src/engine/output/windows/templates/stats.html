@@ -12,10 +12,10 @@
 </div>
 {% if inspection %}
 <div>
-    {% for key, value in inspection.items() %}
+    {% for key, value in inspection %}
     {% if value == True %}
     <p><y>{{ key }}</y></p>
-    {% elif not value %}
+    {% elif value == None %}
     {% elif not key %}
     <p><y>{{ value }}</y></p>
     {% else %}

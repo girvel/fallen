@@ -1,4 +1,5 @@
 import curses
+import logging
 
 from jinja2 import Environment, PackageLoader
 
@@ -67,7 +68,7 @@ class Panel:
             subject=subject,
             potential_damage=int(potential_damage(subject)),
             mode="MOVE" if self.mode == Move else "<rw>ATTACK</rw>",
-            inspection=(subject := ~Q(subject).act[Inspect].subject) and inspect(subject),
+            inspection=(inspected := ~Q(subject).act[Inspect].subject) and inspect(inspected),
         )
 
     pretty_hotkeys = {
