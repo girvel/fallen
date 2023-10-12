@@ -1,5 +1,7 @@
 import random
 
+from ecs import DynamicEntity
+
 from src.engine.acting.damage import Health, DamageKind, ArmorKind, Weapon
 from src.engine.assets import random_composite_name
 from src.engine.attitude.implementation import Faction, common_attitude
@@ -16,7 +18,7 @@ class Soldier(Human):
     color = ColorPair(cyan)
     faction = Faction.Church
 
-    def __post_init__(self):
+    def __post_init__(self, **attributes):
         self.sex = random.choices(["male", "female"], [85, 15])[0]
         self.name = random_composite_name(self.sex)
         self.health = Health(40, ArmorKind.Leather)
@@ -26,6 +28,8 @@ class Soldier(Human):
 
         self.attitude = common_attitude()
         self.attitude.relations[Faction.Church] = 100
+
+        DynamicEntity.__init__(self, **attributes)
 
     def after_load(self, level):
         self.ai.spacial_memory[level] = map_grid(level.grids.physical, lambda e: e is None and "." or e.character)

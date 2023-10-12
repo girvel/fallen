@@ -14,5 +14,6 @@ class Tree(DynamicEntity):
     solid_flag = None
     layer = "physical"
 
-    def __init__(self):
+    def __init__(self, **attributes):
         self.health = Health(random.randrange(250, 2000), ArmorKind.Wood)
+        super().__init__(**attributes)

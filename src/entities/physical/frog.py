@@ -13,7 +13,9 @@ class Frog(DynamicEntity):
     character = "f"
     color = ColorPair(green)
 
-    def __init__(self):
+    def __init__(self, **attributes):
         self.ai = FrogAi()
         self.health = Health(1, ArmorKind.Organic)
         self.classifiers = {Kind.Animate}
+
+        super().__init__(**attributes)

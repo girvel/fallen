@@ -12,7 +12,8 @@ class Flower(DynamicEntity):
     character = 'F'
     layer = "tiles"
 
-    def __init__(self):
+    def __init__(self, **attributes):
         self.sex = random.choice(["male", "female", "mercury"])
         self.health = Health(1, ArmorKind.Organic)
         self.color = random.choice([ColorPair(cyan), ColorPair(red), ColorPair(magenta)])
+        super().__init__(**attributes)

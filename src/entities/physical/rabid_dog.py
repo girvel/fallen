@@ -19,7 +19,7 @@ class RabidDog(DynamicEntity):
 
     on_death = body_factory
 
-    def __init__(self):
+    def __init__(self, **attributes):
         self.name = Name({
             "им": "Бешеный пёс",
             "ро": "Бешеного пса",
@@ -35,3 +35,5 @@ class RabidDog(DynamicEntity):
         self.ai = RabidAi()
         self.senses = Senses(10, 0, 5)
         self.attitude = Attitude({Faction.Water: -1000})
+
+        super().__init__(**attributes)

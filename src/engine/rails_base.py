@@ -16,7 +16,7 @@ class RailsBase(DynamicEntity):
     name = Name("Рельсы")
     rails_flag = None
 
-    def __init__(self, level, ms):
+    def __init__(self, level, genesis):
         self.scenes = []
         self.current_scenes = []
 
@@ -27,7 +27,7 @@ class RailsBase(DynamicEntity):
             self.scenes.append(s)
 
         self.level = level
-        self.ms = ms
+        self.genesis = genesis
         self.player = next(self.level.find(Player), None)
 
         logging.info(f"Initialized rails with scenes {[s.name for s in self.scenes]}")

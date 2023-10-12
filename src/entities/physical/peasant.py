@@ -1,5 +1,7 @@
 import random
 
+from ecs import DynamicEntity
+
 from src.engine.acting.damage import Weapon, Health, DamageKind, ArmorKind
 from src.engine.assets import random_composite_name
 from src.engine.attitude.implementation import common_attitude, Faction
@@ -14,7 +16,7 @@ class Peasant(Human):
     house = None
     faction = Faction.Villagers
 
-    def __post_init__(self):
+    def __post_init__(self, **attributes):
         self.sex = random.choice(["male", "female"])
         self.name = random_composite_name(self.sex)
         self.health = Health(random.randrange(10, 25) + (self.sex == "male" and 10 or 0), ArmorKind.Organic)
@@ -23,6 +25,8 @@ class Peasant(Human):
         self.ai = PeasantAi()
         self.attitude = common_attitude()
         self.attitude.relations[Faction.Villagers] = 50
+
+        DynamicEntity.__init__(self, **attributes)
 
     def after_load(self, level):
         if len(level.markup.houses) > 0:

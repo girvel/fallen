@@ -35,10 +35,10 @@ def init(stdscr, track, debug_mode, no_render, no_rails):
     logging.info("Creating special entities")
 
     ms.add(Hades())
-    ms.add(Genesis())
+    genesis = ms.add(Genesis())
 
     level = ms.add(Level(
-        ms, Path("assets/levels/main"),
+        genesis, Path("assets/levels/main"),
         no_rails,
     ))
 

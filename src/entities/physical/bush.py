@@ -12,5 +12,6 @@ class Bush(DynamicEntity):
     solid_flag = None
     layer = "physical"
 
-    def __init__(self):
+    def __init__(self, **attributes):
         self.health = Health(20, ArmorKind.Organic)
+        super().__init__(**attributes)

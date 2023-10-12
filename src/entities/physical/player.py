@@ -1,3 +1,5 @@
+from ecs import DynamicEntity
+
 from src.engine.acting.damage import Weapon, Health, DamageKind, ArmorKind
 from src.engine.assets import reserved_names
 from src.engine.name import CompositeName
@@ -15,7 +17,7 @@ class Player(Human):
 
     on_death = lambda *_, **__: None
 
-    def __post_init__(self):
+    def __post_init__(self, **attributes):
         self.name = CompositeName(reserved_names.hugh, reserved_names.kinds_male)
 
         self.sex = "male"
@@ -23,3 +25,5 @@ class Player(Human):
         self.health = Health(10, ArmorKind.Organic)
         self.senses = Senses(24, 40, 0)
         self.traits = Traits()
+
+        DynamicEntity.__init__(self, **attributes)

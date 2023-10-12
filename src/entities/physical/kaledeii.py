@@ -16,11 +16,12 @@ class Kaledeii(Human):
 
     faction = Faction.Church
 
-    def __init__(self):
+    def __init__(self, **attributes):
         self.health = Health(80, ArmorKind.Steel)
         self.weapon = Weapon(15, DamageKind.Slashing)
         self.senses = Senses(24, 40, 0)
         self.ai = DummyAi()
+        super().__init__(**attributes)
 
     def after_load(self, level):
         self.ai.spacial_memory[level] = map_grid(level.grids.physical, lambda e: e is None and "." or e.character)

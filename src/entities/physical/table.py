@@ -14,5 +14,7 @@ class Table(DynamicEntity):
     classifiers = {Kind.Table}
     layer = "physical"
 
-    def __init__(self):
+    def __init__(self, **attributes):
         self.health = Health(35, ArmorKind.Wood)
+
+        super().__init__(**attributes)

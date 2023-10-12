@@ -6,6 +6,8 @@ from src.engine.name import Name
 class House(DynamicEntity):
     name = Name("Дом")
 
-    def __init__(self, start, end, entrance):
+    def __init__(self, start, end, entrance, **attributes):
         self.house_borders = (tuple(start), tuple(end))  # TODO figure out how to do this at loading markup
         self.entrance = tuple(entrance)
+
+        super().__init__(**attributes)

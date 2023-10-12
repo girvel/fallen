@@ -9,5 +9,6 @@ class Window(DynamicEntity):
     character = '='
     layer = "physical"
 
-    def __init__(self):
+    def __init__(self, **attributes):
         self.health = Health(10, ArmorKind.Glass)
+        super().__init__(**attributes)

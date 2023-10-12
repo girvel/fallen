@@ -8,3 +8,7 @@ class Genesis(DynamicEntity):
 
     def __init__(self):
         self.entities_to_create = set()
+
+    def queue_creation(self, entity: DynamicEntity):
+        self.entities_to_create.add(entity)
+        return entity

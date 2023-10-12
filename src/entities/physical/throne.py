@@ -11,5 +11,6 @@ class Throne(DynamicEntity):
     character = 't'
     color = ColorPair(yellow)
 
-    def __init__(self):
+    def __init__(self, **attributes):
         self.health = Health(700, ArmorKind.Wood)
+        super().__init__(**attributes)

@@ -1,5 +1,7 @@
 import random
 
+from ecs import DynamicEntity
+
 from src.engine.acting.damage import Health, DamageKind, ArmorKind, Weapon
 from src.engine.attitude.implementation import Faction, common_attitude
 from src.engine.name import Name
@@ -17,7 +19,7 @@ class LordBishop(Human):
     color = ColorPair(yellow)
     faction = Faction.Church
 
-    def __post_init__(self):
+    def __post_init__(self, **attributes):
         self.health = Health(40, ArmorKind.LightSteel)
         self.weapon = Weapon(7, DamageKind.Piercing)
         self.senses = Senses(12, 0, 0)
@@ -25,6 +27,8 @@ class LordBishop(Human):
 
         self.attitude = common_attitude()
         self.attitude.relations[Faction.Church] = 1000
+
+        DynamicEntity.__init__(self, **attributes)
 
     def after_load(self, level):
         self.ai.spacial_memory[level] = map_grid(level.grids.physical, lambda e: e is None and "." or e.character)

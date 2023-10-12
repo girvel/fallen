@@ -11,6 +11,7 @@ from rust_enum import Option
 from src.engine.name import Name
 from src.entities.markup.house import House
 from src.entities.markup.zone import Zone
+from src.entities.special.genesis import Genesis
 from src.lib.toolkit import to_camel_case, import_module
 from src.lib.vector import grid_set, create_grid, int2
 
@@ -48,7 +49,7 @@ class Level(DynamicEntity):
     markup = None
     player = None
 
-    def __init__(self, ms, path: Path, no_rails: bool):
+    def __init__(self, genesis: Genesis, path: Path, no_rails: bool):
         level_lines = (path / "grid.txt").read_text().split('\n')
         self.size = (max(len(l) for l in level_lines), len(level_lines))
 
@@ -74,8 +75,7 @@ class Level(DynamicEntity):
                     continue
 
                 if c in self.palette:
-                    e = ms.add(self.palette[c]())
-                    self.put((x, y), e)
+                    e = genesis.queue_creation(self.palette[c](level=self, p=(x, y)))
 
                     if "after_load" in e:
                         after_loads.append(e.after_load)
@@ -86,8 +86,8 @@ class Level(DynamicEntity):
         if markup_path.exists():
             raw_markup = toml.loads(markup_path.read_text())
             self.markup = Entity(
-                houses=[ms.add(House(**h)) for h in raw_markup["houses"]],
-                zones=[ms.add(Zone(**h)) for h in raw_markup["zones"]],
+                houses=[genesis.queue_creation(House(**h)) for h in raw_markup["houses"]],
+                zones=[genesis.queue_creation(Zone(**h)) for h in raw_markup["zones"]],
             )
         else:
             self.markup = None
@@ -98,7 +98,7 @@ class Level(DynamicEntity):
         if not no_rails:
             rails_path = path / "rails.py"
             if rails_path.exists():
-                self.rails = import_module(rails_path).Rails(self, ms)
+                self.rails = import_module(rails_path).Rails(self, genesis)
 
         self.rails_effect = {}
 

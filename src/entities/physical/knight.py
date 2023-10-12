@@ -14,7 +14,7 @@ class Knight(Human):
 
     faction = Faction.Church
 
-    def __init__(self):
+    def __init__(self, **attributes):
         raise NotImplementedError
         # self.name =
         self.sex = random.choices(["male", "female"], [85, 15])[0]
@@ -25,3 +25,5 @@ class Knight(Human):
 
         self.attitude = common_attitude()
         self.attitude.relations[Faction.Church] = 100
+
+        super().__init__(**attributes)
