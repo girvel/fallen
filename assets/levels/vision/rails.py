@@ -20,12 +20,10 @@ from src.lib.vector import add2, right
 
 
 class Rails(RailsBase):
-    def __init__(self, level, ms):
-        super().__init__(level, ms)
-
+    def __post_init__(self):
         self.characters = Entity(
-            soldiers=list(level.find(Soldier)),
-            kaledeii=next(level.find(Kaledeii)),
+            soldiers=list(self.level.find(Soldier)),
+            kaledeii=next(self.level.find(Kaledeii)),
         )
 
         self.positions = Entity(

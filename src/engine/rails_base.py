@@ -16,7 +16,7 @@ class RailsBase(DynamicEntity):
     name = Name("Рельсы")
     rails_flag = None
 
-    def __init__(self, level, ms):
+    def __init__(self, level, ms, genesis, *args, **kwargs):
         self.scenes = []
         self.current_scenes = []
 
@@ -28,9 +28,15 @@ class RailsBase(DynamicEntity):
 
         self.level = level
         self.ms = ms
+        self.genesis = genesis
         self.player = next(self.level.find(Player), None)
 
         logging.info(f"Initialized rails with scenes {[s.name for s in self.scenes]}")
+
+        self.__post_init__(*args, **kwargs)
+
+    def __post_init__(*args, **kwargs):
+        ...
 
     def options(self, options: dict[str, Action]):
         assert all(options.values()), "Only actions are allowed; for no action use NoAction"

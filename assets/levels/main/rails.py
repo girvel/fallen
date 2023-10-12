@@ -18,14 +18,12 @@ from src.lib.vector import d2
 
 
 class Rails(RailsBase):
-    def __init__(self, level, ms):
-        super().__init__(level, ms)
-
+    def __post_init__(self):
         self.characters = Entity(
             player=self.player,
-            mother=next(level.find(Mother)),
-            brother=next(level.find(Brother)),
-            soldiers=list(level.find(Soldier)),
+            mother=next(self.level.find(Mother)),
+            brother=next(self.level.find(Brother)),
+            soldiers=list(self.level.find(Soldier)),
         )
 
         self.positions = Entity(
@@ -218,7 +216,7 @@ class Rails(RailsBase):
         yield from wait_seconds(2)
         memory.is_vision_disabled = False
 
-        self.vision_level = self.ms.add(Level(self.ms, Path("assets/levels/vision"), False))
+        self.vision_level = self.ms.add(Level(self.ms, Path("assets/levels/vision"), False, self.genesis))
         self.vision_level.rails.parent_level = c.player.level
         yield
 

@@ -5,12 +5,13 @@ from typing import TypeVar, Callable, Any
 
 import numpy
 import toml as toml
-from ecs import DynamicEntity, Entity
+from ecs import DynamicEntity, Entity, Metasystem
 from rust_enum import Option
 
 from src.engine.name import Name
 from src.entities.markup.house import House
 from src.entities.markup.zone import Zone
+from src.entities.special.genesis import Genesis
 from src.lib.toolkit import to_camel_case, import_module
 from src.lib.vector import grid_set, create_grid, int2
 
@@ -48,7 +49,7 @@ class Level(DynamicEntity):
     markup = None
     player = None
 
-    def __init__(self, ms, path: Path, no_rails: bool):
+    def __init__(self, ms: Metasystem, path: Path, no_rails: bool, genesis: Genesis):
         level_lines = (path / "grid.txt").read_text().split('\n')
         self.size = (max(len(l) for l in level_lines), len(level_lines))
 
@@ -98,7 +99,7 @@ class Level(DynamicEntity):
         if not no_rails:
             rails_path = path / "rails.py"
             if rails_path.exists():
-                self.rails = import_module(rails_path).Rails(self, ms)
+                self.rails = import_module(rails_path).Rails(self, ms, genesis)
 
         self.rails_effect = {}
 
