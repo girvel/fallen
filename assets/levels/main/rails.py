@@ -31,6 +31,9 @@ class Rails(RailsBase):
             before_away=(93, 28),
             away=(139, 0),
             vision_start=(33, 19),
+            mother_reappearance=(191, 55),
+            player_bed=(208, 57),
+            beside_the_bed=(207, 58),
         )
 
         self.quests = Entity(
@@ -39,7 +42,7 @@ class Rails(RailsBase):
 
         self.vision_level = None
 
-    # @scene(lambda self: True)
+    # @scene()
     def introduction(self, scene):
         c = self.characters
         p = self.positions
@@ -202,7 +205,7 @@ class Rails(RailsBase):
         yield {c.mother: Leave(), c.brother: Leave()}
 
 
-    @scene(lambda self: True)
+    @scene()
     # @scene(lambda self: self.characters.player.health.amount.current <= 0)
     def player_dies(self, scene):
         c = self.characters
@@ -222,3 +225,20 @@ class Rails(RailsBase):
 
         c.player.health.amount.reset_to_max()
         Level.change(c.player, self.vision_level, p.vision_start)
+
+    @scene(enabled=False)
+    def player_wakes_up_1(self, scene):
+        c = self.characters
+        p = self.positions
+        memory = c.player.ai.memory
+
+        scene.enabled = False
+
+        c.mother = Mother(p=p.mother_reappearance, level=self.level)
+        self.genesis.entities_to_create.add(c.mother)
+
+        yield {c.player: Say("Где я?")}
+        c.mother.ai.pather.going_to = PathTarget.Some(p.beside_the_bed)
+        yield from wait_for(10)
+
+        Level.change(c.player, self.vision_level, self.vision_level.rails.positions.observing_the_throne)

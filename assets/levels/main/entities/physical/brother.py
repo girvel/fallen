@@ -13,18 +13,17 @@ from src.systems.ai import Kind, Senses
 class Brother(DynamicEntity):
     character = 'B'
     color = ColorPair(blue)
-    on_death = body_factory
-    layer = "physical"
 
-    def __init__(self):
+    def __post_init__(self, **attributes):
         self.name = CompositeName(reserved_names.mike, reserved_names.kinds_male)
 
         self.sex = "male"
         self.health = Health(30, ArmorKind.Organic)
         self.weapon = Weapon(4, DamageKind.Slashing)
-        self.classifiers = {Kind.Animate}
         self.senses = Senses(12, 0, 0)
         self.ai = BrotherAi()
+
+        DynamicEntity.__init__(**attributes)
 
     def after_load(self, level):
         self.ai.spacial_memory[level] = map_grid(level.grids.physical, lambda e: e is None and "." or e.character)

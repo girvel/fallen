@@ -33,12 +33,12 @@ class Rails(RailsBase):
                 (74, 17), (75, 17), (76, 17), (76, 18), (76, 16),
             ],
             before_the_throne=(147, 17),
-            player_bed=(208, 57),
+            observing_the_throne=(148, 19),
         )
 
         self.quests = Entity()
 
-    @scene(lambda self: True)
+    @scene()
     def start_vision(self, scene):
         c = self.characters
         p = self.positions
@@ -85,9 +85,10 @@ class Rails(RailsBase):
         c.kaledeii.ai.pather.going_to = PathTarget.Some(p.before_the_throne)
         yield from wait_seconds(2)
 
-        yield {c.player: Say("Стены сотрясаются от мощного удара вдали", True)}
+        yield {c.player: Say("Стены сотрясаются от мощного удара вдали.", True)}
         yield
 
         c.player.ai.dummy.clear()
         # noinspection PyUnresolvedReferences
-        Level.change(c.player, self.parent_level, p.player_bed)
+        self.parent_level.rails.scene_by_name("player_wakes_up_1").enabled = True
+        Level.change(c.player, self.parent_level, self.parent_level.rails.positions.player_bed)

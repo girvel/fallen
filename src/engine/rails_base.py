@@ -88,5 +88,5 @@ class Scene:
 
 PreScene = namedtuple("PreScene", "name, run, start_predicate, enabled")
 
-def scene(start_predicate: Callable[[RailsBase], bool]):
-    return lambda f: PreScene(f.__name__, f, start_predicate, True)
+def scene(start_predicate: Callable[[RailsBase], bool] = lambda _: True, *, enabled=True):
+    return lambda f: PreScene(f.__name__, f, start_predicate, enabled)
