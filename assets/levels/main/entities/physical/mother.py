@@ -23,7 +23,7 @@ class Mother(Human):
         self.senses = Senses(12, 0, 0)
         self.ai = DummyAi()
 
-        DynamicEntity.__init__(**attributes)
+        DynamicEntity.__init__(self, **attributes)
 
     def after_load(self, level):
         self.ai.spacial_memory[level] = map_grid(level.grids.physical, lambda e: e is None and "." or e.character)

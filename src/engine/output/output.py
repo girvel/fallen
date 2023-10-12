@@ -12,13 +12,13 @@ from src.engine.output.windows.panel import Panel
 
 
 class Output:
-    def __init__(self, stdscr, no_render, io):
+    def __init__(self, stdscr, is_render_enabled, io):
         ColorPair.initialize()
         curses.curs_set(0)
 
         panel_w = 35
         self.io = io
-        self.no_render = no_render
+        self.is_render_enabled = is_render_enabled
         self.main = stdscr
         self.game = Game(panel_w)
         self.panel = Panel(panel_w, io)
@@ -46,7 +46,7 @@ class Output:
     def render(self, subject, perception, memory):
         self.main.refresh()
 
-        if self.no_render: return
+        if not self.is_render_enabled: return
 
         for window in self.execution_order:
             try:

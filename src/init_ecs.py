@@ -13,7 +13,7 @@ from src.lib.toolkit import crash_safe
 from src.systems import acting, destruction_and_creation, ai, death, nature
 
 
-def init(stdscr, track, debug_mode, no_render, no_rails):
+def init(stdscr, track, debug_mode, no_render, no_rails, no_fixed_fps):
     logging.info("Creating & filling the metasystem")
     ms = Metasystem()
 
@@ -43,7 +43,7 @@ def init(stdscr, track, debug_mode, no_render, no_rails):
     ))
 
     next(level.find(Player)).ai = (
-        IO(stdscr, debug_track=track, debug_mode=debug_mode, no_render=no_render)
+        IO(stdscr, debug_track=track, debug_mode=debug_mode, is_render_enabled=not no_render, has_fixed_fps=not no_fixed_fps)
     )
 
     logging.info("Starting game cycle")

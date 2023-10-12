@@ -60,15 +60,17 @@ class IO(DynamicEntity):
     name = Name("Ввод/Вывод")
     cutscene_aware_flag = None
 
-    def __init__(self, stdscr, debug_track, debug_mode, no_render):
+    def __init__(self, stdscr, debug_track, debug_mode, is_render_enabled, has_fixed_fps):
         self.debug_mode = debug_mode
 
-        self.output = Output(stdscr, no_render, self)
+        self.output = Output(stdscr, is_render_enabled, self)
         self.input = Input(stdscr, debug_track, self)
 
         self.memory = Memory()
         self.dummy = DummyAi()
         self.output.resize()
+
+        self.has_fixed_fps = has_fixed_fps
 
     def make_decision(self, subject, perception):
         self.form_memory(subject, perception)

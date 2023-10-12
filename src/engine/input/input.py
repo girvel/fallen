@@ -3,6 +3,7 @@ import logging
 import time
 from typing import TYPE_CHECKING
 
+from src.engine.acting.action import Action
 from src.engine.acting.actions.no_action import NoAction
 from src.engine.input.hotkeys import generate_hotkeys
 from src.engine.input.key_queue import KeyQueue
@@ -25,7 +26,7 @@ class Input:
         if debug_track:
             logging.info(f"Debug track: '{debug_track}'")
 
-    def wait_for_input(self, subject, perception: Perception, memory: "Memory"):
+    def wait_for_input(self, subject, perception: Perception, memory: "Memory") -> Action:
         # TODO should be (self, io, subject, perception)
 
         if memory.in_cutscene:

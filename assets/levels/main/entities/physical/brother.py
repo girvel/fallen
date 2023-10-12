@@ -5,12 +5,13 @@ from src.engine.acting.damage import Health, Weapon, ArmorKind, DamageKind
 from src.engine.assets import reserved_names
 from src.engine.name import Name, CompositeName
 from src.engine.output.colors import ColorPair, blue
+from src.entities.abstract.human import Human
 from src.entities.tiles.body import body_factory
 from src.lib.vector import map_grid
 from src.systems.ai import Kind, Senses
 
 
-class Brother(DynamicEntity):
+class Brother(Human):
     character = 'B'
     color = ColorPair(blue)
 
@@ -23,7 +24,7 @@ class Brother(DynamicEntity):
         self.senses = Senses(12, 0, 0)
         self.ai = BrotherAi()
 
-        DynamicEntity.__init__(**attributes)
+        DynamicEntity.__init__(self, **attributes)
 
     def after_load(self, level):
         self.ai.spacial_memory[level] = map_grid(level.grids.physical, lambda e: e is None and "." or e.character)

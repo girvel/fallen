@@ -17,6 +17,7 @@ def main(
     debug_mode: bool = False,
     no_render: bool = False,
     no_rails: bool = False,
+    no_fixed_fps: bool = False,
 ):
     """
     Launch the Fallen RPG
@@ -26,6 +27,7 @@ def main(
         debug_mode: whether to enable debug console & utilities
         no_render: whether to disable render
         no_rails: disable level's rails
+        no_fixed_fps: disable fixed FPS
     """
 
     init_logging()
@@ -38,6 +40,7 @@ def main(
         debug_mode=debug_mode,
         no_render=no_render,
         no_rails=no_rails,
+        no_fixed_fps=no_fixed_fps,
     )
 
 
