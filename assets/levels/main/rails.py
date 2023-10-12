@@ -4,6 +4,7 @@ from ecs import Entity, exists
 
 from assets.levels.main.entities.physical.brother import Brother
 from assets.levels.main.entities.physical.mother import Mother
+from src.entities.ais.dummy_ai import wait_finish
 from src.entities.physical.soldier import Soldier
 from src.engine.acting.actions.leave import Leave
 from src.engine.acting.actions.no_action import NoAction
@@ -42,7 +43,7 @@ class Rails(RailsBase):
 
         self.vision_level = None
 
-    # @scene()
+    @scene()
     def introduction(self, scene):
         c = self.characters
         p = self.positions
@@ -205,8 +206,8 @@ class Rails(RailsBase):
         yield {c.mother: Leave(), c.brother: Leave()}
 
 
-    @scene()
-    # @scene(lambda self: self.characters.player.health.amount.current <= 0)
+    # @scene()
+    @scene(lambda self: self.characters.player.health.amount.current <= 0)
     def player_dies(self, scene):
         c = self.characters
         p = self.positions
@@ -234,11 +235,17 @@ class Rails(RailsBase):
 
         scene.enabled = False
 
-        c.mother = Mother(p=p.mother_reappearance, level=self.level)
-        self.genesis.entities_to_create.add(c.mother)
+        c.mother.p = p.mother_reappearance
+        if not exists(c.mother):
+            self.genesis.entities_to_create.add(c.mother)
+        else:
+            self.level.put(c.mother.p, c.mother)
 
-        yield {c.player: Say("Где я?")}
+        yield from self.center_camera()
+        yield {c.player: Say("Что происходит?")}
         c.mother.ai.pather.going_to = PathTarget.Some(p.beside_the_bed)
-        yield from wait_for(10)
+        yield from wait_finish(c.mother)
 
         Level.change(c.player, self.vision_level, self.vision_level.rails.positions.observing_the_throne)
+
+        yield from self.end_cutscene()
