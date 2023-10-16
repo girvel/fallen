@@ -11,7 +11,7 @@ from src.systems.ai import Senses
 
 
 class LordBishop(Human):
-    name = Name("Лорд Натаниэль")
+    name = Name("лорд Натаниэль")
     sex = "male"
     character = 'B'
     color = ColorPair(yellow)

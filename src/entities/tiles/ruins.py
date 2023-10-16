@@ -4,6 +4,6 @@ from src.engine.name import Name
 
 
 class Ruins(DynamicEntity):
-    name = Name("Обломки")
+    name = Name("обломки")
     layer = "tiles"
     character = ":"

@@ -5,7 +5,7 @@ from src.engine.name import Name
 
 
 class Window(DynamicEntity):
-    name = Name("Окно")
+    name = Name("окно")
     character = '='
     layer = "physical"
 

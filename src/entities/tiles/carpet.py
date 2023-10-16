@@ -5,7 +5,7 @@ from src.engine.output.colors import magenta, ColorPair
 
 
 class Carpet(DynamicEntity):
-    name = Name("Ковёр")
+    name = Name("ковёр")
     character = '`'
     color = ColorPair(magenta)
     layer = "tiles"

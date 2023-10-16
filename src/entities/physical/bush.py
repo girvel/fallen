@@ -6,7 +6,7 @@ from src.engine.output.colors import ColorPair, green
 
 
 class Bush(DynamicEntity):
-    name = Name("Куст")
+    name = Name("куст")
     character = 'b'
     color = ColorPair(green)
     solid_flag = None

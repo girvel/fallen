@@ -5,7 +5,7 @@ from src.engine.output.colors import ColorPair, yellow
 
 
 class WoodenFloor(DynamicEntity):
-    name = Name("Деревянный пол")
+    name = Name("дощатый пол")
     character = '_'
     color = ColorPair(yellow)
     layer = "tiles"

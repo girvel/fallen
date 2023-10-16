@@ -5,7 +5,7 @@ from src.lib.toolkit import death_chance_from_half_life
 
 
 class Footprint(DynamicEntity):
-    name = Name("След")
+    name = Name("след")
     layer = "tiles"
     character = ","
     death_chance = death_chance_from_half_life(100)

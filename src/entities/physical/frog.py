@@ -8,7 +8,7 @@ from src.systems.ai import Kind
 
 
 class Frog(DynamicEntity):
-    name = Name("Лягушка")
+    name = Name("лягушка")
     layer = "physical"
     character = "f"
     color = ColorPair(green)

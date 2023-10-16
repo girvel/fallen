@@ -8,7 +8,7 @@ from src.systems.ai import Kind
 
 
 class Table(DynamicEntity):
-    name = Name("Стол")
+    name = Name("стол")
     character = '"'
     color = ColorPair(yellow)
     classifiers = {Kind.Table}

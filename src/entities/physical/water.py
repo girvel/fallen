@@ -6,7 +6,7 @@ from src.engine.output.colors import blue, white, ColorPair
 
 
 class Water(DynamicEntity):
-    name = Name("Вода")
+    name = Name("вода")
     character = '~'
     color = ColorPair(white, blue)
     layer = "physical"

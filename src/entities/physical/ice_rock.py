@@ -6,7 +6,7 @@ from src.engine.output.colors import white, blue, ColorPair
 
 
 class IceRock(DynamicEntity):
-    name = Name("Ледяная глыба")
+    name = Name("ледяная глыба")
     character = 'I'
     color = ColorPair(blue, white)
     layer = "physical"

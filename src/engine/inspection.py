@@ -19,7 +19,7 @@ def name(subject: DynamicEntity) -> str | bool | None:
         None: "",
     }[~Q(subject).sex]
 
-    return f"{prefix}{~Q(subject).name or ''}"
+    return f"{prefix}{str(~Q(subject).name or '').capitalize()}"
 
 @metrics.append
 def faction(subject: DynamicEntity) -> str | bool | None:
