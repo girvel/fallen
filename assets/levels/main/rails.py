@@ -38,12 +38,12 @@ class Rails(RailsBase):
         )
 
         self.quests = Entity(
-            find_someone_to_fight=Quest("Найти и порубить кого-нибудь")
+            find_someone_to_fight=Quest("Найти и порубить кого-нибудь")  # TODO finishing the quest
         )
 
         self.vision_level = None
 
-    @scene()
+    # @scene()
     def introduction(self, scene):
         c = self.characters
         p = self.positions
@@ -206,8 +206,8 @@ class Rails(RailsBase):
         yield {c.mother: Leave(), c.brother: Leave()}
 
 
-    # @scene()
-    @scene(lambda self: self.characters.player.health.amount.current <= 0)
+    @scene()
+    # @scene(lambda self: self.characters.player.health.amount.current <= 0)
     def player_dies(self, scene):
         c = self.characters
         p = self.positions
@@ -252,6 +252,8 @@ class Rails(RailsBase):
         self.vision_level.rails.scene_by_name("talk_with_lord_bishop_1").enabled = True
         # TODO access with just self.vision_level.talk_with_lord_bishop
 
+
+    @scene(enabled=False)
     def player_wakes_up_2(self, scene):
         c = self.characters
         p = self.positions
@@ -261,7 +263,7 @@ class Rails(RailsBase):
         yield from self.center_camera()
 
         yield {c.player: Say("<Сдавленный вскрик>")}
-        yield {c.player: Say("Зрение сходится; ты в вашей комнате.", True)}
+        yield {c.player: Say("Зрение сходится; ты в своей комнате.", True)}
 
         yield {c.mother: Say("Всё хорошо.")}
         yield {c.mother: Say("Ты дома.")}
@@ -270,6 +272,7 @@ class Rails(RailsBase):
         yield {c.player: Say("Что происходит?")}
 
         yield {c.mother: Say("Ты бредишь.")}
+        yield
 
         Level.change(c.player, self.vision_level, self.vision_level.rails.positions.observing_the_throne)
         self.vision_level.rails.scene_by_name("talk_with_lord_bishop_2").enabled = True

@@ -20,7 +20,7 @@ from src.lib.concurrency import wait_for, wait_seconds, wait_while
 from src.lib.vector import add2, right, d2
 
 
-class Rails(RailsBase):
+class Rails(RailsBase):  # TODO descriptions for the scenes
     def __post_init__(self):
         self.characters = Entity(
             soldiers=list(self.level.find(Soldier)),
@@ -35,8 +35,8 @@ class Rails(RailsBase):
                 (74, 17), (75, 17), (76, 17), (76, 18), (76, 16),
             ],
             before_the_throne=(147, 17),
-            observing_the_throne=(148, 19),
-            observing_the_entrance=(109, 18),
+            observing_the_throne=(132, 19),
+            observing_the_entrance=(96, 18),
         )
 
         self.quests = Entity()
@@ -120,6 +120,8 @@ class Rails(RailsBase):
         yield from wait_seconds(1)
 
         yield {c.player: Say("Стены сотрясаются вновь.", True)}
+
+        yield  # TODO encapsulate interplanar scene change
         self.parent_level.rails.scene_by_name("player_wakes_up_2").enabled = True
         Level.change(c.player, self.parent_level, self.parent_level.rails.positions.player_bed)
 
@@ -132,8 +134,6 @@ class Rails(RailsBase):
 
         scene.enabled = False
 
-        c.player.ai.dummy.pather.going_to = PathTarget.Some(p.observing_the_entrance)
-
         yield {c.kaledeii: Say("Вы не понимаете тяжесть нашей ситуации, лорд-епископ.")}
         yield {c.kaledeii: Say(
             "Стены Ковенанта пали, половина гарнизона мертва, я -- последний стоящий на ногах рыцарь, и я не справлюсь "
@@ -143,9 +143,11 @@ class Rails(RailsBase):
         yield from wait_for(7)
         yield {c.bishop: Say("Так и быть, я вам помогу.")}
 
+        c.player.ai.dummy.pather.going_to = PathTarget.Some(p.observing_the_entrance)
+
         yield from wait_for(5)
         c.kaledeii.ai.pather.going_to = PathTarget.Some(p.observing_the_entrance)
 
-        yield from wait_while(d2(c.player.p, p.observing_the_entrance) > 2)
+        yield from wait_while(lambda: d2(c.player.p, p.observing_the_entrance) > 2)
 
         c.player.ai.dummy.clear()
