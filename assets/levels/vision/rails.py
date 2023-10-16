@@ -2,7 +2,10 @@ import random
 
 from ecs import Entity
 
+from assets.levels.vision.entities.physical.enemy import Enemy
 from src.engine.acting.actions.build import Build
+from src.engine.acting.actions.cast_fire_storm import CastFireStorm
+from src.engine.acting.actions.cast_stone_stomp import CastStoneStomp
 from src.engine.acting.actions.say import Say
 from src.engine.ai.pather import PathTarget
 from src.engine.rails_base import RailsBase, scene
@@ -16,6 +19,7 @@ from src.entities.physical.slash_wall import SlashWall
 from src.entities.physical.soldier import Soldier
 from src.entities.physical.vertical_wall import VerticalWall
 from src.entities.special.level import Level
+from src.lib import vector
 from src.lib.concurrency import wait_for, wait_seconds, wait_while
 from src.lib.vector import add2, right, d2
 
@@ -37,6 +41,8 @@ class Rails(RailsBase):  # TODO descriptions for the scenes
             before_the_throne=(147, 17),
             observing_the_throne=(132, 19),
             observing_the_entrance=(96, 18),
+            enemy_appearance=(0, 17),
+            enemy_attack=(68, 17),
         )
 
         self.quests = Entity()
@@ -134,7 +140,12 @@ class Rails(RailsBase):  # TODO descriptions for the scenes
 
         scene.enabled = False
 
+        enemy = Enemy(p=p.enemy_appearance, level=self.level)
+        self.genesis.entities_to_create.add(enemy)
+        enemy.ai.pather.going_to = PathTarget.Some(p.enemy_attack)
+
         yield {c.kaledeii: Say("Вы не понимаете тяжесть нашей ситуации, лорд-епископ.")}
+        enemy.after_load(self.level)  # TODO encapsulate creation
         yield {c.kaledeii: Say(
             "Стены Ковенанта пали, половина гарнизона мертва, я -- последний стоящий на ногах рыцарь, и я не справлюсь "
             "с ним в одиночку."
@@ -148,6 +159,16 @@ class Rails(RailsBase):  # TODO descriptions for the scenes
         yield from wait_for(5)
         c.kaledeii.ai.pather.going_to = PathTarget.Some(p.observing_the_entrance)
 
-        yield from wait_while(lambda: d2(c.player.p, p.observing_the_entrance) > 2)
+        yield from wait_while(lambda: enemy.p != p.enemy_attack)
 
         c.player.ai.dummy.clear()
+        yield {c.kaledeii: Say("Он здесь")}
+
+        yield {enemy: CastStoneStomp(vector.right)}
+        yield from wait_seconds(1)
+        yield {enemy: CastStoneStomp(vector.right)}
+        yield from wait_seconds(2)
+        yield {enemy: CastFireStorm()}
+        yield from wait_for(CastFireStorm.duration + 1)
+
+        # TODO vision ends on player's death

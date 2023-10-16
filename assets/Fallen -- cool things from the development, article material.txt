@@ -18,6 +18,7 @@ Points:
    Option or forgetting to check an Optional.
 - All the advanced manipulations s.a. .map & .and_then were replaced by Q()
 - Still, there is some interest in rust enums in python & there is now a library
+- Refernce to the billion dollar nullptr mistake
 
 Structure:
 - Why rust-style enums are attractive for python

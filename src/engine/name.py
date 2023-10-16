@@ -3,7 +3,7 @@ from dataclasses import dataclass
 
 @dataclass(frozen=True, init=False)
 class Name:
-    cases: dict
+    cases: dict  # TODO frozen dict
 
     def __init__(self, source: str | dict):
         match source:

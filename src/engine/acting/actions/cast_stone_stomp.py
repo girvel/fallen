@@ -23,4 +23,4 @@ class CastStoneStomp(Action):
 
                 wall = grid_get(actor.level.grids.physical, p, object())
                 if ~Q(wall).health.armor_kind == ArmorKind.Stone:
-                    inflict_damage(wall, 10_000, DamageKind.Crushing, hades)
+                    inflict_damage(wall, 5_000, DamageKind.Crushing, hades)

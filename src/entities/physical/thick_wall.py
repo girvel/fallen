@@ -1,3 +1,5 @@
+import random
+
 from ecs import DynamicEntity
 
 from src.engine.acting.damage import Health, ArmorKind
@@ -16,7 +18,7 @@ class ThickWall(DynamicEntity):
     layer = "physical"
 
     def __init__(self, **attributes):
-        self.health = Health(10000, ArmorKind.Stone)
+        self.health = Health(random.randrange(5000, 10001, 500), ArmorKind.Stone)
         super().__init__(**attributes)
 
     def on_death(self, hades: Hades, genesis: Genesis):

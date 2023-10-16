@@ -13,8 +13,10 @@ from src.lib.vector import grid_get
 
 @dataclass
 class CastFireStorm(Action):
+    duration = 12
+
     def execute(self, actor: DynamicEntity, hades: Hades, genesis: Genesis):
-        for step in range(12):
+        for step in range(self.duration):
             r = (step + 1) * 3
             fire_map = tcod.map.compute_fov(actor.level.transparency_cache, actor.p, r)
 
