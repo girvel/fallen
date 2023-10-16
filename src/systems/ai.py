@@ -114,7 +114,7 @@ def run_rails(level: 'grids', hades: 'entities_to_destroy'):
 
     for scene in current_scenes_clone:
         if (effect := next(scene, stop_signal)) is not stop_signal:
-            level.rails_effect |= effect or []
+            level.rails_effect |= effect or {}
         else:
             level.rails.current_scenes.remove(scene)
 

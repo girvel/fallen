@@ -218,7 +218,6 @@ class Rails(RailsBase):
 
         memory.is_vision_disabled = True
         yield from wait_seconds(2)
-        memory.is_vision_disabled = False
 
         self.vision_level = self.ms.add(Level(self.ms, Path("assets/levels/vision"), False, self.genesis))
         self.vision_level.rails.parent_level = c.player.level
@@ -242,10 +241,35 @@ class Rails(RailsBase):
             self.level.put(c.mother.p, c.mother)
 
         yield from self.center_camera()
+        memory.is_vision_disabled = False
+
         yield {c.player: Say("Что происходит?")}
         c.mother.ai.pather.going_to = PathTarget.Some(p.beside_the_bed)
         yield from wait_finish(c.mother)
 
+        memory.is_vision_disabled = True
         Level.change(c.player, self.vision_level, self.vision_level.rails.positions.observing_the_throne)
+        self.vision_level.rails.scene_by_name("talk_with_lord_bishop_1").enabled = True
+        # TODO access with just self.vision_level.talk_with_lord_bishop
 
-        yield from self.end_cutscene()
+    def player_wakes_up_2(self, scene):
+        c = self.characters
+        p = self.positions
+        memory = c.player.ai.memory
+
+        scene.enabled = False
+        yield from self.center_camera()
+
+        yield {c.player: Say("<Сдавленный вскрик>")}
+        yield {c.player: Say("Зрение сходится; ты в вашей комнате.", True)}
+
+        yield {c.mother: Say("Всё хорошо.")}
+        yield {c.mother: Say("Ты дома.")}
+        yield {c.mother: Say("Ты в безопасности.")}
+
+        yield {c.player: Say("Что происходит?")}
+
+        yield {c.mother: Say("Ты бредишь.")}
+
+        Level.change(c.player, self.vision_level, self.vision_level.rails.positions.observing_the_throne)
+        self.vision_level.rails.scene_by_name("talk_with_lord_bishop_2").enabled = True
