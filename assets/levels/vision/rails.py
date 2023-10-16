@@ -1,4 +1,5 @@
 import random
+from typing import Optional
 
 from ecs import Entity
 
@@ -24,7 +25,9 @@ from src.lib.concurrency import wait_for, wait_seconds, wait_while
 from src.lib.vector import add2, right, d2
 
 
-class Rails(RailsBase):  # TODO descriptions for the scenes
+class Rails(RailsBase):
+    parent_level: Optional[Level]
+
     def __post_init__(self):
         self.characters = Entity(
             soldiers=list(self.level.find(Soldier)),
@@ -58,20 +61,32 @@ class Rails(RailsBase):  # TODO descriptions for the scenes
         self.player = next(self.level.find(Player))  # TODO make this automatic
         c.player = self.player
         memory = c.player.ai.memory
+
         memory.is_vision_disabled = False
 
+        yield {c.player: Say("Холодный коридор с высокими потолками и трещинами в панорамном окне в озеро.", True)}
+        yield {c.player: Say("Кучка вооружённых людей тревожно озирается по сторонам.", True)}
+
         c.kaledeii.ai.pather.going_to = PathTarget.Some(p.kaledeii_entrance)
+        yield from wait_seconds(1)
+
         yield from wait_finish(c.kaledeii)
 
         yield {c.kaledeii: Say("За мной.")}
         c.kaledeii.ai.pather.going_to = PathTarget.Some(p.entrance)
-        yield from wait_for(2)
+
+        yield {c.player: Say("Высокий воин в полном доспехе.", True)}
+        yield {c.player: Say("Доспехи покрыты густой копотью, облик источает решимость.", True)}
 
         for s in c.soldiers:
             s.ai.follower.subject = c.kaledeii
 
         c.player.ai.dummy.follower.subject = c.kaledeii
         yield from wait_finish(c.kaledeii)
+
+        yield {c.player: Say("Неприступный каменный зал, обогреваемый ревущими пламенем печами.", True)}
+        yield {c.player: Say("Колоссальные размеры не позволяют чётко рассмотреть, что находится в его конце.", True)}
+
         yield from wait_finish(*c.soldiers, threshold=2)
 
         for s in c.soldiers:
@@ -92,18 +107,20 @@ class Rails(RailsBase):  # TODO descriptions for the scenes
                     random.choice([HorizontalWall, VerticalWall, SlashWall, BackslashWall]),
                 )}
 
+            # TODO then scatter to their positions
+
         yield {c.kaledeii: Say("Остальные -- оборонительные позиции, оружие наготове.")}
 
         c.kaledeii.ai.pather.going_to = PathTarget.Some(p.before_the_throne)
-        yield from wait_seconds(2)
+        yield from wait_seconds(5)
 
-        yield {c.player: Say("Стены сотрясаются от мощного удара вдали.", True)}
+        yield {c.player: Say("Массивные стены зала сотрясаются от мощного удара вдали.", True)}
         yield
 
-        memory.is_vision_disabled = True
         c.player.ai.dummy.clear()
-        # noinspection PyUnresolvedReferences
         self.parent_level.rails.scene_by_name("player_wakes_up_1").enabled = True
+        memory.is_vision_disabled = True
+        # noinspection PyUnresolvedReferences
         Level.change(c.player, self.parent_level, self.parent_level.rails.positions.player_bed)
 
 
@@ -115,8 +132,13 @@ class Rails(RailsBase):  # TODO descriptions for the scenes
 
         scene.enabled = False
 
+        yield from self.center_camera()
         yield from wait_finish(c.kaledeii)
         memory.is_vision_disabled = False
+
+        yield {c.player: Say("Другой край зала.", True)}
+        yield {c.player: Say("Фигура злого старика нависает с края возвышенности трона.", True)}
+        yield {c.player: Say("Небесная синева робы едва видна под золотом религиозной атрибутики.", True)}
 
         yield {c.kaledeii: Say("Ваше Превосходительство, следуйте за мной.")}
         yield {c.bishop: Say("Глупости! Кем он себя возомнил!")}
@@ -129,6 +151,7 @@ class Rails(RailsBase):  # TODO descriptions for the scenes
 
         yield  # TODO encapsulate interplanar scene change
         self.parent_level.rails.scene_by_name("player_wakes_up_2").enabled = True
+        memory.is_vision_disabled = True
         Level.change(c.player, self.parent_level, self.parent_level.rails.positions.player_bed)
 
 
@@ -154,15 +177,22 @@ class Rails(RailsBase):  # TODO descriptions for the scenes
         yield from wait_for(7)
         yield {c.bishop: Say("Так и быть, я вам помогу.")}
 
+        yield from wait_seconds(2)
+        yield {c.player: Say("Резкая тишина.", True)}
+
         c.player.ai.dummy.pather.going_to = PathTarget.Some(p.observing_the_entrance)
 
         yield from wait_for(5)
         c.kaledeii.ai.pather.going_to = PathTarget.Some(p.observing_the_entrance)
 
         yield from wait_while(lambda: enemy.p != p.enemy_attack)
+        yield from self.center_camera()
+        yield {c.player: Say("Солдаты намертво заложили вход.", True)}
+        yield {c.player: Say("Стены зала высечены из гладкого серого камня толщиной с повозку с лошадью.", True)}
+        yield {c.player: Say("Сложно представить более неприступную крепость.", True)}
 
         c.player.ai.dummy.clear()
-        yield {c.kaledeii: Say("Он здесь")}
+        yield {c.kaledeii: Say("Он здесь.")}
 
         yield {enemy: CastStoneStomp(vector.right)}
         yield from wait_seconds(1)
@@ -171,4 +201,11 @@ class Rails(RailsBase):  # TODO descriptions for the scenes
         yield {enemy: CastFireStorm()}
         yield from wait_for(CastFireStorm.duration + 1)
 
-        # TODO vision ends on player's death
+        yield from wait_while(lambda: c.player.health.amount.current > 0)
+
+        yield
+        memory.is_vision_disabled = True
+        Level.change(c.player, self.parent_level, self.parent_level.rails.positions.player_bed)
+        c.player.health.amount.reset_to_max()
+        yield from self.end_cutscene()
+        memory.is_vision_disabled = False

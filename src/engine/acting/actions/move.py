@@ -19,7 +19,7 @@ class Move(Action):
         next_p = add2(actor.p, self.v)
         if grid_get(actor.level.grids[actor.layer], next_p, False) is not None: return
 
-        if grid_get(actor.level.grids.tiles, actor.p, False) is None and (~Q(actor).health.amount.current or 0) > 5:
+        if grid_get(actor.level.grids.tiles, actor.p, False) is None and (~Q(actor).health.amount.maximum or 0) > 5:
             genesis.entities_to_create.add(Footprint(p=actor.p, level=actor.level))
 
         grid_set(actor.level.grids[actor.layer], actor.p, None)

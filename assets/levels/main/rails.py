@@ -233,6 +233,7 @@ class Rails(RailsBase):
         memory = c.player.ai.memory
 
         scene.enabled = False
+        memory.is_vision_disabled = False
 
         c.mother.p = p.mother_reappearance
         if not exists(c.mother):
@@ -260,6 +261,7 @@ class Rails(RailsBase):
         memory = c.player.ai.memory
 
         scene.enabled = False
+        memory.is_vision_disabled = False
         yield from self.center_camera()
 
         yield {c.player: Say("<Сдавленный вскрик>")}
