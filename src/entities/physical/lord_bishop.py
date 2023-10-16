@@ -13,7 +13,7 @@ from src.systems.ai import Senses
 class LordBishop(Human):
     name = Name("лорд Натаниэль")
     sex = "male"
-    character = 'B'
+    character = 'L'
     color = ColorPair(yellow)
     faction = Faction.Church
 

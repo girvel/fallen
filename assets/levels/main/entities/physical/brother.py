@@ -11,7 +11,7 @@ from src.systems.ai import Senses
 
 
 class Brother(Human):
-    character = 'B'
+    character = 'M'
     color = ColorPair(blue)
     sex = "male"
 
