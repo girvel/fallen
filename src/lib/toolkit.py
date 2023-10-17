@@ -14,6 +14,9 @@ def to_camel_case(snake_str):
 def from_snake_case(snake_str: str):
     return snake_str.strip("_").replace("_", " ")
 
+def soft_capitalize(string: str):
+    return string[0].upper() + string[1:]
+
 def sign(n):
     if n == 0:
         return 0

@@ -1,6 +1,7 @@
 from ecs import DynamicEntity
 
 from src.lib.query import Q
+from src.lib.toolkit import soft_capitalize
 from src.systems.ai import classified_as, Kind
 
 
@@ -19,7 +20,7 @@ def name(subject: DynamicEntity) -> str | bool | None:
         None: "",
     }[~Q(subject).sex]
 
-    return f"{prefix}{str(~Q(subject).name or '').capitalize()}"
+    return f"{prefix}{soft_capitalize(str(~Q(subject).name or ''))}"
 
 @metrics.append
 def faction(subject: DynamicEntity) -> str | bool | None:
