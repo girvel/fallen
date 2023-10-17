@@ -29,7 +29,7 @@ def generate_hotkeys(debug_mode):
             return f
 
 
-    @_hotkey("global_", ["Q"])
+    @_hotkey("global_", ["Q"])  # TODO disable Ctrl+C hotkey
     def quit_(io, subject, perception, memory):
         raise KeyboardInterrupt
 

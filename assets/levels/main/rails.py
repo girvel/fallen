@@ -11,7 +11,7 @@ from src.engine.acting.actions.no_action import NoAction
 from src.engine.acting.actions.say import Say
 from src.engine.acting.damage import Weapon, DamageKind
 from src.engine.ai.pather import PathTarget
-from src.engine.rails_base import RailsBase, scene
+from src.engine.rails_base import RailsBase, Scene
 from src.entities.ais.io import Quest
 from src.entities.special.level import Level
 from src.lib.concurrency import wait_for, wait_while, wait_seconds
@@ -43,7 +43,7 @@ class Rails(RailsBase):
 
         self.vision_level = None
 
-    @scene()
+    # @Scene.new()
     def introduction(self, scene):
         c = self.characters
         p = self.positions
@@ -116,7 +116,6 @@ class Rails(RailsBase):
         else:
             c.player.traits.pain.move(1)
 
-            yield {c.brother: Say("Это шашка...")}
             yield {c.player: Say("Брат морщится, пряча взгляд.", True)}
 
             yield {c.brother: Say("Мне надо это сделать.")}
@@ -147,14 +146,14 @@ class Rails(RailsBase):
         yield from self.end_cutscene()
 
 
-    @scene(lambda self: d2(self.characters.brother.p, self.positions.before_away) <= 2)
+    @Scene.new(lambda self: d2(self.characters.brother.p, self.positions.before_away) <= 2)
     def brother_path_middlepoint(self, scene):
         scene.enabled = False
         self.characters.brother.ai.pather.going_to = PathTarget.Some(self.positions.away)
         yield  # TODO non-async scenes
 
 
-    @scene(lambda self:
+    @Scene.new(lambda self:
         exists(self.characters.brother)
         and self.characters.brother.level is self.characters.player.level
         and d2(self.characters.brother.p, self.positions.away) <= 20
@@ -165,7 +164,7 @@ class Rails(RailsBase):
         p = self.positions
 
         scene.enabled = False
-        self.scene_by_name("brother_and_mother_leave").enabled = False
+        self.brother_and_mother_leave.enabled = False
         c.brother.ai.enable_speech = False
         yield from self.start_cutscene()
         yield from self.center_camera()
@@ -188,14 +187,14 @@ class Rails(RailsBase):
         c.brother.ai.pather.going_to = PathTarget.Some(c.mother.p)
         c.mother.ai.pather.going_to = PathTarget.Some(p.away)
 
-        self.scene_by_name("brother_and_mother_leave").enabled = True
+        self.brother_and_mother_leave.enabled = True
 
         yield from wait_while(lambda: exists(c.brother))
 
         yield from self.end_cutscene()
 
 
-    @scene(lambda self: any(
+    @Scene.new(lambda self: any(
         d2(e.p, self.positions.away) <= 3 for e in [self.characters.brother, self.characters.mother]
     ))
     def brother_and_mother_leave(self, scene):
@@ -206,8 +205,8 @@ class Rails(RailsBase):
         yield {c.mother: Leave(), c.brother: Leave()}
 
 
-    # @scene()
-    @scene(lambda self: self.characters.player.health.amount.current <= 0)
+    @Scene.new()
+    # @Scene.new(lambda self: self.characters.player.health.amount.current <= 0)
     def player_dies(self, scene):
         c = self.characters
         p = self.positions
@@ -226,7 +225,7 @@ class Rails(RailsBase):
         c.player.health.amount.reset_to_max()
         Level.change(c.player, self.vision_level, p.vision_start)
 
-    @scene(enabled=False)
+    @Scene.new(enabled=False)
     def player_wakes_up_1(self, scene):
         c = self.characters
         p = self.positions
@@ -250,11 +249,11 @@ class Rails(RailsBase):
 
         memory.is_vision_disabled = True
         Level.change(c.player, self.vision_level, self.vision_level.rails.positions.observing_the_throne)
-        self.vision_level.rails.scene_by_name("talk_with_lord_bishop_1").enabled = True
+        self.vision_level.rails.talk_with_lord_bishop_1.enabled = True
         # TODO access with just self.vision_level.talk_with_lord_bishop
 
 
-    @scene(enabled=False)
+    @Scene.new(enabled=False)
     def player_wakes_up_2(self, scene):
         c = self.characters
         p = self.positions
@@ -277,4 +276,4 @@ class Rails(RailsBase):
         yield
 
         Level.change(c.player, self.vision_level, self.vision_level.rails.positions.observing_the_throne)
-        self.vision_level.rails.scene_by_name("talk_with_lord_bishop_2").enabled = True
+        self.vision_level.rails.talk_with_lord_bishop_2.enabled = True

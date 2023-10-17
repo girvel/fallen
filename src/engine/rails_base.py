@@ -20,10 +20,10 @@ class RailsBase(DynamicEntity):
         self.scenes = []
         self.current_scenes = []
 
-        for p in vars(type(self)).values():
-            if not isinstance(p, PreScene): continue
-            s = Scene(p.name, None, functools.partial(p.start_predicate, self), p.enabled)
-            s.run = functools.partial(p.run, self, s)
+        for s in vars(type(self)).values():
+            if not isinstance(s, Scene): continue
+            s.run = functools.partial(s.run, self, s)
+            s.start_predicate = functools.partial(s.start_predicate, self)
             self.scenes.append(s)
 
         self.level = level
@@ -82,11 +82,10 @@ class RailsBase(DynamicEntity):
 @dataclass(eq=False)
 class Scene:
     name: str
-    run: Callable[[], None]
-    start_predicate: Callable[[], bool]
+    run: Callable[[...], None]
+    start_predicate: Callable[[...], bool]
     enabled: bool = True
 
-PreScene = namedtuple("PreScene", "name, run, start_predicate, enabled")
-
-def scene(start_predicate: Callable[[RailsBase], bool] = lambda _: True, *, enabled=True):
-    return lambda f: PreScene(f.__name__, f, start_predicate, enabled)
+    @classmethod
+    def new(self, start_predicate: Callable[[RailsBase], bool] = lambda _: True, *, enabled=True):
+        return lambda f: Scene(f.__name__, f, start_predicate, enabled)

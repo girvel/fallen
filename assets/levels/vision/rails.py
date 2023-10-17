@@ -9,7 +9,7 @@ from src.engine.acting.actions.cast_fire_storm import CastFireStorm
 from src.engine.acting.actions.cast_stone_stomp import CastStoneStomp
 from src.engine.acting.actions.say import Say
 from src.engine.ai.pather import PathTarget
-from src.engine.rails_base import RailsBase, scene
+from src.engine.rails_base import RailsBase, Scene
 from src.entities.ais.dummy_ai import wait_finish
 from src.entities.physical.backslash_wall import BackslashWall
 from src.entities.physical.horizontal_wall import HorizontalWall
@@ -51,7 +51,7 @@ class Rails(RailsBase):
         self.quests = Entity()
 
 
-    @scene()
+    @Scene.new()
     def start_vision(self, scene):
         c = self.characters
         p = self.positions
@@ -118,13 +118,13 @@ class Rails(RailsBase):
         yield
 
         c.player.ai.dummy.clear()
-        self.parent_level.rails.scene_by_name("player_wakes_up_1").enabled = True
+        self.parent_level.rails.player_wakes_up_1.enabled = True
         memory.is_vision_disabled = True
         # noinspection PyUnresolvedReferences
         Level.change(c.player, self.parent_level, self.parent_level.rails.positions.player_bed)
 
 
-    @scene(enabled=False)
+    @Scene.new(enabled=False)
     def talk_with_lord_bishop_1(self, scene):
         c = self.characters
         p = self.positions
@@ -143,19 +143,19 @@ class Rails(RailsBase):
         yield {c.kaledeii: Say("Ваше Превосходительство, следуйте за мной.")}
         yield {c.bishop: Say("Глупости! Кем он себя возомнил!")}
         yield {c.bishop: Say("Я останусь на своём положенном месте и не сдвинусь ни на шаг.")}
-        yield {c.bishop: Say("Он защитит нас.")}
+        yield {c.bishop: Say("Мы будем спасены.")}
 
         yield from wait_seconds(1)
 
         yield {c.player: Say("Стены сотрясаются вновь.", True)}
 
         yield  # TODO encapsulate interplanar scene change
-        self.parent_level.rails.scene_by_name("player_wakes_up_2").enabled = True
+        self.parent_level.rails.player_wakes_up_2.enabled = True
         memory.is_vision_disabled = True
         Level.change(c.player, self.parent_level, self.parent_level.rails.positions.player_bed)
 
 
-    @scene(enabled=False)
+    @Scene.new(enabled=False)
     def talk_with_lord_bishop_2(self, scene):
         c = self.characters
         p = self.positions
