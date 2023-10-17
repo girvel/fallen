@@ -62,7 +62,7 @@ class RailsBase(DynamicEntity):
     def scene_by_name(self, name):
         return next(s for s in self.scenes if s.name == name)
 
-    def run_subscene(self, *args, **kwargs):
+    def run_task(self, *args, **kwargs):
         def decorator(f):
             s = Scene(f.__name__, None, lambda: True)
 

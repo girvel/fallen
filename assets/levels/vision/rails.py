@@ -96,8 +96,8 @@ class Rails(RailsBase):
 
         yield {c.kaledeii: Say(f"{builder1.name.last} и {builder2.name.last}, блокируйте проход.")}
 
-        @self.run_subscene(builder1, p.fortification_positions[:3])
-        @self.run_subscene(builder2, p.fortification_positions[3:])
+        @self.run_task(builder1, p.fortification_positions[:3])
+        @self.run_task(builder2, p.fortification_positions[3:])
         def build_fortifications(executor, positions):
             for position in positions:
                 executor.ai.pather.going_to = PathTarget.Some(add2(right, position))
