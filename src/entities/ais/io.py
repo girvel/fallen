@@ -84,7 +84,7 @@ class IO(DynamicEntity):
             dummy_action = self.dummy.make_decision(subject, perception)
             player_action = self.input.wait_for_input(subject, perception, self.memory)
 
-            return dummy_action or player_action
+            if action := dummy_action or player_action: return action
 
     def form_memory(self, subject, perception):
         self.memory.spacial_memory.push(subject, perception)
