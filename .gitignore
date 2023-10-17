@@ -4,3 +4,4 @@
 /.profile
 /*.lprof
 **/__pycache__
+.issues-dump
