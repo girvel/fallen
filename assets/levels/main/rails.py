@@ -64,7 +64,7 @@ class Rails(RailsBase):
         yield from wait_for(2)
 
         yield {c.player: Say(
-            "Вы стоите в обшарпанной деревянной прихожей; цветочные горшки усеивают каждую горизонтальную поверхность;"
+            "Вы стоите в обшарпанной деревянной прихожей. Цветочные горшки усеивают каждую горизонтальную поверхность;"
             " странное жёсткое чувство упирается в кадык.",
             True,
         )}
@@ -273,7 +273,7 @@ class Rails(RailsBase):
 
         yield {c.player: Say("Что происходит?")}
 
-        yield {c.mother: Say("Ты бредишь.")}
+        yield {c.mother: Say("Ты бредишь.")}  # TODO bug: this one is skipped
         yield
 
         Level.change(c.player, self.vision_level, self.vision_level.rails.positions.observing_the_throne)

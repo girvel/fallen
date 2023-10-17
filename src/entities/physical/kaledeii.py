@@ -9,7 +9,7 @@ from src.systems.ai import Senses
 
 
 class Kaledeii(Human):
-    name = Name("каледей")
+    name = Name("Каледей")
     sex = "male"
     character = 'K'
     color = ColorPair(cyan)

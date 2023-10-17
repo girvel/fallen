@@ -52,7 +52,7 @@ def le2(v1: int2, v2: int2) -> int2:
     return ge2(v2, v1)
 
 
-def d2(v1: int2, v2: int2) -> int2:
+def d2(v1: int2, v2: int2) -> int:
     return abs2(sub2(v1, v2))
 
 

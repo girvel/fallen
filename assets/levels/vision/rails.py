@@ -22,7 +22,7 @@ from src.entities.physical.vertical_wall import VerticalWall
 from src.entities.special.level import Level
 from src.lib import vector
 from src.lib.concurrency import wait_for, wait_seconds, wait_while
-from src.lib.vector import add2, right, d2
+from src.lib.vector import add2, right, d2, mul2
 
 
 class Rails(RailsBase):
@@ -138,7 +138,7 @@ class Rails(RailsBase):
 
         yield {c.player: Say("Другой край зала.", True)}
         yield {c.player: Say("Фигура злого старика нависает с края возвышенности трона.", True)}
-        yield {c.player: Say("Небесная синева робы едва видна под золотом религиозной атрибутики.", True)}
+        yield {c.player: Say("Небесная синева его робы едва видна под золотом религиозной атрибутики.", True)}
 
         yield {c.kaledeii: Say("Ваше Превосходительство, следуйте за мной.")}
         yield {c.bishop: Say("Глупости! Кем он себя возомнил!")}
@@ -183,7 +183,7 @@ class Rails(RailsBase):
         c.player.ai.dummy.pather.going_to = PathTarget.Some(p.observing_the_entrance)
 
         yield from wait_for(5)
-        c.kaledeii.ai.pather.going_to = PathTarget.Some(p.observing_the_entrance)
+        c.kaledeii.ai.pather.going_to = PathTarget.Some(add2(p.observing_the_entrance, mul2(vector.up, 2)))
 
         yield from wait_while(lambda: enemy.p != p.enemy_attack)
         yield from self.center_camera()
@@ -196,7 +196,7 @@ class Rails(RailsBase):
 
         yield {enemy: CastStoneStomp(vector.right)}
         yield from wait_seconds(1)
-        yield {enemy: CastStoneStomp(vector.right)}
+        yield {enemy: CastStoneStomp(vector.right)}  # TODO bug: second stomp is invisible
         yield from wait_seconds(2)
         yield {enemy: CastFireStorm()}
         yield from wait_for(CastFireStorm.duration + 1)
