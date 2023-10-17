@@ -28,10 +28,10 @@ start = [147, 44]
 end = [168, 62]
 entrance = [150, 44]
 
-[[houses]]
-start = [184, 44]
-end = [211, 61]
-entrance = [189, 48]
+#[[houses]]  # player's house
+#start = [184, 48]
+#end = [211, 61]
+#entrance = [189, 48]
 
 
 
