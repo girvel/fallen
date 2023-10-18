@@ -44,6 +44,7 @@ class Pather:
         if (
             len(self.path) == 0 or
             self.path[0] != destination or
+            (subject.act and not subject.act.succeeded) or
             perception.vision[subject.layer].get(self.path[-1]) is not None
         ):
             # Create grid for calculations, escaping the beginning and the end

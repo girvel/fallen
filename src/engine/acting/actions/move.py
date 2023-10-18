@@ -17,7 +17,9 @@ class Move(Action):
 
     def execute(self, actor: DynamicEntity, hades: Hades, genesis: Genesis):
         next_p = add2(actor.p, self.v)
-        if grid_get(actor.level.grids[actor.layer], next_p, False) is not None: return
+        if grid_get(actor.level.grids[actor.layer], next_p, False) is not None:
+            self.succeeded = False
+            return
 
         if grid_get(actor.level.grids.tiles, actor.p, False) is None and (~Q(actor).health.amount.maximum or 0) > 5:
             genesis.entities_to_create.add(Footprint(p=actor.p, level=actor.level))
