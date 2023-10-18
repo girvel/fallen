@@ -3,7 +3,7 @@ from ecs import DynamicEntity
 from src.engine.acting.actions.splash_attack import SplashAttack
 from src.engine.acting.damage import Weapon, DamageKind
 from src.engine.attitude.implementation import Faction
-from src.engine.name import Name
+from src.engine.naming.name import Name
 from src.engine.output.colors import ColorPair, red
 from src.entities.ais.static_ai import StaticAi
 from src.lib.toolkit import death_chance_from_half_life

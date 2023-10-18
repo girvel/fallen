@@ -1,6 +1,6 @@
 from ecs import DynamicEntity
 
-from src.engine.name import Name
+from src.engine.naming.name import Name
 from src.lib.toolkit import death_chance_from_half_life
 
 

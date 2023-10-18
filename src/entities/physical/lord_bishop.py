@@ -1,9 +1,7 @@
-import random
-
 from src.engine.acting.damage import Health, DamageKind, ArmorKind, Weapon
 from src.engine.ai.spacial_memory import SpacialMemory
 from src.engine.attitude.implementation import Faction, common_attitude
-from src.engine.name import Name
+from src.engine.naming.name import Name
 from src.engine.output.colors import ColorPair, yellow
 from src.entities.abstract.human import Human
 from src.entities.ais.dummy_ai import DummyAi

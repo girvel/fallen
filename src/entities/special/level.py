@@ -6,9 +6,8 @@ from typing import TypeVar, Callable, Any
 import numpy
 import toml as toml
 from ecs import DynamicEntity, Entity, Metasystem
-from rust_enum import Option
 
-from src.engine.name import Name
+from src.engine.naming.name import Name
 from src.entities.markup.house import House
 from src.entities.markup.zone import Zone
 from src.entities.special.genesis import Genesis

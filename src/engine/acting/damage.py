@@ -68,7 +68,7 @@ def inflict_damage(target: DynamicEntity, power: float, damage_kind: str, hades:
         hades.entities_to_destroy.add(target)
 
 
-db = yaml.safe_load(Path("assets/damage_and_armor.yaml").read_text())
+db = yaml.safe_load((Path(__file__).parent / "damage_and_armor.yaml").read_text())
 
 armor_data = Entity(**{
     armor_kind: Entity(resistance=set(resistance), vulnerability=set(vulnerability))

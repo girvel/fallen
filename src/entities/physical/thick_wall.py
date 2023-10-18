@@ -3,7 +3,7 @@ import random
 from ecs import DynamicEntity
 
 from src.engine.acting.damage import Health, ArmorKind
-from src.engine.name import Name
+from src.engine.naming.name import Name
 from src.engine.output.colors import ColorPair, yellow
 from src.entities.special.genesis import Genesis
 from src.entities.special.hades import Hades

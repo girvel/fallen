@@ -1,8 +1,8 @@
-from typing import Any, Optional
+from typing import Any
 
 from ecs import DynamicEntity
 
-from src.engine.name import Name, CompositeName
+from src.engine.naming.name import Name, CompositeName
 from src.engine.output.colors import ColorPair, red
 from src.entities.special.genesis import Genesis
 from src.entities.special.hades import Hades

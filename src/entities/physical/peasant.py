@@ -2,7 +2,7 @@ import random
 
 from src.engine.acting.damage import Weapon, Health, DamageKind, ArmorKind
 from src.engine.ai.spacial_memory import SpacialMemory
-from src.engine.assets import random_composite_name
+from src.engine.naming.library import random_composite_name
 from src.engine.attitude.implementation import common_attitude, Faction
 from src.entities.abstract.human import Human
 from src.entities.ais.peasant_ai import PeasantAi

@@ -1,4 +1,3 @@
-import logging
 from dataclasses import dataclass, field
 from typing import Optional
 
@@ -7,7 +6,7 @@ from ecs import DynamicEntity
 from src.engine.acting.action import Action
 from src.engine.ai.spacial_memory import SpacialMemory
 from src.engine.input.input import Input
-from src.engine.name import Name
+from src.engine.naming.name import Name
 from src.engine.output.output import Output
 from src.entities.ais.dummy_ai import DummyAi
 from src.entities.special.sound import Sound

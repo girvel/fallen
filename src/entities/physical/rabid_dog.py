@@ -3,7 +3,7 @@ from ecs import DynamicEntity
 from src.engine.acting.damage import Weapon, Health, DamageKind, ArmorKind
 from src.engine.attitude.attitude import Attitude
 from src.engine.attitude.implementation import Faction
-from src.engine.name import Name
+from src.engine.naming.name import Name
 from src.engine.output.colors import magenta, ColorPair
 from src.entities.ais.rabid_ai import RabidAi
 from src.entities.tiles.body import body_factory

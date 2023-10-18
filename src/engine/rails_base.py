@@ -1,13 +1,12 @@
 import functools
 import logging
-from collections import namedtuple
 from dataclasses import dataclass
 from typing import Callable
 
 from ecs import DynamicEntity
 
 from src.engine.acting.action import Action
-from src.engine.name import Name
+from src.engine.naming.name import Name
 from src.entities.physical.player import Player
 from src.entities.special.level import Level
 from src.lib.vector import floordiv2, sub2

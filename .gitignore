@@ -5,3 +5,4 @@
 /*.lprof
 **/__pycache__
 .issues-dump
+.pytest_cache

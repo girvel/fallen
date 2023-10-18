@@ -13,7 +13,7 @@ from src.lib.toolkit import crash_safe
 from src.systems import acting, destruction_and_creation, ai, death, nature
 
 
-def init(stdscr, track, debug_mode, no_render, no_rails, no_fixed_fps):
+def build_metasystem(debug_mode):
     logging.info("Creating & filling the metasystem")
     ms = Metasystem()
 
@@ -36,6 +36,12 @@ def init(stdscr, track, debug_mode, no_render, no_rails, no_fixed_fps):
 
     ms.add(Hades())
     genesis = ms.add(Genesis())
+
+    return ms, genesis
+
+
+def init(stdscr, track, debug_mode, no_render, no_rails, no_fixed_fps):
+    ms, genesis = build_metasystem(debug_mode)
 
     level = ms.add(Level(
         ms, Path("assets/levels/main"),
