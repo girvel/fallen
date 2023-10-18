@@ -1,13 +1,12 @@
 import logging
 
-from ecs import create_system, Metasystem
+from ecs import Metasystem
 
 from src.lib.query import Q
 from src.lib.vector import grid_set, grid_get
 
 
 def generate(ms: Metasystem):
-    @create_system
     def destruction(hades: 'entities_to_destroy', genesis: 'entities_to_create'):
         for e in hades.entities_to_destroy:
             if (level := ~Q(e).level) is not None:
@@ -24,7 +23,6 @@ def generate(ms: Metasystem):
 
         hades.entities_to_destroy.clear()
 
-    @create_system
     def creation(hades: 'entities_to_destroy', genesis: 'entities_to_create'):
         for e in genesis.entities_to_create:
             if hasattr(e, "level"):

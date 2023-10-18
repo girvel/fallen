@@ -5,7 +5,7 @@ from typing import Any, TypeVar
 
 import numpy
 import tcod.map
-from ecs import create_system, DynamicEntity, Entity
+from ecs import DynamicEntity, Entity
 from numpy import ndarray, dtype
 
 from src.entities.special.sound import Sound
@@ -88,7 +88,6 @@ def borders_from_radius(p: int2, r: int, size: int2) -> tuple[int2, int2]:
     )
 
 
-@create_system
 def update_transparency_cache(level: 'grids'):
     for y, line in enumerate(level.grids.physical[0]):
         for x, e in enumerate(line):
@@ -97,7 +96,6 @@ def update_transparency_cache(level: 'grids'):
 
 stop_signal = object()
 
-@create_system
 def run_rails(level: 'grids', hades: 'entities_to_destroy'):
     if not hasattr(level, "rails"): return
 
@@ -119,7 +117,6 @@ def run_rails(level: 'grids', hades: 'entities_to_destroy'):
             level.rails.current_scenes.remove(scene)
 
 
-@create_system
 def think(subject: 'ai'):
     is_railed = subject in subject.level.rails_effect
 

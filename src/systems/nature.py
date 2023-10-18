@@ -1,13 +1,10 @@
-from ecs import create_system
-
 from src.lib import vector
 from src.lib.toolkit import chance
-from src.lib.vector import fits_in_grid, add2, grid_get, grid_unsafe_get
+from src.lib.vector import fits_in_grid, add2, grid_unsafe_get
 
 sequence = []
 
 @sequence.append
-@create_system
 def flow(subject: "liquid_height", genesis: "entities_to_create"):
     if subject.liquid_height <= 1: return
 

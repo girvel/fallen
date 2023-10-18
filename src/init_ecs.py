@@ -2,7 +2,7 @@ import logging
 from pathlib import Path
 from time import time
 
-from ecs import Metasystem
+from ecs import Metasystem, create_system
 
 from src.entities.ais.io import IO
 from src.entities.physical.player import Player
@@ -19,14 +19,14 @@ def build_metasystem(debug_mode):
 
     logging.info("Initializing systems")
 
-    for system in [
+    for system in map(create_system, [
         # *regeneration.sequence,
         *nature.sequence,
         *ai.sequence,
         *acting.sequence,
         *death.sequence,
         *destruction_and_creation.generate(ms),
-    ]:
+    ]):
         if not debug_mode:
             system.process = crash_safe(system.process)
 
