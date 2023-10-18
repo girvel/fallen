@@ -1,9 +1,8 @@
-import logging
 import random
 from enum import Enum
 
-from src.engine.acting.actions.move import Move
 from src.engine.acting.actions.say import Say
+from src.engine.ai.composite_ai import CompositeAi
 from src.engine.ai.fight_or_flight import FightOrFlight
 from src.engine.ai.morale import Morale
 from src.engine.ai.pather import Pather, PathTarget
@@ -15,7 +14,6 @@ from src.lib.period.period import Period
 from src.lib.period.random_period import RandomPeriod
 from src.lib.query import Q
 from src.lib.vector import directions, add2, grid_get
-
 
 Mode = Enum("Mode", "GoHome GoToTable WorkAtTable GoOutside Wandering")
 
@@ -30,31 +28,34 @@ class PeasantAi:
         self.fight_or_flight_period = Period(5)
         self.chat_period = RandomPeriod(5, 11)
 
-        self.spacial_memory = SpacialMemory()
-        self.pather = Pather()
-        self.fight_or_flight = FightOrFlight(False)
-        self.morale = Morale()
-        self.wanderer = Wanderer()
+        self.composite = CompositeAi([
+            SpacialMemory(),
+            Pather(),
+            FightOrFlight(False),
+            Morale(),
+            Wanderer(),
+        ])
 
         self.messages = []
 
     # It is possible to extract ModalAi parent/component?
     def make_decision(self, subject, perception):
-        self.spacial_memory.push(subject, perception)
+        self.composite[SpacialMemory].use(subject, perception)
         if self.lagging_period.step(): return
 
-        aggressives = self.morale.update(subject, perception)
+        aggressives = self.composite[Morale].use(subject, perception)
 
         for e, offset in aggressives:
             self.messages.append(Say(f"<Выражает недовольство {e.name:тв}>", meme=Meme.MoraleChange(e, offset)))
 
         if (
             (len(aggressives) > 0 or self.fight_or_flight_period.step())
-            and (target := self.fight_or_flight.try_producing_target(subject, perception).unwrap_or())
+            and (target := self.composite[FightOrFlight].use(subject, perception).unwrap_or())
         ):
-            self.pather.going_to = target
+            self.composite[Pather].going_to = target
 
-        if action := self.pather.try_going(subject, perception, self.spacial_memory).unwrap_or(): return action
+        if action := self.composite[Pather].use(subject, perception, self.composite[SpacialMemory]).unwrap_or():
+            return action
 
         if (
             self.chat_period.step_without_reset()
@@ -70,7 +71,7 @@ class PeasantAi:
 
         match self.mode:
             case Mode.GoHome:
-                self.pather.going_to = PathTarget.Some(subject.house.entrance)
+                self.composite[Pather].going_to = PathTarget.Some(subject.house.entrance)
                 self.mode = Mode.GoToTable
 
             case Mode.GoToTable:
@@ -82,16 +83,16 @@ class PeasantAi:
                         (x, y)
                         for x in range(subject.house.house_borders[0][0], subject.house.house_borders[1][0])
                         for y in range(subject.house.house_borders[0][1], subject.house.house_borders[1][1])
-                        if grid_get(self.spacial_memory[subject.level], (x, y)) == Table.character
+                        if grid_get(self.composite[SpacialMemory][subject.level], (x, y)) == Table.character
                     ])) is not None
                     and
                     (destination := next((
                         p for v in directions
-                        if (p := add2(table_p, v)) and grid_get(self.spacial_memory[subject.level], p) == "."
+                        if (p := add2(table_p, v)) and grid_get(self.composite[SpacialMemory][subject.level], p) == "."
                         # TODO remove magic character
                     ), None)) is not None
                 ):
-                    self.pather.going_to = PathTarget.Some(destination)
+                    self.composite[Pather].going_to = PathTarget.Some(destination)
                     self.mode = Mode.WorkAtTable
                 else:
                     self.mode = Mode.GoOutside
@@ -101,7 +102,7 @@ class PeasantAi:
                     self.mode = Mode.GoOutside
 
             case Mode.GoOutside:
-                self.pather.going_to = PathTarget.Some(random.choices(
+                self.composite[Pather].going_to = PathTarget.Some(random.choices(
                     self.favourite_zones,
                     [zone.attractiveness for zone in self.favourite_zones]
                 )[0].center)
@@ -110,6 +111,8 @@ class PeasantAi:
 
             case Mode.Wandering:
                 if not self.wandering_period.step():
-                    return self.wanderer.wander(subject, perception, self.pather.free_directions).unwrap_or()
+                    return (self.composite[Wanderer]
+                        .use(subject, perception, self.composite[Pather].free_directions)
+                        .unwrap_or())
 
                 self.mode = Mode.GoHome

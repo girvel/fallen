@@ -18,12 +18,12 @@ class RabidAi:
         self.spacial_memory = SpacialMemory()
 
     def make_decision(self, subject, perception):
-        self.spacial_memory.push(subject, perception)
+        self.spacial_memory.use(subject, perception)
 
-        if (target := self.fight_or_flight.try_producing_target(subject, perception).unwrap_or()) is not None:
+        if (target := self.fight_or_flight.use(subject, perception).unwrap_or()) is not None:
             self.pather.going_to = target
 
-        if action := self.pather.try_going(subject, perception, self.spacial_memory).unwrap_or(): return action
+        if action := self.pather.use(subject, perception, self.spacial_memory).unwrap_or(): return action
 
         possible_targets = [
             e for e in perception.vision.physical.values()

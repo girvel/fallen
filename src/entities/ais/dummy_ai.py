@@ -15,9 +15,9 @@ class DummyAi(DynamicEntity):
         self.spacial_memory = SpacialMemory()
 
     def make_decision(self, subject: DynamicEntity, perception: Perception) -> Action:
-        self.spacial_memory.push(subject, perception)
+        self.spacial_memory.use(subject, perception)
         if target := self.follower.try_producing_target(subject, perception).unwrap_or(): self.pather.going_to = target
-        if move := self.pather.try_going(subject, perception, self.spacial_memory).unwrap_or(): return move
+        if move := self.pather.use(subject, perception, self.spacial_memory).unwrap_or(): return move
 
     def clear(self):
         self.pather.going_to = PathTarget.Nothing()

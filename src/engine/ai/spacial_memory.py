@@ -10,6 +10,6 @@ class SpacialMemory(dict):
         self[key] = map_grid(key.grids.physical, lambda _: None)
         return self[key]
 
-    def push(self, subject: DynamicEntity, perception: Perception):
+    def use(self, subject: DynamicEntity, perception: Perception):
         for p, entity in perception.vision.physical.items():
             grid_set(self[subject.level], p, entity is not None and entity.character or ".")

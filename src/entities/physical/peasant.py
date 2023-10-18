@@ -1,6 +1,7 @@
 import random
 
 from src.engine.acting.damage import Weapon, Health, DamageKind, ArmorKind
+from src.engine.ai.spacial_memory import SpacialMemory
 from src.engine.assets import random_composite_name
 from src.engine.attitude.implementation import common_attitude, Faction
 from src.entities.abstract.human import Human
@@ -31,6 +32,7 @@ class Peasant(Human):
                 [area2(sub2(h.house_borders[1], h.house_borders[0])) for h in level.markup.houses]
             )
 
-        self.ai.spacial_memory[level] = map_grid(level.grids.physical, lambda e: e is None and "." or e.character)
+        self.ai.composite[SpacialMemory][level] = map_grid(level.grids.physical, lambda e: e is None and "." or e.character)
         # TODO remove magic character
+        # TODO do this automatically
         self.ai.favourite_zones = level.markup.zones

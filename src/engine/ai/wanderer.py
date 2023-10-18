@@ -10,7 +10,7 @@ from src.systems.ai import Perception
 
 
 class Wanderer(DynamicEntity):
-    def wander(self, subject: DynamicEntity, perception: Perception, free_directions: list[int2]) -> Option[Action]:
+    def use(self, subject: DynamicEntity, perception: Perception, free_directions: list[int2]) -> Option[Action]:
         if len(free_directions) > 0:
             return Option.Some(Move(random.choice(free_directions)))
         return Option.Nothing()

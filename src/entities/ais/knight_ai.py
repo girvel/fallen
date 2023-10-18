@@ -20,17 +20,17 @@ class KnightAi(DynamicEntity):
         self.morale = Morale()
 
     def make_decision(self, subject, perception: Perception):
-        self.spacial_memory.push(subject, perception)
-        self.morale.update(subject, perception)
+        self.spacial_memory.use(subject, perception)
+        self.morale.use(subject, perception)
 
         if attack := self.attacker.try_attacking(subject, perception, self.fight_or_flight.current_target).unwrap_or():
             return attack
 
         if path_target := (
-            self.fight_or_flight.try_producing_target(subject, perception).unwrap_or() or
-            self.follower.try_producing_target(subject, perception).unwrap_or()
+                self.fight_or_flight.use(subject, perception).unwrap_or() or
+                self.follower.try_producing_target(subject, perception).unwrap_or()
         ):
             self.pather.going_to = path_target
 
-        if action := self.pather.try_going(subject, perception, self.spacial_memory).unwrap_or():
+        if action := self.pather.use(subject, perception, self.spacial_memory).unwrap_or():
             return action

@@ -14,7 +14,7 @@ class FightOrFlight:
     def __init__(self, prefer_fight: bool):
         self.prefer_fight = prefer_fight
 
-    def try_producing_target(
+    def use(
         self, subject: DynamicEntity, perception: Perception
     ) -> Option[PathTarget]:
 

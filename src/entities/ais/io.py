@@ -87,7 +87,7 @@ class IO(DynamicEntity):
             if action := dummy_action or player_action: return action
 
     def form_memory(self, subject, perception):
-        self.memory.spacial_memory.push(subject, perception)
+        self.memory.spacial_memory.use(subject, perception)
 
         self.memory.current_sound = next((
             sound
