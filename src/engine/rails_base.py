@@ -9,6 +9,7 @@ from ecs import DynamicEntity
 from src.engine.acting.action import Action
 from src.engine.name import Name
 from src.entities.physical.player import Player
+from src.entities.special.level import Level
 from src.lib.vector import floordiv2, sub2
 
 
@@ -77,6 +78,12 @@ class RailsBase(DynamicEntity):
             return f
 
         return decorator
+
+    def plane_shift(self, level, p):
+        self.player.ai.memory.is_vision_disabled = True
+        Level.change(self.player, level, p)
+        yield
+        self.player.ai.memory.is_vision_disabled = False
 
 
 @dataclass(eq=False)

@@ -115,13 +115,10 @@ class Rails(RailsBase):
         yield from wait_seconds(5)
 
         yield {c.player: Say("Массивные стены зала сотрясаются от мощного удара вдали.", True)}
-        yield
 
         c.player.ai.dummy.clear()
         self.parent_level.rails.player_wakes_up_1.enabled = True
-        memory.is_vision_disabled = True
-        # noinspection PyUnresolvedReferences
-        Level.change(c.player, self.parent_level, self.parent_level.rails.positions.player_bed)
+        yield from self.plane_shift(self.parent_level, self.parent_level.rails.positions.player_bed)
 
 
     @Scene.new(enabled=False)
@@ -134,7 +131,6 @@ class Rails(RailsBase):
 
         yield from self.center_camera()
         yield from wait_finish(c.kaledeii)
-        memory.is_vision_disabled = False
 
         yield {c.player: Say("Другой край зала.", True)}
         yield {c.player: Say("Фигура злого старика нависает с края возвышенности трона.", True)}
@@ -149,10 +145,8 @@ class Rails(RailsBase):
 
         yield {c.player: Say("Стены сотрясаются вновь.", True)}
 
-        yield  # TODO encapsulate interplanar scene change
         self.parent_level.rails.player_wakes_up_2.enabled = True
-        memory.is_vision_disabled = True
-        Level.change(c.player, self.parent_level, self.parent_level.rails.positions.player_bed)
+        yield from self.plane_shift(self.parent_level, self.parent_level.rails.positions.player_bed)
 
 
     @Scene.new(enabled=False)
@@ -203,9 +197,6 @@ class Rails(RailsBase):
 
         yield from wait_while(lambda: c.player.health.amount.current > 0)
 
-        yield
-        memory.is_vision_disabled = True
-        Level.change(c.player, self.parent_level, self.parent_level.rails.positions.player_bed)
+        self.run_task()(lambda: self.plane_shift(self.parent_level, self.parent_level.rails.positions.player_bed))
         c.player.health.amount.reset_to_max()
         yield from self.end_cutscene()
-        memory.is_vision_disabled = False

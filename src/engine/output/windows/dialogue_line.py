@@ -3,7 +3,7 @@ import logging
 
 from src.engine.output.colors import ColorPair, yellow
 from src.lib.query import Q
-from src.lib.toolkit import cut_by_length, add_multiline_string
+from src.lib.toolkit import cut_by_length, add_multiline_string, soft_capitalize
 
 
 class DialogueLine:
@@ -28,7 +28,7 @@ class DialogueLine:
         if not memory.current_sound.is_internal:
             self._window.addstr(
                 1, 6,
-                str(~Q(perception.vision.physical.get(memory.current_sound.p)).name or "???"),
+                soft_capitalize(str(~Q(perception.vision.physical.get(memory.current_sound.p)).name or "???")),
                 ColorPair(yellow).to_curses()
             )
 

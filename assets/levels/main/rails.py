@@ -218,12 +218,11 @@ class Rails(RailsBase):
         memory.is_vision_disabled = True
         yield from wait_seconds(2)
 
+        c.player.health.amount.reset_to_max()
+
         self.vision_level = self.ms.add(Level(self.ms, Path("assets/levels/vision"), False, self.genesis))
         self.vision_level.rails.parent_level = c.player.level
-        yield
-
-        c.player.health.amount.reset_to_max()
-        Level.change(c.player, self.vision_level, p.vision_start)
+        yield from self.plane_shift(self.vision_level, p.vision_start)
 
     @Scene.new(enabled=False)
     def player_wakes_up_1(self, scene):
@@ -232,7 +231,6 @@ class Rails(RailsBase):
         memory = c.player.ai.memory
 
         scene.enabled = False
-        memory.is_vision_disabled = False
 
         c.mother.p = p.mother_reappearance
         if not exists(c.mother):
@@ -247,10 +245,8 @@ class Rails(RailsBase):
         c.mother.ai.pather.going_to = PathTarget.Some(p.beside_the_bed)
         yield from wait_finish(c.mother)
 
-        memory.is_vision_disabled = True
-        Level.change(c.player, self.vision_level, self.vision_level.rails.positions.observing_the_throne)
         self.vision_level.rails.talk_with_lord_bishop_1.enabled = True
-        # TODO access with just self.vision_level.talk_with_lord_bishop
+        yield from self.plane_shift(self.vision_level, self.vision_level.rails.positions.observing_the_throne)
 
 
     @Scene.new(enabled=False)
@@ -260,7 +256,6 @@ class Rails(RailsBase):
         memory = c.player.ai.memory
 
         scene.enabled = False
-        memory.is_vision_disabled = False
         yield from self.center_camera()
 
         yield {c.player: Say("<Сдавленный вскрик>")}
@@ -273,7 +268,6 @@ class Rails(RailsBase):
         yield {c.player: Say("Что происходит?")}
 
         yield {c.mother: Say("Ты бредишь.")}  # TODO bug: this one is skipped
-        yield
 
-        Level.change(c.player, self.vision_level, self.vision_level.rails.positions.observing_the_throne)
         self.vision_level.rails.talk_with_lord_bishop_2.enabled = True
+        yield from self.plane_shift(self.vision_level, self.vision_level.rails.positions.observing_the_throne)
