@@ -190,7 +190,7 @@ class Rails(RailsBase):
 
         yield {enemy: CastStoneStomp(vector.right)}
         yield from wait_seconds(1)
-        yield {enemy: CastStoneStomp(vector.right)}  # TODO bug: second stomp is invisible
+        yield {enemy: CastStoneStomp(vector.right)}
         yield from wait_seconds(2)
         yield {enemy: CastFireStorm()}
         yield from wait_for(CastFireStorm.duration + 1)

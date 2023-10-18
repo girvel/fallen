@@ -17,10 +17,10 @@ class CastStoneStomp(Action):
         length = 13
         for dv in range(0, length):
             for du in range(-dv, dv + 1):
-                if chance(.15): continue
+                if chance(.05): continue
 
                 p = add2(add2(mul2(self.v, dv), mul2(flip2(self.v), du)), actor.p)
 
                 wall = grid_get(actor.level.grids.physical, p, object())
                 if ~Q(wall).health.armor_kind == ArmorKind.Stone:
-                    inflict_damage(wall, 5_000, DamageKind.Crushing, hades)
+                    inflict_damage(wall, 7_500, DamageKind.Crushing, hades)
