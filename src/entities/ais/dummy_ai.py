@@ -5,27 +5,34 @@ from src.engine.ai.follower import Follower
 from src.engine.ai.pather import Pather, PathTarget
 from src.engine.ai.spacial_memory import SpacialMemory
 from src.lib.concurrency import wait_while
+from src.lib.typed_dict import TypeDict
 from src.systems.ai import Perception
 
 
 class DummyAi(DynamicEntity):
     def __init__(self):
-        self.pather = Pather()
-        self.follower = Follower(3)
-        self.spacial_memory = SpacialMemory()
+        self.composite = TypeDict([
+            Pather(),
+            Follower(3),
+            SpacialMemory(),
+        ])
 
     def make_decision(self, subject: DynamicEntity, perception: Perception) -> Action:
-        self.spacial_memory.use(subject, perception)
-        if target := self.follower.try_producing_target(subject, perception).unwrap_or(): self.pather.going_to = target
-        if move := self.pather.use(subject, perception, self.spacial_memory).unwrap_or(): return move
+        self.composite[SpacialMemory].use(subject, perception)
+
+        if target := self.composite[Follower].use(subject, perception).unwrap_or():
+            self.composite[Pather].going_to = target
+
+        if move := self.composite[Pather].use(subject, perception, self.composite[SpacialMemory]).unwrap_or():
+            return move
 
     def clear(self):
-        self.pather.going_to = PathTarget.Nothing()
-        self.follower.subject = None
+        self.composite[Pather].going_to = PathTarget.Nothing()
+        self.composite[Follower].subject = None
 
 def wait_finish(*dummies, threshold=0):
     yield
     yield from wait_while(lambda: sum(
-        int(dummy.ai.pather.going_to.some() or dummy.ai.follower.active)
+        int(dummy.ai.composite[Pather].going_to.some() or dummy.ai.composite[Follower].active)
         for dummy in dummies
     ) > threshold)

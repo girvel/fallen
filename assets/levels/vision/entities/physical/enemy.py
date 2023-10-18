@@ -1,6 +1,7 @@
 from ecs import DynamicEntity
 
 from src.engine.acting.damage import Health, Weapon, ArmorKind, DamageKind
+from src.engine.ai.spacial_memory import SpacialMemory
 from src.engine.name import Name
 from src.engine.output.colors import ColorPair, magenta, red
 from src.entities.abstract.human import Human
@@ -24,4 +25,4 @@ class Enemy(Human):
         DynamicEntity.__init__(self, **attributes)
 
     def after_load(self, level):
-        self.ai.spacial_memory[level] = map_grid(level.grids.physical, lambda e: e is None and "." or e.character)
+        self.ai.composite[SpacialMemory][level] = map_grid(level.grids.physical, lambda e: e is None and "." or e.character)

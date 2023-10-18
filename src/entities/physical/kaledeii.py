@@ -1,4 +1,5 @@
 from src.engine.acting.damage import Weapon, DamageKind, ArmorKind, Health
+from src.engine.ai.spacial_memory import SpacialMemory
 from src.engine.attitude.implementation import Faction
 from src.engine.name import Name
 from src.engine.output.colors import ColorPair, cyan
@@ -23,4 +24,4 @@ class Kaledeii(Human):
         self.ai = DummyAi()
 
     def after_load(self, level):
-        self.ai.spacial_memory[level] = map_grid(level.grids.physical, lambda e: e is None and "." or e.character)
+        self.ai.composite[SpacialMemory][level] = map_grid(level.grids.physical, lambda e: e is None and "." or e.character)

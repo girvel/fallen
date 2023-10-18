@@ -1,6 +1,7 @@
 import random
 
 from src.engine.acting.damage import Health, DamageKind, ArmorKind, Weapon
+from src.engine.ai.spacial_memory import SpacialMemory
 from src.engine.attitude.implementation import Faction, common_attitude
 from src.engine.name import Name
 from src.engine.output.colors import ColorPair, yellow
@@ -27,4 +28,4 @@ class LordBishop(Human):
         self.attitude.relations[Faction.Church] = 1000
 
     def after_load(self, level):
-        self.ai.spacial_memory[level] = map_grid(level.grids.physical, lambda e: e is None and "." or e.character)
+        self.ai.composite[SpacialMemory][level] = map_grid(level.grids.physical, lambda e: e is None and "." or e.character)

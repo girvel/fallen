@@ -28,7 +28,7 @@ class KnightAi(DynamicEntity):
 
         if path_target := (
                 self.fight_or_flight.use(subject, perception).unwrap_or() or
-                self.follower.try_producing_target(subject, perception).unwrap_or()
+                self.follower.use(subject, perception).unwrap_or()
         ):
             self.pather.going_to = path_target
 

@@ -13,7 +13,7 @@ class Follower:
         self.period = Period(d)
         self.active = False
 
-    def try_producing_target(self, subject, perception) -> Option[PathTarget]:
+    def use(self, subject, perception) -> Option[PathTarget]:
         self.active = False
 
         if not self.period.step(): return Option.Nothing()

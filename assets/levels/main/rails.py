@@ -4,13 +4,14 @@ from ecs import Entity, exists
 
 from assets.levels.main.entities.physical.brother import Brother
 from assets.levels.main.entities.physical.mother import Mother
+from src.engine.ai.follower import Follower
 from src.entities.ais.dummy_ai import wait_finish
 from src.entities.physical.soldier import Soldier
 from src.engine.acting.actions.leave import Leave
 from src.engine.acting.actions.no_action import NoAction
 from src.engine.acting.actions.say import Say
 from src.engine.acting.damage import Weapon, DamageKind
-from src.engine.ai.pather import PathTarget
+from src.engine.ai.pather import PathTarget, Pather
 from src.engine.rails_base import RailsBase, Scene
 from src.entities.ais.io import Quest
 from src.entities.special.level import Level
@@ -43,7 +44,7 @@ class Rails(RailsBase):
 
         self.vision_level = None
 
-    # @Scene.new()
+    @Scene.new()
     def introduction(self, scene):
         c = self.characters
         p = self.positions
@@ -59,7 +60,7 @@ class Rails(RailsBase):
         yield {c.mother: Say("Хью, нам пора идти.")}
         yield {c.brother: Say("Мам, иди вперёд, я догоню.")}
 
-        c.mother.ai.pather.going_to = PathTarget.Some(p.street)
+        c.mother.ai.composite[Pather].going_to = PathTarget.Some(p.street)
 
         yield from wait_for(2)
 
@@ -98,7 +99,7 @@ class Rails(RailsBase):
             yield {c.brother: Say("Это я!")}
             yield {c.brother: Say("Приглядывай пока за хозяйством, а?")}
 
-            c.brother.ai.pather.going_to = PathTarget.Some(p.before_away)
+            c.brother.ai.composite[Pather].going_to = PathTarget.Some(p.before_away)
             yield
 
             yield {c.player: Say(
@@ -110,7 +111,7 @@ class Rails(RailsBase):
             yield {c.player: Say("Ты проглатываешь подступившую слабость и снова смотришь на меч.", True)}
             yield from wait_for(3)
 
-            c.mother.ai.follower.subject = c.brother
+            c.mother.ai.composite[Follower].subject = c.brother
 
             yield {c.player: Say("Он красиво блестит.", True)}
         else:
@@ -127,14 +128,14 @@ class Rails(RailsBase):
             yield {c.mother: Say("Хью!")}
             yield {c.brother: Say("Это я!")}
 
-            c.brother.ai.pather.going_to = PathTarget.Some(p.before_away)
+            c.brother.ai.composite[Pather].going_to = PathTarget.Some(p.before_away)
             yield
             yield {c.player: Say("Брат поворачивается и уходит, растерянно взмахнув рукой.", True)}
 
             yield from wait_for(2)
             yield {c.player: Say("В его глазах видна боль.", True)}
 
-            c.mother.ai.follower.subject = c.brother
+            c.mother.ai.composite[Follower].subject = c.brother
 
             yield from self.options({"Развязать бечёвку": NoAction()})
             yield {c.player: Say("Это меч. Очень красивый.", True)}
@@ -149,7 +150,7 @@ class Rails(RailsBase):
     @Scene.new(lambda self: d2(self.characters.brother.p, self.positions.before_away) <= 2)
     def brother_path_middlepoint(self, scene):
         scene.enabled = False
-        self.characters.brother.ai.pather.going_to = PathTarget.Some(self.positions.away)
+        self.characters.brother.ai.composite[Pather].going_to = PathTarget.Some(self.positions.away)
         yield  # TODO non-async scenes
 
 
@@ -169,9 +170,9 @@ class Rails(RailsBase):
         yield from self.start_cutscene()
         yield from self.center_camera()
 
-        c.mother.ai.follower.subject = None
-        c.brother.ai.pather.going_to = PathTarget.Some(c.player.p)
-        c.brother.ai.follower.subject = c.player
+        c.mother.ai.composite[Follower].subject = None
+        c.brother.ai.composite[Pather].going_to = PathTarget.Some(c.player.p)
+        c.brother.ai.composite[Follower].subject = c.player
 
         yield from wait_while(lambda: d2(self.characters.brother.p, c.player.p) > 5 or c.brother.act is not None)
 
@@ -183,9 +184,9 @@ class Rails(RailsBase):
         c.player.traits.pain.move(1)
         c.player.traits.chaos.move(1)
 
-        c.brother.ai.follower.subject = c.mother
-        c.brother.ai.pather.going_to = PathTarget.Some(c.mother.p)
-        c.mother.ai.pather.going_to = PathTarget.Some(p.away)
+        c.brother.ai.composite[Follower].subject = c.mother
+        c.brother.ai.composite[Pather].going_to = PathTarget.Some(c.mother.p)
+        c.mother.ai.composite[Pather].going_to = PathTarget.Some(p.away)
 
         self.brother_and_mother_leave.enabled = True
 
@@ -242,7 +243,7 @@ class Rails(RailsBase):
         memory.is_vision_disabled = False
 
         yield {c.player: Say("Что происходит?")}
-        c.mother.ai.pather.going_to = PathTarget.Some(p.beside_the_bed)
+        c.mother.ai.composite[Pather].going_to = PathTarget.Some(p.beside_the_bed)
         yield from wait_finish(c.mother)
 
         self.vision_level.rails.talk_with_lord_bishop_1.enabled = True

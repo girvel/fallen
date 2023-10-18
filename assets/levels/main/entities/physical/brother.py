@@ -2,6 +2,7 @@ from ecs import DynamicEntity
 
 from assets.levels.main.entities.ais.brother_ai import BrotherAi
 from src.engine.acting.damage import Health, Weapon, ArmorKind, DamageKind
+from src.engine.ai.spacial_memory import SpacialMemory
 from src.engine.assets import reserved_names
 from src.engine.name import CompositeName
 from src.engine.output.colors import ColorPair, blue
@@ -26,4 +27,4 @@ class Brother(Human):
         DynamicEntity.__init__(self, **attributes)
 
     def after_load(self, level):
-        self.ai.spacial_memory[level] = map_grid(level.grids.physical, lambda e: e is None and "." or e.character)
+        self.ai.composite[SpacialMemory][level] = map_grid(level.grids.physical, lambda e: e is None and "." or e.character)
