@@ -2,7 +2,7 @@ import random
 from enum import Enum
 
 from src.engine.acting.actions.say import Say
-from src.engine.ai.composite_ai import CompositeAi
+from src.lib.typed_dict import TypeDict
 from src.engine.ai.fight_or_flight import FightOrFlight
 from src.engine.ai.morale import Morale
 from src.engine.ai.pather import Pather, PathTarget
@@ -28,7 +28,7 @@ class PeasantAi:
         self.fight_or_flight_period = Period(5)
         self.chat_period = RandomPeriod(5, 11)
 
-        self.composite = CompositeAi([
+        self.composite = TypeDict([
             SpacialMemory(),
             Pather(),
             FightOrFlight(False),
