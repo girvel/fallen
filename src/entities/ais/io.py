@@ -44,7 +44,10 @@ class Memory:
         self._notifications.append(Notification("Новая задача", quest.description))
 
     def complete_quest(self, quest: Quest):
-        if quest in self._quests: self._quests.remove(quest)
+        if quest not in self._quests: return
+
+        self._quests.remove(quest)
+        self._notifications.append(Notification("Задача завершена", quest.description))
 
     def pop_notification(self):
         return self._notifications.pop() if len(self._notifications) > 0 else None

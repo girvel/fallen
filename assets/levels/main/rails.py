@@ -6,6 +6,7 @@ from assets.levels.main.entities.physical.brother import Brother
 from assets.levels.main.entities.physical.mother import Mother
 from src.engine.ai.follower import Follower
 from src.entities.ais.dummy_ai import wait_finish
+from src.entities.physical.rabid_dog import RabidDog
 from src.entities.physical.soldier import Soldier
 from src.engine.acting.actions.leave import Leave
 from src.engine.acting.actions.no_action import NoAction
@@ -26,6 +27,7 @@ class Rails(RailsBase):
             mother=next(self.level.find(Mother)),
             brother=next(self.level.find(Brother)),
             soldiers=list(self.level.find(Soldier)),
+            rabid_dog=next(self.level.find(RabidDog)),
         )
 
         self.positions = Entity(
@@ -39,7 +41,7 @@ class Rails(RailsBase):
         )
 
         self.quests = Entity(
-            find_someone_to_fight=Quest("Найти и порубить кого-нибудь")  # TODO finishing the quest
+            find_someone_to_fight=Quest("Найти и порубить кого-нибудь")
         )
 
         self.vision_level = None
@@ -204,6 +206,12 @@ class Rails(RailsBase):
         scene.enabled = False
 
         yield {c.mother: Leave(), c.brother: Leave()}
+
+
+    @Scene.new(lambda self: self.characters.rabid_dog.health.amount.current <= 0)
+    def rabid_dog_dies(self, scene):
+        self.characters.player.ai.memory.complete_quest(self.quests.find_someone_to_fight)
+        yield  # TODO non-async scenes
 
 
     # @Scene.new()

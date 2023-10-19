@@ -201,3 +201,4 @@ class Rails(RailsBase):
         self.run_task()(lambda: self.plane_shift(self.parent_level, self.parent_level.rails.positions.player_bed))
         c.player.health.amount.reset_to_max()
         yield from self.end_cutscene()
+        memory.complete_quest(self.quests.find_someone_to_fight)
