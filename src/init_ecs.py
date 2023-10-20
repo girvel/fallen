@@ -4,6 +4,7 @@ from time import time
 
 from ecs import Metasystem, create_system
 
+from src.engine.input.hotkeys import GameEnd
 from src.entities.ais.io import IO
 from src.entities.physical.player import Player
 from src.entities.special.genesis import Genesis
@@ -43,13 +44,11 @@ def build_metasystem(debug_mode):
 def init(stdscr, track, debug_mode, no_render, no_rails, no_fixed_fps):
     ms, genesis = build_metasystem(debug_mode)
 
-    level = ms.add(Level(
-        ms, Path("assets/levels/main"),
-        no_rails, genesis,
-    ))
+    level = ms.add(Level(ms, Path("assets/levels/main"), no_rails, genesis))
 
-    next(level.find(Player)).ai = (
-        IO(stdscr, debug_track=track, debug_mode=debug_mode, is_render_enabled=not no_render, has_fixed_fps=not no_fixed_fps)
+    next(level.find(Player)).ai = IO(
+        stdscr, debug_track=track, debug_mode=debug_mode,
+        is_render_enabled=not no_render, has_fixed_fps=not no_fixed_fps,
     )
 
     logging.info("Starting game cycle")
@@ -60,7 +59,7 @@ def init(stdscr, track, debug_mode, no_render, no_rails, no_fixed_fps):
         while True:
             ms.update()
             update_counter += 1
-    except KeyboardInterrupt:
+    except GameEnd:
         pass
     except Exception as ex:
         logging.error("Uncaught error on Metasystem.update", exc_info=ex)

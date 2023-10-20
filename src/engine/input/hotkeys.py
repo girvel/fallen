@@ -29,9 +29,9 @@ def generate_hotkeys(debug_mode):
             return f
 
 
-    @_hotkey("global_", ["Q"])  # TODO disable Ctrl+C hotkey
+    @_hotkey("global_", ["Q", 3] if debug_mode else ["Q"])
     def quit_(io, subject, perception, memory):
-        raise KeyboardInterrupt
+        raise GameEnd
 
     @_hotkey("global_", [curses.KEY_RESIZE])
     def resize_gui(io, subject, perception, memory):
@@ -162,8 +162,11 @@ def generate_hotkeys(debug_mode):
     @_hotkey("cutscene", [-1])
     def watch(io, subject, perception, memory):
         if not memory.is_skipping and io.has_fixed_fps:
-            time.sleep(max(0, .2 - time.time() + io.input.last_t))
+            time.sleep(max(0., .2 - time.time() + io.input.last_t))
             io.input.last_t = time.time()
         return NoAction()
 
     return result
+
+
+class GameEnd(BaseException): pass
