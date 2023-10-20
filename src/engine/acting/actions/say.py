@@ -21,4 +21,4 @@ class Say(Action):
             self.content, self.is_internal, self.meme, p=actor.p, level=actor.level
         ))
 
-        logging.info(f"{actor.name} says '{self.content}'")
+        logging.info(f"{actor.name}: '{self.content}'")

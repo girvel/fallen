@@ -6,3 +6,4 @@ class LiquidWater(Water):
     color = ColorPair(blue)
     liquid_height = 10
     layer = "tiles"
+    boring_flag = None

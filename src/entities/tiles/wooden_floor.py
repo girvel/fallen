@@ -9,3 +9,4 @@ class WoodenFloor(DynamicEntity):
     character = '_'
     color = ColorPair(yellow)
     layer = "tiles"
+    boring_flag = None
