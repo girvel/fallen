@@ -65,8 +65,8 @@ class IO(DynamicEntity):
     def __init__(self, stdscr, debug_track, debug_mode, is_render_enabled, has_fixed_fps):
         self.debug_mode = debug_mode
 
-        self.output = Output(stdscr, is_render_enabled, self)
-        self.input = Input(stdscr, debug_track, self)
+        self.output = Output(self, stdscr, is_render_enabled)
+        self.input = Input(self, stdscr, debug_track)
 
         self.memory = Memory()
         self.dummy = DummyAi()

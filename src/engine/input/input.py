@@ -1,5 +1,6 @@
 import curses
 import logging
+import signal
 import time
 from typing import TYPE_CHECKING
 
@@ -14,7 +15,7 @@ if TYPE_CHECKING:
 
 
 class Input:
-    def __init__(self, stdscr, debug_track, io):
+    def __init__(self, io, stdscr, debug_track):
         stdscr.nodelay(1)
         logging.info(f"Initialized mouse with {curses.mousemask(curses.ALL_MOUSE_EVENTS)}")
 

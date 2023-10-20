@@ -12,7 +12,7 @@ from src.engine.output.windows.panel import Panel
 
 
 class Output:
-    def __init__(self, stdscr, is_render_enabled, io):
+    def __init__(self, io, stdscr, is_render_enabled):
         ColorPair.initialize()
         curses.curs_set(0)
 
