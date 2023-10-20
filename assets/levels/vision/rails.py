@@ -82,7 +82,7 @@ class Rails(RailsBase):
         for s in c.soldiers:
             s.ai.composite[Follower].subject = c.kaledeii
 
-        c.player.ai.dummy.follower.subject = c.kaledeii
+        c.player.ai.dummy.composite[Follower].subject = c.kaledeii
         yield from wait_finish(c.kaledeii)
 
         yield {c.player: Say("Неприступный каменный зал, обогреваемый ревущими пламенем печами.", True)}

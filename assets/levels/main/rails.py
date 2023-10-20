@@ -241,11 +241,10 @@ class Rails(RailsBase):
 
         scene.enabled = False
 
+        yield from wait_while(lambda: exists(c.mother))
+        c.mother.ai.clear()
         c.mother.p = p.mother_reappearance
-        if not exists(c.mother):
-            self.genesis.entities_to_create.add(c.mother)
-        else:
-            self.level.put(c.mother.p, c.mother)
+        self.genesis.entities_to_create.add(c.mother)
 
         yield from self.center_camera()
         memory.is_vision_disabled = False
