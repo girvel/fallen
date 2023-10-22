@@ -90,10 +90,10 @@ class Panel:
                 if hotkey.hidden: continue
                 entry = self.pretty_hotkeys.get(key, chr(key) if key != -1 else " ")
 
-                if entry.description in result:
-                    result[entry.description] += ", " + entry
+                if hotkey.description in result:
+                    result[hotkey.description] += ", " + entry
                 else:
-                    result[entry.description] = entry
+                    result[hotkey.description] = entry
 
             return result
 
