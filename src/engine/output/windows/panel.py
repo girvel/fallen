@@ -78,7 +78,7 @@ class Panel:
         curses.KEY_UP: "↑",
         curses.KEY_DOWN: "↓",
         ord(" "): "␣",
-        ord("\n"): "⏎",
+        13: "⏎",
         ord(""): "Esc",
     }
 

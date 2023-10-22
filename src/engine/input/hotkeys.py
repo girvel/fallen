@@ -141,11 +141,11 @@ def generate_hotkeys(debug_mode):
     def move_cursor_down(io, subject, perception, memory):
         memory.selected_option_i = (memory.selected_option_i + 1) % len(memory.options)
 
-    @_hotkey("options", ["\n", "e"])
+    @_hotkey("options", [13, "e"])
     def submit(io, subject, perception, memory):
         return memory.select_option()
 
-    @_hotkey("notification", ["\n", "e"])
+    @_hotkey("notification", [13, "e"])
     def submit(io, subject, perception, memory):
         return NoAction()
 
