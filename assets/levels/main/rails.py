@@ -84,7 +84,7 @@ class Rails(RailsBase):
         })
 
         if memory.last_selected_option == look:
-            c.player.traits.naivity.move(1)
+            c.player.traits.naivety += 1
             yield {c.player: Say("Это меч. Очень красивый.", True)}
 
             yield {c.brother: Say("Кавалерийская шашка. Настоящая.")}
@@ -117,7 +117,7 @@ class Rails(RailsBase):
 
             yield {c.player: Say("Он красиво блестит.", True)}
         else:
-            c.player.traits.pain.move(1)
+            c.player.traits.pain += 1
 
             yield {c.player: Say("Брат морщится, пряча взгляд.", True)}
 
@@ -182,9 +182,9 @@ class Rails(RailsBase):
         yield {c.brother: Say("Я не могу взять тебя с собой.")}
         yield {c.brother: Say("Иди домой.")}
 
-        c.player.traits.naivity.move(1)
-        c.player.traits.pain.move(1)
-        c.player.traits.chaos.move(1)
+        c.player.traits.naivety += 1
+        c.player.traits.pain += 1
+        c.player.traits.chaos += 1
 
         c.brother.ai.composite[Follower].subject = c.mother
         c.brother.ai.composite[Pather].going_to = PathTarget.Some(c.mother.p)
