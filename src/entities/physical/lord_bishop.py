@@ -26,4 +26,4 @@ class LordBishop(Human):
         self.attitude.relations[Faction.Church] = 1000
 
     def after_load(self, level):
-        self.ai.composite[SpacialMemory][level] = map_grid(level.grids.physical, lambda e: e is None and "." or e.character)
+        self.ai.composite[SpacialMemory].knows(level)

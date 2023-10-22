@@ -32,7 +32,6 @@ class Peasant(Human):
                 [area2(sub2(h.house_borders[1], h.house_borders[0])) for h in level.markup.houses]
             )
 
-        self.ai.composite[SpacialMemory][level] = map_grid(level.grids.physical, lambda e: e is None and "." or e.character)
+        self.ai.composite[SpacialMemory].knows(level)
         # TODO remove magic character
-        # TODO do this automatically
         self.ai.favourite_zones = level.markup.zones

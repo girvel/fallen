@@ -27,4 +27,4 @@ class Mother(Human):
         DynamicEntity.__init__(self, **attributes)
 
     def after_load(self, level):
-        self.ai.composite[SpacialMemory][level] = map_grid(level.grids.physical, lambda e: e is None and "." or e.character)
+        self.ai.composite[SpacialMemory].knows(level)

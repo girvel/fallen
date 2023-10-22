@@ -175,7 +175,7 @@ class Rails(RailsBase):
         yield from wait_seconds(2)
         yield {c.player: Say("Резкая тишина.", True)}
 
-        c.player.ai.dummy.pather.going_to = PathTarget.Some(p.observing_the_entrance)
+        c.player.ai.dummy.composite[Pather].going_to = PathTarget.Some(p.observing_the_entrance)
 
         yield from wait_for(5)
         c.kaledeii.ai.composite[Pather].going_to = PathTarget.Some(add2(p.observing_the_entrance, mul2(vector.up, 2)))
@@ -201,4 +201,4 @@ class Rails(RailsBase):
         self.run_task()(lambda: self.plane_shift(self.parent_level, self.parent_level.rails.positions.player_bed))
         c.player.health.amount.reset_to_max()
         yield from self.end_cutscene()
-        memory.complete_quest(self.quests.find_someone_to_fight)
+        memory.complete_quest(self.parent_level.rails.quests.find_someone_to_fight)
