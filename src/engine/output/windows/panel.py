@@ -6,6 +6,7 @@ from jinja2 import Environment, PackageLoader
 from src.engine.acting.actions.inspect import Inspect
 from src.engine.acting.actions.move import Move
 from src.engine.acting.damage import potential_damage
+from src.engine.input.hotkeys import Key
 from src.engine.inspection import inspect
 from src.engine.output.colors import ColorPair, yellow
 from src.engine.output.html import CursesHtmlRenderer
@@ -78,7 +79,8 @@ class Panel:
         curses.KEY_UP: "↑",
         curses.KEY_DOWN: "↓",
         ord(" "): "␣",
-        13: "⏎",
+        Key.enter: "⏎",
+        Key.ctrl_c: "Ctrl+C",
         ord(""): "Esc",
     }
 
@@ -97,10 +99,20 @@ class Panel:
 
             return result
 
+        mode_translation = {
+            "global_": "Глобальные",
+            "game": "Игра",
+            "options": "Выбор варианта",
+            "dialog_line": "Диалог",
+            "cutscene": "Сцена",
+            "notification": "Уведомление",
+        }
+
         self.html_renderer.render_template(self._window, 1, 2, self.controls_template,
             hotkeys={
-                from_snake_case(mode).capitalize(): reduce_hotkeys(collection)
-                for mode, collection in self.io.input.hotkeys
+                mode_translation[mode]: reduce_hotkeys(self.io.input.hotkeys[mode])
+                for mode
+                in ["global_", "game", "options", "dialog_line", "cutscene", "notification"]
             }
         )
 
