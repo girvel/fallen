@@ -1,0 +1,7 @@
+<div>
+    <p><center>\__ Инвентарь __/</center></p>
+</div>
+
+{% for item in inventory.get_items() %}
+<li>{{ item.name }}</li>
+{% endfor %}

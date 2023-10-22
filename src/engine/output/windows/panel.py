@@ -26,6 +26,7 @@ class Panel:
         self.panes = [
             self._controls,
             self._stats,
+            self._inventory,
             self._quests,
         ]
 
@@ -38,6 +39,7 @@ class Panel:
         self.stats_template = env.get_template("stats.html")
         self.controls_template = env.get_template("controls.html")
         self.quests_template = env.get_template("quests.html")
+        self.inventory_template = env.get_template("inventory.html")
 
     def resize(self, h, w):
         self._window.resize(h - 1, self.w)
@@ -119,4 +121,9 @@ class Panel:
     def _quests(self, subject, perception, memory):
         self.html_renderer.render_template(self._window, 1, 2, self.quests_template,
             quests=memory._quests,
+        )
+
+    def _inventory(self, subject, perception, memory):
+        self.html_renderer.render_template(self._window, 1, 2, self.inventory_template,
+            inventory=subject.inventory,
         )

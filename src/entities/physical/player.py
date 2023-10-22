@@ -1,8 +1,10 @@
 from src.engine.acting.damage import Weapon, Health, DamageKind, ArmorKind
+from src.engine.inventory import Inventory
 from src.engine.naming.library import reserved_names
 from src.engine.naming.name import CompositeName
 from src.engine.traits import Traits
 from src.entities.abstract.human import Human
+from src.entities.items.lily import Lily
 from src.systems.ai import Senses
 
 
@@ -23,3 +25,4 @@ class Player(Human):
         self.health = Health(10, ArmorKind.Organic)
         self.senses = Senses(24, 40, 0)
         self.traits = Traits()
+        self.inventory = Inventory(_items=[Lily()])
