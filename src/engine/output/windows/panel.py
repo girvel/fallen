@@ -86,19 +86,22 @@ class Panel:
         def reduce_hotkeys(hotkey_collection):
             result = {}
 
-            for (hotkey, f) in hotkey_collection.items():
-                name = from_snake_case(f.__name__).capitalize()
-                entry = self.pretty_hotkeys.get(hotkey, chr(hotkey) if hotkey != -1 else " ")
+            for (key, hotkey) in hotkey_collection.items():
+                if hotkey.hidden: continue
+                entry = self.pretty_hotkeys.get(key, chr(key) if key != -1 else " ")
 
-                if name in result:
-                    result[name] += ", " + entry
+                if entry.description in result:
+                    result[entry.description] += ", " + entry
                 else:
-                    result[name] = entry
+                    result[entry.description] = entry
 
             return result
 
         self.html_renderer.render_template(self._window, 1, 2, self.controls_template,
-            hotkeys={from_snake_case(mode).capitalize(): reduce_hotkeys(collection) for mode, collection in self.io.input.hotkeys}
+            hotkeys={
+                from_snake_case(mode).capitalize(): reduce_hotkeys(collection)
+                for mode, collection in self.io.input.hotkeys
+            }
         )
 
     def _quests(self, subject, perception, memory):

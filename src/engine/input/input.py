@@ -52,5 +52,5 @@ class Input:
 
         hotkeys = self.hotkeys.global_ | self.hotkeys[mode]
         key = self.key_queue.read_key(hotkeys, mode == "cutscene")  # TODO remove hardcoded values
-        if (f := hotkeys.get(key)) is not None:
-            return f(self.io, subject, perception, memory)
+        if (used_hotkey := hotkeys.get(key)) is not None:
+            return used_hotkey.function(self.io, subject, perception)
