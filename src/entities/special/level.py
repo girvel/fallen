@@ -87,8 +87,8 @@ class Level(DynamicEntity):
         if markup_path.exists():
             raw_markup = toml.loads(markup_path.read_text())
             self.markup = Entity(
-                houses=[ms.add(House(**h)) for h in raw_markup["houses"]],
-                zones=[ms.add(Zone(**h)) for h in raw_markup["zones"]],
+                houses=[ms.add(House.from_markup(**h)) for h in raw_markup["houses"]],
+                zones=[ms.add(Zone.from_markup(**h)) for h in raw_markup["zones"]],
             )
         else:
             self.markup = None
