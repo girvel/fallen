@@ -79,6 +79,7 @@ class RailsBase(DynamicEntity):
         return decorator
 
     def plane_shift(self, level, p):
+        yield
         self.player.ai.memory.is_vision_disabled = True
         Level.change(self.player, level, p)
         yield

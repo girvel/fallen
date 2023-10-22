@@ -275,7 +275,7 @@ class Rails(RailsBase):
 
         yield {c.player: Say("Что происходит?")}
 
-        yield {c.mother: Say("Ты бредишь.")}  # TODO bug: this one is skipped
+        yield {c.mother: Say("Ты бредишь.")}
 
         self.vision_level.rails.talk_with_lord_bishop_2.enabled = True
         yield from self.plane_shift(self.vision_level, self.vision_level.rails.positions.observing_the_throne)
