@@ -28,6 +28,7 @@ def load_palette_from(path):
 
 class Level(DynamicEntity):
     name = Name("Уровень")
+    no_entity_character = "."
 
     T = TypeVar('T')
     def put(self, p: int2, entity: T) -> T:
@@ -70,7 +71,7 @@ class Level(DynamicEntity):
 
         for y, line in enumerate(level_lines):
             for x, c in enumerate(line):
-                if c == ".":
+                if c == Level.no_entity_character:
                     continue
 
                 if c in self.palette:

@@ -2,6 +2,7 @@ import random
 from enum import Enum
 
 from src.engine.acting.actions.say import Say
+from src.entities.special.level import Level
 from src.lib.typed_dict import TypeDict
 from src.engine.ai.fight_or_flight import FightOrFlight
 from src.engine.ai.morale import Morale
@@ -88,8 +89,8 @@ class PeasantAi:
                     and
                     (destination := next((
                         p for v in directions
-                        if (p := add2(table_p, v)) and grid_get(self.composite[SpacialMemory][subject.level], p) == "."
-                        # TODO remove magic character
+                        if (p := add2(table_p, v))
+                        and grid_get(self.composite[SpacialMemory][subject.level], p) == Level.no_entity_character
                     ), None)) is not None
                 ):
                     self.composite[Pather].going_to = PathTarget.Some(destination)

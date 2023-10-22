@@ -33,5 +33,4 @@ class Peasant(Human):
             )
 
         self.ai.composite[SpacialMemory].knows(level)
-        # TODO remove magic character
         self.ai.favourite_zones = level.markup.zones

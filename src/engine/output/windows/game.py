@@ -3,6 +3,7 @@ from statistics import median
 
 from src.engine.acting.actions.inspect import Inspect
 from src.engine.output.colors import ColorPair, red
+from src.entities.special.level import Level
 from src.lib.vector import floordiv2, grid_get, sub2, le2, zero, lt2, add2
 
 
@@ -67,7 +68,7 @@ class Game:
         for rx in range(0, screen_size[0]):
             for ry in range(0, screen_size[1]):
                 character = grid_get(spacial_memory, add2((rx, ry), self.virtual_p))
-                self._window.addch(ry, rx, character not in {None, "."} and character or " ")
+                self._window.addch(ry, rx, character not in {None, Level.no_entity_character} and character or " ")
 
         inspected = isinstance(subject.act, Inspect) and subject.act.subject
         for p in perception.vision.physical:
@@ -89,7 +90,7 @@ class Game:
                 )
                 break
             else:
-                character = "."
+                character = Level.no_entity_character
                 color = ColorPair().to_curses()
 
             self._window.addch(rp[1], rp[0], character, color)

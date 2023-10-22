@@ -7,6 +7,7 @@ from tcod.path import Pathfinder, SimpleGraph
 
 from src.engine.acting.actions.move import Move
 from src.engine.ai.spacial_memory import SpacialMemory
+from src.entities.special.level import Level
 from src.lib.vector import directions, sub2, map_grid, grid_set, add2, int2, d2
 from src.systems.ai import Perception
 
@@ -48,7 +49,7 @@ class Pather:
             perception.vision[subject.layer].get(self.path[-1]) is not None
         ):
             # Create grid for calculations, escaping the beginning and the end
-            grid = map_grid(spacial_memory[subject.level], lambda c: c == "." and 1 or 0)
+            grid = map_grid(spacial_memory[subject.level], lambda c: c == Level.no_entity_character and 1 or 0)
             grid_set(grid, subject.p, 1)
             grid_set(grid, destination, 1)
 
