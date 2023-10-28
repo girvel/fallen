@@ -9,7 +9,7 @@ from src.engine.acting.actions.cast_fire_storm import CastFireStorm
 from src.engine.acting.actions.cast_stone_stomp import CastStoneStomp
 from src.engine.acting.actions.say import Say
 from src.engine.ai.follower import Follower
-from src.engine.ai.pather import PathTarget, Pather
+from src.engine.ai.pather import Pather
 from src.engine.rails_base import RailsBase, Scene
 from src.entities.ais.dummy_ai import wait_finish
 from src.entities.physical.backslash_wall import BackslashWall
@@ -68,13 +68,13 @@ class Rails(RailsBase):
         yield {c.player: Say("Холодный коридор с высокими потолками и трещинами в панорамном окне в озеро.", True)}
         yield {c.player: Say("Кучка вооружённых людей тревожно озирается по сторонам.", True)}
 
-        c.kaledeii.ai.composite[Pather].going_to = PathTarget.Some(p.kaledeii_entrance)
+        c.kaledeii.ai.composite[Pather].going_to = p.kaledeii_entrance
         yield from wait_seconds(1)
 
         yield from wait_finish(c.kaledeii)
 
         yield {c.kaledeii: Say("За мной.")}
-        c.kaledeii.ai.composite[Pather].going_to = PathTarget.Some(p.entrance)
+        c.kaledeii.ai.composite[Pather].going_to = p.entrance
 
         yield {c.player: Say("Высокий воин в полном доспехе.", True)}
         yield {c.player: Say("Доспехи покрыты густой копотью, облик источает решимость.", True)}
@@ -101,7 +101,7 @@ class Rails(RailsBase):
         @self.run_task(builder2, p.fortification_positions[3:])
         def build_fortifications(executor, positions):
             for position in positions:
-                executor.ai.composite[Pather].going_to = PathTarget.Some(add2(right, position))
+                executor.ai.composite[Pather].going_to = add2(right, position)
                 yield from wait_finish(builder1)
                 yield {executor: Build(
                     position,
@@ -112,14 +112,14 @@ class Rails(RailsBase):
 
         yield {c.kaledeii: Say("Остальные -- оборонительные позиции, оружие наготове.")}
 
-        c.kaledeii.ai.composite[Pather].going_to = PathTarget.Some(p.before_the_throne)
+        c.kaledeii.ai.composite[Pather].going_to = p.before_the_throne
         yield from wait_seconds(5)
 
         yield {c.player: Say("Массивные стены зала сотрясаются от мощного удара вдали.", True)}
 
         c.player.ai.dummy.clear()
         if self.parent_level.rails.is_dog_dead:
-            c.player.ai.dummy.composite[Pather].going_to = PathTarget.Some(p.observing_the_throne)
+            c.player.ai.dummy.composite[Pather].going_to = p.observing_the_throne
             self.talk_with_lord_bishop_1.enabled = True
         else:
             self.parent_level.rails.player_wakes_up_1.enabled = True
@@ -168,7 +168,7 @@ class Rails(RailsBase):
 
         enemy = Enemy(p=p.enemy_appearance, level=self.level)
         self.genesis.entities_to_create.add(enemy)
-        enemy.ai.composite[Pather].going_to = PathTarget.Some(p.enemy_attack)
+        enemy.ai.composite[Pather].going_to = p.enemy_attack
 
         yield {c.kaledeii: Say("Вы не понимаете тяжесть нашей ситуации, лорд-епископ.")}
         enemy.after_load(self.level)  # TODO encapsulate creation
@@ -183,10 +183,10 @@ class Rails(RailsBase):
         yield from wait_seconds(2)
         yield {c.player: Say("Резкая тишина.", True)}
 
-        c.player.ai.dummy.composite[Pather].going_to = PathTarget.Some(p.observing_the_entrance)
+        c.player.ai.dummy.composite[Pather].going_to = p.observing_the_entrance
 
         yield from wait_for(5)
-        c.kaledeii.ai.composite[Pather].going_to = PathTarget.Some(add2(p.observing_the_entrance, mul2(vector.up, 2)))
+        c.kaledeii.ai.composite[Pather].going_to = add2(p.observing_the_entrance, mul2(vector.up, 2))
 
         yield from wait_while(lambda: enemy.p != p.enemy_attack)
         yield from self.center_camera()

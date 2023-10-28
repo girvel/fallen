@@ -6,7 +6,7 @@ from src.entities.special.level import Level
 from src.lib.typed_dict import TypeDict
 from src.engine.ai.fight_or_flight import FightOrFlight
 from src.engine.ai.morale import Morale
-from src.engine.ai.pather import Pather, PathTarget
+from src.engine.ai.pather import Pather
 from src.engine.ai.spacial_memory import SpacialMemory
 from src.engine.ai.wanderer import Wanderer
 from src.engine.meme import Meme
@@ -51,11 +51,11 @@ class PeasantAi:
 
         if (
             (len(aggressives) > 0 or self.fight_or_flight_period.step())
-            and (target := self.composite[FightOrFlight].use(subject, perception).unwrap_or())
+            and (target := self.composite[FightOrFlight].use(subject, perception)) != FightOrFlight.no_change_signal
         ):
             self.composite[Pather].going_to = target
 
-        if action := self.composite[Pather].use(subject, perception, self.composite[SpacialMemory]).unwrap_or():
+        if action := self.composite[Pather].use(subject, perception, self.composite[SpacialMemory]):
             return action
 
         if (
@@ -72,7 +72,7 @@ class PeasantAi:
 
         match self.mode:
             case Mode.GoHome:
-                self.composite[Pather].going_to = PathTarget.Some(subject.house.entrance)
+                self.composite[Pather].going_to = subject.house.entrance
                 self.mode = Mode.GoToTable
 
             case Mode.GoToTable:
@@ -93,7 +93,7 @@ class PeasantAi:
                         and grid_get(self.composite[SpacialMemory][subject.level], p) == Level.no_entity_character
                     ), None)) is not None
                 ):
-                    self.composite[Pather].going_to = PathTarget.Some(destination)
+                    self.composite[Pather].going_to = destination
                     self.mode = Mode.WorkAtTable
                 else:
                     self.mode = Mode.GoOutside
@@ -103,17 +103,15 @@ class PeasantAi:
                     self.mode = Mode.GoOutside
 
             case Mode.GoOutside:
-                self.composite[Pather].going_to = PathTarget.Some(random.choices(
+                self.composite[Pather].going_to = random.choices(
                     self.favourite_zones,
                     [zone.attractiveness for zone in self.favourite_zones]
-                )[0].center)
+                )[0].center
 
                 self.mode = Mode.Wandering
 
             case Mode.Wandering:
                 if not self.wandering_period.step():
-                    return (self.composite[Wanderer]
-                        .use(subject, perception, self.composite[Pather].free_directions)
-                        .unwrap_or())
+                    return self.composite[Wanderer].use(subject, perception, self.composite[Pather].free_directions)
 
                 self.mode = Mode.GoHome

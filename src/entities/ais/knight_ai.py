@@ -23,14 +23,14 @@ class KnightAi(DynamicEntity):
         self.spacial_memory.use(subject, perception)
         self.morale.use(subject, perception)
 
-        if attack := self.attacker.try_attacking(subject, perception, self.fight_or_flight.current_target).unwrap_or():
+        if attack := self.attacker.try_attacking(subject, perception, self.fight_or_flight.current_target):
             return attack
 
-        if path_target := (
-                self.fight_or_flight.use(subject, perception).unwrap_or() or
-                self.follower.use(subject, perception).unwrap_or()
+        if (
+            (path_target := self.fight_or_flight.use(subject, perception)) != FightOrFlight.no_change_signal or
+            (path_target := self.follower.use(subject, perception)) != Follower.no_change_signal
         ):
             self.pather.going_to = path_target
 
-        if action := self.pather.use(subject, perception, self.spacial_memory).unwrap_or():
+        if action := self.pather.use(subject, perception, self.spacial_memory):
             return action

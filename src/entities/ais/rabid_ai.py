@@ -3,7 +3,7 @@ import random
 from src.engine.acting.actions.attack import Attack
 from src.engine.acting.actions.move import Move
 from src.engine.ai.fight_or_flight import FightOrFlight
-from src.engine.ai.pather import Pather, PathTarget
+from src.engine.ai.pather import Pather
 from src.engine.ai.spacial_memory import SpacialMemory
 from src.lib.vector import sub2, abs2
 
@@ -20,10 +20,10 @@ class RabidAi:
     def make_decision(self, subject, perception):
         self.spacial_memory.use(subject, perception)
 
-        if (target := self.fight_or_flight.use(subject, perception).unwrap_or()) is not None:
+        if (target := self.fight_or_flight.use(subject, perception)) != FightOrFlight.no_change_signal:
             self.pather.going_to = target
 
-        if action := self.pather.use(subject, perception, self.spacial_memory).unwrap_or(): return action
+        if action := self.pather.use(subject, perception, self.spacial_memory): return action
 
         possible_targets = [
             e for e in perception.vision.physical.values()
@@ -37,4 +37,4 @@ class RabidAi:
         if abs2(v) == 1:
             return Attack(target)
         else:
-            self.pather.going_to = PathTarget.Some(target.p)
+            self.pather.going_to = target.p

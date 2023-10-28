@@ -1,25 +1,27 @@
-from rust_enum import Option
+from typing import Literal
 
-from src.engine.ai.pather import PathTarget
+from ecs import DynamicEntity
+
 from src.lib.period.period import Period
-from src.lib.vector import d2
+from src.lib.vector import d2, int2
 
 
 class Follower:
-    subject = None
+    subject: DynamicEntity | None = None
+    no_change_signal = object()
 
     def __init__(self, d):
         self.d = d
         self.period = Period(d)
         self.active = False
 
-    def use(self, subject, perception) -> Option[PathTarget]:
+    def use(self, subject, perception) -> int2 | None | object:
         self.active = False
 
-        if not self.period.step(): return Option.Nothing()
+        if not self.period.step(): return self.no_change_signal
 
-        if self.subject is None or self.subject.p not in perception.vision.physical: return Option.Nothing()
-        if d2(subject.p, self.subject.p) <= self.d: return Option.Some(PathTarget.Nothing())
+        if self.subject is None or self.subject.p not in perception.vision.physical: return self.no_change_signal
+        if d2(subject.p, self.subject.p) <= self.d: return None
 
         self.active = True
-        return Option.Some(PathTarget.Some(self.subject.p))
+        return self.subject.p
