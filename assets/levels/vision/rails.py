@@ -118,8 +118,12 @@ class Rails(RailsBase):
         yield {c.player: Say("Массивные стены зала сотрясаются от мощного удара вдали.", True)}
 
         c.player.ai.dummy.clear()
-        self.parent_level.rails.player_wakes_up_1.enabled = True
-        yield from self.plane_shift(self.parent_level, self.parent_level.rails.positions.player_bed)
+        if self.parent_level.rails.is_dog_dead:
+            c.player.ai.dummy.composite[Pather].going_to = PathTarget.Some(p.observing_the_throne)
+            self.talk_with_lord_bishop_1.enabled = True
+        else:
+            self.parent_level.rails.player_wakes_up_1.enabled = True
+            yield from self.plane_shift(self.parent_level, self.parent_level.rails.positions.player_bed)
 
 
     @Scene.new(enabled=False)
@@ -146,8 +150,12 @@ class Rails(RailsBase):
 
         yield {c.player: Say("Стены сотрясаются вновь.", True)}
 
-        self.parent_level.rails.player_wakes_up_2.enabled = True
-        yield from self.plane_shift(self.parent_level, self.parent_level.rails.positions.player_bed)
+        if self.parent_level.rails.is_dog_dead:
+            c.player.p = p.observing_the_throne
+            self.talk_with_lord_bishop_2.enabled = True
+        else:
+            self.parent_level.rails.player_wakes_up_2.enabled = True
+            yield from self.plane_shift(self.parent_level, self.parent_level.rails.positions.player_bed)
 
 
     @Scene.new(enabled=False)

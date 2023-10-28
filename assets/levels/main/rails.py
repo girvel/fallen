@@ -41,10 +41,12 @@ class Rails(RailsBase):
         )
 
         self.quests = Entity(
-            find_someone_to_fight=Quest("Найти и порубить кого-нибудь")
+            find_someone_to_fight=Quest("Найти и порубить кого-нибудь"),
         )
 
         self.vision_level = None
+
+        self.is_dog_dead = False
 
     @Scene.new()
     def introduction(self, scene):
@@ -208,14 +210,11 @@ class Rails(RailsBase):
         yield {c.mother: Leave(), c.brother: Leave()}
 
 
-    @Scene.new(lambda self: self.characters.rabid_dog.health.amount.current <= 0)
-    def rabid_dog_dies(self, scene):
-        self.characters.player.ai.memory.complete_quest(self.quests.find_someone_to_fight)
-        yield  # TODO non-async scenes
-
-
     # @Scene.new()
-    @Scene.new(lambda self: self.characters.player.health.amount.current <= 0)
+    @Scene.new(lambda self: (
+        self.characters.player.health.amount.current <= 0
+        or self.characters.rabid_dog.health.amount.current <= 0
+    ))
     def player_dies(self, scene):
         c = self.characters
         p = self.positions
@@ -224,6 +223,7 @@ class Rails(RailsBase):
         scene.enabled = False
         yield from self.start_cutscene()
 
+        self.is_dog_dead = self.characters.rabid_dog.health.amount.current <= 0
         memory.is_vision_disabled = True
         yield from wait_seconds(2)
 
