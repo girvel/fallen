@@ -7,7 +7,6 @@ from src.engine.naming.name import CompositeName
 from src.engine.output.colors import ColorPair, blue
 from src.entities.abstract.human import Human
 from src.entities.ais.dummy_ai import DummyAi
-from src.lib.vector import map_grid
 from src.systems.ai import Senses
 
 
