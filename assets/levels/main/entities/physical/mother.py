@@ -12,7 +12,7 @@ from src.systems.ai import Senses
 
 
 class Mother(Human):
-    character = 'm'
+    character = 'L'
     color = ColorPair(blue)
 
     def __post_init__(self, **attributes):
