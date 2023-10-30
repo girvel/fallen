@@ -82,7 +82,7 @@ class RailsBase(DynamicEntity):
         yield
         self.player.ai.memory.is_vision_disabled = True
         Level.change(self.player, level, p)
-        yield
+        yield from self.center_camera()
         self.player.ai.memory.is_vision_disabled = False
 
 

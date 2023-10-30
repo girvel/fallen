@@ -16,7 +16,7 @@ from src.engine.ai.pather import Pather
 from src.engine.rails_base import RailsBase, Scene
 from src.entities.ais.io import Quest
 from src.entities.special.level import Level
-from src.lib.concurrency import wait_for, wait_while, wait_seconds
+from src.lib.concurrency import wait_for, wait_while
 from src.lib.vector import d2
 
 
@@ -225,7 +225,7 @@ class Rails(RailsBase):
 
         self.is_dog_dead = self.characters.rabid_dog.health.amount.current <= 0
         memory.is_vision_disabled = True
-        yield from wait_seconds(2)
+        yield from c.player.ai.wait_seconds(2)
 
         c.player.health.amount.reset_to_max()
 

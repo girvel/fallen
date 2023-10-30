@@ -10,7 +10,9 @@ from src.engine.naming.name import Name
 from src.engine.output.output import Output
 from src.entities.ais.dummy_ai import DummyAi
 from src.entities.special.sound import Sound
+from src.lib.concurrency import wait_for
 from src.lib.query import Q
+from src.lib.toolkit import random_round
 
 
 @dataclass
@@ -62,7 +64,7 @@ class IO(DynamicEntity):
     name = Name("Ввод/Вывод")
     cutscene_aware_flag = None
 
-    def __init__(self, stdscr, debug_track, debug_mode, is_render_enabled, has_fixed_fps):
+    def __init__(self, stdscr, debug_track, debug_mode, is_render_enabled, max_fps):
         self.debug_mode = debug_mode
 
         self.output = Output(self, stdscr, is_render_enabled)
@@ -72,7 +74,7 @@ class IO(DynamicEntity):
         self.dummy = DummyAi()
         self.output.resize()
 
-        self.has_fixed_fps = has_fixed_fps
+        self.max_fps = max_fps
 
     def make_decision(self, subject, perception):
         self.form_memory(subject, perception)
@@ -115,3 +117,6 @@ class IO(DynamicEntity):
     def rerender(self):
         if self.last_render_input is None: return
         return self.render(*self.last_render_input)
+
+    def wait_seconds(self, seconds: float):
+        yield from wait_for(random_round(seconds * self.max_fps))

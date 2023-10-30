@@ -48,7 +48,7 @@ def init(stdscr, track, debug_mode, no_render, no_rails, no_fixed_fps):
 
     next(level.find(Player)).ai = IO(
         stdscr, debug_track=track, debug_mode=debug_mode,
-        is_render_enabled=not no_render, has_fixed_fps=not no_fixed_fps,
+        is_render_enabled=not no_render, max_fps=None if no_fixed_fps else 10,
     )
 
     logging.info("Starting game cycle")

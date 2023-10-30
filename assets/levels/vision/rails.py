@@ -22,7 +22,7 @@ from src.entities.physical.soldier import Soldier
 from src.entities.physical.vertical_wall import VerticalWall
 from src.entities.special.level import Level
 from src.lib import vector
-from src.lib.concurrency import wait_for, wait_seconds, wait_while
+from src.lib.concurrency import wait_for, wait_while
 from src.lib.vector import add2, right, d2, mul2
 
 
@@ -54,13 +54,13 @@ class Rails(RailsBase):
 
     @Scene.new()
     def start_vision(self, scene):
+        self.player = next(self.level.find(Player))  # TODO make this automatic
+        self.characters.player = self.player
+
         c = self.characters
         p = self.positions
 
         scene.enabled = False
-
-        self.player = next(self.level.find(Player))  # TODO make this automatic
-        c.player = self.player
         memory = c.player.ai.memory
 
         memory.is_vision_disabled = False
@@ -69,7 +69,7 @@ class Rails(RailsBase):
         yield {c.player: Say("Кучка вооружённых людей тревожно озирается по сторонам.", True)}
 
         c.kaledeii.ai.composite[Pather].going_to = p.kaledeii_entrance
-        yield from wait_seconds(1)
+        yield from c.player.ai.wait_seconds(1)
 
         yield from wait_finish(c.kaledeii)
 
@@ -113,7 +113,7 @@ class Rails(RailsBase):
         yield {c.kaledeii: Say("Остальные -- оборонительные позиции, оружие наготове.")}
 
         c.kaledeii.ai.composite[Pather].going_to = p.before_the_throne
-        yield from wait_seconds(5)
+        yield from c.player.ai.wait_seconds(3)
 
         yield {c.player: Say("Массивные стены зала сотрясаются от мощного удара вдали.", True)}
 
@@ -146,7 +146,7 @@ class Rails(RailsBase):
         yield {c.bishop: Say("Я останусь на своём положенном месте и не сдвинусь ни на шаг.")}
         yield {c.bishop: Say("Мы будем спасены.")}
 
-        yield from wait_seconds(1)
+        yield from c.player.ai.wait_seconds(1)
 
         yield {c.player: Say("Стены сотрясаются вновь.", True)}
 
@@ -180,7 +180,7 @@ class Rails(RailsBase):
         yield from wait_for(7)
         yield {c.bishop: Say("Так и быть, я вам помогу.")}
 
-        yield from wait_seconds(2)
+        yield from c.player.ai.wait_seconds(2)
         yield {c.player: Say("Резкая тишина.", True)}
 
         c.player.ai.dummy.composite[Pather].going_to = p.observing_the_entrance
@@ -196,11 +196,12 @@ class Rails(RailsBase):
 
         c.player.ai.dummy.clear()
         yield {c.kaledeii: Say("Он здесь.")}
+        yield from c.player.ai.wait_seconds(5)
 
         yield {enemy: CastStoneStomp(vector.right)}
-        yield from wait_seconds(1)
+        yield from c.player.ai.wait_seconds(3)
         yield {enemy: CastStoneStomp(vector.right)}
-        yield from wait_seconds(2)
+        yield from c.player.ai.wait_seconds(3)
         yield {enemy: CastFireStorm()}
         yield from wait_for(CastFireStorm.duration + 1)
 

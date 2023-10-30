@@ -183,8 +183,8 @@ def generate_hotkeys(debug_mode):
 
     @Hotkey.define(result.cutscene, [-1])
     def watch(io, subject, perception):
-        if not io.memory.is_skipping and io.has_fixed_fps:
-            time.sleep(max(0., .2 - time.time() + io.input.last_t))
+        if not io.memory.is_skipping and io.max_fps:
+            time.sleep(max(0., 1 / io.max_fps - time.time() + io.input.last_t))
             io.input.last_t = time.time()
         return NoAction()
 
