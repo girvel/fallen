@@ -120,7 +120,7 @@ class Panel:
 
     def _quests(self, subject, perception, memory):
         self.html_renderer.render_template(self._window, 1, 2, self.quests_template,
-            quests=memory._quests,
+            quests=memory.get_quests(),
         )
 
     def _inventory(self, subject, perception, memory):

@@ -27,25 +27,23 @@ class Input:
         if debug_track:
             logging.info(f"Debug track: '{debug_track}'")
 
-    def wait_for_input(self, subject, perception: Perception, memory: "Memory") -> Action:
-        # TODO should be (self, io, subject, perception)
-
-        if memory.in_cutscene:
-            if memory.options:
+    def wait_for_input(self, subject, perception: Perception) -> Action:
+        if self.io.memory.in_cutscene:
+            if self.io.memory.options:
                 mode = "options"
             elif self.io.output.notification.visible:
                 mode = "notification"
-            elif memory.current_sound is not None:
+            elif self.io.memory.current_sound is not None:
                 mode = "dialog_line"
             else:
                 mode = "cutscene"
         else:
             mode = "game"
 
-        if memory.is_skipping:
-            if mode == "options" and len(memory.options) == 1:
-                memory.selected_option_i = 0
-                return memory.select_option()
+        if self.io.memory.is_skipping:
+            if mode == "options" and len(self.io.memory.options) == 1:
+                self.io.memory.selected_option_i = 0
+                return self.io.memory.select_option()
 
             if mode == "dialog_line":
                 return NoAction()

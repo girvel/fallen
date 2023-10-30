@@ -51,6 +51,9 @@ class Memory:
         self._quests.remove(quest)
         self._notifications.append(Notification("Задача завершена", quest.description))
 
+    def get_quests(self):
+        return self._quests
+
     def pop_notification(self):
         return self._notifications.pop() if len(self._notifications) > 0 else None
 
@@ -86,7 +89,7 @@ class IO(DynamicEntity):
                 self.render(subject, perception)
 
             dummy_action = self.dummy.make_decision(subject, perception)
-            player_action = self.input.wait_for_input(subject, perception, self.memory)
+            player_action = self.input.wait_for_input(subject, perception)
 
             if action := dummy_action or player_action: return action
 
