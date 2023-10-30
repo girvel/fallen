@@ -19,38 +19,23 @@ class Output:
         panel_w = 35
         self.io = io
         self.is_render_enabled = is_render_enabled
-        self.main = stdscr
-        self.game = Game(panel_w)
-        self.panel = Panel(panel_w, io)
-        self.dialogue_line = DialogueLine()
-        self.option_picker = OptionPicker()
+        self.stdscr = stdscr
+        self.game = Game(io, panel_w)
+        self.panel = Panel(io, panel_w)
+        self.dialogue_line = DialogueLine(io)
+        self.option_picker = OptionPicker(io)
         self.notification = Notification()
 
         self.execution_order = [self.game, self.panel, self.dialogue_line, self.option_picker, self.notification]
 
-        if not io.debug_mode: return
-        self.monitor = Monitor(10, panel_w)
-        self.console = Console(panel_w)
-        self.execution_order += [self.monitor, self.console]
-
-    def resize(self):
-        h, w = self.main.getmaxyx()
-
-        for window in self.execution_order:
-            try:
-                window.resize(h, w)
-            except Exception as ex:
-                logging.error(f"Exception when resizing {window}", exc_info=ex)
-                if self.io.debug_mode: raise ex
-
-    def render(self, subject, perception, memory):
-        self.main.refresh()
+    def render(self, subject, perception):
+        self.stdscr.refresh()
 
         if not self.is_render_enabled: return
 
         for window in self.execution_order:
             try:
-                window.render(subject, perception, memory)
+                window.render(subject, perception)
             except Exception as ex:
                 logging.error(f"Exception when rendering {window}", exc_info=ex)
                 if self.io.debug_mode: raise ex

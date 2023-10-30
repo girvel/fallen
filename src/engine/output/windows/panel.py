@@ -18,7 +18,7 @@ from src.lib.toolkit import from_snake_case
 class Panel:
     mode = Move
 
-    def __init__(self, w, io):
+    def __init__(self, io, w):
         self._window = curses.newwin(1, 1, 0, 0)
         self.w = w
         self.io = io
@@ -41,19 +41,17 @@ class Panel:
         self.quests_template = env.get_template("quests.html")
         self.inventory_template = env.get_template("inventory.html")
 
-    def resize(self, h, w):
-        self._window.resize(h - 1, self.w)
-        self._window.mvwin(0, w - self.w)
+    def render(self, subject, perception):
+        if self.io.memory.in_cutscene: return
 
-    def render(self, subject, perception, memory):  # TODO should be (self, io, subject, perception)
-        if memory.in_cutscene: return
+        self._responsive_resize()
 
         h, w = self._window.getmaxyx()
 
         self._window.clear()
         self._window.border()
 
-        self.panes[self.pane_i.current](subject, perception, memory)
+        self.panes[self.pane_i.current](subject, perception)
 
         if not self.pane_i.is_min():
             self._window.addstr(h - 2, 2, "<", ColorPair(yellow).to_curses())
@@ -65,6 +63,12 @@ class Panel:
             self._window.addstr(h - 2, w - 4 - len(name), name)
 
         self._window.refresh()
+
+    def _responsive_resize(self):
+        h, w = self.io.output.stdscr.getmaxyx()
+
+        self._window.resize(h - 1, self.w)
+        self._window.mvwin(0, w - self.w)
 
     def _stats(self, subject, perception, memory):
         self.html_renderer.render_template(self._window, 1, 2, self.stats_template,
@@ -86,7 +90,7 @@ class Panel:
         ord(""): "Esc",
     }
 
-    def _controls(self, subject, perception, memory):
+    def _controls(self, subject, perception):
         def reduce_hotkeys(hotkey_collection):
             result = {}
 
@@ -101,7 +105,7 @@ class Panel:
 
             return result
 
-        mode_translation = {
+        mode_translation = {  # TODO move to the Mode itself
             "global_": "Глобальные",
             "game": "Игра",
             "options": "Выбор варианта",
@@ -118,12 +122,12 @@ class Panel:
             }
         )
 
-    def _quests(self, subject, perception, memory):
+    def _quests(self, subject, perception):
         self.html_renderer.render_template(self._window, 1, 2, self.quests_template,
-            quests=memory.get_quests(),
+            quests=self.io.memory.get_quests(),
         )
 
-    def _inventory(self, subject, perception, memory):
+    def _inventory(self, subject, perception):
         self.html_renderer.render_template(self._window, 1, 2, self.inventory_template,
             inventory=subject.inventory,
         )

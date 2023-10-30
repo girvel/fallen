@@ -50,7 +50,7 @@ def generate_hotkeys(debug_mode):
 
     @Hotkey.define(result.global_, [curses.KEY_RESIZE])
     def resize_gui(io, subject, perception):
-        io.output.resize()
+        pass
 
     def generate_movement_function(key, direction, description):
         @Hotkey.define(result.game, [key], description)
@@ -107,53 +107,6 @@ def generate_hotkeys(debug_mode):
             if (e := perception.vision[l].get(add2(io.output.game.virtual_p, (mx, my)))) is not None
         ), None)
         return target and Inspect(target)
-
-    if debug_mode:
-        @Hotkey.define(result.game, ["`"], "Открыть консоль отладки")
-        def show_debug_console(io, subject, perception):
-            io.output.console.visible ^= True
-            if not io.output.console.visible: return
-
-            while True:
-                io.render(subject, perception)
-                hotkey = io.input.key_queue.read_key()
-
-                if hotkey == curses.CTL_ENTER: break
-                if hotkey == curses.KEY_MOUSE: continue
-
-                hotkey = curses_wrong_characters.get(hotkey, chr(hotkey))
-
-                if hotkey == "":
-                    io.output.console.buffer = io.output.console.buffer[:-1]
-                elif isinstance(hotkey, str):
-                    io.output.console.buffer += hotkey
-
-                if hotkey == "\n":
-                    last_line_i = io.output.console.buffer.rfind("\n", 0, -1)
-                    last_line_i = last_line_i if last_line_i != -1 else 0
-                    last_indent = re.match(r"^(\s*)", io.output.console.buffer[last_line_i:]).group(1)
-                    io.output.console.buffer += last_indent
-
-            def enclose_console_code(subject, perception, io):
-                def tracker(f):
-                    io.monitor_values[f.__name__] = f
-
-                try:
-                    exec(io.output.console.buffer, {
-                        "it": isinstance(subject.act, Inspect) and subject.act.subject or None,
-                        "monitor": io.output.monitor.values,
-                        "player": subject,
-                        "perception": perception,
-                        "io": io,
-                        "tracker": tracker,
-                    })
-                except Exception as ex:
-                    logging.error(f"Exception when executing console code", exc_info=ex)
-
-            logging.info(f"Executing console code:\n```py\n{io.output.console.buffer}\n```")
-            enclose_console_code(subject, perception, io)
-            io.output.console.buffer = ""
-            io.output.console.visible = False
 
     @Hotkey.define(result.options, ["w", curses.KEY_UP], "Сдвинуть курсор вверх")
     def move_cursor_up(io, subject, perception):

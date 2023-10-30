@@ -13,31 +13,25 @@ class Game:
 
     layers_display_order = ["physical", "effects", "tiles"]
 
-    def __init__(self, panel_w):
+    def __init__(self, io, panel_w):
         self._window = curses.newwin(1, 1, 0, 0)
+        self.io = io
         self.panel_w = panel_w
-        self.last_parent_h = None
-        self.last_parent_w = None
 
-    def resize(self, h, w):
-        self.last_parent_h = h
-        self.last_parent_w = w
+    def render(self, subject, perception):
+        self._responsive_resize()
+        self._move_camera(subject)
+        self._display_perception(subject, perception)
 
-    def _responsive_resize(self, memory):
-        h = self.last_parent_h
-        w = self.last_parent_w
+    def _responsive_resize(self):
+        h, w = self.io.output.stdscr.getmaxyx()
 
-        if memory.in_cutscene:
+        if self.io.memory.in_cutscene:
             self._window.resize(h - 1, w)
             self.following_offset = floordiv2((w, h - 1), 3)
         else:
             self._window.resize(h - 1, w - self.panel_w)
             self.following_offset = floordiv2((w - self.panel_w, h - 1), 3)
-
-    def render(self, subject, perception, memory):
-        self._responsive_resize(memory)
-        self._move_camera(subject)
-        self._display_perception(subject, perception, memory)
 
     def _move_camera(self, subject):
         screen_h, screen_w = self._window.getmaxyx()
@@ -59,12 +53,12 @@ class Game:
             ))
         )
 
-    def _display_perception(self, subject, perception, memory):
+    def _display_perception(self, subject, perception):
         self._window.clear()
         h, w = self._window.getmaxyx()
         screen_size = (w - 1, h)
 
-        spacial_memory = memory.spacial_memory[subject.level]
+        spacial_memory = self.io.memory.spacial_memory[subject.level]
         for rx in range(0, screen_size[0]):
             for ry in range(0, screen_size[1]):
                 character = grid_get(spacial_memory, add2((rx, ry), self.virtual_p))
@@ -85,7 +79,8 @@ class Game:
                         or 0
                 ) | (
                     curses.A_BLINK
-                    if memory.current_sound is not None and memory.current_sound is perception.hearing.get(p)
+                    if self.io.memory.current_sound is not None
+                    and self.io.memory.current_sound is perception.hearing.get(p)
                     else 0
                 )
                 break

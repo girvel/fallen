@@ -75,7 +75,6 @@ class IO(DynamicEntity):
 
         self.memory = Memory()
         self.dummy = DummyAi()
-        self.output.resize()
 
         self.max_fps = max_fps
 
@@ -114,8 +113,8 @@ class IO(DynamicEntity):
         self.output.render(subject, perception, self.memory)
 
     def render_empty(self):
-        self.output.main.clear()
-        self.output.main.refresh()
+        self.output.stdscr.clear()
+        self.output.stdscr.refresh()
 
     def rerender(self):
         if self.last_render_input is None: return
