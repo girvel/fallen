@@ -110,7 +110,7 @@ class IO(DynamicEntity):
         if self.memory.is_vision_disabled: return self.render_empty()
 
         self.last_render_input = [subject, perception]
-        self.output.render(subject, perception, self.memory)
+        self.output.render(subject, perception)
 
     def render_empty(self):
         self.output.stdscr.clear()

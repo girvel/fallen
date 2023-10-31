@@ -12,7 +12,7 @@ class OptionPicker:
         self._window = curses.newwin(1, 1, 0, 0)
         self.io = io
 
-    def responsive_resize(self):
+    def _resize(self):
         h, w = self.io.output.stdscr.getmaxyx()
 
         own_w = min(40, w - 1)
@@ -21,10 +21,13 @@ class OptionPicker:
         self._window.resize(own_h, own_w)
         self._window.mvwin((h - own_h) // 2, (w - own_w) // 2)
 
-    def render(self, subject, perception):  # TODO NEXT convert this to HTML
+    # TODO NEXT convert this to HTML
+    # TODO NEXT convert this to two-window approach
+    # TODO NEXT extract the parent class
+    def render(self, subject, perception):
         if self.io.memory.options is None: return
 
-        self.responsive_resize()
+        self._resize()
         h, w = self._window.getmaxyx()
 
         self._window.clear()

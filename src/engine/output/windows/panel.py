@@ -70,7 +70,7 @@ class Panel:
         self._window.resize(h - 1, self.w)
         self._window.mvwin(0, w - self.w)
 
-    def _stats(self, subject, perception, memory):
+    def _stats(self, subject, perception):
         self.html_renderer.render_template(self._window, 1, 2, self.stats_template,
             subject=subject,
             potential_damage=int(potential_damage(subject)),

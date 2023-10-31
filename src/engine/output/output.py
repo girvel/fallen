@@ -2,9 +2,7 @@ import curses
 import logging
 
 from src.engine.output.colors import ColorPair
-from src.engine.output.windows.console import Console
 from src.engine.output.windows.dialogue_line import DialogueLine
-from src.engine.output.windows.monitor import Monitor
 from src.engine.output.windows.game import Game
 from src.engine.output.windows.notification import Notification
 from src.engine.output.windows.option_picker import OptionPicker
@@ -24,7 +22,7 @@ class Output:
         self.panel = Panel(io, panel_w)
         self.dialogue_line = DialogueLine(io)
         self.option_picker = OptionPicker(io)
-        self.notification = Notification()
+        self.notification = Notification(io)
 
         self.execution_order = [self.game, self.panel, self.dialogue_line, self.option_picker, self.notification]
 
