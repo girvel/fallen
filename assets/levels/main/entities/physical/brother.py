@@ -7,8 +7,6 @@ from src.engine.naming.library import reserved_names
 from src.engine.naming.name import CompositeName
 from src.engine.output.colors import ColorPair, blue
 from src.entities.abstract.human import Human
-from src.lib.vector import map_grid
-from src.systems.ai import Senses
 
 
 class Brother(Human):
@@ -21,7 +19,6 @@ class Brother(Human):
 
         self.health = Health(30, ArmorKind.Organic)
         self.weapon = Weapon(4, DamageKind.Slashing)
-        self.senses = Senses(12, 0, 0)
         self.ai = BrotherAi()
 
         DynamicEntity.__init__(self, **attributes)

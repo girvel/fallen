@@ -25,5 +25,5 @@ class LordBishop(Human):
         self.attitude = common_attitude()
         self.attitude.relations[Faction.Church] = 1000
 
-    def after_load(self, level):
+    def after_load(self, level):  # TODO isn't the level already known at this point?
         self.ai.composite[SpacialMemory].knows(level)

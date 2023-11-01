@@ -84,6 +84,11 @@ class RailsBase(DynamicEntity):
         yield from self.center_camera()
         self.player.ai.memory.is_vision_disabled = False
 
+    def create_entity(self, entity):
+        self.genesis.entities_to_create.add(entity)
+        yield
+        if hasattr(entity, "after_load"): entity.after_load(entity.level)
+
 
 @dataclass(eq=False)
 class Scene:

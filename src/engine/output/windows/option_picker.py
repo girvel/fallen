@@ -21,9 +21,9 @@ class OptionPicker:
         self._window.resize(own_h, own_w)
         self._window.mvwin((h - own_h) // 2, (w - own_w) // 2)
 
-    # TODO NEXT convert this to HTML
-    # TODO NEXT convert this to two-window approach
-    # TODO NEXT extract the parent class
+    # TODO convert this to HTML
+    # TODO convert this to two-window approach
+    # TODO extract the parent class
     def render(self, subject, perception):
         if self.io.memory.options is None: return
 

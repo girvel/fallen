@@ -12,3 +12,6 @@ class Inventory:
 
     def get_items(self):
         return self._items.copy()
+
+    def add_item(self, item):
+        self._items.append(item)

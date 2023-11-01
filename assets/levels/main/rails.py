@@ -3,9 +3,11 @@ from pathlib import Path
 from ecs import Entity, exists
 
 from assets.levels.main.entities.physical.brother import Brother
+from assets.levels.main.entities.physical.girl import Girl
 from assets.levels.main.entities.physical.mother import Mother
 from src.engine.ai.follower import Follower
 from src.entities.ais.dummy_ai import wait_finish
+from src.entities.items.lily import Lily
 from src.entities.physical.rabid_dog import RabidDog
 from src.entities.physical.soldier import Soldier
 from src.engine.acting.actions.leave import Leave
@@ -16,8 +18,9 @@ from src.engine.ai.pather import Pather
 from src.engine.rails_base import RailsBase, Scene
 from src.entities.ais.io import Quest
 from src.entities.special.level import Level
+from src.lib import vector
 from src.lib.concurrency import wait_for, wait_while
-from src.lib.vector import d2
+from src.lib.vector import d2, add2
 
 
 class Rails(RailsBase):
@@ -28,6 +31,7 @@ class Rails(RailsBase):
             brother=next(self.level.find(Brother)),
             soldiers=list(self.level.find(Soldier)),
             rabid_dog=next(self.level.find(RabidDog)),
+            girl=None,
         )
 
         self.positions = Entity(
@@ -38,6 +42,9 @@ class Rails(RailsBase):
             mother_reappearance=(191, 55),
             player_bed=(208, 57),
             beside_the_bed=(207, 58),
+            kinds_yard_entrance=(185, 45),
+            girl_appearance=(162, 42),
+            girl_runs_away=(183, 54),
         )
 
         self.quests = Entity(
@@ -224,6 +231,9 @@ class Rails(RailsBase):
         yield from self.start_cutscene()
 
         self.is_dog_dead = self.characters.rabid_dog.health.amount.current <= 0
+        if self.is_dog_dead:
+            self.girl_gives_flower.enabled = True
+
         memory.is_vision_disabled = True
         yield from c.player.ai.wait_seconds(2)
 
@@ -279,3 +289,36 @@ class Rails(RailsBase):
 
         self.vision_level.rails.talk_with_lord_bishop_2.enabled = True
         yield from self.plane_shift(self.vision_level, self.vision_level.rails.positions.observing_the_throne)
+
+
+    @Scene.new(lambda self: d2(self.characters.player.p, self.positions.kinds_yard_entrance) <= 2, enabled=False)
+    def girl_gives_flower(self, scene):
+        c = self.characters
+        p = self.positions
+
+        scene.enabled = False
+        yield from self.start_cutscene()
+        yield from self.center_camera()
+
+        c.girl = Girl(p=p.girl_appearance, level=self.level)
+        yield from self.create_entity(c.girl)
+        c.girl.ai.composite[Pather].going_to = add2(c.player.p, vector.left)
+
+        yield from wait_while(lambda: d2(c.girl.p, c.player.p) > 10)
+        yield {c.player: Say("Девочка твоего возраста.", True)}
+        yield {c.player: Say("Взъерошенные рыжие волосы, грязь на лице, грубое льняное платье.", True)}
+
+        yield from wait_finish(c.girl)
+
+        yield from c.player.ai.wait_seconds(1)
+        yield {c.girl: Say(f"Я {c.girl.name.first}.")}
+
+        yield from c.player.ai.wait_seconds(1.5)
+        yield {c.player: Say(f"{c.girl.name}, пряча взгляд, суёт тебе что-то в руку и убегает.", True)}
+        c.player.inventory.add_item(Lily())
+
+        c.girl.ai.composite[Pather].going_to = p.girl_runs_away
+        yield from wait_finish(c.girl)
+        yield {c.girl: Leave()}
+
+        yield from self.end_cutscene()
