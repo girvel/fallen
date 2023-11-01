@@ -44,6 +44,11 @@ class Pather:
         ):
             # Create grid for calculations, escaping the beginning and the end
             grid = map_grid(spacial_memory[subject.level], lambda c: c == Level.no_entity_character and 1 or 0)
+
+            for p, effect in perception.vision.effects.items():
+                if effect is not None:
+                    grid_set(grid, p, 0)
+
             grid_set(grid, subject.p, 1)
             grid_set(grid, self.going_to, 1)
 

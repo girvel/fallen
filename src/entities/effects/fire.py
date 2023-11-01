@@ -20,6 +20,6 @@ class Fire(DynamicEntity):
         self.weapon = Weapon(heat, DamageKind.Fire)
         self.ai = StaticAi(lambda subject, _: SplashAttack(subject.p, 0))
         self.death_chance = death_chance_from_half_life(half_life)
-        self.faction = None if half_life == float('inf') else Faction.Disaster
+        self.faction = None if half_life == float('inf') else Faction.Disasters
 
         super().__init__(**attributes)

@@ -1,9 +1,7 @@
 import curses
-import logging
 import math
 
 from src.engine.output.colors import ColorPair, yellow
-from src.engine.output.html_window import HtmlWindow
 from src.lib.toolkit import add_multiline_string
 
 
@@ -21,9 +19,6 @@ class OptionPicker:
         self._window.resize(own_h, own_w)
         self._window.mvwin((h - own_h) // 2, (w - own_w) // 2)
 
-    # TODO convert this to HTML
-    # TODO convert this to two-window approach
-    # TODO extract the parent class
     def render(self, subject, perception):
         if self.io.memory.options is None: return
 

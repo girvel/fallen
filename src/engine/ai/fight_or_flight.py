@@ -23,8 +23,13 @@ class FightOrFlight:
 
             self.current_target = None
 
-        enemies = [e for e in perception.vision.physical.values() if e is not None and subject.attitude.get(e) < 0]
-        if len(enemies) == 0: return self.no_change_signal
+        if len(enemies := [
+            e
+            for _, grid in perception.vision
+            for e in grid.values()
+            if e is not None and subject.attitude.get(e) < 0
+        ]) == 0:
+            return self.no_change_signal
 
         if self.prefer_fight:
             self.current_target = random.choice(enemies)
