@@ -6,8 +6,8 @@ I always wanted to create my own RPG, here it is.
 
 ## Installation
 
-1. Install [Git](https://git-scm.com/) and [Python](https://www.python.org/downloads/) (3.10+)
-2. Open the terminal and go to preffered installation directory
+1. Install [Git](https://git-scm.com/) and [Python](https://www.python.org/downloads/) 3.10
+2. Open the terminal and go to your preffered installation directory
 3. Clone the repository
 
 ```bash
