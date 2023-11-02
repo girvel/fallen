@@ -26,7 +26,7 @@ from src.lib.vector import d2, add2
 class Rails(RailsBase):
     def __post_init__(self):
         self.characters = Entity(
-            player=self.player,
+            player=self.get_player(),
             mother=next(self.level.find(Mother)),
             brother=next(self.level.find(Brother)),
             soldiers=list(self.level.find(Soldier)),

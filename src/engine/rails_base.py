@@ -29,33 +29,37 @@ class RailsBase(DynamicEntity):
         self.level = level
         self.ms = ms
         self.genesis = genesis
-        self.player = next(self.level.find(Player), None)
 
         logging.info(f"Initialized rails with scenes {[s.name for s in self.scenes]}")
 
         self.__post_init__(*args, **kwargs)
 
-    def __post_init__(*args, **kwargs):
+    def __post_init__(self, *args, **kwargs):
         ...
+
+    @functools.cache
+    def get_player(self):
+        return next(self.level.find(Player), None)
 
     def options(self, options: dict[str, Action]):
         assert all(options.values()), "Only actions are allowed; for no action use NoAction"
 
         yield  # TODO should this be needed? Investigate.
-        self.player.ai.memory.options = options
+        self.get_player().ai.memory.options = options
         yield
 
     def start_cutscene(self):
-        self.player.ai.memory.in_cutscene = True
+        self.get_player().ai.memory.in_cutscene = True
         yield
 
-    def end_cutscene(self):
+    def end_cutscene(self):  # TODO next type annotations
         yield
-        self.player.ai.memory.in_cutscene = False
+        self.get_player().ai.memory.in_cutscene = False
 
     def center_camera(self):
-        h, w = self.player.ai.output.game._window.getmaxyx()
-        self.player.ai.output.game.virtual_p = sub2(self.player.p, floordiv2((w, h), 2))
+        player = self.get_player()
+        h, w = player.ai.output.game._window.getmaxyx()
+        player.ai.output.game.virtual_p = sub2(player.p, floordiv2((w, h), 2))
         yield
 
     def scene_by_name(self, name):
@@ -79,10 +83,10 @@ class RailsBase(DynamicEntity):
 
     def plane_shift(self, level, p):
         yield
-        self.player.ai.memory.is_vision_disabled = True
-        Level.change(self.player, level, p)
+        self.get_player().ai.memory.is_vision_disabled = True
+        Level.change(self.get_player(), level, p)
         yield from self.center_camera()
-        self.player.ai.memory.is_vision_disabled = False
+        self.get_player().ai.memory.is_vision_disabled = False
 
     def create_entity(self, entity):
         self.genesis.entities_to_create.add(entity)

@@ -54,8 +54,7 @@ class Rails(RailsBase):
 
     @Scene.new()
     def start_vision(self, scene):
-        self.player = next(self.level.find(Player))  # TODO make this automatic
-        self.characters.player = self.player
+        self.characters.player = self.get_player()
 
         c = self.characters
         p = self.positions
