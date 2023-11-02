@@ -64,7 +64,10 @@ class Rails(RailsBase):
 
         memory.is_vision_disabled = False
 
-        yield {c.player: Say("Холодный коридор с высокими потолками и трещинами в панорамном окне в озеро.", True)}
+        yield {c.player: Say("Холодный каменный коридор с высокими потолками.", True)}
+        yield {c.player: Say(
+            "Панорамное окно, отделяющее помещение от ледяного озера, потрескалось и протекает.", True
+        )}
         yield {c.player: Say("Кучка вооружённых людей тревожно озирается по сторонам.", True)}
 
         c.kaledeii.ai.composite[Pather].going_to = p.kaledeii_entrance
@@ -76,14 +79,14 @@ class Rails(RailsBase):
         c.kaledeii.ai.composite[Pather].going_to = p.entrance
 
         yield {c.player: Say("Высокий воин в полном доспехе.", True)}
-        yield {c.player: Say("Доспехи покрыты густой копотью, облик источает решимость.", True)}
+        yield {c.player: Say("Пластины брони покрыты густой копотью, облик источает решимость.", True)}
 
         for s in c.soldiers:
             s.ai.composite[Follower].subject = c.kaledeii
 
         c.player.ai.dummy.composite[Follower].subject = c.kaledeii
-        yield from wait_finish(c.kaledeii)
 
+        yield from wait_finish(c.kaledeii)
         yield {c.player: Say("Неприступный каменный зал, обогреваемый ревущими пламенем печами.", True)}
         yield {c.player: Say("Колоссальные размеры не позволяют чётко рассмотреть, что находится в его конце.", True)}
 
@@ -138,7 +141,7 @@ class Rails(RailsBase):
 
         yield {c.player: Say("Другой край зала.", True)}
         yield {c.player: Say("Фигура злого старика нависает с края возвышенности трона.", True)}
-        yield {c.player: Say("Небесная синева его робы едва видна под золотом религиозной атрибутики.", True)}
+        yield {c.player: Say("Небесная синева его робы едва видна под золотом церимониальной атрибутики.", True)}
 
         yield {c.kaledeii: Say("Ваше Превосходительство, следуйте за мной.")}
         yield {c.bishop: Say("Глупости! Кем он себя возомнил!")}
@@ -206,7 +209,7 @@ class Rails(RailsBase):
 
         yield from wait_while(lambda: c.player.health.amount.current > 0)
 
-        self.run_task()(lambda: self.plane_shift(self.parent_level, self.parent_level.rails.positions.player_bed))
+        yield from self.plane_shift(self.parent_level, self.parent_level.rails.positions.player_bed)
         c.player.health.amount.reset_to_max()
         yield from self.end_cutscene()
         memory.complete_quest(self.parent_level.rails.quests.find_someone_to_fight)

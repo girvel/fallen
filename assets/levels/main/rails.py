@@ -5,18 +5,18 @@ from ecs import Entity, exists
 from assets.levels.main.entities.physical.brother import Brother
 from assets.levels.main.entities.physical.girl import Girl
 from assets.levels.main.entities.physical.mother import Mother
-from src.engine.ai.follower import Follower
-from src.entities.ais.dummy_ai import wait_finish
-from src.entities.items.lily import Lily
-from src.entities.physical.rabid_dog import RabidDog
-from src.entities.physical.soldier import Soldier
 from src.engine.acting.actions.leave import Leave
 from src.engine.acting.actions.no_action import NoAction
 from src.engine.acting.actions.say import Say
 from src.engine.acting.damage import Weapon, DamageKind
+from src.engine.ai.follower import Follower
 from src.engine.ai.pather import Pather
 from src.engine.rails_base import RailsBase, Scene
+from src.entities.ais.dummy_ai import wait_finish
 from src.entities.ais.io import Quest
+from src.entities.items.lily import Lily
+from src.entities.physical.rabid_dog import RabidDog
+from src.entities.physical.soldier import Soldier
 from src.entities.special.level import Level
 from src.lib import vector
 from src.lib.concurrency import wait_for, wait_while

@@ -1,16 +1,12 @@
 import curses
 import logging
 import time
-from typing import TYPE_CHECKING
 
 from src.engine.acting.action import Action
 from src.engine.acting.actions.no_action import NoAction
 from src.engine.input.hotkeys import generate_hotkeys
 from src.engine.input.key_queue import KeyQueue
 from src.systems.ai import Perception
-
-if TYPE_CHECKING:
-    from src.entities.ais.io import Memory
 
 
 class Input:
