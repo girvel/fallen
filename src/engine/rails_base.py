@@ -1,7 +1,7 @@
 import functools
 import logging
 from dataclasses import dataclass
-from typing import Callable
+from typing import Callable, Iterator
 
 from ecs import DynamicEntity
 
@@ -11,6 +11,8 @@ from src.entities.physical.player import Player
 from src.entities.special.level import Level
 from src.lib.vector import floordiv2, sub2
 
+
+Script = Iterator[dict[DynamicEntity, Action | None] | None]
 
 class RailsBase(DynamicEntity):
     name = Name("Рельсы")
@@ -38,32 +40,29 @@ class RailsBase(DynamicEntity):
         ...
 
     @functools.cache
-    def get_player(self):
+    def get_player(self) -> Player:
         return next(self.level.find(Player), None)
 
-    def options(self, options: dict[str, Action]):
+    def options(self, options: dict[str, Action]) -> Script:
         assert all(options.values()), "Only actions are allowed; for no action use NoAction"
 
         yield  # TODO should this be needed? Investigate.
         self.get_player().ai.memory.options = options
         yield
 
-    def start_cutscene(self):
+    def start_cutscene(self) -> Script:
         self.get_player().ai.memory.in_cutscene = True
         yield
 
-    def end_cutscene(self):  # TODO next type annotations
+    def end_cutscene(self) -> Script:
         yield
         self.get_player().ai.memory.in_cutscene = False
 
-    def center_camera(self):
+    def center_camera(self) -> Script:
         player = self.get_player()
         h, w = player.ai.output.game._window.getmaxyx()
         player.ai.output.game.virtual_p = sub2(player.p, floordiv2((w, h), 2))
         yield
-
-    def scene_by_name(self, name):
-        return next(s for s in self.scenes if s.name == name)
 
     def run_task(self, *args, **kwargs):
         def decorator(f):
@@ -81,14 +80,14 @@ class RailsBase(DynamicEntity):
 
         return decorator
 
-    def plane_shift(self, level, p):
+    def plane_shift(self, level, p) -> Script:
         yield
         self.get_player().ai.memory.is_vision_disabled = True
         Level.change(self.get_player(), level, p)
         yield from self.center_camera()
         self.get_player().ai.memory.is_vision_disabled = False
 
-    def create_entity(self, entity):
+    def create_entity(self, entity) -> Script:
         self.genesis.entities_to_create.add(entity)
         yield
         if hasattr(entity, "after_load"): entity.after_load(entity.level)
@@ -97,10 +96,13 @@ class RailsBase(DynamicEntity):
 @dataclass(eq=False)
 class Scene:
     name: str
-    run: Callable[[...], None]
-    start_predicate: Callable[[...], bool]
+    run: "Callable[[Scene], Script]"
+    start_predicate: Callable[[RailsBase], bool]
     enabled: bool = True
 
     @classmethod
     def new(self, start_predicate: Callable[[RailsBase], bool] = lambda _: True, *, enabled=True):
-        return lambda f: Scene(f.__name__, f, start_predicate, enabled)
+        def _decorator(f: Callable[[Scene], Script]) -> "Scene":
+            return Scene(f.__name__, f, start_predicate, enabled)
+
+        return _decorator
