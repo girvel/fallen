@@ -13,7 +13,6 @@ class Output:
     def __init__(self, io, stdscr, is_render_enabled):
         ColorPair.initialize()
         curses.curs_set(0)
-        curses.ungetch(curses.KEY_RESIZE)
 
         panel_w = 35
         self.io = io

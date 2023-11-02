@@ -162,7 +162,7 @@ class Rails(RailsBase):
     def brother_path_middlepoint(self, scene):
         scene.enabled = False
         self.characters.brother.ai.composite[Pather].going_to = self.positions.away
-        yield  # TODO non-async scenes
+        yield from ()
 
 
     @Scene.new(lambda self:
