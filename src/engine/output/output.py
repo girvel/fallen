@@ -15,7 +15,6 @@ class Output:
         ColorPair.initialize()
         curses.curs_set(0)
 
-        self.panel_w = 35
         self.io = io
         self.is_render_enabled = is_render_enabled
         self.stdscr = stdscr
@@ -32,13 +31,12 @@ class Output:
         if not self.is_render_enabled: return
         size = flip2(self.stdscr.getmaxyx())
 
-        # TODO remove size variable
-        for window, size, positioning in [
-            (self.game, sub2(size, (0, 1) if self.io.memory.in_cutscene else (self.panel_w, 1)), (0, 0)),
-            # (self.panel, ),
-            (self.dialogue_line, size, (Center(), Reverse(2))),
+        for window, positioning in [
+            (self.game, (0, 0)),
+            (self.panel, (Reverse(3), 1)),
+            (self.dialogue_line, (Center(), Reverse(2))),
             # (self.option_picker, ),
-            (self.notification, size, (Center(), Center())),
+            (self.notification, (Center(), Center())),
         ]:
             try:
                 window.render(subject, perception, size, positioning)

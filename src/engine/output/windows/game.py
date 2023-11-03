@@ -12,6 +12,13 @@ class Game(Window):
     virtual_p = (0, 0)
     layers_display_order = ["physical", "effects", "tiles"]
 
+    def _responsive_size(self, subject, perception, max_size):
+        return sub2(
+            max_size,
+            (0, 1) if self.io.memory.in_cutscene else
+            (self.io.output.panel.border_curses_window.getmaxyx()[1], 1)
+        )
+
     def _render(self, subject, perception):
         self._move_camera(subject)
         self._display_perception(subject, perception)

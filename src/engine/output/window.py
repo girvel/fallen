@@ -1,4 +1,5 @@
 import curses
+import logging
 from abc import ABC, abstractmethod
 from dataclasses import dataclass
 
@@ -34,6 +35,7 @@ class Window(ABC):
 
         window_size = self._responsive_size(subject, perception, max_size)
         self.curses_window.resize(*flip2(window_size))
+        logging.debug([positioning, positioning_to_position(positioning, max_size, window_size)])
         self.curses_window.mvwin(*flip2(positioning_to_position(positioning, max_size, window_size)))
 
         self._render(subject, perception)
