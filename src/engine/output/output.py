@@ -2,7 +2,7 @@ import curses
 import logging
 
 from src.engine.output.colors import ColorPair
-from src.engine.output.window import SIGNAL_CENTERED
+from src.engine.output.window import Center, Reverse
 from src.engine.output.windows.dialogue_line import DialogueLine
 from src.engine.output.windows.game import Game
 from src.engine.output.windows.notification import Notification
@@ -32,12 +32,13 @@ class Output:
         if not self.is_render_enabled: return
         size = flip2(self.stdscr.getmaxyx())
 
+        # TODO remove size variable
         for window, size, positioning in [
             (self.game, sub2(size, (0, 1) if self.io.memory.in_cutscene else (self.panel_w, 1)), (0, 0)),
             # (self.panel, ),
-            # (self.dialogue_line, ),
+            (self.dialogue_line, size, (Center(), Reverse(2))),
             # (self.option_picker, ),
-            (self.notification, size, SIGNAL_CENTERED),
+            (self.notification, size, (Center(), Center())),
         ]:
             try:
                 window.render(subject, perception, size, positioning)
