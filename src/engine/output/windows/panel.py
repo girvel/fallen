@@ -24,7 +24,9 @@ class Panel(HtmlWindow):
     mode = Move
 
     def get_arguments(self, subject, perception):
-        return {}
+        return {
+            "previous_pane_name": "Hello world!",
+        }
 
     def _calculate_visibility(self, subject, perception):
         return not self.io.memory.in_cutscene
