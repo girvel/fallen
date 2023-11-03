@@ -12,7 +12,7 @@ class Game(Window):
     virtual_p = (0, 0)
     layers_display_order = ["physical", "effects", "tiles"]
 
-    def render(self, subject, perception):
+    def _render(self, subject, perception):
         self._move_camera(subject)
         self._display_perception(subject, perception)
 

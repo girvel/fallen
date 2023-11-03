@@ -23,7 +23,7 @@ class Notification(Window):
     def _calculate_visibility(self, subject, perception):
         return bool(self.io.memory.current_notification)
 
-    def render(self, subject, perception):
+    def _render(self, subject, perception):
         self.curses_window.clear()
 
         html_renderer.render(

@@ -2,14 +2,13 @@ import curses
 import logging
 
 from src.engine.output.colors import ColorPair
+from src.engine.output.window import SIGNAL_CENTERED
 from src.engine.output.windows.dialogue_line import DialogueLine
 from src.engine.output.windows.game import Game
 from src.engine.output.windows.notification import Notification
 from src.engine.output.windows.option_picker import OptionPicker
 from src.engine.output.windows.panel import Panel
 from src.lib.vector import flip2, sub2, floordiv2
-
-SIGNAL_CENTERED = object()
 
 class Output:
     def __init__(self, io, stdscr, is_render_enabled):
@@ -41,20 +40,7 @@ class Output:
             (self.notification, size, SIGNAL_CENTERED),
         ]:
             try:
-                # TODO NEXT extract Window's function
-                if not window.update_visibility(subject, perception): continue
-
-                window_size = window.responsive_size(subject, perception, size)
-                window.curses_window.resize(*flip2(window_size))
-
-                match positioning:
-                    case w, h:
-                        window.curses_window.mvwin(h, w)
-                    case CENTERED:
-                        window.curses_window.mvwin(*flip2(floordiv2(sub2(size, window_size), 2)))
-
-                window.render(subject, perception)
-
+                window.render(subject, perception, size, positioning)
             except Exception as ex:
                 logging.error(f"Exception when rendering {window}", exc_info=ex)
                 if self.io.debug_mode: raise ex
