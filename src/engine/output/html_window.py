@@ -1,24 +1,38 @@
-import curses
+from abc import abstractmethod, ABCMeta
 
 from jinja2 import Environment, PackageLoader
 
-from src.engine.output.html import CursesHtmlRenderer
+from src.engine.output.html import html_renderer
+from src.engine.output.window import Window
 
 
-class HtmlWindow:
-    def __init__(self, package_name, template_name):
-        self._window = curses.newwin(1, 1, 0, 0)
-        self.html_renderer = CursesHtmlRenderer()
-        self.env = Environment(loader=PackageLoader(package_name), autoescape=True)
-        self.template_name = template_name
+class HtmlWindow(Window, metaclass=ABCMeta):
+    @property
+    @abstractmethod
+    def package_name(self):
+        ...
 
-    def render_template(self, **parameters):
-        self._window.clear()
-        self._window.border()
+    @property
+    @abstractmethod
+    def template_name(self):
+        ...
 
-        self.html_renderer.render_template(
-            self._window, 1, 2, self.env.get_template(self.template_name),
-            **parameters,
+    @abstractmethod
+    def get_arguments(self, subject, perception):
+        ...
+
+    def __init__(self, *args, **kwargs):
+        self.jinja_environment = Environment(loader=PackageLoader(self.package_name), autoescape=True)
+        super().__init__(*args, **kwargs)
+
+    def _render(self, subject, perception):
+        self.curses_window.clear()
+
+        html_renderer.render(
+            self.curses_window,
+            self.jinja_environment.get_template(self.template_name).render(
+                **self.get_arguments(subject, perception),
+            )
         )
 
-        self._window.refresh()
+        self.curses_window.refresh()
