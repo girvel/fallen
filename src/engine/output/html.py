@@ -4,24 +4,21 @@ from src.engine.output.colors import ColorPair, yellow, white, red
 from src.lib.toolkit import add_multiline_string
 
 
+# TODO redo in native curses calls
 class CursesHtmlRenderer(HTMLParser):
     window = None
     y = None
     x = None
-    padding_x = None
     color_stack = [ColorPair()]
     centering = False
 
-    def render_template(self, window, padding_y, padding_x, template, **kwargs):
+    def render(self, window, html, **kwargs):
         self.window = window
 
-        self.y = padding_y
-        self.x = padding_x
+        self.y = 0
+        self.x = 0
 
-        self.padding_y = padding_y
-        self.padding_x = padding_x
-
-        self.feed(template.render(**kwargs).replace("\n", ""))
+        self.feed(html.replace("\n", ""))
 
     def handle_starttag(self, tag, attrs, **kwargs):
         match tag:
@@ -36,7 +33,7 @@ class CursesHtmlRenderer(HTMLParser):
                 self.y, self.x = add_multiline_string(
                     self.window,
                     self.y, self.x,
-                    self.padding_y, self.padding_x,
+                    0, 0,
                     h, w,
                     "- ", ColorPair(yellow),
                 )
@@ -49,13 +46,13 @@ class CursesHtmlRenderer(HTMLParser):
                 self.color_stack.pop()
             case "div" | "p" | "li":
                 self.y += 1
-                self.x = self.padding_x
+                self.x = 0
 
     def handle_data(self, data):
         h, w = self.window.getmaxyx()
 
         if self.centering:
-            self.x += (w - self.padding_x * 2 - len(data)) // 2  # TODO multiline
+            self.x += (w - len(data)) // 2  # TODO multiline
 
         data = data.lstrip(" ")
         if len(data) == 0: return
@@ -63,7 +60,10 @@ class CursesHtmlRenderer(HTMLParser):
         self.y, self.x = add_multiline_string(
             self.window,
             self.y, self.x,
-            self.padding_y, self.padding_x,
+            0, 0,
             h, w,
             data, self.color_stack[-1],
         )
+
+
+html_renderer = CursesHtmlRenderer()

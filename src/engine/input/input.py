@@ -27,7 +27,7 @@ class Input:
         if self.io.memory.in_cutscene:
             if self.io.memory.options:
                 mode = "options"
-            elif self.io.output.notification.visible:
+            elif self.io.memory.current_notification:
                 mode = "notification"
             elif self.io.memory.current_sound is not None:
                 mode = "dialog_line"
@@ -36,7 +36,7 @@ class Input:
         else:
             mode = "game"
 
-        if self.io.memory.is_skipping:
+        if self.io.memory.is_skipping:  # TODO this is not Input's responsibility but Memory's or a separate module
             if mode == "options" and len(self.io.memory.options) == 1:
                 self.io.memory.selected_option_i = 0
                 return self.io.memory.select_option()

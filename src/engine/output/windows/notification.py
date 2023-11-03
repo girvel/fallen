@@ -1,24 +1,36 @@
 import math
 
-from src.engine.output.html_window import HtmlWindow
+from jinja2 import Environment, PackageLoader
+
+from src.engine.output.html import html_renderer
+from src.engine.output.window import Window
 
 
-class Notification(HtmlWindow):
-    def __init__(self, io):
-        self.io = io
-        super().__init__(__name__, "notification.html")
-        self.visible = False
+class Notification(Window):
+    package_name = __name__
+    template_name = "notification.html"
 
-    def _resize(self, notification, max_size):
-        own_w = min(50, max_w - 1)
-        own_h = min(max_h, 4 + math.ceil(len(notification.content) / (own_w - 2)))
+    def __init__(self, *args, **kwargs):
+        self.jinja_environment = Environment(loader=PackageLoader(self.package_name), autoescape=True)
+        super().__init__(*args, **kwargs)
 
-        self._window.resize(own_h, own_w)
-        self._window.mvwin((max_h - own_h) // 2, (max_w - own_w) // 2)
+    def responsive_size(self, subject, perception, max_size):
+        w = min(50, max_size[0] - 1)
+        h = min(max_size[1], 4 + math.ceil(len(self.io.memory.current_notification.content) / (w - 2)))
 
-    def render(self, subject, perception, max_size):
-        self.visible = (notification := self.io.memory.pop_notification()) is not None
-        if not self.visible: return
+        return w, h
 
-        self._resize(notification, max_size)
-        self.render_template(notification=notification,)
+    def _calculate_visibility(self, subject, perception):
+        return bool(self.io.memory.current_notification)
+
+    def render(self, subject, perception):
+        self.curses_window.clear()
+
+        html_renderer.render(
+            self.curses_window,
+            self.jinja_environment.get_template(self.template_name).render(
+                notification=self.io.memory.current_notification
+            )
+        )
+
+        self.curses_window.refresh()

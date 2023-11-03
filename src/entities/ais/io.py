@@ -39,23 +39,21 @@ class Memory:
     is_vision_disabled: bool = False
 
     _quests: list[Quest] = field(default_factory=list)
-    _notifications: list[Notification] = field(default_factory=list)
+    _notification_queue: list[Notification] = field(default_factory=list)
+    current_notification: Notification = None
 
     def add_quest(self, quest: Quest):
         self._quests.append(quest)
-        self._notifications.append(Notification("Новая задача", quest.description))
+        self._notification_queue.append(Notification("Новая задача", quest.description))
 
     def complete_quest(self, quest: Quest):
         if quest not in self._quests: return
 
         self._quests.remove(quest)
-        self._notifications.append(Notification("Задача завершена", quest.description))
+        self._notification_queue.append(Notification("Задача завершена", quest.description))
 
     def get_quests(self):
         return self._quests
-
-    def pop_notification(self):
-        return self._notifications.pop() if len(self._notifications) > 0 else None
 
     def select_option(self):
         self.last_selected_option, result = list(self.options.items())[self.selected_option_i]
@@ -63,7 +61,7 @@ class Memory:
         self.selected_option_i = 0
         return result
 
-class IO(DynamicEntity):
+class IO(DynamicEntity):  # TODO redo as composite?
     name = Name("Ввод/Вывод")
     cutscene_aware_flag = None
 
@@ -82,7 +80,11 @@ class IO(DynamicEntity):
         self.form_memory(subject, perception)
 
         while True:
-            if self.memory.is_skipping and ~Q(self.memory.options).Q_len() in (None, 1):
+            if all([
+                self.memory.is_skipping,
+                ~Q(self.memory.options).Q_len() in (None, 1),
+                self.memory.current_notification is None,
+            ]):
                 self.render_empty()
             else:
                 self.render(subject, perception)
@@ -103,6 +105,11 @@ class IO(DynamicEntity):
 
         if not self.memory.in_cutscene:
             self.memory.is_skipping = False
+
+        if len(self.memory._notification_queue) > 0:
+            self.memory.current_notification = self.memory._notification_queue.pop(0)
+        else:
+            self.memory.current_notification = None
 
     last_render_input = None
 
