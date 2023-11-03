@@ -10,19 +10,17 @@ class OptionPicker:
         self._window = curses.newwin(1, 1, 0, 0)
         self.io = io
 
-    def _resize(self):
-        h, w = self.io.output.stdscr.getmaxyx()
-
-        own_w = min(40, w - 1)
-        own_h = min(h, 2 + sum(math.ceil(len(o) / (own_w - 2)) for o in self.io.memory.options))
+    def _resize(self, max_size):
+        own_w = min(40, max_w - 1)
+        own_h = min(max_h, 2 + sum(math.ceil(len(o) / (own_w - 2)) for o in self.io.memory.options))
 
         self._window.resize(own_h, own_w)
-        self._window.mvwin((h - own_h) // 2, (w - own_w) // 2)
+        self._window.mvwin((max_h - own_h) // 2, (max_w - own_w) // 2)
 
-    def render(self, subject, perception):
+    def render(self, subject, perception, max_size):
         if self.io.memory.options is None: return
 
-        self._resize()
+        self._resize(max_size)
         h, w = self._window.getmaxyx()
 
         self._window.clear()

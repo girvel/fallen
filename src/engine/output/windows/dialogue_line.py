@@ -10,20 +10,17 @@ class DialogueLine:
         self._window = curses.newwin(1, 1, 0, 0)
         self.io = io
 
-    def _resize(self):
-        h, w = self.io.output.stdscr.getmaxyx()
-
-        this_w = min(80, w - 20)
+    def _resize(self, max_size):
+        this_w = min(80, max_w - 20)
         this_h = 7
 
         self._window.resize(this_h, this_w)
-        self._window.mvwin(h - this_h - 2, (w - this_w) // 2)
+        self._window.mvwin(max_h - this_h - 2, (max_w - this_w) // 2)
 
-    def render(self, subject, perception):
+    def render(self, subject, perception, max_size):
         if self.io.memory.current_sound is None: return
 
-        self._resize()
-
+        self._resize(max_size)
         h, w = self._window.getmaxyx()
 
         self._window.clear()

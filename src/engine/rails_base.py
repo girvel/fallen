@@ -60,7 +60,7 @@ class RailsBase(DynamicEntity):
 
     def center_camera(self) -> Script:
         player = self.get_player()
-        h, w = player.ai.output.game._window.getmaxyx()
+        h, w = player.ai.output.game.curses_window.getmaxyx()
         player.ai.output.game.virtual_p = sub2(player.p, floordiv2((w, h), 2))
         yield
 

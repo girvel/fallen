@@ -3,66 +3,51 @@ from statistics import median
 
 from src.engine.acting.actions.inspect import Inspect
 from src.engine.output.colors import ColorPair, red
+from src.engine.output.window import Window
 from src.entities.special.level import Level
 from src.lib.vector import floordiv2, grid_get, sub2, le2, zero, lt2, add2
 
 
-class Game:
+class Game(Window):
     virtual_p = (0, 0)
-    following_offset = (0, 0)  # modified on resize
-
     layers_display_order = ["physical", "effects", "tiles"]
 
-    def __init__(self, io, panel_w):
-        self._window = curses.newwin(1, 1, 0, 0)
-        self.io = io
-        self.panel_w = panel_w
-
     def render(self, subject, perception):
-        self._responsive_resize()
         self._move_camera(subject)
         self._display_perception(subject, perception)
 
-    def _responsive_resize(self):
-        h, w = self.io.output.stdscr.getmaxyx()
-
-        if self.io.memory.in_cutscene:
-            self._window.resize(h - 1, w)
-            self.following_offset = floordiv2((w, h - 1), 3)
-        else:
-            self._window.resize(h - 1, w - self.panel_w)
-            self.following_offset = floordiv2((w - self.panel_w, h - 1), 3)
-
     def _move_camera(self, subject):
-        screen_h, screen_w = self._window.getmaxyx()
+        h, w = self.curses_window.getmaxyx()
+
+        following_offset = floordiv2((w, h), 3)
 
         self.virtual_p = (
             median((
                 0,
-                subject.p[0] - screen_w + self.following_offset[0],
+                subject.p[0] - w + following_offset[0],
                 self.virtual_p[0],
-                subject.p[0] - self.following_offset[0],
-                subject.level.size[0] - screen_w,
+                subject.p[0] - following_offset[0],
+                subject.level.size[0] - w,
             )),
             median((
                 0,
-                subject.p[1] - screen_h + self.following_offset[1],
+                subject.p[1] - h + following_offset[1],
                 self.virtual_p[1],
-                subject.p[1] - self.following_offset[1],
-                subject.level.size[1] - screen_h,
+                subject.p[1] - following_offset[1],
+                subject.level.size[1] - h,
             ))
         )
 
     def _display_perception(self, subject, perception):
-        self._window.clear()
-        h, w = self._window.getmaxyx()
+        self.curses_window.clear()
+        h, w = self.curses_window.getmaxyx()
         screen_size = (w - 1, h)
 
         spacial_memory = self.io.memory.spacial_memory[subject.level]
         for rx in range(0, screen_size[0]):
             for ry in range(0, screen_size[1]):
                 character = grid_get(spacial_memory, add2((rx, ry), self.virtual_p))
-                self._window.addch(ry, rx, character not in {None, Level.no_entity_character} and character or " ")
+                self.curses_window.addch(ry, rx, character not in {None, Level.no_entity_character} and character or " ")
 
         inspected = isinstance(subject.act, Inspect) and subject.act.subject
         for p in perception.vision.physical:
@@ -88,9 +73,9 @@ class Game:
                 character = Level.no_entity_character
                 color = ColorPair().to_curses()
 
-            self._window.addch(rp[1], rp[0], character, color)
+            self.curses_window.addch(rp[1], rp[0], character, color)
 
-        self._window.refresh()
+        self.curses_window.refresh()
 
 
 def _get_color_pair(entity):

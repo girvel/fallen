@@ -18,9 +18,8 @@ from src.lib.toolkit import from_snake_case
 class Panel:
     mode = Move
 
-    def __init__(self, io, w):
+    def __init__(self, io):
         self._window = curses.newwin(1, 1, 0, 0)
-        self.w = w
         self.io = io
 
         self.panes = [
@@ -41,10 +40,10 @@ class Panel:
         self.quests_template = env.get_template("quests.html")
         self.inventory_template = env.get_template("inventory.html")
 
-    def render(self, subject, perception):
+    def render(self, subject, perception, max_size):
         if self.io.memory.in_cutscene: return
 
-        self._responsive_resize()
+        self._resize(max_size)
 
         h, w = self._window.getmaxyx()
 
@@ -64,11 +63,9 @@ class Panel:
 
         self._window.refresh()
 
-    def _responsive_resize(self):
-        h, w = self.io.output.stdscr.getmaxyx()
-
-        self._window.resize(h - 1, self.w)
-        self._window.mvwin(0, w - self.w)
+    def _resize(self, max_size):
+        self._window.resize(max_h - 1, self.w)
+        self._window.mvwin(0, max_w - self.w)
 
     def _stats(self, subject, perception):
         self.html_renderer.render_template(self._window, 1, 2, self.stats_template,
