@@ -26,6 +26,7 @@ class Panel(HtmlWindow):
     def get_arguments(self, subject, perception):
         return {
             "previous_pane_name": "Hello world!",
+            "next_pane_name": "Hello world!",
         }
 
     def _calculate_visibility(self, subject, perception):

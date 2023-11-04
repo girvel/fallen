@@ -3,4 +3,9 @@
     {% if previous_pane_name %}
     <y>&lt </y>{{ previous_pane_name }}
     {% endif %}
+
+    {% if next_pane_name %}
+    <right>{{ next_pane_name }}  <y>&gt</y></right>
+    <!-- TODO better alignment logic -->
+    {% endif %}
 </bottom>

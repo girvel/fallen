@@ -37,6 +37,8 @@ class CursesHtmlRenderer(HTMLParser):
         match tag:
             case "center":
                 self.horizontal_alignment = HorizontalAlignment.center
+            case "right":
+                self.horizontal_alignment = HorizontalAlignment.right
             case "bottom":
                 self.vertical_alignment = VerticalAlignment.bottom
                 self.y = self.window.getmaxyx()[0] - 1
@@ -56,7 +58,7 @@ class CursesHtmlRenderer(HTMLParser):
 
     def handle_endtag(self, tag):
         match tag:
-            case "center":
+            case "center" | "right":
                 self.horizontal_alignment = HorizontalAlignment.left
             case "bottom":
                 self.vertical_alignment = VerticalAlignment.top
@@ -70,8 +72,11 @@ class CursesHtmlRenderer(HTMLParser):
     def handle_data(self, data):
         h, w = self.window.getmaxyx()
 
-        if self.horizontal_alignment == HorizontalAlignment.center:
-            self.x += (w - len(data)) // 2  # TODO multiline
+        match self.horizontal_alignment:
+            case HorizontalAlignment.center:
+                self.x = (w - len(data)) // 2  # TODO multiline
+            case HorizontalAlignment.right:
+                self.x = w - len(data) - 1
 
         data = data.lstrip(" ")
         if len(data) == 0: return
