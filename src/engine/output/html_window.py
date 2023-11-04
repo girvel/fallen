@@ -26,17 +26,20 @@ class HtmlWindow(Window, metaclass=ABCMeta):
 
     has_border = False
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, parent, io):
         self.jinja_environment = Environment(loader=PackageLoader(self.package_name), autoescape=True)
         self.border_curses_window = curses.newwin(1, 1, 0, 0) if self.has_border else None
-        super().__init__(*args, **kwargs)
+        super().__init__(parent, io)
+        self.__post_init__()
+
+    def __post_init__(self):
+        pass
 
     def _render(self, subject, perception):
         self.curses_window.clear()
 
         if self.border_curses_window:
             self.border_curses_window.resize(*add2(self.curses_window.getmaxyx(), (2, 6)))
-            logging.debug(add2(self.curses_window.getparyx(), (-1, -3)))
             self.border_curses_window.mvwin(*add2(self.curses_window.getbegyx(), (-1, -3)))
 
             self.border_curses_window.clear()

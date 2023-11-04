@@ -6,7 +6,7 @@ from src.lib.toolkit import add_multiline_string
 
 
 class OptionPicker:
-    def __init__(self, io):
+    def __init__(self, parent, io):
         self._window = curses.newwin(1, 1, 0, 0)
         self.io = io
 

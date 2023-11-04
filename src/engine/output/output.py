@@ -8,7 +8,8 @@ from src.engine.output.windows.game import Game
 from src.engine.output.windows.notification import Notification
 from src.engine.output.windows.option_picker import OptionPicker
 from src.engine.output.windows.panel import Panel
-from src.lib.vector import flip2, sub2, floordiv2
+from src.lib.vector import flip2
+
 
 class Output:
     def __init__(self, io, stdscr, is_render_enabled):
@@ -19,11 +20,11 @@ class Output:
         self.is_render_enabled = is_render_enabled
         self.stdscr = stdscr
 
-        self.game = Game(io)
-        self.panel = Panel(io)
-        self.dialogue_line = DialogueLine(io)
-        self.option_picker = OptionPicker(io)
-        self.notification = Notification(io)
+        self.game = Game(self.stdscr, io)
+        self.panel = Panel(self.stdscr, io)
+        self.dialogue_line = DialogueLine(self.stdscr, io)
+        self.option_picker = OptionPicker(self.stdscr, io)
+        self.notification = Notification(self.stdscr, io)
 
     def render(self, subject, perception):
         self.stdscr.refresh()

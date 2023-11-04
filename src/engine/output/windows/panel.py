@@ -11,6 +11,7 @@ from src.engine.inspection import inspect
 from src.engine.output.colors import ColorPair, yellow
 from src.engine.output.html import CursesHtmlRenderer
 from src.engine.output.html_window import HtmlWindow
+from src.engine.output.windows.panes.stats import Stats
 from src.lib.limited import Limited
 from src.lib.query import Q
 from src.lib.toolkit import from_snake_case
@@ -23,11 +24,20 @@ class Panel(HtmlWindow):
 
     mode = Move
 
+    def __post_init__(self):
+        self.panes = [
+            # Stats(self.io),
+        ]
+        self.pane_i = Limited(len(self.panes), 0, 0)
+
     def get_arguments(self, subject, perception):
         return {
             "previous_pane_name": "Hello world!",
             "next_pane_name": "Hello world!",
         }
+
+    def _render(self, subject, perception):
+        super()._render(subject, perception)
 
     def _calculate_visibility(self, subject, perception):
         return not self.io.memory.in_cutscene

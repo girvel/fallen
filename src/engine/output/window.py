@@ -26,8 +26,8 @@ def positioning_to_position(positioning: tuple[Coordinate, Coordinate], max_size
 
 
 class Window(ABC):
-    def __init__(self, io):
-        self.curses_window = curses.newwin(1, 1, 0, 0)
+    def __init__(self, parent, io):
+        self.curses_window = parent.subwin(0, 0)
         self.io = io
 
     def render(self, subject, perception, max_size, positioning):
