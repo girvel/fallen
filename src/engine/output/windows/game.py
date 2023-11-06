@@ -5,6 +5,7 @@ from src.engine.acting.actions.inspect import Inspect
 from src.engine.output.colors import ColorPair, red
 from src.engine.output.window import Window
 from src.entities.special.level import Level
+from src.lib.query import Q
 from src.lib.vector import floordiv2, grid_get, sub2, le2, zero, lt2, add2
 
 
@@ -90,7 +91,7 @@ def _get_color_pair(entity):
     if entity is None:
         return ColorPair()
 
-    if getattr(entity, "receives_damage", None):
+    if ~Q(entity).health.last_damaged_by.Q_len() not in (None, 0):
         return ColorPair(red)
 
     return getattr(entity, "color", ColorPair())

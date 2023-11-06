@@ -1,5 +1,5 @@
 import logging
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from pathlib import Path
 
 import yaml
@@ -20,10 +20,12 @@ class Weapon:
 class Health:
     amount: Limited
     armor_kind: str
+    last_damaged_by: list[DynamicEntity]
 
     def __init__(self, amount: int, armor_kind: str):
         self.amount = Limited(amount + 1)
         self.armor_kind = armor_kind
+        self.last_damaged_by = []
 
 
 def attack(source: DynamicEntity, target: DynamicEntity, hades: Hades):
@@ -61,7 +63,7 @@ def inflict_damage(target: DynamicEntity, power: float, damage_kind: str, hades:
     )
 
     health.amount.move(-total_damage)
-    target.receives_damage = True
+    health.last_damaged_by.append(target)
 
     if health.amount.current <= 0:
         logging.info(f"{target.name} is killed")
