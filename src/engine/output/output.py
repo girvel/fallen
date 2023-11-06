@@ -36,7 +36,7 @@ class Output:
             (self.game, (0, 0)),
             (self.panel, (Reverse(3), 1)),
             (self.dialogue_line, (Center(), Reverse(2))),
-            # (self.option_picker, ),
+            (self.option_picker, (Center(), Center())),
             (self.notification, (Center(), Center())),
         ]:
             try:

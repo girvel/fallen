@@ -110,11 +110,11 @@ def generate_hotkeys(debug_mode):
 
     @Hotkey.define(result[OPTIONS], ["w", curses.KEY_UP], "Сдвинуть курсор вверх")
     def move_cursor_up(io, subject, perception):
-        io.memory.selected_option_i = (io.memory.selected_option_i - 1) % len(io.memory.options)
+        io.memory.selected_option_i = max(io.memory.selected_option_i - 1, 0)
 
     @Hotkey.define(result[OPTIONS], ["s", curses.KEY_DOWN], "Сдвинуть курсор вниз")
     def move_cursor_down(io, subject, perception):
-        io.memory.selected_option_i = (io.memory.selected_option_i + 1) % len(io.memory.options)
+        io.memory.selected_option_i = min(io.memory.selected_option_i + 1, len(io.memory.options) - 1)
 
     @Hotkey.define(result[OPTIONS], [Key.enter, "e"], "Выбрать подсвеченный вариант")
     def submit(io, subject, perception):
