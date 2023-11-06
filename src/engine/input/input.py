@@ -4,7 +4,7 @@ import time
 
 from src.engine.acting.action import Action
 from src.engine.acting.actions.no_action import NoAction
-from src.engine.input.hotkeys import generate_hotkeys
+from src.engine.input.hotkeys import generate_hotkeys, Key
 from src.engine.input.key_queue import KeyQueue
 from src.systems.ai import Perception
 
@@ -22,6 +22,9 @@ class Input:
 
         if debug_track:
             logging.info(f"Debug track: '{debug_track}'")
+
+        if self.io.debug_mode:
+            self.key_queue.read_key([Key.enter])
 
     def wait_for_input(self, subject, perception: Perception) -> Action:
         if self.io.memory.in_cutscene:

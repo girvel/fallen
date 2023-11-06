@@ -4,6 +4,7 @@ from src.engine.acting.damage import potential_damage
 from src.engine.inspection import inspect
 from src.engine.output.html_window import HtmlWindow
 from src.lib.query import Q
+from src.lib.vector import sub2
 
 
 class Stats(HtmlWindow):
@@ -11,6 +12,9 @@ class Stats(HtmlWindow):
     template_name = "stats.html"
 
     mode = Move
+
+    def _responsive_size(self, subject, perception, max_size):
+        return 0, 0
 
     def get_arguments(self, subject, perception):
         return {

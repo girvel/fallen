@@ -15,6 +15,7 @@ from src.engine.output.windows.panes.stats import Stats
 from src.lib.limited import Limited
 from src.lib.query import Q
 from src.lib.toolkit import from_snake_case
+from src.lib.vector import flip2
 
 
 class Panel(HtmlWindow):
@@ -26,7 +27,7 @@ class Panel(HtmlWindow):
 
     def __post_init__(self):
         self.panes = [
-            # Stats(self.io),
+            Stats(self.curses_window, self.io),
         ]
         self.pane_i = Limited(len(self.panes), 0, 0)
 
@@ -38,6 +39,11 @@ class Panel(HtmlWindow):
 
     def _render(self, subject, perception):
         super()._render(subject, perception)
+        self.panes[self.pane_i.current].render(
+            subject, perception,
+            flip2(self.curses_window.getmaxyx()),
+            (0, 0),
+        )
 
     def _calculate_visibility(self, subject, perception):
         return not self.io.memory.in_cutscene
