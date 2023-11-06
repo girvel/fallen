@@ -9,12 +9,11 @@ from src.lib.query import Q
 class Stats(Pane):
     template_name = "stats.html"
     name = "Характеристики"
-    mode = Move
 
     def get_arguments(self, subject, perception):
         return {
             "subject": subject,
             "potential_damage": int(potential_damage(subject)),
-            "mode": "MOVE" if self.mode == Move else "<rw>ATTACK</rw>",
+            "mode": "MOVE" if self.io.output.panel.mode == Move else "<rw>ATTACK</rw>",
             "inspection": (inspected := ~Q(subject).act[Inspect].subject) and inspect(inspected),
         }
