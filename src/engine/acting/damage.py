@@ -32,7 +32,7 @@ def attack(source: DynamicEntity, target: DynamicEntity, hades: Hades):
     if (weapon := ~Q(source).weapon) is None: return
 
     return inflict_damage(
-        target, potential_damage(source), weapon.damage_kind, hades,
+        target, potential_damage(source), weapon.damage_kind, hades, source,
     )
 
 
@@ -45,7 +45,9 @@ def potential_damage(source: DynamicEntity):
     return source.weapon.power * skill_k
 
 
-def inflict_damage(target: DynamicEntity, power: float, damage_kind: str, hades: Hades):
+def inflict_damage(
+    target: DynamicEntity, power: float, damage_kind: str, hades: Hades, source: DynamicEntity
+):
     if (health := ~Q(target).health) is None: return
 
     armor = armor_data[health.armor_kind]
@@ -63,7 +65,7 @@ def inflict_damage(target: DynamicEntity, power: float, damage_kind: str, hades:
     )
 
     health.amount.move(-total_damage)
-    health.last_damaged_by.append(target)
+    health.last_damaged_by.append(source)
 
     if health.amount.current <= 0:
         logging.info(f"{target.name} is killed")

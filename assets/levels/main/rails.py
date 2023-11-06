@@ -217,20 +217,26 @@ class Rails(RailsBase):
         yield {c.mother: Leave(), c.brother: Leave()}
 
 
-    # @Scene.new()
+    def is_player_killing_the_dog(self):
+        return (
+            self.characters.rabid_dog.health.amount.current <= 0
+            and self.characters.player in self.characters.rabid_dog.health.last_damaged_by
+        )
+
     @Scene.new(lambda self: (
         self.characters.player.health.amount.current <= 0
-        or self.characters.rabid_dog.health.amount.current <= 0
+        or self.is_player_killing_the_dog()
     ))
     def player_dies(self, scene):
         c = self.characters
         p = self.positions
         memory = c.player.ai.memory
 
+        self.is_dog_dead = self.is_player_killing_the_dog()
+
         scene.enabled = False
         yield from self.start_cutscene()
 
-        self.is_dog_dead = self.characters.rabid_dog.health.amount.current <= 0
         if self.is_dog_dead:
             self.girl_gives_flower.enabled = True
 
@@ -314,7 +320,7 @@ class Rails(RailsBase):
         yield {c.girl: Say(f"Я {c.girl.name.first}.")}
 
         yield from c.player.ai.wait_seconds(1.5)
-        yield {c.player: Say(f"{c.girl.name}, пряча взгляд, суёт тебе что-то в руку и убегает.", True)}
+        yield {c.player: Say(f"{c.girl.name.first}, пряча взгляд, суёт тебе что-то в руку и убегает.", True)}
         c.player.inventory.add_item(Lily())
 
         c.girl.ai.composite[Pather].going_to = p.girl_runs_away
