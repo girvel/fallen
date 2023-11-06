@@ -39,7 +39,7 @@ class HtmlWindow(Window, metaclass=ABCMeta):
         self.curses_window.clear()
 
         if self.border_curses_window:
-            self.border_curses_window.mvderwin(*add2(self.curses_window.getparyx(), (-1, -3)))
+            self.border_curses_window.mvwin(*add2(self.curses_window.getbegyx(), (-1, -3)))
             self.border_curses_window.resize(*add2(self.curses_window.getmaxyx(), (2, 6)))
 
             self.border_curses_window.clear()
