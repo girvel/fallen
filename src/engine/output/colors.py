@@ -47,4 +47,11 @@ class ColorPair:
                 curses.init_pair(fg_i * 8 + bg_i, fg_i, bg_i)
 
     def to_curses(self):
-        return curses.color_pair(self.fg * 8 + self.bg)
+        return curses.color_pair(self.to_code())
+
+    def to_code(self):
+        return self.fg * 8 + self.bg
+
+    @classmethod
+    def from_code(cls, code):
+        return cls(code // 8, code % 8)

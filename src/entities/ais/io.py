@@ -31,6 +31,7 @@ class Memory:
     spacial_memory: SpacialMemory = field(default_factory=SpacialMemory)
 
     current_sound: Optional[Sound] = None
+    chat: list[Sound] = field(default_factory=list)
 
     options: Optional[dict[str, Optional[Action]]] = None
     selected_option_i: int = 0
@@ -104,6 +105,10 @@ class IO(DynamicEntity):  # TODO redo as composite?
             for sound in perception.hearing.values()
             if sound is not None
         ), None)
+
+        for sound in perception.hearing.values():
+            if sound is None or sound.is_internal: continue
+            self.memory.chat.append(sound)
 
         if not self.memory.in_cutscene:
             self.memory.is_skipping = False

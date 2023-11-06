@@ -1,5 +1,6 @@
 from src.engine.acting.actions.move import Move
 from src.engine.output.html_window import HtmlWindow
+from src.engine.output.windows.panes.chat import Chat
 from src.engine.output.windows.panes.controls import Controls
 from src.engine.output.windows.panes.inventory import Inventory
 from src.engine.output.windows.panes.quests import Quests
@@ -21,6 +22,7 @@ class Panel(HtmlWindow):
             Stats(self.curses_window, self.io),
             Inventory(self.curses_window, self.io),
             Quests(self.curses_window, self.io),
+            Chat(self.curses_window, self.io),
         ]
         self.pane_i = Limited(len(self.panes), 0, 1)
 

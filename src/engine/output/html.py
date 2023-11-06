@@ -34,6 +34,8 @@ class CursesHtmlRenderer(HTMLParser):
         self.feed(html.replace("\n", ""))
 
     def handle_starttag(self, tag, attrs, **kwargs):
+        attrs = dict(attrs)
+
         match tag:
             case "center":
                 self.horizontal_alignment = HorizontalAlignment.center
@@ -55,6 +57,8 @@ class CursesHtmlRenderer(HTMLParser):
                     h, w,
                     "- ", ColorPair(yellow),
                 )
+            case "color":
+                self.color_stack.append(ColorPair.from_code(int(attrs["code"])))
 
     def handle_endtag(self, tag):
         match tag:
@@ -63,7 +67,7 @@ class CursesHtmlRenderer(HTMLParser):
             case "bottom":
                 self.vertical_alignment = VerticalAlignment.top
                 self.y = 0
-            case "y" | "rw":
+            case "y" | "rw" | "color":
                 self.color_stack.pop()
             case "div" | "p" | "li":
                 self.y += 1

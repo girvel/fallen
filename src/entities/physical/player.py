@@ -2,6 +2,7 @@ from src.engine.acting.damage import Weapon, Health, DamageKind, ArmorKind
 from src.engine.inventory import Inventory
 from src.engine.naming.library import reserved_names
 from src.engine.naming.name import CompositeName
+from src.engine.output.colors import ColorPair, white
 from src.engine.traits import Traits
 from src.entities.abstract.human import Human
 from src.systems.ai import Senses
@@ -9,6 +10,7 @@ from src.systems.ai import Senses
 
 class Player(Human):
     character = '@'
+    color = ColorPair(white)
 
     ai = None  # set to IO on level loading
     act = None

@@ -18,7 +18,7 @@ class Say(Action):
 
     def execute(self, actor: DynamicEntity, hades: Hades, genesis: Genesis):
         genesis.entities_to_create.add(Sound(
-            self.content, self.is_internal, self.meme, p=actor.p, level=actor.level
+            actor, self.content, self.is_internal, self.meme, p=actor.p, level=actor.level
         ))
 
         logging.info(f"{actor.name}: '{self.content}'")

@@ -1,0 +1,5 @@
+{% for message in chat %}
+<p>
+    <color code="{{ message.parent.color.to_code() }}">{{ message.parent.name }}</color>: {{ message.content }}
+</p>
+{% endfor %}
