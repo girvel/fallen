@@ -15,6 +15,7 @@ from src.engine.rails_base import RailsBase, Scene
 from src.entities.ais.dummy_ai import wait_finish
 from src.entities.ais.io import Quest
 from src.entities.items.lily import Lily
+from src.entities.physical.frog import Frog
 from src.entities.physical.rabid_dog import RabidDog
 from src.entities.physical.soldier import Soldier
 from src.entities.special.level import Level
@@ -29,9 +30,9 @@ class Rails(RailsBase):
             player=self.get_player(),
             mother=next(self.level.find(Mother)),
             brother=next(self.level.find(Brother)),
-            soldiers=list(self.level.find(Soldier)),
             rabid_dog=next(self.level.find(RabidDog)),
             girl=None,
+            frogs=list(self.level.find(Frog))
         )
 
         self.positions = Entity(
@@ -326,5 +327,22 @@ class Rails(RailsBase):
         c.girl.ai.composite[Pather].going_to = p.girl_runs_away
         yield from wait_finish(c.girl)
         yield {c.girl: Leave()}
+
+        yield from self.end_cutscene()
+
+    @Scene.new(lambda self:
+        any(self.characters.player in f.health.last_damaged_by for f in self.characters.frogs)
+    )
+    def player_attacks_frog(self, scene):
+        c = self.characters
+
+        scene.enabled = False
+
+        c.player.traits.brutality += 1
+
+        yield from self.start_cutscene()
+        yield from self.center_camera()
+
+        yield {c.player: Say("Нет, этого недостаточно.")}
 
         yield from self.end_cutscene()

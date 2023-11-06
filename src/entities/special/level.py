@@ -1,7 +1,7 @@
 import logging
 from functools import reduce
 from pathlib import Path
-from typing import TypeVar, Callable, Any
+from typing import TypeVar, Callable, Any, Type, Iterator
 
 import numpy
 import toml as toml
@@ -26,11 +26,12 @@ def load_palette_from(path):
 
     return result
 
+T = TypeVar('T')
+
 class Level(DynamicEntity):
     name = Name("Уровень")
     no_entity_character = "."
 
-    T = TypeVar('T')
     def put(self, p: int2, entity: T) -> T:
         grid_set(self.grids[entity.layer], p, entity)
         entity.p = p
@@ -105,7 +106,7 @@ class Level(DynamicEntity):
 
         self.transparency_cache = numpy.full(self.size, 1)
 
-    def query(self, request: Callable[[DynamicEntity], bool]):
+    def query(self, request: Callable[[DynamicEntity], bool]) -> Iterator[DynamicEntity]:
         return (
             e
             for _, layer in self.grids
@@ -114,7 +115,7 @@ class Level(DynamicEntity):
             if e and request(e)
         )
 
-    def find(self, entity_type: Any):
+    def find(self, entity_type: Type[T]) -> Iterator[T]:
         return self.query(lambda e: e.character == entity_type.character)
 
     def iter_square(self, p: int2, r: int):
