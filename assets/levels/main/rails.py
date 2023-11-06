@@ -155,7 +155,7 @@ class Rails(RailsBase):
         yield from wait_for(10)
         memory.add_quest(q.find_someone_to_fight)
 
-        yield from self.end_cutscene()
+        yield from self.end_cutscene()  # TODO NEXT what's up with the late camera centering?
 
 
     @Scene.new(lambda self: d2(self.characters.brother.p, self.positions.before_away) <= 2)

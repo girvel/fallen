@@ -13,6 +13,7 @@ from src.engine.acting.actions.cast_fire_flow import CastFireFlow
 from src.engine.acting.actions.inspect import Inspect
 from src.engine.acting.actions.move import Move
 from src.engine.acting.actions.no_action import NoAction
+from src.engine.input.mode import ALL_MODES, GENERAL, GAME, OPTIONS, NOTIFICATION, DIALOGUE_LINE, CUTSCENE
 from src.lib.toolkit import curses_wrong_characters
 from src.lib.vector import add2, up, down, left, right
 from src.systems.ai import Perception
@@ -41,19 +42,18 @@ class Key:
 
 
 def generate_hotkeys(debug_mode):
-    result = Entity(global_={}, game={}, options={}, notification={}, dialog_line={}, cutscene={})
-    # TODO mode as string enum
+    result = {mode: {} for mode in ALL_MODES}
 
-    @Hotkey.define(result.global_, ["Q", 3] if debug_mode else ["Q"], "Выйти из игры")
+    @Hotkey.define(result[GENERAL], ["Q", 3] if debug_mode else ["Q"], "Выйти из игры")
     def quit_(io, subject, perception):
         raise GameEnd
 
-    @Hotkey.define(result.global_, [curses.KEY_RESIZE])
+    @Hotkey.define(result[GENERAL], [curses.KEY_RESIZE])
     def resize_gui(io, subject, perception):
         pass
 
     def generate_movement_function(key, direction, description):
-        @Hotkey.define(result.game, [key], description)
+        @Hotkey.define(result[GAME], [key], description)
         def move(io, subject, perception):
             if io.output.panel.mode == Move:
                 return Move(direction)
@@ -80,26 +80,26 @@ def generate_hotkeys(debug_mode):
     for key, direction in directions_by_key.items():
         generate_movement_function(key, direction, "Идти " + description_by_key[key])
 
-    @Hotkey.define(result.game, ["r"], "Переключить атаку/движение")
+    @Hotkey.define(result[GAME], ["r"], "Переключить атаку/движение")
     def change_mode(io, subject, perception):
         io.output.panel.mode = (io.output.panel.mode == Move) and Attack or Move
 
-    @Hotkey.define(result.game, ["1"], "Сотворить поток огня")
+    @Hotkey.define(result[GAME], ["1"], "Сотворить поток огня")
     def cast_fire_flow(io, subject, perception):
         while (hotkey := chr(io.input.key_queue.read_key())) not in "wasd":
             if hotkey == "": return
 
         return CastFireFlow(directions_by_key[hotkey])
 
-    @Hotkey.define(result.game, [curses.KEY_LEFT], "Предыдущая панель")
+    @Hotkey.define(result[GAME], [curses.KEY_LEFT], "Предыдущая панель")
     def previous_pane(io, subject, perception):
         io.output.panel.pane_i.move(-1)
 
-    @Hotkey.define(result.game, [curses.KEY_RIGHT], "Следующая панель")
+    @Hotkey.define(result[GAME], [curses.KEY_RIGHT], "Следующая панель")
     def next_pane(io, subject, perception):
         io.output.panel.pane_i.move(1)
 
-    @Hotkey.define(result.game, [curses.KEY_MOUSE], "Присмотреться к объекту")
+    @Hotkey.define(result[GAME], [curses.KEY_MOUSE], "Присмотреться к объекту")
     def inspect(io, subject, perception):
         _, mx, my, _, _ = curses.getmouse()
         target = next((
@@ -108,33 +108,33 @@ def generate_hotkeys(debug_mode):
         ), None)
         return target and Inspect(target)
 
-    @Hotkey.define(result.options, ["w", curses.KEY_UP], "Сдвинуть курсор вверх")
+    @Hotkey.define(result[OPTIONS], ["w", curses.KEY_UP], "Сдвинуть курсор вверх")
     def move_cursor_up(io, subject, perception):
         io.memory.selected_option_i = (io.memory.selected_option_i - 1) % len(io.memory.options)
 
-    @Hotkey.define(result.options, ["s", curses.KEY_DOWN], "Сдвинуть курсор вниз")
+    @Hotkey.define(result[OPTIONS], ["s", curses.KEY_DOWN], "Сдвинуть курсор вниз")
     def move_cursor_down(io, subject, perception):
         io.memory.selected_option_i = (io.memory.selected_option_i + 1) % len(io.memory.options)
 
-    @Hotkey.define(result.options, [Key.enter, "e"], "Выбрать подсвеченный вариант")
+    @Hotkey.define(result[OPTIONS], [Key.enter, "e"], "Выбрать подсвеченный вариант")
     def submit(io, subject, perception):
         return io.memory.select_option()
 
-    @Hotkey.define(result.notification, [Key.enter, "e"], "Закрыть уведомление")
+    @Hotkey.define(result[NOTIFICATION], [Key.enter, "e"], "Закрыть уведомление")
     def submit(io, subject, perception):
         return NoAction()
 
-    @Hotkey.define(result.dialog_line, [" "], "Перейти к следующей реплике")
+    @Hotkey.define(result[DIALOGUE_LINE], [" "], "Перейти к следующей реплике")
     def next_(io, subject, perception):
         return NoAction()
 
-    @Hotkey.define(result.dialog_line, [""], "Пропустить сцену")
-    @Hotkey.define(result.cutscene, [""], "Пропустить сцену")
+    @Hotkey.define(result[DIALOGUE_LINE], [""], "Пропустить сцену")
+    @Hotkey.define(result[CUTSCENE], [""], "Пропустить сцену")
     def skip(io, subject, perception):
         io.memory.is_skipping = True
         return NoAction()
 
-    @Hotkey.define(result.cutscene, [-1])
+    @Hotkey.define(result[CUTSCENE], [-1])
     def watch(io, subject, perception):
         if not io.memory.is_skipping and io.max_fps:
             time.sleep(max(0., 1 / io.max_fps - time.time() + io.input.last_t))

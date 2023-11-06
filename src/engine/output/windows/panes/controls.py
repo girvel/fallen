@@ -1,6 +1,7 @@
 import curses
 
 from src.engine.input.hotkeys import Key
+from src.engine.input.mode import ALL_MODES
 from src.engine.output.windows.panes.pane import Pane
 
 
@@ -20,15 +21,6 @@ class Controls(Pane):
         ord(""): "Esc",
     }
 
-    mode_translation = {  # TODO move to the Mode itself
-        "global_": "Глобальные",
-        "game": "Игра",
-        "options": "Выбор варианта",
-        "dialog_line": "Диалог",
-        "cutscene": "Сцена",
-        "notification": "Уведомление",
-    }
-
     def get_arguments(self, subject, perception):
         def reduce_hotkeys(hotkey_collection):
             result = {}
@@ -46,8 +38,8 @@ class Controls(Pane):
 
         return {
             "hotkeys": {
-                self.mode_translation[mode]: reduce_hotkeys(self.io.input.hotkeys[mode])
+                mode.name: reduce_hotkeys(self.io.input.hotkeys[mode])
                 for mode
-                in ["global_", "game", "options", "dialog_line", "cutscene", "notification"]
+                in ALL_MODES
             }
         }
