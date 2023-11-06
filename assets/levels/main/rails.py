@@ -163,6 +163,7 @@ class Rails(RailsBase):
     @Scene.new(lambda self: d2(self.characters.brother.p, self.positions.before_away) <= 2)
     def brother_path_middlepoint(self, scene):
         scene.enabled = False
+        yield from wait_for(30)
         self.characters.brother.ai.composite[Pather].going_to = self.positions.away
         yield from ()
 
@@ -195,7 +196,7 @@ class Rails(RailsBase):
 
         c.player.traits.naivety += 1
         c.player.traits.pain += 1
-        c.player.traits.chaos += 1
+        c.player.traits.curiosity += 1
 
         c.brother.ai.composite[Follower].subject = c.mother
         c.brother.ai.composite[Pather].going_to = c.mother.p
