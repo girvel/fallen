@@ -18,6 +18,7 @@ def main(
     no_render: bool = False,
     no_rails: bool = False,
     no_fixed_fps: bool = False,
+    pause_for_debugger: bool = False,
 ):
     """
     Launch the Fallen RPG
@@ -34,6 +35,9 @@ def main(
     logging.info("Started")
 
     track = track_file and Path(track_file).read_text().replace("\n", "")
+
+    if pause_for_debugger:
+        input()
 
     curses.wrapper(init_ecs.init,
         track=track,
