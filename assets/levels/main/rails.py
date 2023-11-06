@@ -5,6 +5,7 @@ from ecs import Entity, exists
 from assets.levels.main.entities.physical.brother import Brother
 from assets.levels.main.entities.physical.girl import Girl
 from assets.levels.main.entities.physical.mother import Mother
+from src.engine.acting.actions.attack import Attack
 from src.engine.acting.actions.leave import Leave
 from src.engine.acting.actions.no_action import NoAction
 from src.engine.acting.actions.say import Say
@@ -17,10 +18,10 @@ from src.entities.ais.io import Quest
 from src.entities.items.lily import Lily
 from src.entities.physical.frog import Frog
 from src.entities.physical.rabid_dog import RabidDog
-from src.entities.physical.soldier import Soldier
 from src.entities.special.level import Level
 from src.lib import vector
 from src.lib.concurrency import wait_for, wait_while
+from src.lib.query import Q
 from src.lib.vector import d2, add2
 
 
@@ -330,9 +331,7 @@ class Rails(RailsBase):
 
         yield from self.end_cutscene()
 
-    @Scene.new(lambda self:
-        any(self.characters.player in f.health.last_damaged_by for f in self.characters.frogs)
-    )
+    @Scene.new(lambda self: ~Q(self.characters.player.act)[Attack].target.character == Frog.character)
     def player_attacks_frog(self, scene):
         c = self.characters
 
@@ -344,5 +343,26 @@ class Rails(RailsBase):
         yield from self.center_camera()
 
         yield {c.player: Say("Нет, этого недостаточно.")}
+
+        yield from self.end_cutscene()
+
+        self.player_attacks_frog_again.enabled = True
+
+
+    @Scene.new(
+        lambda self: ~Q(self.characters.player.act)[Attack].target.character == Frog.character,
+        enabled=False,
+    )  # TODO write & use is_attacking
+    def player_attacks_frog_again(self, scene):
+        c = self.characters
+
+        scene.enabled = False
+
+        c.player.traits.brutality += 1
+
+        yield from self.start_cutscene()
+        yield from self.center_camera()
+
+        yield {c.player: Say("А в этом что-то есть.")}
 
         yield from self.end_cutscene()
