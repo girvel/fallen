@@ -25,6 +25,7 @@ class Game(Window):
 
     def _move_camera(self, subject):
         h, w = self.curses_window.getmaxyx()
+        w -= 1  # display area width is 1 character smaller
 
         following_offset = floordiv2((w, h), 3)
 

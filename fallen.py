@@ -29,6 +29,7 @@ def main(
         no_render: whether to disable render
         no_rails: disable level's rails
         no_fixed_fps: disable fixed FPS
+        pause_for_debugger: wait for 'Enter' key (useful for debugger connection)
     """
 
     init_logging()
