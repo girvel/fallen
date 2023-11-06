@@ -2,19 +2,14 @@ from src.engine.acting.actions.inspect import Inspect
 from src.engine.acting.actions.move import Move
 from src.engine.acting.damage import potential_damage
 from src.engine.inspection import inspect
-from src.engine.output.html_window import HtmlWindow
+from src.engine.output.windows.panes.pane import Pane
 from src.lib.query import Q
-from src.lib.vector import sub2
 
 
-class Stats(HtmlWindow):
-    package_name = __name__
+class Stats(Pane):
     template_name = "stats.html"
-
+    name = "Характеристики"
     mode = Move
-
-    def _responsive_size(self, subject, perception, max_size):
-        return 0, 0
 
     def get_arguments(self, subject, perception):
         return {

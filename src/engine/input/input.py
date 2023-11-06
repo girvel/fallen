@@ -23,9 +23,6 @@ class Input:
         if debug_track:
             logging.info(f"Debug track: '{debug_track}'")
 
-        if self.io.debug_mode:
-            self.key_queue.read_key([Key.enter])
-
     def wait_for_input(self, subject, perception: Perception) -> Action:
         if self.io.memory.in_cutscene:
             if self.io.memory.options:
