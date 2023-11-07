@@ -14,7 +14,7 @@ from src.engine.ai.follower import Follower
 from src.engine.ai.pather import Pather
 from src.engine.rails_base import RailsBase, Scene
 from src.entities.ais.dummy_ai import wait_finish
-from src.entities.ais.io import Quest
+from src.entities.ais.io import Quest, Notification
 from src.entities.items.lily import Lily
 from src.entities.physical.frog import Frog
 from src.entities.physical.rabid_dog import RabidDog
@@ -158,6 +158,12 @@ class Rails(RailsBase):
         memory.add_quest(q.find_someone_to_fight)
 
         yield from self.end_cutscene()
+
+        memory.notification_queue.append(Notification("Управление",
+            "<y>wasd </y>- движение<br/>"
+            "<y>r </y>- достать/убрать оружие<br/>"
+            "<y>мышь </y>- присмотреться к объекту"
+        ))
 
 
     @Scene.new(lambda self: d2(self.characters.brother.p, self.positions.before_away) <= 2)

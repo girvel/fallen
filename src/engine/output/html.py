@@ -69,7 +69,7 @@ class CursesHtmlRenderer(HTMLParser):
                 self.y = 0
             case "y" | "rw" | "color":
                 self.color_stack.pop()
-            case "div" | "p" | "li":
+            case "div" | "p" | "li" | "br":
                 self.y += 1
                 self.x = 0
 

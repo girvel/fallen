@@ -42,18 +42,18 @@ class Memory:
     is_vision_disabled: bool = False
 
     _quests: list[Quest] = field(default_factory=list)
-    _notification_queue: list[Notification] = field(default_factory=list)
+    notification_queue: list[Notification] = field(default_factory=list)
     current_notification: Notification = None
 
     def add_quest(self, quest: Quest):
         self._quests.append(quest)
-        self._notification_queue.append(Notification("Новая задача", quest.description))
+        self.notification_queue.append(Notification("Новая задача", quest.description))
 
     def complete_quest(self, quest: Quest):
         if quest not in self._quests: return
 
         self._quests.remove(quest)
-        self._notification_queue.append(Notification("Задача завершена", quest.description))
+        self.notification_queue.append(Notification("Задача завершена", quest.description))
 
     def get_quests(self):
         return self._quests
@@ -113,8 +113,8 @@ class IO(DynamicEntity):  # TODO redo as composite?
         if not self.memory.in_cutscene:
             self.memory.is_skipping = False
 
-        if len(self.memory._notification_queue) > 0:
-            self.memory.current_notification = self.memory._notification_queue.pop(0)
+        if len(self.memory.notification_queue) > 0:
+            self.memory.current_notification = self.memory.notification_queue.pop(0)
         else:
             self.memory.current_notification = None
 
