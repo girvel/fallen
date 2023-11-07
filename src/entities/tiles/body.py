@@ -26,6 +26,8 @@ class Body(DynamicEntity):
             "тв": "телом",
             "пр": "теле",
         }), Name(f"{parent_name:ро}"))
+        # TODO NEXT redo that
+        # TODO NEXT abstract body
 
         self.items = items or []
 
