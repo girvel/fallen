@@ -74,6 +74,7 @@ class Game(Window):
                 ) | (
                     curses.A_BLINK
                     if self.io.memory.current_sound is not None
+                    and not self.io.memory.current_sound.is_internal
                     and self.io.memory.current_sound is perception.hearing.get(p)
                     else 0
                 )
