@@ -2,6 +2,7 @@ from dataclasses import dataclass
 
 import pymorphy2
 
+from src.lib.toolkit import soft_capitalize
 
 _analyzer = pymorphy2.MorphAnalyzer()
 _cases = {
@@ -38,10 +39,11 @@ class Name:
 
     @classmethod
     def auto(cls, source: str, variant: int = 0):
+        optionally_capitalize = (lambda x: x.capitalize()) if source[0].isupper() else (lambda x: x)
         parse = _analyzer.parse(source)[variant]
 
         return Name({
-            ru_case: parse.inflect({en_case}).word
+            ru_case: optionally_capitalize(parse.inflect({en_case}).word)
             for ru_case, en_case in _cases.items()
         })
 

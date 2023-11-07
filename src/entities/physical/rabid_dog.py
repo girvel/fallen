@@ -20,15 +20,14 @@ class RabidDog(DynamicEntity):
     on_death = body_factory
 
     def __init__(self):
-        # self.name = Name({
-        #     "им": "бешеный пёс",
-        #     "ро": "бешеного пса",
-        #     "да": "бешеному псу",
-        #     "ви": "бешеного пса",
-        #     "тв": "бешеным псом",
-        #     "пр": "бешеном псе",
-        # })
-        self.name = Name.auto("пёс")  # TODO NEXT change back
+        self.name = Name({
+            "им": "бешеный пёс",
+            "ро": "бешеного пса",
+            "да": "бешеному псу",
+            "ви": "бешеного пса",
+            "тв": "бешеным псом",
+            "пр": "бешеном псе",
+        })
 
         self.weapon = Weapon(3, DamageKind.Piercing)
         self.health = Health(20, ArmorKind.Organic)

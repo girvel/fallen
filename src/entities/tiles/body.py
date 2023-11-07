@@ -21,7 +21,7 @@ class Body(DynamicEntity):
         **attributes,
     ):
         self.name = self.base_name.concat(f" {parent_name:ро}")
-        # TODO NEXT abstract body
+        # TODO abstract body
 
         self.items = items or []
 

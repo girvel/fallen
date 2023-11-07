@@ -1,22 +1,3 @@
-[hugh]  # the player character
-"им" = "Хью"
-
-[mike]  # the brother
-"им" = "Майк"
-"ро" = "Майка"
-"да" = "Майку"
-"ви" = "Майка"
-"тв" = "Майком"
-"пр" = "Майке"
-
-[lilia]  # the mother
-"им" = "Лилия"
-"ро" = "Лилии"
-"да" = "Лилии"
-"ви" = "Лилию"
-"тв" = "Лилией"
-"пр" = "Лилии"
-
 [kinds_male]  # player family name
 "им" = "Кайндс"
 "ро" = "Кайндса"
@@ -25,16 +6,8 @@
 "тв" = "Кайндсом"
 "пр" = "Кайндсе"
 
-[kinds_female]
+[kinds_female]  # TODO maybe get rid of postfixes?
 "им" = "Кайндс"
 
-[morra]  # the girl from the village
-"им" = "Морра"
-"ро" = "Морры"
-"да" = "Морре"
-"ви" = "Морру"
-"тв" = "Моррой"
-"пр" = "Морре"
-
-[wild_female]
+[wild_female]  # girl from the village
 "им" = "Уайлд"
