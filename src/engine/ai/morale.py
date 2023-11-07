@@ -12,7 +12,7 @@ from src.systems.ai import Perception
 class Morale:
     aggression_cost: float = 35
 
-    def use(self, subject: DynamicEntity, perception: Perception):
+    def use(self, subject: DynamicEntity, perception: Perception) -> list[tuple[DynamicEntity, int]]:
         attitude_changes = [
             (e, -self.aggression_cost) for e in perception.vision.physical.values()
             if isinstance(~Q(e).act, Attack) and subject.attitude.get(e.act.target) >= 0

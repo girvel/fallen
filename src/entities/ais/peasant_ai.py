@@ -2,6 +2,7 @@ import random
 from enum import Enum
 
 from src.engine.acting.actions.say import Say
+from src.engine.ai.speaker import Speaker
 from src.entities.special.level import Level
 from src.lib.typed_dict import TypeDict
 from src.engine.ai.fight_or_flight import FightOrFlight
@@ -35,9 +36,8 @@ class PeasantAi:
             FightOrFlight(False),
             Morale(),
             Wanderer(),
+            Speaker(),
         ])
-
-        self.messages = []
 
     # It is possible to extract ModalAi parent/component?
     def make_decision(self, subject, perception):
@@ -47,7 +47,9 @@ class PeasantAi:
         aggressives = self.composite[Morale].use(subject, perception)
 
         for e, offset in aggressives:
-            self.messages.append(Say(f"<Выражает недовольство {e.name:тв}>", meme=Meme.MoraleChange(e, offset)))
+            self.composite[Speaker].messages.append(
+                Say(f"<Выражает недовольство {e.name:тв}>", meme=Meme.MoraleChange(e, offset))
+            )
 
         if (
             (len(aggressives) > 0 or self.fight_or_flight_period.step())
@@ -58,17 +60,7 @@ class PeasantAi:
         if action := self.composite[Pather].use(subject, perception, self.composite[SpacialMemory]):
             return action
 
-        if (
-            self.chat_period.step_without_reset()
-            and len(self.messages) > 0
-            and any(
-                ~Q(e).faction == subject.faction
-                for e in perception.vision.physical.values()
-            )
-        ):
-            self.chat_period.reset()
-            message, *self.messages = self.messages
-            return message
+        if action := self.composite[Speaker].use(subject, perception): return action
 
         match self.mode:
             case Mode.GoHome:
