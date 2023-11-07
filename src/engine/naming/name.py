@@ -30,6 +30,12 @@ class Name:
     def __format__(self, format_spec):
         return self.cases.get(format_spec, self.cases["им"])
 
+    def concat(self, postfix: str):
+        return Name({
+            case_name: case + postfix
+            for case_name, case in self.cases.items()
+        })
+
     @classmethod
     def auto(cls, source: str, variant: int = 0):
         parse = _analyzer.parse(source)[variant]

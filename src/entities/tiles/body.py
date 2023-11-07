@@ -10,6 +10,8 @@ from src.lib.query import Q
 
 
 class Body(DynamicEntity):
+    base_name = Name.auto("тело")
+
     character = '&'
     color = ColorPair(red)
     layer = "tiles"
@@ -18,15 +20,7 @@ class Body(DynamicEntity):
         self, parent_name: Name, items: list[Any] = None,
         **attributes,
     ):
-        self.name = CompositeName(Name({
-            "им": "тело",
-            "ро": "тела",
-            "да": "тело",
-            "ви": "тела",
-            "тв": "телом",
-            "пр": "теле",
-        }), Name(f"{parent_name:ро}"))
-        # TODO NEXT redo that
+        self.name = self.base_name.concat(f" {parent_name:ро}")
         # TODO NEXT abstract body
 
         self.items = items or []
