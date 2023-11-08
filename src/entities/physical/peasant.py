@@ -2,8 +2,9 @@ import random
 
 from src.engine.acting.damage import Weapon, Health, DamageKind, ArmorKind
 from src.engine.ai.spacial_memory import SpacialMemory
-from src.engine.naming.library import random_composite_name
+from src.engine.naming.library import random_composite_name, first_names
 from src.engine.attitude.implementation import common_attitude, Faction
+from src.engine.naming.name import CompositeName
 from src.entities.abstract.human import Human
 from src.entities.ais.peasant_ai import PeasantAi
 from src.lib.vector import sub2, area2, map_grid
@@ -31,6 +32,7 @@ class Peasant(Human):
                 level.markup.houses,
                 [area2(sub2(h.house_borders[1], h.house_borders[0])) for h in level.markup.houses]
             )
+            self.name = CompositeName(random.choice(first_names[self.sex]), self.house.family_names[self.sex])
 
         self.ai.composite[SpacialMemory].knows(level)
         self.ai.favourite_zones = level.markup.zones
