@@ -47,8 +47,11 @@ last_names: list[dict[Sex, Name]] = [
 ]
 
 reserved_names = Entity(**
-    {name: Name(cases) for name, cases in toml.loads(_read_file("reserved.toml")).items()} |
     {
+        identifier: {sex: Name(cases) for sex, cases in name.items()}
+        for identifier, name
+        in toml.loads(_read_file("reserved.toml")).items()
+    } | {
         identifier: Name.auto(name, int(index))
         for identifier, name, index
         in _parse_csv(_read_file("reserved.csv"))

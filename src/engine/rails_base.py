@@ -6,7 +6,9 @@ from typing import Callable, Iterator
 from ecs import DynamicEntity
 
 from src.engine.acting.action import Action
+from src.engine.ai.spacial_memory import SpacialMemory
 from src.engine.naming.name import Name
+from src.entities.ais.dummy_ai import DummyAi
 from src.entities.physical.player import Player
 from src.entities.special.level import Level
 from src.lib.vector import floordiv2, sub2
@@ -31,6 +33,8 @@ class RailsBase(DynamicEntity):
         self.level = level
         self.ms = ms
         self.genesis = genesis
+
+        self._ai_storage = {}
 
         logging.info(f"Initialized rails with scenes {[s.name for s in self.scenes]}")
 
@@ -91,6 +95,15 @@ class RailsBase(DynamicEntity):
         self.genesis.entities_to_create.add(entity)
         yield
         if hasattr(entity, "after_load"): entity.after_load(entity.level)
+
+    def disable_complex_ai(self, entity) -> None:
+        self._ai_storage[entity] = entity.ai
+        entity.ai = DummyAi()
+        entity.ai.composite[SpacialMemory].knows(self.level)
+
+    def enable_complex_ai(self, entity) -> None:
+        entity.ai = self._ai_storage[entity]
+        del self._ai_storage[entity]
 
 
 @dataclass(eq=False)

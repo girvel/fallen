@@ -9,7 +9,7 @@ from src.entities.abstract.human import Human
 
 
 class Girl(Human):
-    name = CompositeName(reserved_names.morra, reserved_names.wild_female)
+    name = CompositeName(reserved_names.morra, reserved_names.wild["female"])
 
     character = "m"
     color = ColorPair(blue)

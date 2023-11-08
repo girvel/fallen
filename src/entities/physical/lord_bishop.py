@@ -5,14 +5,13 @@ from src.engine.naming.name import Name
 from src.engine.output.colors import ColorPair, yellow
 from src.entities.abstract.human import Human
 from src.entities.ais.dummy_ai import DummyAi
-from src.lib.vector import map_grid
 from src.systems.ai import Senses
 
 
 class LordBishop(Human):
     name = Name("лорд Натаниэль")
     sex = "male"
-    character = 'L'
+    character = 'N'
     color = ColorPair(yellow)
     faction = Faction.Church
 

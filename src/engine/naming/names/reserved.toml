@@ -1,13 +1,11 @@
-[kinds_male]  # player family name
-"им" = "Кайндс"
-"ро" = "Кайндса"
-"да" = "Кайндсу"
-"ви" = "Кайндса"
-"тв" = "Кайндсом"
-"пр" = "Кайндсе"
+[kinds]  # player family name
+male."им" = "Кайндс"
+male."ро" = "Кайндса"
+male."да" = "Кайндсу"
+male."ви" = "Кайндса"
+male."тв" = "Кайндсом"
+male."пр" = "Кайндсе"
+female."им" = "Кайндс"
 
-[kinds_female]  # TODO maybe get rid of postfixes?
-"им" = "Кайндс"
-
-[wild_female]  # girl from the village
-"им" = "Уайлд"
+[wild]  # girl from the village
+female."им" = "Уайлд"

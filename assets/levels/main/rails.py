@@ -59,12 +59,15 @@ class Rails(RailsBase):
 
     @Scene.new()
     def introduction(self, scene):
+        scene.enabled = False
+
         c = self.characters
         p = self.positions
         q = self.quests
         memory = c.player.ai.memory
 
-        scene.enabled = False
+        self.disable_complex_ai(c.mother)
+
         yield from self.start_cutscene()
         yield from self.center_camera()
 
@@ -304,6 +307,7 @@ class Rails(RailsBase):
 
         self.vision_level.rails.talk_with_lord_bishop_2.enabled = True
         yield from self.plane_shift(self.vision_level, self.vision_level.rails.positions.observing_the_throne)
+        self.enable_complex_ai(c.mother)
 
 
     @Scene.new(lambda self: d2(self.characters.player.p, self.positions.kinds_yard_entrance) <= 2, enabled=False)

@@ -19,7 +19,7 @@ class Player(Human):
     on_death = lambda *_, **__: None
 
     def __post_init__(self):
-        self.name = CompositeName(reserved_names.hugh, reserved_names.kinds_male)
+        self.name = CompositeName(reserved_names.hugh, reserved_names.kinds["male"])
 
         self.sex = "male"
         self.weapon = Weapon(1, DamageKind.Crushing)

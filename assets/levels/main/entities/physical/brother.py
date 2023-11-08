@@ -15,7 +15,7 @@ class Brother(Human):
     sex = "male"
 
     def __post_init__(self, **attributes):
-        self.name = CompositeName(reserved_names.mike, reserved_names.kinds_male)
+        self.name = CompositeName(reserved_names.mike, reserved_names.kinds["male"])
 
         self.health = Health(30, ArmorKind.Organic)
         self.weapon = Weapon(4, DamageKind.Slashing)

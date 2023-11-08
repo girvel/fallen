@@ -68,7 +68,7 @@ class IO(DynamicEntity):  # TODO redo as composite?
     name = Name("Ввод/Вывод")
     cutscene_aware_flag = None
 
-    def __init__(self, stdscr, debug_track, debug_mode, is_render_enabled, max_fps):
+    def __init__(self, stdscr, debug_track, debug_mode, is_render_enabled, max_fps: int | None):
         self.debug_mode = debug_mode
 
         self.output = Output(self, stdscr, is_render_enabled)
