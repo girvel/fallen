@@ -1,4 +1,6 @@
-# Fallen: detail-oriented mini-RPG game
+English [Русский](/README.ru.md)
+
+# Fallen: reactive mini-RPG
 
 I always wanted to create my own RPG, here it is.
 
