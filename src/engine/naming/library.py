@@ -1,6 +1,7 @@
 import logging
 import random
 from pathlib import Path
+from typing import Literal
 
 import toml
 from ecs import Entity
@@ -9,7 +10,7 @@ from src.engine.naming.name import Name, CompositeName
 
 
 def random_composite_name(sex):
-    return CompositeName(random.choice(first_names[sex]), random.choice(last_names[sex]))
+    return CompositeName(random.choice(first_names[sex]), random.choice(last_names)[sex])
 
 
 def _read_file(name):
@@ -24,7 +25,9 @@ def _interpret_name(cases):
     return Name(cases)
 
 
-first_names = {
+Sex = Literal["male", "female"]
+
+first_names: dict[Sex, list[Name]] = {
     sex: list(map(Name, cases))
     for sex, cases in toml.loads(_read_file("first.toml")).items()
 }
@@ -32,14 +35,16 @@ first_names = {
 for sex, name, index in _parse_csv(_read_file("first.csv")):
     first_names[sex].append(Name.auto(name, int(index)))
 
-last_names = {
-    sex: list(map(Name, cases))
-    for sex, cases in toml.loads(_read_file("last.toml")).items()
-}
-
-for name, index in _parse_csv(_read_file("last.csv")):
-    last_names["male"].append(Name.auto(name, int(index)))
-    last_names["female"].append(Name(name))
+last_names: list[dict[Sex, Name]] = [
+    {sex: Name(cases) for sex, cases in name.items()}
+    for name in toml.loads(_read_file("last.toml"))["names"]
+] + [
+    {
+        "male": Name.auto(name, int(index)),
+        "female": Name(name),
+    }
+    for name, index in _parse_csv(_read_file("last.csv"))
+]
 
 reserved_names = Entity(**
     {name: Name(cases) for name, cases in toml.loads(_read_file("reserved.toml")).items()} |
