@@ -6,7 +6,7 @@ I always wanted to create my own RPG, here it is.
 
 ## Installation
 
-1. Install [Git](https://git-scm.com/) and [Python](https://www.python.org/downloads/) 3.10
+1. Install [Git](https://git-scm.com/) and [Python 3.10](https://www.python.org/downloads/)
 2. Open the terminal and go to your preffered installation directory
 3. Clone the repository
 
@@ -37,7 +37,7 @@ See `docs/`
 
 Basically a container for most use cases. `make` to run the game, `make debug` to run the game with debug utilities, `make profile` to run profiler, `make line_profile` to run line profiler.
 
-## Credits
+# Credits
 
 - Creator: [Nikita Dobrynin / girvel](https://github.com/girvel)
-- Game design/testing: [Alexlosos](https://github.com/potekhinavas)
+- Testing/game design: [Alexlosos](https://github.com/potekhinavas)
