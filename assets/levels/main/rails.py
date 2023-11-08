@@ -226,6 +226,7 @@ class Rails(RailsBase):
 
         scene.enabled = False
 
+        yield from wait_for(25)
         yield {c.mother: Leave(), c.brother: Leave()}
 
 

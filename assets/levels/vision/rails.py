@@ -16,14 +16,13 @@ from src.entities.physical.backslash_wall import BackslashWall
 from src.entities.physical.horizontal_wall import HorizontalWall
 from src.entities.physical.kaledeii import Kaledeii
 from src.entities.physical.lord_bishop import LordBishop
-from src.entities.physical.player import Player
 from src.entities.physical.slash_wall import SlashWall
 from src.entities.physical.soldier import Soldier
 from src.entities.physical.vertical_wall import VerticalWall
 from src.entities.special.level import Level
 from src.lib import vector
 from src.lib.concurrency import wait_for, wait_while
-from src.lib.vector import add2, right, d2, mul2
+from src.lib.vector import add2, right, mul2
 
 
 class Rails(RailsBase):
@@ -85,6 +84,10 @@ class Rails(RailsBase):
             s.ai.composite[Follower].subject = c.kaledeii
 
         c.player.ai.dummy.composite[Follower].subject = c.kaledeii
+
+        yield from wait_for(40)
+        yield {c.player: Say("Вход в зал высечен в гладком сером камне толщиной с повозку с лошадью.", True)}
+        yield {c.player: Say("Сложно представить более неприступную крепость.", True)}
 
         yield from wait_finish(c.kaledeii)
         yield {c.player: Say("Неприступный каменный зал, обогреваемый ревущими пламенем печами.", True)}
@@ -192,9 +195,6 @@ class Rails(RailsBase):
 
         yield from wait_while(lambda: enemy.p != p.enemy_attack)
         yield from self.center_camera()
-        yield {c.player: Say("Солдаты намертво заложили вход.", True)}
-        yield {c.player: Say("Стены зала высечены из гладкого серого камня толщиной с повозку с лошадью.", True)}
-        yield {c.player: Say("Сложно представить более неприступную крепость.", True)}
 
         c.player.ai.dummy.clear()
         yield {c.kaledeii: Say("Он здесь.")}
