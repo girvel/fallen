@@ -50,7 +50,7 @@ class Rails(RailsBase):
         )
 
         self.quests = Entity(
-            find_someone_to_fight=Quest("Найти и порубить кого-нибудь"),
+            find_someone_to_fight=Quest("Найти с чем подраться"),
         )
 
         self.vision_level = None
