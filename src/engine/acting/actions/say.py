@@ -1,5 +1,5 @@
 import logging
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 
 from ecs import DynamicEntity
 
@@ -14,7 +14,7 @@ from src.entities.special.sound import Sound
 class Say(Action):
     content: str
     is_internal: bool = False
-    meme: Meme = field(default_factory=Meme.Nothing)
+    meme: Meme | None = None
 
     def execute(self, actor: DynamicEntity, hades: Hades, genesis: Genesis):
         genesis.entities_to_create.add(Sound(

@@ -10,7 +10,7 @@ from src.engine.ai.morale import Morale
 from src.engine.ai.pather import Pather
 from src.engine.ai.spacial_memory import SpacialMemory
 from src.engine.ai.wanderer import Wanderer
-from src.engine.meme import Meme
+from src.engine.meme import Meme, MoraleChange
 from src.entities.physical.table import Table
 from src.lib.period.period import Period
 from src.lib.period.random_period import RandomPeriod
@@ -44,15 +44,15 @@ class PeasantAi:
         self.composite[SpacialMemory].use(subject, perception)
         if self.lagging_period.step(): return
 
-        aggressives = self.composite[Morale].use(subject, perception)
+        aggressors = self.composite[Morale].use(subject, perception)
 
-        for e, offset in aggressives:
+        for e, offset in aggressors:
             self.composite[Speaker].messages.append(
-                Say(f"<Выражает недовольство {e.name:тв}>", meme=Meme.MoraleChange(e, offset))
+                Say(f"<Выражает недовольство {e.name:тв}>", meme=MoraleChange(e, offset))
             )
 
         if (
-            (len(aggressives) > 0 or self.fight_or_flight_period.step())
+            (len(aggressors) > 0 or self.fight_or_flight_period.step())
             and (target := self.composite[FightOrFlight].use(subject, perception)) != FightOrFlight.no_change_signal
         ):
             self.composite[Pather].going_to = target
