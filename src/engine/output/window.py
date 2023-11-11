@@ -28,7 +28,7 @@ def positioning_to_position(positioning: tuple[Coordinate, Coordinate], max_size
 class Window(ABC):
     def __init__(self, parent: curses.window, io):
         self.parent_curses_window = parent
-        self.curses_window = parent.subwin(1, 1, 0, 0)
+        self.curses_window = curses.newwin(1, 1, 0, 0)
         self.io = io
 
     def render(self, subject, perception, max_size, positioning):
@@ -36,11 +36,11 @@ class Window(ABC):
 
         window_size = self._responsive_size(subject, perception, max_size)
 
+        self.curses_window.resize(*flip2(window_size))
         self.curses_window.mvwin(*add2(
             self.parent_curses_window.getbegyx(),
             flip2(positioning_to_position(positioning, max_size, window_size))
         ))
-        self.curses_window.resize(*flip2(window_size))
 
         self._render(subject, perception)
 
