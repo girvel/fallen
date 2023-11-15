@@ -13,18 +13,25 @@ class LanguageCenter:
     def use(self, subject: DynamicEntity, perception: Perception, ideas: list[Idea]) -> list[Say]:
         speech = []
 
-        for idea in ideas:  # TODO NEXT aggression vs. subject
-            if (message := self.handle(idea.meme, idea)) is not None:
+        for idea in ideas:
+            if (message := self.handle(idea.meme, idea, subject, perception)) is not None:
                 speech.append(message)
 
         return speech
 
     @singledispatchmethod
-    def handle(self, meme, idea: Idea):
+    def handle(self, meme, idea: Idea, subject: DynamicEntity, perception: Perception):
         pass
 
     @handle.register
-    def _(self, meme: Aggression, idea: Idea):
+    def _(self, meme: Aggression, idea: Idea, subject: DynamicEntity, perception: Perception):
+        if meme.target is subject and subject.attitude.get(meme.source) > 0:
+            return Say(
+                f"<Не понимает почему {meme.source.name:им} "
+                f"нападает на {subject.name:ви}>",
+                idea=idea
+            )
+
         return Say(
             f"<Недовольство агрессивным поведением {meme.source.name:ро}>",
             idea=idea,
