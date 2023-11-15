@@ -2,7 +2,7 @@ from typing import TypeVar, Type
 
 R = TypeVar('R')
 
-class TypeDict(dict):
+class TypeDict(dict[type, R]):
     def __init__(self, components):
         super().__init__({type(c): c for c in components})
 

@@ -1,6 +1,8 @@
 import random
+from dataclasses import dataclass, field
 from enum import Enum
 
+from src.engine.composite_ai import CompositeAi
 from src.lib.period.period import Period
 from src.lib.period.random_period import RandomPeriod
 from src.lib.toolkit import random_choice_or
@@ -25,7 +27,7 @@ class Mode(Enum):
     GoOutside = 3
     Wander = 4
 
-class PeasantAi:
+class PeasantAi(CompositeAi):
     mode = Mode.GoOutside
     favourite_zones = []
 
@@ -47,27 +49,27 @@ class PeasantAi:
         ])
 
     # It is possible to extract ModalAi parent/component?
-    def make_decision(self, subject, perception):
-        self.composite[SpacialMemory].use(subject, perception)
+    def _make_decision(self, subject, perception):
+        self.use(SpacialMemory)
         if self.lagging_period.step(): return
 
-        ideas, sees_agression = self.composite[Observer].use(subject, perception)
+        ideas, sees_agression = self.use(Observer)
         # TODO NEXT self.use & CompositeAi
 
-        self.composite[Morale].use(subject, perception, ideas)
-        self.composite[Speaker].messages.extend(self.composite[LanguageCenter].use(subject, perception, ideas))
+        self.use(Morale, ideas)
+        self.composite[Speaker].messages.extend(self.use(LanguageCenter, ideas))
 
         recognizes_danger = (
             (sees_agression and self.fight_or_flight_period.step())
-            and (target := self.composite[FightOrFlight].use(subject, perception)) != FightOrFlight.no_change_signal
+            and (target := self.use(FightOrFlight)) != FightOrFlight.no_change_signal
         )
 
         if recognizes_danger:
             self.composite[Pather].going_to = target
         else:
-            if action := self.composite[Speaker].use(subject, perception): return action
+            if action := self.use(Speaker): return action
 
-        if action := self.composite[Pather].use(subject, perception, self.composite[SpacialMemory]):
+        if action := self.use(Pather, self.composite[SpacialMemory]):
             return action
 
         return self.peasant_routine(subject, perception)
@@ -114,6 +116,6 @@ class PeasantAi:
 
             case Mode.Wander:
                 if not self.wandering_period.step():
-                    return self.composite[Wanderer].use(subject, perception, self.composite[Pather].free_directions)
+                    return self.use(Wanderer, self.composite[Pather].free_directions)
 
                 self.mode = Mode.GoHome
