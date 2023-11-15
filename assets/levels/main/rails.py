@@ -373,7 +373,10 @@ class Rails(RailsBase):
         yield from self.start_cutscene()
         yield from self.center_camera()
 
-        yield {c.player: Say("Нет, этого недостаточно.")}
+        if self.dog_quest_ending == DogQuestEnding.NotYetEnded:
+            yield {c.player: Say("Нет, этого недостаточно.")}
+        else:
+            yield {c.player: Say("Хм.")}
 
         yield from self.end_cutscene()
 
