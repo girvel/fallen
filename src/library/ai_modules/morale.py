@@ -1,25 +1,29 @@
-import logging
 from dataclasses import dataclass
 
 from ecs import DynamicEntity
 
-from src.library.actions.attack import Attack
-from src.lib.query import Q
+from src.engine.meme import Idea, Aggression
+from src.lib.toolkit import random_round
 from src.systems.ai import Perception
 
 
 @dataclass
 class Morale:
-    aggression_cost: float = 35
+    aggression_base_cost: float = 35
+    aggression_to_neutral_base_cost: float = 1
+    neutrality_threshold: int = 10
 
-    def use(self, subject: DynamicEntity, perception: Perception) -> list[tuple[DynamicEntity, int]]:
-        attitude_changes = [
-            (e, -self.aggression_cost) for e in perception.vision.physical.values()
-            if isinstance(~Q(e).act, Attack) and subject.attitude.get(e.act.target) >= 0
-        ]
+    def use(self, subject: DynamicEntity, perception: Perception, ideas: list[Idea]) -> None:
+        for idea in ideas:
+            match idea.meme:
+                case Aggression as aggression:
+                    attitude_to_target = subject.attitude.get(aggression.target)
 
-        for e, offset in attitude_changes:
-            subject.attitude.move(e, offset)
-            logging.info(f"{subject.name} does not like what {e.name} is doing ({offset} -> {subject.attitude.get(e)})")
+                    if attitude_to_target < 0:
+                        continue
+                    elif attitude_to_target < self.neutrality_threshold:
+                        base_cost = self.aggression_to_neutral_base_cost
+                    else:
+                        base_cost = self.aggression_base_cost
 
-        return attitude_changes
+                    subject.attitude.move(aggression.source, random_round(base_cost * idea.weight))

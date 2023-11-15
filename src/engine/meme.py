@@ -1,11 +1,19 @@
 from dataclasses import dataclass
+from typing import TypeAlias
 
 from ecs import DynamicEntity
 
 
 @dataclass
-class MoraleChange:
-    entity: DynamicEntity
-    offset: int
+class Aggression:
+    source: DynamicEntity
+    target: DynamicEntity
 
-Meme = MoraleChange
+Meme: TypeAlias = Aggression
+
+
+@dataclass
+class Idea:
+    meme: Meme
+    weight: float
+    source: DynamicEntity = None

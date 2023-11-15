@@ -1,21 +1,22 @@
 import random
 from enum import Enum
 
-from src.library.actions.say import Say
-from src.library.ai_modules.speaker import Speaker
-from src.library.special.level import Level
-from src.lib.toolkit import random_choice_or
-from src.lib.typed_dict import TypeDict
-from src.library.ai_modules.fight_or_flight import FightOrFlight
-from src.library.ai_modules.morale import Morale
-from src.library.ai_modules.pather import Pather
-from src.library.ai_modules.spacial_memory import SpacialMemory
-from src.library.ai_modules.wanderer import Wanderer
-from src.engine.meme import MoraleChange
-from src.library.physical.table import Table
 from src.lib.period.period import Period
 from src.lib.period.random_period import RandomPeriod
+from src.lib.toolkit import random_choice_or
+from src.lib.typed_dict import TypeDict
 from src.lib.vector import directions, add2, grid_get
+from src.library.ai_modules.fight_or_flight import FightOrFlight
+from src.library.ai_modules.language_center import LanguageCenter
+from src.library.ai_modules.morale import Morale
+from src.library.ai_modules.observer import Observer
+from src.library.ai_modules.pather import Pather
+from src.library.ai_modules.spacial_memory import SpacialMemory
+from src.library.ai_modules.speaker import Speaker
+from src.library.ai_modules.wanderer import Wanderer
+from src.library.physical.table import Table
+from src.library.special.level import Level
+
 
 class Mode(Enum):
     GoHome = 0
@@ -41,6 +42,8 @@ class PeasantAi:
             Morale(),
             Wanderer(),
             Speaker(),
+            Observer(),
+            LanguageCenter(),
         ])
 
     # It is possible to extract ModalAi parent/component?
@@ -48,24 +51,28 @@ class PeasantAi:
         self.composite[SpacialMemory].use(subject, perception)
         if self.lagging_period.step(): return
 
-        aggressors = self.composite[Morale].use(subject, perception)
+        ideas, sees_agression = self.composite[Observer].use(subject, perception)
+        # TODO NEXT self.use & CompositeAi
 
-        for e, offset in aggressors:
-            self.composite[Speaker].messages.append(
-                Say(f"<Выражает недовольство {e.name:тв}>", meme=MoraleChange(e, offset))
-            )
+        self.composite[Morale].use(subject, perception, ideas)
+        self.composite[Speaker].messages.extend(self.composite[LanguageCenter].use(subject, perception, ideas))
 
-        if (
-            (len(aggressors) > 0 or self.fight_or_flight_period.step())
+        recognizes_danger = (
+            (sees_agression and self.fight_or_flight_period.step())
             and (target := self.composite[FightOrFlight].use(subject, perception)) != FightOrFlight.no_change_signal
-        ):
+        )
+
+        if recognizes_danger:
             self.composite[Pather].going_to = target
+        else:
+            if action := self.composite[Speaker].use(subject, perception): return action
 
         if action := self.composite[Pather].use(subject, perception, self.composite[SpacialMemory]):
             return action
 
-        if action := self.composite[Speaker].use(subject, perception): return action
+        return self.peasant_routine(subject, perception)
 
+    def peasant_routine(self, subject, perception):
         match self.mode:
             case Mode.GoHome:
                 self.composite[Pather].going_to = subject.house.entrance
