@@ -9,5 +9,7 @@ class Window(DynamicEntity):
     character = '='
     layer = "physical"
 
+    boring_flag = None
+
     def __init__(self):
         self.health = Health(10, ArmorKind.Glass)

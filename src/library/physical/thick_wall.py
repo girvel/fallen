@@ -17,6 +17,8 @@ class ThickWall(DynamicEntity):
     solid_flag = None
     layer = "physical"
 
+    boring_flag = None
+
     def __init__(self, **attributes):
         self.health = Health(random.randrange(5000, 10001, 500), ArmorKind.Stone)
         super().__init__(**attributes)

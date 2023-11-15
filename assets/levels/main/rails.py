@@ -198,7 +198,7 @@ class Rails(RailsBase):
         p = self.positions
 
         scene.enabled = False
-        self.brother_and_mother_leave.enabled = False
+        self.brother_leaves.enabled = False
         c.brother.ai.enable_speech = False
         yield from self.start_cutscene()
         yield from self.center_camera()
@@ -221,7 +221,7 @@ class Rails(RailsBase):
         c.brother.ai.composite[Pather].going_to = c.mother.p
         c.mother.ai.composite[Pather].going_to = p.away
 
-        self.brother_and_mother_leave.enabled = True
+        self.brother_leaves.enabled = True
 
         yield from wait_while(lambda: exists(c.brother))
 

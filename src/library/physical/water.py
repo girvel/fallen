@@ -11,3 +11,5 @@ class Water(DynamicEntity):
     color = ColorPair(white, blue)
     layer = "physical"
     faction = Faction.Water
+
+    boring_flag = None

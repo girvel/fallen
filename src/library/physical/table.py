@@ -14,5 +14,7 @@ class Table(DynamicEntity):
     classifiers = {Kind.Table}
     layer = "physical"
 
+    boring_flag = None
+
     def __init__(self):
         self.health = Health(35, ArmorKind.Wood)

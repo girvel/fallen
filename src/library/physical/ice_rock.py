@@ -11,5 +11,7 @@ class IceRock(DynamicEntity):
     color = ColorPair(blue, white)
     layer = "physical"
 
+    boring_flag = None
+
     def __init__(self):
         self.health = Health(1000, ArmorKind.Ice)
