@@ -4,7 +4,7 @@ from random import randrange
 
 from ecs import DynamicEntity
 
-from src.engine.meme import Idea, Aggression
+from src.engine.meme import Idea, Aggression, DangerousEntity
 from src.library.actions.say import Say
 from src.systems.ai import Perception
 
@@ -42,4 +42,10 @@ class LanguageCenter:
         return Message(Say(
             f"<Недовольство агрессивным поведением {meme.source.name:ро}>",
             idea=idea,
-        ), randrange(0, 21))
+        ), randrange(0, 20))
+
+    @handle.register
+    def _(self, meme: DangerousEntity, idea: Idea, subject: DynamicEntity, perception: Perception):
+        return Message(Say(
+            f"<Предостерегает о {meme.entity.name:пр}>"  # TODO in the area X, determined by a closest sign
+        ), randrange(0, 100))

@@ -16,8 +16,8 @@ class Morale:
     def use(self, subject: DynamicEntity, perception: Perception, ideas: list[Idea]) -> None:
         for idea in ideas:
             match idea.meme:
-                case Aggression as aggression:
-                    attitude_to_target = subject.attitude.get(aggression.target)
+                case Aggression(source, target):
+                    attitude_to_target = subject.attitude.get(target)
 
                     if attitude_to_target < 0:
                         continue
@@ -26,4 +26,4 @@ class Morale:
                     else:
                         base_cost = self.aggression_base_cost
 
-                    subject.attitude.move(aggression.source, random_round(base_cost * idea.weight))
+                    subject.attitude.move(source, random_round(base_cost * idea.weight))
