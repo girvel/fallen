@@ -232,13 +232,14 @@ class Rails(RailsBase):
     @Scene.new(lambda self: any(
         d2(e.p, self.positions.away) <= 3 for e in [self.characters.brother, self.characters.mother]
     ))
-    def brother_and_mother_leave(self, scene):
+    def brother_leaves(self, scene):
         c = self.characters
 
         scene.enabled = False
 
         yield from wait_for(25)
-        yield {c.mother: Leave(), c.brother: Leave()}
+        yield {c.brother: Leave()}
+        self.enable_complex_ai(c.mother)
 
 
     def is_player_killing_the_dog(self):
@@ -272,10 +273,8 @@ class Rails(RailsBase):
         memory.is_vision_disabled = True
         yield from c.player.ai.wait_seconds(2)
 
-        yield from wait_while(lambda: exists(c.mother))
-        c.mother.ai.clear()
-        c.mother.p = p.mother_reappearance
-        self.genesis.entities_to_create.add(c.mother)
+        self.disable_complex_ai(c.mother)
+        c.mother.ai.composite[Pather].going_to = p.mother_reappearance
 
         c.player.health.amount.reset_to_max()
 
@@ -361,6 +360,7 @@ class Rails(RailsBase):
         yield {c.girl: Leave()}
 
         yield from self.end_cutscene()
+
 
     @Scene.new(lambda self: ~Q(self.characters.player.act)[Attack].target.character == Frog.character)
     def player_attacks_frog(self, scene):

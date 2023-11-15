@@ -29,9 +29,8 @@ class RabidDog(DynamicEntity):
             "пр": "бешеном псе",
         })
 
-        self.weapon = Weapon(3, DamageKind.Piercing)
-        self.health = Health(20, ArmorKind.Organic)
+        self.weapon = Weapon(6, DamageKind.Piercing)
+        self.health = Health(25, ArmorKind.Organic)
         self.classifiers = {Kind.Animate}
         self.ai = RabidAi()
         self.senses = Senses(10, 0, 5)
-        self.attitude = Attitude({Faction.Water: -1000})
