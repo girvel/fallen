@@ -16,6 +16,8 @@ class Fire(DynamicEntity):
 
     layer = "effects"
 
+    boring_flag = None
+
     def __init__(self, half_life=float('inf'), heat=5, **attributes):
         self.weapon = Weapon(heat, DamageKind.Fire)
         self.ai = StaticAi(lambda subject, _: SplashAttack(subject.p, 0))

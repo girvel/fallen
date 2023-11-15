@@ -1,7 +1,7 @@
 import functools
 import logging
 from dataclasses import dataclass
-from typing import Callable, Iterator
+from typing import Callable, Iterator, TypeAlias
 
 from ecs import DynamicEntity
 
@@ -14,7 +14,7 @@ from src.entities.special.level import Level
 from src.lib.vector import floordiv2, sub2
 
 
-Script = Iterator[dict[DynamicEntity, Action | None] | None]
+Script: TypeAlias = Iterator[dict[DynamicEntity, Action | None] | None]
 
 class RailsBase(DynamicEntity):
     name = Name("Рельсы")

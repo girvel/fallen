@@ -2,8 +2,10 @@ import functools
 import logging
 import math
 import random
+from collections.abc import Sequence
 from importlib.util import spec_from_file_location, module_from_spec
 from pathlib import Path
+from typing import TypeVar
 
 from src.engine.output.colors import ColorPair
 
@@ -39,6 +41,12 @@ def death_chance_from_half_life(half_life):
 
 def chance(p):
     return random.random() <= p
+
+T = TypeVar("T")
+TDefault = TypeVar("TDefault")
+def random_choice_or(collection: Sequence[T], default: TDefault = None) -> T | TDefault:
+    if len(collection) == 0: return default
+    return random.choice(collection)
 
 def random_round(number: float) -> int:
     return math.floor(number) + (chance(number % 1) and 1 or 0)

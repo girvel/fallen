@@ -1,3 +1,4 @@
+from enum import Enum
 from pathlib import Path
 
 from ecs import Entity, exists
@@ -15,6 +16,8 @@ from src.engine.ai.pather import Pather
 from src.engine.rails_base import RailsBase, Scene
 from src.entities.ais.dummy_ai import wait_finish
 from src.entities.ais.io import Quest, Notification
+from src.entities.ais.peasant_ai import Mode
+from src.entities.items.bun import Bun
 from src.entities.items.lily import Lily
 from src.entities.physical.frog import Frog
 from src.entities.physical.rabid_dog import RabidDog
@@ -25,7 +28,16 @@ from src.lib.query import Q
 from src.lib.vector import d2, add2
 
 
+class DogQuestEnding(Enum):
+    NotYetEnded = 0
+    Win = 1
+    Loss = 2
+    DumbassDeath = 3
+
+
 class Rails(RailsBase):
+    dog_quest_ending: DogQuestEnding = DogQuestEnding.NotYetEnded
+
     def __post_init__(self):
         self.characters = Entity(
             player=self.get_player(),
@@ -55,7 +67,6 @@ class Rails(RailsBase):
 
         self.vision_level = None
 
-        self.is_dog_dead = False
 
     @Scene.new()
     def introduction(self, scene):
@@ -241,26 +252,37 @@ class Rails(RailsBase):
         or self.is_player_killing_the_dog()
     ))
     def player_dies(self, scene):
+        scene.enabled = False
+
         c = self.characters
         p = self.positions
         memory = c.player.ai.memory
 
-        self.is_dog_dead = self.is_player_killing_the_dog()
+        if self.is_player_killing_the_dog():
+            self.dog_quest_ending = DogQuestEnding.Win
 
-        scene.enabled = False
-        yield from self.start_cutscene()
-
-        if self.is_dog_dead:
             self.girl_gives_flower.enabled = True
+        elif c.rabid_dog in c.player.health.last_damaged_by:
+            self.dog_quest_ending = DogQuestEnding.Loss
+        else:
+            self.dog_quest_ending = DogQuestEnding.DumbassDeath
+
+        yield from self.start_cutscene()
 
         memory.is_vision_disabled = True
         yield from c.player.ai.wait_seconds(2)
+
+        yield from wait_while(lambda: exists(c.mother))
+        c.mother.ai.clear()
+        c.mother.p = p.mother_reappearance
+        self.genesis.entities_to_create.add(c.mother)
 
         c.player.health.amount.reset_to_max()
 
         self.vision_level = self.ms.add(Level(self.ms, Path("assets/levels/vision"), False, self.genesis))
         self.vision_level.rails.parent_level = c.player.level
         yield from self.plane_shift(self.vision_level, p.vision_start)
+
 
     @Scene.new(enabled=False)
     def player_wakes_up_1(self, scene):
@@ -269,11 +291,6 @@ class Rails(RailsBase):
         memory = c.player.ai.memory
 
         scene.enabled = False
-
-        yield from wait_while(lambda: exists(c.mother))
-        c.mother.ai.clear()
-        c.mother.p = p.mother_reappearance
-        self.genesis.entities_to_create.add(c.mother)
 
         yield from self.center_camera()
         memory.is_vision_disabled = False
@@ -307,7 +324,9 @@ class Rails(RailsBase):
         yield {c.mother: Say("Ты бредишь.")}
 
         self.vision_level.rails.talk_with_lord_bishop_2.enabled = True
+
         yield from self.plane_shift(self.vision_level, self.vision_level.rails.positions.observing_the_throne)
+
         self.enable_complex_ai(c.mother)
 
 
@@ -366,9 +385,9 @@ class Rails(RailsBase):
         enabled=False,
     )  # TODO write & use is_attacking
     def player_attacks_frog_again(self, scene):
-        c = self.characters
-
         scene.enabled = False
+
+        c = self.characters
 
         c.player.traits.brutality += 1
 
@@ -378,3 +397,34 @@ class Rails(RailsBase):
         yield {c.player: Say("А в этом что-то есть.")}
 
         yield from self.end_cutscene()
+
+
+    @Scene.new(
+        lambda self: d2(self.characters.mother.p, self.characters.player.p) < 5,
+        enabled=False,
+    )
+    def mother_gives_player_bun(self, scene):
+        scene.enabled = False
+
+        c = self.characters
+
+        self.disable_complex_ai(c.mother)
+
+        yield from self.start_cutscene()
+        yield from self.center_camera()
+
+        yield {c.mother: Say("Я булочки испекла. Кушай, приходи в себя.")}
+
+        mother_initial_p = c.mother.p
+        c.mother.ai.composite[Pather].going_to = c.player.p
+
+        yield from wait_finish(c.mother)
+        c.player.inventory.add_item(Bun())
+        c.mother.ai.composite[Pather].going_to = mother_initial_p
+
+        yield from wait_finish(c.mother)
+        if self.dog_quest_ending == DogQuestEnding.DumbassDeath:
+            yield {c.mother: Say("Кстати, это было глупо.")}
+
+        yield from self.end_cutscene()
+        self.enable_complex_ai(c.mother)

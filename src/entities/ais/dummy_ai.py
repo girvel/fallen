@@ -1,4 +1,4 @@
-from ecs import DynamicEntity
+from ecs import DynamicEntity, exists
 
 from src.engine.acting.action import Action
 from src.engine.ai.follower import Follower
@@ -33,6 +33,10 @@ class DummyAi(DynamicEntity):
 def wait_finish(*dummies, threshold=0):
     yield
     yield from wait_while(lambda: sum(
-        int(dummy.ai.composite[Pather].going_to is not None or dummy.ai.composite[Follower].active)
+        int(
+            not exists(dummy) or
+            dummy.ai.composite[Pather].going_to is not None or
+            dummy.ai.composite[Follower].active
+        )
         for dummy in dummies
     ) > threshold)

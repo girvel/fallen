@@ -4,6 +4,7 @@ from enum import Enum
 from src.engine.acting.actions.say import Say
 from src.engine.ai.speaker import Speaker
 from src.entities.special.level import Level
+from src.lib.toolkit import random_choice_or
 from src.lib.typed_dict import TypeDict
 from src.engine.ai.fight_or_flight import FightOrFlight
 from src.engine.ai.morale import Morale
@@ -17,18 +18,22 @@ from src.lib.period.random_period import RandomPeriod
 from src.lib.query import Q
 from src.lib.vector import directions, add2, grid_get
 
-Mode = Enum("Mode", "GoHome GoToTable WorkAtTable GoOutside Wandering")
+class Mode(Enum):
+    GoHome = 0
+    GoToTable = 1
+    WorkAtTable = 2
+    GoOutside = 3
+    Wander = 4
 
 class PeasantAi:
     mode = Mode.GoOutside
     favourite_zones = []
 
     def __init__(self):
-        self.working_period = RandomPeriod(30, 46)
-        self.wandering_period = RandomPeriod(20, 36)
+        self.working_period = RandomPeriod(80, 121)
+        self.wandering_period = RandomPeriod(40, 56)
         self.lagging_period = RandomPeriod(4, 11)
         self.fight_or_flight_period = Period(5)
-        self.chat_period = RandomPeriod(5, 11)
 
         self.composite = TypeDict([
             SpacialMemory(),
@@ -71,20 +76,19 @@ class PeasantAi:
                 randomized_directions = directions[:]
                 random.shuffle(randomized_directions)
 
-                if (
-                    (table_p := random.choice([
-                        (x, y)
-                        for x in range(subject.house.house_borders[0][0], subject.house.house_borders[1][0])
-                        for y in range(subject.house.house_borders[0][1], subject.house.house_borders[1][1])
-                        if grid_get(self.composite[SpacialMemory][subject.level], (x, y)) == Table.character
-                    ])) is not None
-                    and
-                    (destination := next((
-                        p for v in directions
-                        if (p := add2(table_p, v))
-                        and grid_get(self.composite[SpacialMemory][subject.level], p) == Level.no_entity_character
-                    ), None)) is not None
-                ):
+                spacial_memory = self.composite[SpacialMemory][subject.level]
+
+                if ((destination := random_choice_or([
+                    free_space
+                    for x in range(subject.house.house_borders[0][0], subject.house.house_borders[1][0])
+                    for y in range(subject.house.house_borders[0][1], subject.house.house_borders[1][1])
+                    if grid_get(spacial_memory, (table_p := (x, y))) == Table.character
+                    and (free_space := next((
+                        p
+                        for d in directions
+                        if grid_get(spacial_memory, (p := add2(table_p, d))) == Level.no_entity_character
+                    ), None))  # TODO and Pather.available
+                ])) is not None):
                     self.composite[Pather].going_to = destination
                     self.mode = Mode.WorkAtTable
                 else:
@@ -100,9 +104,9 @@ class PeasantAi:
                     [zone.attractiveness for zone in self.favourite_zones]
                 )[0].center
 
-                self.mode = Mode.Wandering
+                self.mode = Mode.Wander
 
-            case Mode.Wandering:
+            case Mode.Wander:
                 if not self.wandering_period.step():
                     return self.composite[Wanderer].use(subject, perception, self.composite[Pather].free_directions)
 

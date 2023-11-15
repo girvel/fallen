@@ -3,6 +3,7 @@ from typing import Optional
 
 from ecs import Entity
 
+from assets.levels.main.rails import DogQuestEnding
 from assets.levels.vision.entities.physical.enemy import Enemy
 from src.engine.acting.actions.build import Build
 from src.engine.acting.actions.cast_fire_storm import CastFireStorm
@@ -90,7 +91,7 @@ class Rails(RailsBase):
         yield {c.player: Say("Сложно представить более неприступную крепость.", True)}
 
         yield from wait_finish(c.kaledeii)
-        yield {c.player: Say("Неприступный каменный зал, обогреваемый ревущими пламенем печами.", True)}
+        yield {c.player: Say("Каменный зал, обогреваемый ревущими пламенем печами.", True)}
         yield {c.player: Say("Колоссальные размеры не позволяют чётко рассмотреть, что находится в его конце.", True)}
 
         yield from wait_finish(*c.soldiers, threshold=2)
@@ -123,7 +124,7 @@ class Rails(RailsBase):
         yield {c.player: Say("Массивные стены зала сотрясаются от мощного удара вдали.", True)}
 
         c.player.ai.dummy.clear()
-        if self.parent_level.rails.is_dog_dead:
+        if self.parent_level.rails.dog_quest_ending == DogQuestEnding.Win:
             c.player.ai.dummy.composite[Pather].going_to = p.observing_the_throne
             self.talk_with_lord_bishop_1.enabled = True
         else:
@@ -155,7 +156,7 @@ class Rails(RailsBase):
 
         yield {c.player: Say("Стены сотрясаются вновь.", True)}
 
-        if self.parent_level.rails.is_dog_dead:
+        if self.parent_level.rails.dog_quest_ending == DogQuestEnding.Win:
             c.player.p = p.observing_the_throne
             self.talk_with_lord_bishop_2.enabled = True
         else:
@@ -213,3 +214,4 @@ class Rails(RailsBase):
         c.player.health.amount.reset_to_max()
         yield from self.end_cutscene()
         memory.complete_quest(self.parent_level.rails.quests.find_someone_to_fight)
+        self.parent_level.rails.mother_gives_player_bun.enabled = True
