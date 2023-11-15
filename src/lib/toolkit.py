@@ -5,7 +5,7 @@ import random
 from collections.abc import Sequence
 from importlib.util import spec_from_file_location, module_from_spec
 from pathlib import Path
-from typing import TypeVar
+from typing import TypeVar, Any
 
 from src.engine.output.colors import ColorPair
 
@@ -86,3 +86,10 @@ def crash_safe(f):
             logging.error(f"System {f} crashed with {args=}; {kwargs=}", exc_info=ex)
 
     return result
+
+def set_function_value(dictionary: dict, key: Any):
+    def decorator(value):
+        dictionary[key] = value
+        return value
+
+    return decorator

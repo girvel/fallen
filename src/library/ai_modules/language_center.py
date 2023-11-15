@@ -1,8 +1,9 @@
 from dataclasses import dataclass
+from functools import singledispatch, singledispatchmethod
 
 from ecs import DynamicEntity
 
-from src.engine.meme import Idea
+from src.engine.meme import Idea, Aggression
 from src.library.actions.say import Say
 from src.systems.ai import Perception
 
@@ -13,11 +14,18 @@ class LanguageCenter:
         speech = []
 
         for idea in ideas:  # TODO NEXT aggression vs. subject
-            match idea.meme:
-                case Aggression as aggression:  # TODO maybe split these to functions?
-                    speech.append(Say(
-                        f"<Недовольство агрессивным поведением {aggression.source.name:тв}>",
-                        idea=idea,
-                    ))
+            if (message := self.handle(idea.meme, idea)) is not None:
+                speech.append(message)
 
         return speech
+
+    @singledispatchmethod
+    def handle(self, meme, idea: Idea):
+        pass
+
+    @handle.register
+    def _(self, meme: Aggression, idea: Idea):
+        return Say(
+            f"<Недовольство агрессивным поведением {meme.source.name:ро}>",
+            idea=idea,
+        )
