@@ -25,11 +25,11 @@ class Input:
             logging.info(f"Debug track: '{debug_track}'")
 
     def wait_for_input(self, subject, perception: Perception) -> Action:
-        if self.io.memory.in_cutscene:
+        if self.io.memory.current_notification:
+            mode = NOTIFICATION
+        elif self.io.memory.in_cutscene:
             if self.io.memory.options:
                 mode = OPTIONS
-            elif self.io.memory.current_notification:
-                mode = NOTIFICATION
             elif self.io.memory.current_sound is not None:
                 mode = DIALOGUE_LINE
             else:
