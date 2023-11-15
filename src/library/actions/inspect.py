@@ -1,14 +1,15 @@
-from abc import abstractmethod, ABC
+from dataclasses import dataclass
 
 from ecs import DynamicEntity
 
+from src.engine.acting.action import Action
 from src.library.special.genesis import Genesis
 from src.library.special.hades import Hades
 
 
-class Action(ABC):
-    succeeded: bool = True
+@dataclass
+class Inspect(Action):
+    subject: DynamicEntity
 
-    @abstractmethod
     def execute(self, actor: DynamicEntity, hades: Hades, genesis: Genesis):
         pass

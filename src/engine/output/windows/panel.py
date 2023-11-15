@@ -1,4 +1,4 @@
-from src.engine.acting.actions.move import Move
+from src.library.actions.move import Move
 from src.engine.output.html_window import HtmlWindow
 from src.engine.output.windows.panes.chat import Chat
 from src.engine.output.windows.panes.controls import Controls

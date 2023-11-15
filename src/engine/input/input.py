@@ -3,7 +3,7 @@ import logging
 import time
 
 from src.engine.acting.action import Action
-from src.engine.acting.actions.no_action import NoAction
+from src.library.actions.no_action import NoAction
 from src.engine.input.hotkeys import generate_hotkeys
 from src.engine.input.key_queue import KeyQueue
 from src.engine.input.mode import OPTIONS, NOTIFICATION, DIALOGUE_LINE, CUTSCENE, GAME, GENERAL

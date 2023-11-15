@@ -1,10 +1,10 @@
 import curses
 from statistics import median
 
-from src.engine.acting.actions.inspect import Inspect
+from src.library.actions.inspect import Inspect
 from src.engine.output.colors import ColorPair, red
 from src.engine.output.window import Window
-from src.entities.special.level import Level
+from src.library.special.level import Level
 from src.lib.query import Q
 from src.lib.vector import floordiv2, grid_get, sub2, le2, zero, lt2, add2
 

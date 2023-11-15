@@ -8,7 +8,7 @@ import tcod.map
 from ecs import DynamicEntity, Entity
 from numpy import ndarray, dtype
 
-from src.entities.special.sound import Sound
+from src.library.special.sound import Sound
 from src.lib.query import Q
 from src.lib.vector import grid_set, int2, fits_in_grid, grid_unsafe_get
 

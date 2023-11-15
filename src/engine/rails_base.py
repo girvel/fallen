@@ -6,11 +6,11 @@ from typing import Callable, Iterator, TypeAlias
 from ecs import DynamicEntity
 
 from src.engine.acting.action import Action
-from src.engine.ai.spacial_memory import SpacialMemory
+from src.library.ai_modules.spacial_memory import SpacialMemory
 from src.engine.naming.name import Name
-from src.entities.ais.dummy_ai import DummyAi
-from src.entities.physical.player import Player
-from src.entities.special.level import Level
+from src.library.ais.dummy_ai import DummyAi
+from src.library.physical.player import Player
+from src.library.special.level import Level
 from src.lib.vector import floordiv2, sub2
 
 

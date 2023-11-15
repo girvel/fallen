@@ -1,0 +1,18 @@
+from ecs import DynamicEntity
+
+from src.library.special.level import Level
+from src.lib.vector import map_grid, grid_set
+from src.systems.ai import Perception
+
+
+class SpacialMemory(dict):
+    def __missing__(self, key: Level):
+        self[key] = map_grid(key.grids.physical, lambda _: None)
+        return self[key]
+
+    def use(self, subject: DynamicEntity, perception: Perception):
+        for p, entity in perception.vision.physical.items():
+            grid_set(self[subject.level], p, entity is not None and entity.character or Level.no_entity_character)
+
+    def knows(self, level: Level):
+        self[level] = map_grid(level.grids.physical, lambda e: e is None and Level.no_entity_character or e.character)

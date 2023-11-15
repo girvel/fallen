@@ -4,23 +4,23 @@ from typing import Optional
 from ecs import Entity
 
 from assets.levels.main.rails import DogQuestEnding
-from assets.levels.vision.entities.physical.enemy import Enemy
-from src.engine.acting.actions.build import Build
-from src.engine.acting.actions.cast_fire_storm import CastFireStorm
-from src.engine.acting.actions.cast_stone_stomp import CastStoneStomp
-from src.engine.acting.actions.say import Say
-from src.engine.ai.follower import Follower
-from src.engine.ai.pather import Pather
+from assets.levels.vision.library.physical.enemy import Enemy
+from src.library.actions.build import Build
+from src.library.actions.cast_fire_storm import CastFireStorm
+from src.library.actions.cast_stone_stomp import CastStoneStomp
+from src.library.actions.say import Say
+from src.library.ai_modules.follower import Follower
+from src.library.ai_modules.pather import Pather
 from src.engine.rails_base import RailsBase, Scene
-from src.entities.ais.dummy_ai import wait_finish
-from src.entities.physical.backslash_wall import BackslashWall
-from src.entities.physical.horizontal_wall import HorizontalWall
-from src.entities.physical.kaledeii import Kaledeii
-from src.entities.physical.lord_bishop import LordBishop
-from src.entities.physical.slash_wall import SlashWall
-from src.entities.physical.soldier import Soldier
-from src.entities.physical.vertical_wall import VerticalWall
-from src.entities.special.level import Level
+from src.library.ais.dummy_ai import wait_finish
+from src.library.physical.backslash_wall import BackslashWall
+from src.library.physical.horizontal_wall import HorizontalWall
+from src.library.physical.kaledeii import Kaledeii
+from src.library.physical.lord_bishop import LordBishop
+from src.library.physical.slash_wall import SlashWall
+from src.library.physical.soldier import Soldier
+from src.library.physical.vertical_wall import VerticalWall
+from src.library.special.level import Level
 from src.lib import vector
 from src.lib.concurrency import wait_for, wait_while
 from src.lib.vector import add2, right, mul2

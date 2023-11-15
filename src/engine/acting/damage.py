@@ -5,7 +5,7 @@ from pathlib import Path
 import yaml
 from ecs import Entity, DynamicEntity
 
-from src.entities.special.hades import Hades
+from src.library.special.hades import Hades
 from src.lib.limited import Limited
 from src.lib.query import Q
 from src.lib.toolkit import random_round

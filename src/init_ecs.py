@@ -5,11 +5,11 @@ from time import time
 from ecs import Metasystem, create_system
 
 from src.engine.input.hotkeys import GameEnd
-from src.entities.ais.io import IO
-from src.entities.physical.player import Player
-from src.entities.special.genesis import Genesis
-from src.entities.special.hades import Hades
-from src.entities.special.level import Level
+from src.library.ais.io import IO
+from src.library.physical.player import Player
+from src.library.special.genesis import Genesis
+from src.library.special.hades import Hades
+from src.library.special.level import Level
 from src.lib.toolkit import crash_safe
 from src.systems import acting, destruction_and_creation, ai, death, nature
 

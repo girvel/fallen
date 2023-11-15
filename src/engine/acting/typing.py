@@ -3,7 +3,7 @@ from ecs import DynamicEntity
 from typing import Protocol
 
 from src.lib.vector import int2
-from src.entities.special.level import Level
+from src.library.special.level import Level
 
 
 class EntityFactory(Protocol):
