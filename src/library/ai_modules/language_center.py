@@ -1,5 +1,6 @@
 from dataclasses import dataclass
-from functools import singledispatch, singledispatchmethod
+from functools import singledispatchmethod
+from random import randrange
 
 from ecs import DynamicEntity
 
@@ -9,8 +10,14 @@ from src.systems.ai import Perception
 
 
 @dataclass
+class Message:
+    action: Say
+    delay: int
+
+
+@dataclass
 class LanguageCenter:
-    def use(self, subject: DynamicEntity, perception: Perception, ideas: list[Idea]) -> list[Say]:
+    def use(self, subject: DynamicEntity, perception: Perception, ideas: list[Idea]) -> list[Message]:
         speech = []
 
         for idea in ideas:
@@ -26,13 +33,13 @@ class LanguageCenter:
     @handle.register
     def _(self, meme: Aggression, idea: Idea, subject: DynamicEntity, perception: Perception):
         if meme.target is subject and subject.attitude.get(meme.source) > 0:
-            return Say(
+            return Message(Say(
                 f"<Не понимает почему {meme.source.name:им} "
                 f"нападает на {subject.name:ви}>",
                 idea=idea
-            )
+            ), 0)
 
-        return Say(
+        return Message(Say(
             f"<Недовольство агрессивным поведением {meme.source.name:ро}>",
             idea=idea,
-        )
+        ), randrange(0, 21))
