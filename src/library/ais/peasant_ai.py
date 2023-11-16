@@ -10,6 +10,7 @@ from src.lib.typed_dict import TypeDict
 from src.lib.vector import directions, add2, grid_get
 from src.library.ai_modules.fight_or_flight import FightOrFlight
 from src.library.ai_modules.language_center import LanguageCenter
+from src.library.ai_modules.listener import Listener
 from src.library.ai_modules.morale import Morale
 from src.library.ai_modules.observer import Observer
 from src.library.ai_modules.pather import Pather
@@ -45,6 +46,7 @@ class PeasantAi(CompositeAi):
             Speaker(),
             Observer(),
             LanguageCenter(),
+            Listener(),
         ])
 
     # It is possible to extract ModalAi parent/component?
@@ -53,7 +55,7 @@ class PeasantAi(CompositeAi):
         if self.lagging_period.step(): return
 
         ideas, sees_agression = self.use(Observer)
-        # TODO NEXT self.use & CompositeAi
+        ideas.extend(self.use(Listener))
 
         self.use(Morale, ideas)
         self.composite[Speaker].messages.extend(self.use(LanguageCenter, ideas))

@@ -7,7 +7,6 @@ from ecs import DynamicEntity
 from src.engine.language.language import placement
 from src.engine.meme import Idea, Aggression, DangerousEntity
 from src.library.actions.say import Say
-from src.library.markup.house import House
 from src.systems.ai import Perception
 
 
@@ -44,10 +43,11 @@ class LanguageCenter:
         return Message(Say(
             f"<Недовольство агрессивным поведением {meme.source.name:ро}>",
             idea=idea,
-        ), randrange(0, 20))
+        ), randrange(0, 250))
 
     @handle.register
     def _(self, meme: DangerousEntity, idea: Idea, subject: DynamicEntity, perception: Perception):
         return Message(Say(
-            f"<Предостерегает о {meme.entity.name:пр} {placement(subject.level.markup, meme.p)}>"
+            f"<Предостерегает о {meme.entity.name:пр} {placement(subject.level.markup, meme.p)}>",
+            idea=idea,
         ), randrange(0, 100))

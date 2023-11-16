@@ -13,7 +13,7 @@ from src.systems.ai import Perception
 class Observer:
     known_objects: list[DynamicEntity] = field(default_factory=list)
 
-    def use(self, subject: DynamicEntity, perception: Perception) -> list[tuple[DynamicEntity, int]]:
+    def use(self, subject: DynamicEntity, perception: Perception) -> tuple[list[Idea], bool]:
         memes = []
 
         aggressions = [
