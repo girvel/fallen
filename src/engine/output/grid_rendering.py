@@ -6,6 +6,8 @@ def put_string_on_grid(grid, p, string, attributes):
     array, (w, h) = grid
     i = 0
 
+    if y >= h: return x, y
+
     while True:
         if x >= w:
             x = 0
@@ -15,7 +17,8 @@ def put_string_on_grid(grid, p, string, attributes):
 
         if i >= len(string): break
 
-        array[y][x] = (string[i], attributes)
+        if y >= 0:
+            array[y][x] = (string[i], attributes)
 
         i += 1
         x += 1
@@ -31,4 +34,4 @@ def render_grid(grid, window: curses.window):
         for x in range(0, w):
             if y == h - 1 and x == w - 1: break
 
-            window.addch(*array[y][x])
+            window.addstr(*array[y][x])

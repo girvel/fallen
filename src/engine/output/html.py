@@ -59,19 +59,19 @@ class CursesHtmlRenderer(HTMLParser):
     #             )
     #         case "color":
     #             self.color_stack.append(ColorPair.from_code(int(attrs["code"])))
-    #
-    # def handle_endtag(self, tag):
-    #     match tag:
-    #         case "center" | "right":
-    #             self.horizontal_alignment = HorizontalAlignment.left
-    #         case "bottom":
-    #             self.vertical_alignment = VerticalAlignment.top
-    #             self.y = 0
-    #         case "y" | "rw" | "color":
-    #             self.color_stack.pop()
-    #         case "div" | "p" | "li" | "br":
-    #             self.y += 1
-    #             self.x = 0
+
+    def handle_endtag(self, tag):
+        match tag:
+            # case "center" | "right":
+            #     self.horizontal_alignment = HorizontalAlignment.left
+            # case "bottom":
+            #     self.vertical_alignment = VerticalAlignment.top
+            #     self.y = 0
+            # case "y" | "rw" | "color":
+            #     self.color_stack.pop()
+            case "div" | "p" | "li" | "br":
+                _, y = self.cursor_p
+                self.cursor_p = (0, y + 1)
 
     def handle_data(self, data):
         self.cursor_p = put_string_on_grid(self.grid, self.cursor_p, data, ColorPair(white).to_curses())

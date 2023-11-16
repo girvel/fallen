@@ -10,7 +10,7 @@ class Controls(Pane):
     name = "Управление"
 
     pretty_hotkeys = {
-        curses.KEY_MOUSE: "🐭",
+        curses.KEY_MOUSE: "Mouse Key",
         curses.KEY_LEFT: "←",
         curses.KEY_RIGHT: "→",
         curses.KEY_UP: "↑",
@@ -27,7 +27,7 @@ class Controls(Pane):
 
             for (key, hotkey) in hotkey_collection.items():
                 if hotkey.hidden: continue
-                entry = self.pretty_hotkeys.get(key, chr(key) if key != -1 else " ")
+                entry = self.pretty_hotkeys.get(key, chr(key).capitalize() if key != -1 else " ")
 
                 if hotkey.description in result:
                     result[hotkey.description] += ", " + entry
