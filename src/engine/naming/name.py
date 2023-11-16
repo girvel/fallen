@@ -40,6 +40,11 @@ class Name:
 
     @classmethod
     def auto(cls, source: str, variant: int = 0):
+        if " " in source:
+            source, postfix = source.split(' ', maxsplit=1)
+        else:
+            postfix = ""
+
         parses = [parse for parse in _analyzer.parse(source) if "nomn" in parse.tag]
 
         if len(parses) == 0:
@@ -51,7 +56,7 @@ class Name:
         return Name({
             ru_case: optionally_capitalize(~Q(parse.inflect({en_case})).word or source)
             for ru_case, en_case in _cases.items()
-        })
+        }).concat(postfix)
 
 @dataclass(frozen=True)
 class CompositeName:

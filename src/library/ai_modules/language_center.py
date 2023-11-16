@@ -6,6 +6,7 @@ from ecs import DynamicEntity
 
 from src.engine.meme import Idea, Aggression, DangerousEntity
 from src.library.actions.say import Say
+from src.library.markup.house import House
 from src.systems.ai import Perception
 
 
@@ -46,6 +47,13 @@ class LanguageCenter:
 
     @handle.register
     def _(self, meme: DangerousEntity, idea: Idea, subject: DynamicEntity, perception: Perception):
+        markup = subject.level.markup.for_point(meme.p)
+
+        if isinstance(markup, House):
+            placement = f"в {markup.name:пр}"
+        else:
+            placement = f"у {markup.name:ро}"
+
         return Message(Say(
-            f"<Предостерегает о {meme.entity.name:пр}>"  # TODO in the area X, determined by a closest sign
+            f"<Предостерегает о {meme.entity.name:пр} {placement}>"
         ), randrange(0, 100))

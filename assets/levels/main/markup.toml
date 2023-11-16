@@ -37,26 +37,31 @@ reserved_for = "kinds"
 
 
 [[zones]]
-name = "Fishing shack"
+name."им" = "рыбацкая хижина"
 center = [83, 11]
 attractiveness = 10
 
 [[zones]]
-name = "Tavern hall"
+name = "таверна"
 center = [121, 24]
 attractiveness = 30
 
 [[zones]]
-name = "House ruins"
+name."им" = "разрушенный дом"
+name."ро" = "разрушенного дома"
+name."да" = "разрушенному дому"
+name."ви" = "разрушенный дом"
+name."тв" = "разрушенным домом"
+name."пр" = "разрушенном доме"
 center = [18, 46]
 attractiveness = 5
 
 [[zones]]
-name = "Bushes behind the tavern"
+name = "пустырь за таверной"
 center = [202, 10]
 attractiveness = 5
 
 [[zones]]
-name = "The forest"
+name = "лес"
 center = [25, 16]
 attractiveness = 5

@@ -29,7 +29,6 @@ class Mode(Enum):
 
 class PeasantAi(CompositeAi):
     mode = Mode.GoOutside
-    favourite_zones = []
 
     def __init__(self):
         self.working_period = RandomPeriod(80, 121)
@@ -107,10 +106,9 @@ class PeasantAi(CompositeAi):
                     self.mode = Mode.GoOutside
 
             case Mode.GoOutside:
-                self.composite[Pather].going_to = random.choices(
-                    self.favourite_zones,
-                    [zone.attractiveness for zone in self.favourite_zones]
-                )[0].center
+                self.composite[Pather].going_to = random.choices(*zip(*(
+                    (zone, zone.attractiveness) for zone in subject.level.markup.zones
+                )))[0].center
 
                 self.mode = Mode.Wander
 

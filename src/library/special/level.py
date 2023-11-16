@@ -1,4 +1,5 @@
 import logging
+from dataclasses import dataclass
 from functools import reduce
 from pathlib import Path
 from typing import TypeVar, Callable, Any, Type, Iterator
@@ -12,7 +13,7 @@ from src.library.markup.house import House
 from src.library.markup.zone import Zone
 from src.library.special.genesis import Genesis
 from src.lib.toolkit import to_camel_case, import_module
-from src.lib.vector import grid_set, create_grid, int2
+from src.lib.vector import grid_set, create_grid, int2, ge2, lt2, d2
 
 
 def load_palette_from(path):
@@ -25,6 +26,20 @@ def load_palette_from(path):
         result[cls.character] = cls
 
     return result
+
+
+@dataclass
+class Markup:
+    zones: list[Zone]
+    houses: list[House]
+
+    def for_point(self, p: int2) -> Zone | House:
+        for house in self.houses:
+            if ge2(p, house.house_borders[0]) and lt2(p, house.house_borders[1]):
+                return house
+
+        return min(self.zones, key=lambda z: d2(z.center, p))
+
 
 T = TypeVar('T')
 
@@ -86,8 +101,8 @@ class Level(DynamicEntity):
 
         markup_path = path / "markup.toml"
         if markup_path.exists():
-            raw_markup = toml.loads(markup_path.read_text())
-            self.markup = Entity(
+            raw_markup = toml.loads(markup_path.read_text(encoding="utf-8"))
+            self.markup = Markup(
                 houses=[ms.add(House.from_markup(**h)) for h in raw_markup["houses"]],
                 zones=[ms.add(Zone.from_markup(**h)) for h in raw_markup["zones"]],
             )

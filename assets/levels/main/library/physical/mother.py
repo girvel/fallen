@@ -28,5 +28,4 @@ class Mother(Human):
     def after_load(self, level):
         self.ai.composite[SpacialMemory].knows(level)
         self.house = next(h for h in level.markup.houses if h.reserved_for == "kinds")
-        self.ai.favourite_zones = level.markup.zones
         self.attitude.relations[next(level.find(Player))] = 1_000

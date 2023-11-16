@@ -36,7 +36,6 @@ class Peasant(Human):
             self.name = CompositeName(self.name, self.house.family_names[self.sex])
 
         self.ai.composite[SpacialMemory].knows(level)
-        self.ai.favourite_zones = level.markup.zones
 
 
 def peasant_attitude():

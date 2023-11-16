@@ -4,7 +4,7 @@ from src.engine.naming.name import Name, _analyzer
 
 
 def main(word):
-    for i in range(len(_analyzer.parse(word))):
+    for i in range(len([0 for p in _analyzer.parse(word) if "nomn" in p.tag])):
         print(i, repr(Name.auto(word, i)))
 
 
