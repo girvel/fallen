@@ -12,4 +12,4 @@ line_profile:
 	kernprof.exe -lv fallen.py $(FLAGS)
 
 stats:
-	cat `find . -name "*.py"` | wc -l
+	cat `find . -type f -name "*.py" -o -name "*.yaml" -o -name "*.yml" -o -name "*.toml" -o -name "*.csv"` | wc -l
