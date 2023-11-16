@@ -1,3 +1,4 @@
+from statistics import mean
 from typing import Callable, TypeVar, Tuple
 
 from src.lib.toolkit import sign
@@ -54,6 +55,10 @@ def le2(v1: int2, v2: int2) -> int2:
 
 def d2(v1: int2, v2: int2) -> int:
     return abs2(sub2(v1, v2))
+
+
+def average2(vs: list[int2]) -> int2:
+    return tuple(mean(v[i] for v in vs) for i in range(2))
 
 
 T = TypeVar('T')

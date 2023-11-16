@@ -4,6 +4,7 @@ from random import randrange
 
 from ecs import DynamicEntity
 
+from src.engine.language.language import placement
 from src.engine.meme import Idea, Aggression, DangerousEntity
 from src.library.actions.say import Say
 from src.library.markup.house import House
@@ -47,13 +48,6 @@ class LanguageCenter:
 
     @handle.register
     def _(self, meme: DangerousEntity, idea: Idea, subject: DynamicEntity, perception: Perception):
-        markup = subject.level.markup.for_point(meme.p)
-
-        if isinstance(markup, House):
-            placement = f"в {markup.name:пр}"
-        else:
-            placement = f"у {markup.name:ро}"
-
         return Message(Say(
-            f"<Предостерегает о {meme.entity.name:пр} {placement}>"
+            f"<Предостерегает о {meme.entity.name:пр} {placement(subject.level.markup, meme.p)}>"
         ), randrange(0, 100))

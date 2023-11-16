@@ -3,8 +3,8 @@ import random
 from src.engine.acting.damage import Weapon, Health, DamageKind, ArmorKind
 from src.library.ai_modules.spacial_memory import SpacialMemory
 from src.engine.attitude.implementation import common_attitude, Faction
-from src.engine.naming.library import first_names
-from src.engine.naming.name import CompositeName
+from src.engine.language.library import first_names
+from src.engine.language.name import CompositeName
 from src.library.abstract.human import Human
 from src.library.ais.peasant_ai import PeasantAi
 from src.lib.vector import sub2, area2

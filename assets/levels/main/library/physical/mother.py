@@ -2,8 +2,8 @@ from ecs import DynamicEntity
 
 from src.engine.acting.damage import Health, Weapon, ArmorKind, DamageKind
 from src.library.ai_modules.spacial_memory import SpacialMemory
-from src.engine.naming.library import reserved_names
-from src.engine.naming.name import CompositeName
+from src.engine.language.library import reserved_names
+from src.engine.language.name import CompositeName
 from src.engine.output.colors import ColorPair, blue
 from src.library.abstract.human import Human
 from src.library.ais.peasant_ai import PeasantAi

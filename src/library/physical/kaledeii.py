@@ -1,7 +1,7 @@
 from src.engine.acting.damage import Weapon, DamageKind, ArmorKind, Health
 from src.library.ai_modules.spacial_memory import SpacialMemory
 from src.engine.attitude.implementation import Faction
-from src.engine.naming.name import Name
+from src.engine.language.name import Name
 from src.engine.output.colors import ColorPair, cyan
 from src.library.abstract.human import Human
 from src.library.ais.dummy_ai import DummyAi

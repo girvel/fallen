@@ -2,8 +2,8 @@ import random
 
 from ecs import DynamicEntity
 
-from src.engine.naming.library import last_names, reserved_names, Sex
-from src.engine.naming.name import Name
+from src.engine.language.library import last_names, reserved_names, Sex
+from src.engine.language.name import Name
 from src.lib.vector import int2
 
 
@@ -22,7 +22,7 @@ class House(DynamicEntity):
         family_names = random.choice(last_names) if reserved_for is None else reserved_names[reserved_for]
 
         return cls(
-            name=Name.auto("Дом").concat(f" семьи {family_names['male']:ро}"),
+            name=Name.auto("Дом").concat(f" семьи {family_names['male']}"),
             house_borders=(tuple(start), tuple(end)),
             entrance=tuple(entrance),
             family_names=family_names,

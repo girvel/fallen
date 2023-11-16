@@ -6,7 +6,7 @@ from typing import Literal
 import toml
 from ecs import Entity
 
-from src.engine.naming.name import Name, CompositeName
+from src.engine.language.name import Name, CompositeName
 
 
 def random_composite_name(sex):

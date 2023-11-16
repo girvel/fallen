@@ -7,7 +7,7 @@ from ecs import DynamicEntity
 
 from src.engine.acting.action import Action
 from src.library.ai_modules.spacial_memory import SpacialMemory
-from src.engine.naming.name import Name
+from src.engine.language.name import Name
 from src.library.ais.dummy_ai import DummyAi
 from src.library.physical.player import Player
 from src.library.special.level import Level

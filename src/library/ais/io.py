@@ -6,7 +6,7 @@ from ecs import DynamicEntity
 from src.engine.acting.action import Action
 from src.library.ai_modules.spacial_memory import SpacialMemory
 from src.engine.input.input import Input
-from src.engine.naming.name import Name
+from src.engine.language.name import Name
 from src.engine.output.output import Output
 from src.library.ais.dummy_ai import DummyAi
 from src.library.special.sound import Sound

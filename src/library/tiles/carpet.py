@@ -1,6 +1,6 @@
 from ecs import DynamicEntity
 
-from src.engine.naming.name import Name
+from src.engine.language.name import Name
 from src.engine.output.colors import magenta, ColorPair
 
 

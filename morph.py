@@ -1,6 +1,6 @@
 import fire
 
-from src.engine.naming.name import Name, _analyzer
+from src.engine.language.name import Name, _analyzer
 
 
 def main(word):

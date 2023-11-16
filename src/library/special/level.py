@@ -8,7 +8,7 @@ import numpy
 import toml as toml
 from ecs import DynamicEntity, Entity, Metasystem
 
-from src.engine.naming.name import Name
+from src.engine.language.name import Name
 from src.library.markup.house import House
 from src.library.markup.zone import Zone
 from src.library.special.genesis import Genesis
@@ -32,13 +32,6 @@ def load_palette_from(path):
 class Markup:
     zones: list[Zone]
     houses: list[House]
-
-    def for_point(self, p: int2) -> Zone | House:
-        for house in self.houses:
-            if ge2(p, house.house_borders[0]) and lt2(p, house.house_borders[1]):
-                return house
-
-        return min(self.zones, key=lambda z: d2(z.center, p))
 
 
 T = TypeVar('T')

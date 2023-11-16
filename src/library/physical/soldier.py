@@ -2,7 +2,7 @@ import random
 
 from src.engine.acting.damage import Health, DamageKind, ArmorKind, Weapon
 from src.library.ai_modules.spacial_memory import SpacialMemory
-from src.engine.naming.library import random_composite_name
+from src.engine.language.library import random_composite_name
 from src.engine.attitude.implementation import Faction, common_attitude
 from src.engine.output.colors import ColorPair, cyan
 from src.library.abstract.human import Human

@@ -2,7 +2,7 @@ from ecs import DynamicEntity
 
 from src.engine.acting.damage import Health, Weapon, ArmorKind, DamageKind
 from src.library.ai_modules.spacial_memory import SpacialMemory
-from src.engine.naming.name import Name
+from src.engine.language.name import Name
 from src.engine.output.colors import ColorPair, magenta, red
 from src.library.abstract.human import Human
 from src.library.ais.dummy_ai import DummyAi

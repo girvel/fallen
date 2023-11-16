@@ -1,7 +1,7 @@
 from src.engine.acting.damage import Weapon, Health, DamageKind, ArmorKind
 from src.engine.inventory import Inventory
-from src.engine.naming.library import reserved_names
-from src.engine.naming.name import CompositeName
+from src.engine.language.library import reserved_names
+from src.engine.language.name import CompositeName
 from src.engine.output.colors import ColorPair, white
 from src.engine.traits import Traits
 from src.library.abstract.human import Human

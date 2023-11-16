@@ -2,7 +2,7 @@ from typing import Any
 
 from ecs import DynamicEntity
 
-from src.engine.naming.name import Name, CompositeName
+from src.engine.language.name import Name, CompositeName
 from src.engine.output.colors import ColorPair, red
 from src.library.special.genesis import Genesis
 from src.library.special.hades import Hades

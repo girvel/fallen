@@ -1,7 +1,7 @@
 from ecs import DynamicEntity
 
 from src.engine.acting.damage import ArmorKind, Health
-from src.engine.naming.name import Name
+from src.engine.language.name import Name
 from src.engine.output.colors import ColorPair, yellow
 
 

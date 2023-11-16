@@ -1,7 +1,7 @@
 from ecs import DynamicEntity
 
 from src.engine.attitude.implementation import Faction
-from src.engine.naming.name import Name
+from src.engine.language.name import Name
 from src.engine.output.colors import blue, white, ColorPair
 
 
