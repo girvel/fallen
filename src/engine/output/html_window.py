@@ -4,9 +4,10 @@ from abc import abstractmethod, ABCMeta
 
 from jinja2 import Environment, PackageLoader
 
+from src.engine.output.grid_rendering import render_grid
 from src.engine.output.html import html_renderer
 from src.engine.output.window import Window
-from src.lib.vector import add2
+from src.lib.vector import add2, flip2
 
 
 class HtmlWindow(Window, metaclass=ABCMeta):
@@ -46,11 +47,11 @@ class HtmlWindow(Window, metaclass=ABCMeta):
             self.border_curses_window.border()
             self.border_curses_window.refresh()
 
-        html_renderer.render(
-            self.curses_window,
+        render_grid(html_renderer.render(
+            flip2(self.curses_window.getmaxyx()),
             self.jinja_environment.get_template(self.template_name).render(
                 **self.get_arguments(subject, perception),
             )
-        )
+        ), self.curses_window)  # TODO use render_grid in Game window
 
         self.curses_window.refresh()
