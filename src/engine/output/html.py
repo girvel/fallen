@@ -4,7 +4,6 @@ from html.parser import HTMLParser
 
 from src.engine.output.colors import ColorPair, yellow, white, red
 from src.engine.output.grid_rendering import put_string_on_grid
-from src.lib.toolkit import add_multiline_string
 from src.lib.vector import create_grid, grid_size
 
 
@@ -15,15 +14,12 @@ class HorizontalAlignment(Enum):
 
 
 class VerticalAlignment(Enum):
-    top = 0
-    center = 1
-    bottom = 2
+    top = 1
+    bottom = -1
 
 
 class CursesHtmlRenderer(HTMLParser):
-    size = None
-    y = None
-    x = None
+    grid = None
     color_stack = [ColorPair()]
     horizontal_alignment = HorizontalAlignment.left
     vertical_alignment = VerticalAlignment.top
@@ -38,13 +34,14 @@ class CursesHtmlRenderer(HTMLParser):
         attrs = dict(attrs)
 
         match tag:
-            # case "center":
-            #     self.horizontal_alignment = HorizontalAlignment.center
-            # case "right":
-            #     self.horizontal_alignment = HorizontalAlignment.right
-            # case "bottom":
-            #     self.vertical_alignment = VerticalAlignment.bottom
-            #     self.cursor_p = (0, grid_size(self.grid)[1] - 1)
+            case "center":
+                self.horizontal_alignment = HorizontalAlignment.center
+            case "right":
+                self.horizontal_alignment = HorizontalAlignment.right
+                self.cursor_p = (grid_size(self.grid)[0] - 1, self.cursor_p[1])
+            case "bottom":
+                self.vertical_alignment = VerticalAlignment.bottom
+                self.cursor_p = (0, grid_size(self.grid)[1] - 1)
             case "y":
                 self.color_stack.append(ColorPair(yellow))
             case "rw":
@@ -56,38 +53,26 @@ class CursesHtmlRenderer(HTMLParser):
 
     def handle_endtag(self, tag):
         match tag:
-            # case "center" | "right":
-            #     self.horizontal_alignment = HorizontalAlignment.left
-            # case "bottom":
-            #     self.vertical_alignment = VerticalAlignment.top
-            #     self.y = 0
+            case "center" | "right":
+                self.horizontal_alignment = HorizontalAlignment.left
+            case "bottom":
+                self.vertical_alignment = VerticalAlignment.top
+                self.cursor_p = (0, 0)
             case "y" | "rw" | "color":
                 self.color_stack.pop()
             case "div" | "p" | "li" | "br":
                 _, y = self.cursor_p
-                self.cursor_p = (0, y + 1)
+                self.cursor_p = (
+                    0 if self.horizontal_alignment != HorizontalAlignment.right else grid_size(self.grid)[0] - 1,
+                    y + self.vertical_alignment.value
+                )
 
     def handle_data(self, data):
-        self.cursor_p = put_string_on_grid(self.grid, self.cursor_p, data, self.color_stack[-1].to_curses())
-
-        # h, w = self.window.getmaxyx()
-        #
-        # match self.horizontal_alignment:
-        #     case HorizontalAlignment.center:
-        #         self.x = (w - len(data)) // 2  # TODO multiline
-        #     case HorizontalAlignment.right:
-        #         self.x = w - len(data) - 1
-        #
-        # data = data.lstrip(" ")
-        # if len(data) == 0: return
-        #
-        # self.y, self.x = add_multiline_string(
-        #     self.window,
-        #     self.y, self.x,
-        #     0, 0,
-        #     h, w,
-        #     data, self.color_stack[-1],
-        # )
+        self.cursor_p = put_string_on_grid(
+            self.grid, self.cursor_p, data, self.color_stack[-1].to_curses(),
+            self.horizontal_alignment == HorizontalAlignment.right,
+            self.vertical_alignment == VerticalAlignment.bottom,
+        )
 
 
 html_renderer = CursesHtmlRenderer()
