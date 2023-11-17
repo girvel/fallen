@@ -16,11 +16,11 @@ class VerticalAlignment(Enum):
 
 
 def put_string_on_grid(
-    grid: tuple[list[list[str]], int2], p: int2, string: str, attributes: int,
+    array: list[list[str]], window_size: int2, p: int2, string: str, attributes: int,
     horizontal_alignment: HorizontalAlignment, vertical_alignment: VerticalAlignment
 ) -> int2:
     x, y = p
-    array, (w, h) = grid
+    w, h = window_size
     i = 0
 
     def _realign():
@@ -33,15 +33,20 @@ def put_string_on_grid(
 
     x = _realign()
 
+    if y >= len(array):
+        for _ in range(y - len(array) + 1):
+            array.append([" "] * w)
+
     while True:
         if x >= w:
             y += vertical_alignment.value
             x = _realign()
 
+            array.append([" "] * w)
+
         if i >= len(string): break
 
-        if 0 <= y < w and 0 <= x < w:
-            array[y][x] = (string[i], attributes)
+        array[y][x] = (string[i], attributes)
 
         i += 1
         x += 1
@@ -50,11 +55,16 @@ def put_string_on_grid(
 
 
 def render_grid(grid: tuple[list[list[str]], int2], window: curses.window) -> None:
-    array, (w, h) = grid
+    window_h, window_w = window.getmaxyx()
+
+    array, _ = grid
     window.move(0, 0)
 
-    for y in range(0, h):
-        for x in range(0, w):
-            if y == h - 1 and x == w - 1: break
+    for y, row in enumerate(array):
+        if y >= window_h: break
+
+        for x, c in enumerate(row):
+            if y == window_h - 1 and x == window_w - 1: break
+            # curses can not display last window character
 
             window.addstr(*array[y][x])

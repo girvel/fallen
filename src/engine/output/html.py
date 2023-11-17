@@ -13,16 +13,18 @@ from src.lib.vector import create_grid, grid_size
 
 
 class CursesHtmlRenderer(HTMLParser):
-    grid = None
+    array = None
+    size = None
     color_stack = [ColorPair()]
     horizontal_alignment = HorizontalAlignment.left
     vertical_alignment = VerticalAlignment.top
 
     def render(self, size, html, **kwargs):
-        self.grid = create_grid(size, lambda: " ")
+        self.array = [[" "] * size[0]]
+        self.size = size
         self.cursor_p = (0, 0)
         self.feed(re.sub(r"\n\s*", "", html))
-        return self.grid
+        return self.array, (size[0], len(self.array))
 
     def handle_starttag(self, tag, attrs, **kwargs):
         attrs = dict(attrs)
@@ -34,13 +36,16 @@ class CursesHtmlRenderer(HTMLParser):
                 self.horizontal_alignment = HorizontalAlignment.right
             case "bottom":
                 self.vertical_alignment = VerticalAlignment.bottom
-                self.cursor_p = (0, grid_size(self.grid)[1] - 1)
+                self.cursor_p = (0, self.size[1] - 1)
             case "y":
                 self.color_stack.append(ColorPair(yellow))
             case "rw":
                 self.color_stack.append(ColorPair(white, red))
             case "li":
-                self.cursor_p = put_string_on_grid(self.grid, self.cursor_p, "- ", ColorPair(yellow).to_curses())
+                self.cursor_p = put_string_on_grid(
+                    self.array, self.size, self.cursor_p, "- ", ColorPair(yellow).to_curses(),
+                    self.horizontal_alignment, self.vertical_alignment,
+                )
             case "color":
                 self.color_stack.append(ColorPair.from_code(int(attrs["code"])))
 
@@ -55,14 +60,11 @@ class CursesHtmlRenderer(HTMLParser):
                 self.color_stack.pop()
             case "div" | "p" | "li" | "br":
                 _, y = self.cursor_p
-                self.cursor_p = (
-                    0 if self.horizontal_alignment != HorizontalAlignment.right else grid_size(self.grid)[0] - 1,
-                    y + self.vertical_alignment.value
-                )
+                self.cursor_p = (0, y + self.vertical_alignment.value)
 
     def handle_data(self, data):
         self.cursor_p = put_string_on_grid(
-            self.grid, self.cursor_p, data, self.color_stack[-1].to_curses(),
+            self.array, self.size, self.cursor_p, data, self.color_stack[-1].to_curses(),
             self.horizontal_alignment, self.vertical_alignment,
         )
 
