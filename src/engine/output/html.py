@@ -1,21 +1,15 @@
+"""HTML rendering engine.
+
+Has some restrictions:
+- Can not horizontally align complex data (only the contents of one tag)
+"""
+
 import re
-from enum import Enum
 from html.parser import HTMLParser
 
 from src.engine.output.colors import ColorPair, yellow, white, red
-from src.engine.output.grid_rendering import put_string_on_grid
+from src.engine.output.grid_rendering import put_string_on_grid, HorizontalAlignment, VerticalAlignment
 from src.lib.vector import create_grid, grid_size
-
-
-class HorizontalAlignment(Enum):
-    left = 0
-    center = 1
-    right = 2
-
-
-class VerticalAlignment(Enum):
-    top = 1
-    bottom = -1
 
 
 class CursesHtmlRenderer(HTMLParser):
@@ -38,7 +32,6 @@ class CursesHtmlRenderer(HTMLParser):
                 self.horizontal_alignment = HorizontalAlignment.center
             case "right":
                 self.horizontal_alignment = HorizontalAlignment.right
-                self.cursor_p = (grid_size(self.grid)[0] - 1, self.cursor_p[1])
             case "bottom":
                 self.vertical_alignment = VerticalAlignment.bottom
                 self.cursor_p = (0, grid_size(self.grid)[1] - 1)
@@ -70,8 +63,7 @@ class CursesHtmlRenderer(HTMLParser):
     def handle_data(self, data):
         self.cursor_p = put_string_on_grid(
             self.grid, self.cursor_p, data, self.color_stack[-1].to_curses(),
-            self.horizontal_alignment == HorizontalAlignment.right,
-            self.vertical_alignment == VerticalAlignment.bottom,
+            self.horizontal_alignment, self.vertical_alignment,
         )
 
 
