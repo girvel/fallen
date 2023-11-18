@@ -11,6 +11,7 @@ from src.library.actions.leave import Leave
 from src.library.actions.no_action import NoAction
 from src.library.actions.say import Say
 from src.engine.acting.damage import Weapon, DamageKind
+from src.library.actions.teleport import Teleport
 from src.library.ai_modules.follower import Follower
 from src.library.ai_modules.pather import Pather
 from src.engine.rails_base import RailsBase, Scene
@@ -64,6 +65,11 @@ class Rails(RailsBase):
             find_someone_to_fight=Quest("Найти с чем подраться"),
         )
 
+        self.locks = Entity(
+            mother_leaving=None,
+            mother_taking_care=None,
+        )
+
         self.vision_level = None
 
 
@@ -76,7 +82,7 @@ class Rails(RailsBase):
         q = self.quests
         memory = c.player.ai.memory
 
-        self.disable_complex_ai(c.mother)
+        self.locks.mother_leaving = self.lock_complex_ai(c.mother)
 
         yield from self.start_cutscene()
         yield from self.center_camera()
@@ -238,7 +244,7 @@ class Rails(RailsBase):
 
         yield from wait_for(25)
         yield {c.brother: Leave()}
-        self.enable_complex_ai(c.mother)
+        self.unlock_complex_ai(c.mother, self.locks.mother_leaving)
 
 
     def is_player_killing_the_dog(self):
@@ -251,7 +257,7 @@ class Rails(RailsBase):
         self.characters.player.health.amount.current <= 0
         or self.is_player_killing_the_dog()
     ))
-    def player_dies(self, scene):
+    def player_has_vision(self, scene):
         scene.enabled = False
 
         c = self.characters
@@ -272,8 +278,8 @@ class Rails(RailsBase):
         memory.is_vision_disabled = True
         yield from c.player.ai.wait_seconds(2)
 
-        self.disable_complex_ai(c.mother)
-        c.mother.ai.composite[Pather].going_to = p.mother_reappearance
+        self.locks.mother_taking_care = self.lock_complex_ai(c.mother)
+        yield {c.mother: Teleport(p.mother_reappearance)}
 
         c.player.health.amount.reset_to_max()
 
@@ -325,7 +331,7 @@ class Rails(RailsBase):
 
         yield from self.plane_shift(self.vision_level, self.vision_level.rails.positions.observing_the_throne)
 
-        self.enable_complex_ai(c.mother)
+        self.unlock_complex_ai(c.mother, self.locks.mother_taking_care)
 
 
     @Scene.new(lambda self: d2(self.characters.player.p, self.positions.kinds_yard_entrance) <= 2, enabled=False)
@@ -410,7 +416,7 @@ class Rails(RailsBase):
 
         c = self.characters
 
-        self.disable_complex_ai(c.mother)
+        mother_lock = self.lock_complex_ai(c.mother)
 
         yield from self.start_cutscene()
         yield from self.center_camera()
@@ -429,4 +435,4 @@ class Rails(RailsBase):
             yield {c.mother: Say("Кстати, это было глупо.")}
 
         yield from self.end_cutscene()
-        self.enable_complex_ai(c.mother)
+        self.unlock_complex_ai(c.mother, mother_lock)

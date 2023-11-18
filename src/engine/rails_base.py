@@ -1,7 +1,8 @@
 import functools
 import logging
+from collections import defaultdict
 from dataclasses import dataclass
-from typing import Callable, Iterator, TypeAlias
+from typing import Callable, Iterator, TypeAlias, Any
 
 from ecs import DynamicEntity
 
@@ -34,7 +35,8 @@ class RailsBase(DynamicEntity):
         self.ms = ms
         self.genesis = genesis
 
-        self._ai_storage = {}
+        self._ai_storage: dict[DynamicEntity, Any] = {}
+        self._ai_locks: dict[DynamicEntity, list[object]] = {}
 
         logging.info(f"Initialized rails with scenes {[s.name for s in self.scenes]}")
 
@@ -85,25 +87,35 @@ class RailsBase(DynamicEntity):
         return decorator
 
     def plane_shift(self, level, p) -> Script:
-        yield
-        self.get_player().ai.memory.is_vision_disabled = True
+        yield  # to display the last railed action before the shift
         Level.change(self.get_player(), level, p)
-        yield from self.center_camera()
-        self.get_player().ai.memory.is_vision_disabled = False
 
     def create_entity(self, entity) -> Script:
         self.genesis.entities_to_create.add(entity)
         yield
         if hasattr(entity, "after_load"): entity.after_load(entity.level)
 
-    def disable_complex_ai(self, entity) -> None:
-        self._ai_storage[entity] = entity.ai
-        entity.ai = DummyAi()
-        entity.ai.composite[SpacialMemory].knows(self.level)
+    def lock_complex_ai(self, entity) -> object:
+        if entity not in self._ai_storage:
+            self._ai_storage[entity] = entity.ai
+            self._ai_locks[entity] = []
 
-    def enable_complex_ai(self, entity) -> None:
-        entity.ai = self._ai_storage[entity]
-        del self._ai_storage[entity]
+            entity.ai = DummyAi()
+            entity.ai.composite[SpacialMemory].knows(self.level)
+
+        entity.ai.clear()
+
+        lock = object()
+        self._ai_locks[entity].append(lock)
+        return lock
+
+    def unlock_complex_ai(self, entity, lock) -> None:
+        self._ai_locks[entity].remove(lock)
+
+        if len(self._ai_locks[entity]) == 0:
+            entity.ai = self._ai_storage[entity]
+            del self._ai_storage[entity]
+            del self._ai_locks[entity]
 
 
 @dataclass(eq=False)
