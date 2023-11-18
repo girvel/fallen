@@ -96,6 +96,16 @@ def generate_hotkeys(debug_mode):
     def next_pane(io, subject, perception):
         io.output.panel.pane_i.move(1)
 
+    @Hotkey.define(result[GAME], [curses.KEY_UP], "Прокрутить панель вверх")
+    def scroll_up(io, subject, perception):
+        panel = io.output.panel
+        panel.panes[panel.pane_i.current].scroll.move(-1)
+
+    @Hotkey.define(result[GAME], [curses.KEY_DOWN], "Прокрутить панель вниз")
+    def scroll_down(io, subject, perception):
+        panel = io.output.panel
+        panel.panes[panel.pane_i.current].scroll.move(1)
+
     @Hotkey.define(result[GAME], [curses.KEY_MOUSE], "Присмотреться к объекту")
     def inspect(io, subject, perception):
         _, mx, my, _, _ = curses.getmouse()

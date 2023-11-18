@@ -1,5 +1,6 @@
 import curses
 from enum import Enum
+from statistics import median
 
 from src.lib.vector import int2
 
@@ -38,13 +39,14 @@ def put_string_on_grid(
             array.append([" "] * w)
 
     while True:
+        if i >= len(string): break
+
         if x >= w:
             y += vertical_alignment.value
+            x = 0
             x = _realign()
 
             array.append([" "] * w)
-
-        if i >= len(string): break
 
         array[y][x] = (string[i], attributes)
 
@@ -54,17 +56,19 @@ def put_string_on_grid(
     return x, y
 
 
-def render_grid(grid: tuple[list[list[str]], int2], window: curses.window) -> None:
+def render_grid(grid: tuple[list[list[str]], int2], window: curses.window, scroll: int) -> None:
     window_h, window_w = window.getmaxyx()
-
     array, _ = grid
+
+    scroll = median([0, scroll, len(array) - window_h])
+
     window.move(0, 0)
 
-    for y, row in enumerate(array):
+    for y, row in enumerate(array[scroll:]):
         if y >= window_h: break
 
         for x, c in enumerate(row):
             if y == window_h - 1 and x == window_w - 1: break
             # curses can not display last window character
 
-            window.addstr(*array[y][x])
+            window.addstr(*c)
