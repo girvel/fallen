@@ -30,6 +30,7 @@ class Panel(HtmlWindow):
         return {
             "previous_pane_name": self.panes[self.pane_i.current - 1].name if not self.pane_i.is_min() else None,
             "next_pane_name":     self.panes[self.pane_i.current + 1].name if not self.pane_i.is_max() else None,
+            "pane_name": self.panes[self.pane_i.current].name,
         }
 
     def _render(self, subject, perception):
@@ -37,7 +38,7 @@ class Panel(HtmlWindow):
         self.panes[self.pane_i.current].render(
             subject, perception,
             flip2(self.curses_window.getmaxyx()),
-            (0, 0),
+            (0, 2),
         )
 
     def _calculate_visibility(self, subject, perception):
