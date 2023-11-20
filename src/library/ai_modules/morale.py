@@ -9,7 +9,7 @@ from src.systems.ai import Perception
 
 @dataclass
 class Morale:
-    aggression_base_cost: float = 35
+    aggression_base_cost: float = -35
     aggression_to_neutral_base_cost: float = 1
     neutrality_threshold: int = 10
 
