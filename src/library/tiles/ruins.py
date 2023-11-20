@@ -7,3 +7,5 @@ class Ruins(DynamicEntity):
     name = Name("обломки")
     layer = "tiles"
     character = ":"
+
+    boring_flag = None

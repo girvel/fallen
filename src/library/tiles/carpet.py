@@ -9,3 +9,5 @@ class Carpet(DynamicEntity):
     character = '`'
     color = ColorPair(magenta)
     layer = "tiles"
+
+    boring_flag = None
