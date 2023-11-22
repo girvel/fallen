@@ -35,8 +35,7 @@ class LanguageCenter:
     def _(self, meme: Aggression, idea: Idea, subject: DynamicEntity, perception: Perception):
         if meme.target is subject and subject.attitude.get(meme.source) > 0:
             return Message(Say(
-                f"<Не понимает почему {meme.source.name:им} "
-                f"нападает на {subject.name:ви}>",
+                f"<Не понимает почему {meme.source.name:им} нападает на {subject.name:ви}>",
                 idea=idea
             ), 0)
 
@@ -50,4 +49,4 @@ class LanguageCenter:
         return Message(Say(
             f"<Предостерегает о {meme.entity.name:пр} {placement(subject.level.markup, meme.p)}>",
             idea=idea,
-        ), randrange(0, 100))
+        ), randrange(25, 100))
