@@ -106,7 +106,7 @@ class Rails(RailsBase):
 
         yield {c.brother: Say("Вот, смотри.")}
         yield {c.player: Say("В твоих руках оказывается длинный свёрток льняной ткани.", True)}
-        c.player.weapon = Weapon(8, DamageKind.Slashing)
+        c.player.weapon = Weapon(800, DamageKind.Slashing)
 
         yield from self.options({
             (look := "Развязать бечёвку"): NoAction(),
@@ -276,6 +276,13 @@ class Rails(RailsBase):
 
         yield from self.start_cutscene()
 
+        if self.dog_quest_ending == DogQuestEnding.Win:
+            yield from c.player.ai.wait_seconds(2)
+            yield {c.player: Say("Что-то не так.")}
+            yield {c.player: Say("Железный вкус на языке, зрение разошлось на две половины.", True)}
+            yield {c.player: Say("Ты пытаешься вдохнуть, но не можешь.", True)}
+
+        yield from c.player.ai.wait_seconds(2)
         memory.is_vision_disabled = True
         yield from c.player.ai.wait_seconds(2)
 
@@ -298,7 +305,6 @@ class Rails(RailsBase):
         scene.enabled = False
 
         yield from self.center_camera()
-        memory.is_vision_disabled = False
 
         yield {c.player: Say("Что происходит?")}
         c.mother.ai.composite[Pather].going_to = p.beside_the_bed
