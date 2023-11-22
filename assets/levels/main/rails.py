@@ -1,3 +1,4 @@
+import logging
 from enum import Enum
 from pathlib import Path
 
@@ -6,7 +7,8 @@ from ecs import Entity, exists
 from assets.levels.main.library.physical.brother import Brother
 from assets.levels.main.library.physical.girl import Girl
 from assets.levels.main.library.physical.mother import Mother
-from src.library.actions.attack import Attack
+from src.engine.acting.aggressive import Aggressive
+from src.library.actions.hand_attack import HandAttack
 from src.library.actions.leave import Leave
 from src.library.actions.no_action import NoAction
 from src.library.actions.say import Say
@@ -73,7 +75,7 @@ class Rails(RailsBase):
         self.vision_level = None
 
 
-    @Scene.new()
+    # @Scene.new()
     def introduction(self, scene):
         scene.enabled = False
 
@@ -374,7 +376,11 @@ class Rails(RailsBase):
         yield from self.end_cutscene()
 
 
-    @Scene.new(lambda self: ~Q(self.characters.player.act)[Attack].target.character == Frog.character)
+    @Scene.new(lambda self: any(
+        victim.character == Frog.character
+        for victim in (~Q(self.characters.player.act)[Aggressive].get_victims(self.characters.player) or ())
+        if not logging.debug([type(victim), Frog])
+    ))
     def player_attacks_frog(self, scene):
         c = self.characters
 
@@ -396,9 +402,12 @@ class Rails(RailsBase):
 
 
     @Scene.new(
-        lambda self: ~Q(self.characters.player.act)[Attack].target.character == Frog.character,
+        lambda self: any(
+            victim.character == Frog.character
+            for victim in (~Q(self.characters.player.act)[Aggressive].get_victims(self.characters.player) or ())
+        ),
         enabled=False,
-    )  # TODO write & use is_attacking
+    )
     def player_attacks_frog_again(self, scene):
         scene.enabled = False
 

@@ -10,5 +10,5 @@ class Action(ABC):
     succeeded: bool = True
 
     @abstractmethod
-    def execute(self, actor: DynamicEntity, hades: Hades, genesis: Genesis):
+    def execute(self, actor: DynamicEntity, hades: Hades, genesis: Genesis) -> None:
         pass

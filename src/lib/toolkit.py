@@ -93,3 +93,10 @@ def set_function_value(dictionary: dict, key: Any):
         return value
 
     return decorator
+
+def rhombus_iterator(r: int):
+    return (
+        (dx, dy)
+        for dy in range(-r, r + 1)
+        for dx in range(abs(dy) - r, r - abs(dy) + 1)
+    )

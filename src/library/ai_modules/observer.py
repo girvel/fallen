@@ -4,7 +4,7 @@ from ecs import DynamicEntity
 
 from src.engine.meme import Aggression, Idea, DangerousEntity
 from src.lib.query import Q
-from src.library.actions.attack import Attack
+from src.library.actions.hand_attack import HandAttack
 from src.library.tiles.body import Body
 from src.systems.ai import Perception
 
@@ -20,8 +20,8 @@ class Observer:
         aggressions = [
             Aggression(e, target)
             for e in perception.vision.physical.values()
-            if (target := ~Q(e).act[Attack].target)  # TODO use is_attacking
-            and subject.attitude.get(target) >= 0
+            if (target := ~Q(e).act[HandAttack].target)
+               and subject.attitude.get(target) >= 0
         ]
 
         memes.extend(aggressions)

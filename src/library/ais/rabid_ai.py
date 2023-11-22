@@ -1,6 +1,6 @@
 import random
 
-from src.library.actions.attack import Attack
+from src.library.actions.hand_attack import HandAttack
 from src.library.actions.move import Move
 from src.library.ai_modules.pather import Pather
 from src.library.ai_modules.spacial_memory import SpacialMemory
@@ -31,6 +31,6 @@ class RabidAi:
 
         v = sub2(target.p, subject.p)
         if abs2(v) == 1:
-            return Attack(target)
+            return HandAttack(target)
         else:
             self.composite[Pather].going_to = target.p

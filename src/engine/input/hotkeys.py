@@ -6,7 +6,7 @@ from typing import Callable, Optional, IO
 from ecs import DynamicEntity
 
 from src.engine.acting.action import Action
-from src.library.actions.attack import Attack
+from src.library.actions.hand_attack import HandAttack
 from src.library.actions.cast_fire_flow import CastFireFlow
 from src.library.actions.inspect import Inspect
 from src.library.actions.move import Move
@@ -55,9 +55,9 @@ def generate_hotkeys(debug_mode):
             if io.output.panel.mode == Move:
                 return Move(direction)
 
-            if io.output.panel.mode == Attack:
+            if io.output.panel.mode == HandAttack:
                 if (target := perception.vision[subject.layer].get(add2(subject.p, direction))) is not None:
-                    return Attack(target)
+                    return HandAttack(target)
                 return Move(direction)
 
     directions_by_key = {
@@ -79,7 +79,7 @@ def generate_hotkeys(debug_mode):
 
     @Hotkey.define(result[GAME], ["r"], "Переключить атаку/движение")
     def change_mode(io, subject, perception):
-        io.output.panel.mode = (io.output.panel.mode == Move) and Attack or Move
+        io.output.panel.mode = (io.output.panel.mode == Move) and HandAttack or Move
 
     @Hotkey.define(result[GAME], ["1"], "Сотворить поток огня")
     def cast_fire_flow(io, subject, perception):
