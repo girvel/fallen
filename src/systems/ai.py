@@ -101,7 +101,7 @@ def run_rails(level: 'grids', hades: 'entities_to_destroy'):
 
     started_scenes = []
     for s in level.rails.scenes:
-        if s.enabled and s.start_predicate():
+        if s.enabled and s.start_predicate():  # TODO optimization: remove disabled scenes from the list?
             started_scenes.append(s.run())
             logging.info(f"Starting the scene '{s.name}'")
 

@@ -5,6 +5,7 @@ from pathlib import Path
 import yaml
 from ecs import Entity, DynamicEntity
 
+from src.engine.parenting import iter_parenting_stack
 from src.library.special.hades import Hades
 from src.lib.limited import Limited
 from src.lib.query import Q
@@ -71,6 +72,11 @@ def inflict_damage(
         logging.info(f"{target.name} is killed")
         hades.entities_to_destroy.add(target)
 
+        for killer in iter_parenting_stack(source):
+            if not hasattr(killer, "last_killed"):
+                killer.last_killed = []
+
+            killer.last_killed.append(target)
 
 db = yaml.safe_load((Path(__file__).parent / "damage_and_armor.yaml").read_text())
 

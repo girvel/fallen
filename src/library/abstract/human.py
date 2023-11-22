@@ -11,6 +11,8 @@ class Human(DynamicEntity):
     on_death = body_factory
     layer = "physical"
 
+    human_flag = None
+
     def __init__(self, *args, **kwargs):
         self.senses = Senses(12, 0, 0)
         self.ai = DummyAi()

@@ -47,6 +47,6 @@ class LanguageCenter:
     @handle.register
     def _(self, meme: DangerousEntity, idea: Idea, subject: DynamicEntity, perception: Perception):
         return Message(Say(
-            f"<Предостерегает о {meme.entity.name:пр} {placement(subject.level.markup, meme.p)}>",
+            f"<Видел {meme.entity.name:ви} {placement(subject.level.markup, meme.p)}>",
             idea=idea,
         ), randrange(25, 100))

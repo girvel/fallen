@@ -4,6 +4,10 @@ import inspect
 sequence = []
 
 @sequence.append
+def clean_up_kills(container: "last_killed"):
+    del container.last_killed
+
+@sequence.append
 def clean_up_health(container: "health"):
     container.health.last_damaged_by.clear()
 

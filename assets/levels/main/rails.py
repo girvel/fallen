@@ -22,6 +22,7 @@ from src.library.ais.io import Quest, Notification
 from src.library.items.bun import Bun
 from src.library.items.lily import Lily
 from src.library.physical.frog import Frog
+from src.library.physical.peasant import Peasant
 from src.library.physical.rabid_dog import RabidDog
 from src.library.special.level import Level
 from src.lib import vector
@@ -75,7 +76,7 @@ class Rails(RailsBase):
         self.vision_level = None
 
 
-    # @Scene.new()
+    @Scene.new()
     def introduction(self, scene):
         scene.enabled = False
 
@@ -108,7 +109,7 @@ class Rails(RailsBase):
 
         yield {c.brother: Say("Вот, смотри.")}
         yield {c.player: Say("В твоих руках оказывается длинный свёрток льняной ткани.", True)}
-        c.player.weapon = Weapon(800, DamageKind.Slashing)
+        c.player.weapon = Weapon(8, DamageKind.Slashing)
 
         yield from self.options({
             (look := "Развязать бечёвку"): NoAction(),
@@ -452,3 +453,23 @@ class Rails(RailsBase):
 
         yield from self.end_cutscene()
         self.unlock_complex_ai(c.mother, mother_lock)
+
+
+    @Scene.new(lambda self: any(
+        hasattr(victim, "human_flag")
+        for victim in (~Q(self.characters.player).last_killed or ())
+    ))
+    def player_kills_a_person(self, scene):
+        scene.enabled = False
+        self.player_attacks_frog.enabled = False
+        self.player_attacks_frog_again.enabled = False
+
+        c = self.characters
+
+        yield from self.start_cutscene()
+        yield from self.center_camera()
+
+        yield {c.player: Say("Хм.")}
+        yield {c.player: Say("Ты должен был что-то почувствовать.", True)}
+
+        yield from self.end_cutscene()
