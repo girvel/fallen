@@ -2,7 +2,7 @@ import curses
 from statistics import median
 
 from src.library.actions.inspect import Inspect
-from src.engine.output.colors import ColorPair, red
+from src.engine.output.colors import ColorPair, red, black
 from src.engine.output.window import Window
 from src.library.special.level import Level
 from src.lib.query import Q
@@ -66,8 +66,9 @@ class Game(Window):
             for layer in self.layers_display_order:
                 if (entity := grid_get(subject.level.grids[layer], p)) is None: continue
 
-                character = entity.character
-                color = get_color_pair(entity) | (
+                color, is_black = get_color_pair(entity)
+
+                color |= (
                     inspected == entity
                         and curses.A_REVERSE
                         or 0
@@ -78,6 +79,8 @@ class Game(Window):
                     and self.io.memory.current_sound is perception.hearing.get(p)
                     else 0
                 )
+
+                character = entity.character if not is_black else " "
                 break
             else:
                 character = Level.no_entity_character
@@ -99,9 +102,12 @@ def _get_color_pair(entity):
 
 
 def get_color_pair(entity):  # TODO refactor
-    color = _get_color_pair(entity).to_curses()
+    color = _get_color_pair(entity)
 
-    if entity.layer in {"physical", "effects"}:
-        color |= curses.A_BOLD
+    curses_color = color.to_curses()
+    is_black = color == ColorPair(black, black)
 
-    return color
+    if entity.layer in ("physical", "effects") and color.fg != black:
+        curses_color |= curses.A_BOLD
+
+    return curses_color, is_black

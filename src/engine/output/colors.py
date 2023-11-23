@@ -24,7 +24,7 @@ _color_scheme = {
     white:   0xc5c8c6,
 }
 
-@dataclass
+@dataclass(frozen=True)
 class ColorPair:
     fg: int = white
     bg: int = black
