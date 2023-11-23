@@ -12,7 +12,7 @@ from src.library.special.genesis import Genesis
 from src.library.special.hades import Hades
 from src.library.special.level import Level
 from src.lib.toolkit import crash_safe
-from src.systems import acting, destruction_and_creation, ai, death, nature
+from src.systems import acting, destruction_and_creation, ai, death, nature, clock
 
 
 def build_metasystem(debug_mode):
@@ -22,6 +22,7 @@ def build_metasystem(debug_mode):
     logging.info("Initializing systems")
 
     for system in map(create_system, [
+        *clock.sequence,
         # *regeneration.sequence,
         *nature.sequence,
         *ai.sequence,

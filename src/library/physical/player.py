@@ -18,6 +18,8 @@ class Player(Human):
 
     on_death = lambda *_, **__: None
 
+    tick_counter = 0
+
     def __post_init__(self):
         self.name = CompositeName(reserved_names.hugh, reserved_names.kinds["male"])
 

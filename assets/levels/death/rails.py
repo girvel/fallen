@@ -14,10 +14,7 @@ class Rails(RailsBase):
             old_sarr=next(self.level.find(OldSarr)),
         )
 
-        self.death_counter = permanent_storage.read_key("death_counter", 0) + 1
-        permanent_storage.write_key("death_counter", self.death_counter)
-
-        self.sarr_comments = [
+        self.normal_comments = [
             ["Умер? Ну ладно, это случается."],
             ["О, ты снова умер."],
             ["О, это снова ты."],
@@ -48,6 +45,18 @@ class Rails(RailsBase):
             ["Я с вами, идиотами, работать больше не буду."],
         ]
 
+        self.ultra_fast_death_comments = [
+            "Ты как так смог?",
+            "Это не смешно.",
+            "Ты издеваешься надо мной?",
+        ]
+
+        self.fast_death_comments = [
+            "Ты быстро, однако.",
+            "Ты только что тут был.",
+            "Это новый рекорд.",
+        ]
+
     @Scene.new()
     def talk_with_old_sarr(self, scene):
         scene.enabled = False
@@ -56,25 +65,55 @@ class Rails(RailsBase):
         c = self.characters
         memory = c.player.ai.memory
 
+        player_time_alive = c.player.tick_counter
+
         yield from self.start_cutscene()
         yield from self.center_camera()
 
         yield {c.player: Say("Диковинная мастерская, озарённая оранжеватым светом.", True)}
         yield {c.player: Say("Тебе кажется, что ты здесь не один.", True)}
 
-        # TODO NEXT special deaths
+        if player_time_alive <= 25:
+            counter = permanent_storage.read_key("ultra_fast_death_counter", -1) + 1
+            permanent_storage.write_key("ultra_fast_death_counter", counter)
 
-        if self.death_counter < len(self.sarr_comments):
-            for line in self.sarr_comments[self.death_counter]:
-                yield {c.old_sarr: Say(line)}
+            yield {c.old_sarr: Say(
+                self.ultra_fast_death_comments[counter]
+                if counter < len(self.ultra_fast_death_comments) else
+                "..."
+            )}
+
+        elif (
+            player_time_alive < 100 and
+            player_time_alive < (record := permanent_storage.read_key("death_time_record", float('inf')))
+        ):
+            permanent_storage.write_key("death_time_record", player_time_alive)
+
+            counter = permanent_storage.read_key("fast_death_counter", -1) + 1
+            permanent_storage.write_key("fast_death_counter", counter)
+
+            yield {c.old_sarr: Say(
+                self.fast_death_comments[counter]
+                if counter < len(self.fast_death_comments) else
+                "..."
+            )}
+
         else:
-            yield {c.player: Say("Ты чувствуешь на себе злобный взгляд.", True)}
+            counter = permanent_storage.read_key("normal_death_counter", -1) + 1
+            permanent_storage.write_key("normal_death_counter", counter)
+
+            if counter < len(self.normal_comments):
+                for line in self.normal_comments[counter]:
+                    yield {c.old_sarr: Say(line)}
+
+            else:
+                yield {c.player: Say("Ты чувствуешь на себе злобный взгляд.", True)}
 
         yield {c.old_sarr: Say("Действуем?")}
 
         yield from self.options({
-            (ask := "А что происходит?"): NoAction(),
             (agree := "Ага."): NoAction(),
+            (ask := "А что происходит?"): NoAction(),
             "Осмотреться": NoAction(),
         })
 

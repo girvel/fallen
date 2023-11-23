@@ -25,6 +25,7 @@ def _read_storage():
     return toml.loads(file_path.read_text(encoding="utf-8")) if file_path.exists() else {}
 
 
+# TODO NEXT split by .
 def read_key(key: str, default = None):
     try:
         return _read_storage().get(key, default)
