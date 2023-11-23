@@ -24,3 +24,5 @@ armor_kinds:
   Wood: [[Cold, Piercing], [Fire]]
   Stone: [[Acid, Cold, Fire, Lightning, Piercing, Slashing, Thunder], []]
   Ice: [[Acid, Cold], [Crushing, Thunder, Fire]]
+
+  Menith: [[Force, Necrotic, Psychic, Radiant], []]

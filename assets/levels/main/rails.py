@@ -62,6 +62,7 @@ class Rails(RailsBase):
             kinds_yard_entrance=(185, 45),
             girl_appearance=(162, 42),
             girl_runs_away=(183, 54),
+            death_start=(5, 3),
         )
 
         self.quests = Entity(
@@ -74,9 +75,11 @@ class Rails(RailsBase):
         )
 
         self.vision_level = None
+        self.death_level = None
 
 
-    @Scene.new()
+    # TODO NEXT
+    # @Scene.new()
     def introduction(self, scene):
         scene.enabled = False
 
@@ -257,10 +260,15 @@ class Rails(RailsBase):
             and self.characters.player in self.characters.rabid_dog.health.last_damaged_by
         )
 
+    # TODO NEXT
+    # @Scene.new(lambda self: (
+    #     self.characters.player.health.amount.current <= 0
+    #     or self.is_player_killing_the_dog()
+    # ))
     @Scene.new(lambda self: (
         self.characters.player.health.amount.current <= 0
         or self.is_player_killing_the_dog()
-    ))
+    ), enabled=False)
     def player_has_vision(self, scene):
         scene.enabled = False
 
@@ -456,7 +464,7 @@ class Rails(RailsBase):
 
 
     @Scene.new(lambda self: any(
-        hasattr(victim, "human_flag")
+        hasattr(victim, "human_flag") and victim is not self.characters.player
         for victim in (~Q(self.characters.player).last_killed or ())
     ))
     def player_kills_a_person(self, scene):
@@ -473,3 +481,21 @@ class Rails(RailsBase):
         yield {c.player: Say("Ты должен был что-то почувствовать.", True)}
 
         yield from self.end_cutscene()
+
+
+    # TODO NEXT
+    # @Scene.new(lambda self: self.characters.player.health.amount.current <= 0, enabled=False)
+    @Scene.new(lambda self: self.characters.player.health.amount.current <= 0)
+    def player_dies_for_real(self, scene):
+        scene.enabled = False
+
+        c = self.characters
+        p = self.positions
+
+        yield from self.start_cutscene()
+
+        # TODO RailsBase procedure
+        self.death_level = self.ms.add(Level(self.ms, Path("assets/levels/death"), False, self.genesis))
+        self.death_level.rails.parent_level = c.player.level
+
+        yield from self.plane_shift(self.death_level, p.death_start)

@@ -1,4 +1,5 @@
 import curses
+import logging
 from dataclasses import dataclass
 from enum import Enum
 
@@ -40,6 +41,10 @@ class ColorPair:
                     round((hex // 0x000100 % 0x100) / 0x100 * 1000),
                     round((hex             % 0x100) / 0x100 * 1000),
                 )
+        else:
+            logging.info("Failed to initialize color")
+
+        logging.info(f"Available {curses.COLOR_PAIRS} color pairs")
 
         for fg_i in range(8):
             for bg_i in range(8):
