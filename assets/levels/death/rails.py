@@ -1,6 +1,7 @@
 from ecs import Entity
 
 from assets.levels.death.library.physical.old_sarr import OldSarr
+from src.engine import permanent_storage
 from src.engine.input.hotkeys import GameEnd
 from src.engine.rails_base import RailsBase, Scene
 from src.library.actions.no_action import NoAction
@@ -12,6 +13,9 @@ class Rails(RailsBase):
         self.characters = Entity(
             old_sarr=next(self.level.find(OldSarr)),
         )
+
+        self.death_counter = permanent_storage.read_key("death_counter", 0) + 1
+        permanent_storage.write_key("death_counter", self.death_counter)
 
         # self.sarr_comments = [
         #
@@ -31,10 +35,10 @@ class Rails(RailsBase):
         yield {c.player: Say("Диковинная мастерская, озарённая оранжеватым светом.", True)}
         yield {c.player: Say("Тебе кажется, что ты здесь не один.", True)}
 
-        # TODO NEXT permanent storage for deaths
         # TODO NEXT special deaths
 
         yield {c.old_sarr: Say("Умер? Ну ладно, это случается.")}
+        yield {c.old_sarr: Say("Действуем?")}
 
         yield from self.options({
             (ask := "А что происходит?"): NoAction(),

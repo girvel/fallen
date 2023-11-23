@@ -388,7 +388,6 @@ class Rails(RailsBase):
     @Scene.new(lambda self: any(
         victim.character == Frog.character
         for victim in (~Q(self.characters.player.act)[Aggressive].get_victims(self.characters.player) or ())
-        if not logging.debug([type(victim), Frog])
     ))
     def player_attacks_frog(self, scene):
         c = self.characters

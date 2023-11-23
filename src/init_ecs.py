@@ -4,6 +4,7 @@ from time import time
 
 from ecs import Metasystem, create_system
 
+from src.engine import permanent_storage
 from src.engine.input.hotkeys import GameEnd
 from src.library.ais.io import IO
 from src.library.physical.player import Player
@@ -42,6 +43,8 @@ def build_metasystem(debug_mode):
 
 
 def init(stdscr, track, debug_mode, no_render, no_rails, no_fixed_fps):
+    permanent_storage.initialize()
+
     ms, genesis = build_metasystem(debug_mode)
 
     level = ms.add(Level(ms, Path("assets/levels/main"), no_rails, genesis))
