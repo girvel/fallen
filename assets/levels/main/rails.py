@@ -78,8 +78,7 @@ class Rails(RailsBase):
         self.death_level = None
 
 
-    # TODO NEXT
-    # @Scene.new()
+    @Scene.new()
     def introduction(self, scene):
         scene.enabled = False
 
@@ -260,15 +259,10 @@ class Rails(RailsBase):
             and self.characters.player in self.characters.rabid_dog.health.last_damaged_by
         )
 
-    # TODO NEXT
-    # @Scene.new(lambda self: (
-    #     self.characters.player.health.amount.current <= 0
-    #     or self.is_player_killing_the_dog()
-    # ))
     @Scene.new(lambda self: (
         self.characters.player.health.amount.current <= 0
         or self.is_player_killing_the_dog()
-    ), enabled=False)
+    ))
     def player_has_vision(self, scene):
         scene.enabled = False
 
@@ -482,9 +476,7 @@ class Rails(RailsBase):
         yield from self.end_cutscene()
 
 
-    # TODO NEXT
-    # @Scene.new(lambda self: self.characters.player.health.amount.current <= 0, enabled=False)
-    @Scene.new(lambda self: self.characters.player.health.amount.current <= 0)
+    @Scene.new(lambda self: self.characters.player.health.amount.current <= 0, enabled=False)
     def player_dies_for_real(self, scene):
         scene.enabled = False
 

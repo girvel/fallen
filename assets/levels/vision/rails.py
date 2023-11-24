@@ -212,7 +212,9 @@ class Rails(RailsBase):
 
         yield from self.plane_shift(self.parent_level, self.parent_level.rails.positions.player_bed)
         c.player.health.amount.reset_to_max()
+
         yield from self.end_cutscene()
         memory.complete_quest(self.parent_level.rails.quests.find_someone_to_fight)
+
         self.parent_level.rails.mother_gives_player_bun.enabled = True
         self.parent_level.rails.player_dies_for_real.enabled = True
