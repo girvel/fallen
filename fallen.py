@@ -18,6 +18,7 @@ def main(
     no_rails: bool = False,
     no_fixed_fps: bool = False,
     pause_for_debugger: bool = False,
+    on_polygon: bool = False,
 ):
     """
     Launch the Fallen RPG
@@ -29,6 +30,7 @@ def main(
         no_rails: disable level's rails
         no_fixed_fps: disable fixed FPS
         pause_for_debugger: wait for 'Enter' key (useful for debugger connection)
+        on_polygon: load polygon level instead of the main one
     """
 
     init_logging()
@@ -40,12 +42,13 @@ def main(
         input()
 
     curses.wrapper(init_ecs.init,
-        track=track,
-        debug_mode=debug_mode,
-        no_render=no_render,
-        no_rails=no_rails,
-        no_fixed_fps=no_fixed_fps,
-    )
+                   track=track,
+                   debug_mode=debug_mode,
+                   no_render=no_render,
+                   no_rails=no_rails,
+                   no_fixed_fps=no_fixed_fps,
+                   on_polygon=on_polygon,
+                   )
 
 
 if __name__ == '__main__':

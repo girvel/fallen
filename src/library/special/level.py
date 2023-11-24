@@ -111,7 +111,7 @@ class Level(DynamicEntity):
                 zones=[ms.add(Zone.from_markup(**h)) for h in raw_markup["zones"]],
             )
         else:
-            self.markup = None
+            self.markup = Markup(houses=[], zones=[])
 
         for after_load in after_loads:
             after_load(self)

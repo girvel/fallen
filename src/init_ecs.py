@@ -51,12 +51,12 @@ def build_metasystem(debug_mode):
     return ms, genesis
 
 
-def init(stdscr, track, debug_mode, no_render, no_rails, no_fixed_fps):
+def init(stdscr, track, debug_mode, no_render, no_rails, no_fixed_fps, on_polygon):
     permanent_storage.initialize()
 
     ms, genesis = build_metasystem(debug_mode)
 
-    level = ms.add(Level(ms, Path("levels/main"), no_rails, genesis))
+    level = ms.add(Level(ms, Path("levels/main" if not on_polygon else "levels/polygon"), no_rails, genesis))
 
     next(level.find(Player)).ai = IO(
         stdscr, debug_track=track, debug_mode=debug_mode,

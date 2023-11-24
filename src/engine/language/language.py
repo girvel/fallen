@@ -23,6 +23,11 @@ class In:
         return f"в {self.area.name:пр}"
 
 
+class Around:
+    def __str__(self):
+        return "неподалёку"
+
+
 def placement(markup: Markup, p: int2) -> Near | In:
     for house in markup.houses:
         if ge2(p, house.house_borders[0]) and lt2(p, house.house_borders[1]):
@@ -33,5 +38,7 @@ def placement(markup: Markup, p: int2) -> Near | In:
         [(house, house.house_borders[0]) for house in markup.houses] +
         [(house, house.house_borders[1]) for house in markup.houses]
     )
+
+    if len(areas) == 0: return Around()
 
     return Near(min(areas, key=lambda a: d2(a[1], p))[0])

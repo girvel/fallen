@@ -108,9 +108,10 @@ class PeasantAi(CompositeAi):
                     self.mode = Mode.GoOutside
 
             case Mode.GoOutside:
-                self.composite[Pather].going_to = random.choices(*zip(*(
-                    (zone, zone.attractiveness) for zone in subject.level.markup.zones
-                )))[0].center
+                if len(subject.level.markup.zones) > 0:
+                    self.composite[Pather].going_to = random.choices(*zip(*(
+                        (zone, zone.attractiveness) for zone in subject.level.markup.zones
+                    )))[0].center
 
                 self.mode = Mode.Wander
 
