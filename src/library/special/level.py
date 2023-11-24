@@ -28,6 +28,13 @@ def load_palette_from(path):
     return result
 
 
+def load_special_arguments(path):
+    return {
+        tuple(entry["at"]): entry["args"]
+        for entry in toml.loads(path.read_text())["entries"]
+    } if path.exists() else {}
+
+
 @dataclass
 class Markup:
     zones: list[Zone]
@@ -60,6 +67,8 @@ class Level(DynamicEntity):
 
     def __init__(self, ms: Metasystem, path: Path, no_rails: bool, genesis: Genesis):
         level_lines = (path / "grid.txt").read_text().split('\n')
+        special_arguments = load_special_arguments(path / "grid_args.toml")
+
         self.size = (max(len(l) for l in level_lines), len(level_lines))
 
         after_loads = []
@@ -80,17 +89,19 @@ class Level(DynamicEntity):
 
         for y, line in enumerate(level_lines):
             for x, c in enumerate(line):
+                p = (x, y)
+
                 if c == Level.no_entity_character:
                     continue
 
                 if c in self.palette:
-                    e = ms.add(self.palette[c]())
-                    self.put((x, y), e)
+                    e = ms.add(self.palette[c](**special_arguments.get(p, {})))
+                    self.put(p, e)
 
                     if "after_load" in e:
                         after_loads.append(e.after_load)
                 else:
-                    logging.warning(f"Ignored unknown entity `{c}` at {(x, y)}")
+                    logging.warning(f"Ignored unknown entity `{c}` at {p}")
 
         markup_path = path / "markup.toml"
         if markup_path.exists():
