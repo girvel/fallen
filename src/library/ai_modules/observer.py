@@ -14,8 +14,12 @@ class Observer:
     known_objects: list[DynamicEntity] = field(default_factory=list)  # TODO ExpiringCollection
     warning_attitude_threshold: int = -100
 
+    # TODO OPT different collection for ideas? dict? list with idea kind ID as index?
+    # TODO OPT determine the dict/list speed K
+    # TODO OPT isinstance vs comparing a variable
     def use(self, subject: DynamicEntity, perception: Perception) -> tuple[list[Idea], bool]:
         memes = []
+        notices_danger = False
 
         aggressions = [
             Aggression(e, target)
@@ -24,7 +28,9 @@ class Observer:
                and subject.attitude.get(target) >= 0
         ]
 
-        memes.extend(aggressions)
+        if len(aggressions) > 0:
+            notices_danger = True
+            memes.extend(aggressions)
 
         for p, e in perception.vision.tiles.items():
             if isinstance(e, Body) and e not in self.known_objects:
@@ -34,10 +40,11 @@ class Observer:
         for p, e in perception.vision.physical.items():
             if (
                 e is not None and
-                subject.attitude.get(e) < self.warning_attitude_threshold and
-                e not in self.known_objects
+                subject.attitude.get(e) < self.warning_attitude_threshold
             ):
-                memes.append(DangerousEntity(p, e))
-                self.known_objects.append(subject)
+                notices_danger = True
+                if e not in self.known_objects:
+                    memes.append(DangerousEntity(p, e))
+                    self.known_objects.append(subject)
 
-        return [Idea(meme, 1, subject) for meme in memes], len(aggressions) > 0
+        return [Idea(meme, 1, subject) for meme in memes], notices_danger

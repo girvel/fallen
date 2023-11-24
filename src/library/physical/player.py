@@ -29,4 +29,3 @@ class Player(Human):
         self.senses = Senses(24, 40, 0)
         self.traits = Traits()
         self.inventory = Inventory()
-        self.classifiers = {}  # TODO RM

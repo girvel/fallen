@@ -1,9 +1,8 @@
 import random
-from dataclasses import dataclass, field
 from enum import Enum
 
 from src.engine.composite_ai import CompositeAi
-from src.lib.period.period import Period
+from src.lib.limited import Limited
 from src.lib.period.random_period import RandomPeriod
 from src.lib.toolkit import random_choice_or
 from src.lib.typed_dict import TypeDict
@@ -35,7 +34,8 @@ class PeasantAi(CompositeAi):
         self.working_period = RandomPeriod(80, 121)
         self.wandering_period = RandomPeriod(40, 56)
         self.lagging_period = RandomPeriod(4, 11)
-        self.fight_or_flight_period = Period(5)
+
+        self.remains_in_danger_mode_for = Limited(15, 0, 0)
 
         self.composite = TypeDict([
             SpacialMemory(),
@@ -54,21 +54,25 @@ class PeasantAi(CompositeAi):
         self.use(SpacialMemory)
         if self.lagging_period.step(): return
 
-        ideas, sees_agression = self.use(Observer)
+        ideas, notices_danger = self.use(Observer)
+        if notices_danger: self.remains_in_danger_mode_for.reset_to_max()
+
+        if not self.remains_in_danger_mode_for.is_min():
+            self.remains_in_danger_mode_for.move(-1)
+
+            if (target := self.use(FightOrFlight)) != FightOrFlight.no_change_signal:
+                self.composite[Pather].going_to = target
+            # TODO NEXT change mode to go home
+            # TODO NEXT get away module
+
+            return self.use(Pather, self.composite[SpacialMemory])
+
         ideas.extend(self.use(Listener))
 
         self.use(Morale, ideas)
         self.composite[Speaker].messages.extend(self.use(LanguageCenter, ideas))
 
-        recognizes_danger = (
-            (sees_agression and self.fight_or_flight_period.step())
-            and (target := self.use(FightOrFlight)) != FightOrFlight.no_change_signal
-        )
-
-        if recognizes_danger:
-            self.composite[Pather].going_to = target
-        else:
-            if action := self.use(Speaker): return action
+        if action := self.use(Speaker): return action
 
         if action := self.use(Pather, self.composite[SpacialMemory]):
             return action
@@ -76,6 +80,9 @@ class PeasantAi(CompositeAi):
         return self.peasant_routine(subject, perception)
 
     def peasant_routine(self, subject, perception):
+        if subject.house is None and self.mode in (Mode.GoHome, Mode.GoToTable, Mode.WorkAtTable):
+            self.mode = Mode.Wander
+
         match self.mode:
             case Mode.GoHome:
                 self.composite[Pather].going_to = subject.house.entrance

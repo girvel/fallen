@@ -6,6 +6,7 @@ from src.lib.vector import d2, int2
 from src.systems.ai import Perception
 
 
+# TODO OPT use the stream of ideas with separate meme for enemies
 class FightOrFlight:
     current_target: DynamicEntity | None = None
     no_change_signal = object()
@@ -35,7 +36,7 @@ class FightOrFlight:
             self.current_target = random.choice(enemies)
             return self.current_target.p
         else:
-            return max(
+            return max(  # TODO OPT use a ray?
                 (p for p, e in perception.vision.physical.items() if e is None),
                 key=lambda p: sum(d2(p, e.p) for e in enemies),
             )

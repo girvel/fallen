@@ -61,9 +61,10 @@ def inflict_damage(
 
     total_damage = random_round(power * modifier)
 
-    logging.info(
-        f"Damage to {target.name}: {total_damage} = {power} * {modifier} ({damage_kind} on {health.armor_kind})"
-    )
+    if not hasattr(target, "boring_flag"):
+        logging.info(
+            f"Damage to {target.name}: {total_damage} = {power} * {modifier} ({damage_kind} on {health.armor_kind})"
+        )
 
     health.amount.move(-total_damage)
     health.last_damaged_by.append(source)

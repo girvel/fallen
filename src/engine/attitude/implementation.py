@@ -9,4 +9,4 @@ class Faction:
     Water = "Water"
 
 def common_attitude():
-    return Attitude({Faction.Predators: -100, Faction.Disasters: -10_000})
+    return Attitude({Faction.Predators: -1_000, Faction.Disasters: -10_000})
