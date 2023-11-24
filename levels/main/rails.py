@@ -1,14 +1,12 @@
-import logging
 from enum import Enum
 from pathlib import Path
 
 from ecs import Entity, exists
 
-from assets.levels.main.library.physical.brother import Brother
-from assets.levels.main.library.physical.girl import Girl
-from assets.levels.main.library.physical.mother import Mother
+from levels.main.library.physical.brother import Brother
+from levels.main.library.physical.girl import Girl
+from levels.main.library.physical.mother import Mother
 from src.engine.acting.aggressive import Aggressive
-from src.library.actions.hand_attack import HandAttack
 from src.library.actions.leave import Leave
 from src.library.actions.no_action import NoAction
 from src.library.actions.say import Say
@@ -22,7 +20,6 @@ from src.library.ais.io import Quest, Notification
 from src.library.items.bun import Bun
 from src.library.items.lily import Lily
 from src.library.physical.frog import Frog
-from src.library.physical.peasant import Peasant
 from src.library.physical.rabid_dog import RabidDog
 from src.library.special.level import Level
 from src.lib import vector
@@ -78,7 +75,8 @@ class Rails(RailsBase):
         self.death_level = None
 
 
-    @Scene.new()
+    # TODO NEXT
+    # @Scene.new()
     def introduction(self, scene):
         scene.enabled = False
 
@@ -253,7 +251,7 @@ class Rails(RailsBase):
         self.unlock_complex_ai(c.mother, self.locks.mother_leaving)
 
 
-    def is_player_killing_the_dog(self):
+    def has_player_killed_the_dog(self):
         return (
             self.characters.rabid_dog.health.amount.current <= 0
             and self.characters.player in self.characters.rabid_dog.health.last_damaged_by
@@ -261,8 +259,8 @@ class Rails(RailsBase):
 
     @Scene.new(lambda self: (
         self.characters.player.health.amount.current <= 0
-        or self.is_player_killing_the_dog()
-    ))
+        or self.has_player_killed_the_dog()
+    ), enabled=False)  # TODO NEXT
     def player_has_vision(self, scene):
         scene.enabled = False
 
@@ -270,7 +268,7 @@ class Rails(RailsBase):
         p = self.positions
         memory = c.player.ai.memory
 
-        if self.is_player_killing_the_dog():
+        if self.has_player_killed_the_dog():
             self.dog_quest_ending = DogQuestEnding.Win
 
             self.girl_gives_flower.enabled = True
@@ -296,7 +294,7 @@ class Rails(RailsBase):
 
         c.player.health.amount.reset_to_max()
 
-        self.vision_level = self.ms.add(Level(self.ms, Path("assets/levels/vision"), False, self.genesis))
+        self.vision_level = self.ms.add(Level(self.ms, Path("levels/vision"), False, self.genesis))
         self.vision_level.rails.parent_level = c.player.level
         yield from self.plane_shift(self.vision_level, p.vision_start)
 
@@ -476,7 +474,7 @@ class Rails(RailsBase):
         yield from self.end_cutscene()
 
 
-    @Scene.new(lambda self: self.characters.player.health.amount.current <= 0, enabled=False)
+    @Scene.new(lambda self: self.characters.player.health.amount.current <= 0)  # TODO NEXT
     def player_dies_for_real(self, scene):
         scene.enabled = False
 
@@ -486,7 +484,7 @@ class Rails(RailsBase):
         yield from self.start_cutscene()
 
         # TODO RailsBase procedure
-        self.death_level = self.ms.add(Level(self.ms, Path("assets/levels/death"), False, self.genesis))
+        self.death_level = self.ms.add(Level(self.ms, Path("levels/death"), False, self.genesis))
         self.death_level.rails.parent_level = c.player.level
 
         yield from self.plane_shift(self.death_level, p.death_start)

@@ -3,8 +3,8 @@ from typing import Optional
 
 from ecs import Entity
 
-from assets.levels.main.rails import DogQuestEnding
-from assets.levels.vision.library.physical.enemy import Enemy
+from levels.main.rails import DogQuestEnding
+from levels.vision.library.physical.enemy import Enemy
 from src.library.actions.build import Build
 from src.library.actions.cast_fire_storm import CastFireStorm
 from src.library.actions.cast_stone_stomp import CastStoneStomp

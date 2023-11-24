@@ -48,7 +48,7 @@ def init(stdscr, track, debug_mode, no_render, no_rails, no_fixed_fps):
 
     ms, genesis = build_metasystem(debug_mode)
 
-    level = ms.add(Level(ms, Path("assets/levels/main"), no_rails, genesis))
+    level = ms.add(Level(ms, Path("levels/main"), no_rails, genesis))
 
     next(level.find(Player)).ai = IO(
         stdscr, debug_track=track, debug_mode=debug_mode,

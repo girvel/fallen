@@ -1,11 +1,9 @@
 from ecs import DynamicEntity
 
-from assets.levels.main.library.ais.brother_ai import BrotherAi
-from src.engine.acting.damage import Health, Weapon, ArmorKind, DamageKind
+from src.engine.acting.damage import Health, ArmorKind
 from src.library.ai_modules.spacial_memory import SpacialMemory
-from src.engine.language.library import reserved_names
-from src.engine.language.name import CompositeName, Name
-from src.engine.output.colors import ColorPair, blue, black
+from src.engine.language.name import Name
+from src.engine.output.colors import ColorPair, black
 from src.library.abstract.human import Human
 from src.library.ais.dummy_ai import DummyAi
 
