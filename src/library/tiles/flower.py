@@ -15,4 +15,6 @@ class Flower(DynamicEntity):
     def __init__(self):
         self.sex = random.choice(["male", "female", "mercury"])
         self.health = Health(1, ArmorKind.Organic)
-        self.color = random.choice([ColorPair(cyan), ColorPair(red), ColorPair(magenta)])
+
+        if not hasattr(self, "color"):  # for subclassing
+            self.color = random.choice([ColorPair(cyan), ColorPair(red), ColorPair(magenta)])

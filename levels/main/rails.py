@@ -484,7 +484,7 @@ class Rails(RailsBase):
         yield from self.start_cutscene()
 
         # TODO RailsBase procedure
-        self.death_level = self.ms.add(Level(self.ms, Path("levels/death"), False, self.genesis))
+        self.death_level = self.ms.add(Level(self.ms, Path("levels/afterlife"), False, self.genesis))
         self.death_level.rails.parent_level = c.player.level
 
         yield from self.plane_shift(self.death_level, p.death_start)

@@ -1,6 +1,6 @@
 from ecs import Entity
 
-from levels.death.library.physical.old_sarr import OldSarr
+from levels.afterlife.library.physical.old_sarr import OldSarr
 from src.engine import permanent_storage
 from src.engine.input.hotkeys import GameEnd
 from src.engine.rails_base import RailsBase, Scene
