@@ -107,7 +107,10 @@ def get_color_pair(entity):  # TODO refactor
     curses_color = color.to_curses()
     is_black = color == ColorPair(black, black)
 
-    if entity.layer in ("physical", "effects") and color.fg != black:
+    if (
+        entity.layer in ("physical", "effects") and color.fg != black
+        if not hasattr(entity, "is_blinking") else entity.is_blinking
+    ):
         curses_color |= curses.A_BOLD
 
     return curses_color, is_black
