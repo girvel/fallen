@@ -16,6 +16,7 @@ class Listener:
             Idea(sound.idea.meme, sound.idea.weight * self.trust_k, sound.parent)
             for sound in perception.hearing.values()
             if sound is not None
+            and sound.parent is not subject
             and sound.idea is not None
             and sound.idea.weight >= self.idea_weight_threshold
         ]
