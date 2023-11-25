@@ -2,6 +2,7 @@ from dataclasses import dataclass, field
 
 from ecs import DynamicEntity
 
+from src.engine.attitude.implementation import Constants
 from src.library.actions.say import Say
 from src.library.ai_modules.language_center import Message
 from src.systems.ai import Perception
@@ -9,7 +10,7 @@ from src.systems.ai import Perception
 
 @dataclass
 class Speaker:
-    attitude_threshold: int = 50
+    attitude_threshold: int = Constants.Normal
 
     messages: list[Message] = field(default_factory=list)
 

@@ -24,4 +24,4 @@ class Knight(Human):
         self.ai = KnightAi()
 
         self.attitude = common_attitude()
-        self.attitude.relations[Faction.Church] = 100
+        self.attitude.relations[Faction.Church] = Constants.Normal

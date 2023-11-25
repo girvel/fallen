@@ -2,6 +2,7 @@ from dataclasses import dataclass, field
 
 from ecs import DynamicEntity
 
+from src.engine.attitude.implementation import Constants
 from src.engine.meme import Aggression, Idea, DangerousEntity
 from src.lib.query import Q
 from src.library.actions.hand_attack import HandAttack
@@ -12,7 +13,7 @@ from src.systems.ai import Perception
 @dataclass
 class Observer:
     known_objects: list[DynamicEntity] = field(default_factory=list)  # TODO ExpiringCollection
-    warning_attitude_threshold: int = -100
+    warning_attitude_threshold: int = Constants.Neutrality
 
     # TODO OPT different collection for ideas? dict? list with idea kind ID as index?
     # TODO OPT determine the dict/list speed K

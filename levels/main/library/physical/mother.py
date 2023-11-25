@@ -1,6 +1,7 @@
 from ecs import DynamicEntity
 
 from src.engine.acting.damage import Health, Weapon, ArmorKind, DamageKind
+from src.engine.attitude.implementation import Constants
 from src.library.ai_modules.spacial_memory import SpacialMemory
 from src.engine.language.library import reserved_names
 from src.engine.language.name import CompositeName
@@ -28,4 +29,4 @@ class Mother(Human):
     def after_load(self, level):
         self.ai.composite[SpacialMemory].knows(level)
         self.house = next(h for h in level.markup.houses if h.reserved_for == "kinds")
-        self.attitude.relations[next(level.find(Player))] = 1_000
+        self.attitude.relations[next(level.find(Player))] = Constants.Love
