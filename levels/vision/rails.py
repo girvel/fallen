@@ -126,7 +126,6 @@ class Rails(RailsBase):
 
         c.player.ai.dummy.clear()
 
-        logging.debug(f"{self.parent_level.rails.vision_version = }")
         if self.parent_level.rails.vision_version == VisionVersion.Continuous:
             c.player.ai.dummy.composite[Pather].going_to = p.observing_the_throne
             self.talk_with_lord_bishop_1.enabled = True

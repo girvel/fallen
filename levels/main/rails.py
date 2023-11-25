@@ -280,8 +280,6 @@ class Rails(RailsBase):
             if c.rabid_dog not in c.player.health.last_damaged_by:
                 self.dumbass_death = True
 
-        logging.debug(f"{self.vision_version = }")
-
         yield from self.start_cutscene()
 
         if c.player.health.amount.current > 0:

@@ -81,12 +81,13 @@ def generate_hotkeys(debug_mode):
     def change_mode(io, subject, perception):
         io.output.panel.mode = (io.output.panel.mode == Move) and HandAttack or Move
 
-    @Hotkey.define(result[GAME], ["1"], "Сотворить поток огня")
-    def cast_fire_flow(io, subject, perception):
-        while (hotkey := chr(io.input.key_queue.read_key())) not in "wasd":
-            if hotkey == "": return
+    if debug_mode:
+        @Hotkey.define(result[GAME], ["1"], "Сотворить поток огня")
+        def cast_fire_flow(io, subject, perception):
+            while (hotkey := chr(io.input.key_queue.read_key())) not in "wasd":
+                if hotkey == "": return
 
-        return CastFireFlow(directions_by_key[hotkey])
+            return CastFireFlow(directions_by_key[hotkey])
 
     @Hotkey.define(result[GAME], [curses.KEY_LEFT], "Предыдущая панель")
     def previous_pane(io, subject, perception):
