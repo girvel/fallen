@@ -1,3 +1,4 @@
+import logging
 import random
 from enum import Enum
 
@@ -55,6 +56,8 @@ class PeasantAi(CompositeAi):
         if self.lagging_period.step(): return
 
         ideas, notices_danger = self.use(Observer)
+        if notices_danger and self.remains_in_danger_mode_for.is_min():
+            logging.debug(f"{subject.name} goes to danger mode")
         if notices_danger: self.remains_in_danger_mode_for.reset_to_max()
 
         if not self.remains_in_danger_mode_for.is_min():
@@ -62,17 +65,18 @@ class PeasantAi(CompositeAi):
 
             if (target := self.use(FightOrFlight)) != FightOrFlight.no_change_signal:
                 self.composite[Pather].going_to = target
-            # TODO NEXT change mode to go home
-            # TODO NEXT get away module
 
-            return self.use(Pather, self.composite[SpacialMemory])
+            if (move := self.use(Pather, self.composite[SpacialMemory])) is not None:
+                return move
 
-        ideas.extend(self.use(Listener))
+            self.mode = Mode.GoHome
+        else:
+            ideas.extend(self.use(Listener))
 
-        self.use(Morale, ideas)
-        self.composite[Speaker].messages.extend(self.use(LanguageCenter, ideas))
+            self.use(Morale, ideas)
+            self.composite[Speaker].messages.extend(self.use(LanguageCenter, ideas))
 
-        if action := self.use(Speaker): return action
+            if action := self.use(Speaker): return action
 
         if action := self.use(Pather, self.composite[SpacialMemory]):
             return action

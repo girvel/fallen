@@ -37,7 +37,7 @@ reserved_for = "kinds"
 
 
 [[zones]]
-name."им" = "рыбацкая хижина"
+name."им" = "рыбацкая хижина"  # TODO complex Name.auto
 center = [83, 11]
 attractiveness = 10
 
@@ -45,6 +45,7 @@ attractiveness = 10
 name = "таверна"
 center = [121, 24]
 attractiveness = 30
+is_social = true
 
 [[zones]]
 name."им" = "разрушенный дом"

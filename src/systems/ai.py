@@ -132,17 +132,19 @@ def think(subject: 'ai'):
         hearing_r = 0
         smell_r = 0
 
-    fov = tcod.map.compute_fov(subject.level.transparency_cache, subject.p, vision_r)
-    vision = Entity(**{
-        layer: GridProxy(
-            grid, fov,
-            *borders_from_radius(subject.p, vision_r, subject.level.size)
-        )
-        for layer, grid in subject.level.grids
-    })
+    if not hasattr(subject, "god_vision_flag"):
+        fov = tcod.map.compute_fov(subject.level.transparency_cache, subject.p, vision_r)
+    else:
+        fov = numpy.full(subject.level.transparency_cache.shape, True)
 
     act = subject.ai.make_decision(subject, Perception(
-        vision,
+        Entity(**{
+            layer: GridProxy(
+                grid, fov,
+                *borders_from_radius(subject.p, vision_r, subject.level.size)
+            )
+            for layer, grid in subject.level.grids
+        }),
         GridProxy(
             subject.level.grids.sounds,
             create_square_rhombus(subject.p, hearing_r, subject.level.size),

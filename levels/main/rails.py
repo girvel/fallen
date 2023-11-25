@@ -181,7 +181,7 @@ class Rails(RailsBase):
 
         yield from self.end_cutscene()
 
-        memory.notification_queue.append(Notification("Управление",  # TODO NEXT markdown
+        memory.notification_queue.append(Notification("Управление",
             "<y>wasd </y>- движение<br/>"
             "<y>r </y>- достать/убрать оружие<br/>"
             "<y>мышь </y>- присмотреться к объекту<br/><br/>"

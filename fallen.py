@@ -19,6 +19,7 @@ def main(
     no_fixed_fps: bool = False,
     pause_for_debugger: bool = False,
     on_polygon: bool = False,
+    god_vision: bool = False,
 ):
     """
     Launch the Fallen RPG
@@ -31,6 +32,7 @@ def main(
         no_fixed_fps: disable fixed FPS
         pause_for_debugger: wait for 'Enter' key (useful for debugger connection)
         on_polygon: load polygon level instead of the main one
+        god_vision: whether player sees everything
     """
 
     init_logging()
@@ -41,14 +43,16 @@ def main(
     if pause_for_debugger:
         input()
 
-    curses.wrapper(init_ecs.init,
-                   track=track,
-                   debug_mode=debug_mode,
-                   no_render=no_render,
-                   no_rails=no_rails,
-                   no_fixed_fps=no_fixed_fps,
-                   on_polygon=on_polygon,
-                   )
+    curses.wrapper(
+        init_ecs.init,
+        track=track,
+        debug_mode=debug_mode,
+        no_render=no_render,
+        no_rails=no_rails,
+        no_fixed_fps=no_fixed_fps,
+        on_polygon=on_polygon,
+        god_vision=god_vision,
+    )
 
 
 if __name__ == '__main__':

@@ -18,7 +18,7 @@ class FightOrFlight:
         self, subject: DynamicEntity, perception: Perception
     ) -> int2 | None | object:
 
-        if self.current_target:
+        if self.current_target and self.prefer_fight:
             if exists(self.current_target) and self.current_target.p in perception.vision.physical:
                 return self.current_target.p
 

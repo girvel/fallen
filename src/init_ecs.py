@@ -51,17 +51,33 @@ def build_metasystem(debug_mode):
     return ms, genesis
 
 
-def init(stdscr, track, debug_mode, no_render, no_rails, no_fixed_fps, on_polygon):
+def init(stdscr, track, debug_mode, no_render, no_rails, no_fixed_fps, on_polygon, god_vision):
     permanent_storage.initialize()
 
     ms, genesis = build_metasystem(debug_mode)
 
-    level = ms.add(Level(ms, Path("levels/main" if not on_polygon else "levels/polygon"), no_rails, genesis))
+    # TODO NEXT loading screen
+    if on_polygon:
+        level = ms.add(Level(ms, Path("levels/polygon"), no_rails, genesis))
+    else:
+        level = ms.add(Level(ms, Path("levels/main"), no_rails, genesis))
+        prep_time = 10_000
+        logging.info(f"Prerunning the level for {prep_time} ticks")
 
-    next(level.find(Player)).ai = IO(
+        for _ in range(prep_time):
+            try:
+                ms.update()
+            except Exception as ex:
+                logging.error("Uncaught error on Metasystem.update when prerunning the level", exc_info=ex)
+                if debug_mode: raise ex
+
+    player = next(level.find(Player))
+    player.ai = IO(
         stdscr, debug_track=track, debug_mode=debug_mode,
         is_render_enabled=not no_render, max_fps=None if no_fixed_fps else 10,
     )
+    player.god_vision_flag = None
+    player.senses.vision = 1_000
 
     logging.info("Starting game cycle")
 
@@ -80,4 +96,4 @@ def init(stdscr, track, debug_mode, no_render, no_rails, no_fixed_fps, on_polygo
         t = time() - t
 
         logging.info("Finishing game cycle")
-        logging.info(f"FPS: {update_counter / t:.2f}")
+        logging.info(f"FPS: {update_counter / t:.2f}, ticks: {update_counter}")
