@@ -64,7 +64,7 @@ class PeasantAi(CompositeAi):
             self.remains_in_danger_mode_for.move(-1)
 
             if (target := self.use(FightOrFlight)) != FightOrFlight.no_change_signal:
-                self.composite[Pather].going_to = target
+                self.composite[Pather].going_to = target  # TODO FightOrFlight meme
 
             if (move := self.use(Pather, self.composite[SpacialMemory])) is not None:
                 return move

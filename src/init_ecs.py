@@ -61,7 +61,7 @@ def init(stdscr, track, debug_mode, no_render, no_rails, no_fixed_fps, on_polygo
         level = ms.add(Level(ms, Path("levels/polygon"), no_rails, genesis))
     else:
         level = ms.add(Level(ms, Path("levels/main"), no_rails, genesis))
-        prep_time = 10_000
+        prep_time = 60
         logging.info(f"Prerunning the level for {prep_time} ticks")
 
         for _ in range(prep_time):
