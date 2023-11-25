@@ -1,4 +1,4 @@
-from enum import Enum
+import logging
 from pathlib import Path
 
 from ecs import Entity, exists
@@ -7,14 +7,18 @@ from levels.main.library.physical.brother import Brother
 from levels.main.library.physical.girl import Girl
 from levels.main.library.physical.mother import Mother
 from src.engine.acting.aggressive import Aggressive
+from src.engine.acting.damage import Weapon, DamageKind
+from src.engine.rails_base import RailsBase, Scene
+from src.lib import vector
+from src.lib.concurrency import wait_for, wait_while
+from src.lib.query import Q
+from src.lib.vector import d2, add2
 from src.library.actions.leave import Leave
 from src.library.actions.no_action import NoAction
 from src.library.actions.say import Say
-from src.engine.acting.damage import Weapon, DamageKind
 from src.library.actions.teleport import Teleport
 from src.library.ai_modules.follower import Follower
 from src.library.ai_modules.pather import Pather
-from src.engine.rails_base import RailsBase, Scene
 from src.library.ais.dummy_ai import wait_finish
 from src.library.ais.io import Quest, Notification
 from src.library.items.bun import Bun
@@ -22,21 +26,20 @@ from src.library.items.lily import Lily
 from src.library.physical.frog import Frog
 from src.library.physical.rabid_dog import RabidDog
 from src.library.special.level import Level
-from src.lib import vector
-from src.lib.concurrency import wait_for, wait_while
-from src.lib.query import Q
-from src.lib.vector import d2, add2
 
 
-class DogQuestEnding(Enum):
+class VisionVersion:  # TODO make it enum back after fixing importing issues
     NotYetEnded = 0
-    Win = 1
-    Loss = 2
-    DumbassDeath = 3
+    Continuous = 1
+    Interrupted = 2
 
 
 class Rails(RailsBase):
-    dog_quest_ending: DogQuestEnding = DogQuestEnding.NotYetEnded
+    vision_version: VisionVersion = VisionVersion.NotYetEnded
+    vision_level: Level | None = None
+    afterlife_level: Level | None = None
+    dumbass_death: bool = False
+
 
     def __post_init__(self):
         self.characters = Entity(
@@ -52,14 +55,15 @@ class Rails(RailsBase):
             street=(181, 42),
             before_away=(93, 28),
             away=(139, 0),
-            vision_start=(33, 19),
+            vision_shift=(33, 19),
             mother_reappearance=(191, 55),
             player_bed=(208, 57),
             beside_the_bed=(207, 58),
             kinds_yard_entrance=(185, 45),
             girl_appearance=(162, 42),
             girl_runs_away=(183, 54),
-            death_start=(5, 3),
+            afterlife_shift=(5, 3),
+            vision_start=None,
         )
 
         self.quests = Entity(
@@ -70,9 +74,6 @@ class Rails(RailsBase):
             mother_leaving=None,
             mother_taking_care=None,
         )
-
-        self.vision_level = None
-        self.death_level = None
 
 
     @Scene.new()
@@ -180,7 +181,7 @@ class Rails(RailsBase):
 
         yield from self.end_cutscene()
 
-        memory.notification_queue.append(Notification("Управление",
+        memory.notification_queue.append(Notification("Управление",  # TODO NEXT markdown
             "<y>wasd </y>- движение<br/>"
             "<y>r </y>- достать/убрать оружие<br/>"
             "<y>мышь </y>- присмотреться к объекту<br/><br/>"
@@ -197,7 +198,7 @@ class Rails(RailsBase):
 
 
     @Scene.new(lambda self:
-        exists(self.characters.brother)
+        exists(self.characters.brother) and exists(self.characters.mother)
         and self.characters.brother.level is self.characters.player.level
         and d2(self.characters.brother.p, self.positions.away) <= 20
         and d2(self.characters.brother.p, self.characters.player.p) <= self.characters.player.senses.vision
@@ -250,15 +251,12 @@ class Rails(RailsBase):
         self.unlock_complex_ai(c.mother, self.locks.mother_leaving)
 
 
-    def has_player_killed_the_dog(self):
-        return (
-            self.characters.rabid_dog.health.amount.current <= 0
-            and self.characters.player in self.characters.rabid_dog.health.last_damaged_by
-        )
+    def _is_player_killing_the_dog(self):
+        return self.characters.rabid_dog in (~Q(self.characters.player).last_killed or ())
 
     @Scene.new(lambda self: (
         self.characters.player.health.amount.current <= 0
-        or self.has_player_killed_the_dog()
+        or self._is_player_killing_the_dog()
     ))
     def player_has_vision(self, scene):
         scene.enabled = False
@@ -267,18 +265,26 @@ class Rails(RailsBase):
         p = self.positions
         memory = c.player.ai.memory
 
-        if self.has_player_killed_the_dog():
-            self.dog_quest_ending = DogQuestEnding.Win
+        p.vision_start = c.player.p
+
+        if self._is_player_killing_the_dog() or not exists(c.mother):
+            self.vision_version = VisionVersion.Continuous
 
             self.girl_gives_flower.enabled = True
-        elif c.rabid_dog in c.player.health.last_damaged_by:
-            self.dog_quest_ending = DogQuestEnding.Loss
         else:
-            self.dog_quest_ending = DogQuestEnding.DumbassDeath
+            self.vision_version = VisionVersion.Interrupted
+
+            self.locks.mother_taking_care = self.lock_complex_ai(c.mother)
+            yield {c.mother: Teleport(p.mother_reappearance)}
+
+            if c.rabid_dog not in c.player.health.last_damaged_by:
+                self.dumbass_death = True
+
+        logging.debug(f"{self.vision_version = }")
 
         yield from self.start_cutscene()
 
-        if self.dog_quest_ending == DogQuestEnding.Win:
+        if c.player.health.amount.current > 0:
             yield from c.player.ai.wait_seconds(2)
             yield {c.player: Say("Что-то не так.")}
             yield {c.player: Say("Железный вкус на языке, зрение разошлось на две половины.", True)}
@@ -288,14 +294,11 @@ class Rails(RailsBase):
         memory.is_vision_disabled = True
         yield from c.player.ai.wait_seconds(2)
 
-        self.locks.mother_taking_care = self.lock_complex_ai(c.mother)
-        yield {c.mother: Teleport(p.mother_reappearance)}
-
         c.player.health.amount.reset_to_max()
 
         self.vision_level = self.ms.add(Level(self.ms, Path("levels/vision"), False, self.genesis))
         self.vision_level.rails.parent_level = c.player.level
-        yield from self.plane_shift(self.vision_level, p.vision_start)
+        yield from self.plane_shift(self.vision_level, p.vision_shift)
 
 
     @Scene.new(enabled=False)
@@ -390,7 +393,7 @@ class Rails(RailsBase):
         yield from self.start_cutscene()
         yield from self.center_camera()
 
-        if self.dog_quest_ending == DogQuestEnding.NotYetEnded:
+        if self.vision_version == VisionVersion.NotYetEnded:
             yield {c.player: Say("Нет, этого недостаточно.")}
         else:
             yield {c.player: Say("Хм.")}
@@ -423,7 +426,7 @@ class Rails(RailsBase):
 
 
     @Scene.new(
-        lambda self: d2(self.characters.mother.p, self.characters.player.p) < 5,
+        lambda self: exists(self.characters.mother) and d2(self.characters.mother.p, self.characters.player.p) < 5,
         enabled=False,
     )
     def mother_gives_player_bun(self, scene):
@@ -446,7 +449,7 @@ class Rails(RailsBase):
         c.mother.ai.composite[Pather].going_to = mother_initial_p
 
         yield from wait_finish(c.mother)
-        if self.dog_quest_ending == DogQuestEnding.DumbassDeath:
+        if self.dumbass_death:
             yield {c.mother: Say("Кстати, это было глупо.")}
 
         yield from self.end_cutscene()
@@ -483,7 +486,7 @@ class Rails(RailsBase):
         yield from self.start_cutscene()
 
         # TODO RailsBase procedure
-        self.death_level = self.ms.add(Level(self.ms, Path("levels/afterlife"), False, self.genesis))
-        self.death_level.rails.parent_level = c.player.level
+        self.afterlife_level = self.ms.add(Level(self.ms, Path("levels/afterlife"), False, self.genesis))
+        self.afterlife_level.rails.parent_level = c.player.level
 
-        yield from self.plane_shift(self.death_level, p.death_start)
+        yield from self.plane_shift(self.afterlife_level, p.afterlife_shift)

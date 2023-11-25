@@ -1,9 +1,10 @@
+import logging
 import random
 from typing import Optional
 
-from ecs import Entity
+from ecs import Entity, exists
 
-from levels.main.rails import DogQuestEnding
+from levels.main.rails import VisionVersion
 from levels.vision.library.physical.enemy import Enemy
 from src.library.actions.build import Build
 from src.library.actions.cast_fire_storm import CastFireStorm
@@ -124,7 +125,9 @@ class Rails(RailsBase):
         yield {c.player: Say("Массивные стены зала сотрясаются от мощного удара вдали.", True)}
 
         c.player.ai.dummy.clear()
-        if self.parent_level.rails.dog_quest_ending == DogQuestEnding.Win:
+
+        logging.debug(f"{self.parent_level.rails.vision_version = }")
+        if self.parent_level.rails.vision_version == VisionVersion.Continuous:
             c.player.ai.dummy.composite[Pather].going_to = p.observing_the_throne
             self.talk_with_lord_bishop_1.enabled = True
         else:
@@ -156,7 +159,7 @@ class Rails(RailsBase):
 
         yield {c.player: Say("Стены сотрясаются вновь.", True)}
 
-        if self.parent_level.rails.dog_quest_ending == DogQuestEnding.Win:
+        if self.parent_level.rails.vision_version == VisionVersion.Continuous:
             c.player.p = p.observing_the_throne
             self.talk_with_lord_bishop_2.enabled = True
         else:
@@ -210,8 +213,17 @@ class Rails(RailsBase):
 
         yield from wait_while(lambda: c.player.health.amount.current > 0)
 
-        yield from self.plane_shift(self.parent_level, self.parent_level.rails.positions.player_bed)
-        c.player.health.amount.reset_to_max()
+        yield from self.plane_shift(
+            self.parent_level,
+            self.parent_level.rails.positions.player_bed
+            if exists(self.parent_level.rails.characters.mother) else
+            self.parent_level.rails.positions.vision_start,
+        )
+
+        if exists(self.parent_level.rails.characters.mother):
+            c.player.health.amount.reset_to_max()
+        else:
+            c.player.health.amount.current = c.player.health.amount.maximum // 2  # TODO use real regeneration
 
         yield from self.end_cutscene()
         memory.complete_quest(self.parent_level.rails.quests.find_someone_to_fight)
