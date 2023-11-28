@@ -73,7 +73,7 @@ def main(
         player = next(level.find(Player))
         player.ai = IO(
             stdscr, debug_track=track, debug_mode=debug_mode,
-            is_render_enabled=not no_render, max_fps=None if no_fixed_fps else 10,
+            is_render_enabled=not no_render, is_fps_fixed=not no_fixed_fps,
         )
 
         if god_vision:

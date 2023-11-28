@@ -66,7 +66,9 @@ class IO(DynamicEntity):  # TODO redo as composite?
     name = Name("Ввод/Вывод")
     cutscene_aware_flag = None
 
-    def __init__(self, stdscr, debug_track, debug_mode, is_render_enabled, max_fps: int | None):
+    tps = 10
+
+    def __init__(self, stdscr, debug_track, debug_mode, is_render_enabled, is_fps_fixed):
         self.debug_mode = debug_mode
 
         self.output = Output(self, stdscr, is_render_enabled)
@@ -75,7 +77,7 @@ class IO(DynamicEntity):  # TODO redo as composite?
         self.memory = Memory()
         self.dummy = DummyAi()
 
-        self.max_fps = max_fps
+        self.is_fps_fixed = is_fps_fixed
 
     def make_decision(self, subject, perception):
         self.form_memory(subject, perception)
@@ -133,4 +135,4 @@ class IO(DynamicEntity):  # TODO redo as composite?
         return self.render(*self.last_render_input)
 
     def wait_seconds(self, seconds: float):
-        yield from wait_for(random_round(seconds * self.max_fps))
+        yield from wait_for(random_round(seconds * self.tps))
