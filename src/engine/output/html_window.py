@@ -38,11 +38,12 @@ class HtmlWindow(Window, metaclass=ABCMeta):
     def __post_init__(self):
         pass
 
-    # TODO NEXT prevent mvwin out of stdscr errors
     def _render(self, subject, perception):
         self.curses_window.clear()
 
         if self.border_curses_window:
+            # TODO border window can get out of bounds
+            # TODO => border should probably be done by hand
             self.border_curses_window.resize(*add2(self.curses_window.getmaxyx(), (2, 6)))
             self.border_curses_window.mvwin(*add2(self.curses_window.getbegyx(), (-1, -3)))
 

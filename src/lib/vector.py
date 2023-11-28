@@ -1,4 +1,4 @@
-from statistics import mean
+from statistics import mean, median
 from typing import Callable, TypeVar, Tuple
 
 from src.lib.toolkit import sign
@@ -59,6 +59,9 @@ def d2(v1: int2, v2: int2) -> int:
 
 def average2(vs: list[int2]) -> int2:
     return tuple(mean(v[i] for v in vs) for i in range(2))
+
+def median2(vs: list[int2]) -> int2:
+    return tuple(median(v[i] for v in vs) for i in range(2))
 
 
 T = TypeVar('T')
