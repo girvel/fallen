@@ -76,8 +76,10 @@ def init(stdscr, track, debug_mode, no_render, no_rails, no_fixed_fps, on_polygo
         stdscr, debug_track=track, debug_mode=debug_mode,
         is_render_enabled=not no_render, max_fps=None if no_fixed_fps else 10,
     )
-    player.god_vision_flag = None
-    player.senses.vision = 1_000
+
+    if god_vision:
+        player.god_vision_flag = None
+        player.senses.vision = 1_000
 
     logging.info("Starting game cycle")
 
