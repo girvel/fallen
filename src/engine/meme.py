@@ -16,7 +16,12 @@ class DangerousEntity:
     p: int2
     entity: DynamicEntity
 
-Meme: TypeAlias = Aggression | DangerousEntity
+@dataclass
+class Murder:
+    source: DynamicEntity
+    target: DynamicEntity
+
+Meme: TypeAlias = Aggression | DangerousEntity | Murder
 
 
 @dataclass
