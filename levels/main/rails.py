@@ -77,6 +77,13 @@ class Rails(RailsBase):
 
 
     @Scene.new()
+    def initialization(self, scene):
+        scene.enabled = False
+        self.locks.mother_leaving = self.lock_complex_ai(self.characters.mother)
+        yield from ()
+
+
+    @Scene.new(lambda self: ~Q(self.get_player()).ai is not None)
     def introduction(self, scene):
         scene.enabled = False
 
@@ -84,8 +91,6 @@ class Rails(RailsBase):
         p = self.positions
         q = self.quests
         memory = c.player.ai.memory
-
-        self.locks.mother_leaving = self.lock_complex_ai(c.mother)
 
         yield from self.start_cutscene()
         yield from self.center_camera()
@@ -179,14 +184,15 @@ class Rails(RailsBase):
         yield from wait_for(10)
         memory.add_quest(q.find_someone_to_fight)
 
-        yield from self.end_cutscene()
-
         memory.notification_queue.append(Notification("Управление",
-            "<y>wasd </y>- движение<br/>"
-            "<y>r </y>- достать/убрать оружие<br/>"
-            "<y>мышь </y>- присмотреться к объекту<br/><br/>"
+            "<y>wasd</y> - движение<br/>"
+            "<y>r</y> - достать/убрать оружие<br/>"
+            "<y>мышь</y> - присмотреться к объекту<br/><br/>"
             "Все горячие клавиши доступны в панели \"Управление\""
         ))
+        yield
+
+        yield from self.end_cutscene()
 
 
     @Scene.new(lambda self: d2(self.characters.brother.p, self.positions.before_away) <= 2)

@@ -12,7 +12,6 @@ class Player(Human):
     character = '@'
     color = ColorPair(white)
 
-    ai = None  # set to IO on level loading
     act = None
     faction = None
 
@@ -29,3 +28,4 @@ class Player(Human):
         self.senses = Senses(24, 40, 0)
         self.traits = Traits()
         self.inventory = Inventory()
+        del self.ai
