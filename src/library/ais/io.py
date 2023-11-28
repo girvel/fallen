@@ -43,6 +43,8 @@ class Memory:
     notification_queue: list[Notification] = field(default_factory=list)
     current_notification: Notification = None
 
+    inspect_target: DynamicEntity | None = None
+
     def add_quest(self, quest: Quest):
         self._quests.append(quest)
         self.notification_queue.append(Notification("Новая задача", quest.description))
@@ -117,6 +119,8 @@ class IO(DynamicEntity):  # TODO redo as composite?
             self.memory.current_notification = self.memory.notification_queue.pop(0)
         else:
             self.memory.current_notification = None
+
+        self.memory.inspect_target = None
 
     last_render_input = None
 

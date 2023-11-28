@@ -1,9 +1,6 @@
-import curses
 import math
 
-from src.engine.output.colors import ColorPair, yellow
 from src.engine.output.html_window import HtmlWindow
-from src.lib.toolkit import add_multiline_string
 
 
 class OptionPicker(HtmlWindow):

@@ -38,6 +38,7 @@ class HtmlWindow(Window, metaclass=ABCMeta):
     def __post_init__(self):
         pass
 
+    # TODO NEXT prevent mvwin out of stdscr errors
     def _render(self, subject, perception):
         self.curses_window.clear()
 

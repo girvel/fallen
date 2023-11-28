@@ -49,6 +49,14 @@ def generate_hotkeys(debug_mode):
     def resize_gui(io, subject, perception):
         pass
 
+    @Hotkey.define(result[GENERAL], [curses.KEY_MOUSE], "Присмотреться к объекту")
+    def inspect(io, subject, perception):
+        _, mx, my, _, _ = curses.getmouse()
+        io.memory.inspect_target = next((
+            e for l in io.output.game.layers_display_order
+            if (e := perception.vision[l].get(add2(io.output.game.virtual_p, (mx, my)))) is not None
+        ), None)
+
     def generate_movement_function(key, direction, description):
         @Hotkey.define(result[GAME], [key], description)
         def move(io, subject, perception):
@@ -106,15 +114,6 @@ def generate_hotkeys(debug_mode):
     def scroll_down(io, subject, perception):
         panel = io.output.panel
         panel.panes[panel.pane_i.current].scroll.move(1)
-
-    @Hotkey.define(result[GAME], [curses.KEY_MOUSE], "Присмотреться к объекту")
-    def inspect(io, subject, perception):
-        _, mx, my, _, _ = curses.getmouse()
-        target = next((
-            e for l in io.output.game.layers_display_order
-            if (e := perception.vision[l].get(add2(io.output.game.virtual_p, (mx, my)))) is not None
-        ), None)
-        return target and Inspect(target)
 
     @Hotkey.define(result[OPTIONS], ["w", curses.KEY_UP], "Сдвинуть курсор вверх")
     def move_cursor_up(io, subject, perception):
