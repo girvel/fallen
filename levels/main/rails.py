@@ -216,12 +216,13 @@ class Rails(RailsBase):
         scene.enabled = False
         self.brother_leaves.enabled = False
         c.brother.ai.enable_speech = False
-        yield from self.start_cutscene()
-        yield from self.center_camera()
 
         c.mother.ai.composite[Follower].subject = None
         c.brother.ai.composite[Pather].going_to = c.player.p
         c.brother.ai.composite[Follower].subject = c.player
+
+        yield from self.start_cutscene()
+        yield from self.center_camera()
 
         yield from wait_while(lambda: d2(self.characters.brother.p, c.player.p) > 5 or c.brother.act is not None)
 
