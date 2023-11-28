@@ -2,13 +2,19 @@
 
 import curses
 import logging
+import time
 from pathlib import Path
 from typing import Optional
 
 import fire
 
-from src import init_ecs
+from src.engine import permanent_storage
+from src.engine.input.hotkeys import GameEnd
+from src.init_ecs import build_metasystem
 from src.init_logging import init_logging
+from src.library.ais.io import IO
+from src.library.physical.player import Player
+from src.library.special.level import Level
 
 
 def main(
@@ -43,16 +49,55 @@ def main(
     if pause_for_debugger:
         input()
 
-    curses.wrapper(
-        init_ecs.init,
-        track=track,
-        debug_mode=debug_mode,
-        no_render=no_render,
-        no_rails=no_rails,
-        no_fixed_fps=no_fixed_fps,
-        on_polygon=on_polygon,
-        god_vision=god_vision,
-    )
+    @curses.wrapper
+    def _launch(stdscr):
+        permanent_storage.initialize()
+
+        ms, genesis = build_metasystem(debug_mode)
+
+        # TODO loading screen
+        if on_polygon:
+            level = ms.add(Level(ms, Path("levels/polygon"), no_rails, genesis))
+        else:
+            level = ms.add(Level(ms, Path("levels/main"), no_rails, genesis))
+            prep_time = 60
+            logging.info(f"Prerunning the level for {prep_time} ticks")
+
+            for _ in range(prep_time):
+                try:
+                    ms.update()
+                except Exception as ex:
+                    logging.error("Uncaught error on Metasystem.update when prerunning the level", exc_info=ex)
+                    if debug_mode: raise ex
+
+        player = next(level.find(Player))
+        player.ai = IO(
+            stdscr, debug_track=track, debug_mode=debug_mode,
+            is_render_enabled=not no_render, max_fps=None if no_fixed_fps else 10,
+        )
+
+        if god_vision:
+            player.god_vision_flag = None
+            player.senses.vision = 1_000
+
+        logging.info("Starting game cycle")
+
+        t = time.time()
+        update_counter = 0
+        try:
+            while True:
+                ms.update()
+                update_counter += 1
+        except GameEnd:
+            pass
+        except Exception as ex:
+            logging.error("Uncaught error on Metasystem.update", exc_info=ex)
+            if debug_mode: raise ex
+        finally:
+            t = time.time() - t
+
+            logging.info("Finishing game cycle")
+            logging.info(f"FPS: {update_counter / t:.2f}, ticks: {update_counter}")
 
 
 if __name__ == '__main__':
