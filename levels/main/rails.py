@@ -433,7 +433,7 @@ class Rails(RailsBase):
 
 
     @Scene.new(
-        lambda self: exists(self.characters.mother) and d2(self.characters.mother.p, self.characters.player.p) < 5,
+        lambda self: exists(self.characters.mother) and d2(self.characters.mother.p, self.characters.player.p) < 10,
         enabled=False,
     )
     def mother_gives_player_bun(self, scene):
