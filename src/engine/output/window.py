@@ -17,10 +17,9 @@ Coordinate = int | Center | Reverse
 def positioning_to_position(positioning: tuple[Coordinate, Coordinate], max_size: int2, window_size: int2) -> int2:
     def _convert(i: int, coordinate: Coordinate) -> int:
         match coordinate:
-            case int(v): return v
             case Center(): return (max_size[i] - window_size[i]) // 2
             case Reverse(v): return max_size[i] - window_size[i] - v
-            case _: raise TypeError()
+            case v: return int(v)
 
     return _convert(0, positioning[0]), _convert(1, positioning[1])
 
@@ -44,13 +43,6 @@ class Window(ABC):
                 positioning_to_position(positioning, parent_size, window_size),
                 sub2(parent_size, window_size)
             ))),
-        ))
-
-        logging.debug((
-            type(self),
-            (0, 0),
-            flip2(positioning_to_position(positioning, parent_size, window_size)),
-            sub2(parent_size, window_size)
         ))
 
         self._render(subject, perception)
