@@ -118,6 +118,7 @@ class RailsBase(DynamicEntity):
             del self._ai_locks[entity]
 
 
+
 @dataclass(eq=False)
 class Scene:
     name: str

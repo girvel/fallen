@@ -245,6 +245,7 @@ class Rails(RailsBase):
         yield from self.end_cutscene()
 
 
+    # TODO this should be considered cutscene even though it does not enable cutscene mode
     @Scene.new(lambda self: any(
         d2(e.p, self.positions.away) <= 3 for e in [self.characters.brother, self.characters.mother]
     ))
@@ -281,9 +282,6 @@ class Rails(RailsBase):
         else:
             self.vision_version = VisionVersion.Interrupted
 
-            self.locks.mother_taking_care = self.lock_complex_ai(c.mother)
-            yield {c.mother: Teleport(p.mother_reappearance)}
-
             if c.rabid_dog not in c.player.health.last_damaged_by:
                 self.dumbass_death = True
 
@@ -304,6 +302,10 @@ class Rails(RailsBase):
         self.vision_level = self.ms.add(Level(self.ms, Path("levels/vision"), False, self.genesis))
         self.vision_level.rails.parent_level = c.player.level
         yield from self.plane_shift(self.vision_level, p.vision_shift)
+
+        if self.vision_version == VisionVersion.Interrupted:
+            self.locks.mother_taking_care = self.lock_complex_ai(c.mother)
+            yield {c.mother: Teleport(p.mother_reappearance)}
 
 
     @Scene.new(enabled=False)
@@ -481,6 +483,7 @@ class Rails(RailsBase):
         yield from self.end_cutscene()
 
 
+    # TODO this should be done in on_death
     @Scene.new(lambda self: self.characters.player.health.amount.current <= 0, enabled=False)
     def player_dies_for_real(self, scene):
         scene.enabled = False
@@ -490,7 +493,7 @@ class Rails(RailsBase):
 
         yield from self.start_cutscene()
 
-        # TODO RailsBase procedure
+        # TODO RailsBase procedure? maybe not because this should be done in on_death?
         self.afterlife_level = self.ms.add(Level(self.ms, Path("levels/afterlife"), False, self.genesis))
         self.afterlife_level.rails.parent_level = c.player.level
 

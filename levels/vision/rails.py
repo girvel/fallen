@@ -35,6 +35,7 @@ class Rails(RailsBase):
             soldiers=list(self.level.find(Soldier)),
             kaledeii=next(self.level.find(Kaledeii)),
             bishop=next(self.level.find(LordBishop)),
+            enemy=None,
         )
 
         self.positions = Entity(
@@ -174,12 +175,13 @@ class Rails(RailsBase):
 
         scene.enabled = False
 
-        enemy = Enemy(p=p.enemy_appearance, level=self.level)
-        self.genesis.entities_to_create.add(enemy)
-        enemy.ai.composite[Pather].going_to = p.enemy_attack
+        @self.run_task()
+        def enemy_comes():
+            c.enemy = Enemy(p=p.enemy_appearance, level=self.level)
+            yield from self.create_entity(c.enemy)
+            c.enemy.ai.composite[Pather].going_to = p.enemy_attack
 
         yield {c.kaledeii: Say("Вы не понимаете тяжесть нашей ситуации, лорд-епископ.")}
-        enemy.after_load(self.level)  # TODO encapsulate creation
         yield {c.kaledeii: Say(
             "Стены Ковенанта пали, половина гарнизона мертва, я -- последний стоящий на ногах рыцарь, и я не справлюсь "
             "с ним в одиночку."
@@ -196,18 +198,18 @@ class Rails(RailsBase):
         yield from wait_for(5)
         c.kaledeii.ai.composite[Pather].going_to = add2(p.observing_the_entrance, mul2(vector.up, 2))
 
-        yield from wait_while(lambda: enemy.p != p.enemy_attack)
+        yield from wait_while(lambda: c.enemy.p != p.enemy_attack)
         yield from self.center_camera()
 
         c.player.ai.dummy.clear()
         yield {c.kaledeii: Say("Он здесь.")}
         yield from c.player.ai.wait_seconds(5)
 
-        yield {enemy: CastStoneStomp(vector.right)}
+        yield {c.enemy: CastStoneStomp(vector.right)}
         yield from c.player.ai.wait_seconds(3)
-        yield {enemy: CastStoneStomp(vector.right)}
+        yield {c.enemy: CastStoneStomp(vector.right)}
         yield from c.player.ai.wait_seconds(3)
-        yield {enemy: CastFireStorm()}
+        yield {c.enemy: CastFireStorm()}
         yield from wait_for(CastFireStorm.duration + 1)
 
         yield from wait_while(lambda: c.player.health.amount.current > 0)
