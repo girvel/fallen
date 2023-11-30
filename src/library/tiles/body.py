@@ -2,11 +2,11 @@ from typing import Any
 
 from ecs import DynamicEntity
 
-from src.engine.language.name import Name, CompositeName
+from src.engine.language.name import Name
 from src.engine.output.colors import ColorPair, red
+from src.lib.query import Q
 from src.library.special.genesis import Genesis
 from src.library.special.hades import Hades
-from src.lib.query import Q
 
 
 class Body(DynamicEntity):
@@ -15,6 +15,8 @@ class Body(DynamicEntity):
     character = '&'
     color = ColorPair(red)
     layer = "tiles"
+
+    boring_flag = None
 
     def __init__(
         self, parent_name: Name, items: list[Any] = None,

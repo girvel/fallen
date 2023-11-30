@@ -95,6 +95,10 @@ class Rails(RailsBase):
         yield from self.start_cutscene()
         yield from self.center_camera()
 
+        yield from self.notify(Notification("Управление",
+            "С помощью клика <y>мыши</y> можно присмотреться к объекту"
+        ))
+
         yield {c.brother: Say("О, секунду, совсем забыл.")}
         yield {c.player: Say("Улыбка брата излучает теплоту.", True)}
         yield {c.mother: Say("Хью, нам пора идти.")}
@@ -184,13 +188,11 @@ class Rails(RailsBase):
         yield from wait_for(10)
         memory.add_quest(q.find_someone_to_fight)
 
-        memory.notification_queue.append(Notification("Управление",
+        yield from self.notify(Notification("Управление",
             "<y>wasd</y> - движение<br/>"
-            "<y>r</y> - достать/убрать оружие<br/>"
-            "<y>мышь</y> - присмотреться к объекту<br/><br/>"
+            "<y>r</y> - достать/убрать оружие<br/><br/>"
             "Все горячие клавиши доступны в панели \"Управление\""
         ))
-        yield
 
         yield from self.end_cutscene()
 

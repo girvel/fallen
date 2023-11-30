@@ -10,6 +10,7 @@ from src.engine.acting.action import Action
 from src.library.ai_modules.spacial_memory import SpacialMemory
 from src.engine.language.name import Name
 from src.library.ais.dummy_ai import DummyAi
+from src.library.ais.io import Notification
 from src.library.physical.player import Player
 from src.library.special.level import Level
 from src.lib.vector import floordiv2, sub2
@@ -116,6 +117,10 @@ class RailsBase(DynamicEntity):
             entity.ai = self._ai_storage[entity]
             del self._ai_storage[entity]
             del self._ai_locks[entity]
+
+    def notify(self, notification: Notification):
+        self.get_player().ai.memory.notification_queue.append(notification)
+        yield
 
 
 

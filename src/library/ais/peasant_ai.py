@@ -107,7 +107,7 @@ class PeasantAi(CompositeAi):
                         p
                         for d in directions
                         if grid_get(spacial_memory, (p := add2(table_p, d))) == Level.no_entity_character
-                    ), None))  # TODO and Pather.available
+                    ), None))  # TODO and Pather.available(destination)
                 ])) is not None):
                     self.composite[Pather].going_to = destination
                     self.mode = Mode.WorkAtTable
