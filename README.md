@@ -8,6 +8,43 @@ I always wanted to create my own RPG, here it is.
 
 ## Installation
 
+(Command samples are for Windows, if you use Linux you definetely can figure out how to run a python script)
+
+1. Install [Python 3.10](https://www.python.org/downloads/)
+2. Download the [latest release](https://github.com/girvel/fallen/releases/latest) - file `Source code (zip)` will do
+3. Unpack the archive
+4. Open the terminal and go to game folder:
+
+Switch to disk, on which you downloaded your archive (for me it is disk D)
+
+```commandline
+D:
+```
+
+Go to the unpacked game folder -- there should be a `fallen.py` file in it (for me it is D:\Downloads\fallen-0.1.0):
+
+```commandline
+cd D:\Downloads\fallen-0.1.0
+```
+
+5. Install dependencies:
+
+```commandline
+py.exe -3.10 -m pip install -r requirements.txt
+```
+
+6. Run the game:
+
+```commandline
+py.exe -3.10 fallen.py
+```
+
+To run the game again just repeat steps 4 and 6.
+
+# Development section
+
+## Development installation
+
 1. Install [Git](https://git-scm.com/) and [Python 3.10](https://www.python.org/downloads/)
 2. Open the terminal and go to your preffered installation directory
 3. Clone the repository
@@ -28,8 +65,6 @@ pip install -r requirements.txt
 ```shell
 python fallen.py
 ```
-
-# Development section
 
 ## Documentation
 
