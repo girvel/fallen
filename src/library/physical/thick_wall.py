@@ -23,6 +23,6 @@ class ThickWall(DynamicEntity):
         self.health = Health(random.randrange(5000, 10001, 500), ArmorKind.Stone)
         super().__init__(**attributes)
 
-    def on_death(self, hades: Hades, genesis: Genesis):
+    def on_death(_, self, hades: Hades, genesis: Genesis):  # TODO review this pattern. Can I do better?
         genesis.entities_to_create.add(Ruins(p=self.p, level=self.level))
         return True

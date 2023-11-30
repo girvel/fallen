@@ -13,7 +13,7 @@ def generate(ms: Metasystem):
                 grid_set(level.grids[e.layer], e.p, None)
 
             if hasattr(e, "on_death"):
-                if e.on_death(hades, genesis):
+                if e.on_death(e, hades, genesis):
                     ms.delete(e)
             else:
                 ms.delete(e)
