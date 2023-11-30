@@ -17,8 +17,6 @@ class RabidDog(DynamicEntity):
 
     faction = Faction.Predators
 
-    on_death = body_factory
-
     def __init__(self):
         self.name = Name({
             "им": "бешеный пёс",
@@ -34,3 +32,5 @@ class RabidDog(DynamicEntity):
         self.classifiers = {Kind.Animate}
         self.ai = RabidAi()
         self.senses = Senses(10, 0, 5)
+
+        self.on_death = body_factory

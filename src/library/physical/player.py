@@ -15,8 +15,6 @@ class Player(Human):
     act = None
     faction = None
 
-    on_death = lambda *_, **__: None
-
     tick_counter = 0
 
     def __post_init__(self):
@@ -28,4 +26,6 @@ class Player(Human):
         self.senses = Senses(24, 40, 0)
         self.traits = Traits()
         self.inventory = Inventory()
+
+        self.on_death = lambda *_, **__: None
         del self.ai

@@ -8,7 +8,6 @@ from src.systems.ai import Kind, Senses
 required_attributes = "character, sex, name, health".split(", ")
 
 class Human(DynamicEntity):
-    on_death = body_factory
     layer = "physical"
 
     human_flag = None
@@ -21,6 +20,8 @@ class Human(DynamicEntity):
 
         self.skill = {}
         self.weapon = Weapon(1, "Crushing")
+
+        self.on_death = body_factory
 
         self.__post_init__(*args, **kwargs)
 

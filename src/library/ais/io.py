@@ -64,7 +64,7 @@ class Memory:
         self.selected_option_i = 0
         return result
 
-class IO(DynamicEntity):  # TODO redo as composite?
+class IO(DynamicEntity):  # TODO redo as composite AI?
     name = Name("Ввод/Вывод")
     cutscene_aware_flag = None
 
