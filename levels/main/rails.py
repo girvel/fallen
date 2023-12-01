@@ -96,7 +96,7 @@ class Rails(RailsBase):
         yield from self.center_camera()
 
         yield from self.notify(Notification("Управление",
-            "С помощью клика <y>мыши</y> можно присмотреться к объекту"
+            "С помощью клика <y>мыши</y> по символу на сцене можно присмотреться к объекту"
         ))
 
         yield {c.brother: Say("О, секунду, совсем забыл.")}
