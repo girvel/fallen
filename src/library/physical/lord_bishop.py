@@ -9,7 +9,7 @@ from src.systems.ai import Senses
 
 
 class LordBishop(Human):
-    name = Name("лорд Натаниэль")
+    name = Name("лорд-епископ")
     sex = "male"
     character = 'N'
     color = ColorPair(yellow)
