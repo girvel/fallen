@@ -1,5 +1,5 @@
 ecs-girvel~=2.0.1
-windows-curses; sys_platform == 'darwin'
+windows-curses; sys_platform == 'win32'
 PyYAML~=6.0
 numpy~=1.23.4
 fire~=0.5.0
