@@ -71,6 +71,7 @@ class Rails(RailsBase):
             "Панорамное окно, отделяющее помещение от ледяного озера, потрескалось и протекает.", True
         )}
         yield {c.player: Say("Кучка вооружённых людей тревожно озирается по сторонам.", True)}
+        yield {c.player: Say("Слышны звон холодного оружия и рёв огня.", True)}
 
         c.kaledeii.ai.composite[Pather].going_to = p.kaledeii_entrance
         yield from c.player.ai.wait_seconds(1)
@@ -93,6 +94,7 @@ class Rails(RailsBase):
         yield {c.player: Say("Сложно представить более неприступную крепость.", True)}
 
         yield from wait_finish(c.kaledeii)
+        yield from wait_for(5)
         yield {c.player: Say("Каменный зал, обогреваемый ревущими пламенем печами.", True)}
         yield {c.player: Say("Колоссальные размеры не позволяют чётко рассмотреть, что находится в его конце.", True)}
 
