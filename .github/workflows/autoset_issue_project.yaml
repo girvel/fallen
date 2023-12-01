@@ -1,4 +1,4 @@
-name: "Autoset project for a new issue"
+name: "Autoset project"
 
 on:
   issues:
