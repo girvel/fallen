@@ -6,7 +6,7 @@ from src.engine.output.colors import ColorPair, yellow
 
 
 class AbstractWall(DynamicEntity):
-    name = Name("стена")
+    name = Name("стенка")
     character = None
     color = ColorPair(yellow)
     layer = "physical"

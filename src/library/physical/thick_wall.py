@@ -11,7 +11,7 @@ from src.library.tiles.ruins import Ruins
 
 
 class ThickWall(DynamicEntity):
-    name = Name("мощная стена")
+    name = Name("стена")
     character = '#'
     color = ColorPair(yellow)
     solid_flag = None
