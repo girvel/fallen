@@ -2,7 +2,7 @@ name: "Autoset project for a new issue"
 
 on:
   issues:
-    types: ["labeled"]
+    types: ["labeled", "milestoned"]
 
 jobs:
   add-to-project:
