@@ -10,7 +10,7 @@ I always wanted to create my own RPG, here it is.
 
 (Command samples are for Windows, if you use Linux you definetely can figure out how to run a python script)
 
-1. Install [Python 3.10](https://www.python.org/downloads/)
+1. Install [Python 3.10](https://www.python.org/downloads/release/python-31011/) (does not work on any other python version)
 2. Download the [latest release](https://github.com/girvel/fallen/releases/latest) - file `Source code (zip)` will do
 3. Unpack the archive
 4. Open the terminal and go to game folder:
@@ -45,7 +45,7 @@ To run the game again just repeat steps 4 and 6.
 
 ## Development installation
 
-1. Install [Git](https://git-scm.com/) and [Python 3.10](https://www.python.org/downloads/)
+1. Install [Git](https://git-scm.com/) and [Python 3.10](https://www.python.org/downloads/release/python-31011/) (does not work on any other python version)
 2. Open the terminal and go to your preffered installation directory
 3. Clone the repository
 
