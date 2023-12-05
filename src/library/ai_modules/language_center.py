@@ -18,7 +18,7 @@ class Message:
 
 @dataclass
 class LanguageCenter:
-    def use(self, subject: Entity, perception: Perception, ideas: list[Idea]) -> list[Message]:
+    def use(self, subject, perception: Perception, ideas: list[Idea]) -> list[Message]:
         speech = []
 
         for idea in ideas:
@@ -28,11 +28,11 @@ class LanguageCenter:
         return speech
 
     @singledispatchmethod
-    def handle(self, meme, idea: Idea, subject: Entity, perception: Perception):
+    def handle(self, meme, idea: Idea, subject, perception: Perception):
         pass
 
     @handle.register
-    def _(self, meme: Aggression, idea: Idea, subject: Entity, perception: Perception):
+    def _(self, meme: Aggression, idea: Idea, subject, perception: Perception):
         if meme.target is subject and subject.attitude.get(meme.source) > 0:
             return Message(Say(
                 f"<Не понимает почему {meme.source.name:им} нападает на {subject.name:ви}>",
@@ -45,7 +45,7 @@ class LanguageCenter:
         ), randrange(0, 250))
 
     @handle.register
-    def _(self, meme: DangerousEntity, idea: Idea, subject: Entity, perception: Perception):
+    def _(self, meme: DangerousEntity, idea: Idea, subject, perception: Perception):
         return Message(Say(
             f"<Видел{'а' if subject.sex == 'female' else ''} {meme.entity.name:ви} {placement(subject.level.markup, meme.p)}>",
             idea=idea,

@@ -11,7 +11,7 @@ class Listener:
     trust_k: float = .9
     idea_weight_threshold: float = .5
 
-    def use(self, subject: Entity, perception: Perception) -> list[Idea]:
+    def use(self, subject, perception: Perception) -> list[Idea]:
         return [
             Idea(sound.idea.meme, sound.idea.weight * self.trust_k, sound.parent)
             for sound in perception.hearing.values()

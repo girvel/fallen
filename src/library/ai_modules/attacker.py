@@ -9,7 +9,7 @@ from src.engine.ai import Perception
 
 class Attacker:
     def try_attacking(
-        self, subject: Entity, perception: Perception, current_target: Entity | None = None
+        self, subject, perception: Perception, current_target: Entity | None = None
     ) -> HandAttack | None:
 
         if current_target and exists(current_target):

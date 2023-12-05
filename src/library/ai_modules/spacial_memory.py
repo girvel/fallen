@@ -10,7 +10,7 @@ class SpacialMemory(dict):
         self[key] = map_grid(key.grids["physical"], lambda _: None)
         return self[key]
 
-    def use(self, subject: Entity, perception: Perception):
+    def use(self, subject, perception: Perception):
         for p, entity in perception.vision["physical"].items():
             grid_set(self[subject.level], p, entity is not None and entity.character or Level.no_entity_character)
 

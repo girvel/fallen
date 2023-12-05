@@ -13,7 +13,7 @@ class Morale:
     aggression_to_neutral_base_cost: float = 1
     neutrality_threshold: int = 10
 
-    def use(self, subject: Entity, perception: Perception, ideas: list[Idea]) -> None:
+    def use(self, subject, perception: Perception, ideas: list[Idea]) -> None:
         for idea in ideas:
             match idea.meme:
                 case Aggression(source, target):

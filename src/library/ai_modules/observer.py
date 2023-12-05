@@ -18,7 +18,7 @@ class Observer:
     # TODO OPT different collection for ideas? dict? list with idea kind ID as index?
     # TODO OPT determine the dict/list speed K
     # TODO OPT isinstance vs comparing a variable
-    def use(self, subject: Entity, perception: Perception) -> tuple[list[Idea], bool]:
+    def use(self, subject, perception: Perception) -> tuple[list[Idea], bool]:
         memes = []
         notices_danger = False
 

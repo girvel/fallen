@@ -8,7 +8,7 @@ from src.engine.ai import Perception
 
 
 class Wanderer(Entity):
-    def use(self, subject: Entity, perception: Perception, free_directions: list[int2]) -> Move | None:
+    def use(self, subject, perception: Perception, free_directions: list[int2]) -> Move | None:
         if len(free_directions) > 0:
             return Move(random.choice(free_directions))
         return None

@@ -1,4 +1,4 @@
-from typing import Literal
+from typing import Literal, Any
 
 from ecs import Entity
 
@@ -7,7 +7,7 @@ from src.lib.vector import d2, int2
 
 
 class Follower:
-    subject: Entity | None = None
+    subject: Any = None
     no_change_signal = object()
 
     def __init__(self, d):

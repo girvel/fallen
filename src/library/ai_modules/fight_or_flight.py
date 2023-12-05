@@ -1,4 +1,5 @@
 import random
+from typing import Any
 
 from ecs import Entity, exists
 
@@ -8,14 +9,14 @@ from src.engine.ai import Perception
 
 # TODO OPT use the stream of ideas with separate meme for enemies
 class FightOrFlight:
-    current_target: Entity | None = None
+    current_target: Any = None
     no_change_signal = object()
 
     def __init__(self, prefer_fight: bool):
         self.prefer_fight = prefer_fight
 
     def use(
-        self, subject: Entity, perception: Perception
+        self, subject, perception: Perception
     ) -> int2 | None | object:
 
         if self.current_target and self.prefer_fight:

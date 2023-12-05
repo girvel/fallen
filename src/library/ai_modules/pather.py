@@ -16,7 +16,7 @@ class Pather:
         self.path = []
         self.free_directions = None
 
-    def use(self, subject: Entity, perception: Perception, spacial_memory: SpacialMemory) -> Move | None:
+    def use(self, subject, perception: Perception, spacial_memory: SpacialMemory) -> Move | None:
         # Update public self.free_directions
         self.free_directions = [
             d for d in directions if perception.vision[subject.layer].get(add2(subject.p, d)) is None

@@ -14,7 +14,7 @@ class Speaker:
 
     messages: list[Message] = field(default_factory=list)
 
-    def use(self, subject: Entity, perception: Perception) -> Say | None:
+    def use(self, subject, perception: Perception) -> Say | None:
         if len(self.messages) == 0: return
 
         next_message = None
