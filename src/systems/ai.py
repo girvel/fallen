@@ -5,6 +5,7 @@ import tcod.map
 
 from src.components import GridContainer, Sentient
 from src.engine.ai import Perception, GridProxy
+from src.lib.query import Q
 from src.lib.vector import int2
 
 
@@ -31,7 +32,7 @@ def update_transparency_cache(level: GridContainer):
 stop_signal = object()
 
 def run_rails(level: GridContainer):
-    if not hasattr(level, "rails"): return
+    if ~Q(level).rails is None: return
 
     started_scenes = []
     for s in level.rails.scenes:
