@@ -4,7 +4,7 @@ from collections import defaultdict
 from dataclasses import dataclass
 from typing import Callable, Iterator, TypeAlias, Any
 
-from ecs import DynamicEntity
+from ecs import Entity
 
 from src.engine.acting.action import Action
 from src.library.ai_modules.spacial_memory import SpacialMemory
@@ -16,9 +16,9 @@ from src.library.special.level import Level
 from src.lib.vector import floordiv2, sub2
 
 
-Script: TypeAlias = Iterator[dict[DynamicEntity, Action | None] | None]
+Script: TypeAlias = Iterator[dict[Entity, Action | None] | None]
 
-class RailsBase(DynamicEntity):
+class RailsBase(Entity):
     name = Name("Рельсы")
     rails_flag = None
 
@@ -36,8 +36,8 @@ class RailsBase(DynamicEntity):
         self.ms = ms
         self.genesis = genesis
 
-        self._ai_storage: dict[DynamicEntity, Any] = {}
-        self._ai_locks: dict[DynamicEntity, list[object]] = {}
+        self._ai_storage: dict[Entity, Any] = {}
+        self._ai_locks: dict[Entity, list[object]] = {}
 
         logging.info(f"Initialized rails with scenes {[s.name for s in self.scenes]}")
 

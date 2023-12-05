@@ -1,11 +1,11 @@
-from ecs import DynamicEntity
+from ecs import Entity
 from src.engine.acting.action import Action
-from src.systems.ai import Perception
+from src.engine.ai import Perception
 
 
-class StaticAi(DynamicEntity):
+class StaticAi(Entity):
     def __init__(self, action_factory):
         self.action_factory = action_factory
 
-    def make_decision(self, subject: DynamicEntity, perception: Perception) -> Action:
+    def make_decision(self, subject: Entity, perception: Perception) -> Action:
         return self.action_factory(subject, perception)

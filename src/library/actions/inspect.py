@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 
-from ecs import DynamicEntity
+from ecs import Entity
 
 from src.engine.acting.action import Action
 from src.library.special.genesis import Genesis
@@ -9,7 +9,7 @@ from src.library.special.hades import Hades
 
 @dataclass
 class Inspect(Action):
-    subject: DynamicEntity
+    subject: Entity
 
-    def execute(self, actor: DynamicEntity, hades: Hades, genesis: Genesis):
+    def execute(self, actor: Entity, hades: Hades, genesis: Genesis):
         pass

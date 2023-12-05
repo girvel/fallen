@@ -3,13 +3,13 @@ from dataclasses import dataclass
 from pathlib import Path
 
 import yaml
-from ecs import Entity, DynamicEntity
+from ecs import Entity
 
 from src.engine.parenting import iter_parenting_stack
-from src.library.special.hades import Hades
 from src.lib.limited import Limited
 from src.lib.query import Q
 from src.lib.toolkit import random_round
+from src.library.special.hades import Hades
 
 
 @dataclass
@@ -21,7 +21,7 @@ class Weapon:
 class Health:
     amount: Limited
     armor_kind: str
-    last_damaged_by: list[DynamicEntity]
+    last_damaged_by: list[Entity]
 
     def __init__(self, amount: int, armor_kind: str):
         self.amount = Limited(amount + 1)
@@ -29,7 +29,7 @@ class Health:
         self.last_damaged_by = []
 
 
-def attack(source: DynamicEntity, target: DynamicEntity, hades: Hades):
+def attack(source: Entity, target: Entity, hades: Hades):
     if (weapon := ~Q(source).weapon) is None: return
 
     return inflict_damage(
@@ -37,7 +37,7 @@ def attack(source: DynamicEntity, target: DynamicEntity, hades: Hades):
     )
 
 
-def potential_damage(source: DynamicEntity):
+def potential_damage(source: Entity):
     if (skill := ~Q(source).skill) is not None:
         skill_k = skill.get(source.weapon.damage_kind) or .5
     else:
@@ -47,14 +47,14 @@ def potential_damage(source: DynamicEntity):
 
 
 def inflict_damage(
-    target: DynamicEntity, power: float, damage_kind: str, hades: Hades, source: DynamicEntity
+    target: Entity, power: float, damage_kind: str, hades: Hades, source: Entity
 ):
     if (health := ~Q(target).health) is None: return
 
-    armor = armor_data[health.armor_kind]
-    if damage_kind in armor.resistance:
+    stats = armor_data[health.armor_kind]
+    if damage_kind in stats.resistance:
         modifier = 0.5
-    elif damage_kind in armor.vulnerability:
+    elif damage_kind in stats.vulnerability:
         modifier = 2
     else:
         modifier = 1
@@ -81,12 +81,20 @@ def inflict_damage(
 
 db = yaml.safe_load((Path(__file__).parent / "damage_and_armor.yaml").read_text())
 
-armor_data = Entity(**{
-    armor_kind: Entity(resistance=set(resistance), vulnerability=set(vulnerability))
-    for armor_kind, (resistance, vulnerability) in db["armor_kinds"].items()
-})
+@dataclass
+class ArmorStats:
+    resistance: set[str]
+    vulnerability: set[str]
 
-DamageKind = Entity(**{kind: kind for kind in db["damage_kinds"]})
-ArmorKind = Entity(**{kind: kind for kind in db["armor_kinds"]})
+armor_data = {
+    armor_kind: ArmorStats(set(resistance), set(vulnerability))
+    for armor_kind, (resistance, vulnerability) in db["armor_kinds"].items()
+}
+
+# TODO REF something smarter? Like either you write armor = "Steel" or armor = DamageKinds.Steel 
+#  with Steel as stats
+
+damage_kinds = {kind: kind for kind in db["damage_kinds"]}
+armor_kinds = {kind: kind for kind in db["armor_kinds"]}
 
 del db

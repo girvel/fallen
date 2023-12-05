@@ -1,6 +1,6 @@
 from abc import abstractmethod, ABC
 
-from ecs import DynamicEntity
+from ecs import Entity
 
 from src.library.special.genesis import Genesis
 from src.library.special.hades import Hades
@@ -10,5 +10,5 @@ class Action(ABC):
     succeeded: bool = True
 
     @abstractmethod
-    def execute(self, actor: DynamicEntity, hades: Hades, genesis: Genesis) -> None:
+    def execute(self, actor: Entity, hades: Hades, genesis: Genesis) -> None:
         pass

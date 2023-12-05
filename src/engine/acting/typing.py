@@ -1,4 +1,4 @@
-from ecs import DynamicEntity
+from ecs import Entity
 
 from typing import Protocol
 
@@ -7,5 +7,5 @@ from src.library.special.level import Level
 
 
 class EntityFactory(Protocol):
-    def __call__(self, *, p: int2, level: Level) -> DynamicEntity:
+    def __call__(self, *, p: int2, level: Level) -> Entity:
         ...

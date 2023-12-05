@@ -1,15 +1,15 @@
 import random
 
-from ecs import DynamicEntity, exists
+from ecs import Entity, exists
 
 from src.library.actions.hand_attack import HandAttack
 from src.lib.vector import directions, add2, d2
-from src.systems.ai import Perception
+from src.engine.ai import Perception
 
 
 class Attacker:
     def try_attacking(
-        self, subject: DynamicEntity, perception: Perception, current_target: DynamicEntity | None = None
+        self, subject: Entity, perception: Perception, current_target: Entity | None = None
     ) -> HandAttack | None:
 
         if current_target and exists(current_target):
@@ -19,7 +19,7 @@ class Attacker:
 
         enemies = [
             e for d in directions
-            if (e := perception.vision.physical.get(add2(subject.p, d))) is not None
+            if (e := perception.vision["physical"].get(add2(subject.p, d))) is not None
             and subject.attitude.get(e) < 0
         ]
 

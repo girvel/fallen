@@ -22,6 +22,6 @@ def test_rails_run():
     level = ms.add(Level(ms, Path('tests/levels/rails'), False, genesis))
     ms.update()
 
-    wall = grid_get(level.grids.physical, (0, 0))
+    wall = grid_get(level.grids["physical"], (0, 0))
     assert wall.do_rails_work
     assert wall.act == NoAction()

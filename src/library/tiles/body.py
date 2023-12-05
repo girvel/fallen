@@ -1,15 +1,16 @@
 from typing import Any
 
-from ecs import DynamicEntity
+from ecs import Entity
 
 from src.engine.language.name import Name
 from src.engine.output.colors import ColorPair, red
 from src.lib.query import Q
+from src.library.abstract.material import Material
 from src.library.special.genesis import Genesis
 from src.library.special.hades import Hades
 
 
-class Body(DynamicEntity):
+class Body(Material):
     base_name = Name.auto("тело")
 
     character = '&'
@@ -18,19 +19,14 @@ class Body(DynamicEntity):
 
     boring_flag = None
 
-    def __init__(
-        self, parent_name: Name, items: list[Any] = None,
-        **attributes,
-    ):
+    def __post_init__(self, parent_name: Name, items: list[Any] = None):
         self.name = self.base_name.concat(f" {parent_name:ро}")
         # TODO abstract body
 
         self.items = items or []
 
-        super().__init__(**attributes)
 
-
-def body_factory(base: DynamicEntity, hades: Hades, genesis: Genesis):
+def body_factory(base: Any, _hades: Hades, genesis: Genesis) -> bool:
     items = []
 
     if hasattr(base, "weapon"):

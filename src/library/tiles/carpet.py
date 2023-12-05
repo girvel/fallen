@@ -1,10 +1,9 @@
-from ecs import DynamicEntity
-
 from src.engine.language.name import Name
 from src.engine.output.colors import magenta, ColorPair
+from src.library.abstract.material import Material
 
 
-class Carpet(DynamicEntity):
+class Carpet(Material):
     name = Name("ковёр")
     character = '`'
     color = ColorPair(magenta)

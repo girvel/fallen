@@ -7,7 +7,7 @@ from src.lib.vector import grid_get
 class Rails(RailsBase):
     @Scene.new()
     def the_scene(self, scene):
-        wall = grid_get(self.level.grids.physical, (0, 0))
+        wall = grid_get(self.level.grids["physical"], (0, 0))
         wall.do_rails_work = True
 
         wall.ai = DummyAi()

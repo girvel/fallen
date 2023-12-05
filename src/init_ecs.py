@@ -1,6 +1,6 @@
 import logging
 
-from ecs import Metasystem, create_system
+from ecs import MetasystemFacade, System
 
 from src.lib.toolkit import crash_safe
 from src.library.special.genesis import Genesis
@@ -10,12 +10,12 @@ from src.systems import acting, destruction_and_creation, ai, death, nature, clo
 
 def build_metasystem(debug_mode):
     logging.info("Creating & filling the metasystem")
-    ms = Metasystem()
+    ms = MetasystemFacade()
 
     logging.info("Initializing systems")
 
-    for system in map(create_system, [
-        # microprocesses:
+    for system in map(System, [
+        # micro-processes:
         *blinking.sequence,
         *clock.sequence,
         # *regeneration.sequence,
@@ -29,12 +29,14 @@ def build_metasystem(debug_mode):
 
         # death:
         *death.sequence,
-        *destruction_and_creation.generate(ms),
+        *destruction_and_creation.sequence,
     ]):
         if not debug_mode:
-            system.process = crash_safe(system.process)
+            system.ecs_process = crash_safe(system.ecs_process)
 
         ms.add(system)
+
+    ms.register_itself()
 
     logging.info("Creating special entities")
 

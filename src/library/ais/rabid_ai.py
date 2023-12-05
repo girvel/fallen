@@ -6,7 +6,7 @@ from src.library.ai_modules.pather import Pather
 from src.library.ai_modules.spacial_memory import SpacialMemory
 from src.lib.typed_dict import TypeDict
 from src.lib.vector import sub2, abs2
-from src.systems.ai import classified_as, Kind
+from src.engine.ai import Kind, classified_as
 
 
 class RabidAi:
@@ -22,7 +22,7 @@ class RabidAi:
         if action := self.composite[Pather].use(subject, perception, self.composite[SpacialMemory]): return action
 
         possible_targets = [
-            e for e in perception.vision.physical.values()
+            e for e in perception.vision["physical"].values()
             if e is not None and e is not subject and classified_as(e, Kind.Animate)
         ]
         if len(possible_targets) == 0: return Move(random.choice(self.composite[Pather].free_directions))

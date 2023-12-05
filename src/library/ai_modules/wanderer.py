@@ -1,14 +1,14 @@
 import random
 
-from ecs import DynamicEntity
+from ecs import Entity
 
 from src.library.actions.move import Move
 from src.lib.vector import int2
-from src.systems.ai import Perception
+from src.engine.ai import Perception
 
 
-class Wanderer(DynamicEntity):
-    def use(self, subject: DynamicEntity, perception: Perception, free_directions: list[int2]) -> Move | None:
+class Wanderer(Entity):
+    def use(self, subject: Entity, perception: Perception, free_directions: list[int2]) -> Move | None:
         if len(free_directions) > 0:
             return Move(random.choice(free_directions))
         return None

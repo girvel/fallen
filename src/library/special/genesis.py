@@ -1,9 +1,9 @@
-from ecs import DynamicEntity
+from ecs import Entity
 
 from src.engine.language.name import Name
 
 
-class Genesis(DynamicEntity):
+class Genesis(Entity):
     name = Name("Генезис")
 
     def __init__(self):

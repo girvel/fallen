@@ -1,11 +1,12 @@
-from ecs import DynamicEntity
+from ecs import Entity
 
-from src.engine.acting.damage import Health, ArmorKind
+from src.engine.acting.damage import Health, armor_kinds
 from src.engine.language.name import Name
 from src.engine.output.colors import ColorPair, yellow
+from src.library.abstract.material import Material
 
 
-class AbstractWall(DynamicEntity):
+class AbstractWall(Material):
     name = Name("стенка")
     character = None
     color = ColorPair(yellow)
@@ -13,6 +14,5 @@ class AbstractWall(DynamicEntity):
 
     boring_flag = None
 
-    def __init__(self, **attributes):
-        self.health = Health(2000, ArmorKind.Wood)
-        super().__init__(**attributes)
+    def __post_init__(self):
+        self.health = Health(2000, armor_kinds["Wood"])

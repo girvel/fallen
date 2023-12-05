@@ -1,3 +1,4 @@
+from src.components import Liquid, Creator
 from src.lib import vector
 from src.lib.toolkit import chance
 from src.lib.vector import fits_in_grid, add2, grid_unsafe_get
@@ -5,7 +6,7 @@ from src.lib.vector import fits_in_grid, add2, grid_unsafe_get
 sequence = []
 
 @sequence.append
-def flow(subject: "liquid_height", genesis: "entities_to_create"):
+def flow(subject: Liquid, genesis: Creator):
     if subject.liquid_height <= 1: return
 
     grid = subject.level.grids[subject.layer]
@@ -21,7 +22,7 @@ def flow(subject: "liquid_height", genesis: "entities_to_create"):
             if diff >= 2 or diff == 1 and chance(.5):
                 subject.liquid_height -= 1
                 other.liquid_height += 1
-        elif grid_unsafe_get(subject.level.grids.physical, p) is None:
+        elif grid_unsafe_get(subject.level.grids["physical"], p) is None:
             subject.liquid_height -= 1
             genesis.entities_to_create.add(type(subject)(level=subject.level, p=p, liquid_height=1))
 

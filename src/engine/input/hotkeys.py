@@ -3,7 +3,7 @@ import time
 from dataclasses import dataclass
 from typing import Callable, Optional, IO
 
-from ecs import DynamicEntity
+from ecs import Entity
 
 from src.engine.acting.action import Action
 from src.library.actions.hand_attack import HandAttack
@@ -13,18 +13,18 @@ from src.library.actions.move import Move
 from src.library.actions.no_action import NoAction
 from src.engine.input.mode import ALL_MODES, GENERAL, GAME, OPTIONS, NOTIFICATION, DIALOGUE_LINE, CUTSCENE
 from src.lib.vector import add2, up, down, left, right
-from src.systems.ai import Perception
+from src.engine.ai import Perception
 
 
 @dataclass
 class Hotkey:
-    function: Callable[[IO, DynamicEntity, Perception], Optional[Action]]
+    function: Callable[[IO, Entity, Perception], Optional[Action]]
     description: str
     hidden: bool
 
     @classmethod
     def define(cls, collection: "dict[int, Hotkey]", keys: list[str | int], description: Optional[str] = None):
-        def decorator(function: Callable[[IO, DynamicEntity, Perception], Optional[Action]]):
+        def decorator(function: Callable[[IO, Entity, Perception], Optional[Action]]):
             for key in keys:
                 key = ord(key) if isinstance(key, str) else key
                 collection[key] = Hotkey(function, description or "", description is None)

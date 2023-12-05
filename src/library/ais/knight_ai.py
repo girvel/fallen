@@ -1,10 +1,10 @@
-from ecs import DynamicEntity
+from ecs import Entity
 
-from src.systems.ai import Perception
+from src.engine.ai import Perception
 
 
-class KnightAi(DynamicEntity):
-    def make_decision(self, subject: DynamicEntity, perception: Perception):
+class KnightAi(Entity):
+    def make_decision(self, subject: Entity, perception: Perception):
         pass
 
     # def __init__(self):

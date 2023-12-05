@@ -1,41 +1,43 @@
 import logging
 
-from ecs import Metasystem
+from ecs import MetasystemFacade
 
+from src.components import Destructor, Creator
 from src.lib.query import Q
 from src.lib.vector import grid_set, grid_get
 
 
-def generate(ms: Metasystem):
-    def destruction(hades: 'entities_to_destroy', genesis: 'entities_to_create'):
-        for e in hades.entities_to_destroy:
-            if (level := ~Q(e).level) is not None:
-                grid_set(level.grids[e.layer], e.p, None)
+sequence = []
 
-            if hasattr(e, "on_death"):
-                if e.on_death(e, hades, genesis):
-                    ms.delete(e)
-            else:
-                ms.delete(e)
+@sequence.append
+def destruction(hades: Destructor, genesis: Creator, ms: MetasystemFacade):
+    for e in hades.entities_to_destroy:
+        if (level := ~Q(e).level) is not None:
+            grid_set(level.grids[e.layer], e.p, None)
 
-            if not hasattr(e, "sound_flag") and not hasattr(e, "boring_flag"):
-                logging.info(f'-"{~Q(e).name or e}"')
+        if hasattr(e, "on_death"):
+            if e.on_death(e, hades, genesis):
+                ms.remove(e)
+        else:
+            ms.remove(e)
 
-        hades.entities_to_destroy.clear()
+        if not hasattr(e, "sound_flag") and not hasattr(e, "boring_flag"):
+            logging.info(f'-"{~Q(e).name or e}"')
 
-    def creation(hades: 'entities_to_destroy', genesis: 'entities_to_create'):
-        for e in genesis.entities_to_create:
-            if hasattr(e, "level"):
-                if (replaced := grid_get(e.level.grids[e.layer], e.p)) is not None:
-                    hades.entities_to_destroy.add(replaced)
-                    replaced.level = None
+    hades.entities_to_destroy.clear()
 
-                e.level.put(e.p, e)
+@sequence.append
+def creation(hades: Destructor, genesis: Creator, ms: MetasystemFacade):
+    for e in genesis.entities_to_create:
+        if hasattr(e, "level"):
+            if (replaced := grid_get(e.level.grids[e.layer], e.p)) is not None:
+                hades.entities_to_destroy.add(replaced)
+                replaced.level = None
 
-            ms.add(e)
-            if not hasattr(e, "sound_flag") and not hasattr(e, "boring_flag"):
-                logging.info(f'+"{~Q(e).name or e}"')
+            e.level.put(e.p, e)
 
-        genesis.entities_to_create.clear()
+        ms.add(e)
+        if not hasattr(e, "sound_flag") and not hasattr(e, "boring_flag"):
+            logging.info(f'+"{~Q(e).name or e}"')
 
-    return creation, destruction
+    genesis.entities_to_create.clear()

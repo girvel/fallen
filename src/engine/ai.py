@@ -1,0 +1,77 @@
+from collections.abc import Iterator
+from dataclasses import dataclass
+from enum import Enum
+from typing import Any, TypeVar, Generic
+
+from numpy import ndarray, dtype
+
+from src.components import Positioned
+from src.lib.vector import int2, fits_in_grid, grid_unsafe_get
+from src.library.special.sound import Sound
+
+
+class Kind(Enum):
+    Animate = 0
+    Table = 1
+
+
+def classified_as(entity, kind):
+    return hasattr(entity, "classifiers") and kind in entity.classifiers
+
+
+@dataclass
+class Senses:
+    vision: int
+    hearing: int
+    smell: int
+
+
+T = TypeVar('T', bound=Positioned)
+R = TypeVar('R')
+
+@dataclass
+class GridProxy(Generic[T]):
+    _grid: tuple[list[list[T | None]], int2]
+    _availability_mask: ndarray[Any, dtype[bool]]
+    _start: int2
+    _end: int2
+
+    def get(self, key: int2, default: R = None) -> T | R:
+        if not fits_in_grid(self._grid, key) or not self._availability_mask[key]:
+            return default
+
+        return grid_unsafe_get(self._grid, key)
+
+    def values(self) -> Iterator[T | None]:
+        return (
+            grid_unsafe_get(self._grid, (x, y))
+            for x in range(self._start[0], self._end[0])
+            for y in range(self._start[1], self._end[1])
+            if self._availability_mask[x, y]
+        )
+
+    def items(self) -> Iterator[tuple[int2, T | None]]:
+        return (
+            ((x, y), grid_unsafe_get(self._grid, (x, y)))
+            for x in range(self._start[0], self._end[0])
+            for y in range(self._start[1], self._end[1])
+            if self._availability_mask[x, y]
+        )
+
+    def __iter__(self) -> Iterator[int2]:
+        return (
+            (x, y)
+            for x in range(self._start[0], self._end[0])
+            for y in range(self._start[1], self._end[1])
+            if self._availability_mask[x, y]
+        )
+
+    def __contains__(self, item: int2) -> bool:
+        return fits_in_grid(self._grid, item) and self._availability_mask[item]
+
+
+@dataclass
+class Perception:
+    vision: dict[str, GridProxy[Positioned]]
+    hearing: GridProxy[Sound]
+    smell: GridProxy[Positioned]

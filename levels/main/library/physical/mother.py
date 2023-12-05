@@ -1,6 +1,6 @@
-from ecs import DynamicEntity
+from ecs import Entity
 
-from src.engine.acting.damage import Health, Weapon, ArmorKind, DamageKind
+from src.engine.acting.damage import Health, Weapon, armor_kinds, damage_kinds
 from src.engine.attitude.implementation import Constants
 from src.library.ai_modules.spacial_memory import SpacialMemory
 from src.engine.language.library import reserved_names
@@ -16,15 +16,15 @@ class Mother(Human):
     character = 'L'
     color = ColorPair(blue)
     sex = "female"
-    name = CompositeName(reserved_names.lilia, reserved_names.kinds["female"])
+    name = CompositeName(reserved_names["lilia"], reserved_names["kinds"]["female"])
 
     def __post_init__(self, **attributes):
-        self.health = Health(50, ArmorKind.Organic)
-        self.weapon = Weapon(4, DamageKind.Slashing)
+        self.health = Health(50, armor_kinds["Organic"])
+        self.weapon = Weapon(4, damage_kinds["Slashing"])
         self.ai = PeasantAi()
         self.attitude = peasant_attitude()
 
-        DynamicEntity.__init__(self, **attributes)
+        Entity.__init__(self, **attributes)
 
     def after_load(self, level):
         self.ai.composite[SpacialMemory].knows(level)

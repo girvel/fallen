@@ -1,6 +1,6 @@
 import random
 
-from src.engine.acting.damage import Weapon, Health, DamageKind, ArmorKind
+from src.engine.acting.damage import Weapon, Health, damage_kinds, armor_kinds
 from src.library.ai_modules.spacial_memory import SpacialMemory
 from src.engine.attitude.implementation import common_attitude, Faction
 from src.engine.language.library import first_names
@@ -8,7 +8,7 @@ from src.engine.language.name import CompositeName
 from src.library.abstract.human import Human
 from src.library.ais.peasant_ai import PeasantAi
 from src.lib.vector import sub2, area2
-from src.systems.ai import Senses
+from src.engine.ai import Senses
 
 
 class Peasant(Human):
@@ -19,8 +19,8 @@ class Peasant(Human):
     def __post_init__(self):
         self.sex = random.choice(["male", "female"])
         self.name = random.choice(first_names[self.sex])
-        self.health = Health(random.randrange(10, 25) + (self.sex == "male" and 10 or 0), ArmorKind.Organic)
-        self.weapon = Weapon(4, DamageKind.Slashing)
+        self.health = Health(random.randrange(10, 25) + (self.sex == "male" and 10 or 0), armor_kinds["Organic"])
+        self.weapon = Weapon(4, damage_kinds["Slashing"])
         self.senses = Senses(8, 0, 0)
         self.ai = PeasantAi()
         self.attitude = peasant_attitude()

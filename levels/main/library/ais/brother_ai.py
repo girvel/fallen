@@ -1,13 +1,13 @@
 import random
 
-from ecs import DynamicEntity
+from ecs import Entity
 
 from src.engine.acting.action import Action
 from src.library.actions.say import Say
 from src.engine.attitude.implementation import Faction
 from src.library.ais.dummy_ai import DummyAi
 from src.lib.query import Q
-from src.systems.ai import Perception
+from src.engine.ai import Perception
 
 
 class BrotherAi(DummyAi):
@@ -25,11 +25,11 @@ class BrotherAi(DummyAi):
         self.speech_enabled = False
         super().__init__()
 
-    def make_decision(self, subject: DynamicEntity, perception: Perception) -> Action:
+    def make_decision(self, subject: Entity, perception: Perception) -> Action:
         if (
             len(self.bye_lines) > 0 and
             (neighbour := next((
-                e for e in perception.vision.physical.values()
+                e for e in perception.vision["physical"].values()
                 if ~Q(e).faction == Faction.Villagers
                 and e not in self.said_bye_to
             ), None))

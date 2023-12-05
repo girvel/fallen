@@ -1,13 +1,11 @@
-from ecs import DynamicEntity
-
-from src.engine.acting.damage import ArmorKind, Health
+from src.engine.acting.damage import armor_kinds, Health
+from src.engine.ai import Kind
 from src.engine.language.name import Name
 from src.engine.output.colors import yellow, ColorPair
+from src.library.abstract.material import Material
 
-from src.systems.ai import Kind
 
-
-class Table(DynamicEntity):
+class Table(Material):
     name = Name("стол")
     character = '"'
     color = ColorPair(yellow)
@@ -16,5 +14,5 @@ class Table(DynamicEntity):
 
     boring_flag = None
 
-    def __init__(self):
-        self.health = Health(35, ArmorKind.Wood)
+    def __post_init__(self):
+        self.health = Health(35, armor_kinds["Wood"])

@@ -1,10 +1,13 @@
-from ecs import DynamicEntity
+from dataclasses import dataclass
+
+from ecs import Entity
 
 from src.engine.language.name import Name
 from src.lib.vector import int2
 
 
-class Zone(DynamicEntity):
+@dataclass
+class Zone(Entity):
     name: Name
     center: int2
     attractiveness: float

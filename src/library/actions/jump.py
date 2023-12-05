@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from ecs import DynamicEntity
+from ecs import Entity
 from src.engine.acting.action import Action
 from src.library.special.genesis import Genesis
 from src.library.special.hades import Hades
@@ -13,7 +13,7 @@ class Jump(Action):
     v: int2
     d: int
 
-    def execute(self, actor: DynamicEntity, hades: Hades, genesis: Genesis):
+    def execute(self, actor: Entity, hades: Hades, genesis: Genesis):
         if abs2(self.v) != 1:
             self.succeeded = False
             return
@@ -26,7 +26,7 @@ class Jump(Action):
                 self.succeeded = False
                 return
 
-        if grid_get(actor.level.grids.tiles, actor.p, False) is None and (~Q(actor).health.amount.current or 0) > 5:
+        if grid_get(actor.level.grids["tiles"], actor.p, False) is None and (~Q(actor).health.amount.current or 0) > 5:
             genesis.entities_to_create.add(Footprint(p=actor.p, level=actor.level))
 
         grid_set(actor.level.grids[actor.layer], actor.p, None)

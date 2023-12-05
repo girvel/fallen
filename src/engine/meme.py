@@ -1,25 +1,25 @@
 from dataclasses import dataclass
 from typing import TypeAlias
 
-from ecs import DynamicEntity
+from ecs import Entity
 
 from src.lib.vector import int2
 
 
 @dataclass
 class Aggression:
-    source: DynamicEntity
-    target: DynamicEntity
+    source: Entity
+    target: Entity
 
 @dataclass
 class DangerousEntity:
     p: int2
-    entity: DynamicEntity
+    entity: Entity
 
 @dataclass
 class Murder:
-    source: DynamicEntity
-    target: DynamicEntity
+    source: Entity
+    target: Entity
 
 Meme: TypeAlias = Aggression | DangerousEntity | Murder
 
@@ -28,4 +28,4 @@ Meme: TypeAlias = Aggression | DangerousEntity | Murder
 class Idea:
     meme: Meme
     weight: float
-    source: DynamicEntity = None
+    source: Entity = None

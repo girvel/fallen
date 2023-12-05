@@ -7,7 +7,7 @@ from levels.main.library.physical.brother import Brother
 from levels.main.library.physical.girl import Girl
 from levels.main.library.physical.mother import Mother
 from src.engine.acting.aggressive import Aggressive
-from src.engine.acting.damage import Weapon, DamageKind
+from src.engine.acting.damage import Weapon, damage_kinds
 from src.engine.rails_base import RailsBase, Scene
 from src.lib import vector
 from src.lib.concurrency import wait_for, wait_while
@@ -118,7 +118,7 @@ class Rails(RailsBase):
 
         yield {c.brother: Say("Вот, смотри.")}
         yield {c.player: Say("В твоих руках оказывается длинный свёрток льняной ткани.", True)}
-        c.player.weapon = Weapon(8, DamageKind.Slashing)
+        c.player.weapon = Weapon(8, damage_kinds["Slashing"])
 
         yield from self.options({
             (look := "Развязать бечёвку"): NoAction(),

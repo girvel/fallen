@@ -1,18 +1,20 @@
 import random
+from dataclasses import dataclass
 
-from ecs import DynamicEntity
+from ecs import Entity
 
 from src.engine.language.library import last_names, reserved_names, Sex
 from src.engine.language.name import Name
 from src.lib.vector import int2
 
 
-class House(DynamicEntity):
-    name: Name = Name.auto("дом")
+@dataclass
+class House(Entity):
     house_borders: tuple[int2, int2]
     entrance: int2
     family_names: dict[Sex, Name]
     reserved_for: str
+    name: Name = Name.auto("дом")
 
     @classmethod
     def from_markup(

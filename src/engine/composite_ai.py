@@ -1,8 +1,8 @@
 from abc import ABC, abstractmethod
 
-from ecs import DynamicEntity
+from ecs import Entity
 
-from src.systems.ai import Perception
+from src.engine.ai import Perception
 
 
 class CompositeAi(ABC):
@@ -10,7 +10,7 @@ class CompositeAi(ABC):
     def _make_decision(self, subject, perception):
         ...
 
-    _current_subject: DynamicEntity | None = None
+    _current_subject: Entity | None = None
     _current_perception: Perception | None = None
 
     def make_decision(self, subject, perception):

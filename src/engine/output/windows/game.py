@@ -59,7 +59,7 @@ class Game(Window):
                 self.curses_window.addch(ry, rx, character not in {None, Level.no_entity_character} and character or " ")
 
         inspected = isinstance(subject.act, Inspect) and subject.act.subject
-        for p in perception.vision.physical:
+        for p in perception.vision["physical"]:
             rp = sub2(p, self.virtual_p)
             if not (le2(zero, rp) and lt2(rp, screen_size)): continue
 

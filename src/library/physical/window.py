@@ -1,15 +1,14 @@
-from ecs import DynamicEntity
-
-from src.engine.acting.damage import ArmorKind, Health
+from src.engine.acting.damage import armor_kinds, Health
 from src.engine.language.name import Name
+from src.library.abstract.material import Material
 
 
-class Window(DynamicEntity):
+class Window(Material):
     name = Name("окно")
     character = '='
     layer = "physical"
 
     boring_flag = None
 
-    def __init__(self):
-        self.health = Health(10, ArmorKind.Glass)
+    def __post_init__(self):
+        self.health = Health(10, armor_kinds["Glass"])

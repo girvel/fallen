@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 
-from ecs import DynamicEntity
+from ecs import Entity
 
 from src.engine.acting.action import Action
 from src.engine.acting.aggressive import Aggressive
@@ -11,10 +11,10 @@ from src.library.special.hades import Hades
 
 @dataclass
 class HandAttack(Action, Aggressive):
-    target: DynamicEntity  # never None, always exists
+    target: Entity  # never None, always exists
 
-    def execute(self, actor: DynamicEntity, hades: Hades, genesis: Genesis):
+    def execute(self, actor: Entity, hades: Hades, genesis: Genesis):
         attack(actor, self.target, hades)
 
-    def get_victims(self, actor: DynamicEntity) -> list[DynamicEntity]:
+    def get_victims(self, actor: Entity) -> list[Entity]:
         return [self.target]

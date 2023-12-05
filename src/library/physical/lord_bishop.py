@@ -1,11 +1,11 @@
-from src.engine.acting.damage import Health, DamageKind, ArmorKind, Weapon
+from src.engine.acting.damage import Health, damage_kinds, armor_kinds, Weapon
 from src.library.ai_modules.spacial_memory import SpacialMemory
 from src.engine.attitude.implementation import Faction, common_attitude
 from src.engine.language.name import Name
 from src.engine.output.colors import ColorPair, yellow
 from src.library.abstract.human import Human
 from src.library.ais.dummy_ai import DummyAi
-from src.systems.ai import Senses
+from src.engine.ai import Senses
 
 
 class LordBishop(Human):
@@ -16,8 +16,8 @@ class LordBishop(Human):
     faction = Faction.Church
 
     def __post_init__(self):
-        self.health = Health(40, ArmorKind.LightSteel)
-        self.weapon = Weapon(7, DamageKind.Piercing)
+        self.health = Health(40, armor_kinds["LightSteel"])
+        self.weapon = Weapon(7, damage_kinds["Piercing"])
         self.senses = Senses(12, 0, 0)
         self.ai = DummyAi()
 

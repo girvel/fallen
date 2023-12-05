@@ -1,4 +1,4 @@
-from ecs import DynamicEntity, exists
+from ecs import Entity, exists
 
 from src.engine.acting.action import Action
 from src.library.ai_modules.follower import Follower
@@ -6,10 +6,10 @@ from src.library.ai_modules.pather import Pather
 from src.library.ai_modules.spacial_memory import SpacialMemory
 from src.lib.concurrency import wait_while
 from src.lib.typed_dict import TypeDict
-from src.systems.ai import Perception
+from src.engine.ai import Perception
 
 
-class DummyAi(DynamicEntity):
+class DummyAi(Entity):
     def __init__(self):
         self.composite = TypeDict([
             Pather(),
@@ -17,7 +17,7 @@ class DummyAi(DynamicEntity):
             SpacialMemory(),
         ])
 
-    def make_decision(self, subject: DynamicEntity, perception: Perception) -> Action:
+    def make_decision(self, subject: Entity, perception: Perception) -> Action:
         self.composite[SpacialMemory].use(subject, perception)
 
         if (target := self.composite[Follower].use(subject, perception)) != Follower.no_change_signal:

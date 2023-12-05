@@ -1,12 +1,12 @@
 import numpy
-from ecs import DynamicEntity
+from ecs import Entity
 from tcod.path import Pathfinder, SimpleGraph
 
 from src.library.actions.move import Move
 from src.library.ai_modules.spacial_memory import SpacialMemory
 from src.library.special.level import Level
 from src.lib.vector import directions, sub2, map_grid, grid_set, add2, int2, d2
-from src.systems.ai import Perception
+from src.engine.ai import Perception
 
 
 class Pather:
@@ -16,7 +16,7 @@ class Pather:
         self.path = []
         self.free_directions = None
 
-    def use(self, subject: DynamicEntity, perception: Perception, spacial_memory: SpacialMemory) -> Move | None:
+    def use(self, subject: Entity, perception: Perception, spacial_memory: SpacialMemory) -> Move | None:
         # Update public self.free_directions
         self.free_directions = [
             d for d in directions if perception.vision[subject.layer].get(add2(subject.p, d)) is None
@@ -43,7 +43,7 @@ class Pather:
             # Create grid for calculations, escaping the beginning and the end
             grid = map_grid(spacial_memory[subject.level], lambda c: c == Level.no_entity_character and 1 or 0)
 
-            for p, effect in perception.vision.effects.items():
+            for p, effect in perception.vision["effects"].items():
                 if effect is not None:
                     grid_set(grid, p, 0)
 

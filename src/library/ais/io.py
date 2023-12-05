@@ -1,7 +1,7 @@
 from dataclasses import dataclass, field
 from typing import Optional
 
-from ecs import DynamicEntity
+from ecs import Entity
 
 from src.engine.acting.action import Action
 from src.library.ai_modules.spacial_memory import SpacialMemory
@@ -43,7 +43,7 @@ class Memory:
     notification_queue: list[Notification] = field(default_factory=list)
     current_notification: Notification = None
 
-    inspect_target: DynamicEntity | None = None
+    inspect_target: Entity | None = None
 
     def add_quest(self, quest: Quest):
         self._quests.append(quest)
@@ -64,7 +64,7 @@ class Memory:
         self.selected_option_i = 0
         return result
 
-class IO(DynamicEntity):  # TODO redo as composite AI?
+class IO(Entity):  # TODO redo as composite AI?
     name = Name("Ввод/Вывод")
     cutscene_aware_flag = None
 

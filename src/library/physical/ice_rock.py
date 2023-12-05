@@ -1,11 +1,10 @@
-from ecs import DynamicEntity
-
-from src.engine.acting.damage import Health, ArmorKind
+from src.engine.acting.damage import Health, armor_kinds
 from src.engine.language.name import Name
 from src.engine.output.colors import white, blue, ColorPair
+from src.library.abstract.material import Material
 
 
-class IceRock(DynamicEntity):
+class IceRock(Material):
     name = Name("ледяная глыба")
     character = 'I'
     color = ColorPair(blue, white)
@@ -13,5 +12,5 @@ class IceRock(DynamicEntity):
 
     boring_flag = None
 
-    def __init__(self):
-        self.health = Health(1000, ArmorKind.Ice)
+    def __post_init__(self):
+        self.health = Health(1000, armor_kinds["Ice"])

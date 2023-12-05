@@ -1,10 +1,8 @@
-import logging
 import random
 from pathlib import Path
 from typing import Literal
 
 import toml
-from ecs import Entity
 
 from src.engine.language.name import Name, CompositeName
 
@@ -18,11 +16,6 @@ def _read_file(name):
 
 def _parse_csv(content):
     return [row.split(",") for row in content.split("\n") if row != ""]
-
-def _interpret_name(cases):
-    if "база" in cases:
-        return Name.auto(cases["база"])
-    return Name(cases)
 
 
 Sex = Literal["male", "female"]
@@ -46,14 +39,12 @@ last_names: list[dict[Sex, Name]] = [
     for name, index in _parse_csv(_read_file("last.csv"))
 ]
 
-reserved_names = Entity(**
-    {
-        identifier: {sex: Name(cases) for sex, cases in name.items()}
-        for identifier, name
-        in toml.loads(_read_file("reserved.toml")).items()
-    } | {
-        identifier: Name.auto(name, int(index))
-        for identifier, name, index
-        in _parse_csv(_read_file("reserved.csv"))
-    }
-)
+reserved_names = {
+    identifier: {sex: Name(cases) for sex, cases in name.items()}
+    for identifier, name
+    in toml.loads(_read_file("reserved.toml")).items()
+} | {
+    identifier: Name.auto(name, int(index))
+    for identifier, name, index
+    in _parse_csv(_read_file("reserved.csv"))
+}

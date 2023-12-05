@@ -7,7 +7,7 @@ from src.library.actions.no_action import NoAction
 from src.engine.input.hotkeys import generate_hotkeys
 from src.engine.input.key_queue import KeyQueue
 from src.engine.input.mode import OPTIONS, NOTIFICATION, DIALOGUE_LINE, CUTSCENE, GAME, GENERAL
-from src.systems.ai import Perception
+from src.engine.ai import Perception
 
 
 class Input:

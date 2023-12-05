@@ -1,10 +1,10 @@
 from dataclasses import dataclass
 
-from ecs import DynamicEntity
+from ecs import Entity
 
 from src.engine.meme import Idea, Aggression
 from src.lib.toolkit import random_round
-from src.systems.ai import Perception
+from src.engine.ai import Perception
 
 
 @dataclass
@@ -13,7 +13,7 @@ class Morale:
     aggression_to_neutral_base_cost: float = 1
     neutrality_threshold: int = 10
 
-    def use(self, subject: DynamicEntity, perception: Perception, ideas: list[Idea]) -> None:
+    def use(self, subject: Entity, perception: Perception, ideas: list[Idea]) -> None:
         for idea in ideas:
             match idea.meme:
                 case Aggression(source, target):

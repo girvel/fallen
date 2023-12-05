@@ -1,11 +1,11 @@
 from dataclasses import dataclass, field
 
-from ecs import DynamicEntity
+from ecs import Entity
 
 from src.engine.attitude.implementation import Constants
 from src.library.actions.say import Say
 from src.library.ai_modules.language_center import Message
-from src.systems.ai import Perception
+from src.engine.ai import Perception
 
 
 @dataclass
@@ -14,7 +14,7 @@ class Speaker:
 
     messages: list[Message] = field(default_factory=list)
 
-    def use(self, subject: DynamicEntity, perception: Perception) -> Say | None:
+    def use(self, subject: Entity, perception: Perception) -> Say | None:
         if len(self.messages) == 0: return
 
         next_message = None
@@ -24,7 +24,7 @@ class Speaker:
 
         if (next_message and any(
             subject.attitude.get(e) >= self.attitude_threshold
-            for e in perception.vision.physical.values()
+            for e in perception.vision["physical"].values()
         )):
             self.messages.remove(next_message)
             return next_message.action

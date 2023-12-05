@@ -22,7 +22,7 @@ class DialogueLine(HtmlWindow):
 
         return {
             "speaker": soft_capitalize(str(
-                ~Q(perception.vision.physical.get(sound.p)).name or "???"
+                ~Q(perception.vision["physical"].get(sound.p)).name or "???"
             )) if not sound.is_internal else None,
             "line": sound.content,
         }

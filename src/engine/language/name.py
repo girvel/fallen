@@ -3,7 +3,6 @@ from dataclasses import dataclass
 import pymorphy2
 
 from src.lib.query import Q
-from src.lib.toolkit import soft_capitalize
 
 _analyzer = pymorphy2.MorphAnalyzer()
 _cases = {

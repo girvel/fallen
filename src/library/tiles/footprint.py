@@ -1,10 +1,9 @@
-from ecs import DynamicEntity
-
 from src.engine.language.name import Name
 from src.lib.toolkit import death_chance_from_half_life
+from src.library.abstract.material import Material
 
 
-class Footprint(DynamicEntity):
+class Footprint(Material):
     name = Name("след")
     layer = "tiles"
     character = ","

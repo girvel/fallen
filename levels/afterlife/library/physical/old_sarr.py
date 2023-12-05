@@ -1,6 +1,6 @@
-from ecs import DynamicEntity
+from ecs import Entity
 
-from src.engine.acting.damage import Health, ArmorKind
+from src.engine.acting.damage import Health, armor_kinds
 from src.library.ai_modules.spacial_memory import SpacialMemory
 from src.engine.language.name import Name
 from src.engine.output.colors import ColorPair, black
@@ -24,9 +24,9 @@ class OldSarr(Human):
 
     def __post_init__(self, **attributes):
         self.ai = DummyAi()
-        self.health = Health(1_000, ArmorKind.Menith)
+        self.health = Health(1_000, armor_kinds["Menith"])
 
-        DynamicEntity.__init__(self, **attributes)
+        Entity.__init__(self, **attributes)
 
     def after_load(self, level):
         self.ai.composite[SpacialMemory].knows(level)

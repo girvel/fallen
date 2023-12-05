@@ -2,18 +2,18 @@ import logging
 from dataclasses import dataclass
 from functools import reduce
 from pathlib import Path
-from typing import TypeVar, Callable, Any, Type, Iterator
+from typing import TypeVar, Callable, Type, Iterator
 
 import numpy
 import toml as toml
-from ecs import DynamicEntity, Entity, Metasystem
+from ecs import Entity, MetasystemFacade
 
 from src.engine.language.name import Name
+from src.lib.toolkit import to_camel_case, import_module
+from src.lib.vector import grid_set, create_grid, int2
 from src.library.markup.house import House
 from src.library.markup.zone import Zone
 from src.library.special.genesis import Genesis
-from src.lib.toolkit import to_camel_case, import_module
-from src.lib.vector import grid_set, create_grid, int2, ge2, lt2, d2
 
 
 def load_palette_from(path):
@@ -43,7 +43,7 @@ class Markup:
 
 T = TypeVar('T')
 
-class Level(DynamicEntity):
+class Level(Entity):
     name = Name("Уровень")
     no_entity_character = "."
 
@@ -65,7 +65,7 @@ class Level(DynamicEntity):
     markup = None
     player = None
 
-    def __init__(self, ms: Metasystem, path: Path, no_rails: bool, genesis: Genesis):
+    def __init__(self, ms: MetasystemFacade, path: Path, no_rails: bool, genesis: Genesis):
         level_lines = (path / "grid.txt").read_text().split('\n')
         special_arguments = load_special_arguments(path / "grid_args.toml")
 
@@ -73,7 +73,7 @@ class Level(DynamicEntity):
 
         after_loads = []
 
-        self.grids = Entity(**{l: create_grid(self.size, lambda: None) for l in self.layers})
+        self.grids = {l: create_grid(self.size, lambda: None) for l in self.layers}
         self.palette = reduce(lambda a, b: a | b, (
             load_palette_from(Path("src/library") / l)
             for l in self.layers
@@ -95,10 +95,10 @@ class Level(DynamicEntity):
                     continue
 
                 if c in self.palette:
-                    e = ms.add(self.palette[c](**special_arguments.get(p, {})))
+                    e = ms.add(self.palette[c](p=p, level=self, **special_arguments.get(p, {})))
                     self.put(p, e)
 
-                    if "after_load" in e:
+                    if hasattr(e, "after_load"):
                         after_loads.append(e.after_load)
                 else:
                     logging.warning(f"Ignored unknown entity `{c}` at {p}")
@@ -116,7 +116,9 @@ class Level(DynamicEntity):
         for after_load in after_loads:
             after_load(self)
 
-        if not no_rails:
+        # TODO NEXT rails
+        # if not no_rails:
+        if False:
             rails_path = path / "rails.py"
             if rails_path.exists():
                 self.rails = import_module(rails_path).Rails(self, ms, genesis)
@@ -125,10 +127,10 @@ class Level(DynamicEntity):
 
         self.transparency_cache = numpy.full(self.size, 1)
 
-    def query(self, request: Callable[[DynamicEntity], bool]) -> Iterator[DynamicEntity]:
+    def query(self, request: Callable[[Entity], bool]) -> Iterator[Entity]:
         return (
             e
-            for _, layer in self.grids
+            for _, layer in self.grids.items()
             for row in layer[0]
             for e in row
             if e and request(e)

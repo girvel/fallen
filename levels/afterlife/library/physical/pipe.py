@@ -1,10 +1,10 @@
-from ecs import DynamicEntity
+from ecs import Entity
 
 from src.engine.language.name import Name
 from src.engine.output.colors import ColorPair, magenta, yellow, cyan, red, green, blue
 
 
-class Pipe(DynamicEntity):
+class Pipe(Entity):
     name = Name.auto("труба")
 
     character = ">"

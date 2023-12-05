@@ -1,9 +1,9 @@
-from ecs import DynamicEntity
+from ecs import Entity
 
 from src.engine.language.name import Name
 
 
-class Hades(DynamicEntity):
+class Hades(Entity):
     name = Name("Хейдс")
 
     def __init__(self):

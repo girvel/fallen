@@ -1,18 +1,17 @@
-from ecs import DynamicEntity
-
 from src.engine.acting.damage import Weapon
+from src.engine.ai import Kind, Senses
+from src.library.abstract.material import Material
 from src.library.ais.dummy_ai import DummyAi
 from src.library.tiles.body import body_factory
-from src.systems.ai import Kind, Senses
 
 required_attributes = "character, sex, name, health".split(", ")
 
-class Human(DynamicEntity):
+class Human(Material):
     layer = "physical"
 
     human_flag = None
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, **kwargs):
         self.senses = Senses(12, 0, 0)
         self.ai = DummyAi()
 
@@ -23,10 +22,7 @@ class Human(DynamicEntity):
 
         self.on_death = body_factory
 
-        self.__post_init__(*args, **kwargs)
+        super().__init__(**kwargs)
 
         if len(missing_attributes := [a for a in required_attributes if not hasattr(self, a)]) > 0:
             raise NotImplementedError(f"Human subclass {type(self)} is missing attributes {missing_attributes}")
-
-    def __post_init__(self, *args, **kwargs):
-        pass
