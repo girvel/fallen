@@ -1,4 +1,5 @@
 import functools
+import importlib
 import logging
 import math
 import random
@@ -9,6 +10,8 @@ from typing import TypeVar, Any
 
 from src.engine.output.colors import ColorPair
 
+
+project_directory = Path(".").parent.parent.parent
 
 def to_camel_case(snake_str):
     return "".join(x.capitalize() for x in snake_str.lower().split("_"))
@@ -51,11 +54,13 @@ def random_choice_or(collection: Sequence[T], default: TDefault = None) -> T | T
 def random_round(number: float) -> int:
     return math.floor(number) + (chance(number % 1) and 1 or 0)
 
-def import_module(p: Path):
-    spec = spec_from_file_location(p.stem, p)
-    module = module_from_spec(spec)
-    spec.loader.exec_module(module)
-    return module
+def _module_path_from_path(p: Path) -> str:
+    relative_path = p.relative_to(project_directory).as_posix().rsplit(".", 1)[0]
+    return relative_path.replace("/", ".")
+
+def import_module(p: Path) -> Any:
+    assert p.exists()
+    return importlib.import_module(_module_path_from_path(p))
 
 def add_multiline_string(
     window, y: int, x: int, padding_y: int, padding_x: int, h: int, w: int, text: str, color: ColorPair = ColorPair(),

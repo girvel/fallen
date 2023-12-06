@@ -139,7 +139,7 @@ class Level(Entity):
         )
 
     def find(self, entity_type: Type[T]) -> Iterator[T]:
-        return self.query(lambda e: e.character == entity_type.character)
+        return self.query(lambda e: isinstance(e, entity_type))
 
     def iter_square(self, p: int2, r: int):
         for y in range(max(0, p[1] - r), min(self.size[1], p[1] + r + 1)):
