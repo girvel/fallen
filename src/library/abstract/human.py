@@ -1,5 +1,6 @@
 from src.engine.acting.damage import Weapon
 from src.engine.ai import Kind, Senses
+from src.lib.toolkit import assert_attributes
 from src.library.abstract.material import Material
 from src.library.ais.dummy_ai import DummyAi
 from src.library.tiles.body import body_factory
@@ -24,5 +25,4 @@ class Human(Material):
 
         super().__init__(**kwargs)
 
-        if len(missing_attributes := [a for a in required_attributes if not hasattr(self, a)]) > 0:
-            raise NotImplementedError(f"Human subclass {type(self)} is missing attributes {missing_attributes}")
+        assert_attributes(self, required_attributes)

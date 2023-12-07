@@ -1,18 +1,18 @@
-from ecs import Entity
-
 from levels.afterlife.library.physical.old_sarr import OldSarr
 from src.engine import permanent_storage
 from src.engine.input.hotkeys import GameEnd
 from src.engine.rails_base import RailsBase, Scene
 from src.library.actions.no_action import NoAction
 from src.library.actions.say import Say
+from src.library.physical.player import Player
 
 
 class Rails(RailsBase):
     def __post_init__(self):
-        self.characters = Entity(
-            old_sarr=next(self.level.find(OldSarr)),
-        )
+        self.characters = {
+            'player': self.get_player,
+            'old_sarr': next(self.level.find(OldSarr)),
+        }
 
         self.normal_comments = [
             ["Умер? Ну ладно, это случается."],
@@ -57,27 +57,35 @@ class Rails(RailsBase):
             "Это новый рекорд.",
         ]
 
+
+    # @scene
+    # class TalkWithOldSarr:
+    #     player: Player
+    #     old_sarr: OldSarr
+    #
+    #     def run(self, rails):
+    #         ...
+
+
     @Scene.new()
-    def talk_with_old_sarr(self, scene):
-        scene.enabled = False
-        self.characters.player = self.get_player()
+    def talk_with_old_sarr(self, player: Player, old_sarr: OldSarr):
+        self.talk_with_old_sarr.enabled = False
 
-        c = self.characters
-        memory = c.player.ai.memory
+        memory = player.ai.memory
 
-        player_time_alive = c.player.tick_counter
+        player_time_alive = player.tick_counter
 
         yield from self.start_cutscene()
         yield from self.center_camera()
 
-        yield {c.player: Say("Диковинная мастерская, озарённая оранжеватым светом.", True)}
-        yield {c.player: Say("Тебе кажется, что ты здесь не один.", True)}
+        yield {player: Say("Диковинная мастерская, озарённая оранжеватым светом.", True)}
+        yield {player: Say("Тебе кажется, что ты здесь не один.", True)}
 
         if player_time_alive <= 25:
             counter = permanent_storage.read_key("ultra_fast_death_counter", -1) + 1
             permanent_storage.write_key("ultra_fast_death_counter", counter)
 
-            yield {c.old_sarr: Say(
+            yield {old_sarr: Say(
                 self.ultra_fast_death_comments[counter]
                 if counter < len(self.ultra_fast_death_comments) else
                 "..."
@@ -85,14 +93,14 @@ class Rails(RailsBase):
 
         elif (
             player_time_alive < 100 and
-            player_time_alive < (record := permanent_storage.read_key("death_time_record", float('inf')))
+            player_time_alive < permanent_storage.read_key("death_time_record", float('inf'))
         ):
             permanent_storage.write_key("death_time_record", player_time_alive)
 
             counter = permanent_storage.read_key("fast_death_counter", -1) + 1
             permanent_storage.write_key("fast_death_counter", counter)
 
-            yield {c.old_sarr: Say(
+            yield {old_sarr: Say(
                 self.fast_death_comments[counter]
                 if counter < len(self.fast_death_comments) else
                 "..."
@@ -104,12 +112,12 @@ class Rails(RailsBase):
 
             if counter < len(self.normal_comments):
                 for line in self.normal_comments[counter]:
-                    yield {c.old_sarr: Say(line)}
+                    yield {old_sarr: Say(line)}
 
             else:
-                yield {c.player: Say("Ты чувствуешь на себе злобный взгляд.", True)}
+                yield {player: Say("Ты чувствуешь на себе злобный взгляд.", True)}
 
-        yield {c.old_sarr: Say("Действуем?")}
+        yield {old_sarr: Say("Действуем?")}
 
         yield from self.options({
             (agree := "Ага."): NoAction(),
@@ -118,9 +126,9 @@ class Rails(RailsBase):
         })
 
         if memory.last_selected_option == ask:
-            yield {c.old_sarr: Say("Рот закрой.")}
+            yield {old_sarr: Say("Рот закрой.")}
         elif memory.last_selected_option == agree:
-            yield {c.old_sarr: Say("Ага.")}
+            yield {old_sarr: Say("Ага.")}
         else:
             for line in [
                 "С тобой определённо точно кто-то разговаривает, кто-то стоящий неподалёку.",
@@ -132,10 +140,10 @@ class Rails(RailsBase):
                 "В углу стоит мягко светящееся пурпурное растение в горшке.",
                 "Мощёный серый пол подмораживает босые стопы.",
             ]:
-                yield {c.player: Say(line, True)}
+                yield {player: Say(line, True)}
 
-            yield from c.player.ai.wait_seconds(2)
+            yield from player.ai.wait_seconds(2)
 
-        yield {c.player: Say("Собеседник дёргает за рычаг.", True)}
+        yield {player: Say("Собеседник дёргает за рычаг.", True)}
         yield
         raise GameEnd

@@ -105,3 +105,7 @@ def rhombus_iterator(r: int):
         for dy in range(-r, r + 1)
         for dx in range(abs(dy) - r, r - abs(dy) + 1)
     )
+
+def assert_attributes(instance, required_attributes: list[str]) -> None:
+    if len(missing_attributes := [a for a in required_attributes if not hasattr(instance, a)]) > 0:
+        raise NotImplementedError(f"Instance of {type(instance)} is missing attributes {missing_attributes}")
