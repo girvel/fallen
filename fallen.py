@@ -24,7 +24,7 @@ def main(
     no_rails: bool = False,
     no_fixed_fps: bool = False,
     pause_for_debugger: bool = False,
-    on_polygon: bool = False,
+    level_path: str = "levels/main_01_introduction",
     god_vision: bool = False,
 ):
     """
@@ -37,7 +37,7 @@ def main(
         no_rails: disable level's rails
         no_fixed_fps: disable fixed FPS
         pause_for_debugger: wait for 'Enter' key (useful for debugger connection)
-        on_polygon: load polygon level instead of the main one
+        level_path: level folder's full path
         god_vision: whether player sees everything
     """
 
@@ -56,19 +56,19 @@ def main(
         ms, genesis = build_metasystem(debug_mode)
 
         # TODO loading screen
-        if on_polygon:
-            level = ms.add(Level(ms, Path("levels/polygon"), no_rails, genesis))
-        else:
-            level = ms.add(Level(ms, Path("levels/main"), no_rails, genesis))
-            prep_time = 60
-            logging.info(f"Prerunning the level for {prep_time} ticks")
 
-            for _ in range(prep_time):
-                try:
-                    ms.update()
-                except Exception as ex:
-                    logging.error("Uncaught error on Metasystem.update when prerunning the level", exc_info=ex)
-                    if debug_mode: raise ex
+        level = ms.add(Level(ms, Path(level_path), no_rails, genesis))
+
+        # TODO should be inside the Level.construct which should be a replacement constructor
+        prep_time = level.config.prep_ticks
+        if prep_time > 0: logging.info(f"Prerunning the level for {prep_time} ticks")
+
+        for _ in range(prep_time):
+            try:
+                ms.update()
+            except Exception as ex:
+                logging.error("Uncaught error on Metasystem.update when prerunning the level", exc_info=ex)
+                if debug_mode: raise ex
 
         player = next(level.find(Player))
         player.ai = IO(

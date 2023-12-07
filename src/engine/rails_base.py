@@ -123,7 +123,6 @@ class RailsBase(Entity):
         yield
 
 
-
 @dataclass(eq=False)
 class Scene:
     name: str

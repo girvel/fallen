@@ -3,9 +3,9 @@ from pathlib import Path
 
 from ecs import Entity, exists
 
-from levels.main.library.physical.brother import Brother
-from levels.main.library.physical.girl import Girl
-from levels.main.library.physical.mother import Mother
+from levels.main_01_introduction.library.physical.brother import Brother
+from levels.main_01_introduction.library.physical.girl import Girl
+from levels.main_01_introduction.library.physical.mother import Mother
 from src.engine.acting.aggressive import Aggressive
 from src.engine.acting.damage import Weapon, damage_kinds
 from src.engine.rails_base import RailsBase, Scene

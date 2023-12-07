@@ -1,6 +1,6 @@
 from ecs import Entity
 
-from levels.main.library.ais.brother_ai import BrotherAi
+from levels.main_01_introduction.library.ais.brother_ai import BrotherAi
 from src.engine.acting.damage import Health, Weapon, armor_kinds, damage_kinds
 from src.library.ai_modules.spacial_memory import SpacialMemory
 from src.engine.language.library import reserved_names

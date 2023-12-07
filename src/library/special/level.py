@@ -2,7 +2,7 @@ import logging
 from dataclasses import dataclass
 from functools import reduce
 from pathlib import Path
-from typing import TypeVar, Callable, Type, Iterator
+from typing import TypeVar, Callable, Type, Iterator, Any
 
 import numpy
 import toml as toml
@@ -28,17 +28,28 @@ def load_palette_from(path):
     return result
 
 
-def load_special_arguments(path):
-    return {
-        tuple(entry["at"]): entry["args"]
-        for entry in toml.loads(path.read_text())["entries"]
-    } if path.exists() else {}
+def load_toml(path: Path):
+    return toml.loads(path.read_text(encoding="utf-8")) if path.exists() else {}
 
 
 @dataclass
 class Markup:
     zones: list[Zone]
     houses: list[House]
+
+@dataclass(init=False)
+class GridArgs:
+    entries: dict[int2, dict[str, Any]]
+
+    def __init__(self, entries=None):
+        self.entries = {
+            tuple(entry["at"]): entry["args"]
+            for entry in entries or []
+        }
+
+@dataclass
+class Config:
+    prep_ticks: int = 0
 
 
 T = TypeVar('T')
@@ -67,17 +78,19 @@ class Level(Entity):
 
     def __init__(self, ms: MetasystemFacade, path: Path, no_rails: bool, genesis: Genesis):
         level_lines = (path / "grid.txt").read_text().split('\n')
-        special_arguments = load_special_arguments(path / "grid_args.toml")
 
-        self.size = (max(len(l) for l in level_lines), len(level_lines))
+        grid_args = GridArgs(**load_toml(path / "grid_args.toml"))  # TODO maybe join w/ markup?
+        self.config = Config(**load_toml(path / "config.toml"))
+
+        self.size = (max(len(line) for line in level_lines), len(level_lines))
 
         after_loads = []
 
-        self.grids = {l: create_grid(self.size, lambda: None) for l in self.layers}
+        self.grids = {layer: create_grid(self.size, lambda: None) for layer in self.layers}
         self.palette = reduce(lambda a, b: a | b, (
-            load_palette_from(Path("src/library") / l)
-            for l in self.layers
-            if l not in self.invisible_layers
+            load_palette_from(Path("src/library") / layer)
+            for layer in self.layers
+            if layer not in self.invisible_layers
         ))
 
         for layer in self.layers:
@@ -95,7 +108,7 @@ class Level(Entity):
                     continue
 
                 if c in self.palette:
-                    e = ms.add(self.palette[c](p=p, level=self, **special_arguments.get(p, {})))
+                    e = ms.add(self.palette[c](p=p, level=self, **grid_args.entries.get(p, {})))
                     self.put(p, e)
 
                     if hasattr(e, "after_load"):
@@ -116,14 +129,9 @@ class Level(Entity):
         for after_load in after_loads:
             after_load(self)
 
-        # TODO NEXT rails
-        # if not no_rails:
-        if False:
-            rails_path = path / "rails.py"
-            if rails_path.exists():
-                self.rails = import_module(rails_path).Rails(self, ms, genesis)
-        else:
-            self.rails = None
+        # rails_path = path / "rails.py"
+        # self.rails = import_module(rails_path).Rails(self, ms, genesis) if rails_path.exists() else None
+        self.rails = None
 
         self.rails_effect = {}
 
@@ -141,7 +149,7 @@ class Level(Entity):
     def find(self, entity_type: Type[T]) -> Iterator[T]:
         return self.query(lambda e: isinstance(e, entity_type))
 
-    def iter_square(self, p: int2, r: int):
+    def iter_square(self, p: int2, r: int):  # TODO should be together with rhombus_iterator
         for y in range(max(0, p[1] - r), min(self.size[1], p[1] + r + 1)):
             for x in range(max(0, p[0] - r), min(self.size[0], p[0] + r + 1)):
                 yield x, y

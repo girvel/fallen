@@ -4,7 +4,7 @@ from typing import Optional
 
 from ecs import Entity, exists
 
-from levels.main.rails import VisionVersion
+from levels.main_01_introduction.rails import VisionVersion
 from levels.vision.library.physical.enemy import Enemy
 from src.library.actions.build import Build
 from src.library.actions.cast_fire_storm import CastFireStorm
