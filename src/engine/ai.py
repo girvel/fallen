@@ -75,3 +75,10 @@ class Perception:
     vision: dict[str, GridProxy[Positioned]]
     hearing: GridProxy[Sound]
     smell: GridProxy[Positioned]
+
+
+def borders_from_radius(p: int2, r: int, size: int2) -> tuple[int2, int2]:
+    return (
+        (max(0, p[0] - r), max(0, p[1] - r)),
+        (min(size[0], p[0] + r + 1), min(size[1], p[1] + r + 1)),
+    )

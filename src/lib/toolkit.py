@@ -6,7 +6,7 @@ import random
 from collections.abc import Sequence
 from importlib.util import spec_from_file_location, module_from_spec
 from pathlib import Path
-from typing import TypeVar, Any
+from typing import TypeVar, Any, TypeGuard
 
 from src.engine.output.colors import ColorPair
 

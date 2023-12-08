@@ -130,7 +130,7 @@ class Level(Entity):
             after_load(self)
 
         rails_path = path / "rails.py"
-        self.rails = import_module(rails_path).Rails(self, ms, genesis) if rails_path.exists() else None
+        self.rails = ms.add(import_module(rails_path).Rails(self, ms, genesis)) if rails_path.exists() else None
 
         self.rails_effect = {}
 

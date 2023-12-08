@@ -3,11 +3,12 @@ import logging
 from abc import ABCMeta, abstractmethod
 from collections import defaultdict
 from dataclasses import dataclass
-from typing import Callable, Iterator, TypeAlias, Any
+from typing import Callable, Iterator, TypeAlias, Any, Type, Protocol, TypeGuard, TypeVar, get_type_hints
 
 from ecs import Entity, exists
 
 from src.engine.acting.action import Action
+from src.lib.query import Q
 from src.lib.toolkit import assert_attributes
 from src.library.ai_modules.spacial_memory import SpacialMemory
 from src.engine.language.name import Name
@@ -19,6 +20,37 @@ from src.lib.vector import floordiv2, sub2
 
 
 Script: TypeAlias = Iterator[dict[Entity, Action | None] | None]
+
+
+T = TypeVar("T")
+def match_annotation(instance: Any, type_annotation: type[T]) -> TypeGuard[T]:
+    return isinstance(instance, type_annotation) and exists(instance)
+
+
+class SceneDefinition(Protocol):
+    def run(self, rails: "RailsBase") -> Script:
+        ...
+
+
+@dataclass
+class SceneRun:
+    name: str
+    generator: Script
+
+
+@dataclass(eq=False)
+class Scene:
+    name: str
+    enabled: bool
+    definition: SceneDefinition
+
+    @classmethod
+    def new(cls, enabled: bool = True):
+        def decorator(definition_class: type[SceneDefinition]) -> "Scene":
+            return cls(definition_class.__name__, enabled, definition_class())
+
+        return decorator
+
 
 class RailsBase(Entity, metaclass=ABCMeta):
     characters: dict[str, Any]
@@ -39,16 +71,45 @@ class RailsBase(Entity, metaclass=ABCMeta):
         assert_attributes(self, ["characters"])
 
         self.scenes = [
-            scene._finalize(self)
+            scene
             for scene in vars(type(self)).values()
             if isinstance(scene, Scene)
         ]
-        self.current_scenes = []
+
+        self.current_scenes: list[SceneRun] = []
 
         logging.info(f"Initialized rails with scenes {[s.name for s in self.scenes]}")
 
     def __post_init__(self, *args, **kwargs):
         ...
+
+    def _get_character(self, name: str) -> Any:
+        result = self.characters[name]
+        return result() if callable(result) else result
+
+    def get_effect(self):
+        for scene in self.scenes:
+            if not scene.enabled: continue  # TODO OPT: remove disabled scenes from the list?
+
+            for character_name, character_type in get_type_hints(scene.definition).items():
+                if not match_annotation(character := self._get_character(character_name), character_type): break
+                setattr(scene.definition, character_name, character)
+            else:
+                if not hasattr(scene.definition, "start_predicate") or scene.definition.start_predicate(self):
+                    self.current_scenes.append(SceneRun(scene.name, scene.definition.run(self)))
+                    logging.info(f"Starting the scene {scene.name}")
+
+        total_effect = {}
+        stop_signal = object()
+
+        for scene_run in self.current_scenes.copy():
+            if (effect := next(scene_run.generator, stop_signal)) is not stop_signal:
+                total_effect |= effect or {}
+            else:
+                self.current_scenes.remove(scene_run)
+                logging.info(f"Ending the scene {scene_run.name}")
+
+        return total_effect
 
     def get_player(self) -> Player:
         return next(self.level.find(Player), None)
@@ -126,57 +187,58 @@ class RailsBase(Entity, metaclass=ABCMeta):
         yield
 
 
-@dataclass(eq=False)
-class Scene:
-    name: str
-    run: "Callable[[...], Script]"
-    start_predicate: Callable[[...], bool]
-    enabled: bool = True
-
-    @classmethod
-    def new(cls, start_predicate: Callable[[...], bool] = lambda _: True, *, enabled=True):
-        def _decorator(f: Callable[[...], Script]) -> "Scene":
-            return cls(f.__name__, f, start_predicate, enabled)
-
-        return _decorator
-
-    def _finalize(self, rails: RailsBase):
-        characters = {
-            character_name: rails.characters[character_name]
-            for character_name in getattr(self.run, "__annotations__", {})
-            if character_name != "self"
-        }
-
-        def generate_start_predicate(start_predicate):
-            def result():
-                for character_name, character in characters.items():
-                    if callable(character):
-                        character = character()
-
-                    if (
-                        character is None or
-                        not exists(character) or
-                        character.level != rails.level
-                    ):
-                        return False
-
-                return start_predicate(rails)
-
-            return result
-
-        self.start_predicate = generate_start_predicate(self.start_predicate)
-
-        def generate_run(run):
-            def result():
-                yield from run(rails, **{
-                    # TODO NEXT calls character() twice, can be expensive
-                    character_name: (character() if callable(character) else character)
-                    for character_name, character in characters.items()
-                })
-
-            return result
-
-        self.run = generate_run(self.run)
-
-        return self
+# TODO RM
+# @dataclass(eq=False)
+# class Scene:
+#     name: str
+#     run: "Callable[[...], Script]"
+#     start_predicate: Callable[[...], bool]
+#     enabled: bool = True
+#
+#     @classmethod
+#     def new(cls, start_predicate: Callable[[...], bool] = lambda _: True, *, enabled=True):
+#         def _decorator(f: Callable[[...], Script]) -> "Scene":
+#             return cls(f.__name__, f, start_predicate, enabled)
+#
+#         return _decorator
+#
+#     def _finalize(self, rails: RailsBase):
+#         characters = {
+#             character_name: rails.characters[character_name]
+#             for character_name in getattr(self.run, "__annotations__", {})
+#             if character_name != "self"
+#         }
+#
+#         def generate_start_predicate(start_predicate):
+#             def result():
+#                 for character_name, character in characters.items():
+#                     if callable(character):
+#                         character = character()
+#
+#                     if (
+#                         character is None or
+#                         not exists(character) or
+#                         character.level != rails.level
+#                     ):
+#                         return False
+#
+#                 return start_predicate(rails)
+#
+#             return result
+#
+#         self.start_predicate = generate_start_predicate(self.start_predicate)
+#
+#         def generate_run(run):
+#             def result():
+#                 yield from run(rails, **{
+#                     # TODO NEXT calls character() twice, can be expensive
+#                     character_name: (character() if callable(character) else character)
+#                     for character_name, character in characters.items()
+#                 })
+#
+#             return result
+#
+#         self.run = generate_run(self.run)
+#
+#         return self
 

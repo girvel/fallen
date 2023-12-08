@@ -1,14 +1,11 @@
-import logging
-
 import numpy
 import tcod.map
 
-from src.components import GridContainer, Sentient
-from src.engine.ai import Perception, GridProxy
-from src.lib.query import Q
-from src.lib.vector import int2
+from src.components import GridContainer, Sentient, RailsComponent
+from src.engine.ai import Perception, GridProxy, borders_from_radius
 
 
+# TODO NEXT move this
 def create_square_rhombus(position, radius, field_size):
     return numpy.fromfunction(
         lambda x, y: abs(x - position[0]) + abs(y - position[1]) <= radius,
@@ -16,41 +13,22 @@ def create_square_rhombus(position, radius, field_size):
     )
 
 
-def borders_from_radius(p: int2, r: int, size: int2) -> tuple[int2, int2]:
-    return (
-        (max(0, p[0] - r), max(0, p[1] - r)),
-        (min(size[0], p[0] + r + 1), min(size[1], p[1] + r + 1)),
-    )
+sequence = []
 
 
+@sequence.append
 def update_transparency_cache(level: GridContainer):
     for y, line in enumerate(level.grids["physical"][0]):
         for x, e in enumerate(line):
             level.transparency_cache[x, y] = int(e is None or not hasattr(e, "solid_flag"))
 
 
-stop_signal = object()
-
-def run_rails(level: GridContainer):
-    if ~Q(level).rails is None: return
-
-    started_scenes = []
-    for s in level.rails.scenes:
-        if s.enabled and s.start_predicate():  # TODO optimization: remove disabled scenes from the list?
-            started_scenes.append(s.run())
-            logging.info(f"Starting the scene '{s.name}'")
-
-    level.rails.current_scenes += started_scenes
-
-    level.rails_effect = {}
-
-    for scene in level.rails.current_scenes.copy():
-        if (effect := next(scene, stop_signal)) is not stop_signal:
-            level.rails_effect |= effect or {}
-        else:
-            level.rails.current_scenes.remove(scene)
+@sequence.append
+def run_rails(rails: RailsComponent):
+    rails.level.rails_effect = rails.get_effect()
 
 
+@sequence.append
 def think(subject: Sentient):
     is_railed = subject in subject.level.rails_effect
 
@@ -86,9 +64,3 @@ def think(subject: Sentient):
     if not is_railed:
         subject.act = act
 
-
-sequence = [
-    update_transparency_cache,
-    run_rails,
-    think,
-]

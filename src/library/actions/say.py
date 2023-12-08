@@ -2,10 +2,8 @@ import logging
 from dataclasses import dataclass
 from typing import Any
 
-from ecs import Entity
-
 from src.engine.acting.action import Action
-from src.engine.meme import Meme, Idea
+from src.engine.meme import Idea
 from src.library.special.genesis import Genesis
 from src.library.special.hades import Hades
 from src.library.special.sound import Sound

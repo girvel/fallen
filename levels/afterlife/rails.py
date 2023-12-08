@@ -1,7 +1,7 @@
 from levels.afterlife.library.physical.old_sarr import OldSarr
 from src.engine import permanent_storage
 from src.engine.input.hotkeys import GameEnd
-from src.engine.rails_base import RailsBase, Scene
+from src.engine.rails_base import RailsBase, Scene, SceneDefinition
 from src.library.actions.no_action import NoAction
 from src.library.actions.say import Say
 from src.library.physical.player import Player
@@ -58,92 +58,87 @@ class Rails(RailsBase):
         ]
 
 
-    # @scene
-    # class TalkWithOldSarr:
-    #     player: Player
-    #     old_sarr: OldSarr
-    #
-    #     def run(self, rails):
-    #         ...
-
-
     @Scene.new()
-    def talk_with_old_sarr(self, player: Player, old_sarr: OldSarr):
-        self.talk_with_old_sarr.enabled = False
+    class talk_with_old_sarr:
+        player: Player
+        old_sarr: OldSarr
 
-        memory = player.ai.memory
+        def run(self, rails: "Rails"):
+            rails.talk_with_old_sarr.enabled = False
 
-        player_time_alive = player.tick_counter
+            memory = self.player.ai.memory
 
-        yield from self.start_cutscene()
-        yield from self.center_camera()
+            player_time_alive = self.player.tick_counter
 
-        yield {player: Say("Диковинная мастерская, озарённая оранжеватым светом.", True)}
-        yield {player: Say("Тебе кажется, что ты здесь не один.", True)}
+            yield from rails.start_cutscene()
+            yield from rails.center_camera()
 
-        if player_time_alive <= 25:
-            counter = permanent_storage.read_key("ultra_fast_death_counter", -1) + 1
-            permanent_storage.write_key("ultra_fast_death_counter", counter)
+            yield {self.player: Say("Диковинная мастерская, озарённая оранжеватым светом.", True)}
+            yield {self.player: Say("Тебе кажется, что ты здесь не один.", True)}
 
-            yield {old_sarr: Say(
-                self.ultra_fast_death_comments[counter]
-                if counter < len(self.ultra_fast_death_comments) else
-                "..."
-            )}
+            if player_time_alive <= 25:
+                counter = permanent_storage.read_key("ultra_fast_death_counter", -1) + 1
+                permanent_storage.write_key("ultra_fast_death_counter", counter)
 
-        elif (
-            player_time_alive < 100 and
-            player_time_alive < permanent_storage.read_key("death_time_record", float('inf'))
-        ):
-            permanent_storage.write_key("death_time_record", player_time_alive)
+                yield {self.old_sarr: Say(
+                    rails.ultra_fast_death_comments[counter]
+                    if counter < len(rails.ultra_fast_death_comments) else
+                    "..."
+                )}
 
-            counter = permanent_storage.read_key("fast_death_counter", -1) + 1
-            permanent_storage.write_key("fast_death_counter", counter)
+            elif (
+                player_time_alive < 100 and
+                player_time_alive < permanent_storage.read_key("death_time_record", float('inf'))
+            ):
+                permanent_storage.write_key("death_time_record", player_time_alive)
 
-            yield {old_sarr: Say(
-                self.fast_death_comments[counter]
-                if counter < len(self.fast_death_comments) else
-                "..."
-            )}
+                counter = permanent_storage.read_key("fast_death_counter", -1) + 1
+                permanent_storage.write_key("fast_death_counter", counter)
 
-        else:
-            counter = permanent_storage.read_key("normal_death_counter", -1) + 1
-            permanent_storage.write_key("normal_death_counter", counter)
-
-            if counter < len(self.normal_comments):
-                for line in self.normal_comments[counter]:
-                    yield {old_sarr: Say(line)}
+                yield {self.old_sarr: Say(
+                    rails.fast_death_comments[counter]
+                    if counter < len(rails.fast_death_comments) else
+                    "..."
+                )}
 
             else:
-                yield {player: Say("Ты чувствуешь на себе злобный взгляд.", True)}
+                counter = permanent_storage.read_key("normal_death_counter", -1) + 1
+                permanent_storage.write_key("normal_death_counter", counter)
 
-        yield {old_sarr: Say("Действуем?")}
+                if counter < len(rails.normal_comments):
+                    for line in rails.normal_comments[counter]:
+                        yield {self.old_sarr: Say(line)}
 
-        yield from self.options({
-            (agree := "Ага."): NoAction(),
-            (ask := "А что происходит?"): NoAction(),
-            "Осмотреться": NoAction(),
-        })
+                else:
+                    yield {self.player: Say("Ты чувствуешь на себе злобный взгляд.", True)}
 
-        if memory.last_selected_option == ask:
-            yield {old_sarr: Say("Рот закрой.")}
-        elif memory.last_selected_option == agree:
-            yield {old_sarr: Say("Ага.")}
-        else:
-            for line in [
-                "С тобой определённо точно кто-то разговаривает, кто-то стоящий неподалёку.",
-                "Он материален и - скорее всего - человекоподобен, но ты не можешь его рассмотреть.",
-                "Как будто бы ты видишь его глазами, но твоё сознание не способно на нём сфокусироваться.",
-                "Стены высечены из чёрного камня, окон нет. Вдоль одной из граней пола идёт массивная бронзовая труба.",
-                "На ней открыта задвижка; в трубе -- быстрый поток света, мерцающий оттенками.",
-                "Столы завалены металлическими инструментами и приборами непонятного назначения.",
-                "В углу стоит мягко светящееся пурпурное растение в горшке.",
-                "Мощёный серый пол подмораживает босые стопы.",
-            ]:
-                yield {player: Say(line, True)}
+            yield {self.old_sarr: Say("Действуем?")}
 
-            yield from player.ai.wait_seconds(2)
+            yield from rails.options({
+                (agree := "Ага."): NoAction(),
+                (ask := "А что происходит?"): NoAction(),
+                "Осмотреться": NoAction(),
+            })
 
-        yield {player: Say("Собеседник дёргает за рычаг.", True)}
-        yield
-        raise GameEnd
+            if memory.last_selected_option == ask:
+                yield {self.old_sarr: Say("Рот закрой.")}
+            elif memory.last_selected_option == agree:
+                yield {self.old_sarr: Say("Ага.")}
+            else:
+                for line in [
+                    "С тобой определённо точно кто-то разговаривает, кто-то стоящий неподалёку.",
+                    "Он материален и - скорее всего - человекоподобен, но ты не можешь его рассмотреть.",
+                    "Как будто бы ты видишь его глазами, но твоё сознание не способно на нём сфокусироваться.",
+                    "Стены высечены из чёрного камня, окон нет. Вдоль одной из граней пола идёт массивная бронзовая труба.",
+                    "На ней открыта задвижка; в трубе -- быстрый поток света, мерцающий оттенками.",
+                    "Столы завалены металлическими инструментами и приборами непонятного назначения.",
+                    "В углу стоит мягко светящееся пурпурное растение в горшке.",
+                    "Мощёный серый пол подмораживает босые стопы.",
+                ]:
+                    yield {self.player: Say(line, True)}
+
+                yield from self.player.ai.wait_seconds(2)
+
+            yield {self.player: Say("Собеседник дёргает за рычаг.", True)}
+            yield
+            raise GameEnd
