@@ -7,7 +7,6 @@ if TYPE_CHECKING:
     from src.engine.acting.damage import Health
     from src.engine.ai import Senses
     from src.engine.output.colors import ColorPair
-    from src.engine.rails_base import RailsBase, Scene, SceneRun
     from src.lib.vector import int2
     from src.library.special.level import Level
 
