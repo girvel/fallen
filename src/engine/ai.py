@@ -7,6 +7,7 @@ import numpy
 from numpy import ndarray, dtype
 
 from src.components import Positioned
+from src.lib.vector.iteration import iter_rhombus
 from src.lib.vector.vector import int2
 from src.lib.vector.grid import fits_in_grid, grid_unsafe_get, grid_size
 from src.library.special.sound import Sound
@@ -32,20 +33,12 @@ T = TypeVar('T', bound=Positioned)
 R = TypeVar('R')
 Grid = tuple[list[list[T | None]], int2]
 
-@dataclass(init=False)
+@dataclass
 class GridProxy(Generic[T]):
     _grid: Grid
-    _availability_mask: ndarray[Any, dtype[bool]]
-    _start: int2
-    _end: int2
-
-    def __init__(self, grid: Grid, p: int2, r: int2, mask: ndarray[Any, dtype[bool]] | None = None):
-        self._grid = grid
-        self._start, self._end = borders_from_radius(p, r, grid_size(grid))
-        self._availability_mask = create_square_rhombus(p, r, grid_size(grid))
-
-        if mask is not None:
-            self._availability_mask &= mask
+    _center: int2
+    _r: int
+    _availability_mask: ndarray[Any, dtype[bool]] | None = None
 
     def get(self, key: int2, default: R = None) -> T | R:
         if not fits_in_grid(self._grid, key) or not self._availability_mask[key]:
@@ -56,29 +49,26 @@ class GridProxy(Generic[T]):
     def values(self) -> Iterator[T | None]:
         return (
             grid_unsafe_get(self._grid, (x, y))
-            for x in range(self._start[0], self._end[0])
-            for y in range(self._start[1], self._end[1])
-            if self._availability_mask[x, y]
+            for x, y in iter_rhombus(self._center, self._r, grid_size(self._grid))
+            if self._availability_mask is None or self._availability_mask[x, y]
         )
 
     def items(self) -> Iterator[tuple[int2, T | None]]:
         return (
             ((x, y), grid_unsafe_get(self._grid, (x, y)))
-            for x in range(self._start[0], self._end[0])
-            for y in range(self._start[1], self._end[1])
-            if self._availability_mask[x, y]
+            for x, y in iter_rhombus(self._center, self._r, grid_size(self._grid))
+            if self._availability_mask is None or self._availability_mask[x, y]
         )
 
     def __iter__(self) -> Iterator[int2]:
         return (
             (x, y)
-            for x in range(self._start[0], self._end[0])
-            for y in range(self._start[1], self._end[1])
-            if self._availability_mask[x, y]
+            for x, y in iter_rhombus(self._center, self._r, grid_size(self._grid))
+            if self._availability_mask is None or self._availability_mask[x, y]
         )
 
     def __contains__(self, item: int2) -> bool:
-        return fits_in_grid(self._grid, item) and self._availability_mask[item]
+        return fits_in_grid(self._grid, item) and (self._availability_mask is None or self._availability_mask[item])
 
 
 @dataclass

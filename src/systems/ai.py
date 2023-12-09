@@ -33,7 +33,7 @@ def think(subject: Sentient):
 
     act = subject.ai.make_decision(subject, Perception(
         {
-            layer: GridProxy(grid, subject.p, subject.senses.vision, mask=fov)
+            layer: GridProxy(grid, subject.p, subject.senses.vision, fov)
             for layer, grid in subject.level.grids.items()
         },
         GridProxy(subject.level.grids["sounds"], subject.p, subject.senses.hearing),
