@@ -2,14 +2,7 @@ import numpy
 import tcod.map
 
 from src.components import GridContainer, Sentient, RailsComponent
-from src.engine.ai import Perception, GridProxy, borders_from_radius
-
-
-def create_square_rhombus(position, radius, field_size):  # TODO NEXT move this
-    return numpy.fromfunction(
-        lambda x, y: abs(x - position[0]) + abs(y - position[1]) <= radius,
-        field_size
-    )
+from src.engine.ai import Perception, GridProxy, borders_from_radius, create_square_rhombus
 
 
 sequence = []
@@ -38,26 +31,15 @@ def think(subject: Sentient):
     if not hasattr(subject, "god_vision_flag"):
         fov = tcod.map.compute_fov(subject.level.transparency_cache, subject.p, subject.senses.vision)
     else:
-        fov = numpy.full(subject.level.transparency_cache.shape, True)
+        fov = None
 
     act = subject.ai.make_decision(subject, Perception(
         {
-            layer: GridProxy(
-                grid, fov,
-                *borders_from_radius(subject.p, subject.senses.vision, subject.level.size)
-            )
+            layer: GridProxy(grid, subject.p, subject.senses.vision, mask=fov)
             for layer, grid in subject.level.grids.items()
         },
-        GridProxy(
-            subject.level.grids["sounds"],
-            create_square_rhombus(subject.p, subject.senses.hearing, subject.level.size),
-            *borders_from_radius(subject.p, subject.senses.hearing, subject.level.size),
-        ),
-        GridProxy(
-            subject.level.grids["physical"],
-            create_square_rhombus(subject.p, subject.senses.smell, subject.level.size),
-            *borders_from_radius(subject.p, subject.senses.smell, subject.level.size),
-        ),
+        GridProxy(subject.level.grids["sounds"], subject.p, subject.senses.hearing),
+        GridProxy(subject.level.grids["physical"], subject.p, subject.senses.smell),
     ))
 
     if not is_railed:

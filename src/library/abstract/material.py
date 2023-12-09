@@ -6,7 +6,7 @@ from src.lib.vector.vector import int2
 from src.library.special.level import Level
 
 
-# TODO NEXT try dataclass
+# TODO try dataclass
 class Material(Entity, metaclass=ABCMeta):
     @property
     @abstractmethod
