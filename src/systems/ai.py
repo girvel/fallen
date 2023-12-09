@@ -1,9 +1,7 @@
-import numpy
 import tcod.map
 
 from src.components import GridContainer, Sentient, RailsComponent
-from src.engine.ai import Perception, GridProxy, borders_from_radius, create_square_rhombus
-
+from src.engine.ai import Perception, GridProxy
 
 sequence = []
 
