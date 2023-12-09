@@ -5,7 +5,8 @@ from src.library.special.genesis import Genesis
 from src.library.special.hades import Hades
 from src.library.tiles.footprint import Footprint
 from src.lib.query import Q
-from src.lib.vector import add2, int2, grid_get, grid_set, mul2, abs2
+from src.lib.vector.vector import add2, int2, abs2
+from src.lib.vector.grid import grid_set, grid_get
 
 
 @dataclass

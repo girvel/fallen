@@ -5,8 +5,7 @@ from src.components import GridContainer, Sentient, RailsComponent
 from src.engine.ai import Perception, GridProxy, borders_from_radius
 
 
-# TODO NEXT move this
-def create_square_rhombus(position, radius, field_size):
+def create_square_rhombus(position, radius, field_size):  # TODO NEXT move this
     return numpy.fromfunction(
         lambda x, y: abs(x - position[0]) + abs(y - position[1]) <= radius,
         field_size

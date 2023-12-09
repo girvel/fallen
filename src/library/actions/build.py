@@ -6,7 +6,8 @@ from src.engine.acting.action import Action
 from src.engine.acting.typing import EntityFactory
 from src.library.special.genesis import Genesis
 from src.library.special.hades import Hades
-from src.lib.vector import int2, grid_get
+from src.lib.vector.vector import int2
+from src.lib.vector.grid import grid_get
 
 
 @dataclass

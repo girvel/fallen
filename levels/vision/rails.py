@@ -23,7 +23,7 @@ from src.library.physical.vertical_wall import VerticalWall
 from src.library.special.level import Level
 from src.lib import vector
 from src.lib.concurrency import wait_for, wait_while
-from src.lib.vector import add2, right, mul2
+from src.lib.vector.vector import add2, right, mul2
 
 
 class Rails(RailsBase):

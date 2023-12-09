@@ -6,7 +6,8 @@ from src.engine.output.colors import ColorPair, red, black
 from src.engine.output.window import Window
 from src.library.special.level import Level
 from src.lib.query import Q
-from src.lib.vector import floordiv2, grid_get, sub2, le2, zero, lt2, add2
+from src.lib.vector.vector import floordiv2, sub2, le2, zero, lt2, add2
+from src.lib.vector.grid import grid_get
 
 
 class Game(Window):

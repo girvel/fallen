@@ -6,7 +6,8 @@ from src.library.special.genesis import Genesis
 from src.library.special.hades import Hades
 from src.lib.query import Q
 from src.lib.toolkit import chance
-from src.lib.vector import grid_get, int2, add2, mul2, flip2
+from src.lib.vector.vector import int2, add2, mul2, flip2
+from src.lib.vector.grid import grid_get
 
 
 @dataclass

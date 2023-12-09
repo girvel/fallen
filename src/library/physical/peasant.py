@@ -7,7 +7,7 @@ from src.engine.language.library import first_names
 from src.engine.language.name import CompositeName
 from src.library.abstract.human import Human
 from src.library.ais.peasant_ai import PeasantAi
-from src.lib.vector import sub2, area2
+from src.lib.vector.vector import sub2, area2
 from src.engine.ai import Senses
 
 

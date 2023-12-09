@@ -1,9 +1,9 @@
 import random
 from typing import Any
 
-from ecs import Entity, exists
+from ecs import exists
 
-from src.lib.vector import d2, int2
+from src.lib.vector.vector import d2, int2
 from src.engine.ai import Perception
 
 

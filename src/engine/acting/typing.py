@@ -2,7 +2,7 @@ from ecs import Entity
 
 from typing import Protocol
 
-from src.lib.vector import int2
+from src.lib.vector.vector import int2
 from src.library.special.level import Level
 
 

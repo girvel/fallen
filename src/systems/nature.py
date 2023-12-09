@@ -1,7 +1,8 @@
 from src.components import Liquid, Creator
 from src.lib import vector
 from src.lib.toolkit import chance
-from src.lib.vector import fits_in_grid, add2, grid_unsafe_get
+from src.lib.vector.vector import add2
+from src.lib.vector.grid import fits_in_grid, grid_unsafe_get
 
 sequence = []
 

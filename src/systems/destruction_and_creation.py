@@ -4,8 +4,7 @@ from ecs import MetasystemFacade
 
 from src.components import Destructor, Creator
 from src.lib.query import Q
-from src.lib.vector import grid_set, grid_get
-
+from src.lib.vector.grid import grid_set, grid_get
 
 sequence = []
 

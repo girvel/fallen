@@ -5,7 +5,7 @@ from ecs import Entity
 
 from src.engine.language.library import last_names, reserved_names, Sex
 from src.engine.language.name import Name
-from src.lib.vector import int2
+from src.lib.vector.vector import int2
 
 
 @dataclass

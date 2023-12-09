@@ -5,7 +5,7 @@ from xml.dom.minidom import Entity
 from ecs import MetasystemFacade
 
 from src.engine.acting.action import Action
-from src.lib.vector import sub2, floordiv2
+from src.lib.vector.vector import sub2, floordiv2
 from src.library.ai_modules.spacial_memory import SpacialMemory
 from src.library.ais.dummy_ai import DummyAi
 from src.library.ais.io import Notification

@@ -1,5 +1,5 @@
 from statistics import mean, median
-from typing import Callable, TypeVar, Tuple
+from typing import Tuple
 
 from src.lib.toolkit import sign
 
@@ -64,29 +64,3 @@ def median2(vs: list[int2]) -> int2:
     return tuple(median(v[i] for v in vs) for i in range(2))
 
 
-T = TypeVar('T')
-def create_grid(size: int2, filler: Callable[[], T]) -> tuple[list[list[T]], int2]:
-    return [[filler() for _ in range(size[0])] for _ in range(size[1])], size
-
-R = TypeVar('R')
-def map_grid(grid: tuple[list[list[T]], int2], f: Callable[[T], R]) -> tuple[list[list[R]], int2]:
-    array, size = grid
-    return [[f(e) for e in row] for row in array], size
-
-def fits_in_grid(grid: tuple[list[list[T]], int2], p: int2) -> bool:
-    return ge2(p, zero) and lt2(p, grid_size(grid))
-
-def grid_set(grid: tuple[list[list[T]], int2], p: int2, value: T):
-    array, size = grid
-    assert ge2(p, zero) and lt2(p, size), f"Can not set grid cell at {p} outside of (0, 0) - {size}"
-    array[p[1]][p[0]] = value
-
-def grid_get(grid: tuple[list[list[T]], int2], p: int2, default: T = None) -> T:
-    array, size = grid
-    return array[p[1]][p[0]] if fits_in_grid(grid, p) else default
-
-def grid_unsafe_get(grid: tuple[list[list[T]], int2], p: int2) -> T:
-    return grid[0][p[1]][p[0]]
-
-def grid_size(grid: tuple[list[list[T]], int2]) -> int2:
-    return grid[1]

@@ -9,7 +9,6 @@ from html.parser import HTMLParser
 
 from src.engine.output.colors import ColorPair, yellow, white, red
 from src.engine.output.grid_rendering import put_string_on_grid, HorizontalAlignment, VerticalAlignment
-from src.lib.vector import create_grid, grid_size
 
 
 class CursesHtmlRenderer(HTMLParser):

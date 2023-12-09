@@ -9,6 +9,7 @@ from src.engine.language.name import Name
 from src.engine.rails.rails_api import RailsApi, Script
 from src.lib.toolkit import assert_attributes
 
+
 T = TypeVar("T")
 def match_annotation(instance: Any, type_annotation: type[T]) -> TypeGuard[T]:
     return isinstance(instance, type_annotation) and exists(instance)

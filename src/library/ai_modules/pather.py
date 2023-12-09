@@ -1,11 +1,11 @@
 import numpy
-from ecs import Entity
 from tcod.path import Pathfinder, SimpleGraph
 
 from src.library.actions.move import Move
 from src.library.ai_modules.spacial_memory import SpacialMemory
 from src.library.special.level import Level
-from src.lib.vector import directions, sub2, map_grid, grid_set, add2, int2, d2
+from src.lib.vector.vector import directions, sub2, add2, int2, d2
+from src.lib.vector.grid import grid_map, grid_set
 from src.engine.ai import Perception
 
 
@@ -41,7 +41,7 @@ class Pather:
             perception.vision[subject.layer].get(self.path[-1]) is not None
         ):
             # Create grid for calculations, escaping the beginning and the end
-            grid = map_grid(spacial_memory[subject.level], lambda c: c == Level.no_entity_character and 1 or 0)
+            grid = grid_map(spacial_memory[subject.level], lambda c: c == Level.no_entity_character and 1 or 0)
 
             for p, effect in perception.vision["effects"].items():
                 if effect is not None:

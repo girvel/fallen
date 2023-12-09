@@ -8,11 +8,10 @@ from ecs import Entity
 from src.engine.acting.action import Action
 from src.library.actions.hand_attack import HandAttack
 from src.library.actions.cast_fire_flow import CastFireFlow
-from src.library.actions.inspect import Inspect
 from src.library.actions.move import Move
 from src.library.actions.no_action import NoAction
 from src.engine.input.mode import ALL_MODES, GENERAL, GAME, OPTIONS, NOTIFICATION, DIALOGUE_LINE, CUTSCENE
-from src.lib.vector import add2, up, down, left, right
+from src.lib.vector.vector import add2, up, down, left, right
 from src.engine.ai import Perception
 
 

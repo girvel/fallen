@@ -4,14 +4,14 @@ from src.library.actions.hand_attack import HandAttack
 from src.library.actions.move import Move
 from src.library.ai_modules.pather import Pather
 from src.library.ai_modules.spacial_memory import SpacialMemory
-from src.lib.typed_dict import TypeDict
-from src.lib.vector import sub2, abs2
+from src.lib.composite import Composite
+from src.lib.vector.vector import sub2, abs2
 from src.engine.ai import Kind, classified_as
 
 
 class RabidAi:
     def __init__(self):
-        self.composite = TypeDict([
+        self.composite = Composite([
             Pather(),
             SpacialMemory(),
         ])

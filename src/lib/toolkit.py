@@ -4,9 +4,8 @@ import logging
 import math
 import random
 from collections.abc import Sequence
-from importlib.util import spec_from_file_location, module_from_spec
 from pathlib import Path
-from typing import TypeVar, Any, TypeGuard
+from typing import TypeVar, Any
 
 from src.engine.output.colors import ColorPair
 
@@ -99,13 +98,6 @@ def set_function_value(dictionary: dict, key: Any):
 
     return decorator
 
-def rhombus_iterator(r: int):
-    return (
-        (dx, dy)
-        for dy in range(-r, r + 1)
-        for dx in range(abs(dy) - r, r - abs(dy) + 1)
-    )
-
-def assert_attributes(instance, required_attributes: list[str]) -> None:
+def assert_attributes(instance: Any, required_attributes: list[str]) -> None:
     if len(missing_attributes := [a for a in required_attributes if not hasattr(instance, a)]) > 0:
         raise NotImplementedError(f"Instance of {type(instance)} is missing attributes {missing_attributes}")

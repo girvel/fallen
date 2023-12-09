@@ -3,7 +3,7 @@ import random
 from ecs import Entity, exists
 
 from src.library.actions.hand_attack import HandAttack
-from src.lib.vector import directions, add2, d2
+from src.lib.vector.vector import directions, add2, d2
 from src.engine.ai import Perception
 
 

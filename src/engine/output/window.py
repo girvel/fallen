@@ -1,9 +1,8 @@
 import curses
-import logging
 from abc import ABC, abstractmethod
 from dataclasses import dataclass
 
-from src.lib.vector import flip2, floordiv2, sub2, int2, add2, median2
+from src.lib.vector.vector import flip2, sub2, int2, add2, median2
 
 
 @dataclass

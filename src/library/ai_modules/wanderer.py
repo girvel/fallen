@@ -3,7 +3,7 @@ import random
 from ecs import Entity
 
 from src.library.actions.move import Move
-from src.lib.vector import int2
+from src.lib.vector.vector import int2
 from src.engine.ai import Perception
 
 

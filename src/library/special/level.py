@@ -10,7 +10,8 @@ from ecs import Entity, MetasystemFacade
 
 from src.engine.language.name import Name
 from src.lib.toolkit import to_camel_case, import_module
-from src.lib.vector import grid_set, create_grid, int2
+from src.lib.vector.vector import int2
+from src.lib.vector.grid import grid_create, grid_set
 from src.library.markup.house import House
 from src.library.markup.zone import Zone
 from src.library.special.genesis import Genesis
@@ -86,7 +87,7 @@ class Level(Entity):
 
         after_loads = []
 
-        self.grids = {layer: create_grid(self.size, lambda: None) for layer in self.layers}
+        self.grids = {layer: grid_create(self.size, lambda: None) for layer in self.layers}
         self.palette = reduce(lambda a, b: a | b, (
             load_palette_from(Path("src/library") / layer)
             for layer in self.layers
@@ -147,8 +148,3 @@ class Level(Entity):
 
     def find(self, entity_type: Type[T]) -> Iterator[T]:
         return self.query(lambda e: isinstance(e, entity_type))
-
-    def iter_square(self, p: int2, r: int):  # TODO should be together with rhombus_iterator
-        for y in range(max(0, p[1] - r), min(self.size[1], p[1] + r + 1)):
-            for x in range(max(0, p[0] - r), min(self.size[0], p[0] + r + 1)):
-                yield x, y

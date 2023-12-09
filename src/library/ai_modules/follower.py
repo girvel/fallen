@@ -1,9 +1,7 @@
-from typing import Literal, Any
-
-from ecs import Entity
+from typing import Any
 
 from src.lib.period.period import Period
-from src.lib.vector import d2, int2
+from src.lib.vector.vector import d2, int2
 
 
 class Follower:

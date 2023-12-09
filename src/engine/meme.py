@@ -3,7 +3,7 @@ from typing import TypeAlias
 
 from ecs import Entity
 
-from src.lib.vector import int2
+from src.lib.vector.vector import int2
 
 
 @dataclass

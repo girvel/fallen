@@ -10,7 +10,7 @@ from src.engine.output.windows.notification import Notification
 from src.engine.output.windows.option_picker import OptionPicker
 from src.engine.output.windows.panel import Panel
 from src.lib.query import Q
-from src.lib.vector import flip2, sub2
+from src.lib.vector.vector import flip2, sub2
 
 
 class Output:

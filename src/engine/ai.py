@@ -6,7 +6,8 @@ from typing import Any, TypeVar, Generic
 from numpy import ndarray, dtype
 
 from src.components import Positioned
-from src.lib.vector import int2, fits_in_grid, grid_unsafe_get
+from src.lib.vector.vector import int2
+from src.lib.vector.grid import fits_in_grid, grid_unsafe_get
 from src.library.special.sound import Sound
 
 

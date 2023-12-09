@@ -1,6 +1,5 @@
 from dataclasses import dataclass
 
-import numpy
 from ecs import Entity
 from tcod import tcod
 
@@ -9,7 +8,7 @@ from src.engine.acting.aggressive import Aggressive
 from src.library.effects.fire import Fire
 from src.library.special.genesis import Genesis
 from src.library.special.hades import Hades
-from src.lib.vector import grid_get
+from src.lib.vector.grid import grid_get
 
 
 @dataclass

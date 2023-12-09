@@ -5,13 +5,13 @@ from src.library.ai_modules.follower import Follower
 from src.library.ai_modules.pather import Pather
 from src.library.ai_modules.spacial_memory import SpacialMemory
 from src.lib.concurrency import wait_while
-from src.lib.typed_dict import TypeDict
+from src.lib.composite import Composite
 from src.engine.ai import Perception
 
 
 class DummyAi(Entity):
     def __init__(self):
-        self.composite = TypeDict([
+        self.composite = Composite([
             Pather(),
             Follower(3),
             SpacialMemory(),

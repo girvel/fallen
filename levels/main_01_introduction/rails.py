@@ -11,7 +11,7 @@ from src.engine.rails.rails_base import RailsBase, Scene
 from src.lib import vector
 from src.lib.concurrency import wait_for, wait_while
 from src.lib.query import Q
-from src.lib.vector import d2, add2
+from src.lib.vector.vector import d2, add2
 from src.library.actions.leave import Leave
 from src.library.actions.no_action import NoAction
 from src.library.actions.say import Say

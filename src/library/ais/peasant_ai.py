@@ -6,8 +6,9 @@ from src.engine.composite_ai import CompositeAi
 from src.lib.limited import Limited
 from src.lib.period.random_period import RandomPeriod
 from src.lib.toolkit import random_choice_or
-from src.lib.typed_dict import TypeDict
-from src.lib.vector import directions, add2, grid_get
+from src.lib.composite import Composite
+from src.lib.vector.vector import directions, add2
+from src.lib.vector.grid import grid_get
 from src.library.ai_modules.fight_or_flight import FightOrFlight
 from src.library.ai_modules.language_center import LanguageCenter
 from src.library.ai_modules.listener import Listener
@@ -38,7 +39,7 @@ class PeasantAi(CompositeAi):
 
         self.remains_in_danger_mode_for = Limited(15, 0, 0)
 
-        self.composite = TypeDict([
+        self.composite = Composite([
             SpacialMemory(),
             Pather(),
             FightOrFlight(False),

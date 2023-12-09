@@ -8,7 +8,8 @@ from src.library.effects.fire import Fire
 from src.library.special.genesis import Genesis
 from src.library.special.hades import Hades
 from src.lib.toolkit import chance
-from src.lib.vector import add2, mul2, flip2, grid_get, int2
+from src.lib.vector.vector import add2, mul2, flip2, int2
+from src.lib.vector.grid import grid_get
 
 
 @dataclass

@@ -1,7 +1,7 @@
 from abc import ABCMeta
 
 from src.engine.output.html_window import HtmlWindow
-from src.lib.vector import sub2
+from src.lib.vector.vector import sub2
 
 
 class Pane(HtmlWindow, metaclass=ABCMeta):

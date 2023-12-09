@@ -3,7 +3,7 @@ from pathlib import Path
 from src.library.actions.no_action import NoAction
 from src.library.special.level import Level
 from src.init_ecs import build_metasystem
-from src.lib.vector import grid_get
+from src.lib.vector.grid import grid_get
 
 
 def test_build():

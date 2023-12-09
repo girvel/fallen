@@ -1,5 +1,4 @@
 import curses
-import logging
 from abc import abstractmethod, ABCMeta
 
 from jinja2 import Environment, PackageLoader
@@ -8,7 +7,8 @@ from src.engine.output.grid_rendering import render_grid
 from src.engine.output.html import html_renderer
 from src.engine.output.window import Window
 from src.lib.limited import Limited
-from src.lib.vector import add2, flip2, grid_size
+from src.lib.vector.vector import add2, flip2
+from src.lib.vector.grid import grid_size
 
 
 class HtmlWindow(Window, metaclass=ABCMeta):
