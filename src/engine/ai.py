@@ -8,7 +8,7 @@ from numpy import ndarray, dtype
 
 from src.components import Positioned
 from src.lib.vector.iteration import iter_rhombus
-from src.lib.vector.vector import int2
+from src.lib.vector.vector import int2, d2
 from src.lib.vector.grid import fits_in_grid, grid_unsafe_get, grid_size
 from src.library.special.sound import Sound
 
@@ -29,31 +29,29 @@ class Senses:
     smell: int
 
 
-T = TypeVar('T', bound=Positioned)
-R = TypeVar('R')
-Grid = tuple[list[list[T | None]], int2]
+Grid = tuple[list[list[Any]], int2]
 
 @dataclass
-class GridProxy(Generic[T]):
+class GridProxy:
     _grid: Grid
     _center: int2
     _r: int
     _availability_mask: ndarray[Any, dtype[bool]] | None = None
 
-    def get(self, key: int2, default: R = None) -> T | R:
+    def get(self, key: int2, default: Any = None) -> Any:
         if not fits_in_grid(self._grid, key) or not self._availability_mask[key]:
             return default
 
         return grid_unsafe_get(self._grid, key)
 
-    def values(self) -> Iterator[T | None]:
+    def values(self) -> Iterator[Any]:
         return (
             grid_unsafe_get(self._grid, (x, y))
             for x, y in iter_rhombus(self._center, self._r, grid_size(self._grid))
             if self._availability_mask is None or self._availability_mask[x, y]
         )
 
-    def items(self) -> Iterator[tuple[int2, T | None]]:
+    def items(self) -> Iterator[tuple[int2, Any]]:
         return (
             ((x, y), grid_unsafe_get(self._grid, (x, y)))
             for x, y in iter_rhombus(self._center, self._r, grid_size(self._grid))
@@ -68,25 +66,15 @@ class GridProxy(Generic[T]):
         )
 
     def __contains__(self, item: int2) -> bool:
-        return fits_in_grid(self._grid, item) and (self._availability_mask is None or self._availability_mask[item])
+        return (
+            d2(item, self._center) <= self._r and
+            fits_in_grid(self._grid, item) and
+            (self._availability_mask is None or self._availability_mask[item])
+        )
 
 
 @dataclass
 class Perception:
-    vision: dict[str, GridProxy[Positioned]]
-    hearing: GridProxy[Sound]
-    smell: GridProxy[Positioned]
-
-
-def borders_from_radius(p: int2, r: int, size: int2) -> tuple[int2, int2]:
-    return (
-        (max(0, p[0] - r), max(0, p[1] - r)),
-        (min(size[0], p[0] + r + 1), min(size[1], p[1] + r + 1)),
-    )
-
-
-def create_square_rhombus(position, radius, field_size):  # TODO NEXT move this
-    return numpy.fromfunction(
-        lambda x, y: abs(x - position[0]) + abs(y - position[1]) <= radius,
-        field_size
-    )
+    vision: dict[str, GridProxy]
+    hearing: GridProxy
+    smell: GridProxy

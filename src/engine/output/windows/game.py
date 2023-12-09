@@ -1,13 +1,15 @@
 import curses
 from statistics import median
 
+from line_profiler import profile
+
 from src.library.actions.inspect import Inspect
 from src.engine.output.colors import ColorPair, red, black
 from src.engine.output.window import Window
 from src.library.special.level import Level
 from src.lib.query import Q
 from src.lib.vector.vector import floordiv2, sub2, le2, zero, lt2, add2
-from src.lib.vector.grid import grid_get
+from src.lib.vector.grid import grid_get, grid_unsafe_get
 
 
 class Game(Window):
@@ -56,7 +58,7 @@ class Game(Window):
         spacial_memory = self.io.memory.spacial_memory[subject.level]
         for rx in range(0, screen_size[0]):
             for ry in range(0, screen_size[1]):
-                character = grid_get(spacial_memory, add2((rx, ry), self.virtual_p))
+                character = grid_unsafe_get(spacial_memory, add2((rx, ry), self.virtual_p))
                 self.curses_window.addch(ry, rx, character not in {None, Level.no_entity_character} and character or " ")
 
         inspected = isinstance(subject.act, Inspect) and subject.act.subject
