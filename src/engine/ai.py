@@ -31,6 +31,7 @@ class Senses:
 
 Grid = tuple[list[list[Any]], int2]
 
+# TODO maybe derive MaskedGridProxy for speed?
 @dataclass
 class GridProxy:
     _grid: Grid
@@ -69,6 +70,12 @@ class GridProxy:
         return (
             d2(item, self._center) <= self._r and
             fits_in_grid(self._grid, item) and
+            (self._availability_mask is None or self._availability_mask[item])
+        )
+
+    def unsafe_contains(self, item: int2) -> bool:
+        return (
+            d2(item, self._center) <= self._r and
             (self._availability_mask is None or self._availability_mask[item])
         )
 

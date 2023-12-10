@@ -56,40 +56,53 @@ class Game(Window):
         screen_size = (w - 1, h)
 
         spacial_memory = self.io.memory.spacial_memory[subject.level]
+
+        # TODO NEXT consider level size
         for rx in range(0, screen_size[0]):
             for ry in range(0, screen_size[1]):
-                character = grid_unsafe_get(spacial_memory, add2((rx, ry), self.virtual_p))
-                self.curses_window.addch(ry, rx, character not in {None, Level.no_entity_character} and character or " ")
+                p = add2((rx, ry), self.virtual_p)
 
-        inspected = isinstance(subject.act, Inspect) and subject.act.subject
-        for p in perception.vision["physical"]:
-            rp = sub2(p, self.virtual_p)
-            if not (le2(zero, rp) and lt2(rp, screen_size)): continue
+                if not perception.vision["physical"].unsafe_contains(p):
+                    character = grid_unsafe_get(spacial_memory, p)
+                    self.curses_window.addch(
+                        ry, rx, character not in {None, Level.no_entity_character} and character or " "
+                    )
+                    continue
 
-            for layer in self.layers_display_order:
-                if (entity := grid_get(subject.level.grids[layer], p)) is None: continue
+                for layer in self.layers_display_order:
+                    if (entity := grid_unsafe_get(subject.level.grids[layer], p)) is None: continue
 
-                color, is_black = get_color_pair(entity)
+                    if ~Q(entity).health.last_damaged_by.Q_len() not in (None, 0):
+                        color = ColorPair(red)
+                    else:
+                        color = getattr(entity, "color", ColorPair())
 
-                color |= (
-                    inspected == entity
-                        and curses.A_REVERSE
-                        or 0
-                ) | (
-                    curses.A_BLINK
-                    if self.io.memory.current_sound is not None
-                    and not self.io.memory.current_sound.is_internal
-                    and self.io.memory.current_sound is perception.hearing.get(p)
-                    else 0
-                )
+                    is_fully_black = color == ColorPair(black, black)
+                    curses_color = color.to_curses()
 
-                character = entity.character if not is_black else " "
-                break
-            else:
-                character = Level.no_entity_character
-                color = ColorPair().to_curses()
+                    if (
+                        layer in ("physical", "effects") and color.fg != black
+                        if not hasattr(entity, "is_blinking") else entity.is_blinking
+                    ):
+                        curses_color |= curses.A_BOLD
 
-            self.curses_window.addch(rp[1], rp[0], character, color)
+                    if self.io.memory.inspect_target == entity:
+                        curses_color |= curses.A_REVERSE
+
+                    if (
+                        (sound := self.io.memory.current_sound) is not None
+                        and not sound.is_internal
+                        and sound is perception.hearing.get(p)
+                    ):
+                        curses_color |= curses.A_BLINK
+
+                    character = entity.character if not is_fully_black else " "
+                    break
+                else:
+                    curses_color = ColorPair().to_curses()
+                    character = Level.no_entity_character
+
+                self.curses_window.addch(ry, rx, character, curses_color)
 
         self.curses_window.refresh()
 
