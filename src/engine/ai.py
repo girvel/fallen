@@ -4,6 +4,7 @@ from enum import Enum
 from typing import Any, TypeVar, Generic
 
 import numpy
+from line_profiler import profile
 from numpy import ndarray, dtype
 
 from src.components import Positioned
@@ -73,6 +74,7 @@ class GridProxy:
             (self._availability_mask is None or self._availability_mask[item])
         )
 
+    @profile
     def unsafe_contains(self, item: int2) -> bool:
         return (
             d2(item, self._center) <= self._r and

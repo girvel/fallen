@@ -1,15 +1,13 @@
 import curses
 from statistics import median
 
-from line_profiler import profile
-
-from src.library.actions.inspect import Inspect
+from src.engine.ai import Perception
 from src.engine.output.colors import ColorPair, red, black
 from src.engine.output.window import Window
-from src.library.special.level import Level
 from src.lib.query import Q
-from src.lib.vector.vector import floordiv2, sub2, le2, zero, lt2, add2
-from src.lib.vector.grid import grid_get, grid_unsafe_get
+from src.lib.vector.grid import grid_unsafe_get
+from src.lib.vector.vector import floordiv2, sub2, add2
+from src.library.special.level import Level
 
 
 class Game(Window):
@@ -50,22 +48,38 @@ class Game(Window):
             ))
         )
 
-    def _display_perception(self, subject, perception):
+    def _display_perception(self, subject, perception: Perception):
         self.curses_window.clear()
         h, w = self.curses_window.getmaxyx()
         screen_size = (w - 1, h)
 
         spacial_memory = self.io.memory.spacial_memory[subject.level]
+        proxy_sample = perception.vision["physical"]
+
+        rx_perception_zone_start = proxy_sample._center[0] - proxy_sample._r - self.virtual_p[0]
+        rx_perception_zone_end = proxy_sample._center[0] + proxy_sample._r - self.virtual_p[0]
+
+        ry_perception_zone_start = proxy_sample._center[1] - proxy_sample._r - self.virtual_p[1]
+        ry_perception_zone_end = proxy_sample._center[1] + proxy_sample._r - self.virtual_p[1]
 
         # TODO NEXT consider level size
+        # TODO NEXT maybe outer loop should be y?
         for rx in range(0, screen_size[0]):
+            can_x_be_in_perception = rx_perception_zone_start <= rx <= rx_perception_zone_end
+
             for ry in range(0, screen_size[1]):
+                can_y_be_in_perception = ry_perception_zone_start <= ry <= ry_perception_zone_end
+
                 p = add2((rx, ry), self.virtual_p)
 
-                if not perception.vision["physical"].unsafe_contains(p):
+                if (
+                    not can_x_be_in_perception or
+                    not can_y_be_in_perception or
+                    not proxy_sample.unsafe_contains(p)
+                ):
                     character = grid_unsafe_get(spacial_memory, p)
                     self.curses_window.addch(
-                        ry, rx, character not in {None, Level.no_entity_character} and character or " "
+                        ry, rx, character not in (None, Level.no_entity_character) and character or " "
                     )
                     continue
 
@@ -97,36 +111,9 @@ class Game(Window):
                         curses_color |= curses.A_BLINK
 
                     character = entity.character if not is_fully_black else " "
+                    self.curses_window.addch(ry, rx, character, curses_color)
                     break
                 else:
-                    curses_color = ColorPair().to_curses()
-                    character = Level.no_entity_character
-
-                self.curses_window.addch(ry, rx, character, curses_color)
+                    self.curses_window.addch(ry, rx, Level.no_entity_character)
 
         self.curses_window.refresh()
-
-
-def _get_color_pair(entity):
-    if entity is None:
-        return ColorPair()
-
-    if ~Q(entity).health.last_damaged_by.Q_len() not in (None, 0):
-        return ColorPair(red)
-
-    return getattr(entity, "color", ColorPair())
-
-
-def get_color_pair(entity):  # TODO refactor
-    color = _get_color_pair(entity)
-
-    curses_color = color.to_curses()
-    is_black = color == ColorPair(black, black)
-
-    if (
-        entity.layer in ("physical", "effects") and color.fg != black
-        if not hasattr(entity, "is_blinking") else entity.is_blinking
-    ):
-        curses_color |= curses.A_BOLD
-
-    return curses_color, is_black

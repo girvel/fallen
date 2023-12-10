@@ -54,7 +54,7 @@ def le2(v1: int2, v2: int2) -> int2:
 
 
 def d2(v1: int2, v2: int2) -> int:
-    return abs2(sub2(v1, v2))
+    return abs(v1[0] - v2[0]) + abs(v1[1] - v2[1])
 
 
 def average2(vs: list[int2]) -> int2:
