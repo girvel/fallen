@@ -1,43 +1,20 @@
 import logging
 from abc import ABCMeta
 from dataclasses import dataclass
-from typing import Any, Protocol, TypeGuard, TypeVar, get_type_hints
+from typing import Any
 
-from ecs import Entity, exists
+from ecs import Entity
 
 from src.engine.language.name import Name
 from src.engine.rails.rails_api import RailsApi, Script
+from src.engine.rails.scene import Scene
 from src.lib.toolkit import assert_attributes
-
-
-T = TypeVar("T")
-def match_annotation(instance: Any, type_annotation: type[T]) -> TypeGuard[T]:
-    return isinstance(instance, type_annotation) and exists(instance)
-
-
-class SceneDefinition(Protocol):
-    def run(self, rails: "RailsBase") -> Script:
-        ...
 
 
 @dataclass
 class SceneRun:
     name: str
     generator: Script
-
-
-@dataclass(eq=False)
-class Scene:
-    name: str
-    enabled: bool
-    definition: SceneDefinition
-
-    @classmethod
-    def new(cls, enabled: bool = True):
-        def decorator(definition_class: type[SceneDefinition]) -> "Scene":
-            return cls(definition_class.__name__, enabled, definition_class())
-
-        return decorator
 
 
 class RailsBase(RailsApi, Entity, metaclass=ABCMeta):
@@ -70,15 +47,9 @@ class RailsBase(RailsApi, Entity, metaclass=ABCMeta):
 
     def get_effect(self):
         for scene in self.scenes:
-            if not scene.enabled: continue  # TODO OPT: remove disabled scenes from the list?
-
-            for character_name, character_type in get_type_hints(scene.definition).items():
-                if not match_annotation(character := self._get_character(character_name), character_type): break
-                setattr(scene.definition, character_name, character)
-            else:
-                if not hasattr(scene.definition, "start_predicate") or scene.definition.start_predicate(self):
-                    self.current_scenes.append(SceneRun(scene.name, scene.definition.run(self)))
-                    logging.info(f"Starting the scene {scene.name}")
+            if scene.start_predicate(self):
+                self.current_scenes.append(SceneRun(scene.name, scene.run(self)))
+                logging.info(f"Starting the scene {scene.name}")
 
         total_effect = {}
         stop_signal = object()

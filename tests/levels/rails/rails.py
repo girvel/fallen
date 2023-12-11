@@ -1,5 +1,6 @@
 from src.library.actions.no_action import NoAction
-from src.engine.rails.rails_base import RailsBase, Scene
+from src.engine.rails.rails_base import RailsBase
+from src.engine.rails.scene import Scene
 from src.library.ais.dummy_ai import DummyAi
 from src.lib.vector.grid import grid_get
 

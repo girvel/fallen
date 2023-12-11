@@ -11,7 +11,8 @@ from src.library.actions.cast_stone_stomp import CastStoneStomp
 from src.library.actions.say import Say
 from src.library.ai_modules.follower import Follower
 from src.library.ai_modules.pather import Pather
-from src.engine.rails.rails_base import RailsBase, Scene
+from src.engine.rails.rails_base import RailsBase
+from src.engine.rails.scene import Scene
 from src.library.ais.dummy_ai import wait_finish
 from src.library.physical.backslash_wall import BackslashWall
 from src.library.physical.horizontal_wall import HorizontalWall
