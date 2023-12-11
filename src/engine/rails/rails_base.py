@@ -91,5 +91,3 @@ class RailsBase(RailsApi, Entity, metaclass=ABCMeta):
                 logging.info(f"Ending the scene {scene_run.name}")
 
         return total_effect
-
-
