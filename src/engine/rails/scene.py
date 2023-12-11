@@ -24,12 +24,13 @@ class SceneDefinition(Protocol):
 class Scene:
     name: str
     enabled: bool
+    reoccurring: bool
     _definition: SceneDefinition
 
     @classmethod
-    def new(cls, enabled: bool = True):
+    def new(cls, enabled: bool = True, reoccurring: bool = False):
         def decorator(definition_class: type[SceneDefinition]) -> "Scene":
-            return cls(definition_class.__name__, enabled, definition_class())
+            return cls(definition_class.__name__, enabled, reoccurring, definition_class())
 
         return decorator
 
@@ -47,6 +48,8 @@ class Scene:
         return True
 
     def run(self, rails: "RailsBase"):
+        if not self.reoccurring: self.enabled = False
+
         locks = [
             (character, rails.lock_complex_ai(character))
             for character_name, _ in get_type_hints(self._definition).items()

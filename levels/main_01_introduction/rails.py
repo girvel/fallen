@@ -89,8 +89,6 @@ class Rails(RailsBase):
         player: Player
 
         def run(self, rails: "Rails"):
-            rails.introduction.enabled = False  # TODO reoccurring flag in Scene.new
-
             yield from wait_while(lambda: ~Q(self.player).ai is None)
 
             yield from rails.start_cutscene()
@@ -117,7 +115,7 @@ class Rails(RailsBase):
     #     yield from wait_for(2)
     #
     #     yield {c.player: Say(
-    #         "Вы стоите в обшарпанной деревянной прихожей. Цветочные горшки усеивают каждую горизонтальную поверхность;"
+    #         "Вы стоите в обшарпанной деревянной прихожей. Горшки с цветами усеивают каждую горизонтальную поверхность;"
     #         " странное жёсткое чувство упирается в кадык.",
     #         True,
     #     )}
