@@ -26,6 +26,8 @@ def think(subject: Sentient):
         subject.act = subject.level.rails_effect[subject]
         if not hasattr(subject.ai, "cutscene_aware_flag"): return
 
+    if subject.ai is None: return
+
     if not hasattr(subject, "god_vision_flag"):
         fov = tcod.map.compute_fov(subject.level.transparency_cache, subject.p, subject.senses.vision)
     else:

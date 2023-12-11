@@ -16,6 +16,7 @@ class Human(Material):
         self.senses = Senses(12, 0, 0)
 
         self.classifiers = {Kind.Animate}
+        self.ai = None
 
         self.skill = {}
         self.weapon = Weapon(1, "Crushing")

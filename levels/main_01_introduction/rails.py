@@ -89,8 +89,7 @@ class Rails(RailsBase):
         player: Player
 
         def run(self, rails: "Rails"):
-            rails.introduction.enabled = False
-            rails.locks["mother_leaving"] = rails.lock_complex_ai(self.mother)
+            rails.introduction.enabled = False  # TODO reoccurring flag in Scene.new
 
             yield from wait_while(lambda: ~Q(self.player).ai is None)
 
@@ -108,7 +107,6 @@ class Rails(RailsBase):
 
             yield from rails.end_cutscene()
 
-            # TODO NEXT by default all characters have their AIs locked
             # TODO NEXT lock dying during a cutscene
 
     # @Scene.new(lambda self: ~Q(self.get_player()).ai is not None)

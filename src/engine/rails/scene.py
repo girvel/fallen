@@ -4,6 +4,7 @@ from typing import get_type_hints, TypeVar, Any, TypeGuard, Protocol, TYPE_CHECK
 from ecs import exists
 
 from src.engine.rails.rails_api import Script
+from src.lib.query import Q
 
 if TYPE_CHECKING:
     from src.engine.rails.rails_base import RailsBase
@@ -32,9 +33,10 @@ class Scene:
 
         return decorator
 
-    def start_predicate(self, rails) -> bool:
+    def start_predicate(self, rails: "RailsBase") -> bool:
         if not self.enabled: return False
 
+        # TODO bug when a method in the definition is annotated
         for character_name, character_type in get_type_hints(self._definition).items():
             if not match_annotation(character := rails._get_character(character_name), character_type): return False
             setattr(self._definition, character_name, character)
@@ -44,5 +46,15 @@ class Scene:
 
         return True
 
-    def run(self, rails):
-        return self._definition.run(rails)
+    def run(self, rails: "RailsBase"):
+        locks = [
+            (character, rails.lock_complex_ai(character))
+            for character_name, _ in get_type_hints(self._definition).items()
+            if (character := getattr(self._definition, character_name)) is not None
+            and not hasattr(character, "player_flag")
+        ]
+
+        yield from self._definition.run(rails)
+
+        for character, lock in locks:
+            rails.unlock_complex_ai(character, lock)
