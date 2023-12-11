@@ -28,4 +28,3 @@ class Player(Human):
         self.inventory = Inventory()
 
         self.on_death = lambda *_, **__: None
-        del self.ai

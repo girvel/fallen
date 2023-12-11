@@ -24,6 +24,7 @@ from src.library.ais.io import Quest, Notification
 from src.library.items.bun import Bun
 from src.library.items.lily import Lily
 from src.library.physical.frog import Frog
+from src.library.physical.player import Player
 from src.library.physical.rabid_dog import RabidDog
 from src.library.special.level import Level
 
@@ -81,44 +82,36 @@ class Rails(RailsBase):
 
 
     @Scene.new()
-    class initialization:
+    class introduction:
         mother: Mother
+        brother: Brother
+        player: Player
 
         def run(self, rails: "Rails"):
-            rails.initialization.enabled = False
+            rails.introduction.enabled = False
             rails.locks["mother_leaving"] = rails.lock_complex_ai(self.mother)
-            yield from ()
 
-            # TODO NEXT by default Humans do not have an AI
+            yield from wait_while(lambda: ~Q(self.player).ai is None)
+
+            yield from rails.start_cutscene()
+            yield from rails.center_camera()
+
+            yield from rails.notify(Notification("Управление",
+                "С помощью клика <y>мыши</y> по символу на сцене можно присмотреться к объекту"
+            ))
+
+            yield {self.brother: Say("О, секунду, совсем забыл.")}
+            yield {self.player: Say("Улыбка брата излучает теплоту.", True)}
+            yield {self.mother: Say("Хью, нам пора идти.")}
+            yield {self.brother: Say("Мам, иди вперёд, я догоню.")}
+
+            yield from rails.end_cutscene()
+
             # TODO NEXT by default all characters have their AIs locked
-            # TODO NEXT join with introduction
+            # TODO NEXT lock dying during a cutscene
 
-    # def initialization(self, scene):
-    #     scene.enabled = False
-    #     self.locks.mother_leaving = self.lock_complex_ai(self.characters.mother)
-    #     yield from ()
-    #
-    #
     # @Scene.new(lambda self: ~Q(self.get_player()).ai is not None)
     # def introduction(self, scene):
-    #     scene.enabled = False
-    #
-    #     c = self.characters
-    #     p = self.positions
-    #     q = self.quests
-    #     memory = c.player.ai.memory
-    #
-    #     yield from self.start_cutscene()
-    #     yield from self.center_camera()
-    #
-    #     yield from self.notify(Notification("Управление",
-    #         "С помощью клика <y>мыши</y> по символу на сцене можно присмотреться к объекту"
-    #     ))
-    #
-    #     yield {c.brother: Say("О, секунду, совсем забыл.")}
-    #     yield {c.player: Say("Улыбка брата излучает теплоту.", True)}
-    #     yield {c.mother: Say("Хью, нам пора идти.")}
-    #     yield {c.brother: Say("Мам, иди вперёд, я догоню.")}
     #
     #     c.mother.ai.composite[Pather].going_to = p.street
     #
@@ -209,8 +202,6 @@ class Rails(RailsBase):
     #         "<y>r</y> - достать/убрать оружие<br/><br/>"
     #         "Все горячие клавиши доступны в панели \"Управление\""
     #     ))
-    #
-    #     yield from self.end_cutscene()
     #
 
     # @Scene.new(lambda self: d2(self.characters.brother.p, self.positions.before_away) <= 2)

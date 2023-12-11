@@ -41,7 +41,10 @@ class GridProxy:
     _availability_mask: ndarray[Any, dtype[bool]] | None = None
 
     def get(self, key: int2, default: Any = None) -> Any:
-        if not fits_in_grid(self._grid, key) or not self._availability_mask[key]:
+        if (
+            not fits_in_grid(self._grid, key) or
+            self._availability_mask is not None and not self._availability_mask[key]
+        ):
             return default
 
         return grid_unsafe_get(self._grid, key)

@@ -14,7 +14,6 @@ class Human(Material):
 
     def __init__(self, **kwargs):
         self.senses = Senses(12, 0, 0)
-        self.ai = DummyAi()
 
         self.classifiers = {Kind.Animate}
 
