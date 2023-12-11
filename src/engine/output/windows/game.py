@@ -49,6 +49,8 @@ class Game(Window):
         )
 
     def _display_perception(self, subject, perception: Perception):
+        # questionably optimized
+
         self.curses_window.clear()
         h, w = self.curses_window.getmaxyx()
         screen_size = (w - 1, h)
@@ -62,12 +64,19 @@ class Game(Window):
         ry_perception_zone_start = proxy_sample._center[1] - proxy_sample._r - self.virtual_p[1]
         ry_perception_zone_end = proxy_sample._center[1] + proxy_sample._r - self.virtual_p[1]
 
-        # TODO NEXT consider level size
-        # TODO NEXT maybe outer loop should be y?
-        for rx in range(0, screen_size[0]):
+        rx_range = range(
+            max(0, -self.virtual_p[0]),
+            min(screen_size[0], subject.level.size[0] - self.virtual_p[0])
+        )
+        ry_range = range(
+            max(0, -self.virtual_p[1]),
+            min(screen_size[1], subject.level.size[1] - self.virtual_p[1])
+        )
+
+        for rx in rx_range:
             can_x_be_in_perception = rx_perception_zone_start <= rx <= rx_perception_zone_end
 
-            for ry in range(0, screen_size[1]):
+            for ry in ry_range:
                 can_y_be_in_perception = ry_perception_zone_start <= ry <= ry_perception_zone_end
 
                 p = add2((rx, ry), self.virtual_p)

@@ -26,7 +26,7 @@ class Observer:
             Aggression(e, target)
             for e in perception.vision["physical"].values()
             if (target := ~Q(e).act[HandAttack].target)
-               and subject.attitude.get(target) >= 0
+            and subject.attitude.get(target) >= 0
         ]
 
         if len(aggressions) > 0:

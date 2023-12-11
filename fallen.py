@@ -70,6 +70,10 @@ def main(
                 logging.error("Uncaught error on Metasystem.update when prerunning the level", exc_info=ex)
                 if debug_mode: raise ex
 
+        # TODO RM
+        genesis.entities_to_create.add(Player(p=(5, 3), level=level))
+        ms.update()
+
         player = next(level.find(Player))
         player.ai = IO(
             stdscr, debug_track=track, debug_mode=debug_mode,
