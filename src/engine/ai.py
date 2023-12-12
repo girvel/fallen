@@ -14,15 +14,6 @@ from src.lib.vector.grid import fits_in_grid, grid_unsafe_get, grid_size
 from src.library.special.sound import Sound
 
 
-class Kind(Enum):
-    Animate = 0
-    Table = 1
-
-
-def classified_as(entity, kind):
-    return hasattr(entity, "classifiers") and kind in entity.classifiers
-
-
 @dataclass
 class Senses:
     vision: int
