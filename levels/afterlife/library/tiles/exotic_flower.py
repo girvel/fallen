@@ -4,7 +4,7 @@ from src.library.tiles.flower import Flower
 
 
 class ExoticFlower(Flower):
-    name = Name({  # TODO NEXT Name.auto
+    name = Name({
         "им": "экзотический цветок",
         "ро": "экзотического цветка",
         "да": "экзотическому цветку",

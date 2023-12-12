@@ -1,5 +1,6 @@
 from enum import Enum
 from pathlib import Path
+from typing import Annotated
 
 from ecs import Entity, exists
 
@@ -10,7 +11,7 @@ from src.engine.acting.aggressive import Aggressive
 from src.engine.acting.damage import Weapon
 from src.engine.acting import damage_kind
 from src.engine.rails.rails_base import RailsBase
-from src.engine.rails.scene import Scene
+from src.engine.rails.scene import Scene, keep_ai
 from src.lib import vector
 from src.lib.concurrency import wait_for, wait_while
 from src.lib.query import Q
@@ -45,7 +46,7 @@ class Rails(RailsBase):
 
     positions: dict[str, int2]
     quests: dict[str, Quest]
-    locks: dict[str, object]
+    locks: dict[str, object | None]
 
 
     def __post_init__(self):
@@ -86,10 +87,12 @@ class Rails(RailsBase):
     @Scene.new()
     class introduction:
         mother: Mother
-        brother: Brother
-        player: Player
+        brother: Annotated[Brother, keep_ai]
+        player: Annotated[Player, keep_ai]
 
         def run(self, rails: "Rails"):
+            rails.locks['mother_leaving'] = rails.lock_complex_ai(self.mother)
+
             yield from wait_while(lambda: ~Q(self.player).ai is None)
 
             memory = self.player.ai.memory
@@ -197,6 +200,8 @@ class Rails(RailsBase):
             ))
 
             yield from rails.end_cutscene()
+
+
 
     # @Scene.new(lambda self: d2(self.characters.brother.p, self.positions.before_away) <= 2)
     # def brother_path_middlepoint(self, scene):

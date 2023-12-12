@@ -19,8 +19,6 @@ class Player(Human):
 
     tick_counter = 0
 
-    player_flag = None
-
     def __post_init__(self):
         self.name = CompositeName(reserved_names["hugh"], reserved_names["kinds"]["male"])
 

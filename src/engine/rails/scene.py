@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from typing import get_type_hints, TypeVar, Any, TypeGuard, Protocol, TYPE_CHECKING
+from typing import get_type_hints, TypeVar, Any, TypeGuard, Protocol, TYPE_CHECKING, get_origin, Annotated, get_args
 
 from ecs import exists
 
@@ -12,12 +12,23 @@ if TYPE_CHECKING:
 
 T = TypeVar("T")
 def match_annotation(instance: Any, type_annotation: type[T]) -> TypeGuard[T]:
+    if get_origin(type_annotation) == Annotated:
+        return match_annotation(instance, get_args(type_annotation)[0])
+
     return isinstance(instance, type_annotation) and exists(instance)
+
+def needs_ai_lock(type_annotation: type) -> bool:
+    return (
+        get_origin(type_annotation) != Annotated or
+        keep_ai not in get_args(type_annotation)[1:]
+    )
 
 
 class SceneDefinition(Protocol):
     def run(self, rails: "RailsBase") -> Script:
         ...
+
+keep_ai = object()
 
 
 @dataclass(eq=False)
@@ -52,9 +63,9 @@ class Scene:
 
         locks = [
             (character, rails.lock_complex_ai(character))
-            for character_name, _ in get_type_hints(self._definition).items()
+            for character_name, character_type in get_type_hints(self._definition, include_extras=True).items()
             if (character := getattr(self._definition, character_name)) is not None
-            and not hasattr(character, "player_flag")
+            and needs_ai_lock(character_type)
         ]
 
         yield from self._definition.run(rails)
