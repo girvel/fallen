@@ -1,6 +1,7 @@
 import logging
 import os
 import sys
+from collections import defaultdict
 from pathlib import Path
 
 root_directory = Path(__file__).parent.parent
@@ -27,6 +28,7 @@ class SafeFileHandler(logging.FileHandler):
     def __init__(self, *args, **kwargs):
         self.last_message_content = None
         self.repetitions_n = 1
+        self.stats = defaultdict(int)
         super().__init__(*args, **kwargs)
 
     def handleError(self, record: logging.LogRecord) -> None:
@@ -48,6 +50,8 @@ class SafeFileHandler(logging.FileHandler):
                 sys.stderr.write(f"3rd degree logging exception: {ex3}\n\n" + message)
 
     def emit(self, record):
+        self.stats[record.levelname] += 1
+
         if self.stream is None:
             if self.mode != 'w' or not self._closed:
                 self.stream = self._open()
@@ -70,7 +74,7 @@ class SafeFileHandler(logging.FileHandler):
 
             self.flush()
 
-        except RecursionError:  # See issue 36272
+        except RecursionError:
             raise
         except Exception:
             self.handleError(record)
@@ -87,3 +91,13 @@ def init_logging():
 
     logging.getLogger('numba').setLevel(logging.WARNING)
     logging.info("Initialized logging")
+
+    return handler
+
+
+def log_stats(handler):
+    logging.info(
+        f"Critical: {handler.stats['CRITICAL']}, "
+        f"errors: {handler.stats['ERROR']}, "
+        f"warnings: {handler.stats['WARNING']}"
+    )

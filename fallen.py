@@ -10,8 +10,8 @@ import fire
 
 from src.engine import permanent_storage
 from src.engine.input.hotkeys import GameEnd
-from src.init_ecs import build_metasystem
-from src.init_logging import init_logging
+from src.ecs import build_metasystem
+from src.logging import init_logging, log_stats
 from src.library.ais.io import IO
 from src.library.physical.player import Player
 from src.library.special.level import Level
@@ -41,7 +41,7 @@ def main(
         god_vision: whether player sees everything
     """
 
-    init_logging()
+    log_handler = init_logging()
     logging.info("Started")
 
     track = track_file and Path(track_file).read_text().replace("\n", "")
@@ -99,6 +99,7 @@ def main(
             logging.info("Finishing game cycle")
             if t > 0:
                 logging.info(f"FPS: {update_counter / t:.2f}, ticks: {update_counter}")
+            log_stats(log_handler)
 
 
 if __name__ == '__main__':
