@@ -7,7 +7,8 @@ from levels.main_01_introduction.library.physical.brother import Brother
 from levels.main_01_introduction.library.physical.girl import Girl
 from levels.main_01_introduction.library.physical.mother import Mother
 from src.engine.acting.aggressive import Aggressive
-from src.engine.acting.damage import Weapon, damage_kinds
+from src.engine.acting.damage import Weapon
+from src.engine.acting import damage_kind
 from src.engine.rails.rails_base import RailsBase
 from src.engine.rails.scene import Scene
 from src.lib import vector
@@ -103,28 +104,26 @@ class Rails(RailsBase):
             yield {self.mother: Say("Хью, нам пора идти.")}
             yield {self.brother: Say("Мам, иди вперёд, я догоню.")}
 
-            yield from rails.end_cutscene()
+            self.mother.ai.composite[Pather].going_to = rails.positions["street"]
 
-            # TODO NEXT lock dying during a cutscene
+            yield from wait_for(2)
+
+            yield {self.player: Say(
+                "Вы стоите в обшарпанной деревянной прихожей. Горшки с цветами усеивают каждую горизонтальную "
+                "поверхность; странное жёсткое чувство упирается в кадык.",
+                True,
+            )}
+
+            yield from wait_while(lambda: d2(self.mother.p, self.brother.p) < 7)
+
+            yield {self.brother: Say("Вот, смотри.")}
+            yield {self.player: Say("В твоих руках оказывается длинный свёрток льняной ткани.", True)}
+            self.player.weapon = Weapon(8, damage_kind.slashing)
+
+            yield from rails.end_cutscene()
 
     # @Scene.new(lambda self: ~Q(self.get_player()).ai is not None)
     # def introduction(self, scene):
-    #
-    #     c.mother.ai.composite[Pather].going_to = p.street
-    #
-    #     yield from wait_for(2)
-    #
-    #     yield {c.player: Say(
-    #         "Вы стоите в обшарпанной деревянной прихожей. Горшки с цветами усеивают каждую горизонтальную поверхность;"
-    #         " странное жёсткое чувство упирается в кадык.",
-    #         True,
-    #     )}
-    #
-    #     yield from wait_while(lambda: d2(c.mother.p, c.brother.p) < 7)
-    #
-    #     yield {c.brother: Say("Вот, смотри.")}
-    #     yield {c.player: Say("В твоих руках оказывается длинный свёрток льняной ткани.", True)}
-    #     c.player.weapon = Weapon(8, damage_kinds["Slashing"])
     #
     #     yield from self.options({
     #         (look := "Развязать бечёвку"): NoAction(),

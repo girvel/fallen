@@ -1,6 +1,8 @@
 from ecs import Entity
 
-from src.engine.acting.damage import Health, Weapon, armor_kinds, damage_kinds
+from src.engine.acting.damage import Health, Weapon
+from src.engine.acting import armor_kind
+from src.engine.acting import damage_kind
 from src.engine.attitude.implementation import Constants
 from src.library.ai_modules.spacial_memory import SpacialMemory
 from src.engine.language.library import reserved_names
@@ -19,8 +21,8 @@ class Mother(Human):
     name = CompositeName(reserved_names["lilia"], reserved_names["kinds"]["female"])
 
     def __post_init__(self, **attributes):
-        self.health = Health(50, armor_kinds["Organic"])
-        self.weapon = Weapon(4, damage_kinds["Slashing"])
+        self.health = Health(50, armor_kind.none)
+        self.weapon = Weapon(4, damage_kind.slashing)
         self.ai = PeasantAi()
         self.attitude = peasant_attitude()
 

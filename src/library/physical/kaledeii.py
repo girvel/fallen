@@ -1,4 +1,6 @@
-from src.engine.acting.damage import Weapon, damage_kinds, armor_kinds, Health
+from src.engine.acting.damage import Weapon, Health
+from src.engine.acting import armor_kind
+from src.engine.acting import damage_kind
 from src.library.ai_modules.spacial_memory import SpacialMemory
 from src.engine.attitude.implementation import Faction
 from src.engine.language.name import Name
@@ -17,8 +19,8 @@ class Kaledeii(Human):
     faction = Faction.Church
 
     def __post_init__(self):
-        self.health = Health(80, armor_kinds["Steel"])
-        self.weapon = Weapon(15, damage_kinds["Slashing"])
+        self.health = Health(80, armor_kind.steel)
+        self.weapon = Weapon(15, damage_kind.slashing)
         self.senses = Senses(24, 40, 0)
         self.ai = DummyAi()
 

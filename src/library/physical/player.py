@@ -1,4 +1,6 @@
-from src.engine.acting.damage import Weapon, Health, damage_kinds, armor_kinds
+from src.engine.acting.damage import Weapon, Health
+from src.engine.acting import armor_kind
+from src.engine.acting import damage_kind
 from src.engine.inventory import Inventory
 from src.engine.language.library import reserved_names
 from src.engine.language.name import CompositeName
@@ -23,8 +25,8 @@ class Player(Human):
         self.name = CompositeName(reserved_names["hugh"], reserved_names["kinds"]["male"])
 
         self.sex = "male"
-        self.weapon = Weapon(1, damage_kinds["Crushing"])
-        self.health = Health(10, armor_kinds["Organic"])
+        self.weapon = Weapon(1, damage_kind.crushing)
+        self.health = Health(10, armor_kind.none)
         self.senses = Senses(24, 40, 0)
         self.traits = Traits()
         self.inventory = Inventory()

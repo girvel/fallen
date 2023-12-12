@@ -1,6 +1,8 @@
 import random
 
-from src.engine.acting.damage import Health, damage_kinds, armor_kinds, Weapon
+from src.engine.acting.damage import Health, Weapon
+from src.engine.acting import armor_kind
+from src.engine.acting import damage_kind
 from src.library.ai_modules.spacial_memory import SpacialMemory
 from src.engine.language.library import random_composite_name
 from src.engine.attitude.implementation import Faction, common_attitude, Constants
@@ -18,8 +20,8 @@ class Soldier(Human):
     def __post_init__(self):
         self.sex = random.choices(["male", "female"], [85, 15])[0]
         self.name = random_composite_name(self.sex)
-        self.health = Health(40, armor_kinds["Leather"])
-        self.weapon = Weapon(5, damage_kinds["Slashing"])
+        self.health = Health(40, armor_kind.leather)
+        self.weapon = Weapon(5, damage_kind.slashing)
         self.senses = Senses(16, 0, 0)
         self.ai = DummyAi()
 

@@ -1,4 +1,6 @@
-from src.engine.acting.damage import Health, damage_kinds, armor_kinds, Weapon
+from src.engine.acting.damage import Health, Weapon
+from src.engine.acting import armor_kind
+from src.engine.acting import damage_kind
 from src.library.ai_modules.spacial_memory import SpacialMemory
 from src.engine.attitude.implementation import Faction, common_attitude
 from src.engine.language.name import Name
@@ -16,8 +18,8 @@ class LordBishop(Human):
     faction = Faction.Church
 
     def __post_init__(self):
-        self.health = Health(40, armor_kinds["LightSteel"])
-        self.weapon = Weapon(7, damage_kinds["Piercing"])
+        self.health = Health(40, armor_kind.light_steel)
+        self.weapon = Weapon(7, damage_kind.piercing)
         self.senses = Senses(12, 0, 0)
         self.ai = DummyAi()
 

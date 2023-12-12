@@ -2,7 +2,8 @@ import random
 
 from ecs import Entity
 
-from src.engine.acting.damage import Health, armor_kinds
+from src.engine.acting.damage import Health
+from src.engine.acting import armor_kind
 from src.engine.language.name import Name
 from src.engine.output.colors import ColorPair, yellow
 from src.library.abstract.material import Material
@@ -21,7 +22,7 @@ class ThickWall(Material):
     boring_flag = None
 
     def __post_init__(self):
-        self.health = Health(random.randrange(5000, 10001, 500), armor_kinds["Stone"])
+        self.health = Health(random.randrange(5000, 10001, 500), armor_kind.stone)
 
     def on_death(_, self, _hades: Hades, genesis: Genesis):  # TODO review this pattern. Can I do better?
         genesis.entities_to_create.add(Ruins(p=self.p, level=self.level))

@@ -3,9 +3,9 @@
 </div>
 
 <div>
-    <p>Здоровье: <y>{{subject.health.amount.current}}/{{subject.health.amount.maximum - 1}}</y></p>
-    <p>Броня: <y>{{subject.health.armor_kind}}</y></p>
-    <p>Урон: <y>{{potential_damage}} {{subject.weapon.damage_kind}}</y></p>
+    <p>Здоровье: <y>{{ subject.health.amount.current}}/{{ subject.health.amount.maximum - 1 }}</y></p>
+    <p>Броня: <y>{{ subject.health.armor_kind.name }}</y></p>
+    <p>Урон: <y>{{ potential_damage }} ({{ subject.weapon.damage_kind.name }})</y></p>
 </div>
 <div>
     <p>{{ mode|safe }}</p>

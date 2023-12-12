@@ -37,7 +37,7 @@ def attack(source: Entity, target: Entity, hades: Hades):
     )
 
 
-def potential_damage(source: Entity):
+def potential_damage(source) -> int:
     if (skill := ~Q(source).skill) is not None:
         skill_k = skill.get(source.weapon.damage_kind) or .5
     else:
@@ -47,14 +47,13 @@ def potential_damage(source: Entity):
 
 
 def inflict_damage(
-    target: Entity, power: float, damage_kind: str, hades: Hades, source: Entity
+    target, power: float, damage_kind: str, hades: Hades, source: Entity
 ):
     if (health := ~Q(target).health) is None: return
 
-    stats = armor_data[health.armor_kind]
-    if damage_kind in stats.resistance:
+    if damage_kind in health.armor_kind.resistance:
         modifier = 0.5
-    elif damage_kind in stats.vulnerability:
+    elif damage_kind in health.armor_kind.vulnerability:
         modifier = 2
     else:
         modifier = 1
@@ -78,23 +77,3 @@ def inflict_damage(
                 killer.last_killed = []
 
             killer.last_killed.append(target)
-
-db = yaml.safe_load((Path(__file__).parent / "damage_and_armor.yaml").read_text())
-
-@dataclass
-class ArmorStats:
-    resistance: set[str]
-    vulnerability: set[str]
-
-armor_data = {
-    armor_kind: ArmorStats(set(resistance), set(vulnerability))
-    for armor_kind, (resistance, vulnerability) in db["armor_kinds"].items()
-}
-
-# TODO REF something smarter? Like either you write armor = "Steel" or armor = DamageKinds.Steel 
-#  with Steel as stats
-
-damage_kinds = {kind: kind for kind in db["damage_kinds"]}
-armor_kinds = {kind: kind for kind in db["armor_kinds"]}
-
-del db

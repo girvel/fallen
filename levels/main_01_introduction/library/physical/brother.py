@@ -1,7 +1,9 @@
 from ecs import Entity
 
 from levels.main_01_introduction.library.ais.brother_ai import BrotherAi
-from src.engine.acting.damage import Health, Weapon, armor_kinds, damage_kinds
+from src.engine.acting.damage import Health, Weapon
+from src.engine.acting import armor_kind
+from src.engine.acting import damage_kind
 from src.library.ai_modules.spacial_memory import SpacialMemory
 from src.engine.language.library import reserved_names
 from src.engine.language.name import CompositeName
@@ -17,8 +19,8 @@ class Brother(Human):
     def __post_init__(self, **attributes):
         self.name = CompositeName(reserved_names["mike"], reserved_names["kinds"]["male"])
 
-        self.health = Health(30, armor_kinds["Organic"])
-        self.weapon = Weapon(4, damage_kinds["Slashing"])
+        self.health = Health(30, armor_kind.none)
+        self.weapon = Weapon(4, damage_kind.slashing)
         self.ai = BrotherAi()
 
         Entity.__init__(self, **attributes)

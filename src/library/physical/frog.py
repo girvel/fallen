@@ -1,4 +1,5 @@
-from src.engine.acting.damage import Health, armor_kinds
+from src.engine.acting.damage import Health
+from src.engine.acting import armor_kind
 from src.engine.ai import Kind
 from src.engine.language.name import Name
 from src.engine.output.colors import ColorPair, green
@@ -14,5 +15,5 @@ class Frog(Material):
 
     def __post_init__(self):
         self.ai = FrogAi()
-        self.health = Health(1, armor_kinds["Organic"])
+        self.health = Health(1, armor_kind.none)
         self.classifiers = {Kind.Animate}

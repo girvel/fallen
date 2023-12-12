@@ -1,6 +1,7 @@
 from ecs import Entity
 
-from src.engine.acting.damage import Health, armor_kinds
+from src.engine.acting.damage import Health
+from src.engine.acting import armor_kind
 from src.library.ai_modules.spacial_memory import SpacialMemory
 from src.engine.language.name import Name
 from src.engine.output.colors import ColorPair, black
@@ -24,7 +25,7 @@ class OldSarr(Human):
 
     def __post_init__(self, **attributes):
         self.ai = DummyAi()
-        self.health = Health(1_000, armor_kinds["Menith"])
+        self.health = Health(1_000, armor_kind.mennar)
 
         Entity.__init__(self, **attributes)
 

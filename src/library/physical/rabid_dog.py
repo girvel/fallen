@@ -1,4 +1,6 @@
-from src.engine.acting.damage import Weapon, Health, damage_kinds, armor_kinds
+from src.engine.acting.damage import Weapon, Health
+from src.engine.acting import armor_kind
+from src.engine.acting import damage_kind
 from src.engine.ai import Kind, Senses
 from src.engine.attitude.implementation import Faction
 from src.engine.language.name import Name
@@ -25,8 +27,8 @@ class RabidDog(Material):
             "пр": "бешеном псе",
         })
 
-        self.weapon = Weapon(6, damage_kinds["Piercing"])
-        self.health = Health(25, armor_kinds["Organic"])
+        self.weapon = Weapon(6, damage_kind.piercing)
+        self.health = Health(25, armor_kind.none)
         self.classifiers = {Kind.Animate}
         self.ai = RabidAi()
         self.senses = Senses(10, 0, 5)

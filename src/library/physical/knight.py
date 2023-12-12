@@ -1,6 +1,8 @@
 import random
 
-from src.engine.acting.damage import Health, Weapon, armor_kinds, damage_kinds
+from src.engine.acting.damage import Health, Weapon
+from src.engine.acting import armor_kind
+from src.engine.acting import damage_kind
 from src.engine.attitude.implementation import Faction, common_attitude
 from src.engine.output.colors import cyan, ColorPair
 from src.library.abstract.human import Human
@@ -18,8 +20,8 @@ class Knight(Human):
         raise NotImplementedError
         # self.name =
         self.sex = random.choices(["male", "female"], [85, 15])[0]
-        self.health = Health(70, armor_kinds["Steel"])
-        self.weapon = Weapon(15, damage_kinds["Slashing"])
+        self.health = Health(70, armor_kind.steel)
+        self.weapon = Weapon(15, damage_kind.slashing)
         self.senses = Senses(18, 40, 0)
         self.ai = KnightAi()
 
