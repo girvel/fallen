@@ -1,5 +1,5 @@
 import curses
-import logging
+import time
 from dataclasses import dataclass, field
 from typing import Any, Optional
 
@@ -10,6 +10,8 @@ class KeyQueue:
     debug_track: Optional[Any]
     _list: list[int] = field(default_factory=list)
 
+    total_waiting_time: float = 0
+
     def read_key(self, hotkeys=None, allow_empty=False):
         if len(self._list) > 0 and (hotkeys is None or self._list[0] in hotkeys):
             hotkey, *self._list = self._list
@@ -18,7 +20,7 @@ class KeyQueue:
         if self.debug_track is not None:
             hotkey = ord(next(self.debug_track))
         else:
-            while (hotkey := self._window.getch()) == -1 and not allow_empty: pass
+            while (hotkey := self._read_key_from_curses()) == -1 and not allow_empty: pass
 
         if hotkey not in (-1, curses.KEY_MOUSE):
             self._list.clear()
@@ -27,3 +29,10 @@ class KeyQueue:
             return hotkey
 
         self._list.append(hotkey)
+
+    def _read_key_from_curses(self):
+        t = time.time()
+        result = self._window.getch()
+        self.total_waiting_time += time.time() - t
+        return result
+
