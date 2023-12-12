@@ -255,20 +255,20 @@ class Rails(RailsBase):
             yield from rails.end_cutscene()
 
 
-    # # TODO this should be considered cutscene even though it does not enable cutscene mode
-    # @Scene.new(lambda self: any(
-    #     d2(e.p, self.positions.away) <= 3 for e in [self.characters.brother, self.characters.mother]
-    # ))
-    # def brother_leaves(self, scene):
-    #     c = self.characters
-    #
-    #     scene.enabled = False
-    #
-    #     yield from wait_for(25)
-    #     yield {c.brother: Leave()}
-    #     self.unlock_complex_ai(c.mother, self.locks.mother_leaving)
-    #
-    #
+    # TODO this should be considered cutscene even though it does not enable cutscene mode
+    @Scene.new()
+    class brother_leaves:
+        brother: Annotated[Brother, keep_ai]
+        mother: Annotated[Mother, maybe_exists]
+
+        def start_predicate(self, rails: "Rails"):
+            return d2(self.brother.p, rails.positions["brother_leaving_endpoint"]) <= 3
+
+        def run(self, rails: "Rails"):
+            yield from wait_for(25)
+            yield {self.brother: Leave()}
+            rails.unlock_complex_ai(self.mother, rails.locks["mother_leaving"])
+
     # def _is_player_killing_the_dog(self):
     #     return self.characters.rabid_dog in (~Q(self.characters.player).last_killed or ())
     #
