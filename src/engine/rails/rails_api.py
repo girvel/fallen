@@ -35,6 +35,7 @@ class RailsApi:
         yield  # TODO should this be needed? Investigate.
         self.get_player().ai.memory.options = options
         yield
+        return self.get_player().ai.memory.last_selected_option
 
     def start_cutscene(self) -> Script:
         self.get_player().ai.memory.in_cutscene = True

@@ -92,6 +92,8 @@ class Rails(RailsBase):
         def run(self, rails: "Rails"):
             yield from wait_while(lambda: ~Q(self.player).ai is None)
 
+            memory = self.player.ai.memory
+
             yield from rails.start_cutscene()
             yield from rails.center_camera()
 
@@ -120,85 +122,81 @@ class Rails(RailsBase):
             yield {self.player: Say("В твоих руках оказывается длинный свёрток льняной ткани.", True)}
             self.player.weapon = Weapon(8, damage_kind.slashing)
 
-            yield from rails.end_cutscene()
+            selected_option = yield from rails.options({
+                (look := "Развязать бечёвку"): NoAction(),
+                "Укоризненно смотреть на брата": NoAction(),
+            })
 
-    # @Scene.new(lambda self: ~Q(self.get_player()).ai is not None)
-    # def introduction(self, scene):
-    #
-    #     yield from self.options({
-    #         (look := "Развязать бечёвку"): NoAction(),
-    #         "Укоризненно смотреть на брата": NoAction(),
-    #     })
-    #
-    #     if memory.last_selected_option == look:
-    #         c.player.traits.naivety += 1
-    #         yield {c.player: Say("Это меч. Очень красивый.", True)}
-    #
-    #         yield {c.brother: Say("Кавалерийская шашка. Настоящая.")}
-    #         yield {c.brother: Say("Это вещь.")}
-    #
-    #         yield {c.player: Say("Это вещь.")}
-    #         yield {c.player: Say("Где ты его достал?")}
-    #
-    #         yield {c.brother: Say("Не спрашивай.")}
-    #         yield {c.brother: Say("И не показывай маме.")}
-    #
-    #         yield {c.mother: Say("Хью!")}
-    #
-    #         yield {c.brother: Say("Это я!")}
-    #         yield {c.brother: Say("Приглядывай пока за хозяйством, а?")}
-    #
-    #         c.brother.ai.composite[Pather].going_to = p.before_away
-    #         yield
-    #
-    #         yield {c.player: Say(
-    #             "Брат подскакивает и, блеснув зелёными глазами и одной рукой придерживая кожаную сумку, уходит.",
-    #             True
-    #         )}
-    #         yield from wait_for(3)
-    #
-    #         yield {c.player: Say("Ты проглатываешь подступившую слабость и снова смотришь на меч.", True)}
-    #         yield from wait_for(3)
-    #
-    #         c.mother.ai.composite[Follower].subject = c.brother
-    #
-    #         yield {c.player: Say("Он красиво блестит.", True)}
-    #     else:
-    #         c.player.traits.pain += 1
-    #
-    #         yield {c.player: Say("Брат морщится, пряча взгляд.", True)}
-    #
-    #         yield {c.brother: Say("Мне надо это сделать.")}
-    #         yield {c.brother: Say("")}
-    #         yield {c.brother: Say("Не смотри на меня так.")}
-    #         yield {c.brother: Say("")}
-    #         yield {c.brother: Say("Ты не знаешь, о чём говоришь. Я тебе потом объясню.")}
-    #
-    #         yield {c.mother: Say("Хью!")}
-    #         yield {c.brother: Say("Это я!")}
-    #
-    #         c.brother.ai.composite[Pather].going_to = p.before_away
-    #         yield
-    #         yield {c.player: Say("Брат поворачивается и уходит, растерянно взмахнув рукой.", True)}
-    #
-    #         yield from wait_for(2)
-    #         yield {c.player: Say("В его глазах видна боль.", True)}
-    #
-    #         c.mother.ai.composite[Follower].subject = c.brother
-    #
-    #         yield from self.options({"Развязать бечёвку": NoAction()})
-    #         yield {c.player: Say("Это меч. Очень красивый.", True)}
-    #
-    #     c.brother.ai.enable_speech = True
-    #     yield from wait_for(10)
-    #     memory.add_quest(q.find_someone_to_fight)
-    #
-    #     yield from self.notify(Notification("Управление",
-    #         "<y>wasd</y> - движение<br/>"
-    #         "<y>r</y> - достать/убрать оружие<br/><br/>"
-    #         "Все горячие клавиши доступны в панели \"Управление\""
-    #     ))
-    #
+            if selected_option == look:
+                self.player.traits.naivety += 1
+                yield {self.player: Say("Это меч. Очень красивый.", True)}
+
+                yield {self.brother: Say("Кавалерийская шашка. Настоящая.")}
+                yield {self.brother: Say("Это вещь.")}
+
+                yield {self.player: Say("Это вещь.")}
+                yield {self.player: Say("Где ты его достал?")}
+
+                yield {self.brother: Say("Не спрашивай.")}
+                yield {self.brother: Say("И не показывай маме.")}
+
+                yield {self.mother: Say("Хью!")}
+
+                yield {self.brother: Say("Это я!")}
+                yield {self.brother: Say("Приглядывай пока за хозяйством, а?")}
+
+                self.brother.ai.composite[Pather].going_to = rails.positions["before_away"]
+                yield
+
+                yield {self.player: Say(
+                    "Брат подскакивает и, блеснув зелёными глазами и одной рукой придерживая кожаную сумку, уходит.",
+                    True
+                )}
+                yield from wait_for(3)
+
+                yield {self.player: Say("Ты проглатываешь подступившую слабость и снова смотришь на меч.", True)}
+                yield from wait_for(3)
+
+                self.mother.ai.composite[Follower].subject = self.brother
+
+                yield {self.player: Say("Он красиво блестит.", True)}
+            else:
+                self.player.traits.pain += 1
+
+                yield {self.player: Say("Брат морщится, пряча взгляд.", True)}
+
+                yield {self.brother: Say("Мне надо это сделать.")}
+                yield {self.brother: Say("")}
+                yield {self.brother: Say("Не смотри на меня так.")}
+                yield {self.brother: Say("")}
+                yield {self.brother: Say("Ты не знаешь, о чём говоришь. Я тебе потом объясню.")}
+
+                yield {self.mother: Say("Хью!")}
+                yield {self.brother: Say("Это я!")}
+
+                self.brother.ai.composite[Pather].going_to = rails.positions["before_away"]
+                yield
+                yield {self.player: Say("Брат поворачивается и уходит, растерянно взмахнув рукой.", True)}
+
+                yield from wait_for(2)
+                yield {self.player: Say("В его глазах видна боль.", True)}
+
+                self.mother.ai.composite[Follower].subject = self.brother
+
+                yield from rails.options({"Развязать бечёвку": NoAction()})
+                yield {self.player: Say("Это меч. Очень красивый.", True)}
+
+            self.brother.ai.enable_speech = True
+            yield from wait_for(10)
+            memory.add_quest(rails.quests["find_someone_to_fight"])
+
+            yield from rails.notify(Notification("Управление",
+                "<y>wasd</y> - движение<br/>"
+                "<y>r</y> - достать/убрать оружие<br/><br/>"
+                "Все горячие клавиши доступны в панели \"Управление\""
+            ))
+
+            yield from rails.end_cutscene()
 
     # @Scene.new(lambda self: d2(self.characters.brother.p, self.positions.before_away) <= 2)
     # def brother_path_middlepoint(self, scene):

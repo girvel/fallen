@@ -31,7 +31,7 @@ class Memory:
     current_sound: Optional[Sound] = None
     chat: list[Sound] = field(default_factory=list)
 
-    options: Optional[dict[str, Optional[Action]]] = None
+    options: dict[str, Optional[Action]] | None = None
     selected_option_i: int = 0
     last_selected_option: Optional[str] = None
 
