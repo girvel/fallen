@@ -8,13 +8,13 @@ from src.library.ai_modules.spacial_memory import SpacialMemory
 from src.engine.language.library import reserved_names
 from src.engine.language.name import CompositeName
 from src.engine.output.colors import ColorPair, blue
-from src.library.abstract.human import Human
+from src.library.abstract.humanoid import Humanoid
 from src.library.ais.peasant_ai import PeasantAi
 from src.library.physical.peasant import peasant_attitude
 from src.library.physical.player import Player
 
 
-class Mother(Human):
+class Mother(Humanoid):
     character = 'L'
     color = ColorPair(blue)
     sex = "female"

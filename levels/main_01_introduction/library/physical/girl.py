@@ -5,10 +5,10 @@ from src.library.ai_modules.spacial_memory import SpacialMemory
 from src.engine.language.library import reserved_names
 from src.engine.language.name import CompositeName
 from src.engine.output.colors import ColorPair, blue
-from src.library.abstract.human import Human
+from src.library.abstract.humanoid import Humanoid
 
 
-class Girl(Human):
+class Girl(Humanoid):
     name = CompositeName(reserved_names["morra"], reserved_names["wild"]["female"])
 
     character = "m"

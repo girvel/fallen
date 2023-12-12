@@ -10,25 +10,44 @@ if TYPE_CHECKING:
     from src.engine.rails.rails_base import RailsBase
 
 
-T = TypeVar("T")
-def match_annotation(instance: Any, type_annotation: type[T]) -> TypeGuard[T]:
-    if get_origin(type_annotation) == Annotated:
-        return match_annotation(instance, get_args(type_annotation)[0])
+keep_ai = object()
+maybe_exists = object()
 
-    return isinstance(instance, type_annotation) and exists(instance)
 
-def needs_ai_lock(type_annotation: type) -> bool:
-    return (
-        get_origin(type_annotation) != Annotated or
-        keep_ai not in get_args(type_annotation)[1:]
-    )
+@dataclass
+class CharacterRequirement:
+    name: str
+    python_type: type
+
+    needs_ai_lock: bool
+    has_to_exist: bool
+
+    @classmethod
+    def from_annotation(cls, name: str, annotation: type):
+        if get_origin(annotation) == Annotated:
+            python_type, *args = get_args(annotation)
+        else:
+            python_type = annotation
+            args = []
+
+        return cls(
+            name=name,
+            python_type=python_type,
+            needs_ai_lock=keep_ai not in args,
+            has_to_exist=maybe_exists not in args,
+        )
+
+    def matches(self, instance, rails: "RailsBase"):
+        return (
+            isinstance(instance, self.python_type) and
+            (not self.has_to_exist or exists(instance)) and
+            (instance.level == rails.level)
+        )
 
 
 class SceneDefinition(Protocol):
     def run(self, rails: "RailsBase") -> Script:
         ...
-
-keep_ai = object()
 
 
 @dataclass(eq=False)
@@ -36,12 +55,24 @@ class Scene:
     name: str
     enabled: bool
     reoccurring: bool
+
     _definition: SceneDefinition
+    _characters_required: list[CharacterRequirement]
 
     @classmethod
     def new(cls, enabled: bool = True, reoccurring: bool = False):
         def decorator(definition_class: type[SceneDefinition]) -> "Scene":
-            return cls(definition_class.__name__, enabled, reoccurring, definition_class())
+            return cls(
+                name=definition_class.__name__,
+                enabled=enabled,
+                reoccurring=reoccurring,
+                _definition=definition_class(),
+                _characters_required=[
+                    CharacterRequirement.from_annotation(name, annotation)
+                    for name, annotation
+                    in get_type_hints(definition_class, include_extras=True).items()
+                ],
+            )
 
         return decorator
 
@@ -49,12 +80,15 @@ class Scene:
         if not self.enabled: return False
 
         # TODO bug when a method in the definition is annotated
-        for character_name, character_type in get_type_hints(self._definition).items():
-            if not match_annotation(character := rails._get_character(character_name), character_type): return False
-            setattr(self._definition, character_name, character)
+        for requirement in self._characters_required:
+            character = rails._get_character(requirement.name)
+            if not requirement.matches(character, rails):
+                return False
+
+            setattr(self._definition, requirement.name, character)
 
         if hasattr(self._definition, "start_predicate"):
-            return self._definition.start_predicate(self)
+            return self._definition.start_predicate(rails)
 
         return True
 
@@ -63,9 +97,9 @@ class Scene:
 
         locks = [
             (character, rails.lock_complex_ai(character))
-            for character_name, character_type in get_type_hints(self._definition, include_extras=True).items()
-            if (character := getattr(self._definition, character_name)) is not None
-            and needs_ai_lock(character_type)
+            for requirement in self._characters_required
+            if (character := getattr(self._definition, requirement.name)) is not None
+            and requirement.needs_ai_lock
         ]
 
         yield from self._definition.run(rails)

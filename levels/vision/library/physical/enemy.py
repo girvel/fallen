@@ -6,12 +6,12 @@ from src.engine.acting import damage_kind
 from src.library.ai_modules.spacial_memory import SpacialMemory
 from src.engine.language.name import Name
 from src.engine.output.colors import ColorPair, magenta, red
-from src.library.abstract.human import Human
+from src.library.abstract.humanoid import Humanoid
 from src.library.ais.dummy_ai import DummyAi
 from src.engine.ai import Senses
 
 
-class Enemy(Human):
+class Enemy(Humanoid):
     character = "E"
     color = ColorPair(red, magenta)
     name = Name("Враг")

@@ -5,12 +5,12 @@ from src.engine.acting import armor_kind
 from src.engine.acting import damage_kind
 from src.engine.attitude.implementation import Faction, common_attitude
 from src.engine.output.colors import cyan, ColorPair
-from src.library.abstract.human import Human
+from src.library.abstract.humanoid import Humanoid
 from src.library.ais.knight_ai import KnightAi
 from src.engine.ai import Senses
 
 
-class Knight(Human):
+class Knight(Humanoid):
     character = 'k'
     color = ColorPair(cyan)
 

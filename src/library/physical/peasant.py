@@ -7,13 +7,13 @@ from src.library.ai_modules.spacial_memory import SpacialMemory
 from src.engine.attitude.implementation import common_attitude, Faction
 from src.engine.language.library import first_names
 from src.engine.language.name import CompositeName
-from src.library.abstract.human import Human
+from src.library.abstract.humanoid import Humanoid
 from src.library.ais.peasant_ai import PeasantAi
 from src.lib.vector.vector import sub2, area2
 from src.engine.ai import Senses
 
 
-class Peasant(Human):
+class Peasant(Humanoid):
     character = 'p'
     house = None
     faction = Faction.Villagers

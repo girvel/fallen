@@ -8,10 +8,10 @@ from src.library.ai_modules.spacial_memory import SpacialMemory
 from src.engine.language.library import reserved_names
 from src.engine.language.name import CompositeName
 from src.engine.output.colors import ColorPair, blue
-from src.library.abstract.human import Human
+from src.library.abstract.humanoid import Humanoid
 
 
-class Brother(Human):
+class Brother(Humanoid):
     character = 'M'
     color = ColorPair(blue)
     sex = "male"

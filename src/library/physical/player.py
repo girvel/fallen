@@ -6,11 +6,11 @@ from src.engine.language.library import reserved_names
 from src.engine.language.name import CompositeName
 from src.engine.output.colors import ColorPair, white
 from src.engine.traits import Traits
-from src.library.abstract.human import Human
+from src.library.abstract.humanoid import Humanoid
 from src.engine.ai import Senses
 
 
-class Player(Human):
+class Player(Humanoid):
     character = '@'
     color = ColorPair(white)
 

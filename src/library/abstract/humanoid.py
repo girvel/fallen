@@ -6,7 +6,7 @@ from src.library.tiles.body import body_factory
 
 required_attributes = "character, sex, name, health".split(", ")
 
-class Human(Material):
+class Humanoid(Material):
     layer = "physical"
 
     human_flag = None
@@ -15,6 +15,7 @@ class Human(Material):
     def __init__(self, **kwargs):
         self.senses = Senses(12, 0, 0)
         self.ai = None
+        self.act = None
 
         self.skill = {}
         self.weapon = Weapon(1, "Crushing")

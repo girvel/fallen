@@ -11,7 +11,7 @@ from src.engine.acting.aggressive import Aggressive
 from src.engine.acting.damage import Weapon
 from src.engine.acting import damage_kind
 from src.engine.rails.rails_base import RailsBase
-from src.engine.rails.scene import Scene, keep_ai
+from src.engine.rails.scene import Scene, keep_ai, maybe_exists
 from src.lib import vector
 from src.lib.concurrency import wait_for, wait_while
 from src.lib.query import Q
@@ -61,8 +61,8 @@ class Rails(RailsBase):
 
         self.positions = {
             'street': (181, 42),
-            'before_away': (93, 28),
-            'away': (139, 0),
+            'brother_leaving_midpoint': (93, 28),
+            'brother_leaving_endpoint': (139, 0),
             'vision_shift': (33, 19),
             'mother_reappearance': (191, 55),
             'player_bed': (208, 57),
@@ -148,7 +148,7 @@ class Rails(RailsBase):
                 yield {self.brother: Say("Это я!")}
                 yield {self.brother: Say("Приглядывай пока за хозяйством, а?")}
 
-                self.brother.ai.composite[Pather].going_to = rails.positions["before_away"]
+                self.brother.ai.composite[Pather].going_to = rails.positions["brother_leaving_midpoint"]
                 yield
 
                 yield {self.player: Say(
@@ -177,7 +177,7 @@ class Rails(RailsBase):
                 yield {self.mother: Say("Хью!")}
                 yield {self.brother: Say("Это я!")}
 
-                self.brother.ai.composite[Pather].going_to = rails.positions["before_away"]
+                self.brother.ai.composite[Pather].going_to = rails.positions["brother_leaving_midpoint"]
                 yield
                 yield {self.player: Say("Брат поворачивается и уходит, растерянно взмахнув рукой.", True)}
 
@@ -202,57 +202,59 @@ class Rails(RailsBase):
             yield from rails.end_cutscene()
 
 
+    @Scene.new()
+    class brother_path_midpoint:
+        brother: Annotated[Brother, keep_ai]
 
-    # @Scene.new(lambda self: d2(self.characters.brother.p, self.positions.before_away) <= 2)
-    # def brother_path_middlepoint(self, scene):
-    #     scene.enabled = False
-    #     yield from wait_for(30)
-    #     self.characters.brother.ai.composite[Pather].going_to = self.positions.away
-    #     yield from ()
-    #
-    #
-    # @Scene.new(lambda self:
-    #     exists(self.characters.brother) and exists(self.characters.mother)
-    #     and self.characters.brother.level is self.characters.player.level
-    #     and d2(self.characters.brother.p, self.positions.away) <= 20
-    #     and d2(self.characters.brother.p, self.characters.player.p) <= self.characters.player.senses.vision
-    # )
-    # def brother_stops_player(self, scene):
-    #     c = self.characters
-    #     p = self.positions
-    #
-    #     scene.enabled = False
-    #     self.brother_leaves.enabled = False
-    #     c.brother.ai.enable_speech = False
-    #
-    #     c.mother.ai.composite[Follower].subject = None
-    #     c.brother.ai.composite[Pather].going_to = c.player.p
-    #     c.brother.ai.composite[Follower].subject = c.player
-    #
-    #     yield from self.start_cutscene()
-    #     yield from self.center_camera()
-    #
-    #     yield from wait_while(lambda: d2(self.characters.brother.p, c.player.p) > 5 or c.brother.act is not None)
-    #
-    #     yield {c.brother: Say("Перестань.")}
-    #     yield {c.brother: Say("Я не могу взять тебя с собой.")}
-    #     yield {c.brother: Say("Иди домой.")}
-    #
-    #     c.player.traits.naivety += 1
-    #     c.player.traits.pain += 1
-    #     c.player.traits.curiosity += 1
-    #
-    #     c.brother.ai.composite[Follower].subject = c.mother
-    #     c.brother.ai.composite[Pather].going_to = c.mother.p
-    #     c.mother.ai.composite[Pather].going_to = p.away
-    #
-    #     self.brother_leaves.enabled = True
-    #
-    #     yield from wait_while(lambda: exists(c.brother))
-    #
-    #     yield from self.end_cutscene()
-    #
-    #
+        def start_predicate(self, rails: "Rails"):
+            return d2(self.brother.p, rails.positions["brother_leaving_midpoint"]) < 2
+
+        def run(self, rails: "Rails"):
+            yield from wait_for(30)
+            self.brother.ai.composite[Pather].going_to = rails.positions["brother_leaving_endpoint"]
+
+
+    @Scene.new()
+    class brother_stops_player:
+        brother: Annotated[Brother, keep_ai]
+        mother: Annotated[Mother, maybe_exists]
+        player: Annotated[Player, keep_ai]
+
+        def start_predicate(self, rails: "Rails"):
+            return (
+                d2(self.brother.p, rails.positions["brother_leaving_endpoint"]) <= 20 and
+                d2(self.brother.p, self.player.p) <= self.player.senses.vision
+            )
+
+        def run(self, rails: "Rails"):
+            self.brother.ai.enable_speech = False
+
+            self.mother.ai.composite[Follower].subject = None
+            self.brother.ai.composite[Pather].going_to = self.player.p
+            self.brother.ai.composite[Follower].subject = self.player
+
+            yield from rails.start_cutscene()
+            yield from rails.center_camera()
+
+            yield from wait_while(lambda: d2(self.brother.p, self.player.p) > 5 or self.brother.act is not None)
+
+            yield {self.brother: Say("Перестань.")}
+            yield {self.brother: Say("Я не могу взять тебя с собой.")}
+            yield {self.brother: Say("Иди домой.")}
+
+            self.player.traits.naivety += 1
+            self.player.traits.pain += 1
+            self.player.traits.curiosity += 1
+
+            self.brother.ai.composite[Follower].subject = self.mother
+            self.brother.ai.composite[Pather].going_to = self.mother.p
+            self.mother.ai.composite[Pather].going_to = rails.positions["brother_leaving_endpoint"]
+
+            yield from self.player.ai.wait_seconds(5)
+
+            yield from rails.end_cutscene()
+
+
     # # TODO this should be considered cutscene even though it does not enable cutscene mode
     # @Scene.new(lambda self: any(
     #     d2(e.p, self.positions.away) <= 3 for e in [self.characters.brother, self.characters.mother]
