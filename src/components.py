@@ -47,7 +47,6 @@ class GridContainer(Protocol):
 
 class Sentient(Positioned):
     ai: "Any"
-    senses: "Senses"
 
 class Killer(Protocol):
     last_killed: "list[Any]"
