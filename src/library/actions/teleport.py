@@ -13,6 +13,6 @@ from src.library.special.hades import Hades
 class Teleport(Action):
     destination: int2
 
-    def execute(self, actor: Entity, hades: Hades, genesis: Genesis):
+    def execute(self, actor, hades: Hades, genesis: Genesis):
         grid_set(actor.level.grids["physical"], actor.p, None)
         actor.level.put(self.destination, actor)

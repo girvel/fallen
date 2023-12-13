@@ -16,7 +16,7 @@ class CastFireStorm(Action, Aggressive):
     duration: int = 12
     power: int = 3
 
-    def execute(self, actor: Entity, hades: Hades, genesis: Genesis):
+    def execute(self, actor, hades: Hades, genesis: Genesis):
         for step in range(self.duration):
             r = (step + 1) * self.power
             fire_map = tcod.map.compute_fov(actor.level.transparency_cache, actor.p, r)
@@ -27,7 +27,7 @@ class CastFireStorm(Action, Aggressive):
 
             yield
 
-    def get_victims(self, actor: Entity) -> list[Entity]:
+    def get_victims(self, actor) -> list:
         r = self.duration * self.power
         fire_map = tcod.map.compute_fov(actor.level.transparency_cache, actor.p, r)
 

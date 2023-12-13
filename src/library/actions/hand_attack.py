@@ -13,8 +13,8 @@ from src.library.special.hades import Hades
 class HandAttack(Action, Aggressive):
     target: Entity  # never None, always exists
 
-    def execute(self, actor: Entity, hades: Hades, genesis: Genesis):
+    def execute(self, actor, hades: Hades, genesis: Genesis):
         attack(actor, self.target, hades)
 
-    def get_victims(self, actor: Entity) -> list[Entity]:
+    def get_victims(self, actor) -> list[Entity]:
         return [self.target]

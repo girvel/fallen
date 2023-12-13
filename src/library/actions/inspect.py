@@ -11,5 +11,5 @@ from src.library.special.hades import Hades
 class Inspect(Action):
     subject: Entity
 
-    def execute(self, actor: Entity, hades: Hades, genesis: Genesis):
+    def execute(self, actor, hades: Hades, genesis: Genesis):
         pass

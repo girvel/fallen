@@ -14,7 +14,7 @@ class Jump(Action):
     v: int2
     d: int
 
-    def execute(self, actor: Entity, hades: Hades, genesis: Genesis):
+    def execute(self, actor, hades: Hades, genesis: Genesis):
         if abs2(self.v) != 1:
             self.succeeded = False
             return

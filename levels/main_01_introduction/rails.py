@@ -269,55 +269,57 @@ class Rails(RailsBase):
             yield {self.brother: Leave()}
             rails.unlock_complex_ai(self.mother, rails.locks["mother_leaving"])
 
-    # def _is_player_killing_the_dog(self):
-    #     return self.characters.rabid_dog in (~Q(self.characters.player).last_killed or ())
-    #
-    # @Scene.new(lambda self: (
-    #     self.characters.player.health.amount.current <= 0
-    #     or self._is_player_killing_the_dog()
-    # ))
-    # def player_has_vision(self, scene):
-    #     scene.enabled = False
-    #
-    #     c = self.characters
-    #     p = self.positions
-    #     memory = c.player.ai.memory
-    #
-    #     p.vision_start = c.player.p
-    #
-    #     if self._is_player_killing_the_dog() or not exists(c.mother):
-    #         self.vision_version = VisionVersion.Continuous
-    #
-    #         self.girl_gives_flower.enabled = True
-    #     else:
-    #         self.vision_version = VisionVersion.Interrupted
-    #
-    #         if c.rabid_dog not in c.player.health.last_damaged_by:
-    #             self.dumbass_death = True
-    #
-    #     yield from self.start_cutscene()
-    #
-    #     if c.player.health.amount.current > 0:
-    #         yield from c.player.ai.wait_seconds(2)
-    #         yield {c.player: Say("Что-то не так.")}
-    #         yield {c.player: Say("Железный вкус на языке, зрение разошлось на две половины.", True)}
-    #         yield {c.player: Say("Ты пытаешься вдохнуть, но не можешь.", True)}
-    #
-    #     yield from c.player.ai.wait_seconds(2)
-    #     memory.is_vision_disabled = True
-    #     yield from c.player.ai.wait_seconds(2)
-    #
-    #     c.player.health.amount.reset_to_max()
-    #
-    #     self.vision_level = self.ms.add(Level(self.ms, Path("levels/vision"), False, self.genesis))
-    #     self.vision_level.rails.parent_level = c.player.level
-    #     yield from self.plane_shift(self.vision_level, p.vision_shift)
-    #
-    #     if self.vision_version == VisionVersion.Interrupted:
-    #         self.locks.mother_taking_care = self.lock_complex_ai(c.mother)
-    #         yield {c.mother: Teleport(p.mother_reappearance)}
-    #
-    #
+    @Scene.new()
+    class player_has_vision:
+        player: Annotated[Player, keep_ai]
+        rabid_dog: Annotated[RabidDog, maybe_exists]
+        mother: Annotated[Mother, maybe_exists]
+
+        def _is_player_killing_the_dog(self):
+            return self.rabid_dog in (~Q(self.player).last_killed or ())
+
+        def start_predicate(self, rails: "Rails"):
+            return (
+                self.player.health.amount.current <= 0
+                or self._is_player_killing_the_dog()
+            )
+
+        def run(self, rails: "Rails"):
+            rails.positions["vision_start"] = self.player.p
+
+            if self._is_player_killing_the_dog() or not exists(self.mother):
+                rails.vision_version = VisionVersion.Continuous
+
+                rails.girl_gives_flower.enabled = True
+            else:
+                rails.vision_version = VisionVersion.Interrupted
+
+                if self.rabid_dog not in self.player.health.last_damaged_by:
+                    rails.dumbass_death = True
+
+            yield from rails.start_cutscene()
+
+            if self.player.health.amount.current > 0:
+                yield from self.player.ai.wait_seconds(2)
+                yield {self.player: Say("Что-то не так.")}
+                yield {self.player: Say("Железный вкус на языке, зрение разошлось на две половины.", True)}
+                yield {self.player: Say("Ты пытаешься вдохнуть, но не можешь.", True)}
+
+            yield from self.player.ai.wait_seconds(2)
+            self.player.ai.memory.is_vision_disabled = True
+            yield from self.player.ai.wait_seconds(2)
+
+            self.player.health.amount.reset_to_max()
+
+            rails.vision_level = rails.ms.add(Level(rails.ms, Path("levels/vision"), False, rails.genesis))
+            rails.vision_level.rails.parent_level = self.player.level
+            yield from rails.plane_shift(rails.vision_level, rails.positions["vision_shift"])
+
+            if rails.vision_version == VisionVersion.Interrupted:
+                rails.locks["mother_taking_care"] = rails.lock_complex_ai(self.mother)
+                yield {self.mother: Teleport(rails.positions["mother_reappearance"])}
+
+
     # @Scene.new(enabled=False)
     # def player_wakes_up_1(self, scene):
     #     c = self.characters
@@ -394,32 +396,35 @@ class Rails(RailsBase):
     #     yield {c.girl: Leave()}
     #
     #     yield from self.end_cutscene()
-    #
-    #
-    # @Scene.new(lambda self: any(
-    #     victim.character == Frog.character
-    #     for victim in (~Q(self.characters.player.act)[Aggressive].get_victims(self.characters.player) or ())
-    # ))
-    # def player_attacks_frog(self, scene):
-    #     c = self.characters
-    #
-    #     scene.enabled = False
-    #
-    #     c.player.traits.brutality += 1
-    #
-    #     yield from self.start_cutscene()
-    #     yield from self.center_camera()
-    #
-    #     if self.vision_version == VisionVersion.NotYetEnded:
-    #         yield {c.player: Say("Нет, этого недостаточно.")}
-    #     else:
-    #         yield {c.player: Say("Хм.")}
-    #
-    #     yield from self.end_cutscene()
-    #
-    #     self.player_attacks_frog_again.enabled = True
-    #
-    #
+
+
+    @Scene.new()
+    class player_attacks_frog:
+        player: Annotated[Player, keep_ai]
+
+        def start_predicate(self, rails: "Rails"):
+            return any(
+                isinstance(victim, Frog)
+                for victim in (~Q(self.player.act)[Aggressive].get_victims(self.player) or ())
+            )
+
+        def run(self, rails: "Rails"):
+            self.player.traits.brutality += 1
+
+            yield from rails.start_cutscene()
+            yield from rails.center_camera()
+
+            if rails.vision_version == VisionVersion.Undefined:
+                yield {self.player: Say("Нет, этого недостаточно.")}
+            else:
+                yield {self.player: Say("Хм.")}
+
+            yield from rails.end_cutscene()
+
+            # TODO NEXT
+            # rails.player_attacks_frog_again.enabled = True
+
+
     # @Scene.new(
     #     lambda self: any(
     #         victim.character == Frog.character

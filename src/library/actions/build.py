@@ -15,6 +15,6 @@ class Build(Action):
     p: int2
     entity_factory: EntityFactory
 
-    def execute(self, actor: Entity, hades: Hades, genesis: Genesis):
+    def execute(self, actor, hades: Hades, genesis: Genesis):
         if grid_get(actor.level.grids["physical"], self.p) is not None: return
         genesis.entities_to_create.add(self.entity_factory(p=self.p, level=actor.level))

@@ -7,5 +7,5 @@ from src.library.special.hades import Hades
 
 @dataclass
 class NoAction(Action):
-    def execute(self, actor: Entity, hades: Hades, genesis: Genesis):
+    def execute(self, actor, hades: Hades, genesis: Genesis):
         pass

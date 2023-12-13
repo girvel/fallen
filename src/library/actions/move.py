@@ -15,7 +15,7 @@ from src.lib.vector.grid import grid_set, grid_get
 class Move(Action):
     v: int2
 
-    def execute(self, actor: Entity, hades: Hades, genesis: Genesis):
+    def execute(self, actor, hades: Hades, genesis: Genesis):
         if abs2(self.v) != 1 or actor.layer != "physical":
             self.succeeded = False
             return

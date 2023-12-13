@@ -9,7 +9,7 @@ from src.library.special.hades import Hades
 
 @dataclass
 class Leave(Action):
-    def execute(self, actor: Entity, hades: Hades, genesis: Genesis):
+    def execute(self, actor, hades: Hades, genesis: Genesis):
         if hasattr(actor, "on_death"):
             del actor.on_death
             # TODO investigate why this causes an error

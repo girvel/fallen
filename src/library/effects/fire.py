@@ -18,8 +18,9 @@ class Fire(Material):
 
     boring_flag = None
 
-    def __post_init__(self, half_life=float('inf'), heat=5):
+    def __post_init__(self, half_life=float('inf'), heat=5, parent=None):
         self.weapon = Weapon(heat, damage_kind.fire)
         self.ai = StaticAi(lambda subject, _: SplashAttack(subject.p, 0))
         self.death_chance = death_chance_from_half_life(half_life)
         self.faction = None if half_life == float('inf') else Faction.Disasters
+        self.parent = parent

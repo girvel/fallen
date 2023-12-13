@@ -17,7 +17,7 @@ class CastFireFlow(Action, Aggressive):
     v: int2
     length: int = 18
 
-    def execute(self, actor: Entity, hades: Hades, genesis: Genesis) -> None:
+    def execute(self, actor, hades: Hades, genesis: Genesis) -> None:
         for dp, k in self._pattern():
             p = add2(dp, actor.p)
 
@@ -35,7 +35,7 @@ class CastFireFlow(Action, Aggressive):
                     (1 - dv / self.length) * (1 - abs(du) / r)
                 )
 
-    def get_victims(self, actor: Entity) -> list[Entity]:
+    def get_victims(self, actor) -> list[Entity]:
         return [
             victim
             for dp, _ in self._pattern()

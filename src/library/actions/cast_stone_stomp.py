@@ -16,7 +16,7 @@ from src.lib.vector.grid import grid_get
 class CastStoneStomp(Action):
     v: int2
 
-    def execute(self, actor: Entity, hades: Hades, genesis: Genesis):
+    def execute(self, actor, hades: Hades, genesis: Genesis):
         length = 13
         for dv in range(0, length):
             for du in range(-dv, dv + 1):
