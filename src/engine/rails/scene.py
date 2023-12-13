@@ -27,18 +27,23 @@ class Scene:
     enabled: bool
     reoccurring: bool
     priority: Priority
+    timeout: int
 
     _definition: "SceneDefinition"
     _characters_required: list["CharacterRequirement"]
 
     @classmethod
-    def new(cls, *, enabled: bool = True, reoccurring: bool = False, priority: Priority = Priority.script):
+    def new(cls, *,
+        enabled: bool = True, reoccurring: bool = False, priority: Priority = Priority.script,
+        timeout: int = 5_000,
+    ):
         def decorator(definition_class: type[SceneDefinition]) -> "Scene":
             return cls(
                 name=definition_class.__name__,
                 enabled=enabled,
                 reoccurring=reoccurring,
                 priority=priority,
+                timeout=timeout,
                 _definition=definition_class(),
                 _characters_required=[
                     CharacterRequirement.from_annotation(name, annotation)
