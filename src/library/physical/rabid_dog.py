@@ -7,7 +7,7 @@ from src.engine.language.name import Name
 from src.engine.output.colors import magenta, ColorPair
 from src.library.abstract.material import Material
 from src.library.ais.rabid_ai import RabidAi
-from src.library.tiles.body import body_factory
+from src.library.tiles.body import generate_body_factory
 
 
 class RabidDog(Material):
@@ -34,4 +34,4 @@ class RabidDog(Material):
         self.ai = RabidAi()
         self.senses = Senses(10, 0, 5)
 
-        self.on_death = body_factory
+        self.on_death = generate_body_factory(self)

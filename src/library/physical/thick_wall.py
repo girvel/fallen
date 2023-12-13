@@ -22,6 +22,5 @@ class ThickWall(Material):
     def __post_init__(self):
         self.health = Health(random.randrange(5000, 10001, 500), armor_kind.stone)
 
-    def on_death(_, self, _hades: Hades, genesis: Genesis):  # TODO review this pattern. Can I do better?
+    def on_death(self, _hades: Hades, genesis: Genesis):
         genesis.entities_to_create.add(Ruins(p=self.p, level=self.level))
-        return True

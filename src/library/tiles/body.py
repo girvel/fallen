@@ -26,14 +26,15 @@ class Body(Material):
         self.items = items or []
 
 
-def body_factory(base: Any, _hades: Hades, genesis: Genesis) -> bool:
-    items = []
+def generate_body_factory(base: Any):
+    def result(_hades: Hades, genesis: Genesis) -> bool:
+        items = []
 
-    if hasattr(base, "weapon"):
-        items.append(base.weapon)
+        if hasattr(base, "weapon"):
+            items.append(base.weapon)
 
-    genesis.entities_to_create.add(Body(
-        base.name, items=items, sex=~Q(base).sex, p=base.p, level=base.level
-    ))
+        genesis.entities_to_create.add(Body(
+            base.name, items=items, sex=~Q(base).sex, p=base.p, level=base.level
+        ))
 
-    return True
+    return result

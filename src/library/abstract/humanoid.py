@@ -2,7 +2,7 @@ from src.engine.acting.damage import Weapon
 from src.engine.ai import Senses
 from src.lib.toolkit import assert_attributes
 from src.library.abstract.material import Material
-from src.library.tiles.body import body_factory
+from src.library.tiles.body import generate_body_factory
 
 required_attributes = "character, sex, name, health".split(", ")
 
@@ -20,7 +20,7 @@ class Humanoid(Material):
         self.skill = {}
         self.weapon = Weapon(1, "Crushing")
 
-        self.on_death = body_factory
+        self.on_death = generate_body_factory(self)
 
         super().__init__(**kwargs)
 

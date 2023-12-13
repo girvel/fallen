@@ -29,4 +29,4 @@ class Player(Humanoid):
         self.traits = Traits()
         self.inventory = Inventory()
 
-        self.on_death = lambda *_, **__: None
+        self.on_death = lambda *_, **__: True

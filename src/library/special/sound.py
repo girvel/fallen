@@ -5,7 +5,9 @@ from src.library.abstract.material import Material
 class Sound(Material):
     name = Name("Звук")
     layer = 'sounds'
+
     sound_flag = None
+    boring_flag = None
 
     def __post_init__(self, parent, content, is_internal, idea):
         self.parent = parent  # TODO change convention: parent -> creator?

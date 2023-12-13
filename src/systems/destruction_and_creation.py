@@ -11,16 +11,15 @@ sequence = []
 @sequence.append
 def destruction(hades: Destructor, genesis: Creator, ms: MetasystemFacade):
     for e in hades.entities_to_destroy:
+        if hasattr(e, "on_death") and e.on_death(hades, genesis):
+            continue
+
         if (level := ~Q(e).level) is not None:
             grid_set(level.grids[e.layer], e.p, None)
 
-        if hasattr(e, "on_death"):
-            if e.on_death(e, hades, genesis):
-                ms.remove(e)
-        else:
-            ms.remove(e)
+        ms.remove(e)
 
-        if not hasattr(e, "sound_flag") and not hasattr(e, "boring_flag"):
+        if not hasattr(e, "boring_flag"):
             logging.info(f'-"{~Q(e).name or e}"')
 
     hades.entities_to_destroy.clear()
@@ -36,7 +35,7 @@ def creation(hades: Destructor, genesis: Creator, ms: MetasystemFacade):
             e.level.put(e.p, e)
 
         ms.add(e)
-        if not hasattr(e, "sound_flag") and not hasattr(e, "boring_flag"):
+        if not hasattr(e, "boring_flag"):
             logging.info(f'+"{~Q(e).name or e}"')
 
     genesis.entities_to_create.clear()
