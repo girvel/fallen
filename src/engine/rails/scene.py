@@ -1,4 +1,5 @@
 from dataclasses import dataclass
+from enum import Enum
 from typing import get_type_hints, TypeVar, Any, TypeGuard, Protocol, TYPE_CHECKING, get_origin, Annotated, get_args
 
 from ecs import exists
@@ -14,40 +15,10 @@ keep_ai = object()
 maybe_exists = object()
 
 
-@dataclass
-class CharacterRequirement:
-    name: str
-    python_type: type
-
-    needs_ai_lock: bool
-    has_to_exist: bool
-
-    @classmethod
-    def from_annotation(cls, name: str, annotation: type):
-        if get_origin(annotation) == Annotated:
-            python_type, *args = get_args(annotation)
-        else:
-            python_type = annotation
-            args = []
-
-        return cls(
-            name=name,
-            python_type=python_type,
-            needs_ai_lock=keep_ai not in args,
-            has_to_exist=maybe_exists not in args,
-        )
-
-    def matches(self, instance, rails: "RailsBase"):
-        return (
-            isinstance(instance, self.python_type) and
-            (not self.has_to_exist or exists(instance)) and
-            (instance.level == rails.level)
-        )
-
-
-class SceneDefinition(Protocol):
-    def run(self, rails: "RailsBase") -> Script:
-        ...
+class Priority(Enum):
+    script = 0  # scripts do not block other scenes
+    sideline = 1
+    mainline = 2
 
 
 @dataclass(eq=False)
@@ -55,17 +26,19 @@ class Scene:
     name: str
     enabled: bool
     reoccurring: bool
+    priority: Priority
 
-    _definition: SceneDefinition
-    _characters_required: list[CharacterRequirement]
+    _definition: "SceneDefinition"
+    _characters_required: list["CharacterRequirement"]
 
     @classmethod
-    def new(cls, enabled: bool = True, reoccurring: bool = False):
+    def new(cls, *, enabled: bool = True, reoccurring: bool = False, priority: Priority = Priority.script):
         def decorator(definition_class: type[SceneDefinition]) -> "Scene":
             return cls(
                 name=definition_class.__name__,
                 enabled=enabled,
                 reoccurring=reoccurring,
+                priority=priority,
                 _definition=definition_class(),
                 _characters_required=[
                     CharacterRequirement.from_annotation(name, annotation)
@@ -106,3 +79,40 @@ class Scene:
 
         for character, lock in locks:
             rails.unlock_complex_ai(character, lock)
+
+
+
+@dataclass
+class CharacterRequirement:
+    name: str
+    python_type: type
+
+    needs_ai_lock: bool
+    has_to_exist: bool
+
+    @classmethod
+    def from_annotation(cls, name: str, annotation: type):
+        if get_origin(annotation) == Annotated:
+            python_type, *args = get_args(annotation)
+        else:
+            python_type = annotation
+            args = []
+
+        return cls(
+            name=name,
+            python_type=python_type,
+            needs_ai_lock=keep_ai not in args,
+            has_to_exist=maybe_exists not in args,
+        )
+
+    def matches(self, instance, rails: "RailsBase"):
+        return (
+            isinstance(instance, self.python_type) and
+            (not self.has_to_exist or exists(instance)) and
+            (instance.level == rails.level)
+        )
+
+
+class SceneDefinition(Protocol):
+    def run(self, rails: "RailsBase") -> Script:
+        ...

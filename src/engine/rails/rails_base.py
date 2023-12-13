@@ -7,13 +7,13 @@ from ecs import Entity
 
 from src.engine.language.name import Name
 from src.engine.rails.rails_api import RailsApi, Script
-from src.engine.rails.scene import Scene
+from src.engine.rails.scene import Scene, Priority
 from src.lib.toolkit import assert_attributes
 
 
 @dataclass
 class SceneRun:
-    name: str
+    base: Scene
     generator: Script
 
 
@@ -28,13 +28,15 @@ class RailsBase(RailsApi, Entity, metaclass=ABCMeta):
         self.__post_init__()
         assert_attributes(self, ["characters"])
 
-        self.scenes = [
-            scene
-            for scene in vars(type(self)).values()
-            if isinstance(scene, Scene)
-        ]
+        self.scenes = list(sorted(
+            (scene
+             for scene in vars(type(self)).values()
+             if isinstance(scene, Scene)),
+            key=lambda scene: -scene.priority.value
+        ))
 
         self.current_scenes: list[SceneRun] = []
+        self.in_cutscene = False
 
         logging.info(f"Initialized rails with scenes {[s.name for s in self.scenes]}")
 
@@ -47,9 +49,12 @@ class RailsBase(RailsApi, Entity, metaclass=ABCMeta):
 
     def get_effect(self):
         for scene in self.scenes:
-            if scene.start_predicate(self):
-                self.current_scenes.append(SceneRun(scene.name, scene.run(self)))
+            if (not self.in_cutscene or scene.priority.value == 0) and scene.start_predicate(self):
+                self.current_scenes.append(SceneRun(scene, scene.run(self)))
                 logging.info(f"Starting the scene {scene.name}")
+
+                if scene.priority is not None:
+                    self.in_cutscene = True
 
         total_effect = {}
         stop_signal = object()
@@ -59,6 +64,9 @@ class RailsBase(RailsApi, Entity, metaclass=ABCMeta):
                 total_effect |= effect or {}
             else:
                 self.current_scenes.remove(scene_run)
-                logging.info(f"Ending the scene {scene_run.name}")
+                logging.info(f"Ending the scene {scene_run.base.name}")
+
+                if scene_run.base.priority.value != 0:
+                    self.in_cutscene = False
 
         return total_effect

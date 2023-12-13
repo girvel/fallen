@@ -11,7 +11,7 @@ from src.engine.acting.aggressive import Aggressive
 from src.engine.acting.damage import Weapon
 from src.engine.acting import damage_kind
 from src.engine.rails.rails_base import RailsBase
-from src.engine.rails.scene import Scene, keep_ai, maybe_exists
+from src.engine.rails.scene import Scene, keep_ai, maybe_exists, Priority
 from src.lib import vector
 from src.lib.concurrency import wait_for, wait_while
 from src.lib.query import Q
@@ -84,7 +84,7 @@ class Rails(RailsBase):
         }
 
 
-    @Scene.new()
+    @Scene.new(priority=Priority.mainline)
     class introduction:
         mother: Mother
         brother: Annotated[Brother, keep_ai]
@@ -214,7 +214,7 @@ class Rails(RailsBase):
             self.brother.ai.composite[Pather].going_to = rails.positions["brother_leaving_endpoint"]
 
 
-    @Scene.new()
+    @Scene.new(priority=Priority.mainline)
     class brother_stops_player:
         brother: Annotated[Brother, keep_ai]
         mother: Annotated[Mother, maybe_exists]
@@ -269,7 +269,7 @@ class Rails(RailsBase):
             yield {self.brother: Leave()}
             rails.unlock_complex_ai(self.mother, rails.locks["mother_leaving"])
 
-    @Scene.new()
+    @Scene.new(priority=Priority.mainline)
     class player_has_vision:
         player: Annotated[Player, keep_ai]
         rabid_dog: Annotated[RabidDog, maybe_exists]
@@ -398,7 +398,7 @@ class Rails(RailsBase):
     #     yield from self.end_cutscene()
 
 
-    @Scene.new()
+    @Scene.new(priority=Priority.sideline)
     class player_attacks_frog:
         player: Annotated[Player, keep_ai]
 
