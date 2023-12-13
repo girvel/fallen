@@ -5,6 +5,7 @@ from pathlib import Path
 import yaml
 from ecs import Entity
 
+from src.engine.acting.damage_kind import DamageKind
 from src.engine.parenting import iter_parenting_stack
 from src.lib.limited import Limited
 from src.lib.query import Q
@@ -29,7 +30,7 @@ class Health:
         self.last_damaged_by = []
 
 
-def attack(source: Entity, target: Entity, hades: Hades):
+def attack(source, target, hades: Hades):
     if (weapon := ~Q(source).weapon) is None: return
 
     return inflict_damage(
@@ -47,7 +48,7 @@ def potential_damage(source) -> int:
 
 
 def inflict_damage(
-    target, power: float, damage_kind: str, hades: Hades, source: Entity
+    target, power: float, damage_kind: DamageKind, hades: Hades, source
 ):
     if (health := ~Q(target).health) is None: return
 
@@ -62,7 +63,8 @@ def inflict_damage(
 
     if not hasattr(target, "boring_flag"):
         logging.info(
-            f"Damage to {target.name}: {total_damage} = {power} * {modifier} ({damage_kind} on {health.armor_kind})"
+            f"Damage to {target.name}: {total_damage} = {power} * {modifier} "
+            f"({damage_kind.name} on {health.armor_kind.name})"
         )
 
     health.amount.move(-total_damage)
