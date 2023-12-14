@@ -65,9 +65,7 @@ class RailsApi:
         yield
         if hasattr(entity, "after_load"): entity.after_load(entity.level)
 
-    def lock_complex_ai(self, entity) -> object | None:
-        if hasattr(entity.ai, "cutscene_aware_flag"): return
-
+    def lock_complex_ai(self, entity, lock) -> object | None:
         if entity not in self._ai_storage:
             self._ai_storage[entity] = entity.ai
             self._ai_locks[entity] = []
@@ -77,13 +75,10 @@ class RailsApi:
 
         entity.ai.clear()
 
-        lock = object()
         self._ai_locks[entity].append(lock)
         return lock
 
     def unlock_complex_ai(self, entity, lock: object | None) -> None:
-        if lock is None: return
-
         self._ai_locks[entity].remove(lock)
 
         if len(self._ai_locks[entity]) == 0:
@@ -94,3 +89,11 @@ class RailsApi:
     def notify(self, notification: Notification):
         self.get_player().ai.memory.notification_queue.append(notification)
         yield
+
+
+@dataclass(eq=False)
+class Lock:
+    info: Any = None
+
+    def __eq__(self, other):
+        return self is other

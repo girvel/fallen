@@ -10,6 +10,7 @@ from levels.main_01_introduction.library.physical.mother import Mother
 from src.engine.acting.aggressive import Aggressive
 from src.engine.acting.damage import Weapon
 from src.engine.acting import damage_kind
+from src.engine.rails.rails_api import Lock
 from src.engine.rails.rails_base import RailsBase
 from src.engine.rails.scene import Scene, keep_ai, maybe_exists, Priority
 from src.lib.vector import vector
@@ -91,7 +92,7 @@ class Rails(RailsBase):
         player: Annotated[Player, keep_ai]
 
         def run(self, rails: "Rails"):
-            rails.locks['mother_leaving'] = rails.lock_complex_ai(self.mother)
+            rails.locks['mother_leaving'] = rails.lock_complex_ai(self.mother, Lock(rails.introduction))
 
             yield from wait_while(lambda: ~Q(self.player).ai is None)
 
@@ -255,6 +256,7 @@ class Rails(RailsBase):
             yield from rails.end_cutscene()
 
 
+    @Scene.new()
     class brother_leaves:
         brother: Brother
         mother: Annotated[Mother, maybe_exists]
@@ -315,7 +317,7 @@ class Rails(RailsBase):
             yield from rails.plane_shift(rails.vision_level, rails.positions["vision_shift"])
 
             if rails.vision_version == VisionVersion.Interrupted:
-                rails.locks["mother_taking_care"] = rails.lock_complex_ai(self.mother)
+                rails.locks["mother_taking_care"] = rails.lock_complex_ai(self.mother, Lock(rails.player_has_vision))
                 yield {self.mother: Teleport(rails.positions["mother_reappearance"])}
 
 
@@ -468,7 +470,8 @@ class Rails(RailsBase):
 
             yield from wait_finish(self.mother)
             if rails.dumbass_death:
-                yield {self.mother: Say("Кстати, это было глупо.")}
+                yield {self.mother: Say("С твоей стороны это было глупо.")}
+                yield {self.mother: Say("Будь поаккуратнее, ладно?")}
 
             yield from rails.end_cutscene()
 

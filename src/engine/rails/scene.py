@@ -4,7 +4,7 @@ from typing import get_type_hints, TypeVar, Any, TypeGuard, Protocol, TYPE_CHECK
 
 from ecs import exists
 
-from src.engine.rails.rails_api import Script
+from src.engine.rails.rails_api import Script, Lock
 from src.lib.query import Q
 
 if TYPE_CHECKING:
@@ -75,11 +75,12 @@ class Scene:
         if not self.reoccurring: self.enabled = False
 
         locks = [
-            (character, rails.lock_complex_ai(character))
+            (character, rails.lock_complex_ai(character, Lock(self)))
             for requirement in self._characters_required
             if requirement.needs_ai_lock
             and (character_or_list := getattr(self._definition, requirement.name)) is not None
             for character in (character_or_list if isinstance(character_or_list, list) else [character_or_list])
+            if not hasattr(~Q(character).ai, "cutscene_aware_flag")
         ]
 
         yield from self._definition.run(rails)
