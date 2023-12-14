@@ -76,8 +76,9 @@ class Scene:
         locks = [
             (character, rails.lock_complex_ai(character))
             for requirement in self._characters_required
-            if (character := getattr(self._definition, requirement.name)) is not None
-            and requirement.needs_ai_lock
+            if requirement.needs_ai_lock
+            and (character_or_list := getattr(self._definition, requirement.name)) is not None
+            for character in (character_or_list if isinstance(character_or_list, list) else [character_or_list])
         ]
 
         yield from self._definition.run(rails)
@@ -111,11 +112,18 @@ class CharacterRequirement:
         )
 
     def matches(self, instance, rails: "RailsBase"):
+        return self._matches(instance, rails, self.python_type)
+
+    def _matches(self, instance, rails, type_override):
+        if get_origin(type_override) is list:
+            return all(self._matches(element, rails, get_args(type_override)[0]) for element in instance)
+
         return (
-            isinstance(instance, self.python_type) and
+            isinstance(instance, type_override) and
             (not self.has_to_exist or exists(instance)) and
             (instance.level == rails.level)
         )
+
 
 
 class SceneDefinition(Protocol):

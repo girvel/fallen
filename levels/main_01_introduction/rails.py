@@ -84,7 +84,7 @@ class Rails(RailsBase):
         }
 
 
-    @Scene.new(priority=Priority.mainline)
+    # @Scene.new(priority=Priority.mainline)
     class introduction:
         mother: Mother
         brother: Brother
