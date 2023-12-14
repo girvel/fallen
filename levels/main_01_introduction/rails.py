@@ -87,7 +87,7 @@ class Rails(RailsBase):
     @Scene.new(priority=Priority.mainline)
     class introduction:
         mother: Mother
-        brother: Annotated[Brother, keep_ai]
+        brother: Brother
         player: Annotated[Player, keep_ai]
 
         def run(self, rails: "Rails"):
@@ -216,9 +216,9 @@ class Rails(RailsBase):
 
     @Scene.new(priority=Priority.mainline)
     class brother_stops_player:
-        brother: Annotated[Brother, keep_ai]
+        brother: Brother
         mother: Annotated[Mother, maybe_exists]
-        player: Annotated[Player, keep_ai]
+        player: Player
 
         def start_predicate(self, rails: "Rails"):
             return (
@@ -255,10 +255,8 @@ class Rails(RailsBase):
             yield from rails.end_cutscene()
 
 
-    # TODO this should be considered cutscene even though it does not enable cutscene mode
-    @Scene.new()
     class brother_leaves:
-        brother: Annotated[Brother, keep_ai]
+        brother: Brother
         mother: Annotated[Mother, maybe_exists]
 
         def start_predicate(self, rails: "Rails"):
@@ -269,9 +267,10 @@ class Rails(RailsBase):
             yield {self.brother: Leave()}
             rails.unlock_complex_ai(self.mother, rails.locks["mother_leaving"])
 
+
     @Scene.new(priority=Priority.mainline)
     class player_has_vision:
-        player: Annotated[Player, keep_ai]
+        player: Player
         rabid_dog: Annotated[RabidDog, maybe_exists]
         mother: Annotated[Mother, maybe_exists]
 
@@ -400,7 +399,7 @@ class Rails(RailsBase):
 
     @Scene.new(priority=Priority.sideline)
     class player_attacks_frog:
-        player: Annotated[Player, keep_ai]
+        player: Player
 
         def start_predicate(self, rails: "Rails"):
             return any(
@@ -413,6 +412,8 @@ class Rails(RailsBase):
 
             yield from rails.start_cutscene()
             yield from rails.center_camera()
+
+            yield from self.player.ai.wait_seconds(1)
 
             if rails.vision_version == VisionVersion.Undefined:
                 yield {self.player: Say("Нет, этого недостаточно.")}

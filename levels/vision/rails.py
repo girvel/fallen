@@ -28,33 +28,38 @@ from src.lib.vector.vector import add2, right, mul2
 
 
 class Rails(RailsBase):
-    parent_level: Optional[Level]
+    parent_level: Level | None
 
     def __post_init__(self):
-        self.characters = Entity(
-            soldiers=list(self.level.find(Soldier)),
-            kaledeii=next(self.level.find(Kaledeii)),
-            bishop=next(self.level.find(LordBishop)),
-            enemy=None,
-        )
+        self.characters = {
+            'soldiers': list(self.level.find(Soldier)),
+            'kaledeii': next(self.level.find(Kaledeii)),
+            'bishop': next(self.level.find(LordBishop)),
+            'enemy': None
+        }
 
-        self.positions = Entity(
-            entrance=(87, 17),
-            kaledeii_entrance=(16, 17),
-            fortification_positions=[
-                (74, 17), (75, 17), (76, 17), (76, 18), (76, 16),
-            ],
-            before_the_throne=(147, 17),
-            observing_the_throne=(132, 19),
-            observing_the_entrance=(96, 18),
-            enemy_appearance=(0, 17),
-            enemy_attack=(68, 17),
-        )
-
-        self.quests = Entity()
+        self.positions = {
+            'entrance': (87, 17),
+            'kaledeii_entrance': (16, 17),
+            'fortification_positions': [(74, 17), (75, 17), (76, 17), (76, 18), (76, 16), ],
+            'before_the_throne': (147, 17),
+            'observing_the_throne': (132, 19),
+            'observing_the_entrance': (96, 18),
+            'enemy_appearance': (0, 17),
+            'enemy_attack': (68, 17)
+        }
 
 
     @Scene.new()
+    class start_vision:
+
+
+        def start_predicate(self, rails: "Rails"):
+            raise NotImplementedError
+
+        def run(self, rails: "Rails"):
+            raise NotImplementedError
+
     def start_vision(self, scene):
         self.characters.player = self.get_player()
 

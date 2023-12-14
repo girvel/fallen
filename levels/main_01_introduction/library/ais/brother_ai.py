@@ -20,6 +20,8 @@ class BrotherAi(DummyAi):
         "{}, кстати, мы расстаёмся.",
     ]
 
+    cutscene_aware_flag = None
+
     def __init__(self):
         self.said_bye_to = set()
         self.speech_enabled = False

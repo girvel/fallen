@@ -77,7 +77,9 @@ class RailsApi:
         yield
         if hasattr(entity, "after_load"): entity.after_load(entity.level)
 
-    def lock_complex_ai(self, entity) -> object:
+    def lock_complex_ai(self, entity) -> object | None:
+        if hasattr(entity.ai, "cutscene_aware_flag"): return
+
         if entity not in self._ai_storage:
             self._ai_storage[entity] = entity.ai
             self._ai_locks[entity] = []
@@ -91,7 +93,9 @@ class RailsApi:
         self._ai_locks[entity].append(lock)
         return lock
 
-    def unlock_complex_ai(self, entity, lock) -> None:
+    def unlock_complex_ai(self, entity, lock: object | None) -> None:
+        if lock is None: return
+
         self._ai_locks[entity].remove(lock)
 
         if len(self._ai_locks[entity]) == 0:
