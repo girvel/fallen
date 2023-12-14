@@ -6,10 +6,15 @@ from src.lib.vector.grid import grid_get
 
 
 class Rails(RailsBase):
-    @Scene.new()
-    def the_scene(self, scene):
-        wall = grid_get(self.level.grids["physical"], (0, 0))
-        wall.do_rails_work = True
+    def __post_init__(self):
+        self.characters = {}
 
-        wall.ai = DummyAi()
-        yield {wall: NoAction()}
+    # TODO test more functionality (characters, tags, lists of characters)
+    @Scene.new()
+    class the_scene:
+        def run(self, rails: "Rails"):
+            wall = grid_get(rails.level.grids["physical"], (0, 0))
+            wall.do_rails_work = True
+
+            wall.ai = DummyAi()
+            yield {wall: NoAction()}
