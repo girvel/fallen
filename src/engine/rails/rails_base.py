@@ -37,7 +37,7 @@ class RailsBase(RailsApi, Entity, metaclass=ABCMeta):
         ))
 
         self.current_scenes: list[SceneRun] = []
-        self.in_cutscene = False
+        self.current_cutscene: SceneRun | None = None
 
         logging.info(f"Initialized rails with scenes {[s.name for s in self.scenes]}")
 
@@ -50,12 +50,13 @@ class RailsBase(RailsApi, Entity, metaclass=ABCMeta):
 
     def get_effect(self):
         for scene in self.scenes:
-            if (not self.in_cutscene or scene.priority.value == 0) and scene.start_predicate(self):
-                self.current_scenes.append(SceneRun(scene, scene.run(self)))
+            if (self.current_cutscene is None or scene.priority.value == 0) and scene.start_predicate(self):
+                run = SceneRun(scene, scene.run(self))
+                self.current_scenes.append(run)
                 logging.info(f"Starting the scene {scene.name}")
 
                 if scene.priority is not None:
-                    self.in_cutscene = True
+                    self.current_cutscene = run
 
         total_effect = {}
         stop_signal = object()
@@ -73,8 +74,8 @@ class RailsBase(RailsApi, Entity, metaclass=ABCMeta):
                 self.current_scenes.remove(scene_run)
                 logging.info(f"Ending the scene {scene_run.base.name}")
 
-                if scene_run.base.priority.value != 0:
-                    self.in_cutscene = False
+                if self.current_cutscene is scene_run:
+                    self.current_cutscene = None
 
         return total_effect
 

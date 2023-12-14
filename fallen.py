@@ -23,6 +23,7 @@ def main(
     no_render: bool = False,
     no_rails: bool = False,
     no_fixed_fps: bool = False,
+    skip_cutscenes: str = "",
     pause_for_debugger: bool = False,
     level_path: str = "levels/main_01_introduction",
     god_vision: bool = False,
@@ -36,6 +37,7 @@ def main(
         no_render: whether to disable render
         no_rails: disable level's rails
         no_fixed_fps: disable fixed FPS
+        skip_cutscenes: comma-separated list of cutscenes to skip
         pause_for_debugger: wait for 'Enter' key (useful for debugger connection)
         level_path: level folder's full path
         god_vision: whether player sees everything
@@ -74,6 +76,7 @@ def main(
         player.ai = IO(
             stdscr, debug_track=track, debug_mode=debug_mode,
             is_render_enabled=not no_render, is_fps_fixed=not no_fixed_fps,
+            skipped_cutscenes=skip_cutscenes.split(','),
         )
 
         if god_vision:

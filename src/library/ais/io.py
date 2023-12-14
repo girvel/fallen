@@ -37,6 +37,7 @@ class Memory:
 
     in_cutscene: bool = False
     is_skipping: bool = False
+    cutscenes_to_skip: list[str] = field(default_factory=list)
     is_vision_disabled: bool = False
 
     _quests: list[Quest] = field(default_factory=list)
@@ -70,13 +71,14 @@ class IO(Entity):  # TODO redo as composite AI?
 
     tps = 10
 
-    def __init__(self, stdscr, debug_track, debug_mode, is_render_enabled, is_fps_fixed):
+    def __init__(self, stdscr, debug_track, debug_mode, is_render_enabled, is_fps_fixed, skipped_cutscenes):
         self.debug_mode = debug_mode
 
         self.output = Output(self, stdscr, is_render_enabled)
         self.input = Input(self, stdscr, debug_track)
 
         self.memory = Memory()
+        self.memory.cutscenes_to_skip = skipped_cutscenes
         self.dummy = DummyAi()
 
         self.is_fps_fixed = is_fps_fixed
