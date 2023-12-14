@@ -7,6 +7,7 @@ from pathlib import Path
 from typing import Optional
 
 import fire
+from ecs import exists
 
 from src.engine import permanent_storage
 from src.engine.input.hotkeys import GameEnd
@@ -37,7 +38,7 @@ def main(
         no_render: whether to disable render
         no_rails: disable level's rails
         no_fixed_fps: disable fixed FPS
-        skip_cutscenes: comma-separated list of cutscenes to skip
+        skip_cutscenes: `:`-separated list of cutscenes to skip
         pause_for_debugger: wait for 'Enter' key (useful for debugger connection)
         level_path: level folder's full path
         god_vision: whether player sees everything
@@ -76,7 +77,7 @@ def main(
         player.ai = IO(
             stdscr, debug_track=track, debug_mode=debug_mode,
             is_render_enabled=not no_render, is_fps_fixed=not no_fixed_fps,
-            skipped_cutscenes=skip_cutscenes.split(','),
+            skipped_cutscenes=skip_cutscenes.split(':'),
         )
 
         if god_vision:
@@ -88,7 +89,7 @@ def main(
         t = time.time()
         update_counter = 0
         try:
-            while True:
+            while exists(player):
                 ms.update()
                 update_counter += 1
         except GameEnd:

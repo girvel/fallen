@@ -47,7 +47,8 @@ class Rails(RailsBase):
 
     positions: dict[str, int2]
     quests: dict[str, Quest]
-    locks: dict[str, object | None]
+    ai_locks: dict[str, Lock]
+    death_locks: dict[str, Lock]
 
 
     def __post_init__(self):
@@ -72,16 +73,19 @@ class Rails(RailsBase):
             'girl_appearance': (162, 42),
             'girl_runs_away': (183, 54),
             'afterlife_shift': (5, 3),
-            'vision_start': None,
         }
 
         self.quests = {
             'find_someone_to_fight': Quest("Найти с чем подраться"),
         }
 
-        self.locks = {
-            'mother_leaving': None,
-            'mother_taking_care': None,
+        self.ai_locks = {
+            'mother_leaving': Lock("mother_leaving"),
+            'mother_taking_care': Lock("mother_leaving"),
+        }
+
+        self.death_locks = {
+            "player_vision": Lock("player_vision"),
         }
 
 
@@ -92,7 +96,8 @@ class Rails(RailsBase):
         player: Annotated[Player, keep_ai]
 
         def run(self, rails: "Rails"):
-            rails.locks['mother_leaving'] = rails.lock_complex_ai(self.mother, Lock(rails.introduction))
+            rails.lock_complex_ai(self.mother, rails.ai_locks['mother_leaving'])
+            rails.lock_dying(self.player, rails.death_locks["player_vision"])
 
             yield from wait_while(lambda: ~Q(self.player).ai is None)
 
@@ -267,7 +272,7 @@ class Rails(RailsBase):
         def run(self, rails: "Rails"):
             yield from wait_for(25)
             yield {self.brother: Leave()}
-            rails.unlock_complex_ai(self.mother, rails.locks["mother_leaving"])
+            rails.unlock_complex_ai(self.mother, rails.ai_locks["mother_leaving"])
 
 
     @Scene.new(priority=Priority.mainline)
@@ -286,6 +291,7 @@ class Rails(RailsBase):
             )
 
         def run(self, rails: "Rails"):
+            rails.unlock_dying(self.player, rails.death_locks["player_vision"])
             rails.positions["vision_start"] = self.player.p
 
             if self._is_player_killing_the_dog() or not exists(self.mother):
@@ -317,7 +323,7 @@ class Rails(RailsBase):
             yield from rails.plane_shift(rails.vision_level, rails.positions["vision_shift"])
 
             if rails.vision_version == VisionVersion.Interrupted:
-                rails.locks["mother_taking_care"] = rails.lock_complex_ai(self.mother, Lock(rails.player_has_vision))
+                rails.lock_complex_ai(self.mother, rails.ai_locks["mother_taking_care"])
                 yield {self.mother: Teleport(rails.positions["mother_reappearance"])}
 
 
@@ -360,7 +366,7 @@ class Rails(RailsBase):
 
             yield from rails.plane_shift(rails.vision_level, rails.vision_level.rails.positions["observing_the_throne"])
 
-            rails.unlock_complex_ai(self.mother, rails.locks["mother_taking_care"])
+            rails.unlock_complex_ai(self.mother, rails.ai_locks["mother_taking_care"])
 
 
     @Scene.new(enabled=False)

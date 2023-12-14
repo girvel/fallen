@@ -12,6 +12,7 @@ if TYPE_CHECKING:
 
 
 keep_ai = object()
+keep_death = object()
 maybe_exists = object()
 not_required = object()
 
@@ -74,19 +75,30 @@ class Scene:
     def run(self, rails: "RailsBase"):
         if not self.reoccurring: self.enabled = False
 
-        locks = [
-            (character, rails.lock_complex_ai(character, Lock(self)))
-            for requirement in self._characters_required
-            if requirement.needs_ai_lock
-            and (character_or_list := getattr(self._definition, requirement.name)) is not None
-            for character in (character_or_list if isinstance(character_or_list, list) else [character_or_list])
-            if not hasattr(~Q(character).ai, "cutscene_aware_flag")
-        ]
+        ai_locks = []
+        death_locks = []
+
+        for requirement in self._characters_required:
+            if (character_or_list := getattr(self._definition, requirement.name)) is None: continue
+
+            for character in (character_or_list if isinstance(character_or_list, list) else [character_or_list]):
+                args = (character, Lock(self))
+
+                if requirement.needs_ai_lock and not hasattr(~Q(character).ai, "cutscene_aware_flag"):
+                    ai_locks.append(args)
+                    rails.lock_complex_ai(*args)
+
+                if requirement.needs_death_lock:
+                    death_locks.append(args)
+                    rails.lock_dying(*args)
 
         yield from self._definition.run(rails)
 
-        for character, lock in locks:
-            rails.unlock_complex_ai(character, lock)
+        for args in ai_locks:
+            rails.unlock_complex_ai(*args)
+
+        for args in death_locks:
+            rails.unlock_dying(*args)
 
 
 
@@ -96,6 +108,7 @@ class CharacterRequirement:
     python_type: type
 
     needs_ai_lock: bool
+    needs_death_lock: bool
     has_to_exist: bool
 
     @classmethod
@@ -112,6 +125,7 @@ class CharacterRequirement:
             name=name,
             python_type=python_type,
             needs_ai_lock=keep_ai not in args,
+            needs_death_lock=keep_death not in args,
             has_to_exist=maybe_exists not in args,
         )
 

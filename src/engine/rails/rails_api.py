@@ -1,10 +1,11 @@
 from dataclasses import dataclass, field
-from typing import Any, TypeAlias, Iterator
+from typing import Any, TypeAlias, Iterator, ClassVar
 from xml.dom.minidom import Entity
 
 from ecs import MetasystemFacade
 
 from src.engine.acting.action import Action
+from src.lib.query import Q
 from src.lib.vector.vector import sub2, floordiv2
 from src.library.ai_modules.spacial_memory import SpacialMemory
 from src.library.ais.dummy_ai import DummyAi
@@ -25,8 +26,11 @@ class RailsApi:
 
     _player: Player | None = None
 
-    _ai_storage: dict[Entity, Any] = field(default_factory=dict)
-    _ai_locks: dict[Entity, list[object]] = field(default_factory=dict)
+    _ai_storage: ClassVar[dict[Entity, Any]] = {}
+    _ai_locks: ClassVar[dict[Entity, list[object]]] = {}
+
+    _death_storage: ClassVar[dict[Entity, Any]] = {}
+    _death_locks: ClassVar[dict[Entity, list[object]]] = {}
 
     def get_player(self) -> Player:
         if self._player is None:
@@ -65,7 +69,7 @@ class RailsApi:
         yield
         if hasattr(entity, "after_load"): entity.after_load(entity.level)
 
-    def lock_complex_ai(self, entity, lock) -> object | None:
+    def lock_complex_ai(self, entity, lock) -> Any:
         if entity not in self._ai_storage:
             self._ai_storage[entity] = entity.ai
             self._ai_locks[entity] = []
@@ -73,18 +77,40 @@ class RailsApi:
             entity.ai = DummyAi()
             entity.ai.composite[SpacialMemory].knows(self.level)
 
-        entity.ai.clear()
+        assert lock not in self._ai_locks[entity]
+
+        entity.ai.clear()  # TODO LONG it interrupts previous scene. Is it appropriate?
 
         self._ai_locks[entity].append(lock)
         return lock
 
-    def unlock_complex_ai(self, entity, lock: object | None) -> None:
+    def unlock_complex_ai(self, entity, lock):
         self._ai_locks[entity].remove(lock)
 
         if len(self._ai_locks[entity]) == 0:
             entity.ai = self._ai_storage[entity]
             del self._ai_storage[entity]
             del self._ai_locks[entity]
+
+    def lock_dying(self, entity, lock) -> Any:
+        if entity not in self._death_storage:
+            self._death_storage[entity] = ~Q(entity).on_death or (lambda *_, **__: None)
+            self._death_locks[entity] = []
+
+            entity.on_death = (lambda *_, **__: True)
+
+        assert lock not in self._death_locks[entity]
+
+        self._death_locks[entity].append(lock)
+        return lock
+
+    def unlock_dying(self, entity, lock):
+        self._death_locks[entity].remove(lock)
+
+        if len(self._death_locks[entity]) == 0:
+            entity.on_death = self._death_storage[entity]
+            del self._death_storage[entity]
+            del self._death_locks[entity]
 
     def notify(self, notification: Notification):
         self.get_player().ai.memory.notification_queue.append(notification)

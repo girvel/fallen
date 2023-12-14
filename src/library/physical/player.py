@@ -28,5 +28,3 @@ class Player(Humanoid):
         self.senses = Senses(24, 40, 0)
         self.traits = Traits()
         self.inventory = Inventory()
-
-        self.on_death = lambda *_, **__: True
