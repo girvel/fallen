@@ -4,6 +4,8 @@ from src.library.physical.water import Water
 
 class LiquidWater(Water):
     color = ColorPair(blue)
-    liquid_height = 25
     layer = "tiles"
     boring_flag = None
+
+    def __post_init__(self, *, liquid_height=25):
+        self.liquid_height = liquid_height

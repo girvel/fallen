@@ -19,5 +19,5 @@ class Material(Entity, metaclass=ABCMeta):
 
         self.__post_init__(**kwargs)
 
-    def __post_init__(self, **kwargs):
+    def __post_init__(self):
         pass
