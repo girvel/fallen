@@ -17,13 +17,11 @@ class Enemy(Humanoid):
     name = Name("Враг")
     sex = "male"
 
-    def __init__(self, **attributes):
+    def __post_init__(self):
         self.health = Health(10_000, armor_kind.none)
         self.weapon = Weapon(24, damage_kind.slashing)
         self.senses = Senses(12, 0, 0)
         self.ai = DummyAi()
-
-        Entity.__init__(self, **attributes)
 
     def after_load(self, level):
         self.ai.composite[SpacialMemory].knows(level)

@@ -19,6 +19,7 @@ class Q(Generic[T]):
     def __getattr__(self, item: str) -> "Q[Any]":
         return Q(getattr(self.__object, item, None))
 
+    # TODO __getitem__ <-> Q_isinstance
     def __getitem__(self, cast_type: Type[R]) -> "Q[R]":
         return Q(self.__object if isinstance(self.__object, cast_type) else None)
 

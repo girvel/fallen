@@ -12,7 +12,7 @@ from src.engine.acting.damage import Weapon
 from src.engine.acting import damage_kind
 from src.engine.rails.rails_base import RailsBase
 from src.engine.rails.scene import Scene, keep_ai, maybe_exists, Priority
-from src.lib import vector
+from src.lib.vector import vector
 from src.lib.concurrency import wait_for, wait_while
 from src.lib.query import Q
 from src.lib.vector.vector import d2, add2, int2
@@ -84,7 +84,7 @@ class Rails(RailsBase):
         }
 
 
-    # @Scene.new(priority=Priority.mainline)
+    @Scene.new(priority=Priority.mainline)
     class introduction:
         mother: Mother
         brother: Brother
@@ -319,82 +319,81 @@ class Rails(RailsBase):
                 yield {self.mother: Teleport(rails.positions["mother_reappearance"])}
 
 
-    # @Scene.new(enabled=False)
-    # def player_wakes_up_1(self, scene):
-    #     c = self.characters
-    #     p = self.positions
-    #     memory = c.player.ai.memory
-    #
-    #     scene.enabled = False
-    #
-    #     yield from self.center_camera()
-    #
-    #     yield {c.player: Say("Что происходит?")}
-    #     c.mother.ai.composite[Pather].going_to = p.beside_the_bed
-    #     yield from wait_finish(c.mother)
-    #
-    #     self.vision_level.rails.talk_with_lord_bishop_1.enabled = True
-    #     yield from self.plane_shift(self.vision_level, self.vision_level.rails.positions.observing_the_throne)
-    #
-    #
-    # @Scene.new(enabled=False)
-    # def player_wakes_up_2(self, scene):
-    #     c = self.characters
-    #     p = self.positions
-    #     memory = c.player.ai.memory
-    #
-    #     scene.enabled = False
-    #     yield from self.center_camera()
-    #
-    #     yield {c.player: Say("<Сдавленный вскрик>")}
-    #     yield {c.player: Say("Зрение сходится; ты в своей комнате.", True)}
-    #
-    #     yield {c.mother: Say("Всё хорошо.")}
-    #     yield {c.mother: Say("Ты дома.")}
-    #     yield {c.mother: Say("Ты в безопасности.")}
-    #
-    #     yield {c.player: Say("Что происходит?")}
-    #
-    #     yield {c.mother: Say("Ты бредишь.")}
-    #
-    #     self.vision_level.rails.talk_with_lord_bishop_2.enabled = True
-    #
-    #     yield from self.plane_shift(self.vision_level, self.vision_level.rails.positions.observing_the_throne)
-    #
-    #     self.unlock_complex_ai(c.mother, self.locks.mother_taking_care)
-    #
-    #
-    # @Scene.new(lambda self: d2(self.characters.player.p, self.positions.kinds_yard_entrance) <= 2, enabled=False)
-    # def girl_gives_flower(self, scene):
-    #     c = self.characters
-    #     p = self.positions
-    #
-    #     scene.enabled = False
-    #     yield from self.start_cutscene()
-    #     yield from self.center_camera()
-    #
-    #     c.girl = Girl(p=p.girl_appearance, level=self.level)
-    #     yield from self.create_entity(c.girl)
-    #     c.girl.ai.composite[Pather].going_to = add2(c.player.p, vector.left)
-    #
-    #     yield from wait_while(lambda: d2(c.girl.p, c.player.p) > 10)
-    #     yield {c.player: Say("Девочка твоего возраста.", True)}
-    #     yield {c.player: Say("Взъерошенные рыжие волосы, грязь на лице, грубое льняное платье.", True)}
-    #
-    #     yield from wait_finish(c.girl)
-    #
-    #     yield from c.player.ai.wait_seconds(1)
-    #     yield {c.girl: Say(f"Я {c.girl.name.first}.")}
-    #
-    #     yield from c.player.ai.wait_seconds(1.5)
-    #     yield {c.player: Say(f"{c.girl.name.first}, пряча взгляд, суёт тебе что-то в руку и убегает.", True)}
-    #     c.player.inventory.add_item(Lily())
-    #
-    #     c.girl.ai.composite[Pather].going_to = p.girl_runs_away
-    #     yield from wait_finish(c.girl)
-    #     yield {c.girl: Leave()}
-    #
-    #     yield from self.end_cutscene()
+    @Scene.new(enabled=False)
+    class player_wakes_up_1:
+        player: Player
+        mother: Mother
+
+        def run(self, rails: "Rails"):
+            yield from rails.center_camera()
+
+            yield {self.player: Say("Что происходит?")}
+            self.mother.ai.composite[Pather].going_to = rails.positions["beside_the_bed"]
+            yield from wait_finish(self.mother)
+
+            rails.vision_level.rails.talk_with_lord_bishop_1.enabled = True
+            yield from rails.plane_shift(rails.vision_level, rails.vision_level.rails.positions["observing_the_throne"])
+
+
+    @Scene.new(enabled=False)
+    class player_wakes_up_2:
+        mother: Mother
+        player: Player
+
+        def run(self, rails: "Rails"):
+            yield from rails.center_camera()
+
+            yield {self.player: Say("<Сдавленный вскрик>")}
+            yield {self.player: Say("Зрение сходится; ты в своей комнате.", True)}
+
+            yield {self.mother: Say("Всё хорошо.")}
+            yield {self.mother: Say("Ты дома.")}
+            yield {self.mother: Say("Ты в безопасности.")}
+
+            yield {self.player: Say("Что происходит?")}
+
+            yield {self.mother: Say("Ты бредишь.")}
+
+            rails.vision_level.rails.talk_with_lord_bishop_2.enabled = True
+
+            yield from rails.plane_shift(rails.vision_level, rails.vision_level.rails.positions["observing_the_throne"])
+
+            rails.unlock_complex_ai(self.mother, rails.locks["mother_taking_care"])
+
+
+    @Scene.new(enabled=False)
+    class girl_gives_flower:
+        player: Player
+
+        def start_predicate(self, rails: "Rails"):
+            return d2(self.player.p, rails.positions["kinds_yard_entrance"]) <= 2
+
+        def run(self, rails: "Rails"):
+            yield from rails.start_cutscene()
+            yield from rails.center_camera()
+
+            girl = Girl(p=rails.positions["girl_appearance"], level=rails.level)
+            yield from rails.create_entity(girl)
+            girl.ai.composite[Pather].going_to = add2(self.player.p, vector.left)
+
+            yield from wait_while(lambda: d2(girl.p, self.player.p) > 10)
+            yield {self.player: Say("Девочка твоего возраста.", True)}
+            yield {self.player: Say("Взъерошенные рыжие волосы, грязь на лице, грубое льняное платье.", True)}
+
+            yield from wait_finish(girl)
+
+            yield from self.player.ai.wait_seconds(1)
+            yield {girl: Say(f"Я {girl.name.first}.")}
+
+            yield from self.player.ai.wait_seconds(1.5)
+            yield {self.player: Say(f"{girl.name.first}, пряча взгляд, суёт тебе что-то в руку и убегает.", True)}
+            self.player.inventory.add_item(Lily())
+
+            girl.ai.composite[Pather].going_to = rails.positions["girl_runs_away"]
+            yield from wait_finish(girl)
+            yield {girl: Leave()}
+
+            yield from rails.end_cutscene()
 
 
     @Scene.new(priority=Priority.sideline)
@@ -422,83 +421,81 @@ class Rails(RailsBase):
 
             yield from rails.end_cutscene()
 
-            # TODO NEXT
-            # rails.player_attacks_frog_again.enabled = True
+            rails.player_attacks_frog_again.enabled = True
 
 
-    # @Scene.new(
-    #     lambda self: any(
-    #         victim.character == Frog.character
-    #         for victim in (~Q(self.characters.player.act)[Aggressive].get_victims(self.characters.player) or ())
-    #     ),
-    #     enabled=False,
-    # )
-    # def player_attacks_frog_again(self, scene):
-    #     scene.enabled = False
-    #
-    #     c = self.characters
-    #
-    #     c.player.traits.brutality += 1
-    #
-    #     yield from self.start_cutscene()
-    #     yield from self.center_camera()
-    #
-    #     yield {c.player: Say("А в этом что-то есть.")}
-    #
-    #     yield from self.end_cutscene()
-    #
-    #
-    # @Scene.new(
-    #     lambda self: exists(self.characters.mother) and d2(self.characters.mother.p, self.characters.player.p) < 10,
-    #     enabled=False,
-    # )
-    # def mother_gives_player_bun(self, scene):
-    #     scene.enabled = False
-    #
-    #     c = self.characters
-    #
-    #     mother_lock = self.lock_complex_ai(c.mother)
-    #
-    #     yield from self.start_cutscene()
-    #     yield from self.center_camera()
-    #
-    #     yield {c.mother: Say("Я булочки испекла. Кушай, приходи в себя.")}
-    #
-    #     mother_initial_p = c.mother.p
-    #     c.mother.ai.composite[Pather].going_to = c.player.p
-    #
-    #     yield from wait_finish(c.mother)
-    #     c.player.inventory.add_item(Bun())
-    #     c.mother.ai.composite[Pather].going_to = mother_initial_p
-    #
-    #     yield from wait_finish(c.mother)
-    #     if self.dumbass_death:
-    #         yield {c.mother: Say("Кстати, это было глупо.")}
-    #
-    #     yield from self.end_cutscene()
-    #     self.unlock_complex_ai(c.mother, mother_lock)
-    #
-    #
-    # @Scene.new(lambda self: any(
-    #     hasattr(victim, "human_flag") and victim is not self.characters.player
-    #     for victim in (~Q(self.characters.player).last_killed or ())
-    # ))
-    # def player_kills_a_person(self, scene):
-    #     scene.enabled = False
-    #     self.player_attacks_frog.enabled = False
-    #     self.player_attacks_frog_again.enabled = False
-    #
-    #     c = self.characters
-    #
-    #     yield from self.start_cutscene()
-    #     yield from self.center_camera()
-    #
-    #     yield {c.player: Say("Хм.")}
-    #     yield {c.player: Say("Ты должен был что-то почувствовать.", True)}
-    #
-    #     yield from self.end_cutscene()
-    #
-    #
+    @Scene.new(enabled=False)
+    class player_attacks_frog_again:
+        player: Player
+
+        def start_predicate(self, rails: "Rails"):
+            return any(
+                victim.character == Frog.character
+                for victim in (~Q(self.player.act)[Aggressive].get_victims(self.player) or ())
+            )
+
+        def run(self, rails: "Rails"):
+            self.player.traits.brutality += 1
+
+            yield from rails.start_cutscene()
+            yield from rails.center_camera()
+
+            yield {self.player: Say("А в этом что-то есть.")}
+
+            yield from rails.end_cutscene()
+
+
+    @Scene.new(enabled=False)
+    class mother_gives_player_bun:
+        player: Player
+        mother: Mother
+
+        def start_predicate(self, rails: "Rails"):
+            return d2(self.mother.p, self.player.p) < 10
+
+        def run(self, rails: "Rails"):
+            yield from rails.start_cutscene()
+            yield from rails.center_camera()
+
+            yield {self.mother: Say("Я булочки испекла. Кушай, приходи в себя.")}
+
+            mother_initial_p = self.mother.p
+            self.mother.ai.composite[Pather].going_to = self.player.p
+
+            yield from wait_finish(self.mother)
+            self.player.inventory.add_item(Bun())
+            self.mother.ai.composite[Pather].going_to = mother_initial_p
+
+            yield from wait_finish(self.mother)
+            if rails.dumbass_death:
+                yield {self.mother: Say("Кстати, это было глупо.")}
+
+            yield from rails.end_cutscene()
+
+
+    @Scene.new()
+    class player_kills_a_person:
+        player: Player
+
+        def start_predicate(self, rails: "Rails"):
+            return any(
+                hasattr(victim, "human_flag") and victim is not self.player
+                for victim in (~Q(self.player).last_killed or ())
+            )
+
+        def run(self, rails: "Rails"):
+            rails.player_attacks_frog.enabled = False
+            rails.player_attacks_frog_again.enabled = False
+
+            yield from rails.start_cutscene()
+            yield from rails.center_camera()
+
+            yield {self.player: Say("Хм.")}
+            yield {self.player: Say("Ты должен был что-то почувствовать.", True)}
+
+            yield from rails.end_cutscene()
+
+
     # # TODO this should be done in on_death
     # @Scene.new(lambda self: self.characters.player.health.amount.current <= 0, enabled=False)
     # def player_dies_for_real(self, scene):

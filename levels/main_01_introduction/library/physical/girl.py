@@ -15,10 +15,8 @@ class Girl(Humanoid):
     color = ColorPair(blue)
     sex = "female"
 
-    def __post_init__(self, **attributes):
+    def __post_init__(self):
         self.health = Health(10, "Organic")
-
-        Entity.__init__(self, **attributes)
 
     def after_load(self, level):
         self.ai.composite[SpacialMemory].knows(level)

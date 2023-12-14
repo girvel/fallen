@@ -13,6 +13,7 @@ if TYPE_CHECKING:
 
 keep_ai = object()
 maybe_exists = object()
+not_required = object()
 
 
 class Priority(Enum):
@@ -35,20 +36,21 @@ class Scene:
     @classmethod
     def new(cls, *,
         enabled: bool = True, reoccurring: bool = False, priority: Priority = Priority.script,
-        timeout: int = 5_000,
+        timeout: int = 5_000, name: str | None = None,
     ):
         def decorator(definition_class: type[SceneDefinition]) -> "Scene":
             return cls(
-                name=definition_class.__name__,
+                name=name or definition_class.__name__,
                 enabled=enabled,
                 reoccurring=reoccurring,
                 priority=priority,
                 timeout=timeout,
                 _definition=definition_class(),
                 _characters_required=[
-                    CharacterRequirement.from_annotation(name, annotation)
-                    for name, annotation
+                    requirement
+                    for name_, annotation
                     in get_type_hints(definition_class, include_extras=True).items()
+                    if (requirement := CharacterRequirement.from_annotation(name_, annotation)) is not None
                 ],
             )
 
@@ -57,9 +59,8 @@ class Scene:
     def start_predicate(self, rails: "RailsBase") -> bool:
         if not self.enabled: return False
 
-        # TODO bug when a method in the definition is annotated
         for requirement in self._characters_required:
-            character = rails._get_character(requirement.name)
+            character = rails.get_character(requirement.name)
             if not requirement.matches(character, rails):
                 return False
 
@@ -97,12 +98,14 @@ class CharacterRequirement:
     has_to_exist: bool
 
     @classmethod
-    def from_annotation(cls, name: str, annotation: type):
+    def from_annotation(cls, name: str, annotation: type) -> "CharacterRequirement | None":
         if get_origin(annotation) == Annotated:
             python_type, *args = get_args(annotation)
         else:
             python_type = annotation
             args = []
+
+        if not_required in args: return
 
         return cls(
             name=name,

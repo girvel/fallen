@@ -10,6 +10,7 @@ from src.engine.language.name import CompositeName
 from src.engine.output.colors import ColorPair, blue
 from src.library.abstract.humanoid import Humanoid
 from src.library.ais.peasant_ai import PeasantAi
+from src.library.markup.house import House
 from src.library.physical.peasant import peasant_attitude
 from src.library.physical.player import Player
 
@@ -20,13 +21,14 @@ class Mother(Humanoid):
     sex = "female"
     name = CompositeName(reserved_names["lilia"], reserved_names["kinds"]["female"])
 
-    def __post_init__(self, **attributes):
+    house: House
+
+    def __post_init__(self):
         self.health = Health(50, armor_kind.none)
         self.weapon = Weapon(4, damage_kind.slashing)
         self.ai = PeasantAi()
         self.attitude = peasant_attitude()
-
-        Entity.__init__(self, **attributes)
+        self.house = None
 
     def after_load(self, level):
         self.ai.composite[SpacialMemory].knows(level)

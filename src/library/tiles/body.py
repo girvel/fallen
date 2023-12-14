@@ -19,8 +19,9 @@ class Body(Material):
 
     boring_flag = None
 
-    def __post_init__(self, parent_name: Name, items: list[Any] = None):
+    def __post_init__(self, parent_name: Name, sex: str | None, items: list[Any] = None):
         self.name = self.base_name.concat(f" {parent_name:ро}")
+        self.sex = sex
         # TODO abstract body
 
         self.items = items or []
@@ -34,7 +35,7 @@ def generate_body_factory(base: Any):
             items.append(base.weapon)
 
         genesis.entities_to_create.add(Body(
-            base.name, items=items, sex=~Q(base).sex, p=base.p, level=base.level
+            parent_name=base.name, items=items, sex=~Q(base).sex, p=base.p, level=base.level
         ))
 
     return result

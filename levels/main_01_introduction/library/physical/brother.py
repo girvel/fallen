@@ -16,14 +16,12 @@ class Brother(Humanoid):
     color = ColorPair(blue)
     sex = "male"
 
-    def __post_init__(self, **attributes):
+    def __post_init__(self):
         self.name = CompositeName(reserved_names["mike"], reserved_names["kinds"]["male"])
 
         self.health = Health(30, armor_kind.none)
         self.weapon = Weapon(4, damage_kind.slashing)
         self.ai = BrotherAi()
-
-        Entity.__init__(self, **attributes)
 
     def after_load(self, level):
         self.ai.composite[SpacialMemory].knows(level)

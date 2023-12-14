@@ -7,7 +7,7 @@ from ecs import Entity
 
 from src.engine.language.name import Name
 from src.engine.rails.rails_api import RailsApi, Script
-from src.engine.rails.scene import Scene, Priority
+from src.engine.rails.scene import Scene
 from src.lib.toolkit import assert_attributes
 
 
@@ -44,7 +44,7 @@ class RailsBase(RailsApi, Entity, metaclass=ABCMeta):
     def __post_init__(self):
         ...
 
-    def _get_character(self, name: str) -> Any:
+    def get_character(self, name: str) -> Any:
         result = self.characters[name]
         return result() if callable(result) else result
 
@@ -77,3 +77,16 @@ class RailsBase(RailsApi, Entity, metaclass=ABCMeta):
                     self.in_cutscene = False
 
         return total_effect
+
+    def run_task(self, *args, **kwargs):
+        def decorator(f):
+            @Scene.new(name=f.__name__)
+            class task:
+                def run(self_task, rails: "RailsBase"):
+                    yield from f(*args, **kwargs)
+                    self.scenes.remove(task)
+
+            self.scenes.append(task)
+            return f
+
+        return decorator

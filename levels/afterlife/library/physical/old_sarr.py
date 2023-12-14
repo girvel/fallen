@@ -23,11 +23,9 @@ class OldSarr(Humanoid):
     color = ColorPair(black)
     sex = "male"
 
-    def __post_init__(self, **attributes):
+    def __post_init__(self):
         self.ai = DummyAi()
         self.health = Health(1_000, armor_kind.mennar)
-
-        Entity.__init__(self, **attributes)
 
     def after_load(self, level):
         self.ai.composite[SpacialMemory].knows(level)

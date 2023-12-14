@@ -23,11 +23,16 @@ class RailsApi:
     ms: MetasystemFacade
     genesis: Genesis
 
+    _player: Player | None = None
+
     _ai_storage: dict[Entity, Any] = field(default_factory=dict)
     _ai_locks: dict[Entity, list[object]] = field(default_factory=dict)
 
     def get_player(self) -> Player:
-        return next(self.level.find(Player), None)
+        if self._player is None:
+            self._player = next(self.level.find(Player), None)
+
+        return self._player
 
     def options(self, options: dict[str, Action]) -> Script:
         assert all(options.values()), "Only actions are allowed; for no action use NoAction"
@@ -50,23 +55,6 @@ class RailsApi:
         h, w = player.ai.output.game.curses_window.getmaxyx()
         player.ai.output.game.virtual_p = sub2(player.p, floordiv2((w, h), 2))
         yield
-
-    def run_task(self, *args, **kwargs):
-        raise NotImplementedError
-        # def decorator(f):
-        #     s = Scene(f.__name__, None, lambda: True)
-        #
-        #     @functools.wraps(f)
-        #     def task(self, scene):  # TODO NEXT redo
-        #         scene.enabled = False
-        #         yield from f(*args, **kwargs)
-        #         self.scenes.remove(scene)
-        #
-        #     s.run = functools.partial(task, self, s)
-        #     self.scenes.append(s)
-        #     return f
-        #
-        # return decorator
 
     def plane_shift(self, level, p) -> Script:
         yield  # to display the last railed action before the shift
