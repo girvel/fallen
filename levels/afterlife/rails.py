@@ -23,7 +23,7 @@ class Rails(RailsBase):
             ["О."],
             ["Привет."],
             ["Тяжело быть смертным, а?"],
-            ["Мне всегда было интересно, какого это -- умереть?"],
+            ["Мне всегда было интересно, каково это -- умереть?"],
             ["У тебя не очень хорошо выходит, да?"],
             ["У тебя правда всё не очень хорошо выходит."],
             ["Уугх."],
@@ -65,10 +65,6 @@ class Rails(RailsBase):
         old_sarr: OldSarr
 
         def run(self, rails: "Rails"):
-            rails.talk_with_old_sarr.enabled = False
-
-            memory = self.player.ai.memory
-
             player_time_alive = self.player.tick_counter
 
             yield from rails.start_cutscene()
@@ -115,15 +111,15 @@ class Rails(RailsBase):
 
             yield {self.old_sarr: Say("Действуем?")}
 
-            yield from rails.options({
+            option = yield from rails.options({
                 (agree := "Ага."): NoAction(),
                 (ask := "А что происходит?"): NoAction(),
                 "Осмотреться": NoAction(),
             })
 
-            if memory.last_selected_option == ask:
+            if option == ask:
                 yield {self.old_sarr: Say("Рот закрой.")}
-            elif memory.last_selected_option == agree:
+            elif option == agree:
                 yield {self.old_sarr: Say("Ага.")}
             else:
                 for line in [

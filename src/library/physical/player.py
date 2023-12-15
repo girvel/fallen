@@ -1,3 +1,5 @@
+from typing import TYPE_CHECKING
+
 from src.engine.acting.damage import Weapon, Health
 from src.engine.acting import armor_kind
 from src.engine.acting import damage_kind
@@ -8,6 +10,11 @@ from src.engine.output.colors import ColorPair, white
 from src.engine.traits import Traits
 from src.library.abstract.humanoid import Humanoid
 from src.engine.ai import Senses
+from src.library.special.genesis import Genesis
+from src.library.special.hades import Hades
+
+if TYPE_CHECKING:
+    from src.library.special.level import Level
 
 
 class Player(Humanoid):
@@ -19,6 +26,8 @@ class Player(Humanoid):
 
     tick_counter = 0
 
+    afterlife_level: "Level | None" = None
+
     def __post_init__(self):
         self.name = CompositeName(reserved_names["hugh"], reserved_names["kinds"]["male"])
 
@@ -28,3 +37,7 @@ class Player(Humanoid):
         self.senses = Senses(24, 40, 0)
         self.traits = Traits()
         self.inventory = Inventory()
+
+    def on_death(self, _hades: Hades, _genesis: Genesis):
+        self.level.change(self, self.afterlife_level, (5, 3))
+        return True

@@ -9,19 +9,21 @@ required_attributes = "character, sex, name, health".split(", ")
 class Humanoid(Material):
     layer = "physical"
 
+    ai = None
+    act = None
+
     human_flag = None
     animate_flag = None
 
     def __init__(self, **kwargs):
         self.senses = Senses(12, 0, 0)
-        self.ai = None
-        self.act = None
 
         self.skill = {}
         self.weapon = Weapon(1, "Crushing")
 
-        self.on_death = generate_body_factory(self)
-
         super().__init__(**kwargs)
 
         assert_attributes(self, required_attributes)
+
+    def on_death(self, *args):
+        return generate_body_factory(self)(*args)

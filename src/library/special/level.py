@@ -56,7 +56,7 @@ class Config:
 T = TypeVar('T')
 
 class Level(Entity):
-    name = Name("Уровень")
+    name = Name("Unknown level")
     no_entity_character = "."
 
     def put(self, p: int2, entity: T) -> T:
@@ -72,12 +72,15 @@ class Level(Entity):
         target.put(p, entity)
 
     layers = ["tiles", "physical", "effects", "sounds"]
-    invisible_layers = {"sounds"}  # TODO maybe as a separate thing instead of subset?
+    invisible_layers = ["sounds"]  # TODO maybe as a separate thing instead of subset?
 
     markup = None
     player = None
 
     def __init__(self, ms: MetasystemFacade, path: Path, no_rails: bool, genesis: Genesis):
+        self.name = Name(f"Level {path.stem}")
+        logging.info(f"Loading the level {self.name}")
+
         level_lines = (path / "grid.txt").read_text().split('\n')
 
         grid_args = GridArgs(**load_toml(path / "grid_args.toml"))  # TODO maybe join w/ markup?

@@ -42,7 +42,6 @@ class VisionVersion(Enum):
 class Rails(RailsBase):
     vision_version: VisionVersion = VisionVersion.Undefined
     vision_level: Level | None = None
-    afterlife_level: Level | None = None
     dumbass_death: bool = False
 
     positions: dict[str, int2]
@@ -72,7 +71,6 @@ class Rails(RailsBase):
             'kinds_yard_entrance': (185, 45),
             'girl_appearance': (162, 42),
             'girl_runs_away': (183, 54),
-            'afterlife_shift': (5, 3),
         }
 
         self.quests = {
@@ -99,9 +97,11 @@ class Rails(RailsBase):
             rails.lock_complex_ai(self.mother, rails.ai_locks['mother_leaving'])
             rails.lock_dying(self.player, rails.death_locks["player_vision"])
 
-            yield from wait_while(lambda: ~Q(self.player).ai is None)
+            # TODO move this to on_death? (after level refactor)
+            self.player.afterlife_level = rails.ms.add(Level(rails.ms, Path("levels/afterlife"), False, rails.genesis))
+            self.player.afterlife_level.rails.parent_level = self.player.level  # TODO encapsulate this?
 
-            memory = self.player.ai.memory
+            yield from wait_while(lambda: ~Q(self.player).ai is None)
 
             yield from rails.start_cutscene()
             yield from rails.center_camera()
@@ -197,7 +197,7 @@ class Rails(RailsBase):
 
             self.brother.ai.enable_speech = True
             yield from wait_for(10)
-            memory.add_quest(rails.quests["find_someone_to_fight"])
+            self.player.ai.memory.add_quest(rails.quests["find_someone_to_fight"])
 
             yield from rails.notify(Notification("Управление",
                 "<y>wasd</y> - движение<br/>"
@@ -503,20 +503,3 @@ class Rails(RailsBase):
             yield {self.player: Say("Ты должен был что-то почувствовать.", True)}
 
             yield from rails.end_cutscene()
-
-
-    # # TODO this should be done in on_death
-    # @Scene.new(lambda self: self.characters.player.health.amount.current <= 0, enabled=False)
-    # def player_dies_for_real(self, scene):
-    #     scene.enabled = False
-    #
-    #     c = self.characters
-    #     p = self.positions
-    #
-    #     yield from self.start_cutscene()
-    #
-    #     # TODO RailsBase procedure? maybe not because this should be done in on_death?
-    #     self.afterlife_level = self.ms.add(Level(self.ms, Path("levels/afterlife"), False, self.genesis))
-    #     self.afterlife_level.rails.parent_level = c.player.level
-    #
-    #     yield from self.plane_shift(self.afterlife_level, p.afterlife_shift)
