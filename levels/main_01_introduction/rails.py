@@ -327,7 +327,7 @@ class Rails(RailsBase):
                 yield {self.mother: Teleport(rails.positions["mother_reappearance"])}
 
 
-    @Scene.new(enabled=False)
+    @Scene.new(priority=Priority.mainline, enabled=False)
     class player_wakes_up_1:
         player: Player
         mother: Mother
@@ -343,7 +343,7 @@ class Rails(RailsBase):
             yield from rails.plane_shift(rails.vision_level, rails.vision_level.rails.positions["observing_the_throne"])
 
 
-    @Scene.new(enabled=False)
+    @Scene.new(priority=Priority.mainline, enabled=False)
     class player_wakes_up_2:
         mother: Mother
         player: Player
@@ -369,7 +369,7 @@ class Rails(RailsBase):
             rails.unlock_complex_ai(self.mother, rails.ai_locks["mother_taking_care"])
 
 
-    @Scene.new(enabled=False)
+    @Scene.new(priority=Priority.sideline, enabled=False)
     class girl_gives_flower:
         player: Player
 
@@ -432,7 +432,7 @@ class Rails(RailsBase):
             rails.player_attacks_frog_again.enabled = True
 
 
-    @Scene.new(enabled=False)
+    @Scene.new(priority=Priority.sideline, enabled=False)
     class player_attacks_frog_again:
         player: Player
 
@@ -453,7 +453,7 @@ class Rails(RailsBase):
             yield from rails.end_cutscene()
 
 
-    @Scene.new(enabled=False)
+    @Scene.new(priority=Priority.sideline, enabled=False)
     class mother_gives_player_bun:
         player: Player
         mother: Mother
@@ -482,7 +482,7 @@ class Rails(RailsBase):
             yield from rails.end_cutscene()
 
 
-    @Scene.new()
+    @Scene.new(priority=Priority.sideline)
     class player_kills_a_person:
         player: Player
 

@@ -55,7 +55,7 @@ class RailsBase(RailsApi, Entity, metaclass=ABCMeta):
                 self.current_scenes.append(run)
                 logging.info(f"Starting the scene {scene.name}")
 
-                if scene.priority is not None:
+                if scene.priority.value != 0:
                     self.current_cutscene = run
 
         total_effect = {}

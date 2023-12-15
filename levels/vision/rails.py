@@ -12,7 +12,7 @@ from src.library.actions.say import Say
 from src.library.ai_modules.follower import Follower
 from src.library.ai_modules.pather import Pather
 from src.engine.rails.rails_base import RailsBase
-from src.engine.rails.scene import Scene, not_required
+from src.engine.rails.scene import Scene, not_required, Priority
 from src.library.ais.dummy_ai import wait_finish
 from src.library.physical.backslash_wall import BackslashWall
 from src.library.physical.horizontal_wall import HorizontalWall
@@ -52,7 +52,7 @@ class Rails(RailsBase):
         }
 
 
-    @Scene.new()
+    @Scene.new(priority=Priority.mainline)
     class start_vision:
         player: Player
         kaledeii: Kaledeii
@@ -132,7 +132,7 @@ class Rails(RailsBase):
                 yield from rails.plane_shift(rails.parent_level, rails.parent_level.rails.positions["player_bed"])
 
 
-    @Scene.new(enabled=False)
+    @Scene.new(priority=Priority.mainline, enabled=False)
     class talk_with_lord_bishop_1:
         player: Player
         kaledeii: Kaledeii
@@ -163,7 +163,7 @@ class Rails(RailsBase):
                 yield from rails.plane_shift(rails.parent_level, rails.parent_level.rails.positions["player_bed"])
 
 
-    @Scene.new(enabled=False)
+    @Scene.new(priority=Priority.mainline, enabled=False)
     class talk_with_lord_bishop_2:
         kaledeii: Kaledeii
         bishop: LordBishop
