@@ -98,7 +98,7 @@ def main(
             logging.error("Uncaught error on Metasystem.update", exc_info=ex)
             if debug_mode: raise ex
         finally:
-            t = time.time() - t - player.ai.input.key_queue.total_waiting_time
+            t = time.time() - t - player.ai.input.key_reader.total_waiting_time
 
             logging.info("Finishing game cycle")
             if t > 0:

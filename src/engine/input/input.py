@@ -6,7 +6,7 @@ from src.engine.acting.action import Action
 from src.lib.query import Q
 from src.library.actions.no_action import NoAction
 from src.engine.input.hotkeys import generate_hotkeys
-from src.engine.input.key_queue import KeyQueue
+from src.engine.input.key_reader import KeyReader
 from src.engine.input.mode import OPTIONS, NOTIFICATION, DIALOGUE_LINE, CUTSCENE, GAME, GENERAL
 from src.engine.ai import Perception
 
@@ -20,7 +20,7 @@ class Input:
         self.io = io
         self.hotkeys = generate_hotkeys(io.debug_mode)
         self.last_t = time.time()
-        self.key_queue = KeyQueue(stdscr, debug_track and iter(debug_track))
+        self.key_reader = KeyReader(stdscr, debug_track and iter(debug_track))
 
         if debug_track:
             logging.info(f"Debug track: '{debug_track}'")
@@ -55,6 +55,6 @@ class Input:
                 return NoAction()
 
         hotkeys = self.hotkeys[GENERAL] | self.hotkeys[mode]
-        key = self.key_queue.read_key(hotkeys, mode.accepts_empty_input)
+        key = self.key_reader.read_key(hotkeys, mode.accepts_empty_input)
         if (used_hotkey := hotkeys.get(key)) is not None:
             return used_hotkey.function(self.io, subject, perception)
