@@ -20,7 +20,7 @@ class Input:
         self.io = io
         self.hotkeys = generate_hotkeys(io.debug_mode)
         self.last_t = time.time()
-        self.key_reader = KeyReader(stdscr, debug_track and iter(debug_track))
+        self.key_reader = KeyReader(stdscr, iter(debug_track))
 
         if debug_track:
             logging.info(f"Debug track: '{debug_track}'")
@@ -39,7 +39,7 @@ class Input:
             mode = GAME
 
         is_skipping_cutscene = (
-            ~Q(subject.level.rails.current_cutscene).base.name in self.io.memory.cutscenes_to_skip
+            ~Q(subject.level.rails).current_cutscene.base.name in self.io.memory.cutscenes_to_skip
         )
 
         # TODO this is not Input's responsibility but Memory's or a separate module?

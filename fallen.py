@@ -2,6 +2,7 @@
 
 import curses
 import logging
+import random
 import time
 from pathlib import Path
 from typing import Optional
@@ -28,6 +29,7 @@ def main(
     pause_for_debugger: bool = False,
     level_path: str = "levels/main_01_introduction",
     god_vision: bool = False,
+    random_seed: str | None = None,
 ):
     """
     Launch the Fallen RPG
@@ -42,15 +44,20 @@ def main(
         pause_for_debugger: wait for 'Enter' key (useful for debugger connection)
         level_path: level folder's full path
         god_vision: whether player sees everything
+        random_seed: seed for random numbers generation
     """
 
     log_handler = init_logging()
     logging.info("Started")
 
-    track = track_file and Path(track_file).read_text().replace("\n", "")
+    track = track_file and Path(track_file).read_text().replace("\n", "") or ""
 
     if pause_for_debugger:
         input()
+
+    random_seed = random_seed or hex(random.randrange(0, 0xFFFFFF))
+    random.seed(random_seed)
+    logging.info(f"Seed is {random_seed!r}")
 
     @curses.wrapper
     def _launch(stdscr):
