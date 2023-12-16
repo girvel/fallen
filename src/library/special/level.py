@@ -2,7 +2,7 @@ import logging
 from dataclasses import dataclass
 from functools import reduce
 from pathlib import Path
-from typing import TypeVar, Callable, Type, Iterator, Any
+from typing import TypeVar, Callable, Type, Iterator, Any, ClassVar
 
 import numpy
 import toml as toml
@@ -17,20 +17,7 @@ from src.library.markup.zone import Zone
 from src.library.special.genesis import Genesis
 
 
-def load_palette_from(path):
-    result = {}
-
-    for p in path.iterdir():
-        if p.suffix != '.py': continue
-
-        cls = getattr(import_module(p), to_camel_case(p.stem))
-        result[cls.character] = cls
-
-    return result
-
-
-def load_toml(path: Path):
-    return toml.loads(path.read_text(encoding="utf-8")) if path.exists() else {}
+T = TypeVar('T')
 
 
 @dataclass
@@ -38,32 +25,26 @@ class Markup:
     zones: list[Zone]
     houses: list[House]
 
-@dataclass(init=False)
-class GridArgs:
-    entries: dict[int2, dict[str, Any]]
-
-    def __init__(self, entries=None):
-        self.entries = {
-            tuple(entry["at"]): entry["args"]
-            for entry in entries or []
-        }
+    @classmethod
+    def from_toml_data(cls, houses: list[dict] = None, zones: list[dict] = None):
+        return cls(
+            houses=[House.from_markup(**h) for h in houses or []],
+            zones=[Zone.from_markup(**h) for h in zones or []],
+        )
 
 @dataclass
 class Config:
     prep_ticks: int = 0
 
 
-T = TypeVar('T')
-
+@dataclass(eq=False)
 class Level(Entity):
-    name = Name("Unknown level")
-    no_entity_character = "."
+    name: Name
+    markup: Markup
 
-    layers = ["tiles", "physical", "effects", "sounds"]
-    invisible_layers = ["sounds"]  # TODO maybe as a separate thing instead of subset?
-
-    markup = None
-    player = None
+    no_entity_character: ClassVar[str] = "."
+    layers: ClassVar[tuple[str, ...]] = ("tiles", "physical", "effects", "sounds", )
+    invisible_layers: ClassVar[tuple[str, ...]] = ("sounds", )
 
     def __init__(self, ms: MetasystemFacade, path: Path, no_rails: bool, genesis: Genesis):
         self.name = Name(f"Level {path.stem}")
@@ -71,8 +52,11 @@ class Level(Entity):
 
         level_lines = (path / "grid.txt").read_text().split('\n')
 
-        grid_args = GridArgs(**load_toml(path / "grid_args.toml"))  # TODO maybe join w/ markup?
-        self.config = Config(**load_toml(path / "config.toml"))
+        grid_args = {
+            tuple(entry["at"]): entry["args"]
+            for entry in _load_toml(path / "grid_args.toml").get("entries", [])
+        }
+        self.config = Config(**_load_toml(path / "config.toml"))
 
         self.size = (max(len(line) for line in level_lines), len(level_lines))
 
@@ -80,7 +64,7 @@ class Level(Entity):
 
         self.grids = {layer: grid_create(self.size, lambda: None) for layer in self.layers}
         self.palette = reduce(lambda a, b: a | b, (
-            load_palette_from(Path("src/library") / layer)
+            _load_palette_from(Path("src/library") / layer)
             for layer in self.layers
             if layer not in self.invisible_layers
         ))
@@ -90,7 +74,7 @@ class Level(Entity):
 
             local_palette_path = path / "library" / layer
             if local_palette_path.exists():
-                self.palette.update(load_palette_from(local_palette_path))
+                self.palette.update(_load_palette_from(local_palette_path))
 
         for y, line in enumerate(level_lines):
             for x, c in enumerate(line):
@@ -100,7 +84,7 @@ class Level(Entity):
                     continue
 
                 if c in self.palette:
-                    e = ms.add(self.palette[c](p=p, level=self, **grid_args.entries.get(p, {})))
+                    e = ms.add(self.palette[c](p=p, level=self, **grid_args.get(p, {})))
                     self.put(p, e)
 
                     if hasattr(e, "after_load"):
@@ -158,3 +142,19 @@ class Level(Entity):
         grid_set(entity.level.grids[entity.layer], entity.p, None)
         entity.level = target
         target.put(p, entity)
+
+
+def _load_palette_from(path):
+    result = {}
+
+    for p in path.iterdir():
+        if p.suffix != '.py': continue
+
+        cls = getattr(import_module(p), to_camel_case(p.stem))
+        result[cls.character] = cls
+
+    return result
+
+
+def _load_toml(path: Path):
+    return toml.loads(path.read_text(encoding="utf-8")) if path.exists() else {}
