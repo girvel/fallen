@@ -38,6 +38,6 @@ class Player(Humanoid):
         self.traits = Traits()
         self.inventory = Inventory()
 
-    def on_death(self, _hades: Hades, _genesis: Genesis):
+    def on_destruction(self, _hades: Hades, _genesis: Genesis):
         Level.change(self, self.afterlife_level, (5, 3))
         return True

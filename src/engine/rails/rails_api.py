@@ -94,10 +94,10 @@ class RailsApi:
 
     def lock_dying(self, entity, lock) -> Any:
         if entity not in self._death_storage:
-            self._death_storage[entity] = ~Q(entity).on_death or (lambda *_, **__: None)
+            self._death_storage[entity] = ~Q(entity).on_destruction or (lambda *_, **__: None)
             self._death_locks[entity] = []
 
-            entity.on_death = (lambda *_, **__: True)
+            entity.on_destruction = (lambda *_, **__: True)
 
         assert lock not in self._death_locks[entity]
 
@@ -108,7 +108,7 @@ class RailsApi:
         self._death_locks[entity].remove(lock)
 
         if len(self._death_locks[entity]) == 0:
-            entity.on_death = self._death_storage[entity]
+            entity.on_destruction = self._death_storage[entity]
             del self._death_storage[entity]
             del self._death_locks[entity]
 

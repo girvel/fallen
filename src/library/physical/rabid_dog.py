@@ -34,4 +34,4 @@ class RabidDog(Material):
         self.ai = RabidAi()
         self.senses = Senses(10, 0, 5)
 
-        self.on_death = generate_body_factory(self)
+        self.on_destruction = generate_body_factory(self)

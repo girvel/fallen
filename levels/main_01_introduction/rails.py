@@ -97,7 +97,7 @@ class Rails(RailsBase):
             rails.lock_complex_ai(self.mother, rails.ai_locks['mother_leaving'])
             rails.lock_dying(self.player, rails.death_locks["player_vision"])
 
-            # TODO move this to on_death? (after level refactor)
+            # TODO move this to on_destruction? (after level refactor)
             self.player.afterlife_level = rails.ms.add(Level(rails.ms, Path("levels/afterlife"), False, rails.genesis))
             self.player.afterlife_level.rails.parent_level = self.player.level  # TODO encapsulate this?
 

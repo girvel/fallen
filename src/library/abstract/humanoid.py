@@ -25,5 +25,5 @@ class Humanoid(Material):
 
         assert_attributes(self, required_attributes)
 
-    def on_death(self, *args):
+    def on_destruction(self, *args):
         return generate_body_factory(self)(*args)
