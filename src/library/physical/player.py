@@ -39,5 +39,5 @@ class Player(Humanoid):
         self.inventory = Inventory()
 
     def on_death(self, _hades: Hades, _genesis: Genesis):
-        self.level.change(self, self.afterlife_level, (5, 3))
+        Level.change(self, self.afterlife_level, (5, 3))
         return True

@@ -14,5 +14,4 @@ class Teleport(Action):
     destination: int2
 
     def execute(self, actor, hades: Hades, genesis: Genesis):
-        grid_set(actor.level.grids["physical"], actor.p, None)
-        actor.level.put(self.destination, actor)
+        actor.level.move(self.destination, actor)

@@ -11,7 +11,7 @@ from ecs import Entity, MetasystemFacade
 from src.engine.language.name import Name
 from src.lib.toolkit import to_camel_case, import_module
 from src.lib.vector.vector import int2
-from src.lib.vector.grid import grid_create, grid_set
+from src.lib.vector.grid import grid_create, grid_set, grid_get, grid_unsafe_get
 from src.library.markup.house import House
 from src.library.markup.zone import Zone
 from src.library.special.genesis import Genesis
@@ -58,18 +58,6 @@ T = TypeVar('T')
 class Level(Entity):
     name = Name("Unknown level")
     no_entity_character = "."
-
-    def put(self, p: int2, entity: T) -> T:
-        grid_set(self.grids[entity.layer], p, entity)
-        entity.p = p
-        entity.level = self
-        return entity
-
-    @staticmethod
-    def change(entity: T, target: "Level", p: int2) -> T:
-        grid_set(entity.level.grids[entity.layer], entity.p, None)
-        entity.level = target
-        target.put(p, entity)
 
     layers = ["tiles", "physical", "effects", "sounds"]
     invisible_layers = ["sounds"]  # TODO maybe as a separate thing instead of subset?
@@ -154,3 +142,19 @@ class Level(Entity):
 
     def find(self, entity_type: Type[T]) -> Iterator[T]:
         return self.query(lambda e: isinstance(e, entity_type))
+
+    def put(self, p: int2, entity: T) -> T:
+        grid_set(self.grids[entity.layer], p, entity)
+        entity.p = p
+        entity.level = self
+        return entity
+
+    def move(self, p: int2, entity: T) -> T:
+        grid_set(self.grids[entity.layer], entity.p, None)
+        self.put(p, entity)
+
+    @staticmethod
+    def change(entity: T, target: "Level", p: int2) -> T:
+        grid_set(entity.level.grids[entity.layer], entity.p, None)
+        entity.level = target
+        target.put(p, entity)
