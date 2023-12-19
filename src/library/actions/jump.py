@@ -5,6 +5,7 @@ from src.lib.query import Q
 from src.lib.vector.grid import grid_get
 from src.lib.vector.vector import add2, int2, abs2
 from src.components import Genesis, Hades
+from src.library.special.level import Level
 from src.library.tiles.footprint import Footprint
 
 
@@ -29,6 +30,6 @@ class Jump(Action):
         if grid_get(actor.level.grids["tiles"], actor.p, False) is None and (~Q(actor).health.amount.current or 0) > 5:
             genesis.push(Footprint(p=actor.p, level=actor.level))
 
-        actor.level.move(next_p, actor)
+        Level.move(actor, next_p)
         self.succeeded = True
 

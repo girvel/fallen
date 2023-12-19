@@ -58,7 +58,7 @@ class RailsApi:
 
     def plane_shift(self, level, p) -> Script:
         yield  # to display the last railed action before the shift
-        Level.change(self.get_player(), level, p)
+        Level.move(self.get_player(), p, level=level)  # TODO is it needed? maybe use yield {entity: Teleport}?
 
     def create_entity(self, entity) -> Script:  # TODO not needed, replace with genesis.push
         self.genesis.push(entity)

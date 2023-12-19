@@ -1,13 +1,12 @@
 from dataclasses import dataclass
 
-from ecs import Entity
-
-from src.engine.acting.action import Action
 from src.components import Genesis, Hades
-from src.library.tiles.footprint import Footprint
+from src.engine.acting.action import Action
 from src.lib.query import Q
+from src.lib.vector.grid import grid_get
 from src.lib.vector.vector import add2, int2, abs2
-from src.lib.vector.grid import grid_set, grid_get
+from src.library.special.level import Level
+from src.library.tiles.footprint import Footprint
 
 
 @dataclass
@@ -27,4 +26,4 @@ class Move(Action):
         if grid_get(actor.level.grids["tiles"], actor.p, False) is None and (~Q(actor).health.amount.maximum or 0) > 5:
             genesis.push(Footprint(p=actor.p, level=actor.level))
 
-        actor.level.move(next_p, actor)
+        Level.move(actor, next_p)

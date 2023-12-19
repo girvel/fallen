@@ -37,5 +37,6 @@ class Player(Humanoid):
         self.inventory = Inventory()
 
     def on_destruction(self, _hades: Hades, _genesis: Genesis):
-        Level.change(self, self.afterlife_level, (5, 3))
+        assert self.afterlife_level is not None
+        Level.move(self, (5, 3), level=self.afterlife_level)
         return True

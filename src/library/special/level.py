@@ -15,9 +15,9 @@ from src.lib.vector.grid import grid_create, grid_set
 from src.lib.vector.vector import int2
 from src.library.markup.house import House
 from src.library.markup.zone import Zone
-from src.components import Genesis
+from src.components import Genesis, Positioned
 
-T = TypeVar('T')
+TPositioned = TypeVar('TPositioned', bound=Positioned)
 
 
 @dataclass
@@ -43,7 +43,7 @@ class Level(Entity):
     markup: Markup
     config: Config
 
-    grids: dict[str, tuple[list[list[Any]], int2]]
+    grids: dict[str, tuple[list[list[TPositioned]], int2]]
     transparency_cache: numpy.ndarray[Any, numpy.dtype[int]]
     size: int2
 
@@ -129,24 +129,23 @@ class Level(Entity):
             if e and request(e)
         )
 
-    def find(self, entity_type: Type[T]) -> Iterator[T]:
+    def find(self, entity_type: Type[TPositioned]) -> Iterator[TPositioned]:
         return self.query(lambda e: isinstance(e, entity_type))
 
-    def put(self, p: int2, entity: T) -> T:
-        grid_set(self.grids[entity.layer], p, entity)
-        entity.p = p
-        entity.level = self
-        return entity
+    @classmethod
+    def put(cls, entity: TPositioned):
+        grid_set(entity.level.grids[entity.layer], entity.p, entity)
 
-    def move(self, p: int2, entity: T) -> T:
-        grid_set(self.grids[entity.layer], entity.p, None)
-        self.put(p, entity)
-
-    @staticmethod
-    def change(entity: T, target: "Level", p: int2) -> T:
+    @classmethod
+    def remove(cls, entity: TPositioned):
         grid_set(entity.level.grids[entity.layer], entity.p, None)
-        entity.level = target
-        target.put(p, entity)
+
+    @classmethod
+    def move(cls, entity: TPositioned, p: int2, *, level: "Level | None" = None):
+        cls.remove(entity)
+        entity.p = p
+        if level is not None: entity.level = level
+        cls.put(entity)
 
 
 def _load_palette_from(path):
