@@ -2,24 +2,20 @@ import logging
 from dataclasses import dataclass, field
 from functools import reduce
 from pathlib import Path
-from typing import TypeVar, Callable, Type, Iterator, Any, ClassVar, Generator, TYPE_CHECKING
+from typing import TypeVar, Callable, Type, Iterator, Any, ClassVar
 
 import numpy
 import toml as toml
-from ecs import Entity, MetasystemFacade
+from ecs import Entity
 
 from src.engine.acting.action import Action
 from src.engine.language.name import Name
 from src.lib.toolkit import to_camel_case, import_module
+from src.lib.vector.grid import grid_create, grid_set
 from src.lib.vector.vector import int2
-from src.lib.vector.grid import grid_create, grid_set, grid_get, grid_unsafe_get
 from src.library.markup.house import House
 from src.library.markup.zone import Zone
 from src.library.special.genesis import Genesis
-
-if TYPE_CHECKING:
-    from src.engine.rails.rails_base import RailsBase
-
 
 T = TypeVar('T')
 
@@ -82,37 +78,8 @@ class Level(Entity):
             rails=None,
         )
 
-        grid_args = {
-            tuple(entry["at"]): entry["args"]
-            for entry in _load_toml(path / "grid_args.toml").get("entries", [])
-        }
-
-        # TODO NEXT REF move all loading to a separate private function
-        palette = reduce(lambda a, b: a | b, (
-            _load_palette_from(Path("src/library") / layer)
-            for layer in cls.layers
-            if layer not in cls.invisible_layers
-        ))
-
-        for layer in cls.layers:
-            if layer in cls.invisible_layers: continue
-
-            local_palette_path = path / "library" / layer
-            if local_palette_path.exists():
-                palette.update(_load_palette_from(local_palette_path))
-
-        for y, line in enumerate(level_lines):
-            for x, c in enumerate(line):
-                p = (x, y)
-
-                if c == cls.no_entity_character:
-                    continue
-
-                if c not in palette:
-                    logging.warning(f"Ignored unknown entity `{c}` at {p}")
-                    continue
-
-                genesis.push(palette[c](p=p, level=result, **grid_args.get(p, {})))
+        for loaded_entity in result._load_grid(path, level_lines):
+            genesis.push(loaded_entity)
 
         if not disable_rails and (rails_path := path / "rails.py").exists():
             result.rails = genesis.push(import_module(rails_path).Rails(result, genesis))
@@ -120,6 +87,38 @@ class Level(Entity):
         genesis.push(result)
         logging.info(f"Finished loading {result.name}")
         return result
+
+    def _load_grid(self, base_path: Path, level_lines: list[str]) -> Iterator[Any]:
+        grid_args = {
+            tuple(entry["at"]): entry["args"]
+            for entry in _load_toml(base_path / "grid_args.toml").get("entries", [])
+        }
+
+        palette = reduce(lambda a, b: a | b, (
+            _load_palette_from(Path("src/library") / layer)
+            for layer in self.layers
+            if layer not in self.invisible_layers
+        ))
+
+        for layer in self.layers:
+            if layer in self.invisible_layers: continue
+
+            local_palette_path = base_path / "library" / layer
+            if local_palette_path.exists():
+                palette.update(_load_palette_from(local_palette_path))
+
+        for y, line in enumerate(level_lines):
+            for x, c in enumerate(line):
+                p = (x, y)
+
+                if c == self.no_entity_character:
+                    continue
+
+                if c not in palette:
+                    logging.warning(f"Ignored unknown entity `{c}` at {p}")
+                    continue
+
+                yield palette[c](p=p, level=self, **grid_args.get(p, {}))
 
     def query(self, request: Callable[[Entity], bool]) -> Iterator[Entity]:
         return (
