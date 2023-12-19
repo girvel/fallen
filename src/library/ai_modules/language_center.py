@@ -1,13 +1,12 @@
+import logging
 from dataclasses import dataclass
 from functools import singledispatchmethod
 from random import randrange
 
-from ecs import Entity
-
+from src.engine.ai import Perception
 from src.engine.language.language import placement
 from src.engine.meme import Idea, Aggression, DangerousEntity
 from src.library.actions.say import Say
-from src.engine.ai import Perception
 
 
 @dataclass

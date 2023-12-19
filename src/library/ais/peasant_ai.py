@@ -57,8 +57,10 @@ class PeasantAi(CompositeAi):
         if self.lagging_period.step(): return
 
         ideas, notices_danger = self.use(Observer)
+
         if notices_danger and self.remains_in_danger_mode_for.is_min():
-            logging.debug(f"{subject.name} goes to danger mode")
+            logging.info(f"{subject.name} goes to danger mode")
+
         if notices_danger: self.remains_in_danger_mode_for.reset_to_max()
 
         if not self.remains_in_danger_mode_for.is_min():

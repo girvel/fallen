@@ -3,7 +3,7 @@ from ecs import Entity
 from src.engine.acting.damage import Health, Weapon
 from src.engine.acting import armor_kind
 from src.engine.acting import damage_kind
-from src.engine.attitude.implementation import Constants
+from src.engine.attitude.implementation import Relation
 from src.library.ai_modules.spacial_memory import SpacialMemory
 from src.engine.language.library import reserved_names
 from src.engine.language.name import CompositeName
@@ -33,4 +33,4 @@ class Mother(Humanoid):
     def after_creation(self):
         self.ai.composite[SpacialMemory].knows(self.level)
         self.house = next(h for h in self.level.markup.houses if h.reserved_for == "kinds")
-        self.attitude.relations[next(self.level.find(Player))] = Constants.Love
+        self.attitude.relations[next(self.level.find(Player))] = Relation.Love

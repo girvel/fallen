@@ -8,7 +8,7 @@ class Faction:
     Villagers = "Villagers"
     Water = "Water"
 
-class Constants:
+class Relation:
     MortalEnemy = -10_000
     Enemy = -1_000
     Neutrality = 0
@@ -17,4 +17,4 @@ class Constants:
     Love = 1_000
 
 def common_attitude():
-    return Attitude({Faction.Predators: Constants.Enemy, Faction.Disasters: Constants.MortalEnemy})
+    return Attitude({Faction.Predators: Relation.Enemy, Faction.Disasters: Relation.MortalEnemy})

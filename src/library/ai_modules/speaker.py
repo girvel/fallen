@@ -2,7 +2,7 @@ from dataclasses import dataclass, field
 
 from ecs import Entity
 
-from src.engine.attitude.implementation import Constants
+from src.engine.attitude.implementation import Relation
 from src.library.actions.say import Say
 from src.library.ai_modules.language_center import Message
 from src.engine.ai import Perception
@@ -10,7 +10,7 @@ from src.engine.ai import Perception
 
 @dataclass
 class Speaker:
-    attitude_threshold: int = Constants.Normal
+    attitude_threshold: int = Relation.Neutrality
 
     messages: list[Message] = field(default_factory=list)
 

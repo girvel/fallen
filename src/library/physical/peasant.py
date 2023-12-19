@@ -4,7 +4,7 @@ from src.engine.acting.damage import Weapon, Health
 from src.engine.acting import armor_kind
 from src.engine.acting import damage_kind
 from src.library.ai_modules.spacial_memory import SpacialMemory
-from src.engine.attitude.implementation import common_attitude, Faction
+from src.engine.attitude.implementation import common_attitude, Faction, Relation
 from src.engine.language.library import first_names
 from src.engine.language.name import CompositeName
 from src.library.abstract.humanoid import Humanoid
@@ -42,5 +42,5 @@ class Peasant(Humanoid):
 
 def peasant_attitude():
     result = common_attitude()
-    result.relations[Faction.Villagers] = 50
+    result.relations[Faction.Villagers] = Relation.Normal
     return result

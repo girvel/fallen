@@ -1,19 +1,20 @@
+import logging
 from dataclasses import dataclass, field
 
 from ecs import Entity
 
-from src.engine.attitude.implementation import Constants
+from src.engine.ai import Perception
+from src.engine.attitude.implementation import Relation
 from src.engine.meme import Aggression, Idea, DangerousEntity
 from src.lib.query import Q
 from src.library.actions.hand_attack import HandAttack
 from src.library.tiles.body import Body
-from src.engine.ai import Perception
 
 
 @dataclass
 class Observer:
     known_objects: list[Entity] = field(default_factory=list)  # TODO ExpiringCollection
-    warning_attitude_threshold: int = Constants.Neutrality
+    warning_attitude_threshold: int = Relation.Neutrality
 
     # TODO OPT different collection for ideas? dict? list with idea kind ID as index?
     # TODO OPT determine the dict/list speed K
@@ -30,7 +31,6 @@ class Observer:
         ]
 
         if len(aggressions) > 0:
-            notices_danger = True
             memes.extend(aggressions)
 
         for p, e in perception.vision["tiles"].items():
@@ -44,6 +44,7 @@ class Observer:
                 subject.attitude.get(e) < self.warning_attitude_threshold
             ):
                 notices_danger = True
+                logging.debug(f"{e.name}: {subject.attitude.get(e)}")
                 if e not in self.known_objects:
                     memes.append(DangerousEntity(p, e))
                     self.known_objects.append(subject)

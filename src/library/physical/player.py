@@ -3,6 +3,7 @@ from typing import TYPE_CHECKING
 from src.engine.acting.damage import Weapon, Health
 from src.engine.acting import armor_kind
 from src.engine.acting import damage_kind
+from src.engine.attitude.implementation import Faction
 from src.engine.inventory import Inventory
 from src.engine.language.library import reserved_names
 from src.engine.language.name import CompositeName
@@ -20,7 +21,7 @@ class Player(Humanoid):
     color = ColorPair(white)
 
     act = None
-    faction = None
+    faction = Faction.Villagers
 
     tick_counter = 0
 
