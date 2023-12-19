@@ -51,15 +51,6 @@ class Rails(RailsBase):
 
 
     def __post_init__(self):
-        self.characters = {
-            'player': self.get_player(),
-            'mother': next(self.level.find(Mother)),
-            'brother': next(self.level.find(Brother)),
-            'rabid_dog': next(self.level.find(RabidDog)),
-            'girl': None,
-            'frogs': list(self.level.find(Frog)),
-        }
-
         self.positions = {
             'street': (181, 42),
             'brother_leaving_midpoint': (93, 28),
@@ -84,6 +75,16 @@ class Rails(RailsBase):
 
         self.death_locks = {
             "player_vision": Lock("player_vision"),
+        }
+
+    def after_creation(self):
+        self.characters = {
+            'player': self.get_player(),
+            'mother': next(self.level.find(Mother)),
+            'brother': next(self.level.find(Brother)),
+            'rabid_dog': next(self.level.find(RabidDog)),
+            'girl': None,
+            'frogs': list(self.level.find(Frog)),
         }
 
 

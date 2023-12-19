@@ -24,7 +24,7 @@ class CastFireStorm(Action, Aggressive):
 
             for p in iter_square(actor.p, r, actor.level.size):
                 if fire_map[p] and grid_get(actor.level.grids["effects"], p) is None:
-                    genesis.entities_to_create.add(Fire(half_life=18, heat=25, p=p, level=actor.level, parent=actor))
+                    genesis.push(Fire(half_life=18, heat=25, p=p, level=actor.level, parent=actor))
 
             yield
 

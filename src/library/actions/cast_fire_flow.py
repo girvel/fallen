@@ -24,7 +24,7 @@ class CastFireFlow(Action, Aggressive):
             if grid_get(actor.level.grids["effects"], p, object()) is not None or not chance(k):
                 continue
 
-            genesis.entities_to_create.add(Fire(half_life=18, heat=10, p=p, level=actor.level, parent=actor))
+            genesis.push(Fire(half_life=18, heat=10, p=p, level=actor.level, parent=actor))
 
     def _pattern(self):
         for dv in range(0, self.length):

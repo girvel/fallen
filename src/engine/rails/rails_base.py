@@ -21,13 +21,12 @@ class SceneRun:
 class RailsBase(RailsApi, Entity, metaclass=ABCMeta):
     characters: dict[str, Any]
 
-    name = Name("Рельсы")
+    name = Name("rails")
     rails_flag = None
 
     def __init__(self, level, ms, genesis):
         RailsApi.__init__(self, level, ms, genesis)
         self.__post_init__()
-        assert_attributes(self, ["characters"])
 
         self.scenes = list(sorted(
             (scene

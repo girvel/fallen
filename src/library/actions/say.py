@@ -16,7 +16,7 @@ class Say(Action):
     idea: Idea | None = None
 
     def execute(self, actor: Any, hades: Hades, genesis: Genesis):
-        genesis.entities_to_create.add(Sound(
+        genesis.push(Sound(
             parent=actor,
             content=self.content,
             is_internal=self.is_internal,

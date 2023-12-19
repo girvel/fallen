@@ -22,4 +22,4 @@ class Slope(Material):
         self.health = Health(random.randrange(2500, 6000), armor_kind.stone)
 
     def on_destruction(self, _hades: Hades, genesis: Genesis):
-        genesis.entities_to_create.add(Ruins(p=self.p, level=self.level))
+        genesis.push(Ruins(p=self.p, level=self.level))

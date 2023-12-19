@@ -12,7 +12,7 @@ if TYPE_CHECKING:
 
 
 class Creator(Protocol):
-    entities_to_create: "set[Any]"
+    _entities_to_create: "set[Any]"
 
 class Destructor(Protocol):
     entities_to_destroy: "set[Any]"

@@ -25,6 +25,6 @@ def flow(subject: Liquid, genesis: Creator):
                 other.liquid_height += 1
         elif grid_unsafe_get(subject.level.grids["physical"], p) is None:
             subject.liquid_height -= 1
-            genesis.entities_to_create.add(type(subject)(level=subject.level, p=p, liquid_height=1))
+            genesis.push(type(subject)(level=subject.level, p=p, liquid_height=1))
 
         if subject.liquid_height <= 1: return

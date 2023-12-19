@@ -34,7 +34,7 @@ def generate_body_factory(base: Any):
         if hasattr(base, "weapon"):
             items.append(base.weapon)
 
-        genesis.entities_to_create.add(Body(
+        genesis.push(Body(
             parent_name=base.name, items=items, sex=~Q(base).sex, p=base.p, level=base.level
         ))
 

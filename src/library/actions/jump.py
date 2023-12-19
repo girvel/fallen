@@ -28,7 +28,7 @@ class Jump(Action):
                 return
 
         if grid_get(actor.level.grids["tiles"], actor.p, False) is None and (~Q(actor).health.amount.current or 0) > 5:
-            genesis.entities_to_create.add(Footprint(p=actor.p, level=actor.level))
+            genesis.push(Footprint(p=actor.p, level=actor.level))
 
         actor.level.move(next_p, actor)
         self.succeeded = True

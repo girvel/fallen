@@ -65,7 +65,7 @@ class RailsApi:
         Level.change(self.get_player(), level, p)
 
     def create_entity(self, entity) -> Script:
-        self.genesis.entities_to_create.add(entity)
+        self.genesis.push(entity)
         yield
 
     def lock_complex_ai(self, entity, lock) -> Any:

@@ -113,13 +113,12 @@ class Level(Entity):
                     logging.warning(f"Ignored unknown entity `{c}` at {p}")
                     continue
 
-                genesis.entities_to_create.add(palette[c](p=p, level=result, **grid_args.get(p, {})))
+                genesis.push(palette[c](p=p, level=result, **grid_args.get(p, {})))
 
         if not disable_rails and (rails_path := path / "rails.py").exists():
-            result.rails = import_module(rails_path).Rails(result, ms, genesis)
-            genesis.entities_to_create.add(result.rails)
+            result.rails = genesis.push(import_module(rails_path).Rails(result, ms, genesis))
 
-        genesis.entities_to_create.add(result)
+        genesis.push(result)
         logging.info(f"Finished loading {result.name}")
         return result
 

@@ -28,8 +28,9 @@ def destruction(hades: Destructor, genesis: Creator, ms: MetasystemFacade):
 
 @sequence.append
 def creation(hades: Destructor, genesis: Creator, ms: MetasystemFacade):
-    for entity in genesis.entities_to_create:
-        if hasattr(entity, "level"):
+    for entity in genesis._entities_to_create:
+        # TODO NEXT ecs.has_component()
+        if hasattr(entity, "level") and hasattr(entity, "p") and hasattr(entity, "layer"):
             if (replaced := grid_get(entity.level.grids[entity.layer], entity.p)) is not None:
                 hades.entities_to_destroy.add(replaced)
                 replaced.level = None
@@ -43,8 +44,8 @@ def creation(hades: Destructor, genesis: Creator, ms: MetasystemFacade):
 
 @sequence.append
 def after_creation(genesis: Creator):
-    for entity in genesis.entities_to_create:
+    for entity in genesis._entities_to_create:
         if hasattr(entity, "after_creation"):
             entity.after_creation()
 
-    genesis.entities_to_create.clear()
+    genesis._entities_to_create.clear()
