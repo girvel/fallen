@@ -23,5 +23,5 @@ class Brother(Humanoid):
         self.weapon = Weapon(4, damage_kind.slashing)
         self.ai = BrotherAi()
 
-    def after_load(self, level):
-        self.ai.composite[SpacialMemory].knows(level)
+    def after_creation(self):
+        self.ai.composite[SpacialMemory].knows(self.level)

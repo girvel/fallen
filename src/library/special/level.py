@@ -60,7 +60,7 @@ class Level(Entity):
 
         self.size = (max(len(line) for line in level_lines), len(level_lines))
 
-        after_loads = []
+        after_loads = []  # TODO RM
 
         self.grids = {layer: grid_create(self.size, lambda: None) for layer in self.layers}
         self.palette = reduce(lambda a, b: a | b, (
@@ -87,7 +87,7 @@ class Level(Entity):
                     e = ms.add(self.palette[c](p=p, level=self, **grid_args.get(p, {})))
                     self.put(p, e)
 
-                    if hasattr(e, "after_load"):
+                    if hasattr(e, "after_load"):  # TODO RM
                         after_loads.append(e.after_load)
                 else:
                     logging.warning(f"Ignored unknown entity `{c}` at {p}")
@@ -102,7 +102,7 @@ class Level(Entity):
         else:
             self.markup = Markup(houses=[], zones=[])
 
-        for after_load in after_loads:
+        for after_load in after_loads:  # TODO RM
             after_load(self)
 
         if no_rails:

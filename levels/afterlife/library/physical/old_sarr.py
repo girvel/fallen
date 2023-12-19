@@ -27,5 +27,5 @@ class OldSarr(Humanoid):
         self.ai = DummyAi()
         self.health = Health(1_000, armor_kind.mennar)
 
-    def after_load(self, level):
-        self.ai.composite[SpacialMemory].knows(level)
+    def after_creation(self):
+        self.ai.composite[SpacialMemory].knows(self.level)

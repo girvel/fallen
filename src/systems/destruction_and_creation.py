@@ -8,6 +8,7 @@ from src.lib.vector.grid import grid_set, grid_get
 
 sequence = []
 
+
 @sequence.append
 def destruction(hades: Destructor, genesis: Creator, ms: MetasystemFacade):
     for entity in hades.entities_to_destroy:
@@ -24,6 +25,7 @@ def destruction(hades: Destructor, genesis: Creator, ms: MetasystemFacade):
 
     hades.entities_to_destroy.clear()
 
+
 @sequence.append
 def creation(hades: Destructor, genesis: Creator, ms: MetasystemFacade):
     for entity in genesis.entities_to_create:
@@ -38,10 +40,12 @@ def creation(hades: Destructor, genesis: Creator, ms: MetasystemFacade):
         if not hasattr(entity, "boring_flag"):
             logging.info(f'+"{~Q(entity).name or entity}"')
 
+
 @sequence.append
 def after_creation(genesis: Creator):
     for entity in genesis.entities_to_create:
         if hasattr(entity, "after_creation"):
+            logging.debug(f'"{entity.name}".after_creation()')
             entity.after_creation()
 
     genesis.entities_to_create.clear()

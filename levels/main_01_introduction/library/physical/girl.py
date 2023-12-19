@@ -18,5 +18,5 @@ class Girl(Humanoid):
     def __post_init__(self):
         self.health = Health(10, "Organic")
 
-    def after_load(self, level):
-        self.ai.composite[SpacialMemory].knows(level)
+    def after_creation(self):
+        self.ai.composite[SpacialMemory].knows(self.level)

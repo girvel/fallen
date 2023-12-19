@@ -67,7 +67,7 @@ class RailsApi:
     def create_entity(self, entity) -> Script:
         self.genesis.entities_to_create.add(entity)
         yield
-        if hasattr(entity, "after_load"): entity.after_load(entity.level)
+        if hasattr(entity, "after_load"): entity.after_load(entity.level)  # TODO RM
 
     def lock_complex_ai(self, entity, lock) -> Any:
         if entity not in self._ai_storage:

@@ -23,5 +23,5 @@ class Enemy(Humanoid):
         self.senses = Senses(12, 0, 0)
         self.ai = DummyAi()
 
-    def after_load(self, level):
-        self.ai.composite[SpacialMemory].knows(level)
+    def after_creation(self):
+        self.ai.composite[SpacialMemory].knows(self.level)

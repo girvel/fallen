@@ -27,17 +27,17 @@ class Peasant(Humanoid):
         self.ai = PeasantAi()
         self.attitude = peasant_attitude()
 
-    def after_load(self, level):
-        if len(level.markup.houses) > 0:
+    def after_creation(self):
+        if len(self.level.markup.houses) > 0:
             self.house, = random.choices(*zip(*(
                 (h, area2(sub2(h.house_borders[1], h.house_borders[0])))
-                for h in level.markup.houses
+                for h in self.level.markup.houses
                 if h.reserved_for is None
             )))
 
             self.name = CompositeName(self.name, self.house.family_names[self.sex])
 
-        self.ai.composite[SpacialMemory].knows(level)
+        self.ai.composite[SpacialMemory].knows(self.level)
 
 
 def peasant_attitude():

@@ -30,7 +30,7 @@ class Mother(Humanoid):
         self.attitude = peasant_attitude()
         self.house = None
 
-    def after_load(self, level):
-        self.ai.composite[SpacialMemory].knows(level)
-        self.house = next(h for h in level.markup.houses if h.reserved_for == "kinds")
-        self.attitude.relations[next(level.find(Player))] = Constants.Love
+    def after_creation(self):
+        self.ai.composite[SpacialMemory].knows(self.level)
+        self.house = next(h for h in self.level.markup.houses if h.reserved_for == "kinds")
+        self.attitude.relations[next(self.level.find(Player))] = Constants.Love

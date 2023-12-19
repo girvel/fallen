@@ -24,5 +24,5 @@ class Kaledeii(Humanoid):
         self.senses = Senses(24, 40, 0)
         self.ai = DummyAi()
 
-    def after_load(self, level):
-        self.ai.composite[SpacialMemory].knows(level)
+    def after_creation(self):
+        self.ai.composite[SpacialMemory].knows(self.level)

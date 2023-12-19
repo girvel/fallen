@@ -13,8 +13,7 @@ from src.engine.ai import Senses
 from src.library.special.genesis import Genesis
 from src.library.special.hades import Hades
 
-if TYPE_CHECKING:
-    from src.library.special.level import Level
+from src.library.special.level import Level
 
 
 class Player(Humanoid):
