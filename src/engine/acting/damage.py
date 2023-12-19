@@ -72,7 +72,7 @@ def inflict_damage(
 
     if health.amount.current <= 0:
         logging.info(f"{target.name} is killed")
-        hades.entities_to_destroy.add(target)
+        hades.push(target)
 
         for killer in iter_parenting_stack(source):
             if not hasattr(killer, "last_killed"):

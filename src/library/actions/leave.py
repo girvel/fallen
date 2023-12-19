@@ -11,4 +11,4 @@ class Leave(Action):
         if hasattr(actor, "on_destruction"):
             actor.on_destruction = lambda *_, **__: False
 
-        hades.entities_to_destroy.add(actor)
+        hades.push(actor)

@@ -7,8 +7,8 @@ sequence = []
 @sequence.append
 def death_by_chance(subject: DyingWithChance, hades: Destructor):
     if chance(subject.death_chance):
-        hades.entities_to_destroy.add(subject)
+        hades.push(subject)
 
 @sequence.append
 def sounds_death(subject: Sound, hades: Destructor):
-    hades.entities_to_destroy.add(subject)
+    hades.push(subject)

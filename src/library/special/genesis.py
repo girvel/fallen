@@ -9,7 +9,6 @@ class Genesis(Entity):
     def __init__(self):
         self._entities_to_create = []
 
-    # TODO NEXT the same for hades?
     def push(self, entity):
         self._entities_to_create.append(entity)
         return entity

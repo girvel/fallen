@@ -60,7 +60,7 @@ class RailsApi:
         yield  # to display the last railed action before the shift
         Level.change(self.get_player(), level, p)
 
-    def create_entity(self, entity) -> Script:
+    def create_entity(self, entity) -> Script:  # TODO not needed, replace with genesis.push
         self.genesis.push(entity)
         yield
 

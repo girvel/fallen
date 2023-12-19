@@ -7,4 +7,8 @@ class Hades(Entity):
     name = Name("Хейдс")
 
     def __init__(self):
-        self.entities_to_destroy = set()
+        self._entities_to_destroy = []
+
+    def push(self, entity):
+        self._entities_to_destroy.append(entity)
+        return entity

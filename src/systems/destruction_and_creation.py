@@ -11,7 +11,7 @@ sequence = []
 
 @sequence.append
 def destruction(hades: Destructor, genesis: Creator, ms: MetasystemFacade):
-    for entity in hades.entities_to_destroy:
+    for entity in hades._entities_to_destroy:
         if hasattr(entity, "on_destruction") and entity.on_destruction(hades, genesis):
             continue
 
@@ -23,18 +23,14 @@ def destruction(hades: Destructor, genesis: Creator, ms: MetasystemFacade):
         if not hasattr(entity, "boring_flag"):
             logging.info(f'-"{~Q(entity).name or entity}"')
 
-    hades.entities_to_destroy.clear()
+    hades._entities_to_destroy.clear()
 
 
 @sequence.append
-def creation(hades: Destructor, genesis: Creator, ms: MetasystemFacade):
+def creation(genesis: Creator, ms: MetasystemFacade):
     for entity in genesis._entities_to_create:
         # TODO NEXT ecs.has_component()
         if hasattr(entity, "level") and hasattr(entity, "p") and hasattr(entity, "layer"):
-            if (replaced := grid_get(entity.level.grids[entity.layer], entity.p)) is not None:
-                hades.entities_to_destroy.add(replaced)
-                replaced.level = None
-
             entity.level.put(entity.p, entity)
 
         ms.add(entity)

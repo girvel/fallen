@@ -15,7 +15,7 @@ class Creator(Protocol):
     _entities_to_create: "set[Any]"
 
 class Destructor(Protocol):
-    entities_to_destroy: "set[Any]"
+    _entities_to_destroy: "set[Any]"
 
 class Blinking(Protocol):
     blink_colors: "list[ColorPair]"
