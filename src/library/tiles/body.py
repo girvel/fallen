@@ -6,8 +6,7 @@ from src.engine.language.name import Name
 from src.engine.output.colors import ColorPair, red
 from src.lib.query import Q
 from src.library.abstract.material import Material
-from src.library.special.genesis import Genesis
-from src.library.special.hades import Hades
+from src.components import Genesis, Hades
 
 
 class Body(Material):

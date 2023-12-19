@@ -9,7 +9,7 @@ from src.library.ai_modules.spacial_memory import SpacialMemory
 from src.library.ais.dummy_ai import DummyAi
 from src.library.ais.io import Notification
 from src.library.physical.player import Player
-from src.library.special.genesis import Genesis
+from src.components import Genesis
 from src.library.special.level import Level
 
 Script: TypeAlias = Iterator[dict[Entity, Action | None] | None]

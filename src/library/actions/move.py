@@ -3,8 +3,7 @@ from dataclasses import dataclass
 from ecs import Entity
 
 from src.engine.acting.action import Action
-from src.library.special.genesis import Genesis
-from src.library.special.hades import Hades
+from src.components import Genesis, Hades
 from src.library.tiles.footprint import Footprint
 from src.lib.query import Q
 from src.lib.vector.vector import add2, int2, abs2

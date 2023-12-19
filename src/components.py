@@ -1,4 +1,9 @@
+from dataclasses import dataclass, field
 from typing import Any, Protocol, TYPE_CHECKING
+
+from ecs import Entity
+
+from src.engine.language.name import Name
 
 if TYPE_CHECKING:
     from numpy import ndarray, dtype
@@ -11,11 +16,7 @@ if TYPE_CHECKING:
     from src.library.special.level import Level
 
 
-class Creator(Protocol):
-    _entities_to_create: "set[Any]"
-
-class Destructor(Protocol):
-    _entities_to_destroy: "set[Any]"
+# GENERAL PROTOCOLS #
 
 class Blinking(Protocol):
     blink_colors: "list[ColorPair]"
@@ -62,3 +63,28 @@ class DyingWithChance(Protocol):
 
 class Sound(Protocol):
     sound_flag: "None"
+
+
+# SPECIAL PROTOCOLS #
+
+@dataclass
+class Genesis(Entity):
+    name: Name = field(default_factory=lambda: Name("Генезис"))
+    entities_to_create: list[Any] = field(default_factory=list)
+
+    def push(self, entity):
+        self.entities_to_create.append(entity)
+        return entity
+
+    __hash__ = object.__hash__
+
+@dataclass
+class Hades(Entity):
+    name: Name = field(default_factory=lambda: Name("Хейдс"))
+    entities_to_destroy: list[Any] = field(default_factory=list)
+
+    def push(self, entity):
+        self.entities_to_destroy.append(entity)
+        return entity
+
+    __hash__ = object.__hash__

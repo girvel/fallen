@@ -4,8 +4,7 @@ from src.engine.acting.action import Action
 from src.engine.acting.damage import inflict_damage
 from src.engine.acting import armor_kind
 from src.engine.acting import damage_kind
-from src.library.special.genesis import Genesis
-from src.library.special.hades import Hades
+from src.components import Genesis, Hades
 from src.lib.query import Q
 from src.lib.toolkit import chance
 from src.lib.vector.vector import int2, add2, mul2, flip2

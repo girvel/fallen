@@ -1,6 +1,6 @@
 import inspect
 
-from src.components import Killer, Healthy, Actor, Destructor, Creator
+from src.components import Killer, Healthy, Actor, Hades, Genesis
 
 sequence = []
 
@@ -13,7 +13,7 @@ def clean_up_health(container: Healthy):
     container.health.last_damaged_by.clear()  # TODO this is bullshit
 
 @sequence.append
-def act(actor: Actor, hades: Destructor, genesis: Creator):
+def act(actor: Actor, hades: Hades, genesis: Genesis):
     if actor.act is None: return
 
     if not inspect.isgeneratorfunction(actor.act.execute):

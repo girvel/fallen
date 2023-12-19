@@ -4,8 +4,7 @@ from typing import Any
 
 from src.engine.acting.action import Action
 from src.engine.meme import Idea
-from src.library.special.genesis import Genesis
-from src.library.special.hades import Hades
+from src.components import Genesis, Hades
 from src.library.special.sound import Sound
 
 

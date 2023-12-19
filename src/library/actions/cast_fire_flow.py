@@ -5,8 +5,7 @@ from ecs import Entity
 from src.engine.acting.action import Action
 from src.engine.acting.aggressive import Aggressive
 from src.library.effects.fire import Fire
-from src.library.special.genesis import Genesis
-from src.library.special.hades import Hades
+from src.components import Genesis, Hades
 from src.lib.toolkit import chance
 from src.lib.vector.vector import add2, mul2, flip2, int2
 from src.lib.vector.grid import grid_get

@@ -5,8 +5,7 @@ from src.engine.acting.damage import Health
 from src.engine.language.name import Name
 from src.engine.output.colors import ColorPair, yellow
 from src.library.abstract.material import Material
-from src.library.special.genesis import Genesis
-from src.library.special.hades import Hades
+from src.components import Genesis, Hades
 from src.library.tiles.ruins import Ruins
 
 

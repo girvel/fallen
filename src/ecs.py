@@ -3,8 +3,7 @@ import logging
 from ecs import MetasystemFacade, System
 
 from src.lib.toolkit import crash_safe
-from src.library.special.genesis import Genesis
-from src.library.special.hades import Hades
+from src.components import Genesis, Hades
 from src.systems import acting, destruction_and_creation, ai, death, nature, clock, blinking
 
 

@@ -15,7 +15,7 @@ from src.lib.vector.grid import grid_create, grid_set
 from src.lib.vector.vector import int2
 from src.library.markup.house import House
 from src.library.markup.zone import Zone
-from src.library.special.genesis import Genesis
+from src.components import Genesis
 
 T = TypeVar('T')
 

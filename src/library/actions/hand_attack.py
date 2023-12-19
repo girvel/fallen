@@ -5,8 +5,7 @@ from ecs import Entity
 from src.engine.acting.action import Action
 from src.engine.acting.aggressive import Aggressive
 from src.engine.acting.damage import attack
-from src.library.special.genesis import Genesis
-from src.library.special.hades import Hades
+from src.components import Genesis, Hades
 
 
 @dataclass

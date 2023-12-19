@@ -1,4 +1,4 @@
-from src.components import Liquid, Creator
+from src.components import Liquid, Genesis
 from src.lib.vector import vector
 from src.lib.toolkit import chance
 from src.lib.vector.vector import add2
@@ -7,7 +7,7 @@ from src.lib.vector.grid import fits_in_grid, grid_unsafe_get
 sequence = []
 
 @sequence.append
-def flow(subject: Liquid, genesis: Creator):
+def flow(subject: Liquid, genesis: Genesis):
     if subject.liquid_height <= 1: return
 
     grid = subject.level.grids[subject.layer]

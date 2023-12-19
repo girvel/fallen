@@ -10,8 +10,7 @@ from src.engine.output.colors import ColorPair, white
 from src.engine.traits import Traits
 from src.library.abstract.humanoid import Humanoid
 from src.engine.ai import Senses
-from src.library.special.genesis import Genesis
-from src.library.special.hades import Hades
+from src.components import Genesis, Hades
 
 from src.library.special.level import Level
 

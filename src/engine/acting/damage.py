@@ -10,7 +10,7 @@ from src.engine.parenting import iter_parenting_stack
 from src.lib.limited import Limited
 from src.lib.query import Q
 from src.lib.toolkit import random_round
-from src.library.special.hades import Hades
+from src.components import Hades
 
 
 @dataclass

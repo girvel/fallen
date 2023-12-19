@@ -7,8 +7,7 @@ from src.engine.acting.action import Action
 from src.engine.acting.aggressive import Aggressive
 from src.lib.vector.iteration import iter_square
 from src.library.effects.fire import Fire
-from src.library.special.genesis import Genesis
-from src.library.special.hades import Hades
+from src.components import Genesis, Hades
 from src.lib.vector.grid import grid_get
 
 

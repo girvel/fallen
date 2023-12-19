@@ -69,7 +69,7 @@ def main(
 
         level = Level.create(Path(level_path), genesis, no_rails)
 
-        # TODO should be inside the Level.construct which should be a replacement constructor
+        # TODO should be inside the Level.create?
         prep_time = level.config.prep_ticks
         if prep_time > 0: logging.info(f"Prerunning the level for {prep_time} ticks")
 

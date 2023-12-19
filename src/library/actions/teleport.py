@@ -5,8 +5,7 @@ from ecs import Entity
 from src.engine.acting.action import Action
 from src.lib.vector.vector import int2
 from src.lib.vector.grid import grid_set
-from src.library.special.genesis import Genesis
-from src.library.special.hades import Hades
+from src.components import Genesis, Hades
 
 
 @dataclass

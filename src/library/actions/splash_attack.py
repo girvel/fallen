@@ -6,8 +6,7 @@ from src.engine.acting.damage import attack
 from src.lib.vector.grid import grid_unsafe_get
 from src.lib.vector.iteration import iter_rhombus
 from src.lib.vector.vector import int2
-from src.library.special.genesis import Genesis
-from src.library.special.hades import Hades
+from src.components import Genesis, Hades
 
 
 @dataclass

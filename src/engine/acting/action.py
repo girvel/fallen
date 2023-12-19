@@ -2,8 +2,7 @@ from abc import abstractmethod, ABC
 
 from ecs import Entity
 
-from src.library.special.genesis import Genesis
-from src.library.special.hades import Hades
+from src.components import Genesis, Hades
 
 
 class Action(ABC):
