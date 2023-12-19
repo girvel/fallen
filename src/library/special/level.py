@@ -1,13 +1,14 @@
 import logging
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from functools import reduce
 from pathlib import Path
-from typing import TypeVar, Callable, Type, Iterator, Any, ClassVar
+from typing import TypeVar, Callable, Type, Iterator, Any, ClassVar, Generator, TYPE_CHECKING
 
 import numpy
 import toml as toml
 from ecs import Entity, MetasystemFacade
 
+from src.engine.acting.action import Action
 from src.engine.language.name import Name
 from src.lib.toolkit import to_camel_case, import_module
 from src.lib.vector.vector import int2
@@ -15,6 +16,9 @@ from src.lib.vector.grid import grid_create, grid_set, grid_get, grid_unsafe_get
 from src.library.markup.house import House
 from src.library.markup.zone import Zone
 from src.library.special.genesis import Genesis
+
+if TYPE_CHECKING:
+    from src.engine.rails.rails_base import RailsBase
 
 
 T = TypeVar('T')
@@ -41,79 +45,83 @@ class Config:
 class Level(Entity):
     name: Name
     markup: Markup
+    config: Config
+
+    grids: dict[str, tuple[list[list[Any]], int2]]
+    transparency_cache: numpy.ndarray[Any, numpy.dtype[int]]
+    size: int2
+
+    rails: "RailsBase | None"
+    rails_effect: dict[Any, Action] = field(default_factory=dict)
 
     no_entity_character: ClassVar[str] = "."
     layers: ClassVar[tuple[str, ...]] = ("tiles", "physical", "effects", "sounds", )
     invisible_layers: ClassVar[tuple[str, ...]] = ("sounds", )
 
-    def __init__(self, ms: MetasystemFacade, path: Path, no_rails: bool, genesis: Genesis):
-        self.name = Name(f"Level {path.stem}")
-        logging.info(f"Loading the level {self.name}")
+    # TODO NEXT maybe disable rails in a system via flag container entity, not via argument to a Level? less
+    #      dependencies that way
+    # TODO NEXT metasystem-independent Rails -> remove ms argument
+    @classmethod
+    def create(
+        cls, path: Path, genesis: Genesis, ms: MetasystemFacade, disable_rails: bool = False
+    ) -> "Level":
+        name = Name(f"level {path.stem}")
+        logging.info(f"Started loading {name}")
 
         level_lines = (path / "grid.txt").read_text().split('\n')
+        size = (max(len(line) for line in level_lines), len(level_lines))
+
+        result = cls(
+            name=name,
+            markup=Markup.from_toml_data(**_load_toml(path / "markup.toml")),
+            config=Config(**_load_toml(path / "config.toml")),
+
+            grids={layer: grid_create(size, lambda: None) for layer in cls.layers},
+            transparency_cache=numpy.full(size, 1),
+            size=size,
+
+            rails=None,
+        )
 
         grid_args = {
             tuple(entry["at"]): entry["args"]
             for entry in _load_toml(path / "grid_args.toml").get("entries", [])
         }
-        self.config = Config(**_load_toml(path / "config.toml"))
 
-        self.size = (max(len(line) for line in level_lines), len(level_lines))
-
-        after_loads = []  # TODO RM
-
-        self.grids = {layer: grid_create(self.size, lambda: None) for layer in self.layers}
-        self.palette = reduce(lambda a, b: a | b, (
+        # TODO NEXT REF move all loading to a separate private function
+        palette = reduce(lambda a, b: a | b, (
             _load_palette_from(Path("src/library") / layer)
-            for layer in self.layers
-            if layer not in self.invisible_layers
+            for layer in cls.layers
+            if layer not in cls.invisible_layers
         ))
 
-        for layer in self.layers:
-            if layer in self.invisible_layers: continue
+        for layer in cls.layers:
+            if layer in cls.invisible_layers: continue
 
             local_palette_path = path / "library" / layer
             if local_palette_path.exists():
-                self.palette.update(_load_palette_from(local_palette_path))
+                palette.update(_load_palette_from(local_palette_path))
 
         for y, line in enumerate(level_lines):
             for x, c in enumerate(line):
                 p = (x, y)
 
-                if c == Level.no_entity_character:
+                if c == cls.no_entity_character:
                     continue
 
-                if c in self.palette:
-                    e = ms.add(self.palette[c](p=p, level=self, **grid_args.get(p, {})))
-                    self.put(p, e)
-
-                    if hasattr(e, "after_load"):  # TODO RM
-                        after_loads.append(e.after_load)
-                else:
+                if c not in palette:
                     logging.warning(f"Ignored unknown entity `{c}` at {p}")
+                    continue
 
-        markup_path = path / "markup.toml"
-        if markup_path.exists():
-            raw_markup = toml.loads(markup_path.read_text(encoding="utf-8"))
-            self.markup = Markup(
-                houses=[ms.add(House.from_markup(**h)) for h in raw_markup["houses"]],
-                zones=[ms.add(Zone.from_markup(**h)) for h in raw_markup["zones"]],
-            )
-        else:
-            self.markup = Markup(houses=[], zones=[])
+                genesis.entities_to_create.add(palette[c](p=p, level=result, **grid_args.get(p, {})))
 
-        for after_load in after_loads:  # TODO RM
-            after_load(self)
+        if not disable_rails and (rails_path := path / "rails.py").exists():
+            result.rails = import_module(rails_path).Rails(result, ms, genesis)
+            genesis.entities_to_create.add(result.rails)
 
-        if no_rails:
-            self.rails = None
-        else:
-            rails_path = path / "rails.py"
-            self.rails = ms.add(import_module(rails_path).Rails(self, ms, genesis)) if rails_path.exists() else None
-
-        self.rails_effect = {}
-
-        self.transparency_cache = numpy.full(self.size, 1)
+        genesis.entities_to_create.add(result)
+        logging.info(f"Finished loading {result.name}")
+        return result
 
     def query(self, request: Callable[[Entity], bool]) -> Iterator[Entity]:
         return (

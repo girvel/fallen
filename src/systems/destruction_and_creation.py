@@ -45,7 +45,6 @@ def creation(hades: Destructor, genesis: Creator, ms: MetasystemFacade):
 def after_creation(genesis: Creator):
     for entity in genesis.entities_to_create:
         if hasattr(entity, "after_creation"):
-            logging.debug(f'"{entity.name}".after_creation()')
             entity.after_creation()
 
     genesis.entities_to_create.clear()

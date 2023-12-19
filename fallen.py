@@ -67,7 +67,7 @@ def main(
 
         # TODO loading screen
 
-        level = ms.add(Level(ms, Path(level_path), no_rails, genesis))
+        level = Level.create(Path(level_path), genesis, ms, no_rails)
 
         # TODO should be inside the Level.construct which should be a replacement constructor
         prep_time = level.config.prep_ticks
