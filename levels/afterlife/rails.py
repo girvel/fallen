@@ -10,11 +10,6 @@ from src.library.physical.player import Player
 
 class Rails(RailsBase):
     def __post_init__(self):
-        self.characters = {
-            'player': self.get_player,
-            'old_sarr': next(self.level.find(OldSarr)),
-        }
-
         self.normal_comments = [
             ["Умер? Ну ладно, это случается."],
             ["О, ты снова умер."],
@@ -57,6 +52,12 @@ class Rails(RailsBase):
             "Ты только что тут был.",
             "Это новый рекорд.",
         ]
+
+    def after_creation(self):
+        self.characters = {
+            'player': self.get_player,
+            'old_sarr': next(self.level.find(OldSarr)),
+        }
 
 
     @Scene.new()

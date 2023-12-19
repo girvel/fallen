@@ -13,7 +13,8 @@ def test_build():
 
 def test_loading_empty_level():
     ms, genesis = build_metasystem(False)
-    ms.add(Level(ms, Path('tests/levels/empty'), False, genesis))
+    Level.create(Path('tests/levels/empty'), genesis)
+    ms.update()
     ms.update()
 
 

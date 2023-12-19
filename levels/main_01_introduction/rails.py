@@ -2,20 +2,20 @@ from enum import Enum
 from pathlib import Path
 from typing import Annotated
 
-from ecs import Entity, exists
+from ecs import exists
 
 from levels.main_01_introduction.library.physical.brother import Brother
 from levels.main_01_introduction.library.physical.girl import Girl
 from levels.main_01_introduction.library.physical.mother import Mother
+from src.engine.acting import damage_kind
 from src.engine.acting.aggressive import Aggressive
 from src.engine.acting.damage import Weapon
-from src.engine.acting import damage_kind
 from src.engine.rails.rails_api import Lock
 from src.engine.rails.rails_base import RailsBase
 from src.engine.rails.scene import Scene, keep_ai, maybe_exists, Priority
-from src.lib.vector import vector
 from src.lib.concurrency import wait_for, wait_while
 from src.lib.query import Q
+from src.lib.vector import vector
 from src.lib.vector.vector import d2, add2, int2
 from src.library.actions.leave import Leave
 from src.library.actions.no_action import NoAction
@@ -99,7 +99,7 @@ class Rails(RailsBase):
             rails.lock_dying(self.player, rails.death_locks["player_vision"])
 
             # TODO move this to on_destruction? (after level refactor)
-            self.player.afterlife_level = rails.ms.add(Level(rails.ms, Path("levels/afterlife"), False, rails.genesis))
+            self.player.afterlife_level = Level.create(Path("levels/afterlife"), rails.genesis)
             self.player.afterlife_level.rails.parent_level = self.player.level  # TODO encapsulate this?
 
             yield from wait_while(lambda: ~Q(self.player).ai is None)
@@ -319,8 +319,10 @@ class Rails(RailsBase):
 
             self.player.health.amount.reset_to_max()
 
-            rails.vision_level = rails.ms.add(Level(rails.ms, Path("levels/vision"), False, rails.genesis))
+            rails.vision_level = Level.create(Path("levels/vision"), rails.genesis)
             rails.vision_level.rails.parent_level = self.player.level
+            yield
+
             yield from rails.plane_shift(rails.vision_level, rails.positions["vision_shift"])
 
             if rails.vision_version == VisionVersion.Interrupted:

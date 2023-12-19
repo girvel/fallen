@@ -32,14 +32,6 @@ class Rails(RailsBase):
     parent_level: Level | None
 
     def __post_init__(self):
-        self.characters = {
-            'player': self.get_player,
-            'soldiers': list(self.level.find(Soldier)),
-            'kaledeii': next(self.level.find(Kaledeii)),
-            'bishop': next(self.level.find(LordBishop)),
-            'enemy': None
-        }
-
         self.positions = {
             'entrance': (87, 17),
             'kaledeii_entrance': (16, 17),
@@ -49,6 +41,15 @@ class Rails(RailsBase):
             'observing_the_entrance': (96, 18),
             'enemy_appearance': (0, 17),
             'enemy_attack': (68, 17)
+        }
+
+    def after_creation(self):
+        self.characters = {
+            'player': self.get_player,
+            'soldiers': list(self.level.find(Soldier)),
+            'kaledeii': next(self.level.find(Kaledeii)),
+            'bishop': next(self.level.find(LordBishop)),
+            'enemy': None
         }
 
 

@@ -8,7 +8,6 @@ from ecs import Entity
 from src.engine.language.name import Name
 from src.engine.rails.rails_api import RailsApi, Script
 from src.engine.rails.scene import Scene
-from src.lib.toolkit import assert_attributes
 
 
 @dataclass
@@ -24,8 +23,8 @@ class RailsBase(RailsApi, Entity, metaclass=ABCMeta):
     name = Name("rails")
     rails_flag = None
 
-    def __init__(self, level, ms, genesis):
-        RailsApi.__init__(self, level, ms, genesis)
+    def __init__(self, level, genesis):
+        RailsApi.__init__(self, level, genesis)
         self.__post_init__()
 
         self.scenes = list(sorted(

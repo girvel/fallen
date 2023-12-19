@@ -1,8 +1,6 @@
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 from typing import Any, TypeAlias, Iterator, ClassVar
 from xml.dom.minidom import Entity
-
-from ecs import MetasystemFacade
 
 from src.engine.acting.action import Action
 from src.lib.query import Q
@@ -14,14 +12,12 @@ from src.library.physical.player import Player
 from src.library.special.genesis import Genesis
 from src.library.special.level import Level
 
-
 Script: TypeAlias = Iterator[dict[Entity, Action | None] | None]
 
 
 @dataclass
 class RailsApi:
     level: Level
-    ms: MetasystemFacade
     genesis: Genesis
 
     _player: Player | None = None

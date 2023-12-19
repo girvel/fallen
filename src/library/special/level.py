@@ -51,7 +51,7 @@ class Level(Entity):
     transparency_cache: numpy.ndarray[Any, numpy.dtype[int]]
     size: int2
 
-    rails: "RailsBase | None"
+    rails: Any
     rails_effect: dict[Any, Action] = field(default_factory=dict)
 
     no_entity_character: ClassVar[str] = "."
@@ -60,10 +60,9 @@ class Level(Entity):
 
     # TODO NEXT maybe disable rails in a system via flag container entity, not via argument to a Level? less
     #      dependencies that way
-    # TODO NEXT metasystem-independent Rails -> remove ms argument
     @classmethod
     def create(
-        cls, path: Path, genesis: Genesis, ms: MetasystemFacade, disable_rails: bool = False
+        cls, path: Path, genesis: Genesis, disable_rails: bool = False
     ) -> "Level":
         name = Name(f"level {path.stem}")
         logging.info(f"Started loading {name}")
@@ -116,7 +115,7 @@ class Level(Entity):
                 genesis.push(palette[c](p=p, level=result, **grid_args.get(p, {})))
 
         if not disable_rails and (rails_path := path / "rails.py").exists():
-            result.rails = genesis.push(import_module(rails_path).Rails(result, ms, genesis))
+            result.rails = genesis.push(import_module(rails_path).Rails(result, genesis))
 
         genesis.push(result)
         logging.info(f"Finished loading {result.name}")
