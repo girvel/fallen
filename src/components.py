@@ -1,5 +1,5 @@
 from dataclasses import dataclass, field
-from typing import Any, Protocol, TYPE_CHECKING
+from typing import Any, Protocol, TYPE_CHECKING, runtime_checkable
 
 from ecs import Entity
 
@@ -26,6 +26,7 @@ class Blinking(Protocol):
 class Counting(Protocol):
     tick_counter: "int"
 
+@runtime_checkable
 class Positioned(Protocol):
     level: "Level"
     layer: "str"

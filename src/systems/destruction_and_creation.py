@@ -2,7 +2,7 @@ import logging
 
 from ecs import MetasystemFacade
 
-from src.components import Hades, Genesis
+from src.components import Hades, Genesis, Positioned
 from src.lib.query import Q
 from src.lib.vector.grid import grid_set
 
@@ -15,8 +15,9 @@ def destruction(hades: Hades, genesis: Genesis, ms: MetasystemFacade):
         if hasattr(entity, "on_destruction") and entity.on_destruction(hades, genesis):
             continue
 
-        if (level := ~Q(entity).level) is not None:
-            grid_set(level.grids[entity.layer], entity.p, None)  # TODO NEXT level.remove
+        # TODO OPT runtime_checkable protocols native type checking is slow, rewrite
+        if isinstance(entity, Positioned):
+            grid_set(entity.level.grids[entity.layer], entity.p, None)  # TODO NEXT level.remove
 
         ms.remove(entity)
 
@@ -29,8 +30,8 @@ def destruction(hades: Hades, genesis: Genesis, ms: MetasystemFacade):
 @sequence.append
 def creation(genesis: Genesis, ms: MetasystemFacade):
     for entity in genesis.entities_to_create:
-        # TODO NEXT ecs.has_component()
-        if hasattr(entity, "level") and hasattr(entity, "p") and hasattr(entity, "layer"):
+        # TODO OPT runtime_checkable protocols native type checking is slow, rewrite
+        if isinstance(entity, Positioned):
             entity.level.put(entity.p, entity)
 
         ms.add(entity)

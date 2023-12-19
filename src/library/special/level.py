@@ -54,7 +54,7 @@ class Level(Entity):
     layers: ClassVar[tuple[str, ...]] = ("tiles", "physical", "effects", "sounds", )
     invisible_layers: ClassVar[tuple[str, ...]] = ("sounds", )
 
-    # TODO NEXT maybe disable rails in a system via flag container entity, not via argument to a Level? less
+    # TODO maybe disable rails in a system via flag container entity, not via argument to a Level? less
     #      dependencies that way
     @classmethod
     def create(
