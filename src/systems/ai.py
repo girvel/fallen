@@ -9,13 +9,6 @@ sequence = []
 
 
 @sequence.append
-def update_transparency_cache(level: GridContainer):
-    for y, line in enumerate(level.grids["physical"][0]):
-        for x, e in enumerate(line):
-            level.transparency_cache[x, y] = int(e is None or not hasattr(e, "solid_flag"))
-
-
-@sequence.append
 def run_rails(rails: RailsComponent):
     rails.level.rails_effect = rails.get_effect()
 

@@ -136,9 +136,15 @@ class Level(Entity):
     def put(cls, entity: TPositioned):
         grid_set(entity.level.grids[entity.layer], entity.p, entity)
 
+        if entity.layer == "physical":
+            entity.level.transparency_cache[entity.p] = int(not hasattr(entity, "solid_flag"))
+
     @classmethod
     def remove(cls, entity: TPositioned):
         grid_set(entity.level.grids[entity.layer], entity.p, None)
+
+        if entity.layer == "physical":
+            entity.level.transparency_cache[entity.p] = 1
 
     @classmethod
     def move(cls, entity: TPositioned, p: int2, *, level: "Level | None" = None):
