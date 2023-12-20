@@ -1,7 +1,6 @@
-import logging
 from abc import ABC, abstractmethod
 
-from ecs import Entity, exists
+from ecs import Entity
 
 from src.lib.query import Q
 

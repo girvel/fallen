@@ -1,9 +1,11 @@
 import logging
 
 from ecs import MetasystemFacade
+from line_profiler import profile
 
 from src.components import Hades, Genesis, Positioned
 from src.lib.query import Q
+from src.lib.toolkit import matches_protocol
 from src.lib.vector.grid import grid_set
 from src.library.special.level import Level
 
@@ -28,10 +30,10 @@ def destruction(hades: Hades, genesis: Genesis, ms: MetasystemFacade):
 
 
 @sequence.append
+@profile
 def creation(genesis: Genesis, ms: MetasystemFacade):
     for entity in genesis.entities_to_create:
-        # TODO OPT runtime_checkable protocols native type checking is slow, rewrite
-        if isinstance(entity, Positioned):
+        if matches_protocol(entity, Positioned):
             Level.put(entity)
 
         ms.add(entity)

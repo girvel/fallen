@@ -68,7 +68,6 @@ class GridProxy:
             (self.availability_mask is None or self.availability_mask[item])
         )
 
-    @profile
     def unsafe_contains(self, item: int2) -> bool:
         return (
             d2(item, self.center) <= self.r and

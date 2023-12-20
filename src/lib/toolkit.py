@@ -5,7 +5,7 @@ import math
 import random
 from collections.abc import Sequence
 from pathlib import Path
-from typing import TypeVar, Any
+from typing import TypeVar, Any, TypeGuard
 
 from src.engine.output.colors import ColorPair
 
@@ -101,3 +101,9 @@ def set_function_value(dictionary: dict, key: Any):
 def assert_attributes(instance: Any, required_attributes: list[str]) -> None:
     if len(missing_attributes := [a for a in required_attributes if not hasattr(instance, a)]) > 0:
         raise NotImplementedError(f"Instance of {type(instance)} is missing attributes {missing_attributes}")
+
+def matches_protocol(instance: Any, protocol: type[T]) -> TypeGuard[T]:
+    return all(
+        hasattr(instance, attribute)
+        for attribute in protocol.__annotations__
+    )
