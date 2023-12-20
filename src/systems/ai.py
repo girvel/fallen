@@ -3,7 +3,7 @@ import logging
 import tcod.map
 
 from src.components import GridContainer, Sentient, RailsComponent
-from src.engine.ai import Perception, MaskedGridProxy, Senses, GridProxy
+from src.engine.ai import Perception, GridProxy, Senses
 
 sequence = []
 
@@ -32,7 +32,7 @@ def think(subject: Sentient):
 
     act = subject.ai.make_decision(subject, Perception(
         {
-            layer: MaskedGridProxy(grid, subject.p, senses.vision, fov)
+            layer: GridProxy(grid, subject.p, senses.vision, fov)
             for layer, grid in subject.level.grids.items()
         },
         GridProxy(subject.level.grids["sounds"], subject.p, senses.hearing),
