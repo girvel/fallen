@@ -44,7 +44,6 @@ class Observer:
                 subject.attitude.get(e) < self.warning_attitude_threshold
             ):
                 notices_danger = True
-                logging.debug(f"{e.name}: {subject.attitude.get(e)}")
                 if e not in self.known_objects:
                     memes.append(DangerousEntity(p, e))
                     self.known_objects.append(subject)

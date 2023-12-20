@@ -58,10 +58,10 @@ class PeasantAi(CompositeAi):
 
         ideas, notices_danger = self.use(Observer)
 
-        if notices_danger and self.remains_in_danger_mode_for.is_min():
-            logging.info(f"{subject.name} goes to danger mode")
-
-        if notices_danger: self.remains_in_danger_mode_for.reset_to_max()
+        if notices_danger:
+            if self.remains_in_danger_mode_for.is_min():
+                logging.info(f"{subject.name} goes to danger mode")
+            self.remains_in_danger_mode_for.reset_to_max()
 
         if not self.remains_in_danger_mode_for.is_min():
             self.remains_in_danger_mode_for.move(-1)
@@ -69,24 +69,23 @@ class PeasantAi(CompositeAi):
             if (target := self.use(FightOrFlight)) != FightOrFlight.no_change_signal:
                 self.composite[Pather].going_to = target  # TODO FightOrFlight meme
 
-            if (move := self.use(Pather, self.composite[SpacialMemory])) is not None:
-                return move
+            if (move := self.use(Pather, self.composite[SpacialMemory])) is not None: return move
 
-            self.mode = Mode.GoHome
-        else:
-            ideas.extend(self.use(Listener))
+            if subject.p != subject.house.entrance: self.composite[Pather].going_to = subject.house.entrance
 
-            self.use(Morale, ideas)
-            self.composite[Speaker].messages.extend(self.use(LanguageCenter, ideas))
+            return None
 
-            if action := self.use(Speaker): return action
+        ideas.extend(self.use(Listener))
 
-        if action := self.use(Pather, self.composite[SpacialMemory]):
-            return action
+        self.use(Morale, ideas)
+        self.composite[Speaker].messages.extend(self.use(LanguageCenter, ideas))
 
-        return self.peasant_routine(subject, perception)
+        if action := self.use(Speaker): return action
+        if action := self.use(Pather, self.composite[SpacialMemory]): return action
 
-    def peasant_routine(self, subject, perception):
+        return self.peasant_routine(subject)
+
+    def peasant_routine(self, subject):
         if subject.house is None and self.mode in (Mode.GoHome, Mode.GoToTable, Mode.WorkAtTable):
             self.mode = Mode.Wander
 

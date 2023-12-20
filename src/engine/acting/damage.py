@@ -71,7 +71,7 @@ def inflict_damage(
     health.last_damaged_by.append(source)
 
     if health.amount.current <= 0:
-        logging.info(f"{target.name} is killed")
+        logging.info(f"{target.name} is killed by {source.name}")
         hades.push(target)
 
         for killer in iter_parenting_stack(source):
