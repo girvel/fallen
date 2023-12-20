@@ -13,4 +13,7 @@ class SpacialMemory(dict):
             grid_set(self[subject.level], p, entity is not None and entity.character or Level.no_entity_character)
 
     def knows(self, level: Level):
-        self[level] = grid_map(level.grids["physical"], lambda e: e is None and Level.no_entity_character or e.character)
+        self[level] = grid_map(
+            level.grids["physical"],
+            lambda e: e is None and Level.no_entity_character or e.character
+        )
