@@ -2,6 +2,8 @@ import logging
 import random
 from enum import Enum
 
+from line_profiler import profile
+
 from src.engine.composite_ai import CompositeAi
 from src.lib.limited import Limited
 from src.lib.period.random_period import RandomPeriod
@@ -52,6 +54,7 @@ class PeasantAi(CompositeAi):
         ])
 
     # It is possible to extract ModalAi parent/component?
+    # @profile
     def _make_decision(self, subject, perception):
         self.use(SpacialMemory)
         if self.lagging_period.step(): return

@@ -23,29 +23,24 @@ class Observer:
         memes = []
         notices_danger = False
 
-        aggressions = [
-            Aggression(e, target)
-            for e in perception.vision["physical"].values()
-            if (target := ~Q(e).act[HandAttack].target)
-            and subject.attitude.get(target) >= 0
-        ]
+        for p, seen_entity in perception.vision["physical"].items():
+            if seen_entity is None: continue
 
-        if len(aggressions) > 0:
-            memes.extend(aggressions)
-
-        for p, e in perception.vision["tiles"].items():
-            if isinstance(e, Body) and e not in self.known_objects:
-                memes.append(DangerousEntity(p, e))
-                self.known_objects.append(e)
-
-        for p, e in perception.vision["physical"].items():
             if (
-                e is not None and
-                subject.attitude.get(e) < self.warning_attitude_threshold
+                (target := ~Q(seen_entity).act[HandAttack].target) is not None and
+                subject.attitude.get(target) >= 0
             ):
+                memes.append(Aggression(seen_entity, target))
+
+            if subject.attitude.get(seen_entity) < self.warning_attitude_threshold:
                 notices_danger = True
-                if e not in self.known_objects:
-                    memes.append(DangerousEntity(p, e))
+                if seen_entity not in self.known_objects:
+                    memes.append(DangerousEntity(p, seen_entity))
                     self.known_objects.append(subject)
+
+        for p, seen_entity in perception.vision["tiles"].items():
+            if isinstance(seen_entity, Body) and seen_entity not in self.known_objects:
+                memes.append(DangerousEntity(p, seen_entity))
+                self.known_objects.append(seen_entity)
 
         return [Idea(meme, 1, subject) for meme in memes], notices_danger
