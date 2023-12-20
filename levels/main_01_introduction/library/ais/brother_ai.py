@@ -40,6 +40,6 @@ class BrotherAi(DummyAi):
 
             line = random.choice(self.bye_lines)
             self.bye_lines.remove(line)
-            return Say(line.format(neighbour.name))
+            return Say(line.format(~Q(neighbour.name).first or neighbour.name))
 
         return super().make_decision(subject, perception)
