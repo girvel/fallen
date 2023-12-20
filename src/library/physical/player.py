@@ -33,7 +33,7 @@ class Player(Humanoid):
         self.sex = "male"
         self.weapon = Weapon(1, damage_kind.crushing)
         self.health = Health(10, armor_kind.none)
-        self.senses = Senses(24, 40, 0)
+        self.senses = Senses(24, 30, 0, attention_k=1)
         self.traits = Traits()
         self.inventory = Inventory()
 

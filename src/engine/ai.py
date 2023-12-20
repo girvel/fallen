@@ -20,10 +20,11 @@ class Senses:
     hearing: int
     smell: int
 
+    attention_k: float = .2
+
 
 Grid = tuple[list[list[Any]], int2]
 
-# TODO maybe derive MaskedGridProxy for speed?
 @dataclass
 class GridProxy:
     grid: Grid
