@@ -4,6 +4,10 @@ from typing import Optional
 from ecs import Entity
 
 from src.engine.acting.action import Action
+from src.engine.ai import Perception
+from src.lib.vector.grid import grid_size
+from src.lib.vector.iteration import iter_rhombus_from_center
+from src.lib.vector.vector import d2
 from src.library.ai_modules.spacial_memory import SpacialMemory
 from src.engine.input.input import Input
 from src.engine.language.name import Name
@@ -101,17 +105,19 @@ class IO(Entity):  # TODO redo as composite AI?
 
             if action := dummy_action or player_action: return action
 
-    def form_memory(self, subject, perception):
+    def form_memory(self, subject, perception: Perception):
         self.memory.spacial_memory.use(subject, perception)
 
-        self.memory.current_sound = next((
-            sound
-            for sound in perception.hearing.values()
-            if sound is not None
-        ), None)
+        self.memory.current_sound = None
+        current_d_to_sound = float('inf')
 
-        for sound in perception.hearing.values():
-            if sound is None or sound.is_internal: continue
+        for p, sound in perception.hearing.items():
+            if sound is None: continue
+            if current_d_to_sound > (next_d_to_sound := d2(subject.p, p)):
+                current_d_to_sound = next_d_to_sound
+                self.memory.current_sound = sound
+
+            if sound.is_internal: continue
             self.memory.chat.append(sound)
 
         if not self.memory.in_cutscene:

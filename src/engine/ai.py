@@ -26,53 +26,53 @@ Grid = tuple[list[list[Any]], int2]
 # TODO maybe derive MaskedGridProxy for speed?
 @dataclass
 class GridProxy:
-    _grid: Grid
-    _center: int2
-    _r: int
-    _availability_mask: ndarray[Any, dtype[bool]] | None = None
+    grid: Grid
+    center: int2
+    r: int
+    availability_mask: ndarray[Any, dtype[bool]] | None = None
 
     def get(self, key: int2, default: Any = None) -> Any:
         if (
-            not fits_in_grid(self._grid, key) or
-            self._availability_mask is not None and not self._availability_mask[key]
+            not fits_in_grid(self.grid, key) or
+            self.availability_mask is not None and not self.availability_mask[key]
         ):
             return default
 
-        return grid_unsafe_get(self._grid, key)
+        return grid_unsafe_get(self.grid, key)
 
     def values(self) -> Iterator[Any]:
         return (
-            grid_unsafe_get(self._grid, (x, y))
-            for x, y in iter_rhombus(self._center, self._r, grid_size(self._grid))
-            if self._availability_mask is None or self._availability_mask[x, y]
+            grid_unsafe_get(self.grid, (x, y))
+            for x, y in iter_rhombus(self.center, self.r, grid_size(self.grid))
+            if self.availability_mask is None or self.availability_mask[x, y]
         )
 
     def items(self) -> Iterator[tuple[int2, Any]]:
         return (
-            ((x, y), grid_unsafe_get(self._grid, (x, y)))
-            for x, y in iter_rhombus(self._center, self._r, grid_size(self._grid))
-            if self._availability_mask is None or self._availability_mask[x, y]
+            ((x, y), grid_unsafe_get(self.grid, (x, y)))
+            for x, y in iter_rhombus(self.center, self.r, grid_size(self.grid))
+            if self.availability_mask is None or self.availability_mask[x, y]
         )
 
     def __iter__(self) -> Iterator[int2]:
         return (
             (x, y)
-            for x, y in iter_rhombus(self._center, self._r, grid_size(self._grid))
-            if self._availability_mask is None or self._availability_mask[x, y]
+            for x, y in iter_rhombus(self.center, self.r, grid_size(self.grid))
+            if self.availability_mask is None or self.availability_mask[x, y]
         )
 
     def __contains__(self, item: int2) -> bool:
         return (
-            d2(item, self._center) <= self._r and
-            fits_in_grid(self._grid, item) and
-            (self._availability_mask is None or self._availability_mask[item])
+            d2(item, self.center) <= self.r and
+            fits_in_grid(self.grid, item) and
+            (self.availability_mask is None or self.availability_mask[item])
         )
 
     @profile
     def unsafe_contains(self, item: int2) -> bool:
         return (
-            d2(item, self._center) <= self._r and
-            (self._availability_mask is None or self._availability_mask[item])
+            d2(item, self.center) <= self.r and
+            (self.availability_mask is None or self.availability_mask[item])
         )
 
 

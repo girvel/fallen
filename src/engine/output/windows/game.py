@@ -58,11 +58,11 @@ class Game(Window):
         spacial_memory = self.io.memory.spacial_memory[subject.level]
         proxy_sample = perception.vision["physical"]
 
-        rx_perception_zone_start = proxy_sample._center[0] - proxy_sample._r - self.virtual_p[0]
-        rx_perception_zone_end = proxy_sample._center[0] + proxy_sample._r - self.virtual_p[0]
+        rx_perception_zone_start = proxy_sample.center[0] - proxy_sample.r - self.virtual_p[0]
+        rx_perception_zone_end = proxy_sample.center[0] + proxy_sample.r - self.virtual_p[0]
 
-        ry_perception_zone_start = proxy_sample._center[1] - proxy_sample._r - self.virtual_p[1]
-        ry_perception_zone_end = proxy_sample._center[1] + proxy_sample._r - self.virtual_p[1]
+        ry_perception_zone_start = proxy_sample.center[1] - proxy_sample.r - self.virtual_p[1]
+        ry_perception_zone_end = proxy_sample.center[1] + proxy_sample.r - self.virtual_p[1]
 
         rx_range = range(
             max(0, -self.virtual_p[0]),
