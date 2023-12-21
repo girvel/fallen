@@ -65,6 +65,7 @@ class PeasantAi(CompositeAi):
             if self.remains_in_danger_mode_for.is_min():
                 logging.info(f"{subject.name} goes to danger mode")
             self.remains_in_danger_mode_for.reset_to_max()
+            subject.attention_boost = 10  # TODO maybe boost attention on any Aggression meme?
 
         if not self.remains_in_danger_mode_for.is_min():
             self.remains_in_danger_mode_for.move(-1)

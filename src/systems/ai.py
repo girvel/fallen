@@ -1,9 +1,9 @@
-import logging
-
 import tcod.map
 
-from src.components import GridContainer, Sentient, RailsComponent
-from src.engine.ai import Perception, GridProxy, Senses
+from src.components import Sentient, RailsComponent, Attentive
+from src.engine.ai import Perception, GridProxy
+from src.lib.query import Q
+from src.lib.toolkit import chance
 
 sequence = []
 
@@ -23,22 +23,40 @@ def think(subject: Sentient):
 
     if subject.ai is None: return
 
-    senses = subject.senses if hasattr(subject, "senses") else Senses(0, 0, 0)
+    if not hasattr(subject, "senses"):
+        vision_r = 0
+        hearing_r = 0
+        smell_r = 0
+    elif chance(subject.senses.attention_k) or ~Q(subject).attention_boost:
+        vision_r = subject.senses.vision
+        hearing_r = subject.senses.hearing
+        smell_r = subject.senses.smell
+    else:
+        vision_r = subject.senses.vision // 3
+        hearing_r = subject.senses.hearing // 3
+        smell_r = subject.senses.smell // 3
 
     if not hasattr(subject, "god_vision_flag"):
-        fov = tcod.map.compute_fov(subject.level.transparency_cache, subject.p, senses.vision)
+        fov = tcod.map.compute_fov(subject.level.transparency_cache, subject.p, vision_r)
     else:
         fov = None
 
+    # TODO! last_act
     act = subject.ai.make_decision(subject, Perception(
         {
-            layer: GridProxy(grid, subject.p, senses.vision, fov)
+            layer: GridProxy(grid, subject.p, vision_r, fov)
             for layer, grid in subject.level.grids.items()
         },
-        GridProxy(subject.level.grids["sounds"], subject.p, senses.hearing),
-        GridProxy(subject.level.grids["physical"], subject.p, senses.smell),
+        GridProxy(subject.level.grids["sounds"], subject.p, hearing_r),
+        GridProxy(subject.level.grids["physical"], subject.p, smell_r),
     ))
 
     if not is_railed:
         subject.act = act
 
+
+@sequence.append
+def clean_up_attention_flags(subject: Attentive):
+    subject.attention_boost -= 1
+    if subject.attention_boost <= 0:
+        del subject.attention_boost

@@ -1,6 +1,7 @@
 import inspect
 
 from src.components import Killer, Healthy, Actor, Hades, Genesis
+from src.engine.acting.aggressive import Aggressive
 
 sequence = []
 

@@ -48,10 +48,10 @@ class GridContainer(Protocol):
     rails: "RailsBase | None"
 
 class Sentient(Positioned):
-    ai: "Any"
+    ai: Any
 
 class Killer(Protocol):
-    last_killed: "list[Any]"
+    last_killed: list[Any]
 
 class Healthy(Protocol):
     health: "Health"
@@ -60,10 +60,13 @@ class Actor(Protocol):
     act: "Action"
 
 class DyingWithChance(Protocol):
-    death_chance: "float"
+    death_chance: float
 
 class Sound(Protocol):
-    sound_flag: "None"
+    sound_flag: None
+
+class Attentive(Protocol):
+    attention_boost: int
 
 
 # SPECIAL PROTOCOLS #

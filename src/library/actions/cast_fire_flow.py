@@ -12,7 +12,7 @@ from src.lib.vector.grid import grid_get
 
 
 @dataclass
-class CastFireFlow(Action, Aggressive):
+class CastFireFlow(Aggressive, Action):
     v: int2
     length: int = 18
 

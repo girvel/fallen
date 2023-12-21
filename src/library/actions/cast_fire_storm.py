@@ -12,7 +12,7 @@ from src.lib.vector.grid import grid_get
 
 
 @dataclass
-class CastFireStorm(Action, Aggressive):
+class CastFireStorm(Aggressive, Action):
     duration: int = 12
     power: int = 3
 

@@ -3,6 +3,7 @@ from typing import Any, TypeAlias, Iterator, ClassVar
 from xml.dom.minidom import Entity
 
 from src.engine.acting.action import Action
+from src.engine.ai import Senses
 from src.lib.query import Q
 from src.lib.vector.vector import sub2, floordiv2
 from src.library.ai_modules.spacial_memory import SpacialMemory
@@ -66,11 +67,12 @@ class RailsApi:
 
     def lock_complex_ai(self, entity, lock) -> Any:
         if entity not in self._ai_storage:
-            self._ai_storage[entity] = entity.ai
+            self._ai_storage[entity] = entity.ai, entity.senses
             self._ai_locks[entity] = []
 
             entity.ai = DummyAi()
             entity.ai.composite[SpacialMemory].knows(self.level)
+            entity.senses = Senses(entity.senses.vision, entity.senses.hearing, entity.senses.smell, attention_k=1)
 
         assert lock not in self._ai_locks[entity]
 
@@ -83,7 +85,7 @@ class RailsApi:
         self._ai_locks[entity].remove(lock)
 
         if len(self._ai_locks[entity]) == 0:
-            entity.ai = self._ai_storage[entity]
+            entity.ai, entity.senses = self._ai_storage[entity]
             del self._ai_storage[entity]
             del self._ai_locks[entity]
 

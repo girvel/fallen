@@ -10,7 +10,7 @@ from src.components import Genesis, Hades
 
 
 @dataclass
-class SplashAttack(Action, Aggressive):
+class SplashAttack(Aggressive, Action):
     p: int2
     r: int
 

@@ -9,7 +9,7 @@ from src.components import Genesis, Hades
 
 
 @dataclass
-class HandAttack(Action, Aggressive):
+class HandAttack(Aggressive, Action):
     target: Entity  # never None, always exists
 
     def execute(self, actor, hades: Hades, genesis: Genesis):

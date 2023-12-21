@@ -30,6 +30,7 @@ class DummyAi(Entity):
         self.composite[Pather].going_to = None
         self.composite[Follower].subject = None
 
+# TODO shit, rewrite
 def wait_finish(*dummies, threshold=0):
     yield
     yield from wait_while(lambda: sum(
