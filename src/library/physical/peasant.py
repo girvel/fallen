@@ -3,7 +3,7 @@ import random
 from src.engine.acting.damage import Weapon, Health
 from src.engine.acting import armor_kind
 from src.engine.acting import damage_kind
-from src.library.ai_modules.spacial_memory import SpacialMemory
+from src.library.ai_modules.spacial_memory import CharacterMemory, PathMemory
 from src.engine.attitude.implementation import common_attitude, Faction, Relation
 from src.engine.language.library import first_names
 from src.engine.language.name import CompositeName
@@ -37,7 +37,8 @@ class Peasant(Humanoid):
 
             self.name = CompositeName(self.name, self.house.family_names[self.sex])
 
-        self.ai.composite[SpacialMemory].knows(self.level)
+        self.ai.composite[CharacterMemory].knows(self.level)
+        self.ai.composite[PathMemory].knows(self.level)
 
 
 def peasant_attitude():

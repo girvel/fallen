@@ -5,20 +5,20 @@ from src.lib.vector.vector import sub2, abs2
 from src.library.actions.hand_attack import HandAttack
 from src.library.actions.move import Move
 from src.library.ai_modules.pather import Pather
-from src.library.ai_modules.spacial_memory import SpacialMemory
+from src.library.ai_modules.spacial_memory import PathMemory
 
 
 class RabidAi:
     def __init__(self):
         self.composite = Composite([
             Pather(),
-            SpacialMemory(),
+            PathMemory(),
         ])
 
     def make_decision(self, subject, perception):
-        self.composite[SpacialMemory].use(subject, perception)
+        self.composite[PathMemory].use(subject, perception)
 
-        if action := self.composite[Pather].use(subject, perception, self.composite[SpacialMemory]): return action
+        if action := self.composite[Pather].use(subject, perception, self.composite[PathMemory]): return action
 
         possible_targets = [
             e for e in perception.vision["physical"].values()

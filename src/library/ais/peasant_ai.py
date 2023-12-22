@@ -7,7 +7,7 @@ from line_profiler import profile
 from src.engine.composite_ai import CompositeAi
 from src.lib.limited import Limited
 from src.lib.period.random_period import RandomPeriod
-from src.lib.toolkit import random_choice_or
+from src.lib.toolkit import random_choice_or, chance
 from src.lib.composite import Composite
 from src.lib.vector.vector import directions, add2
 from src.lib.vector.grid import grid_get
@@ -17,7 +17,7 @@ from src.library.ai_modules.listener import Listener
 from src.library.ai_modules.morale import Morale
 from src.library.ai_modules.observer import Observer
 from src.library.ai_modules.pather import Pather
-from src.library.ai_modules.spacial_memory import SpacialMemory
+from src.library.ai_modules.spacial_memory import CharacterMemory, PathMemory
 from src.library.ai_modules.speaker import Speaker
 from src.library.ai_modules.wanderer import Wanderer
 from src.library.physical.table import Table
@@ -42,7 +42,8 @@ class PeasantAi(CompositeAi):
         self.remains_in_danger_mode_for = Limited(15, 0, 0)
 
         self.composite = Composite([
-            SpacialMemory(),
+            CharacterMemory(),
+            PathMemory(),
             Pather(),
             FightOrFlight(False),
             Morale(),
@@ -54,9 +55,10 @@ class PeasantAi(CompositeAi):
         ])
 
     # It is possible to extract ModalAi parent/component?
-    # @profile
     def _make_decision(self, subject, perception):
-        self.use(SpacialMemory)
+        if chance(.45): self.use(PathMemory)
+        if chance(.12): self.use(CharacterMemory)
+
         if self.lagging_period.step(): return
 
         ideas, notices_danger = self.use(Observer)
@@ -73,9 +75,10 @@ class PeasantAi(CompositeAi):
             if (target := self.use(FightOrFlight)) != FightOrFlight.no_change_signal:
                 self.composite[Pather].going_to = target  # TODO FightOrFlight meme
 
-            if (move := self.use(Pather, self.composite[SpacialMemory])) is not None: return move
+            if (move := self.use(Pather, self.composite[PathMemory])) is not None: return move
 
-            if subject.p != subject.house.entrance: self.composite[Pather].going_to = subject.house.entrance
+            if subject.house is not None and subject.p != subject.house.entrance:
+                self.composite[Pather].going_to = subject.house.entrance
 
             return None
 
@@ -85,7 +88,7 @@ class PeasantAi(CompositeAi):
         self.composite[Speaker].messages.extend(self.use(LanguageCenter, ideas))
 
         if action := self.use(Speaker): return action
-        if action := self.use(Pather, self.composite[SpacialMemory]): return action
+        if action := self.use(Pather, self.composite[PathMemory]): return action
 
         return self.peasant_routine(subject)
 
@@ -102,7 +105,7 @@ class PeasantAi(CompositeAi):
                 randomized_directions = directions[:]
                 random.shuffle(randomized_directions)
 
-                spacial_memory = self.composite[SpacialMemory][subject.level]
+                spacial_memory = self.composite[CharacterMemory][subject.level]
 
                 if ((destination := random_choice_or([
                     free_space

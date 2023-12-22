@@ -73,7 +73,7 @@ def main(
         prep_time = level.config.prep_ticks
         if prep_time > 0: logging.info(f"Prerunning the level for {prep_time} ticks")
 
-        for _ in range(prep_time):
+        for _ in range(prep_time + 1):
             try:
                 ms.update()
             except Exception as ex:

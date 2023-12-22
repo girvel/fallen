@@ -23,6 +23,7 @@ from src.library.actions.say import Say
 from src.library.actions.teleport import Teleport
 from src.library.ai_modules.follower import Follower
 from src.library.ai_modules.pather import Pather
+from src.library.ai_modules.spacial_memory import PathMemory
 from src.library.ais.dummy_ai import wait_finish
 from src.library.ais.io import Quest, Notification
 from src.library.items.bun import Bun
@@ -322,6 +323,8 @@ class Rails(RailsBase):
             rails.vision_level = Level.create(Path("levels/vision"), rails.genesis)
             rails.vision_level.rails.parent_level = self.player.level
             yield
+
+            self.player.ai.dummy.composite[PathMemory].knows(rails.vision_level)
 
             yield from rails.plane_shift(rails.vision_level, rails.positions["vision_shift"])
 

@@ -2,15 +2,15 @@ from dataclasses import dataclass
 from typing import Any, TypeAlias, Iterator, ClassVar
 from xml.dom.minidom import Entity
 
+from src.components import Genesis
 from src.engine.acting.action import Action
 from src.engine.ai import Senses
 from src.lib.query import Q
 from src.lib.vector.vector import sub2, floordiv2
-from src.library.ai_modules.spacial_memory import SpacialMemory
+from src.library.ai_modules.spacial_memory import PathMemory
 from src.library.ais.dummy_ai import DummyAi
 from src.library.ais.io import Notification
 from src.library.physical.player import Player
-from src.components import Genesis
 from src.library.special.level import Level
 
 Script: TypeAlias = Iterator[dict[Entity, Action | None] | None]
@@ -71,7 +71,7 @@ class RailsApi:
             self._ai_locks[entity] = []
 
             entity.ai = DummyAi()
-            entity.ai.composite[SpacialMemory].knows(self.level)
+            entity.ai.composite[PathMemory].knows(self.level)
             entity.senses = Senses(entity.senses.vision, entity.senses.hearing, entity.senses.smell, attention_k=1)
 
         assert lock not in self._ai_locks[entity]

@@ -5,18 +5,16 @@ from ecs import Entity
 
 from src.engine.acting.action import Action
 from src.engine.ai import Perception
-from src.lib.vector.grid import grid_size
-from src.lib.vector.iteration import iter_rhombus_from_center
-from src.lib.vector.vector import d2
-from src.library.ai_modules.spacial_memory import SpacialMemory
 from src.engine.input.input import Input
 from src.engine.language.name import Name
 from src.engine.output.output import Output
-from src.library.ais.dummy_ai import DummyAi
-from src.library.special.sound import Sound
 from src.lib.concurrency import wait_for
 from src.lib.query import Q
 from src.lib.toolkit import random_round
+from src.lib.vector.vector import d2
+from src.library.ai_modules.spacial_memory import CharacterMemory
+from src.library.ais.dummy_ai import DummyAi
+from src.library.special.sound import Sound
 
 
 @dataclass
@@ -30,7 +28,7 @@ class Notification:
 
 @dataclass
 class Memory:
-    spacial_memory: SpacialMemory = field(default_factory=SpacialMemory)
+    spacial_memory: CharacterMemory = field(default_factory=CharacterMemory)
 
     current_sound: Optional[Sound] = None
     chat: list[Sound] = field(default_factory=list)

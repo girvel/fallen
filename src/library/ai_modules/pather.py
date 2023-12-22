@@ -1,12 +1,10 @@
 import numpy
 from tcod.path import Pathfinder, SimpleGraph
 
-from src.library.actions.move import Move
-from src.library.ai_modules.spacial_memory import SpacialMemory
-from src.library.special.level import Level
-from src.lib.vector.vector import directions, sub2, add2, int2, d2
-from src.lib.vector.grid import grid_map, grid_set
 from src.engine.ai import Perception
+from src.lib.vector.vector import directions, sub2, add2, int2, d2
+from src.library.actions.move import Move
+from src.library.ai_modules.spacial_memory import PathMemory
 
 
 class Pather:
@@ -16,7 +14,7 @@ class Pather:
         self.path = []
         self.free_directions = None
 
-    def use(self, subject, perception: Perception, spacial_memory: SpacialMemory) -> Move | None:
+    def use(self, subject, perception: Perception, path_memory: PathMemory) -> Move | None:
         # Update public self.free_directions
         self.free_directions = [
             d for d in directions if perception.vision[subject.layer].get(add2(subject.p, d)) is None
@@ -41,17 +39,17 @@ class Pather:
             perception.vision[subject.layer].get(self.path[-1]) is not None
         ):
             # Create grid for calculations, escaping the beginning and the end
-            grid = grid_map(spacial_memory[subject.level], lambda c: c == Level.no_entity_character and 1 or 0)
+            grid = numpy.array(path_memory[subject.level][0]).transpose()
 
-            for p, effect in perception.vision["effects"].items():
+            for p, effect in perception.vision["effects"].items():  # TODO move to PathMemory???
                 if effect is not None:
-                    grid_set(grid, p, 0)
+                    grid[p] = 0
 
-            grid_set(grid, subject.p, 1)
-            grid_set(grid, self.going_to, 1)
+            grid[subject.p] = 1
+            grid[self.going_to] = 1
 
             # Resort to external library to construct the path
-            pathfinder = Pathfinder(SimpleGraph(cost=numpy.array(grid[0]).transpose(), cardinal=1, diagonal=0))
+            pathfinder = Pathfinder(SimpleGraph(cost=grid, cardinal=1, diagonal=0))
             pathfinder.add_root(subject.p)
             self.path = list(map(tuple, pathfinder.path_to(self.going_to)))[1:][::-1]
 

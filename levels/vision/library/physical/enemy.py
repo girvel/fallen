@@ -1,14 +1,12 @@
-from ecs import Entity
-
-from src.engine.acting.damage import Health, Weapon
 from src.engine.acting import armor_kind
 from src.engine.acting import damage_kind
-from src.library.ai_modules.spacial_memory import SpacialMemory
+from src.engine.acting.damage import Health, Weapon
+from src.engine.ai import Senses
 from src.engine.language.name import Name
 from src.engine.output.colors import ColorPair, magenta, red
 from src.library.abstract.humanoid import Humanoid
+from src.library.ai_modules.spacial_memory import PathMemory
 from src.library.ais.dummy_ai import DummyAi
-from src.engine.ai import Senses
 
 
 class Enemy(Humanoid):
@@ -24,4 +22,4 @@ class Enemy(Humanoid):
         self.ai = DummyAi()
 
     def after_creation(self):
-        self.ai.composite[SpacialMemory].knows(self.level)
+        self.ai.composite[PathMemory].knows(self.level)

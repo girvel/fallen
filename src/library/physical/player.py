@@ -12,6 +12,7 @@ from src.engine.traits import Traits
 from src.library.abstract.humanoid import Humanoid
 from src.engine.ai import Senses
 from src.components import Genesis, Hades
+from src.library.ais.io import IO
 
 from src.library.special.level import Level
 
@@ -20,6 +21,7 @@ class Player(Humanoid):
     character = '@'
     color = ColorPair(white)
 
+    ai: IO | None
     act = None
     faction = Faction.Villagers
 
