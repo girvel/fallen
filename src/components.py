@@ -53,8 +53,8 @@ class Sentient(Positioned):
 class Killer(Protocol):
     last_killed: list[Any]
 
-class Healthy(Protocol):
-    health: "Health"
+class Damaged(Protocol):
+    last_damaged_by: list[Any]
 
 class Actor(Protocol):
     act: "Action"

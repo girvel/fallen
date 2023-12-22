@@ -95,7 +95,7 @@ class Game(Window):
                 for layer in self.layers_display_order:
                     if (entity := grid_unsafe_get(subject.level.grids[layer], p)) is None: continue
 
-                    if ~Q(entity).health.last_damaged_by.Q_len() not in (None, 0):
+                    if ~Q(entity).last_damaged_by.Q_len() not in (None, 0):
                         color = ColorPair(red)
                     else:
                         color = getattr(entity, "color", ColorPair())

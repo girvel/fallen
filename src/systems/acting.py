@@ -1,7 +1,6 @@
 import inspect
 
-from src.components import Killer, Healthy, Actor, Hades, Genesis
-from src.engine.acting.aggressive import Aggressive
+from src.components import Killer, Damaged, Actor, Hades, Genesis
 
 sequence = []
 
@@ -10,8 +9,8 @@ def clean_up_kills(container: Killer):
     del container.last_killed
 
 @sequence.append
-def clean_up_health(container: Healthy):
-    container.health.last_damaged_by.clear()  # TODO this is bullshit
+def clean_up_damage_statistics(container: Damaged):
+    del container.last_damaged_by
 
 @sequence.append
 def act(actor: Actor, hades: Hades, genesis: Genesis):

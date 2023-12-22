@@ -303,7 +303,7 @@ class Rails(RailsBase):
             else:
                 rails.vision_version = VisionVersion.Interrupted
 
-                if self.rabid_dog not in self.player.health.last_damaged_by:
+                if self.rabid_dog not in (~Q(self.player).last_damaged_by or []):
                     rails.dumbass_death = True
 
             yield from rails.start_cutscene()

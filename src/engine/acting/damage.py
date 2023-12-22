@@ -22,12 +22,10 @@ class Weapon:
 class Health:
     amount: Limited
     armor_kind: str
-    last_damaged_by: list[Entity]
 
     def __init__(self, amount: int, armor_kind: str):
         self.amount = Limited(amount + 1)
         self.armor_kind = armor_kind
-        self.last_damaged_by = []
 
 
 def attack(source, target, hades: Hades):
@@ -68,7 +66,7 @@ def inflict_damage(
         )
 
     health.amount.move(-total_damage)
-    health.last_damaged_by.append(source)
+    target.last_damaged_by = (~Q(target).last_damaged_by or []) + [source]
 
     if health.amount.current <= 0:
         logging.info(f"{target.name} is killed by {source.name}")
