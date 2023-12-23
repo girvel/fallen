@@ -63,11 +63,11 @@ def main(
     def _launch(stdscr):
         permanent_storage.initialize()
 
-        ms, genesis = build_metasystem(debug_mode)
+        ms, hades, genesis = build_metasystem(debug_mode)
 
         # TODO loading screen
 
-        level = Level.create(Path(level_path), genesis, no_rails)
+        level = Level.create(Path(level_path), hades, genesis, no_rails)
 
         # TODO should be inside the Level.create?
         prep_time = level.config.prep_ticks

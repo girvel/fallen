@@ -23,8 +23,8 @@ class RailsBase(RailsApi, Entity, metaclass=ABCMeta):
     name = Name("rails")
     rails_flag = None
 
-    def __init__(self, level, genesis):
-        RailsApi.__init__(self, level, genesis)
+    def __init__(self, level, hades, genesis):
+        RailsApi.__init__(self, level, hades, genesis)
         self.__post_init__()
 
         self.scenes = list(sorted(

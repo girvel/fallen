@@ -2,7 +2,7 @@ from dataclasses import dataclass
 from typing import Any, TypeAlias, Iterator, ClassVar
 from xml.dom.minidom import Entity
 
-from src.components import Genesis
+from src.components import Genesis, Hades
 from src.engine.acting.action import Action
 from src.engine.ai import Senses
 from src.lib.query import Q
@@ -19,6 +19,7 @@ Script: TypeAlias = Iterator[dict[Entity, Action | None] | None]
 @dataclass
 class RailsApi:
     level: Level
+    hades: Hades
     genesis: Genesis
 
     _player: Player | None = None
@@ -57,9 +58,9 @@ class RailsApi:
         player.ai.output.game.virtual_p = sub2(player.p, floordiv2((w, h), 2))
         yield
 
-    def plane_shift(self, level, p) -> Script:
+    def plane_shift(self, level, p) -> Script:  # TODO is it needed? maybe use yield {entity: Teleport}?
         yield  # to display the last railed action before the shift
-        Level.move(self.get_player(), p, level=level)  # TODO is it needed? maybe use yield {entity: Teleport}?
+        Level.move(self.get_player(), p, level=level)
 
     def create_entity(self, entity) -> Script:  # TODO not needed, replace with genesis.push
         self.genesis.push(entity)

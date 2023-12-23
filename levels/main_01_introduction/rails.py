@@ -100,7 +100,7 @@ class Rails(RailsBase):
             rails.lock_dying(self.player, rails.death_locks["player_vision"])
 
             # TODO move this to on_destruction? (after level refactor)
-            self.player.afterlife_level = Level.create(Path("levels/afterlife"), rails.genesis)
+            self.player.afterlife_level = Level.create(Path("levels/afterlife"), rails.hades, rails.genesis)
             self.player.afterlife_level.rails.parent_level = self.player.level  # TODO encapsulate this?
 
             yield from wait_while(lambda: ~Q(self.player).ai is None)
@@ -320,7 +320,7 @@ class Rails(RailsBase):
 
             self.player.health.amount.reset_to_max()
 
-            rails.vision_level = Level.create(Path("levels/vision"), rails.genesis)
+            rails.vision_level = Level.create(Path("levels/vision"), rails.hades, rails.genesis)
             rails.vision_level.rails.parent_level = self.player.level
             yield
 

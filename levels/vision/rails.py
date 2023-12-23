@@ -228,3 +228,5 @@ class Rails(RailsBase):
             self.player.ai.memory.complete_quest(rails.parent_level.rails.quests["find_someone_to_fight"])
 
             rails.parent_level.rails.mother_gives_player_bun.enabled = True
+            rails.level.destroy(rails.hades)
+            rails.parent_level.rails.vision_level = None

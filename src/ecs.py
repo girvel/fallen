@@ -37,9 +37,4 @@ def build_metasystem(debug_mode):
 
     ms.register_itself()
 
-    logging.info("Creating special entities")
-
-    ms.add(Hades())
-    genesis = ms.add(Genesis())
-
-    return ms, genesis
+    return ms, ms.add(Hades()), ms.add(Genesis())

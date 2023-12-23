@@ -6,7 +6,7 @@ from typing import TypeVar, Callable, Type, Iterator, Any, ClassVar
 
 import numpy
 import toml as toml
-from ecs import Entity
+from ecs import Entity, exists
 
 from src.engine.acting.action import Action
 from src.engine.language.name import Name
@@ -15,7 +15,7 @@ from src.lib.vector.grid import grid_create, grid_set
 from src.lib.vector.vector import int2
 from src.library.markup.house import House
 from src.library.markup.zone import Zone
-from src.components import Genesis, Positioned
+from src.components import Genesis, Positioned, Hades
 
 TPositioned = TypeVar('TPositioned', bound=Positioned)
 
@@ -58,7 +58,7 @@ class Level(Entity):
     #      dependencies that way
     @classmethod
     def create(
-        cls, path: Path, genesis: Genesis, disable_rails: bool = False
+        cls, path: Path, hades: Hades, genesis: Genesis, disable_rails: bool = False
     ) -> "Level":
         name = Name(f"level {path.stem}")
         logging.info(f"Started loading {name}")
@@ -82,11 +82,23 @@ class Level(Entity):
             genesis.push(loaded_entity)
 
         if not disable_rails and (rails_path := path / "rails.py").exists():
-            result.rails = genesis.push(import_module(rails_path).Rails(result, genesis))
+            result.rails = genesis.push(import_module(rails_path).Rails(result, hades, genesis))
 
         genesis.push(result)
         logging.info(f"Finished loading {result.name}")
         return result
+
+    def destroy(self, hades: Hades):
+        logging.info(f"Destroying {self.name}")
+
+        for grid in self.grids.values():
+            for row in grid[0]:
+                for destroyed_entity in row:
+                    if destroyed_entity is not None and exists(destroyed_entity):
+                        hades.push(destroyed_entity)
+
+        if self.rails is not None: hades.push(self.rails)
+        hades.push(self)
 
     def _load_grid(self, base_path: Path, level_lines: list[str]) -> Iterator[Any]:
         grid_args = {

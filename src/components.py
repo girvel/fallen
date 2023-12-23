@@ -77,7 +77,8 @@ class Genesis(Entity):
     entities_to_create: list[Any] = field(default_factory=list)
 
     def push(self, entity):
-        self.entities_to_create.append(entity)
+        if entity not in self.entities_to_create:
+            self.entities_to_create.append(entity)
         return entity
 
     __hash__ = object.__hash__
@@ -88,7 +89,8 @@ class Hades(Entity):
     entities_to_destroy: list[Any] = field(default_factory=list)
 
     def push(self, entity):
-        self.entities_to_destroy.append(entity)
+        if entity not in self.entities_to_destroy:
+            self.entities_to_destroy.append(entity)
         return entity
 
     __hash__ = object.__hash__
