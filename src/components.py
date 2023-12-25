@@ -6,11 +6,7 @@ from ecs import Entity
 from src.engine.language.name import Name
 
 if TYPE_CHECKING:
-    from numpy import ndarray, dtype
-
     from src.engine.acting.action import Action
-    from src.engine.acting.damage import Health
-    from src.engine.ai import Senses
     from src.engine.output.colors import ColorPair
     from src.lib.vector.vector import int2
     from src.library.special.level import Level
@@ -41,11 +37,6 @@ class RailsComponent(Protocol):
 
     def get_effect(self) -> "dict[Any, Action | None]":
         ...
-
-class GridContainer(Protocol):
-    grids: "dict[str, tuple[int2, list[list[Positioned]]]]"
-    transparency_cache: "ndarray[Any, dtype[int]]"
-    rails: "RailsBase | None"
 
 class Sentient(Positioned):
     ai: Any
