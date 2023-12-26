@@ -75,7 +75,7 @@ class Rails(RailsBase):
             yield {self.player: Say("Тебе кажется, что ты здесь не один.", True)}
 
             if player_time_alive <= 25:
-                counter = permanent_storage.read_key("ultra_fast_death_counter", -1) + 1
+                counter = permanent_storage.read_key("ultra_fast_death_counter", -1) + 1  # TODO should be 0
                 permanent_storage.write_key("ultra_fast_death_counter", counter)
 
                 yield {self.old_sarr: Say(

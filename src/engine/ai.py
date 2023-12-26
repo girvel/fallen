@@ -1,17 +1,12 @@
 from collections.abc import Iterator
 from dataclasses import dataclass
-from enum import Enum
-from typing import Any, TypeVar, Generic
+from typing import Any
 
-import numpy
-from line_profiler import profile
 from numpy import ndarray, dtype
 
-from src.components import Positioned
+from src.lib.vector.grid import fits_in_grid, grid_unsafe_get, grid_size
 from src.lib.vector.iteration import iter_rhombus
 from src.lib.vector.vector import int2, d2
-from src.lib.vector.grid import fits_in_grid, grid_unsafe_get, grid_size
-from src.library.special.sound import Sound
 
 
 @dataclass
