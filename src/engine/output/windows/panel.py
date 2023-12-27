@@ -14,7 +14,7 @@ class Panel(HtmlWindow):
     template_name = "panel.html"
     has_border = True
 
-    mode = Move
+    mode = Move  # TODO move from here?
 
     def __post_init__(self):
         self.panes = [
@@ -45,4 +45,4 @@ class Panel(HtmlWindow):
         return not self.io.memory.in_cutscene
 
     def _responsive_size(self, subject, perception, max_size):
-        return min(max_size[0] - 6, 35), max_size[1] - 2
+        return min(max_size[0] - 6, 35), max_size[1] - 12

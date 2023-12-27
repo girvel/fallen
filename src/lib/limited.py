@@ -25,6 +25,9 @@ class Limited:
     def reset_to_max(self):
         self.current = self.maximum - 1
 
+    def ratio(self):
+        return (self.current - self.minimum) / (self.maximum - self.minimum - 1)
+
 
 class AssertLimited(Limited):
     def move(self, offset: int):

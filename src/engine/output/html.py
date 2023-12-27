@@ -7,7 +7,7 @@ Has some restrictions:
 import re
 from html.parser import HTMLParser
 
-from src.engine.output.colors import ColorPair, yellow, white, red
+from src.engine.output.colors import ColorPair, yellow, white, red, green
 from src.engine.output.grid_rendering import put_string_on_grid, HorizontalAlignment, VerticalAlignment
 
 
@@ -38,6 +38,8 @@ class CursesHtmlRenderer(HTMLParser):
                 self.cursor_p = (0, self.size[1] - 1)
             case "y":
                 self.color_stack.append(ColorPair(yellow))
+            case "g":
+                self.color_stack.append(ColorPair(green))
             case "rw":
                 self.color_stack.append(ColorPair(white, red))
             case "li":
@@ -55,7 +57,7 @@ class CursesHtmlRenderer(HTMLParser):
             case "bottom":
                 self.vertical_alignment = VerticalAlignment.top
                 self.cursor_p = (0, 0)
-            case "y" | "rw" | "color":
+            case "y" | "rw" | "color" | "g":
                 self.color_stack.pop()
             case "div" | "p" | "li" | "br":
                 _, y = self.cursor_p

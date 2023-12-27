@@ -9,6 +9,7 @@ from src.engine.output.windows.hint import Hint
 from src.engine.output.windows.notification import Notification
 from src.engine.output.windows.option_picker import OptionPicker
 from src.engine.output.windows.panel import Panel
+from src.engine.output.windows.stats import Stats
 from src.lib.query import Q
 from src.lib.vector.vector import flip2, sub2
 
@@ -24,6 +25,7 @@ class Output:
 
         # TODO maybe TypeDict?
         self.game = Game(self.stdscr, io)
+        self.stats = Stats(self.stdscr, io)
         self.panel = Panel(self.stdscr, io)
         self.dialogue_line = DialogueLine(self.stdscr, io)
         self.option_picker = OptionPicker(self.stdscr, io)
@@ -45,7 +47,8 @@ class Output:
 
         for window, positioning in [
             (self.game, (0, 0)),
-            (self.panel, (Reverse(3), 1)),
+            (self.stats, (Reverse(3), 1)),
+            (self.panel, (Reverse(3), 11)),
             (self.dialogue_line, (Center(), Reverse(2))),
             (self.option_picker, (Center(), Center())),
             (self.notification, (Center(), Center())),
