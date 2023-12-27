@@ -6,7 +6,7 @@ from src.library.abstract.material import Material
 
 
 class Throne(Material):
-    name = Name("трон")
+    name = Name.auto("трон")
     layer = "physical"
     character = 't'
     color = ColorPair(yellow)

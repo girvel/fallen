@@ -6,7 +6,7 @@ from src.library.abstract.material import Material
 
 
 class Bush(Material):
-    name = Name("куст")
+    name = Name.auto("куст")
     character = 'b'
     color = ColorPair(green)
     solid_flag = None

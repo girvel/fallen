@@ -8,7 +8,7 @@ from src.library.abstract.material import Material
 
 
 class Tree(Material):
-    name = Name("дерево")
+    name = Name.auto("дерево")
     character = 'T'
     color = ColorPair(yellow, green)
     solid_flag = None

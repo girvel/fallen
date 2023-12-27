@@ -6,7 +6,7 @@ from src.library.abstract.material import Material
 
 
 class IceRock(Material):
-    name = Name("ледяная глыба")
+    name = Name("ледяная глыба")  # TODO cases
     character = 'I'
     color = ColorPair(blue, white)
     layer = "physical"

@@ -8,7 +8,7 @@ from src.library.abstract.material import Material
 
 
 class Flower(Material):
-    name = Name("цветок")
+    name = Name.auto("цветок")
     character = 'F'
     layer = "tiles"
 

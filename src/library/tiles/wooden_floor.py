@@ -4,7 +4,7 @@ from src.library.abstract.material import Material
 
 
 class WoodenFloor(Material):
-    name = Name("дощатый пол")
+    name = Name("дощатый пол")  # TODO cases
     character = '_'
     color = ColorPair(yellow)
     layer = "tiles"

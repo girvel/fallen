@@ -3,7 +3,7 @@ from src.library.abstract.material import Material
 
 
 class Sound(Material):
-    name = Name("Звук")
+    name = Name.auto("звук")
     layer = 'sounds'
 
     sound_flag = None

@@ -4,7 +4,7 @@ from src.library.abstract.material import Material
 
 
 class Carpet(Material):
-    name = Name("ковёр")
+    name = Name.auto("ковёр")
     character = '`'
     color = ColorPair(magenta)
     layer = "tiles"

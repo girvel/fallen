@@ -4,7 +4,7 @@ from src.library.abstract.material import Material
 
 
 class Bed(Material):
-    name = Name("кровать")
+    name = Name.auto("кровать")
     character = 'B'
     color = ColorPair(cyan)
     layer = "tiles"

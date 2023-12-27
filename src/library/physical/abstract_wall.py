@@ -8,7 +8,7 @@ from src.library.abstract.material import Material
 
 
 class AbstractWall(Material):
-    name = Name("стенка")
+    name = Name.auto("стенка")
     character = None
     color = ColorPair(yellow)
     layer = "physical"

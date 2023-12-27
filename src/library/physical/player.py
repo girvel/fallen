@@ -1,8 +1,8 @@
-from typing import TYPE_CHECKING
-
-from src.engine.acting.damage import Weapon, Health
+from src.components import Genesis, Hades
 from src.engine.acting import armor_kind
 from src.engine.acting import damage_kind
+from src.engine.acting.damage import Weapon, Health
+from src.engine.ai import Senses
 from src.engine.attitude.implementation import Faction
 from src.engine.inventory import Inventory
 from src.engine.language.library import reserved_names
@@ -10,10 +10,7 @@ from src.engine.language.name import CompositeName
 from src.engine.output.colors import ColorPair, white
 from src.engine.traits import Traits
 from src.library.abstract.humanoid import Humanoid
-from src.engine.ai import Senses
-from src.components import Genesis, Hades
 from src.library.ais.io import IO
-
 from src.library.special.level import Level
 
 

@@ -10,7 +10,7 @@ from src.library.ais.static_ai import StaticAi
 
 
 class Fire(Material):
-    name = Name("огонь")
+    name = Name.auto("огонь")
     character = '*'
     color = ColorPair(red)
 

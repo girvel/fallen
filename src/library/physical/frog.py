@@ -7,7 +7,7 @@ from src.library.ais.frog_ai import FrogAi
 
 
 class Frog(Material):
-    name = Name("лягушка")
+    name = Name.auto("лягушка")
     layer = "physical"
     character = "f"
     color = ColorPair(green)

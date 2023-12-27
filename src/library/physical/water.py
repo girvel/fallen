@@ -5,7 +5,7 @@ from src.library.abstract.material import Material
 
 
 class Water(Material):
-    name = Name("вода")
+    name = Name.auto("вода")
     character = '~'
     color = ColorPair(white, blue)
     layer = "physical"

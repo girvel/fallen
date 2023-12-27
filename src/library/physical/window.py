@@ -5,7 +5,7 @@ from src.library.abstract.material import Material
 
 
 class Window(Material):
-    name = Name("окно")
+    name = Name.auto("окно")
     character = '='
     layer = "physical"
 

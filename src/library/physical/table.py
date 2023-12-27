@@ -6,7 +6,7 @@ from src.library.abstract.material import Material
 
 
 class Table(Material):
-    name = Name("стол")
+    name = Name.auto("стол")
     character = '"'
     color = ColorPair(yellow)
     layer = "physical"

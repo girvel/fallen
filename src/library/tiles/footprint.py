@@ -4,7 +4,7 @@ from src.library.abstract.material import Material
 
 
 class Footprint(Material):
-    name = Name("след")
+    name = Name.auto("след")
     layer = "tiles"
     character = ","
     death_chance = death_chance_from_half_life(100)

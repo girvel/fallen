@@ -3,7 +3,7 @@ from src.library.abstract.material import Material
 
 
 class Ruins(Material):
-    name = Name("обломки")
+    name = Name.auto("обломки")
     layer = "tiles"
     character = ":"
 

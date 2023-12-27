@@ -12,7 +12,7 @@ from src.library.ais.dummy_ai import DummyAi
 class Enemy(Humanoid):
     character = "E"
     color = ColorPair(red, magenta)
-    name = Name("Враг")
+    name = Name.auto("Враг")
     sex = "male"
 
     def __post_init__(self):
