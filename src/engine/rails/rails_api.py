@@ -7,11 +7,11 @@ from src.engine.acting.action import Action
 from src.engine.ai import Senses
 from src.lib.query import Q
 from src.lib.vector.vector import sub2, floordiv2
-from src.library.ai_modules.spacial_memory import PathMemory
-from src.library.ais.dummy_ai import DummyAi
-from src.library.ais.io import Notification
-from src.library.physical.player import Player
-from src.library.special.level import Level
+from src.assets.ai_modules.spacial_memory import PathMemory
+from src.assets.ais.dummy_ai import DummyAi
+from src.assets.ais.io import Notification
+from src.assets.physical.player import Player
+from src.assets.special.level import Level
 
 Script: TypeAlias = Iterator[dict[Entity, Action | None] | None]
 

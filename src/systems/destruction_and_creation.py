@@ -6,7 +6,7 @@ from ecs import MetasystemFacade
 from src.components import Hades, Genesis, Positioned
 from src.lib.query import Q
 from src.lib.toolkit import matches_protocol
-from src.library.special.level import Level
+from src.assets.special.level import Level
 
 sequence = []
 

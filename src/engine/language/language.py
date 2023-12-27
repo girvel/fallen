@@ -1,9 +1,9 @@
 from dataclasses import dataclass
 
 from src.lib.vector.vector import int2, ge2, lt2, d2
-from src.library.markup.house import House
-from src.library.markup.zone import Zone
-from src.library.special.level import Markup
+from src.assets.markup.house import House
+from src.assets.markup.zone import Zone
+from src.assets.special.level import Markup
 
 
 @dataclass

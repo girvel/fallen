@@ -4,9 +4,9 @@ from typing import Annotated
 
 from ecs import exists
 
-from levels.main_01_introduction.library.physical.brother import Brother
-from levels.main_01_introduction.library.physical.girl import Girl
-from levels.main_01_introduction.library.physical.mother import Mother
+from levels.main_01_introduction.assets.physical.brother import Brother
+from levels.main_01_introduction.assets.physical.girl import Girl
+from levels.main_01_introduction.assets.physical.mother import Mother
 from src.engine.acting import damage_kind
 from src.engine.acting.aggressive import Aggressive
 from src.engine.acting.damage import Weapon
@@ -17,21 +17,21 @@ from src.lib.concurrency import wait_for, wait_while
 from src.lib.query import Q
 from src.lib.vector import vector
 from src.lib.vector.vector import d2, add2, int2
-from src.library.actions.leave import Leave
-from src.library.actions.no_action import NoAction
-from src.library.actions.say import Say
-from src.library.actions.teleport import Teleport
-from src.library.ai_modules.follower import Follower
-from src.library.ai_modules.pather import Pather
-from src.library.ai_modules.spacial_memory import PathMemory
-from src.library.ais.dummy_ai import wait_finish
-from src.library.ais.io import Quest, Notification
-from src.library.items.bun import Bun
-from src.library.items.lily import Lily
-from src.library.physical.frog import Frog
-from src.library.physical.player import Player
-from src.library.physical.rabid_dog import RabidDog
-from src.library.special.level import Level
+from src.assets.actions.leave import Leave
+from src.assets.actions.no_action import NoAction
+from src.assets.actions.say import Say
+from src.assets.actions.teleport import Teleport
+from src.assets.ai_modules.follower import Follower
+from src.assets.ai_modules.pather import Pather
+from src.assets.ai_modules.spacial_memory import PathMemory
+from src.assets.ais.dummy_ai import wait_finish
+from src.assets.ais.io import Quest, Notification
+from src.assets.items.bun import Bun
+from src.assets.items.lily import Lily
+from src.assets.physical.frog import Frog
+from src.assets.physical.player import Player
+from src.assets.physical.rabid_dog import RabidDog
+from src.assets.special.level import Level
 
 
 class VisionVersion(Enum):

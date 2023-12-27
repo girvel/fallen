@@ -1,11 +1,11 @@
-from levels.afterlife.library.physical.old_sarr import OldSarr
+from levels.afterlife.assets.physical.old_sarr import OldSarr
 from src.engine import permanent_storage
 from src.engine.input.hotkeys import GameEnd
 from src.engine.rails.rails_base import RailsBase
 from src.engine.rails.scene import Scene
-from src.library.actions.no_action import NoAction
-from src.library.actions.say import Say
-from src.library.physical.player import Player
+from src.assets.actions.no_action import NoAction
+from src.assets.actions.say import Say
+from src.assets.physical.player import Player
 
 
 class Rails(RailsBase):

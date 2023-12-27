@@ -9,7 +9,7 @@ if TYPE_CHECKING:
     from src.engine.acting.action import Action
     from src.engine.output.colors import ColorPair
     from src.lib.vector.vector import int2
-    from src.library.special.level import Level
+    from src.assets.special.level import Level
 
 
 # GENERAL PROTOCOLS #

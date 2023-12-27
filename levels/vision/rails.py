@@ -4,25 +4,25 @@ from typing import Optional, Annotated
 from ecs import Entity, exists
 
 from levels.main_01_introduction.rails import VisionVersion
-from levels.vision.library.physical.enemy import Enemy
-from src.library.actions.build import Build
-from src.library.actions.cast_fire_storm import CastFireStorm
-from src.library.actions.cast_stone_stomp import CastStoneStomp
-from src.library.actions.say import Say
-from src.library.ai_modules.follower import Follower
-from src.library.ai_modules.pather import Pather
+from levels.vision.assets.physical.enemy import Enemy
+from src.assets.actions.build import Build
+from src.assets.actions.cast_fire_storm import CastFireStorm
+from src.assets.actions.cast_stone_stomp import CastStoneStomp
+from src.assets.actions.say import Say
+from src.assets.ai_modules.follower import Follower
+from src.assets.ai_modules.pather import Pather
 from src.engine.rails.rails_base import RailsBase
 from src.engine.rails.scene import Scene, not_required, Priority
-from src.library.ais.dummy_ai import wait_finish
-from src.library.physical.backslash_wall import BackslashWall
-from src.library.physical.horizontal_wall import HorizontalWall
-from src.library.physical.kaledeii import Kaledeii
-from src.library.physical.lord_bishop import LordBishop
-from src.library.physical.player import Player
-from src.library.physical.slash_wall import SlashWall
-from src.library.physical.soldier import Soldier
-from src.library.physical.vertical_wall import VerticalWall
-from src.library.special.level import Level
+from src.assets.ais.dummy_ai import wait_finish
+from src.assets.physical.backslash_wall import BackslashWall
+from src.assets.physical.horizontal_wall import HorizontalWall
+from src.assets.physical.kaledeii import Kaledeii
+from src.assets.physical.lord_bishop import LordBishop
+from src.assets.physical.player import Player
+from src.assets.physical.slash_wall import SlashWall
+from src.assets.physical.soldier import Soldier
+from src.assets.physical.vertical_wall import VerticalWall
+from src.assets.special.level import Level
 from src.lib.vector import vector
 from src.lib.concurrency import wait_for, wait_while
 from src.lib.vector.vector import add2, right, mul2

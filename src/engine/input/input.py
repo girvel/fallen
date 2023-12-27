@@ -4,7 +4,7 @@ import time
 
 from src.engine.acting.action import Action
 from src.lib.query import Q
-from src.library.actions.no_action import NoAction
+from src.assets.actions.no_action import NoAction
 from src.engine.input.hotkeys import generate_hotkeys
 from src.engine.input.key_reader import KeyReader
 from src.engine.input.mode import OPTIONS, NOTIFICATION, DIALOGUE_LINE, CUTSCENE, GAME, GENERAL

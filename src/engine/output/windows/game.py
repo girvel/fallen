@@ -7,7 +7,7 @@ from src.engine.output.window import Window
 from src.lib.query import Q
 from src.lib.vector.grid import grid_unsafe_get
 from src.lib.vector.vector import floordiv2, sub2, add2
-from src.library.special.level import Level
+from src.assets.special.level import Level
 
 
 class Game(Window):

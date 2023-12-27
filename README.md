@@ -4,7 +4,7 @@ English [Русский](/README.ru.md)
 
 I always wanted to create my own RPG, here it is.
 
-![(Here should have been a screenshot, I don't know what went wrong)](assets/screenshot.png)
+![(Here should have been a screenshot, I don't know what went wrong)](stuff/screenshot.png)
 
 ## Installation
 

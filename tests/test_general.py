@@ -1,7 +1,7 @@
 from pathlib import Path
 
-from src.library.actions.no_action import NoAction
-from src.library.special.level import Level
+from src.assets.actions.no_action import NoAction
+from src.assets.special.level import Level
 from src.ecs import build_metasystem
 from src.lib.vector.grid import grid_get
 

@@ -14,9 +14,9 @@ from src.engine import permanent_storage
 from src.engine.input.hotkeys import GameEnd
 from src.ecs import build_metasystem
 from src.logging_setup import init_logging, log_stats
-from src.library.ais.io import IO
-from src.library.physical.player import Player
-from src.library.special.level import Level
+from src.assets.ais.io import IO
+from src.assets.physical.player import Player
+from src.assets.special.level import Level
 
 
 def main(

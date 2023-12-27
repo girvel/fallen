@@ -1,5 +1,5 @@
-from src.library.actions.inspect import Inspect
-from src.library.actions.move import Move
+from src.assets.actions.inspect import Inspect
+from src.assets.actions.move import Move
 from src.engine.acting.damage import potential_damage
 from src.engine.inspection import inspect
 from src.engine.output.windows.panes.pane import Pane
