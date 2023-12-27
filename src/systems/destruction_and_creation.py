@@ -18,8 +18,7 @@ def destruction(hades: Hades, genesis: Genesis, ms: MetasystemFacade):
     for entity in hades.entities_to_destroy:
         if ~Q(entity).on_destruction(hades, genesis): continue  # TODO vulnerability, can change iterable
 
-        # TODO OPT runtime_checkable protocols native type checking is slow, rewrite
-        if isinstance(entity, Positioned):
+        if matches_protocol(entity, Positioned):
             Level.remove(entity)
 
         ms.remove(entity)
