@@ -9,14 +9,26 @@ class Controls(Pane):
     template_name = "controls.html"
     name = "Управление"
 
+    # pretty_hotkeys = {
+    #     curses.KEY_MOUSE: "Mouse Key",
+    #     curses.KEY_LEFT: "←",
+    #     curses.KEY_RIGHT: "→",
+    #     curses.KEY_UP: "↑",
+    #     curses.KEY_DOWN: "↓",
+    #     ord(" "): "␣",
+    #     Key.enter: "⏎",
+    #     Key.ctrl_c: "Ctrl+C",
+    #     ord(""): "Esc",
+    # }
+
     pretty_hotkeys = {
-        curses.KEY_MOUSE: "Mouse Key",
-        curses.KEY_LEFT: "←",
-        curses.KEY_RIGHT: "→",
-        curses.KEY_UP: "↑",
-        curses.KEY_DOWN: "↓",
-        ord(" "): "␣",
-        Key.enter: "⏎",
+        curses.KEY_MOUSE: "Кнопка мыши",
+        curses.KEY_LEFT: "Влево",
+        curses.KEY_RIGHT: "Вправо",
+        curses.KEY_UP: "Вверх",
+        curses.KEY_DOWN: "Вниз",
+        ord(" "): "Space",
+        Key.enter: "Enter",
         Key.ctrl_c: "Ctrl+C",
         ord(""): "Esc",
     }
