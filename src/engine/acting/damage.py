@@ -69,7 +69,9 @@ def inflict_damage(
     target.last_damaged_by = (~Q(target).last_damaged_by or []) + [source]
 
     if health.amount.current <= 0:
-        logging.info(f"{target.name} is killed by {source.name}")
+        if not hasattr(target, "boring_flag"):
+            logging.info(f"{target.name} is killed by {source.name}")
+
         hades.push(target)
 
         for killer in iter_parenting_stack(source):

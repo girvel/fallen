@@ -1,4 +1,5 @@
 import logging
+from collections import Counter
 
 from ecs import MetasystemFacade
 
@@ -12,8 +13,10 @@ sequence = []
 
 @sequence.append
 def destruction(hades: Hades, genesis: Genesis, ms: MetasystemFacade):
+    counter = Counter()
+
     for entity in hades.entities_to_destroy:
-        if ~Q(entity).on_destruction(hades, genesis): continue
+        if ~Q(entity).on_destruction(hades, genesis): continue  # TODO vulnerability, can change iterable
 
         # TODO OPT runtime_checkable protocols native type checking is slow, rewrite
         if isinstance(entity, Positioned):
@@ -22,20 +25,34 @@ def destruction(hades: Hades, genesis: Genesis, ms: MetasystemFacade):
         ms.remove(entity)
 
         if not hasattr(entity, "boring_flag"):
-            logging.info(f'-"{~Q(entity).name or entity}"')
+            counter[str(~Q(entity).name or entity)] += 1
+
+    if len(counter) > 0:
+        logging.info("Destroyed: " + "".join(
+            f"\n    - {name}" + (f" ({count})" if count > 1 else "")
+            for name, count in counter.items())
+        )
 
     hades.entities_to_destroy.clear()
 
 
 @sequence.append
 def creation(genesis: Genesis, ms: MetasystemFacade):
+    counter = Counter()
+
     for entity in genesis.entities_to_create:
         if matches_protocol(entity, Positioned):
             Level.put(entity)
 
         ms.add(entity)
         if not hasattr(entity, "boring_flag"):
-            logging.info(f'+"{~Q(entity).name or entity}"')
+            counter[str(~Q(entity).name or entity)] += 1
+
+    if len(counter) > 0:
+        logging.info("Created: " + "".join(
+            f"\n    + {name}" + (f" ({count})" if count > 1 else "")
+            for name, count in counter.items())
+        )
 
 
 @sequence.append
