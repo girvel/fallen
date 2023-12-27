@@ -1,9 +1,9 @@
 {% for option in options %}
 <p>
     {% if selected_option_i == loop.index - 1 %}
-    <y>{{ option }}</y>
+    <y>> {{ option }} <</y>
     {% else %}
-    {{ option }}
+    <span>  {{ option }}  </span>
     {% endif %}
 </p>
 {% endfor %}
