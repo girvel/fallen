@@ -1,10 +1,8 @@
-from src.assets.actions.move import Move
 from src.engine.output.html_window import HtmlWindow
 from src.engine.output.windows.panes.chat import Chat
 from src.engine.output.windows.panes.controls import Controls
 from src.engine.output.windows.panes.inventory import Inventory
 from src.engine.output.windows.panes.quests import Quests
-from src.engine.output.windows.panes.stats import Stats
 from src.lib.limited import Limited
 from src.lib.vector.vector import flip2
 

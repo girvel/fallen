@@ -33,6 +33,9 @@ class Stats(HtmlWindow):
             "armor": subject.health.armor_kind.name,
         }
 
+    def _calculate_visibility(self, subject, perception):
+        return not self.io.memory.in_cutscene
+
     def _build_hp_bar(self, health: Health | None) -> tuple[str, str]:
         if health is None: return "", "-"
 
