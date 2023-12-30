@@ -32,7 +32,7 @@ class Window(ABC):
     def render(self, subject, perception, parent_size, positioning):
         if not self.update_visibility(subject, perception): return
 
-        window_size = self._responsive_size(subject, perception, parent_size)
+        window_size = self.get_size(subject, perception, parent_size)
 
         self.curses_window.resize(*flip2(window_size))
         self.curses_window.mvwin(*add2(
@@ -50,7 +50,7 @@ class Window(ABC):
     def _render(self, subject, perception):
         ...
 
-    def _responsive_size(self, subject, perception, max_size):
+    def get_size(self, subject, perception, max_size):
         return max_size
 
     def update_visibility(self, subject, perception):

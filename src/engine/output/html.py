@@ -7,7 +7,7 @@ Has some restrictions:
 import re
 from html.parser import HTMLParser
 
-from src.engine.output.colors import ColorPair, yellow, white, red, green
+from src.engine.output.colors import ColorPair, yellow, white, red, green, black, color_by_name
 from src.engine.output.grid_rendering import put_string_on_grid, HorizontalAlignment, VerticalAlignment
 
 
@@ -48,7 +48,15 @@ class CursesHtmlRenderer(HTMLParser):
                     self.horizontal_alignment, self.vertical_alignment,
                 )
             case "color":
-                self.color_stack.append(ColorPair.from_code(int(attrs["code"])))
+                if "code" in attrs:
+                    color = ColorPair.from_code(int(attrs["code"]))
+                else:
+                    color = ColorPair(
+                        color_by_name[attrs.get("fg", "white")],
+                        color_by_name[attrs.get("bg", "black")],
+                    )
+
+                self.color_stack.append(color)
 
     def handle_endtag(self, tag):
         match tag:

@@ -30,8 +30,8 @@ def generate_body_factory(base: Any):
     def result(_hades: Hades, genesis: Genesis) -> bool:
         items = []
 
-        if hasattr(base, "weapon"):
-            items.append(base.weapon)
+        if hasattr(base, "damage_source"):
+            items.append(base.damage_source)
 
         genesis.push(Body(
             parent_name=base.name, items=items, sex=~Q(base).sex, p=base.p, level=base.level

@@ -14,6 +14,6 @@ class Stats(Pane):
         return {
             "subject": subject,
             "potential_damage": int(potential_damage(subject)),
-            "mode": "MOVE" if self.io.output.panel.mode == Move else "<rw>ATTACK</rw>",
+            "mode": "",
             "inspection": (inspected := ~Q(subject).act[Inspect].subject) and inspect(inspected),
         }

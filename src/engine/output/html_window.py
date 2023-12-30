@@ -3,12 +3,13 @@ from abc import abstractmethod, ABCMeta
 
 from jinja2 import Environment, PackageLoader
 
+from src.engine.output.colors import ColorPair
 from src.engine.output.grid_rendering import render_grid
 from src.engine.output.html import html_renderer
 from src.engine.output.window import Window
 from src.lib.limited import Limited
-from src.lib.vector.vector import add2, flip2
 from src.lib.vector.grid import grid_size
+from src.lib.vector.vector import add2, flip2
 
 
 class HtmlWindow(Window, metaclass=ABCMeta):
@@ -25,6 +26,9 @@ class HtmlWindow(Window, metaclass=ABCMeta):
     @abstractmethod
     def get_arguments(self, subject, perception):
         ...
+
+    def get_border_attributes(self, subject, perception):
+        return ColorPair().to_curses()
 
     has_border = False
 
@@ -48,7 +52,9 @@ class HtmlWindow(Window, metaclass=ABCMeta):
             self.border_curses_window.mvwin(*add2(self.curses_window.getbegyx(), (-1, -3)))
 
             self.border_curses_window.clear()
+            self.border_curses_window.attrset(self.get_border_attributes(subject, perception))
             self.border_curses_window.border()
+            self.border_curses_window.attrset(0)
             self.border_curses_window.refresh()
 
         grid = html_renderer.render(

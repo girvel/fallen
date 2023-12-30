@@ -1,6 +1,6 @@
 from src.engine.acting import armor_kind
 from src.engine.acting import damage_kind
-from src.engine.acting.damage import Health, Weapon
+from src.engine.acting.damage import Health, DamageSource
 from src.engine.attitude.implementation import Relation
 from src.engine.language.library import reserved_names
 from src.engine.language.name import CompositeName
@@ -23,7 +23,7 @@ class Mother(Humanoid):
 
     def __post_init__(self):
         self.health = Health(50, armor_kind.none)
-        self.weapon = Weapon(4, damage_kind.slashing)
+        self.damage_source = DamageSource(4, damage_kind.slashing)
         self.ai = PeasantAi()
         self.attitude = peasant_attitude()
         self.house = None

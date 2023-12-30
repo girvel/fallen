@@ -9,7 +9,7 @@ from levels.main_01_introduction.assets.physical.girl import Girl
 from levels.main_01_introduction.assets.physical.mother import Mother
 from src.engine.acting import damage_kind
 from src.engine.acting.aggressive import Aggressive
-from src.engine.acting.damage import Weapon
+from src.engine.acting.damage import DamageSource
 from src.engine.rails.rails_api import Lock
 from src.engine.rails.rails_base import RailsBase
 from src.engine.rails.scene import Scene, keep_ai, maybe_exists, Priority
@@ -131,7 +131,7 @@ class Rails(RailsBase):
 
             yield {self.brother: Say("Вот, смотри.")}
             yield {self.player: Say("В твоих руках оказывается длинный свёрток льняной ткани.", True)}
-            self.player.weapon = Weapon(8, damage_kind.slashing)
+            self.player.damage_source = DamageSource(8, damage_kind.slashing)
 
             selected_option = yield from rails.options({
                 (look := "Развязать бечёвку"): NoAction(),

@@ -14,7 +14,7 @@ class Game(Window):
     virtual_p = (0, 0)
     layers_display_order = ["physical", "effects", "tiles"]
 
-    def _responsive_size(self, subject, perception, max_size):
+    def get_size(self, subject, perception, max_size):
         return sub2(
             max_size,
             (0, 1) if self.io.memory.in_cutscene else

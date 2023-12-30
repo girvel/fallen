@@ -1,6 +1,6 @@
 import random
 
-from src.engine.acting.damage import Weapon, Health
+from src.engine.acting.damage import DamageSource, Health
 from src.engine.acting import armor_kind
 from src.engine.acting import damage_kind
 from src.assets.ai_modules.spacial_memory import CharacterMemory, PathMemory
@@ -22,7 +22,6 @@ class Peasant(Humanoid):
         self.sex = random.choice(["male", "female"])
         self.name = random.choice(first_names[self.sex])
         self.health = Health(random.randrange(10, 25) + (self.sex == "male" and 10 or 0), armor_kind.none)
-        self.weapon = Weapon(4, damage_kind.slashing)
         self.senses = Senses(8, 0, 0)
         self.ai = PeasantAi()
         self.attitude = peasant_attitude()

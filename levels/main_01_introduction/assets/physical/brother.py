@@ -1,7 +1,7 @@
 from levels.main_01_introduction.assets.ais.brother_ai import BrotherAi
 from src.engine.acting import armor_kind
 from src.engine.acting import damage_kind
-from src.engine.acting.damage import Health, Weapon
+from src.engine.acting.damage import Health, DamageSource
 from src.engine.language.library import reserved_names
 from src.engine.language.name import CompositeName
 from src.engine.output.colors import ColorPair, blue
@@ -18,7 +18,7 @@ class Brother(Humanoid):
         self.name = CompositeName(reserved_names["mike"], reserved_names["kinds"]["male"])
 
         self.health = Health(30, armor_kind.none)
-        self.weapon = Weapon(4, damage_kind.slashing)
+        self.damage_source = DamageSource(4, damage_kind.slashing)
         self.ai = BrotherAi()
 
     def after_creation(self):

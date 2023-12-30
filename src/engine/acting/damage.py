@@ -6,6 +6,7 @@ import yaml
 from ecs import Entity
 
 from src.engine.acting.damage_kind import DamageKind
+from src.engine.language.name import Name
 from src.engine.parenting import iter_parenting_stack
 from src.lib.limited import Limited
 from src.lib.query import Q
@@ -14,7 +15,7 @@ from src.components import Hades
 
 
 @dataclass
-class Weapon:
+class DamageSource:
     power: int
     damage_kind: str
 
@@ -29,20 +30,20 @@ class Health:
 
 
 def attack(source, target, hades: Hades):
-    if (weapon := ~Q(source).weapon) is None: return
+    if (damage_source := ~Q(source).damage_source) is None: return
 
     return inflict_damage(
-        target, potential_damage(source), weapon.damage_kind, hades, source,
+        target, potential_damage(source), damage_source.damage_kind, hades, source,
     )
 
 
 def potential_damage(source) -> int:
     if (skill := ~Q(source).skill) is not None:
-        skill_k = skill.get(source.weapon.damage_kind) or .5
+        skill_k = skill.get(source.damage_source.damage_kind) or .5
     else:
         skill_k = 1
 
-    return source.weapon.power * skill_k
+    return source.damage_source.power * skill_k
 
 
 def inflict_damage(

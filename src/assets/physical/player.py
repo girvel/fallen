@@ -1,7 +1,7 @@
 from src.components import Genesis, Hades
 from src.engine.acting import armor_kind
 from src.engine.acting import damage_kind
-from src.engine.acting.damage import Weapon, Health
+from src.engine.acting.damage import DamageSource, Health
 from src.engine.ai import Senses
 from src.engine.attitude.implementation import Faction
 from src.engine.inventory import Inventory
@@ -30,7 +30,7 @@ class Player(Humanoid):
         self.name = CompositeName(reserved_names["hugh"], reserved_names["kinds"]["male"])
 
         self.sex = "male"
-        self.weapon = Weapon(1, damage_kind.crushing)
+        self.damage_source = DamageSource(1, damage_kind.crushing)
         self.health = Health(10, armor_kind.none)
         self.senses = Senses(24, 30, 0, attention_k=1)
         self.traits = Traits()

@@ -11,7 +11,7 @@ class DialogueLine(HtmlWindow):
     template_name = "dialogue_line.html"
     has_border = True
 
-    def _responsive_size(self, subject, perception, max_size):
+    def get_size(self, subject, perception, max_size):
         return min(80, max_size[0] - 20), 5
 
     def _calculate_visibility(self, subject, perception):

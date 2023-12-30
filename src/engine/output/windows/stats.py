@@ -1,6 +1,9 @@
 import math
 
-from src.engine.output.colors import ColorPair, green, red
+from src.assets.actions.hand_attack import HandAttack
+from src.assets.actions.move import Move
+from src.engine.acting.damage import potential_damage, Health
+from src.engine.output.colors import ColorPair, green, red, white
 from src.engine.output.html_window import HtmlWindow
 from src.lib.query import Q
 
@@ -10,29 +13,40 @@ class Stats(HtmlWindow):
     template_name = "stats.html"
     has_border = True
 
+    def get_size(self, subject, perception, max_size):
+        return 35, 8
+
+    def get_border_attributes(self, subject, perception):
+        return ColorPair(red if self.io.memory.movement_mode is HandAttack else white).to_curses()
+
     def get_arguments(self, subject, perception):
-        if (health := ~Q(subject).health) is not None:
-            hp_value = f"{health.amount.current}/{health.amount.maximum - 1}"
-
-            max_length = 25
-            healthy_length = int(health.amount.ratio() * max_length)
-
-            hp_bar = "|" * healthy_length + " " * (max_length - healthy_length)
-
-            hp_bar = (
-                hp_bar[:max_length // 2 - math.floor(len(hp_value) / 2)] +
-                hp_value +
-                hp_bar[max_length // 2 + math.ceil(len(hp_value) / 2):]
-            )
-
-            hp_bar = (hp_bar[:healthy_length], hp_bar[healthy_length:])
-        else:
-            hp_bar = ("", "-")
-
         return {
-            "hp_bar": hp_bar,
-            "hp_bar_color": ColorPair(green if ~Q(subject).last_damaged_by in (0, None) else red).to_code()
+            "character_name": str(~Q(subject).name or "???"),
+            "hp_bar": self._build_hp_bar(~Q(subject).health),
+            "hp_bar_color": ColorPair(green if ~Q(subject).last_damaged_by in (0, None) else red).to_code(),
+            "weapon": {
+                "name": "???",
+                "damage": potential_damage(subject),
+                "damage_kind": subject.damage_source.damage_kind.name,
+                "is_out": self.io.memory.movement_mode is HandAttack,
+            },
+            "armor": subject.health.armor_kind.name,
         }
 
-    def _responsive_size(self, subject, perception, max_size):
-        return min(max_size[0] - 6, 35), 8
+    def _build_hp_bar(self, health: Health | None) -> tuple[str, str]:
+        if health is None: return "", "-"
+
+        hp_value = f"{health.amount.current}/{health.amount.maximum - 1}"
+
+        max_length = 25
+        healthy_length = int(health.amount.ratio() * max_length)
+
+        hp_bar = "|" * healthy_length + " " * (max_length - healthy_length)
+
+        hp_bar = (
+            hp_bar[:max_length // 2 - math.floor(len(hp_value) / 2)] +
+            hp_value +
+            hp_bar[max_length // 2 + math.ceil(len(hp_value) / 2):]
+        )
+
+        return hp_bar[:healthy_length], hp_bar[healthy_length:]

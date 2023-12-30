@@ -39,9 +39,8 @@ class Output:
         size = flip2(self.stdscr.getmaxyx())
 
         # TODO maybe move positioning into the window itself?
-        # TODO and rename _responsive_size to something appropriate?
         def _get_hint_position():
-            w, h = self.hint._responsive_size(subject, perception, size)
+            w, h = self.hint.get_size(subject, perception, size)
             if (p := ~Q(self.io.memory.inspect_target).p) is None: return 0, 0
             return sub2(sub2(p, self.game.virtual_p), (w // 2, h))
 

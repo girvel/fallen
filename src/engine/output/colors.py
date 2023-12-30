@@ -13,6 +13,17 @@ yellow = curses.COLOR_YELLOW
 cyan = curses.COLOR_CYAN
 magenta = curses.COLOR_MAGENTA
 
+color_by_name = {
+    "white": white,
+    "black": black,
+    "red": red,
+    "green": green,
+    "blue": blue,
+    "yellow": yellow,
+    "cyan": cyan,
+    "magenta": magenta,
+}
+
 _color_scheme = {
     black:   0x1d1f21,
     red:     0xcc6666,

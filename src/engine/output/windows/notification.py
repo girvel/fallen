@@ -8,7 +8,7 @@ class Notification(HtmlWindow):
     template_name = "notification.html"
     has_border = True
 
-    def _responsive_size(self, subject, perception, max_size):
+    def get_size(self, subject, perception, max_size):
         w = min(46, max_size[0] - 1)
         h = min(max_size[1], 4 + math.ceil(len(self.io.memory.current_notification.content) / w))
 

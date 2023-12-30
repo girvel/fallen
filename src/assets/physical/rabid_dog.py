@@ -1,4 +1,4 @@
-from src.engine.acting.damage import Weapon, Health
+from src.engine.acting.damage import DamageSource, Health
 from src.engine.acting import armor_kind
 from src.engine.acting import damage_kind
 from src.engine.ai import Senses
@@ -29,7 +29,7 @@ class RabidDog(Material):
             "пр": "бешеном псе",
         })
 
-        self.weapon = Weapon(6, damage_kind.piercing)
+        self.damage_source = DamageSource(6, damage_kind.piercing)
         self.health = Health(25, armor_kind.none)
         self.ai = RabidAi()
         self.senses = Senses(10, 0, 5)

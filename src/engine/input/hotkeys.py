@@ -59,10 +59,10 @@ def generate_hotkeys(debug_mode):
     def generate_movement_function(key, direction, description):
         @Hotkey.define(result[GAME], [key], description)
         def move(io, subject, perception):
-            if io.output.panel.mode == Move:
+            if io.memory.movement_mode == Move:
                 return Move(direction)
 
-            if io.output.panel.mode == HandAttack:
+            if io.memory.movement_mode == HandAttack:
                 if (target := perception.vision[subject.layer].get(add2(subject.p, direction))) is not None:
                     return HandAttack(target)
                 return Move(direction)
@@ -86,7 +86,7 @@ def generate_hotkeys(debug_mode):
 
     @Hotkey.define(result[GAME], ["r"], "Переключить атаку/движение")
     def change_mode(io, subject, perception):
-        io.output.panel.mode = (io.output.panel.mode == Move) and HandAttack or Move
+        io.memory.movement_mode = (io.memory.movement_mode == Move) and HandAttack or Move
 
     if debug_mode:
         @Hotkey.define(result[GAME], ["1"], "Сотворить поток огня")

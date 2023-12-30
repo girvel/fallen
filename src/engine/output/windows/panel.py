@@ -14,22 +14,19 @@ class Panel(HtmlWindow):
     template_name = "panel.html"
     has_border = True
 
-    mode = Move  # TODO move from here?
-
     def __post_init__(self):
         self.panes = [
             Controls(self.curses_window, self.io),
-            Stats(self.curses_window, self.io),
             Inventory(self.curses_window, self.io),
             Quests(self.curses_window, self.io),
             Chat(self.curses_window, self.io),
         ]
-        self.pane_i = Limited(len(self.panes), 0, 1)
+        self.pane_i = Limited(len(self.panes), 0, 2)
 
     def get_arguments(self, subject, perception):
         return {
             "previous_pane_name": self.panes[self.pane_i.current - 1].name if not self.pane_i.is_min() else None,
-            "next_pane_name":     self.panes[self.pane_i.current + 1].name if not self.pane_i.is_max() else None,
+            "next_pane_name": self.panes[self.pane_i.current + 1].name if not self.pane_i.is_max() else None,
             "pane_name": self.panes[self.pane_i.current].name,
         }
 
@@ -44,5 +41,5 @@ class Panel(HtmlWindow):
     def _calculate_visibility(self, subject, perception):
         return not self.io.memory.in_cutscene
 
-    def _responsive_size(self, subject, perception, max_size):
+    def get_size(self, subject, perception, max_size):
         return min(max_size[0] - 6, 35), max_size[1] - 12

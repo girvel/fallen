@@ -3,6 +3,7 @@ from typing import Optional
 
 from ecs import Entity
 
+from src.assets.actions.move import Move
 from src.engine.acting.action import Action
 from src.engine.ai import Perception
 from src.engine.input.input import Input
@@ -28,6 +29,8 @@ class Notification:
 
 @dataclass
 class Memory:
+    movement_mode: type[Action] = Move
+
     spacial_memory: CharacterMemory = field(default_factory=CharacterMemory)
 
     current_sound: Optional[Sound] = None

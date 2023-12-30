@@ -7,7 +7,7 @@ class Hint(HtmlWindow):
     package_name = __name__
     template_name = "hint.html"
 
-    def _responsive_size(self, subject, perception, max_size):
+    def get_size(self, subject, perception, max_size):
         return len(self.get_arguments(subject, perception)["name"]) + 2, 1
 
     def _calculate_visibility(self, subject, perception):

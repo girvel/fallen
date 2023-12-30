@@ -1,4 +1,4 @@
-from src.engine.acting.damage import Weapon
+from src.engine.acting.damage import DamageSource
 from src.engine.ai import Senses
 from src.lib.toolkit import assert_attributes
 from src.assets.abstract.material import Material
@@ -19,7 +19,7 @@ class Humanoid(Material):
         self.senses = Senses(12, 0, 0)
 
         self.skill = {}
-        self.weapon = Weapon(1, "Crushing")
+        self.damage_source = DamageSource(1, "Crushing")
 
         super().__init__(**kwargs)
 
