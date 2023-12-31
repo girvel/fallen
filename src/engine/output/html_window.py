@@ -3,9 +3,9 @@ from abc import abstractmethod, ABCMeta
 
 from jinja2 import Environment, PackageLoader
 
+from src.engine.output import html
 from src.engine.output.colors import ColorPair
 from src.engine.output.grid_rendering import render_grid
-from src.engine.output.html import html_renderer
 from src.engine.output.window import Window
 from src.lib.limited import Limited
 from src.lib.vector.grid import grid_size
@@ -57,11 +57,11 @@ class HtmlWindow(Window, metaclass=ABCMeta):
             self.border_curses_window.attrset(0)
             self.border_curses_window.refresh()
 
-        grid = html_renderer.render(
-            flip2(self.curses_window.getmaxyx()),
+        grid = html.render(
             self.jinja_environment.get_template(self.template_name).render(
                 **self.get_arguments(subject, perception),
-            )
+            ),
+            *flip2(self.curses_window.getmaxyx()),
         )
 
         self.scroll.maximum = max(0, grid_size(grid)[1] - self.curses_window.getmaxyx()[0]) + 1

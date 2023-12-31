@@ -17,11 +17,10 @@ class VerticalAlignment(Enum):
 
 
 def put_string_on_grid(
-    array: list[list[str]], window_size: int2, p: int2, string: str, attributes: int,
+    array: list[list[str]], w: int2, p: int2, string: str, attributes: int,
     horizontal_alignment: HorizontalAlignment, vertical_alignment: VerticalAlignment
 ) -> int2:
     x, y = p
-    w, h = window_size
     i = 0
 
     def _realign():

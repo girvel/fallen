@@ -5,25 +5,32 @@ Has some restrictions:
 """
 
 import re
+from dataclasses import field, dataclass
 from html.parser import HTMLParser
 
-from src.engine.output.colors import ColorPair, yellow, white, red, green, black, color_by_name
+from src.engine.output.colors import ColorPair, yellow, white, red, green, color_by_name
 from src.engine.output.grid_rendering import put_string_on_grid, HorizontalAlignment, VerticalAlignment
+from src.lib.vector.vector import zero, int2
 
 
-class CursesHtmlRenderer(HTMLParser):
-    array = None
-    size = None
-    color_stack = [ColorPair()]
-    horizontal_alignment = HorizontalAlignment.left
-    vertical_alignment = VerticalAlignment.top
+def render(html, w: int, h: int | None):
+    renderer = _CursesHtmlRenderer(w, h)
+    renderer.feed(re.sub(r"\n\s*", "", html))
+    return renderer.array, (w, len(renderer.array))
 
-    def render(self, size, html, **kwargs):
-        self.array = [[" "] * size[0]]
-        self.size = size
-        self.cursor_p = (0, 0)
-        self.feed(re.sub(r"\n\s*", "", html))
-        return self.array, (size[0], len(self.array))
+
+class _CursesHtmlRenderer(HTMLParser):
+    def __init__(self, w: int, h: int | None):
+        super().__init__()
+
+        self.w = w
+        self.h = h  # needed only for <bottom>
+
+        self.array: list[list[str]] = []
+        self.color_stack: list[ColorPair] = [ColorPair()]
+        self.horizontal_alignment: HorizontalAlignment = HorizontalAlignment.left
+        self.vertical_alignment: VerticalAlignment = VerticalAlignment.top
+        self.cursor_p: int2 = zero
 
     def handle_starttag(self, tag, attrs, **kwargs):
         attrs = dict(attrs)
@@ -35,7 +42,7 @@ class CursesHtmlRenderer(HTMLParser):
                 self.horizontal_alignment = HorizontalAlignment.right
             case "bottom":
                 self.vertical_alignment = VerticalAlignment.bottom
-                self.cursor_p = (0, self.size[1] - 1)
+                self.cursor_p = (0, self.h - 1)
             case "y":
                 self.color_stack.append(ColorPair(yellow))
             case "g":
@@ -44,7 +51,7 @@ class CursesHtmlRenderer(HTMLParser):
                 self.color_stack.append(ColorPair(white, red))
             case "li":
                 self.cursor_p = put_string_on_grid(
-                    self.array, self.size, self.cursor_p, "- ", ColorPair(yellow).to_curses(),
+                    self.array, self.w, self.cursor_p, "- ", ColorPair(yellow).to_curses(),
                     self.horizontal_alignment, self.vertical_alignment,
                 )
             case "color":
@@ -73,9 +80,6 @@ class CursesHtmlRenderer(HTMLParser):
 
     def handle_data(self, data):
         self.cursor_p = put_string_on_grid(
-            self.array, self.size, self.cursor_p, data, self.color_stack[-1].to_curses(),
+            self.array, self.w, self.cursor_p, data, self.color_stack[-1].to_curses(),
             self.horizontal_alignment, self.vertical_alignment,
         )
-
-
-html_renderer = CursesHtmlRenderer()
