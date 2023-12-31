@@ -5,10 +5,9 @@ Has some restrictions:
 """
 
 import re
-from dataclasses import field, dataclass
 from html.parser import HTMLParser
 
-from src.engine.output.colors import ColorPair, yellow, white, red, green, color_by_name
+from src.engine.output.colors import ColorPair, yellow, color_by_name
 from src.engine.output.grid_rendering import put_string_on_grid, HorizontalAlignment, VerticalAlignment
 from src.lib.vector.vector import zero, int2
 
@@ -43,12 +42,8 @@ class _CursesHtmlRenderer(HTMLParser):
             case "bottom":
                 self.vertical_alignment = VerticalAlignment.bottom
                 self.cursor_p = (0, self.h - 1)
-            case "y":
+            case "b":
                 self.color_stack.append(ColorPair(yellow))
-            case "g":
-                self.color_stack.append(ColorPair(green))
-            case "rw":
-                self.color_stack.append(ColorPair(white, red))
             case "li":
                 self.cursor_p = put_string_on_grid(
                     self.array, self.w, self.cursor_p, "- ", ColorPair(yellow).to_curses(),
@@ -72,9 +67,9 @@ class _CursesHtmlRenderer(HTMLParser):
             case "bottom":
                 self.vertical_alignment = VerticalAlignment.top
                 self.cursor_p = (0, 0)
-            case "y" | "rw" | "color" | "g":
+            case "b" | "color":
                 self.color_stack.pop()
-            case "div" | "p" | "li" | "br":
+            case "div" | "li" | "br":
                 _, y = self.cursor_p
                 self.cursor_p = (0, y + self.vertical_alignment.value)
 

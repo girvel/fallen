@@ -4,12 +4,12 @@
 
 <bottom>
     {% if previous_pane_name %}
-    <y>&lt </y>{{ previous_pane_name }}
+    <b>&lt </b>{{ previous_pane_name }}
     {% endif %}
 </bottom>
 
 {% if next_pane_name %}
 <bottom><right>{{ next_pane_name }}   </right></bottom>
-<bottom><right><y>&gt </y></right></bottom>
+<bottom><right><b>&gt </b></right></bottom>
 <!-- TODO better alignment logic -->
 {% endif %}

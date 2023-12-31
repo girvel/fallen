@@ -42,8 +42,8 @@ GUI is rendered from HTML! How cool is that?
 
 ```html
 <div>
-    <p>Health: <y>{{subject.health.amount.current}}/{{subject.health.amount.maximum - 1}}</y></p>
-    <p>Armor: <y>{{subject.health.armor_kind}}</y></p>
-    <p>Damage: <y>{{subject.weapon.power}} {{subject.weapon.damage_kind}}</y></p>
+    <div>Health: <b>{{subject.health.amount.current}}/{{subject.health.amount.maximum - 1}}</b></div>
+    <div>Armor: <b>{{subject.health.armor_kind}}</b></div>
+    <div>Damage: <b>{{subject.weapon.power}} {{subject.weapon.damage_kind}}</b></div>
 </div>
 ```

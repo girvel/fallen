@@ -1,5 +1,5 @@
 {% for message in chat %}
-<p>
+<div>
     <color code="{{ message.color_code }}">{{ message.speaker }}</color>: {{ message.content }}
-</p>
+</div>
 {% endfor %}

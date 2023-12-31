@@ -1,14 +1,14 @@
 <div><div><center>{{ character_name }}</center></div></div>
 <div>
-    <span>HP: </span>
+    <span><b>HP</b>: </span>
     [<color code="{{ hp_bar_color }}">{{ hp_bar[0] }}</color>{{ hp_bar[1] }}]
 </div>
 <div>
-    Оружие: {{ weapon.damage }}, {{ weapon.damage_kind }}
+    <b>Оружие</b>: {{ weapon.damage }}, {{ weapon.damage_kind }}
     {% if weapon.is_out %}
     <color fg="red"> - обнажено</color>
     {% endif %}
 </div>
 <div>
-    Броня:  {{ armor }}
+    <b>Броня</b>:  {{ armor }}
 </div>

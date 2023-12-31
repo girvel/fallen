@@ -1,10 +1,10 @@
 {% for mode, collection in hotkeys.items() %}
 <div>
-    <center><p>{{ mode }}</p></center>
+    <center><div>{{ mode }}</div></center>
 </div>
 <div>
     {% for name, hotkey in collection.items() %}
-    <p>{{ name }}: <y>{{ hotkey }}</y></p>
+    <div>{{ name }}: <b>{{ hotkey }}</b></div>
     {% endfor %}
 </div>
 {% endfor %}

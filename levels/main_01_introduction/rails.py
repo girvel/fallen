@@ -109,7 +109,7 @@ class Rails(RailsBase):
             yield from rails.center_camera()
 
             yield from rails.notify(Notification("Управление",
-                "С помощью клика <y>мыши</y> по символу на сцене можно присмотреться к объекту"
+                "С помощью клика <b>мыши</b> по символу на сцене можно присмотреться к объекту"
             ))
 
             yield {self.brother: Say("О, секунду, совсем забыл.")}
@@ -202,8 +202,8 @@ class Rails(RailsBase):
             self.player.ai.memory.add_quest(rails.quests["find_someone_to_fight"])
 
             yield from rails.notify(Notification("Управление",
-                "<y>wasd</y> - движение<br/>"
-                "<y>r</y> - достать/убрать оружие<br/><br/>"
+                "<b>wasd</b> - движение<br/>"
+                "<b>r</b> - достать/убрать оружие<br/><br/>"
                 "Все горячие клавиши доступны в панели \"Управление\""
             ))
 
