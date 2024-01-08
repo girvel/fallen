@@ -20,10 +20,8 @@ class Humanoid(Material):
 
         self.skill = {}
         self.damage_source = DamageSource(1, "Crushing")
+        self.on_destruction = generate_body_factory(self)
 
         super().__init__(**kwargs)
 
         assert_attributes(self, required_attributes)
-
-    def on_destruction(self, *args):
-        return generate_body_factory(self)(*args)
