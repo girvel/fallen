@@ -112,6 +112,8 @@ class Rails(RailsBase):
                 "С помощью клика <b>мыши</b> по символу на сцене можно присмотреться к объекту"
             ))
 
+            yield {self.player: Say("Тебе 12. Солнечная осень.", True)}
+
             yield {self.brother: Say("О, секунду, совсем забыл.")}
             yield {self.player: Say("Улыбка брата излучает теплоту.", True)}
             yield {self.mother: Say("Хью, нам пора идти.")}
