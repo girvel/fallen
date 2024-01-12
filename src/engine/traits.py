@@ -1,7 +1,10 @@
 class Traits:
-    naivety = 0  # 0..2 (2)
-    pain = 0  # 0..2 (3)
-    curiosity = 0  # 0..1 (4)
+    # TODO redo to:
+    # fun, dignity, passion, exploration, prosperity, ambition, vengeance
+
+    naivety = 0  # 0..2
+    pain = 0  # 0..2
+    curiosity = 0  # 0..1
     brutality = 0  # 0..1
 
     bravery = 0  # 0..0
