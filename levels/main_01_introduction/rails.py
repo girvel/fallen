@@ -116,7 +116,7 @@ class Rails(RailsBase):
 
             yield {self.brother: Say("О, секунду, совсем забыл.")}
             yield {self.player: Say("Улыбка брата излучает теплоту.", True)}
-            yield {self.mother: Say("Хью, нам пора идти.")}
+            yield {self.mother: Say("Пора идти!")}
             yield {self.brother: Say("Мам, иди вперёд, я догоню.")}
 
             self.mother.ai.composite[Pather].going_to = rails.positions["street"]
@@ -153,7 +153,7 @@ class Rails(RailsBase):
                 yield {self.brother: Say("Не спрашивай.")}
                 yield {self.brother: Say("И не показывай маме.")}
 
-                yield {self.mother: Say("Хью!")}
+                yield {self.mother: Say("Майк!")}
 
                 yield {self.brother: Say("Это я!")}
                 yield {self.brother: Say("Приглядывай пока за хозяйством, а?")}
