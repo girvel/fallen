@@ -14,6 +14,13 @@ class Hint(HtmlWindow):
         return self.io.memory.inspect_target is not None
 
     def get_arguments(self, subject, perception):
+        name_raw = ~Q(self.io.memory.inspect_target).name or "???"
+
+        if (subjective_name := self.io.memory.find_subjective_name(self.io.memory.inspect_target)) is not None:
+            name = f"{soft_capitalize(str(subjective_name))} ({name_raw})"
+        else:
+            name = soft_capitalize(str(name_raw))
+
         return {
-            "name": soft_capitalize(str(~Q(self.io.memory.inspect_target).name or "???"))
+            "name": name,
         }

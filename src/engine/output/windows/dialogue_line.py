@@ -1,9 +1,6 @@
-import curses
-
-from src.engine.output.colors import ColorPair, yellow
 from src.engine.output.html_window import HtmlWindow
 from src.lib.query import Q
-from src.lib.toolkit import add_multiline_string, soft_capitalize
+from src.lib.toolkit import soft_capitalize
 
 
 class DialogueLine(HtmlWindow):
@@ -20,9 +17,17 @@ class DialogueLine(HtmlWindow):
     def get_arguments(self, subject, perception):
         sound = self.io.memory.current_sound
 
+        if sound.is_internal:
+            speaker_name = None
+        else:
+            speaker = perception.vision["physical"].get(sound.p)
+            speaker_name = soft_capitalize(str(
+                self.io.memory.find_subjective_name(speaker)
+                or ~Q(speaker).name
+                or "???"
+            ))
+
         return {
-            "speaker": soft_capitalize(str(
-                ~Q(perception.vision["physical"].get(sound.p)).name or "???"
-            )) if not sound.is_internal else None,
+            "speaker_name": speaker_name,
             "line": sound.content,
         }

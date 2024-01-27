@@ -1,9 +1,14 @@
 from dataclasses import dataclass, field
-from typing import Optional
+from typing import Optional, Callable, Any
 
 from ecs import Entity
 
+from levels.main_01_introduction.assets.physical.brother import Brother
+from levels.main_01_introduction.assets.physical.mother import Mother
 from src.assets.actions.move import Move
+from src.assets.ai_modules.spacial_memory import CharacterMemory
+from src.assets.ais.dummy_ai import DummyAi
+from src.assets.special.sound import Sound
 from src.engine.acting.action import Action
 from src.engine.ai import Perception
 from src.engine.input.input import Input
@@ -13,9 +18,6 @@ from src.lib.concurrency import wait_for
 from src.lib.query import Q
 from src.lib.toolkit import random_round
 from src.lib.vector.vector import d2
-from src.assets.ai_modules.spacial_memory import CharacterMemory
-from src.assets.ais.dummy_ai import DummyAi
-from src.assets.special.sound import Sound
 
 
 @dataclass
@@ -51,6 +53,11 @@ class Memory:
 
     inspect_target: Entity | None = None
 
+    subjective_names: tuple[Callable[[Any], bool], Name] = field(default_factory=lambda: (
+        (lambda e: isinstance(e, Mother), Name.auto("мама")),
+        (lambda e: isinstance(e, Brother), Name.auto("брат")),
+    ))
+
     def add_quest(self, quest: Quest):
         self._quests.append(quest)
         self.notification_queue.append(Notification("Новая задача", quest.description))
@@ -70,7 +77,14 @@ class Memory:
         self.selected_option_i = 0
         return result
 
-class IO(Entity):  # TODO redo as composite AI?
+    def find_subjective_name(self, target) -> Name | None:
+        return next((
+            name
+            for predicate, name in self.subjective_names
+            if predicate(target)
+        ), None)
+
+class IO(Entity):
     name = Name("Ввод/Вывод")
     cutscene_aware_flag = None
 
@@ -106,7 +120,7 @@ class IO(Entity):  # TODO redo as composite AI?
 
             if action := dummy_action or player_action: return action
 
-    def form_memory(self, subject, perception: Perception):
+    def form_memory(self, subject, perception: Perception):  # TODO move to Memory?
         self.memory.spacial_memory.use(subject, perception)
 
         self.memory.current_sound = None

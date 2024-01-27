@@ -1,3 +1,5 @@
+from typing import TYPE_CHECKING
+
 from src.components import Genesis, Hades
 from src.engine.acting import armor_kind
 from src.engine.acting import damage_kind
@@ -10,15 +12,16 @@ from src.engine.language.name import CompositeName
 from src.engine.output.colors import ColorPair, white
 from src.engine.traits import Traits
 from src.assets.abstract.humanoid import Humanoid
-from src.assets.ais.io import IO
 from src.assets.special.level import Level
 
+if TYPE_CHECKING:
+    from src.assets.ais.io import IO
 
 class Player(Humanoid):
     character = '@'
     color = ColorPair(white)
 
-    ai: IO | None
+    ai: "IO | None"
     act = None
     faction = Faction.Villagers
 
