@@ -42,7 +42,7 @@ GUI is rendered from HTML! How cool is that?
 
 ```html
 <div>
-    <div>Health: <b>{{subject.health.amount.current}}/{{subject.health.amount.maximum - 1}}</b></div>
+    <div>Health: <b>{{subject.health.current}}/{{subject.health.maximum - 1}}</b></div>
     <div>Armor: <b>{{subject.health.armor_kind}}</b></div>
     <div>Damage: <b>{{subject.weapon.power}} {{subject.weapon.damage_kind}}</b></div>
 </div>

@@ -4,4 +4,4 @@ sequence = []
 
 @sequence.append
 def regenerate(subject: "health"):
-    subject.health.amount.move(random_round(.007))
+    subject.health.move(random_round(.007))

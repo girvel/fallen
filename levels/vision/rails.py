@@ -209,7 +209,7 @@ class Rails(RailsBase):
             yield {self.enemy: CastFireStorm()}
             yield from wait_for(CastFireStorm.duration + 1)
 
-            yield from wait_while(lambda: self.player.health.amount.current > 0)
+            yield from wait_while(lambda: self.player.health.current > 0)
 
             yield from rails.plane_shift(
                 rails.parent_level,
@@ -219,9 +219,9 @@ class Rails(RailsBase):
             )
 
             if exists(rails.parent_level.rails.get_character("mother")):
-                self.player.health.amount.reset_to_max()
+                self.player.health.reset_to_max()
             else:
-                self.player.health.amount.current = self.player.health.amount.maximum // 2
+                self.player.health.current = self.player.health.maximum // 2
                 # TODO use real regeneration
 
             yield from rails.end_cutscene()

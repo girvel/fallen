@@ -1,8 +1,8 @@
-from src.engine.acting.damage import Health
 from src.engine.acting import armor_kind
 from src.engine.language.name import Name
 from src.engine.output.colors import ColorPair, yellow
 from src.assets.abstract.material import Material
+from src.lib.limited import Limited
 
 
 class Throne(Material):
@@ -12,4 +12,4 @@ class Throne(Material):
     color = ColorPair(yellow)
 
     def __post_init__(self):
-        self.health = Health(700, armor_kind.wood)
+        self.health = Limited(701)

@@ -1,10 +1,11 @@
 from src.engine.acting import armor_kind
-from src.engine.acting.damage import Health
+
 from src.engine.language.name import Name
 from src.engine.output.colors import ColorPair, black
 from src.assets.abstract.humanoid import Humanoid
 from src.assets.ai_modules.spacial_memory import PathMemory
 from src.assets.ais.dummy_ai import DummyAi
+from src.lib.limited import Limited
 
 
 class OldSarr(Humanoid):
@@ -23,7 +24,7 @@ class OldSarr(Humanoid):
 
     def __post_init__(self):
         self.ai = DummyAi()
-        self.health = Health(1_000, armor_kind.mennar)
+        self.health = Limited(1_001)
 
     def after_creation(self):
         self.ai.composite[PathMemory].knows(self.level)

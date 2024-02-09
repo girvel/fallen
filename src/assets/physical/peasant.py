@@ -1,6 +1,5 @@
 import random
 
-from src.engine.acting.damage import DamageSource, Health
 from src.engine.acting import armor_kind
 from src.engine.acting import damage_kind
 from src.assets.ai_modules.spacial_memory import CharacterMemory, PathMemory
@@ -9,6 +8,7 @@ from src.engine.language.library import first_names
 from src.engine.language.name import CompositeName
 from src.assets.abstract.humanoid import Humanoid
 from src.assets.ais.peasant_ai import PeasantAi
+from src.lib.limited import Limited
 from src.lib.vector.vector import sub2, area2
 from src.engine.ai import Senses
 
@@ -21,7 +21,7 @@ class Peasant(Humanoid):
     def __post_init__(self):
         self.sex = random.choice(["male", "female"])
         self.name = random.choice(first_names[self.sex])
-        self.health = Health(random.randrange(10, 25) + (self.sex == "male" and 10 or 0), armor_kind.none)
+        self.health = Limited(random.randrange(10, 25) + (self.sex == "male" and 10 or 0) + 1)
         self.senses = Senses(8, 0, 0)
         self.ai = PeasantAi()
         self.attitude = peasant_attitude()

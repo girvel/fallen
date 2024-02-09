@@ -1,6 +1,5 @@
 from src.engine.acting import armor_kind
 from src.engine.acting import damage_kind
-from src.engine.acting.damage import Health, DamageSource
 from src.engine.attitude.implementation import Relation
 from src.engine.language.library import reserved_names
 from src.engine.language.name import CompositeName
@@ -11,6 +10,7 @@ from src.assets.ais.peasant_ai import PeasantAi
 from src.assets.markup.house import House
 from src.assets.physical.peasant import peasant_attitude
 from src.assets.physical.player import Player
+from src.lib.limited import Limited
 
 
 class Mother(Humanoid):
@@ -22,8 +22,7 @@ class Mother(Humanoid):
     house: House
 
     def __post_init__(self):
-        self.health = Health(50, armor_kind.none)
-        self.damage_source = DamageSource(4, damage_kind.slashing)
+        self.health = Limited(51)
         self.ai = PeasantAi()
         self.attitude = peasant_attitude()
         self.house = None

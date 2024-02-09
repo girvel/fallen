@@ -1,9 +1,9 @@
-from src.engine.acting.damage import Health
 from src.engine.language.library import reserved_names
 from src.engine.language.name import CompositeName
 from src.engine.output.colors import ColorPair, blue
 from src.assets.abstract.humanoid import Humanoid
 from src.assets.ai_modules.spacial_memory import PathMemory
+from src.lib.limited import Limited
 
 
 class Girl(Humanoid):
@@ -14,7 +14,7 @@ class Girl(Humanoid):
     sex = "female"
 
     def __post_init__(self):
-        self.health = Health(10, "Organic")
+        self.health = Limited(11)
 
     def after_creation(self):
         self.ai.composite[PathMemory].knows(self.level)

@@ -1,11 +1,11 @@
 import random
 
-from src.lib.composite import Composite
-from src.lib.vector.vector import sub2, abs2
-from src.assets.actions.hand_attack import HandAttack
 from src.assets.actions.move import Move
+from src.assets.actions.splash_attack import SplashAttack
 from src.assets.ai_modules.pather import Pather
 from src.assets.ai_modules.spacial_memory import PathMemory
+from src.lib.composite import Composite
+from src.lib.vector.vector import sub2, abs2
 
 
 class RabidAi:
@@ -30,6 +30,6 @@ class RabidAi:
 
         v = sub2(target.p, subject.p)
         if abs2(v) == 1:
-            return HandAttack(target)
+            return SplashAttack(target.p, 0, subject.bite_power)
         else:
             self.composite[Pather].going_to = target.p

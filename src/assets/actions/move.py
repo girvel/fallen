@@ -23,7 +23,7 @@ class Move(Action):
             self.succeeded = False
             return
 
-        if grid_get(actor.level.grids["tiles"], actor.p, False) is None and (~Q(actor).health.amount.maximum or 0) > 5:
+        if grid_get(actor.level.grids["tiles"], actor.p, False) is None and (~Q(actor).health.maximum or 0) > 5:
             genesis.push(Footprint(p=actor.p, level=actor.level))
 
         Level.move(actor, next_p)

@@ -34,7 +34,7 @@ def body_factory(base: Any, _hades: Hades, genesis: Genesis):
         items.append(base.damage_source)
 
     genesis.push(Body(
-        core_name=Name.auto("тело" if base.health.amount.maximum > 6 else "тельце"),
+        core_name=Name.auto("тело" if base.health.maximum > 6 else "тельце"),
         parent_name=base.name, items=items, sex=~Q(base).sex, p=base.p, level=base.level
     ))
 

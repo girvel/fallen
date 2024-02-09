@@ -4,11 +4,8 @@
     [<color code="{{ hp_bar_color }}">{{ hp_bar[0] }}</color>{{ hp_bar[1] }}]
 </div>
 <div>
-    <b>Оружие</b>: {{ weapon.damage }}, {{ weapon.damage_kind }}
+    <b>Оружие</b>: {{ weapon.name }} ({{ weapon.damage }})
     {% if weapon.is_out %}
     <color fg="red"> - обнажено</color>
     {% endif %}
-</div>
-<div>
-    <b>Броня</b>:  {{ armor }}
 </div>

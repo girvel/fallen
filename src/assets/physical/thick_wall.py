@@ -1,12 +1,12 @@
 import random
 
 from src.engine.acting import armor_kind
-from src.engine.acting.damage import Health
 from src.engine.language.name import Name
 from src.engine.output.colors import ColorPair, yellow
 from src.assets.abstract.material import Material
 from src.components import Genesis, Hades
 from src.assets.tiles.ruins import Ruins
+from src.lib.limited import Limited
 
 
 class ThickWall(Material):
@@ -19,7 +19,7 @@ class ThickWall(Material):
     boring_flag = None
 
     def __post_init__(self):
-        self.health = Health(random.randrange(5000, 10001, 500), armor_kind.stone)
+        self.health = Limited(random.randrange(5000, 10001, 500))
 
     def on_destruction(self, _hades: Hades, genesis: Genesis):
         genesis.push(Ruins(p=self.p, level=self.level))

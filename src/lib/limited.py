@@ -1,13 +1,8 @@
 from statistics import median
-from typing import Optional, Callable
+from typing import Optional
 
 
 class Limited:
-    def __class_getitem__(cls, item: slice) -> Callable[[Optional[int]], "Limited"]:
-        def factory(value: Optional[int] = None):
-            return Limited(item.start, item.stop, value)
-        return factory
-
     def __init__(self, maximum: int, minimum: int = 0, current: Optional[int] = None):
         self.maximum: int = maximum
         self.minimum: int = minimum
@@ -25,13 +20,5 @@ class Limited:
     def reset_to_max(self):
         self.current = self.maximum - 1
 
-    def ratio(self):
+    def ratio(self) -> float:
         return (self.current - self.minimum) / (self.maximum - self.minimum - 1)
-
-
-class AssertLimited(Limited):
-    def move(self, offset: int):
-        self.current += offset
-        assert self.minimum <= self.current < self.maximum, (
-            f"This limited value can not exceed {self.minimum}..{self.maximum}"
-        )

@@ -1,10 +1,10 @@
 from src.assets.tiles.body import generate_body_factory, body_factory
-from src.engine.acting.damage import Health
 from src.engine.acting import armor_kind
 from src.engine.language.name import Name
 from src.engine.output.colors import ColorPair, green
 from src.assets.abstract.material import Material
 from src.assets.ais.frog_ai import FrogAi
+from src.lib.limited import Limited
 
 
 class Frog(Material):
@@ -17,7 +17,7 @@ class Frog(Material):
 
     def __post_init__(self):
         self.ai = FrogAi()
-        self.health = Health(1, armor_kind.none)
+        self.health = Limited(2)
 
         self.on_destruction = generate_body_factory(self)
 

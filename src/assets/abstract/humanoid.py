@@ -1,5 +1,5 @@
-from src.engine.acting.damage import DamageSource
 from src.engine.ai import Senses
+from src.engine.inventory import Inventory
 from src.lib.toolkit import assert_attributes
 from src.assets.abstract.material import Material
 from src.assets.tiles.body import generate_body_factory
@@ -17,9 +17,7 @@ class Humanoid(Material):
 
     def __init__(self, **kwargs):
         self.senses = Senses(12, 0, 0)
-
-        self.skill = {}
-        self.damage_source = DamageSource(1, "Crushing")
+        self.inventory = Inventory()
         self.on_destruction = generate_body_factory(self)
 
         super().__init__(**kwargs)

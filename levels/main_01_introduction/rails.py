@@ -7,9 +7,9 @@ from ecs import exists
 from levels.main_01_introduction.assets.physical.brother import Brother
 from levels.main_01_introduction.assets.physical.girl import Girl
 from levels.main_01_introduction.assets.physical.mother import Mother
+from src.assets.items.engraved_cavalry_saber import EngravedCavalrySaber
 from src.engine.acting import damage_kind
 from src.engine.acting.aggressive import Aggressive
-from src.engine.acting.damage import DamageSource
 from src.engine.rails.rails_api import Lock
 from src.engine.rails.rails_base import RailsBase
 from src.engine.rails.scene import Scene, keep_ai, maybe_exists, Priority
@@ -133,7 +133,7 @@ class Rails(RailsBase):
 
             yield {self.brother: Say("Вот, смотри.")}
             yield {self.player: Say("В твоих руках оказывается длинный свёрток льняной ткани.", True)}
-            self.player.damage_source = DamageSource(8, damage_kind.slashing)
+            self.player.inventory.hand = EngravedCavalrySaber()
 
             selected_option = yield from rails.options({
                 (look := "Развязать бечёвку"): NoAction(),
@@ -290,7 +290,7 @@ class Rails(RailsBase):
 
         def start_predicate(self, rails: "Rails"):
             return (
-                self.player.health.amount.current <= 0
+                self.player.health.current <= 0
                 or self._is_player_killing_the_dog()
             )
 
@@ -310,7 +310,7 @@ class Rails(RailsBase):
 
             yield from rails.start_cutscene()
 
-            if self.player.health.amount.current > 0:
+            if self.player.health.current > 0:
                 yield from self.player.ai.wait_seconds(2)
                 yield {self.player: Say("Что-то не так.")}
                 yield {self.player: Say("Железный вкус на языке, зрение разошлось на две половины.", True)}
@@ -320,7 +320,7 @@ class Rails(RailsBase):
             self.player.ai.memory.is_vision_disabled = True
             yield from self.player.ai.wait_seconds(2)
 
-            self.player.health.amount.reset_to_max()
+            self.player.health.reset_to_max()
 
             rails.vision_level = Level.create(Path("levels/vision"), rails.hades, rails.genesis)
             rails.vision_level.rails.parent_level = self.player.level
@@ -403,7 +403,7 @@ class Rails(RailsBase):
 
             yield from self.player.ai.wait_seconds(1.5)
             yield {self.player: Say(f"{girl.name.first}, пряча взгляд, суёт тебе что-то в руку и убегает.", True)}
-            self.player.inventory.add_item(Lily())
+            self.player.inventory.items.append(Lily())
 
             girl.ai.composite[Pather].going_to = rails.positions["girl_runs_away"]
             yield from wait_finish(girl)
@@ -479,7 +479,7 @@ class Rails(RailsBase):
             self.mother.ai.composite[Pather].going_to = self.player.p
 
             yield from wait_finish(self.mother)
-            self.player.inventory.add_item(Bun())
+            self.player.inventory.items.append(Bun())
             self.mother.ai.composite[Pather].going_to = mother_initial_p
 
             yield from wait_finish(self.mother)

@@ -1,10 +1,10 @@
 import math
 
 from src.assets.actions.hand_attack import HandAttack
-from src.assets.actions.move import Move
-from src.engine.acting.damage import potential_damage, Health
+from src.engine.language.name import Name
 from src.engine.output.colors import ColorPair, green, red, white
 from src.engine.output.html_window import HtmlWindow
+from src.lib.limited import Limited
 from src.lib.query import Q
 
 
@@ -20,29 +20,34 @@ class Stats(HtmlWindow):
         return ColorPair(red if self.io.memory.movement_mode is HandAttack else white).to_curses()
 
     def get_arguments(self, subject, perception):
+        if (weapon := subject.inventory.hand) is not None:
+            weapon_name = weapon.name
+            weapon_damage = weapon.damage
+        else:
+            weapon_name = Name.auto("кулаки")
+            weapon_damage = 1
+
         return {
             "character_name": str(~Q(subject).name or "???"),
             "hp_bar": self._build_hp_bar(~Q(subject).health),
             "hp_bar_color": ColorPair(green if ~Q(subject).last_damaged_by in (0, None) else red).to_code(),
             "weapon": {
-                "name": "???",
-                "damage": potential_damage(subject),
-                "damage_kind": subject.damage_source.damage_kind.name,
+                "name": weapon_name,
+                "damage": weapon_damage,
                 "is_out": self.io.memory.movement_mode is HandAttack,
             },
-            "armor": subject.health.armor_kind.name,
         }
 
     def _calculate_visibility(self, subject, perception):
         return not self.io.memory.in_cutscene
 
-    def _build_hp_bar(self, health: Health | None) -> tuple[str, str]:
+    def _build_hp_bar(self, health: Limited | None) -> tuple[str, str]:
         if health is None: return "", "-"
 
-        hp_value = f"{health.amount.current}/{health.amount.maximum - 1}"
+        hp_value = f"{health.current}/{health.maximum - 1}"
 
         max_length = 25
-        healthy_length = int(health.amount.ratio() * max_length)
+        healthy_length = int(health.ratio() * max_length)
 
         hp_bar = "|" * healthy_length + " " * (max_length - healthy_length)
 

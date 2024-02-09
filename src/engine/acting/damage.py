@@ -1,82 +1,37 @@
 import logging
-from dataclasses import dataclass
-from pathlib import Path
 
-import yaml
-from ecs import Entity
-
-from src.engine.acting.damage_kind import DamageKind
-from src.engine.language.name import Name
+from src.components import Hades
 from src.engine.parenting import iter_parenting_stack
-from src.lib.limited import Limited
 from src.lib.query import Q
 from src.lib.toolkit import random_round
-from src.components import Hades
 
 
-@dataclass
-class DamageSource:
-    power: int
-    damage_kind: str
 
-@dataclass
-class Health:
-    amount: Limited
-    armor_kind: str
-
-    def __init__(self, amount: int, armor_kind: str):
-        self.amount = Limited(amount + 1)
-        self.armor_kind = armor_kind
+def try_inflict_damage(target, source, power: float, hades: Hades) -> bool:
+    if not hasattr(target, "health"): return False
+    inflict_damage(target, source, power, hades)
+    return True
 
 
-def attack(source, target, hades: Hades):
-    if (damage_source := ~Q(source).damage_source) is None: return
-
-    return inflict_damage(
-        target, potential_damage(source), damage_source.damage_kind, hades, source,
-    )
-
-
-def potential_damage(source) -> int:
-    if (skill := ~Q(source).skill) is not None:
-        skill_k = skill.get(source.damage_source.damage_kind) or .5
-    else:
-        skill_k = 1
-
-    return source.damage_source.power * skill_k
-
-
-def inflict_damage(
-    target, power: float, damage_kind: DamageKind, hades: Hades, source
-):
-    if (health := ~Q(target).health) is None: return
-
-    if damage_kind in health.armor_kind.resistance:
-        modifier = 0.5
-    elif damage_kind in health.armor_kind.vulnerability:
-        modifier = 2
-    else:
-        modifier = 1
-
-    total_damage = random_round(power * modifier)
+def inflict_damage(target, source, power: float, hades: Hades):
+    power = random_round(power)
 
     if not hasattr(target, "boring_flag"):
-        logging.info(
-            f"Damage to {target.name}: {total_damage} = {power} * {modifier} "
-            f"({damage_kind.name} on {health.armor_kind.name})"
-        )
+        logging.info(f"{power} damage from {source.name} to {target.name}")
 
-    health.amount.move(-total_damage)
+    target.health.move(-power)
     target.last_damaged_by = (~Q(target).last_damaged_by or []) + [source]
+    # TODO this practice is ugly
+    #      maybe do Statistics global object with all this crap?
 
-    if health.amount.current <= 0:
+    if target.health.current <= 0:
         if not hasattr(target, "boring_flag"):
-            logging.info(f"{target.name} is killed by {source.name}")
+            logging.info(f"{target.name} is killed")
 
         hades.push(target)
 
         for killer in iter_parenting_stack(source):
-            if not hasattr(killer, "last_killed"):
+            if not hasattr(killer, "last_killed"):  # TODO this practice is ugly
                 killer.last_killed = []
 
             killer.last_killed.append(target)
