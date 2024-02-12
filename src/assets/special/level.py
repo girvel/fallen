@@ -10,6 +10,7 @@ from ecs import Entity, exists
 
 from src.engine.acting.action import Action
 from src.engine.language.name import Name
+from src.lib import static_toml
 from src.lib.time import Time
 from src.lib.toolkit import to_camel_case, import_module
 from src.lib.vector.grid import grid_create, grid_set
@@ -23,21 +24,21 @@ TPositioned = TypeVar('TPositioned', bound=Positioned)
 
 @dataclass
 class Markup:
-    zones: list[Zone]
-    houses: list[House]
+    zones: tuple[Zone, ...]
+    houses: tuple[House, ...]
 
     @classmethod
-    def from_toml_data(cls, houses: list[dict] = None, zones: list[dict] = None):
+    def from_toml_data(cls, houses: tuple[dict] = None, zones: tuple[dict] = None):
         return cls(
-            houses=[House.from_markup(**h) for h in houses or []],
-            zones=[Zone.from_markup(**h) for h in zones or []],
+            houses=tuple(House.from_markup(**h) for h in houses or ()),
+            zones=tuple(Zone.from_markup(**h) for h in zones or ()),
         )
 
 
 @dataclass
 class Config:
     prep_ticks: int = 0
-    start_time: list[int] = field(default_factory=lambda: [6, 0, 0])
+    start_time: tuple[int] = field(default_factory=lambda: (6, 0, 0))
 
 
 @dataclass(eq=False)
@@ -187,4 +188,4 @@ def _load_palette_from(path):
 
 
 def _load_toml(path: Path):
-    return toml.loads(path.read_text(encoding="utf-8")) if path.exists() else {}
+    return static_toml.loads(path.read_text(encoding="utf-8")) if path.exists() else {}

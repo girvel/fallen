@@ -5,6 +5,8 @@ from pathlib import Path
 
 import toml
 
+from src.lib import static_toml
+
 file_path: Path
 
 if sys.platform.startswith("win"):
@@ -22,7 +24,7 @@ def initialize():
 
 
 def _read_storage():
-    return toml.loads(file_path.read_text(encoding="utf-8")) if file_path.exists() else {}
+    return static_toml.loads(file_path.read_text(encoding="utf-8")) if file_path.exists() else {}
 
 
 # TODO split by .

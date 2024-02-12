@@ -5,6 +5,7 @@ from typing import Literal
 import toml
 
 from src.engine.language.name import Name, CompositeName
+from src.lib import static_toml
 
 
 def random_composite_name(sex):
@@ -22,7 +23,7 @@ Sex = Literal["male", "female"]
 
 first_names: dict[Sex, list[Name]] = {
     sex: list(map(Name, cases))
-    for sex, cases in toml.loads(_read_file("first.toml")).items()
+    for sex, cases in static_toml.loads(_read_file("first.toml")).items()
 }
 
 for sex, name, index in _parse_csv(_read_file("first.csv")):
@@ -30,7 +31,7 @@ for sex, name, index in _parse_csv(_read_file("first.csv")):
 
 last_names: list[dict[Sex, Name]] = [
     {sex: Name(cases) for sex, cases in name.items()}
-    for name in toml.loads(_read_file("last.toml"))["names"]
+    for name in static_toml.loads(_read_file("last.toml"))["names"]
 ] + [
     {
         "male": Name.auto(name, int(index)),
@@ -42,7 +43,7 @@ last_names: list[dict[Sex, Name]] = [
 reserved_names = {
     identifier: {sex: Name(cases) for sex, cases in name.items()}
     for identifier, name
-    in toml.loads(_read_file("reserved.toml")).items()
+    in static_toml.loads(_read_file("reserved.toml")).items()
 } | {
     identifier: Name.auto(name, int(index))
     for identifier, name, index
