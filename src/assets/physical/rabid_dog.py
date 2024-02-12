@@ -1,8 +1,10 @@
 from src.assets.abstract.material import Material
 from src.assets.ais.rabid_ai import RabidAi
+from src.assets.items.dog_teeth import DogTeeth
 from src.assets.tiles.body import generate_body_factory
 from src.engine.ai import Senses
 from src.engine.attitude.implementation import Faction
+from src.engine.inventory import Inventory
 from src.engine.language.name import Name
 from src.engine.output.colors import magenta, ColorPair
 from src.lib.limited import Limited
@@ -27,7 +29,7 @@ class RabidDog(Material):
             "пр": "бешеном псе",
         })
 
-        self.bite_power = 6
+        self.inventory = Inventory(weapon=DogTeeth())
         self.health = Limited(26)
         self.ai = RabidAi()
         self.senses = Senses(10, 0, 5)

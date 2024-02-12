@@ -31,8 +31,6 @@ class Notification:
 
 @dataclass
 class Memory:
-    movement_mode: type[Action] = Move
-
     spacial_memory: CharacterMemory = field(default_factory=CharacterMemory)
 
     current_sound: Optional[Sound] = None

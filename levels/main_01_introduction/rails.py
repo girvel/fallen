@@ -133,7 +133,7 @@ class Rails(RailsBase):
 
             yield {self.brother: Say("Вот, смотри.")}
             yield {self.player: Say("В твоих руках оказывается длинный свёрток льняной ткани.", True)}
-            self.player.inventory.hand = EngravedCavalrySaber()
+            self.player.inventory.weapon = EngravedCavalrySaber()
 
             selected_option = yield from rails.options({
                 (look := "Развязать бечёвку"): NoAction(),

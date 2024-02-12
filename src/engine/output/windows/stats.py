@@ -1,6 +1,6 @@
 import math
 
-from src.assets.actions.hand_attack import HandAttack
+from src.assets.actions.hand_attack import WeaponAttack
 from src.engine.language.name import Name
 from src.engine.output.colors import ColorPair, green, red, white
 from src.engine.output.html_window import HtmlWindow
@@ -17,10 +17,10 @@ class Stats(HtmlWindow):
         return 35, 8
 
     def get_border_attributes(self, subject, perception):
-        return ColorPair(red if self.io.memory.movement_mode is HandAttack else white).to_curses()
+        return ColorPair(red if subject.inventory.is_weapon_out else white).to_curses()
 
     def get_arguments(self, subject, perception):
-        if (weapon := subject.inventory.hand) is not None:
+        if (weapon := subject.inventory.weapon) is not None:
             weapon_name = weapon.name
             weapon_damage = weapon.damage
         else:
@@ -34,7 +34,7 @@ class Stats(HtmlWindow):
             "weapon": {
                 "name": weapon_name,
                 "damage": weapon_damage,
-                "is_out": self.io.memory.movement_mode is HandAttack,
+                "is_out": subject.inventory.is_weapon_out,
             },
         }
 

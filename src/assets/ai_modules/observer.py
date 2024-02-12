@@ -7,7 +7,7 @@ from src.engine.ai import Perception
 from src.engine.attitude.implementation import Relation
 from src.engine.meme import Aggression, Idea, DangerousEntity
 from src.lib.query import Q
-from src.assets.actions.hand_attack import HandAttack
+from src.assets.actions.hand_attack import WeaponAttack
 from src.assets.tiles.body import Body
 
 
@@ -27,7 +27,7 @@ class Observer:
             if seen_entity is None: continue
 
             if (
-                (target := ~Q(seen_entity).act[HandAttack].target) is not None and
+                (target := ~Q(seen_entity).act[WeaponAttack].target) is not None and
                 subject.attitude.get(target) >= 0
             ):
                 memes.append(Aggression(seen_entity, target))

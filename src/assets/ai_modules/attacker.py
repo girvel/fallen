@@ -2,7 +2,7 @@ import random
 
 from ecs import Entity, exists
 
-from src.assets.actions.hand_attack import HandAttack
+from src.assets.actions.hand_attack import WeaponAttack
 from src.lib.vector.vector import directions, add2, d2
 from src.engine.ai import Perception
 
@@ -10,11 +10,11 @@ from src.engine.ai import Perception
 class Attacker:
     def try_attacking(
         self, subject, perception: Perception, current_target: Entity | None = None
-    ) -> HandAttack | None:
+    ) -> WeaponAttack | None:
 
         if current_target and exists(current_target):
             return (d2(subject.p, current_target.p) <= 1
-                    and HandAttack(current_target)
+                    and WeaponAttack(current_target)
                     or None)
 
         enemies = [
@@ -23,4 +23,4 @@ class Attacker:
             and subject.attitude.get(e) < 0
         ]
 
-        return len(enemies) > 0 and HandAttack(random.choice(enemies)) or None
+        return len(enemies) > 0 and WeaponAttack(random.choice(enemies)) or None

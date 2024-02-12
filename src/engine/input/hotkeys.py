@@ -6,7 +6,7 @@ from typing import Callable, Optional, IO
 from ecs import Entity
 
 from src.engine.acting.action import Action
-from src.assets.actions.hand_attack import HandAttack
+from src.assets.actions.hand_attack import WeaponAttack
 from src.assets.actions.cast_fire_flow import CastFireFlow
 from src.assets.actions.move import Move
 from src.assets.actions.no_action import NoAction
@@ -59,13 +59,12 @@ def generate_hotkeys(debug_mode):
     def generate_movement_function(key, direction, description):
         @Hotkey.define(result[GAME], [key], description)
         def move(io, subject, perception):
-            if io.memory.movement_mode == Move:
+            if not subject.inventory.is_weapon_out:
                 return Move(direction)
 
-            if io.memory.movement_mode == HandAttack:
-                if (target := perception.vision[subject.layer].get(add2(subject.p, direction))) is not None:
-                    return HandAttack(target)
-                return Move(direction)
+            if (target := perception.vision[subject.layer].get(add2(subject.p, direction))) is not None:
+                return WeaponAttack(target)
+            return Move(direction)
 
     directions_by_key = {
         "w": up,
@@ -86,7 +85,7 @@ def generate_hotkeys(debug_mode):
 
     @Hotkey.define(result[GAME], ["r"], "Переключить атаку/движение")
     def change_mode(io, subject, perception):
-        io.memory.movement_mode = (io.memory.movement_mode == Move) and HandAttack or Move
+        subject.inventory.is_weapon_out ^= True
 
     if debug_mode:
         @Hotkey.define(result[GAME], ["1"], "Сотворить поток огня")
