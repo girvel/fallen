@@ -6,7 +6,7 @@ from src.engine.language.name import CompositeName
 from src.engine.output.colors import ColorPair, blue
 from src.assets.abstract.humanoid import Humanoid
 from src.assets.ai_modules.spacial_memory import PathMemory
-from src.assets.ais.peasant_ai import PeasantAi
+from src.assets.ais.peasant_ai_legacy import PeasantAi
 from src.assets.markup.house import House
 from src.assets.physical.peasant import peasant_attitude
 from src.assets.physical.player import Player

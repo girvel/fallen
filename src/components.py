@@ -10,6 +10,7 @@ if TYPE_CHECKING:
     from src.engine.output.colors import ColorPair
     from src.lib.vector.vector import int2
     from src.assets.special.level import Level
+    from src.lib.time import Time
 
 
 # GENERAL PROTOCOLS #
@@ -41,14 +42,14 @@ class RailsComponent(Protocol):
 class Sentient(Positioned):
     ai: Any
 
+class Actor(Protocol):
+    act: "Action"
+
 class Killer(Protocol):
     last_killed: list[Any]
 
 class Damaged(Protocol):
     last_damaged_by: list[Any]
-
-class Actor(Protocol):
-    act: "Action"
 
 class DyingWithChance(Protocol):
     death_chance: float
@@ -58,6 +59,9 @@ class Sound(Protocol):
 
 class Attentive(Protocol):
     attention_boost: int
+
+class TimeAware(Protocol):
+    time: "Time"
 
 
 # SPECIAL PROTOCOLS #

@@ -5,11 +5,12 @@ from pathlib import Path
 from typing import TypeVar, Callable, Type, Iterator, Any, ClassVar
 
 import numpy
-import toml as toml
+import toml
 from ecs import Entity, exists
 
 from src.engine.acting.action import Action
 from src.engine.language.name import Name
+from src.lib.time import Time
 from src.lib.toolkit import to_camel_case, import_module
 from src.lib.vector.grid import grid_create, grid_set
 from src.lib.vector.vector import int2
@@ -32,9 +33,11 @@ class Markup:
             zones=[Zone.from_markup(**h) for h in zones or []],
         )
 
+
 @dataclass
 class Config:
     prep_ticks: int = 0
+    start_time: list[int] = field(default_factory=lambda: [6, 0, 0])
 
 
 @dataclass(eq=False)
@@ -42,6 +45,8 @@ class Level(Entity):
     name: Name
     markup: Markup
     config: Config
+
+    time: Time
 
     grids: dict[str, tuple[list[list[TPositioned]], int2]]
     transparency_cache: numpy.ndarray[Any, numpy.dtype[int]]
@@ -65,11 +70,14 @@ class Level(Entity):
 
         level_lines = (path / "grid.txt").read_text().split('\n')
         size = (max(len(line) for line in level_lines), len(level_lines))
+        config = Config(**_load_toml(path / "config.toml"))
 
         result = cls(
             name=name,
             markup=Markup.from_toml_data(**_load_toml(path / "markup.toml")),
-            config=Config(**_load_toml(path / "config.toml")),
+            config=config,
+
+            time=Time(*config.start_time),
 
             grids={layer: grid_create(size, lambda: None) for layer in cls.layers},
             transparency_cache=numpy.full(size, 1),
