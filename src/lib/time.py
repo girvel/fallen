@@ -1,4 +1,3 @@
-import logging
 from dataclasses import dataclass
 
 
@@ -28,4 +27,7 @@ class Time:
         return hash(self.total_seconds)
 
     def __repr__(self):
-        return f"{type(self).__name__}(hours={self.get_hours()}, minutes={self.get_minutes()}, seconds={self.get_seconds()})"
+        return (
+            f"{type(self).__name__}(hours={self.get_hours()}, minutes={self.get_minutes()}, "
+            f"seconds={self.get_seconds()})"
+        )

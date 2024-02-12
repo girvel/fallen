@@ -1,7 +1,6 @@
 import random
 
 from src.assets.abstract.humanoid import Humanoid
-from src.assets.ai_modules.spacial_memory import CharacterMemory, PathMemory
 from src.assets.ais.peasant_ai import PeasantAi
 from src.engine.ai import Senses
 from src.engine.attitude.implementation import common_attitude, Faction, Relation
@@ -34,9 +33,7 @@ class Peasant(Humanoid):
 
             self.name = CompositeName(self.name, self.house.family_names[self.sex])
 
-        # self.ai.composite[CharacterMemory].knows(self.level)
-        # self.ai.composite[PathMemory].knows(self.level)
-        # TODO NEXT initialize memories
+        self.ai.after_creation(self)
 
 
 def peasant_attitude():
