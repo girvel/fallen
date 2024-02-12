@@ -14,6 +14,19 @@ def iter_square(p: int2, r: int, size: int2):
         )
     )
 
+def iter_rect(borders: tuple[int2, int2], size: int2):
+    return (
+        (x, y)
+        for y in range(
+            max(min(borders[0][1], borders[1][1]), 0),
+            min(max(borders[0][1], borders[1][1]), size[1])
+        )
+        for x in range(
+            max(min(borders[0][0], borders[1][0]), 0),
+            min(max(borders[0][0], borders[1][0]), size[0])
+        )
+    )
+
 def iter_rhombus(p: int2, r: int, size: int2):
     return (
         (x, y)

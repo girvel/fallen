@@ -15,13 +15,15 @@ class Peasant(Humanoid):
     house = None
     faction = Faction.Villagers
 
-    def __post_init__(self):
+    def __post_init__(self, bed_p):
         self.sex = random.choice(["male", "female"])
         self.name = random.choice(first_names[self.sex])
         self.health = Limited(random.randrange(10, 25) + (self.sex == "male" and 10 or 0) + 1)
         self.senses = Senses(8, 0, 0)
         self.ai = PeasantAi()
         self.attitude = peasant_attitude()
+
+        self.bed_p = bed_p
 
     def after_creation(self):
         if len(self.level.markup.houses) > 0:

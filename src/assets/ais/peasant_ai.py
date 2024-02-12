@@ -7,7 +7,7 @@ from src.assets.ai_modules.listener import Listener
 from src.assets.ai_modules.morale import Morale
 from src.assets.ai_modules.observer import Observer
 from src.assets.ai_modules.pather import Pather
-from src.assets.ai_modules.spacial_memory import PathMemory, CharacterMemory
+from src.assets.ai_modules.spacial_memory import PathMemory
 from src.assets.ai_modules.speaker import Speaker
 from src.assets.ai_modules.wanderer import Wanderer
 from src.lib.limited import Limited
@@ -24,7 +24,7 @@ class PeasantAi:
             (Time(3), self.sleep),
             (Time(7), self.wander),
         )
-        self.current_row_i = -1
+        self.current_row_i = 0
 
         self.lagging_period = RandomPeriod(4, 11)
         self.wandering_pause = RandomPeriod(2, 5)
@@ -33,7 +33,6 @@ class PeasantAi:
 
         self.pather = Pather()
         self.path_memory = PathMemory()
-        self.character_memory = CharacterMemory()
         self.fight_or_flight = FightOrFlight(False)
         self.morale = Morale()
         self.wanderer = Wanderer()
@@ -44,11 +43,9 @@ class PeasantAi:
 
     def after_creation(self, subject):
         self.path_memory.knows(subject.level)
-        self.character_memory.knows(subject.level)
 
     def make_decision(self, subject, perception):
         if chance(.3): self.path_memory.use(subject, perception)
-        if chance(.1): self.character_memory.use(subject, perception)
 
         if self.lagging_period.step(): return
 
@@ -89,7 +86,8 @@ class PeasantAi:
         return self.timetable[self.current_row_i][1](subject, perception)
 
     def sleep(self, subject, perception):
-        return
+        if subject.p != subject.bed_p:
+            self.pather.going_to = subject.bed_p
 
     def wander(self, _subject, perception):
         if not self.wandering_pause.step(): return
