@@ -11,6 +11,7 @@ class IceRock(Material):
     layer = "physical"
 
     boring_flag = None
+    hard_flag = None
 
     def __post_init__(self):
         self.health = Limited(1001)

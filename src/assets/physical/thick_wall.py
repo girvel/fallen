@@ -1,11 +1,10 @@
 import random
 
-from src.engine.acting import armor_kind
+from src.assets.abstract.material import Material
+from src.assets.tiles.ruins import Ruins
+from src.components import Genesis, Hades
 from src.engine.language.name import Name
 from src.engine.output.colors import ColorPair, yellow
-from src.assets.abstract.material import Material
-from src.components import Genesis, Hades
-from src.assets.tiles.ruins import Ruins
 from src.lib.limited import Limited
 
 
@@ -13,10 +12,11 @@ class ThickWall(Material):
     name = Name.auto("стена")
     character = '#'
     color = ColorPair(yellow)
-    solid_flag = None
     layer = "physical"
 
+    solid_flag = None
     boring_flag = None
+    hard_flag = None
 
     def __post_init__(self):
         self.health = Limited(random.randrange(5000, 10001, 500))

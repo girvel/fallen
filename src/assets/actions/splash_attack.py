@@ -17,8 +17,7 @@ class SplashAttack(Aggressive, Action):
 
     def execute(self, actor, hades: Hades, genesis: Genesis):
         for p in iter_rhombus(self.p, self.r, actor.level.size):
-            if (target := grid_unsafe_get(actor.level.grids["physical"], p)) is not None:
-                try_inflict_damage(actor, target, self.power, hades)
+            try_inflict_damage(actor, grid_unsafe_get(actor.level.grids["physical"], p), self.power, hades)
 
     def get_victims(self, actor) -> list:
         return [

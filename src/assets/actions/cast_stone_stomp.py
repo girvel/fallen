@@ -23,6 +23,6 @@ class CastStoneStomp(Action):
 
                 p = add2(add2(mul2(self.v, dv), mul2(flip2(self.v), du)), actor.p)
 
-                wall = grid_get(actor.level.grids["physical"], p, object())
-                if ~Q(wall).health.armor_kind == armor_kind.stone:
-                    inflict_damage(wall, 7_500, damage_kind.crushing, hades, actor)
+                target = grid_get(actor.level.grids["physical"], p, object())
+                if hasattr(target, "hard_flag"):
+                    inflict_damage(actor, target, 7_500, hades)

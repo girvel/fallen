@@ -7,13 +7,13 @@ from src.lib.toolkit import random_round
 
 
 
-def try_inflict_damage(target, source, power: float, hades: Hades) -> bool:
+def try_inflict_damage(source, target, power: float, hades: Hades) -> bool:
     if not hasattr(target, "health"): return False
-    inflict_damage(target, source, power, hades)
+    inflict_damage(source, target, power, hades)
     return True
 
 
-def inflict_damage(target, source, power: float, hades: Hades):
+def inflict_damage(source, target, power: float, hades: Hades):
     power = random_round(power)
 
     if not hasattr(target, "boring_flag"):
