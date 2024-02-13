@@ -107,3 +107,14 @@ def matches_protocol(instance: Any, protocol: type[T]) -> TypeGuard[T]:
         hasattr(instance, attribute)
         for attribute in protocol.__annotations__
     )
+
+def logged(level: int = logging.DEBUG):
+    def _decorator(f):
+        @functools.wraps(f)
+        def _wrapped(*args, **kwargs):
+            result = f(*args, **kwargs)
+            logging.log(level, f"{f.__name__}() = {result!r}")
+            return result
+
+        return _wrapped
+    return _decorator

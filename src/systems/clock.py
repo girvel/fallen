@@ -11,4 +11,5 @@ def count_ticks(subject: Counting):
 
 @sequence.append
 def count_time(subject: TimeAware):
-    subject.time += Time(seconds=6)
+    # subject.time += Time(seconds=6)  TODO NEXT
+    subject.time += Time(minutes=1)

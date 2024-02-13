@@ -13,7 +13,7 @@ from src.assets.ai_modules.wanderer import Wanderer
 from src.lib.limited import Limited
 from src.lib.period.random_period import RandomPeriod
 from src.lib.time import Time
-from src.lib.toolkit import chance
+from src.lib.toolkit import chance, logged
 
 
 class PeasantAi:
@@ -23,8 +23,14 @@ class PeasantAi:
             (Time(1), self.wander),
             (Time(3), self.sleep),
             (Time(7), self.wander),
+            (Time(8), self.work),
+            (Time(13), self.socialize),
+            (Time(15), self.work),
+            (Time(20), self.socialize),
+            (Time(21), self.sleep),
         )
         self.current_row_i = 0
+        self.was_mode_switched = True
 
         self.lagging_period = RandomPeriod(4, 11)
         self.wandering_pause = RandomPeriod(2, 5)
@@ -80,15 +86,39 @@ class PeasantAi:
 
         # TODO NEXT extract timetable logic
         next_i = (self.current_row_i + 1) % len(self.timetable)
-        if subject.level.time.total_seconds > self.timetable[next_i][0].total_seconds:
+
+        if next_i == 0:
+            self.was_mode_switched = (
+                subject.level.time.total_seconds > self.timetable[next_i][0].total_seconds
+                and subject.level.time.total_seconds < self.timetable[next_i + 1][0].total_seconds
+            )
+        else:
+            self.was_mode_switched = subject.level.time.total_seconds > self.timetable[next_i][0].total_seconds
+
+        if self.was_mode_switched:
             self.current_row_i = next_i
+            logging.debug([self.timetable[self.current_row_i][1].__name__, subject.level.time])
 
         return self.timetable[self.current_row_i][1](subject, perception)
 
-    def sleep(self, subject, perception):
+    def sleep(self, subject, _perception):
         if subject.p != subject.bed_p:
             self.pather.going_to = subject.bed_p
+            logging.debug(f"sleep: {self.pather.going_to = }")
 
-    def wander(self, _subject, perception):
-        if not self.wandering_pause.step(): return
-        self.pather.going_to = random.choice(list(iter(perception.vision["physical"])))
+    def wander(self, subject, perception):
+        if self.was_mode_switched:
+            self.pather.going_to = random.choices(*zip(*(
+                (zone, zone.attractiveness) for zone in subject.level.markup.zones
+            )))[0].center
+            logging.debug(f"wander: {self.pather.going_to = }")
+            return
+
+        if self.wandering_pause.step():
+            self.pather.going_to = random.choice(list(iter(perception.vision["physical"])))
+
+    def socialize(self, subject, perception):
+        pass
+
+    def work(self, subject, perception):
+        pass
