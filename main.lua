@@ -2,6 +2,8 @@
 -- TODO basic WASD movement
 
 local tiny = require("lib.tiny")
+local vector = require("lib.vector")
+
 
 local world = tiny.world()
 
@@ -15,16 +17,24 @@ love.load = function()
 		end,
 	}))
 
+  local movement_hotkeys = {
+    w = vector({0, -20}),
+    a = vector({-20, 0}),
+    s = vector({0, 20}),
+    d = vector({20, 0}),
+  }
 	world:add(tiny.processingSystem({
 		filter = tiny.requireAll("player_flag"),
     base_callback = "keypressed",
-		process = function(_, entity)
-      entity.position[1] = entity.position[1] + 20
+		process = function(event, entity)
+      local movement = movement_hotkeys[event[2]]
+      if movement == nil then return end
+      entity.position = entity.position + movement
 		end,
 	}))
 
   world:add({
-    position = {400, 320},
+    position = vector({400, 320}),
     sprite = {
       character = "@",
     },
@@ -32,21 +42,21 @@ love.load = function()
   })
 
   world:add({
-    position = {380, 320},
+    position = vector({380, 320}),
     sprite = {
       character = "#",
     },
   })
 
   world:add({
-    position = {380, 300},
+    position = vector({380, 300}),
     sprite = {
       character = "#",
     },
   })
 
   world:add({
-    position = {380, 340},
+    position = vector({380, 340}),
     sprite = {
       character = "#",
     },
@@ -54,8 +64,8 @@ love.load = function()
 end
 
 for _, callback_name in ipairs({"draw", "keypressed"}) do
-  love[callback_name] = function() -- TODO pass varargs downwards
-    world:update(nil, function(_, entity) return entity.base_callback == callback_name end)
+  love[callback_name] = function(...)
+    world:update({...}, function(_, entity) return entity.base_callback == callback_name end)
   end
 end
 
