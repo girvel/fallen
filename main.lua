@@ -4,6 +4,7 @@
 local tiny = require("lib.tiny")
 local vector = require("lib.vector")
 local log = require("lib.log")
+local inspect = require("lib.inspect")
 
 
 local world = tiny.world()
@@ -29,7 +30,7 @@ love.load = function()
 	world:add(tiny.processingSystem({
 		filter = tiny.requireAll("player_flag"),
     base_callback = "keypressed",
-		process = function(event, entity)
+		process = function(_, entity, event)
       local movement = movement_hotkeys[event[2]]
       if movement == nil then return end
       entity.position = entity.position + movement
