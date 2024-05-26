@@ -3,11 +3,14 @@
 
 local tiny = require("lib.tiny")
 local vector = require("lib.vector")
+local log = require("lib.log")
 
 
 local world = tiny.world()
 
 love.load = function()
+  log.info("Game started")
+
   local main_font = love.graphics.newFont("fonts/BigBlueTerm437NerdFontMono-Regular.ttf", 24)
 	world:add(tiny.processingSystem({
 		filter = tiny.requireAll("position", "sprite"),
