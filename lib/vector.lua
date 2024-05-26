@@ -16,4 +16,8 @@ vector_mt.__add = function(self, other)
   return module({self[1] + other[1], self[2] + other[2]})
 end
 
+vector_mt.__mul = function(self, other)
+  return module({self[1] * other, self[2] * other})
+end
+
 return module
