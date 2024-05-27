@@ -1,3 +1,5 @@
+
+
 --[[
 Copyright (c) 2016 Calvin Rose
 
@@ -298,13 +300,13 @@ local function isSystem(table)
 end
 
 -- Update function for all Processing Systems.
-local function processingSystemUpdate(system, dt)
+local function processingSystemUpdate(system, ...)
     local preProcess = system.preProcess
     local process = system.process
     local postProcess = system.postProcess
 
     if preProcess then
-        preProcess(system, dt)
+        preProcess(system, ...)
     end
 
     if process then
@@ -315,20 +317,20 @@ local function processingSystemUpdate(system, dt)
                 for i = 1, #entities do
                     local entity = entities[i]
                     if filter(system, entity) then
-                        process(system, entity, dt)
+                        process(system, entity, ...)
                     end
                 end
             end
         else
             local entities = system.entities
             for i = 1, #entities do
-                process(system, entities[i], dt)
+                process(system, entities[i], ...)
             end
         end
     end
 
     if postProcess then
-        postProcess(system, dt)
+        postProcess(system, ...)
     end
 end
 
@@ -730,7 +732,7 @@ end
 -- which is a Filter that selects Systems from the World, and updates only those
 -- Systems. If `filter` is not supplied, all Systems are updated. Put this
 -- function in your main loop.
-function tiny.update(world, dt, filter)
+function tiny.update(world, filter, ...)
 
     tiny_manageSystems(world)
     tiny_manageEntities(world)
@@ -744,12 +746,12 @@ function tiny.update(world, dt, filter)
             -- Call the modify callback on Systems that have been modified.
             local onModify = system.onModify
             if onModify and system.modified then
-                onModify(system, dt)
+                onModify(system, ...)
             end
             local preWrap = system.preWrap
             if preWrap and
                 ((not filter) or filter(world, system)) then
-                preWrap(system, dt)
+                preWrap(system, ...)
             end
         end
     end
@@ -764,14 +766,14 @@ function tiny.update(world, dt, filter)
             if update then
                 local interval = system.interval
                 if interval then
-                    local bufferedTime = (system.bufferedTime or 0) + dt
+                    local bufferedTime = (system.bufferedTime or 0) + ...
                     while bufferedTime >= interval do
                         bufferedTime = bufferedTime - interval
                         update(system, interval)
                     end
                     system.bufferedTime = bufferedTime
                 else
-                    update(system, dt)
+                    update(system, ...)
                 end
             end
 
@@ -785,7 +787,7 @@ function tiny.update(world, dt, filter)
         local postWrap = system.postWrap
         if postWrap and system.active and
             ((not filter) or filter(world, system)) then
-            postWrap(system, dt)
+            postWrap(system, ...)
         end
     end
 

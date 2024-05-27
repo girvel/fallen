@@ -9,7 +9,7 @@ love.load = function()
   log.info("Game started")
 
   local CELL_DISPLAY_SIZE = 20
-  local main_font = love.graphics.newFont("fonts/BigBlueTerm437NerdFontMono-Regular.ttf", 24)
+  local main_font = love.graphics.newFont("assets/fonts/BigBlueTerm437NerdFontMono-Regular.ttf", 24)
 	world:add(tiny.processingSystem({
 		filter = tiny.requireAll("position", "sprite"),
     base_callback = "draw",
@@ -27,7 +27,7 @@ love.load = function()
 	world:add(tiny.processingSystem({
 		filter = tiny.requireAll("player_flag"),
     base_callback = "keypressed",
-		process = function(_, entity, event)
+		process = function(_, entity, _, event)
       local movement = movement_hotkeys[event[2]]
       if movement == nil then return end
       entity.position = entity.position + movement
@@ -64,9 +64,11 @@ love.load = function()
   })
 end
 
+local game_state = {}
+
 for _, callback_name in ipairs({"draw", "keypressed"}) do
   love[callback_name] = function(...)
-    world:update({...}, function(_, entity) return entity.base_callback == callback_name end)
+    world:update(function(_, entity) return entity.base_callback == callback_name end, game_state, {...})
   end
 end
 
