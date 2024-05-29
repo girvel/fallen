@@ -1,7 +1,12 @@
 local move = function(direction)
-  return function(entity)
+  return function(entity, state)
     if entity.turn_resources.movement <= 0 then return end
-    entity.position = entity.position + direction
+    local next_position = entity.position + direction
+    if not state.grid:can_fit(next_position) or state.grid[next_position] ~= nil then return end
+
+    state.grid[next_position] = entity
+    state.grid[entity.position] = nil
+    entity.position = next_position
     entity.turn_resources.movement = entity.turn_resources.movement - 1
   end
 end
@@ -20,8 +25,8 @@ local hotkeys = {
 return Tiny.processingSystem({
   filter = Tiny.requireAll("player_flag"),
   base_callback = "keypressed",
-  process = function(_, entity, _, event)
+  process = function(_, entity, state, event)
     local action = hotkeys[event[2]]
-    if action ~= nil then return action(entity) end
+    if action ~= nil then return action(entity, state) end
   end,
 })

@@ -1,7 +1,13 @@
 Tiny = require("lib.tiny")
 Vector = require("lib.vector")
 Log = require("lib.log")
+Grid = require("lib.grid")
+Inspect = require("lib.inspect")
 
+
+local game_state = {
+  grid = Grid(Vector({10, 10})),
+}
 
 local world
 love.load = function()
@@ -9,8 +15,8 @@ love.load = function()
 
   world = Tiny.world(unpack(require("systems")))
 
-  world:add({
-    position = Vector({20, 16}),
+  game_state.grid[Vector({2, 2})] = world:add({
+    position = Vector({2, 2}),
     sprite = {
       character = "@",
     },
@@ -21,29 +27,27 @@ love.load = function()
     },
   })
 
-  world:add({
-    position = Vector({19, 16}),
+  game_state.grid[Vector({1, 1})] = world:add({
+    position = Vector({1, 1}),
     sprite = {
       character = "#",
     },
   })
 
-  world:add({
-    position = Vector({19, 15}),
+  game_state.grid[Vector({1, 2})] = world:add({
+    position = Vector({1, 2}),
     sprite = {
       character = "#",
     },
   })
 
-  world:add({
-    position = Vector({19, 17}),
+  game_state.grid[Vector({1, 3})] = world:add({
+    position = Vector({1, 3}),
     sprite = {
       character = "#",
     },
   })
 end
-
-local game_state = {}
 
 for _, callback_name in ipairs({"draw", "keypressed"}) do
   love[callback_name] = function(...)
