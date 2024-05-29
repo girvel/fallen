@@ -1,17 +1,18 @@
-local tiny = require("lib.tiny")
-local vector = require("lib.vector")
-local log = require("lib.log")
+Tiny = require("lib.tiny")
+Vector = require("lib.vector")
+Log = require("lib.log")
 
 
-local world = tiny.world()
+local world = Tiny.world()
 
 love.load = function()
-  log.info("Game started")
+  Log.info("Game started")
 
   local CELL_DISPLAY_SIZE = 20
   local main_font = love.graphics.newFont("assets/fonts/BigBlueTerm437NerdFontMono-Regular.ttf", 24)
-	world:add(tiny.processingSystem({
-		filter = tiny.requireAll("position", "sprite"),
+
+  world:add(Tiny.processingSystem({
+		filter = Tiny.requireAll("position", "sprite"),
     base_callback = "draw",
 		process = function(_, entity)
 			love.graphics.print(entity.sprite.character, main_font, unpack(entity.position * CELL_DISPLAY_SIZE))
@@ -19,45 +20,58 @@ love.load = function()
 	}))
 
   local movement_hotkeys = {
-    w = vector({0, -1}),
-    a = vector({-1, 0}),
-    s = vector({0, 1}),
-    d = vector({1, 0}),
+    w = Vector({0, -1}),
+    a = Vector({-1, 0}),
+    s = Vector({0, 1}),
+    d = Vector({1, 0}),
   }
-	world:add(tiny.processingSystem({
-		filter = tiny.requireAll("player_flag"),
+  local turn_skip_hotkey = "space"
+	world:add(Tiny.processingSystem({
+		filter = Tiny.requireAll("player_flag"),
     base_callback = "keypressed",
 		process = function(_, entity, _, event)
-      local movement = movement_hotkeys[event[2]]
-      if movement == nil then return end
+      local _, scancode = unpack(event)
+
+      if scancode == turn_skip_hotkey then
+        entity.turn_resources.movement = entity.turn_resources.movement_max
+        return
+      end
+
+      local movement = movement_hotkeys[scancode]
+      if movement == nil or entity.turn_resources.movement <= 0 then return end
       entity.position = entity.position + movement
+      entity.turn_resources.movement = entity.turn_resources.movement - 1
 		end,
 	}))
 
   world:add({
-    position = vector({20, 16}),
+    position = Vector({20, 16}),
     sprite = {
       character = "@",
     },
     player_flag = true,
+    turn_resources = {
+      movement = 6,
+      movement_max = 6,
+    },
   })
 
   world:add({
-    position = vector({19, 16}),
+    position = Vector({19, 16}),
     sprite = {
       character = "#",
     },
   })
 
   world:add({
-    position = vector({19, 15}),
+    position = Vector({19, 15}),
     sprite = {
       character = "#",
     },
   })
 
   world:add({
-    position = vector({19, 17}),
+    position = Vector({19, 17}),
     sprite = {
       character = "#",
     },
