@@ -33,7 +33,16 @@ love.load = function()
     },
   })
 
-  local wall_image = love.graphics.newImage("assets/sprites/wall.png")
+  local wall_image_data = love.image.newImageData("assets/sprites/wall.png")
+	wall_image_data:mapPixel(function(_, _, r, g, b, a)
+		if r == 1 and g == 1 and b == 1 and a == 1 then
+			return 0.25, 0.169, 0.33, 1
+		else
+			return 0, 0, 0, 0
+		end
+	end)
+	local wall_image = love.graphics.newImage(wall_image_data)
+
   local wall_at = function(x, y)
     local v = Vector({x, y})
     game_state.grid[v] = world:add({
@@ -58,5 +67,5 @@ for _, callback_name in ipairs({"draw", "keypressed"}) do
 end
 
 love.errorhandler = function(msg)
-    Log.fatal(msg)
+  Log.fatal(msg)
 end
