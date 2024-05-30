@@ -90,6 +90,7 @@ for i, x in ipairs(modes) do
       fp:close()
     end
 
+		return ...
   end
 end
 
