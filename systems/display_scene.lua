@@ -4,18 +4,20 @@ local main_font = love.graphics.newFont("assets/fonts/BigBlueTerm437NerdFontMono
 return Tiny.processingSystem({
   filter = Tiny.requireAll("position", "sprite"),
   base_callback = "draw",
-  process = function(_, entity)
-    local scaled_position = (entity.position - Vector({1, 1})) * CELL_DISPLAY_SIZE + Vector({1, 1})
+  process = function(_, entity, state)
+		state.camera:draw(function()
+			local scaled_position = (entity.position - Vector({1, 1})) * CELL_DISPLAY_SIZE + Vector({1, 1})
 
-    if entity.sprite.character then
-      scaled_position = scaled_position + Vector({
-        CELL_DISPLAY_SIZE - main_font:getWidth(entity.sprite.character),
-        CELL_DISPLAY_SIZE - main_font:getHeight(),
-      }) / 2
+			if entity.sprite.character then
+				scaled_position = scaled_position + Vector({
+					CELL_DISPLAY_SIZE - main_font:getWidth(entity.sprite.character),
+					CELL_DISPLAY_SIZE - main_font:getHeight(),
+				}) / 2
 
-      love.graphics.print(entity.sprite.character, main_font, unpack(scaled_position))
-    else
-      love.graphics.draw(entity.sprite.image, unpack(scaled_position))
-    end
+				love.graphics.print(entity.sprite.character, main_font, unpack(scaled_position))
+			else
+				love.graphics.draw(entity.sprite.image, unpack(scaled_position))
+			end
+		end)
   end,
 })

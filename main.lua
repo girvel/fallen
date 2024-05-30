@@ -4,14 +4,20 @@ Log = require("lib.log")
 Grid = require("lib.grid")
 Inspect = require("lib.inspect")
 
+local gamera = require("lib.gamera")
 
-local game_state = {
-  grid = Grid(Vector({10, 10})),
-}
 
-local world
+local world, game_state
 love.load = function()
   Log.info("Game started")
+
+	game_state = {
+		grid = Grid(Vector({10, 10})),
+		camera = gamera.new(0, 0, 9999, 9999),
+	}
+	game_state.camera:setScale(2)
+	game_state.camera:setPosition(0, 0)
+	love.graphics.setDefaultFilter("nearest", "nearest")
 
   world = Tiny.world(unpack(require("systems")))
 
