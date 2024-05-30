@@ -51,3 +51,6 @@ for _, callback_name in ipairs({"draw", "keypressed"}) do
   end
 end
 
+love.errorhandler = function(msg)
+    Log.fatal(msg)
+end
