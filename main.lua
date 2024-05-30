@@ -27,26 +27,22 @@ love.load = function()
     },
   })
 
-  game_state.grid[Vector({1, 1})] = world:add({
-    position = Vector({1, 1}),
-    sprite = {
-      character = "#",
-    },
-  })
+  local wall_image = love.graphics.newImage("assets/sprites/wall.png")
+  local wall_at = function(x, y)
+    local v = Vector({x, y})
+    game_state.grid[v] = world:add({
+      position = v,
+      sprite = {
+        image = wall_image,
+      },
+    })
+  end
 
-  game_state.grid[Vector({1, 2})] = world:add({
-    position = Vector({1, 2}),
-    sprite = {
-      character = "#",
-    },
-  })
-
-  game_state.grid[Vector({1, 3})] = world:add({
-    position = Vector({1, 3}),
-    sprite = {
-      character = "#",
-    },
-  })
+  wall_at(1, 1)
+  wall_at(1, 2)
+  wall_at(1, 3)
+  wall_at(2, 3)
+  wall_at(3, 3)
 end
 
 for _, callback_name in ipairs({"draw", "keypressed"}) do
