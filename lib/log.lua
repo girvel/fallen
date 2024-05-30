@@ -1,3 +1,5 @@
+-- MODIFIED
+
 --
 -- log.lua
 --
@@ -6,6 +8,8 @@
 -- This library is free software; you can redistribute it and/or modify it
 -- under the terms of the MIT license. See LICENSE for details.
 --
+
+local inspect = require("lib.inspect")
 
 local log = { _version = "0.1.0" }
 
@@ -45,6 +49,9 @@ local tostring = function(...)
     local x = select(i, ...)
     if type(x) == "number" then
       x = round(x, .01)
+    end
+    if type(x) == "table" then
+      x = inspect(x)
     end
     t[#t + 1] = _tostring(x)
   end
