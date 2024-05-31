@@ -26,13 +26,11 @@ love.load = function()
 	local colored_image = function(path, color)
 		local image_data = love.image.newImageData(path)
 
-		image_data:mapPixel(function(_, _, r, g, b, a)
-			if r == 1 and g == 1 and b == 1 and a == 1 then
-				return unpack(color)
-			else
-				return 0, 0, 0, 0
-			end
+		image_data:mapPixel(function(_, _, _, _, _, a)
+      if a == 0 then return 0, 0, 0, 0 end
+      return unpack(color)
 		end)
+
 		return love.graphics.newImage(image_data)
 	end
 
@@ -46,11 +44,11 @@ love.load = function()
     })
   end
 
-	local floor_at = function(x, y)
+	local planks_at = function(x, y)
 		world:add({
 			position = Vector({x, y}),
 			sprite = {
-        image = colored_image("assets/sprites/floor.png", utils.hex_color("31222c"))
+        image = colored_image("assets/sprites/planks.png", utils.hex_color("31222c"))
 			}
 		})
 	end
@@ -61,10 +59,10 @@ love.load = function()
   wall_at(2, 3)
   wall_at(3, 3)
 
-  floor_at(2, 1)
-  floor_at(2, 2)
-  floor_at(3, 1)
-  floor_at(3, 2)
+  planks_at(2, 1)
+  planks_at(2, 2)
+  planks_at(3, 1)
+  planks_at(3, 2)
 
   game_state.grid[Vector({2, 2})] = world:add({
     position = Vector({2, 2}),
