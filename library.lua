@@ -33,6 +33,15 @@ local get_modifier = function(ability_score)
   return math.floor((ability_score - 10) / 2)
 end
 
+-- TODO extract abstract shit
+module.get_turn_resources = function(creature)
+  return {
+    movement = 6,
+    actions = 1,
+  }
+end
+
+-- TODO extract abstract shit
 module.creature = function()
   return {
     turn_resources = {
@@ -45,17 +54,21 @@ module.creature = function()
     },
 
     get_armor = function(self) return 10 + get_modifier(self.abilities.dexterity) end,
+
+    move = function(entity, state, direction)
+      if (
+        entity.turn_resources.movement > 0 and
+        level.move(state.grid, entity, entity.position + direction)
+      ) then
+        entity.turn_resources.movement = entity.turn_resources.movement - 1
+      end
+    end,
   }
 end
 
 local move = function(direction)
   return function(entity, state)
-    if (
-      entity.turn_resources.movement > 0 and
-      level.move(state.grid, entity, entity.position + direction)
-    ) then
-      entity.turn_resources.movement = entity.turn_resources.movement - 1
-    end
+    return entity:move(state, direction)
   end
 end
 
@@ -127,9 +140,9 @@ module.bat = function()
       if random.chance(0.5) then
         return true
       end
-      move(Vector(random.choice({
+      self:move(state, Vector(random.choice({
         {1, 0}, {0, 1}, {-1, 0}, {0, -1},
-      })))(self, state)
+      })))
     end,
   })
 end
