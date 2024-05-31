@@ -54,21 +54,41 @@ module.creature = function()
     },
 
     get_armor = function(self) return 10 + get_modifier(self.abilities.dexterity) end,
-
-    move = function(entity, state, direction)
-      if (
-        entity.turn_resources.movement > 0 and
-        level.move(state.grid, entity, entity.position + direction)
-      ) then
-        entity.turn_resources.movement = entity.turn_resources.movement - 1
-      end
-    end,
   }
 end
 
 local move = function(direction)
   return function(entity, state)
-    return entity:move(state, direction)
+    if (
+      entity.turn_resources.movement > 0 and
+      level.move(state.grid, entity, entity.position + direction)
+    ) then
+      entity.turn_resources.movement = entity.turn_resources.movement - 1
+    end
+  end
+end
+
+local hand_attack = function(entity, state, target)
+  if entity.turn_resources.actions <= 0 then return end
+  if not target or not target.hp then return end
+  entity.turn_resources.actions = entity.turn_resources.actions - 1
+
+  local attack_roll = random.d(20) + get_modifier(entity.abilities.strength)
+  Log.info(
+    entity.name .. " attacks " .. target.name .. "; attack roll: " ..
+    attack_roll .. ", armor: " .. target:get_armor()
+  )
+
+  if attack_roll < target:get_armor() then return end
+
+  local damage = math.max(1, (entity.abilities.strength - 10) / 2)
+  Log.info("damage: " .. damage)
+
+  target.hp = target.hp - damage
+  if target.hp <= 0 then
+    state:remove(target)
+    Log.info(target.name .. " is killed")
+    state.grid[target.position] = nil
   end
 end
 
@@ -83,27 +103,7 @@ local hotkeys = {
   end,
 
   f = function(entity, state)
-    if entity.turn_resources.actions <= 0 then return end
-    local target = state.grid[entity.position + Vector.right]
-    if not target or not target.hp then return end
-    entity.turn_resources.actions = entity.turn_resources.actions - 1
-
-    local attack_roll = random.d(20) + get_modifier(entity.abilities.strength)
-    Log.info(
-      entity.name .. " attacks " .. target.name .. "; attack roll: " ..
-      attack_roll .. ", armor: " .. target:get_armor()
-    )
-
-    if attack_roll < target:get_armor() then return end
-
-    local damage = math.max(1, (entity.abilities.strength - 10) / 2)
-    Log.info("damage: " .. damage)
-
-    target.hp = target.hp - damage
-    if target.hp <= 0 then
-      Log.warn(target.name .. " should be killed, but there is no system for that yet")
-      state.grid[target.position] = nil
-    end
+    return hand_attack(entity, state, state.grid[entity.position + Vector.right])
   end,
 }
 
@@ -140,9 +140,9 @@ module.bat = function()
       if random.chance(0.5) then
         return true
       end
-      self:move(state, Vector(random.choice({
+      move(Vector(random.choice({
         {1, 0}, {0, 1}, {-1, 0}, {0, -1},
-      })))
+      })))(self, state)
     end,
   })
 end
