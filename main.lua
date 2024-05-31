@@ -7,6 +7,7 @@ Fun = require("lib.fun")
 
 local gamera = require("lib.gamera")
 local utils = require("utils")
+local level = require("level")
 
 
 local world, game_state
@@ -68,14 +69,12 @@ love.load = function()
 
   local move = function(direction)
     return function(entity, state)
-      if entity.turn_resources.movement <= 0 then return end
-      local next_position = entity.position + direction
-      if not state.grid:can_fit(next_position) or state.grid[next_position] ~= nil then return end
-
-      state.grid[next_position] = entity
-      state.grid[entity.position] = nil
-      entity.position = next_position
-      entity.turn_resources.movement = entity.turn_resources.movement - 1
+      if (
+        entity.turn_resources.movement > 0 and
+        level.move(state.grid, entity, entity.position + direction)
+      ) then
+        entity.turn_resources.movement = entity.turn_resources.movement - 1
+      end
     end
   end
 
