@@ -1,12 +1,11 @@
 local ui_font = love.graphics.newFont("assets/fonts/BigBlueTerm437NerdFontMono-Regular.ttf", 12)
 
-return Tiny.processingSystem({
-  filter = Tiny.requireAll("player_flag"),
+return Tiny.system({
   base_callback = "draw",
 
-  process = function(_, entity)
+  update = function(_, state)
     for i, line in ipairs({
-      "Movement: " .. entity.turn_resources.movement .. "/" .. entity.turn_resources.movement_max,
+      "Movement: " .. state.player.turn_resources.movement .. "/?",
     }) do
       love.graphics.print(line, ui_font, 600, 10 + i * 10)
     end

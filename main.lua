@@ -64,21 +64,75 @@ love.load = function()
   planks_at(3, 1)
   planks_at(3, 2)
 
+  local move = function(direction)
+    return function(entity, state)
+      if entity.turn_resources.movement <= 0 then return end
+      local next_position = entity.position + direction
+      if not state.grid:can_fit(next_position) or state.grid[next_position] ~= nil then return end
+
+      state.grid[next_position] = entity
+      state.grid[entity.position] = nil
+      entity.position = next_position
+      entity.turn_resources.movement = entity.turn_resources.movement - 1
+    end
+  end
+
+  local hotkeys = {
+    w = move(Vector({0, -1})),
+    a = move(Vector({-1, 0})),
+    s = move(Vector({0, 1})),
+    d = move(Vector({1, 0})),
+
+    space = function()
+      return true
+    end,
+  }
+
   game_state.grid[Vector({2, 2})] = world:add({
     position = Vector({2, 2}),
     sprite = {
       character = "@",
     },
-    player_flag = true,
     turn_resources = {
       movement = 6,
-      movement_max = 6,
     },
+    ai = function(self, state)
+      local action = hotkeys[self.last_pressed_key]
+      self.last_pressed_key = nil
+      if action ~= nil then return action(self, state) end
+    end,
   })
 
+  game_state.player = game_state.grid[Vector({2, 2})]
+
+  game_state.grid[Vector({5, 5})] = world:add({
+    position = Vector({5, 5}),
+    sprite = {
+      character = "b",
+    },
+    turn_resources = {
+      movement = 6,
+    },
+    ai = function(self, state)
+      if utils.chance(0.5) then
+        return true
+      end
+      move(Vector(utils.choice({
+        {1, 0}, {0, 1}, {-1, 0}, {0, -1},
+      })))(self, state)
+    end,
+  })
+
+  game_state.move_order = {
+    list = {
+      game_state.grid[Vector({2, 2})],
+      game_state.grid[Vector({5, 5})],
+    },
+    current_i = 1,
+  }
 end
 
-for _, callback_name in ipairs({"draw", "keypressed"}) do
+for _, callback_name in ipairs({"draw", "keypressed", "update"}) do
   love[callback_name] = function(...)
     world:update(function(_, entity) return entity.base_callback == callback_name end, game_state, {...})
   end
