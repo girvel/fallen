@@ -88,7 +88,6 @@ local hand_attack = function(entity, state, target)
   if target.hp <= 0 then
     state:remove(target)
     Log.info(target.name .. " is killed")
-    state.grid[target.position] = nil
   end
 end
 
