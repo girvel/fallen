@@ -6,7 +6,7 @@ Inspect = require("lib.inspect")
 Fun = require("lib.fun")
 
 local gamera = require("lib.gamera")
-local utils = require("utils")
+local common = require("utils.common")
 local level = require("level")
 local library = require("library")
 
@@ -14,6 +14,8 @@ local library = require("library")
 local world, game_state
 love.load = function()
   Log.info("Game started")
+
+  math.randomseed(os.time())
 
 	game_state = {
 		grid = Grid(Vector({10, 10})),
@@ -31,16 +33,16 @@ love.load = function()
   }) do
     local entity_factory, solid, positions = unpack(pair)
     for _, position in ipairs(positions) do
-      local entity = world:add(utils.extend(entity_factory(), {position = Vector(position)}))
+      local entity = world:add(common.extend(entity_factory(), {position = Vector(position)}))
       if solid then
         level.put(game_state.grid, entity)
       end
     end
   end
 
-  game_state.player = world:add(utils.extend(library.player(), {position = Vector({2, 2})}))
+  game_state.player = world:add(common.extend(library.player(), {position = Vector({2, 2})}))
   level.put(game_state.grid, game_state.player)
-  local bat = world:add(utils.extend(library.bat(), {position = Vector({5, 5})}))
+  local bat = world:add(common.extend(library.bat(), {position = Vector({5, 5})}))
   level.put(game_state.grid, bat)
 
   game_state.move_order = {

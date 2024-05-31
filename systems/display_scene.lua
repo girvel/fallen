@@ -1,5 +1,3 @@
-local utils = require("utils")
-
 local CELL_DISPLAY_SIZE = 16
 local main_font = love.graphics.newFont("assets/fonts/BigBlueTerm437NerdFontMono-Regular.ttf", 16)
 
