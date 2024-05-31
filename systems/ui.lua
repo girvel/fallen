@@ -5,9 +5,11 @@ return Tiny.system({
 
   update = function(_, state)
     for i, line in ipairs({
-      "Movement: " .. state.player.turn_resources.movement .. "/?",
+      "Resources:",
+      "  Movement: " .. state.player.turn_resources.movement .. "/?",
+      "  Actions: " .. state.player.turn_resources.actions,
     }) do
-      love.graphics.print(line, ui_font, 600, 10 + i * 10)
+      love.graphics.print(line, ui_font, 600, i * 15)
     end
   end,
 })

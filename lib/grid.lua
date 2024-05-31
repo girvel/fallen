@@ -12,7 +12,7 @@ module_mt.__call = function(_, size)
 end
 
 local grid_methods = {
-  can_fit = function(self, v) return v > Vector.zero() and v <= self.size end,
+  can_fit = function(self, v) return v > Vector.zero and v <= self.size end,
 }
 
 grid_mt.__index = function(self, v)

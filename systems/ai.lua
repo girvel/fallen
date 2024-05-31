@@ -6,6 +6,7 @@ return Tiny.processingSystem({
 
     if entity:ai(state, event) or not state.move_order then
       entity.turn_resources.movement = 6
+      entity.turn_resources.actions = 1
       state.move_order.current_i = state.move_order.current_i + 1
       if state.move_order.current_i > #state.move_order.list then
         state.move_order.current_i = 1

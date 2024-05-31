@@ -42,6 +42,15 @@ love.load = function()
 		})
 	end
 
+  local grass_at = function(x, y)
+		world:add({
+			position = Vector({x, y}),
+			sprite = {
+        image = love.graphics.newImage("assets/sprites/grass.png")
+			}
+		})
+  end
+
   wall_at(1, 1)
   wall_at(1, 2)
   wall_at(1, 3)
@@ -52,6 +61,10 @@ love.load = function()
   planks_at(2, 2)
   planks_at(3, 1)
   planks_at(3, 2)
+
+  grass_at(1, 4)
+  grass_at(2, 4)
+  grass_at(3, 4)
 
   local move = function(direction)
     return function(entity, state)
@@ -75,6 +88,18 @@ love.load = function()
     space = function()
       return true
     end,
+
+    f = function(entity, state)
+      if entity.turn_resources.actions <= 0 then return end
+      local target = state.grid[entity.position + Vector.right]
+      if not target or not target.hp then return end
+      target.hp = target.hp - 1
+      if target.hp <= 0 then
+        world:remove(target)
+        state.grid[target.position] = nil
+      end
+      entity.turn_resources.actions = entity.turn_resources.actions - 1
+    end,
   }
 
   game_state.grid[Vector({2, 2})] = world:add({
@@ -84,6 +109,7 @@ love.load = function()
     },
     turn_resources = {
       movement = 6,
+      actions = 1,
     },
     ai = function(self, state)
       local action = hotkeys[self.last_pressed_key]
@@ -95,12 +121,14 @@ love.load = function()
   game_state.player = game_state.grid[Vector({2, 2})]
 
   game_state.grid[Vector({5, 5})] = world:add({
+    hp = 2,
     position = Vector({5, 5}),
     sprite = {
       image = love.graphics.newImage("assets/sprites/bat.png")
     },
     turn_resources = {
       movement = 6,
+      actions = 1,
     },
     ai = function(self, state)
       if utils.chance(0.5) then

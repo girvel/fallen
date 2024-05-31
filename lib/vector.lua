@@ -12,7 +12,11 @@ module_mt.__call = function(_, base_object)
   return setmetatable(base_object, vector_mt)
 end
 
-module.zero = function() return module({0, 0}) end
+module.zero = module({0, 0})
+module.up = module({0, -1})
+module.down = module({0, 1})
+module.left = module({-1, 0})
+module.right = module({1, 0})
 
 vector_mt.__add = function(self, other)
   return module({self[1] + other[1], self[2] + other[2]})
