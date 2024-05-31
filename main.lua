@@ -23,23 +23,12 @@ love.load = function()
 
   world = Tiny.world(unpack(require("systems")))
 
-	local colored_image = function(path, color)
-		local image_data = love.image.newImageData(path)
-
-		image_data:mapPixel(function(_, _, _, _, _, a)
-      if a == 0 then return 0, 0, 0, 0 end
-      return unpack(color)
-		end)
-
-		return love.graphics.newImage(image_data)
-	end
-
   local wall_at = function(x, y)
     local v = Vector({x, y})
     game_state.grid[v] = world:add({
       position = v,
       sprite = {
-        image = colored_image("assets/sprites/wall.png", utils.hex_color("402b55")),
+        image = love.graphics.newImage("assets/sprites/wall.png"),
       },
     })
   end
@@ -48,7 +37,7 @@ love.load = function()
 		world:add({
 			position = Vector({x, y}),
 			sprite = {
-        image = colored_image("assets/sprites/planks.png", utils.hex_color("31222c"))
+        image = love.graphics.newImage("assets/sprites/planks.png")
 			}
 		})
 	end
@@ -91,7 +80,7 @@ love.load = function()
   game_state.grid[Vector({2, 2})] = world:add({
     position = Vector({2, 2}),
     sprite = {
-      image = colored_image("assets/sprites/fighter.png", utils.hex_color("c0edef")),
+      image = love.graphics.newImage("assets/sprites/fighter.png"),
     },
     turn_resources = {
       movement = 6,
@@ -108,7 +97,7 @@ love.load = function()
   game_state.grid[Vector({5, 5})] = world:add({
     position = Vector({5, 5}),
     sprite = {
-      image = colored_image("assets/sprites/bat.png", utils.hex_color("984071"))
+      image = love.graphics.newImage("assets/sprites/bat.png")
     },
     turn_resources = {
       movement = 6,
@@ -126,7 +115,7 @@ love.load = function()
   game_state.grid[Vector({4, 3})] = world:add({
     position = Vector({4, 3}),
     sprite = {
-      image = colored_image("assets/sprites/smooth_wall.png", utils.hex_color("402b55"))
+      image = love.graphics.newImage("assets/sprites/smooth_wall.png")
     }
   })
 
