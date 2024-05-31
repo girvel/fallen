@@ -91,7 +91,7 @@ love.load = function()
   game_state.grid[Vector({2, 2})] = world:add({
     position = Vector({2, 2}),
     sprite = {
-      character = "@",
+      image = colored_image("assets/sprites/fighter.png", utils.hex_color("c0edef")),
     },
     turn_resources = {
       movement = 6,
@@ -108,7 +108,7 @@ love.load = function()
   game_state.grid[Vector({5, 5})] = world:add({
     position = Vector({5, 5}),
     sprite = {
-      character = "b",
+      image = colored_image("assets/sprites/bat.png", utils.hex_color("984071"))
     },
     turn_resources = {
       movement = 6,
@@ -121,6 +121,13 @@ love.load = function()
         {1, 0}, {0, 1}, {-1, 0}, {0, -1},
       })))(self, state)
     end,
+  })
+
+  game_state.grid[Vector({4, 3})] = world:add({
+    position = Vector({4, 3}),
+    sprite = {
+      image = colored_image("assets/sprites/smooth_wall.png", utils.hex_color("402b55"))
+    }
   })
 
   game_state.move_order = {
