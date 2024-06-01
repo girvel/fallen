@@ -52,6 +52,7 @@ module.creature = function()
       strength = 10,
       dexterity = 10,
     },
+    direction = "right",
 
     get_armor = function(self)
       return 10 + get_modifier(self.abilities.dexterity)
@@ -61,6 +62,7 @@ end
 
 local move = function(direction_name)
   return function(entity, state)
+    entity.direction = direction_name
     if (
       entity.turn_resources.movement > 0 and
       level.move(state.grids[entity.layer], entity, entity.position + Vector[direction_name])
@@ -113,7 +115,16 @@ local hotkeys = {
 }
 
 local player_character_pack = {
-  idle = {
+  idle_up = {
+    love.graphics.newImage("assets/sprites/player_character/idle_up.png"),
+  },
+  idle_left = {
+    love.graphics.newImage("assets/sprites/player_character/idle_left.png"),
+  },
+  idle_down = {
+    love.graphics.newImage("assets/sprites/player_character/idle_down.png"),
+  },
+  idle_right = {
     love.graphics.newImage("assets/sprites/player_character/idle_right.png"),
   },
   move_right = {
@@ -135,7 +146,7 @@ module.player = function()
     },
     animation = {
       pack = player_character_pack,
-      current = "idle",
+      current = "idle_right",
       frame = 1,
     },
     ai = function(self, state)

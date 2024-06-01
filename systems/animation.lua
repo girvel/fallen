@@ -8,7 +8,7 @@ return Tiny.processingSystem({
     local animation = entity.animation
     animation.frame = animation.frame + dt * FPS
     if not animation.pack[animation.current] or math.floor(animation.frame) > #animation.pack[animation.current] then
-      animation.current = "idle"
+      animation.current = "idle_" .. entity.direction
       animation.frame = 1
     end
 
