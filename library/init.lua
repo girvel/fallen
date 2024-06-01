@@ -63,7 +63,7 @@ local move = function(direction)
   return function(entity, state)
     if (
       entity.turn_resources.movement > 0 and
-      level.move(state.grid, entity, entity.position + direction)
+      level.move(state.grids[entity.layer], entity, entity.position + direction)
     ) then
       entity.turn_resources.movement = entity.turn_resources.movement - 1
     end
@@ -104,7 +104,7 @@ local hotkeys = {
   end,
 
   f = function(entity, state)
-    return hand_attack(entity, state, state.grid[entity.position + Vector.right])
+    return hand_attack(entity, state, state.grids.solids[entity.position + Vector.right])
   end,
 }
 

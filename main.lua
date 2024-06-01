@@ -8,7 +8,6 @@ require("lib.strong")
 
 local gamera = require("lib.gamera")
 local common = require("utils.common")
-local level = require("level")
 local library = require("library")
 
 
@@ -18,39 +17,51 @@ love.load = function()
 
   math.randomseed(os.time())
 
+  local GRID_LAYERS = {"tiles", "solids"}
+
 	state = {
-    grid = nil,
+    -- grids
 		camera = gamera.new(0, 0, 9999, 9999),
     world = Tiny.world(unpack(require("systems"))),
 
     add = function(self, entity)
       self.world:add(entity)
       if entity.position then
-        self.grid[entity.position] = entity
+        self.grids[entity.layer][entity.position] = entity
       end
+      return entity
     end,
 
     remove = function(self, entity)
       self.world:remove(entity)
 
       if entity.position then
-        self.grid[entity.position] = nil
+        self.grids[entity.layer][entity.position] = nil
       end
 
       self.move_order.list = Fun.iter(self.move_order.list)
         :filter(function(e) return e ~= entity end)
         :totable()
+
+      return entity
     end,
 
     load_level = function(self, path, scheme)
       local level_lines = love.filesystem.read(path):split("\n")
-      self.grid = Grid(Vector({#level_lines[1], #level_lines}))
+      self.grids = Fun.iter(GRID_LAYERS)
+        :map(function(layer) return layer, Grid(Vector({#level_lines[1], #level_lines})) end)
+        :tomap()
 
-      for y, line in ipairs(level_lines) do
-        for _, x, character in Fun.iter(line):enumerate() do
-          local factory = scheme[character]
-          if factory then
-            self:add(common.extend(factory(), {position = Vector({x, y})}))
+      for _, layer in ipairs(GRID_LAYERS) do
+        for y, line in ipairs(level_lines) do
+          for _, x, character in Fun.iter(line):enumerate() do
+            local factory = scheme[layer][character]
+            if factory then
+              local e = self:add(common.extend(factory(), {position = Vector({x, y}), layer = layer}))
+              if character == "@" then
+                self.player = e
+              end
+            end
           end
         end
       end
@@ -61,14 +72,19 @@ love.load = function()
 	love.graphics.setDefaultFilter("nearest", "nearest")
 
   state:load_level("assets/levels/demo.txt", {
-    ["#"] = library.wall,
-    S = library.smooth_wall,
-    ["@"] = library.player,
-    b = library.bat,
+    tiles = {
+      _ = library.planks,
+      [","] = library.grass,
+    },
+    solids = {
+      ["#"] = library.wall,
+      S = library.smooth_wall,
+      ["@"] = library.player,
+      b = library.bat,
+    },
   })
 
-  state.player = state.grid[Vector({4, 4})]
-  local bat = state.grid[Vector({9, 5})]
+  local bat = state.grids.solids[Vector({9, 5})]
 
   state.move_order = {
     list = {
@@ -81,6 +97,8 @@ end
 
 for _, callback_name in ipairs({"draw", "keypressed", "update"}) do
   love[callback_name] = function(...)
-    state.world:update(function(_, entity) return entity.base_callback == callback_name end, state, {...})
+    state.world:update(function(_, entity)
+      return entity.base_callback == callback_name
+    end, state, {...})
   end
 end
