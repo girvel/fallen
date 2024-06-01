@@ -53,7 +53,9 @@ module.creature = function()
       dexterity = 10,
     },
 
-    get_armor = function(self) return 10 + get_modifier(self.abilities.dexterity) end,
+    get_armor = function(self)
+      return 10 + get_modifier(self.abilities.dexterity)
+    end,
   }
 end
 

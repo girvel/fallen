@@ -4,6 +4,7 @@ Log = require("lib.log")
 Grid = require("lib.grid")
 Inspect = require("lib.inspect")
 Fun = require("lib.fun")
+require("lib.strong")
 
 local gamera = require("lib.gamera")
 local common = require("utils.common")
@@ -18,39 +19,56 @@ love.load = function()
   math.randomseed(os.time())
 
 	state = {
-		grid = Grid(Vector({10, 10})),
+    grid = nil,
 		camera = gamera.new(0, 0, 9999, 9999),
     world = Tiny.world(unpack(require("systems"))),
 
+    add = function(self, entity)
+      self.world:add(entity)
+      if entity.position then
+        self.grid[entity.position] = entity
+      end
+    end,
+
     remove = function(self, entity)
       self.world:remove(entity)
-      self.grid[entity.position] = nil
+
+      if entity.position then
+        self.grid[entity.position] = nil
+      end
+
       self.move_order.list = Fun.iter(self.move_order.list)
         :filter(function(e) return e ~= entity end)
         :totable()
+    end,
+
+    load_level = function(self, path, scheme)
+      local level_lines = love.filesystem.read(path):split("\n")
+      self.grid = Grid(Vector({#level_lines[1], #level_lines}))
+
+      for y, line in ipairs(level_lines) do
+        for _, x, character in Fun.iter(line):enumerate() do
+          local factory = scheme[character]
+          if factory then
+            self:add(common.extend(factory(), {position = Vector({x, y})}))
+          end
+        end
+      end
     end,
 	}
 	state.camera:setScale(2)
 	state.camera:setPosition(0, 0)
 	love.graphics.setDefaultFilter("nearest", "nearest")
 
-  for _, pair in ipairs({
-    {library.wall, true, {{1, 1}, {1, 2}, {1, 3}, {2, 3}, {3, 3}}},
-    {library.planks, false, {{2, 1}, {2, 2}, {3, 2}}},
-  }) do
-    local entity_factory, solid, positions = unpack(pair)
-    for _, position in ipairs(positions) do
-      local entity = state.world:add(common.extend(entity_factory(), {position = Vector(position)}))
-      if solid then
-        level.put(state.grid, entity)
-      end
-    end
-  end
+  state:load_level("assets/levels/demo.txt", {
+    ["#"] = library.wall,
+    S = library.smooth_wall,
+    ["@"] = library.player,
+    b = library.bat,
+  })
 
-  state.player = state.world:add(common.extend(library.player(), {position = Vector({2, 2})}))
-  level.put(state.grid, state.player)
-  local bat = state.world:add(common.extend(library.bat(), {position = Vector({5, 5})}))
-  level.put(state.grid, bat)
+  state.player = state.grid[Vector({4, 4})]
+  local bat = state.grid[Vector({9, 5})]
 
   state.move_order = {
     list = {
