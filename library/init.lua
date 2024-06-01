@@ -69,7 +69,6 @@ local move = function(direction_name)
 
       if entity.animation then
         entity.animation.current = "move_" .. direction_name
-        entity.animation.frame = 0
       end
     end
   end
@@ -120,6 +119,11 @@ local player_character_pack = {
   move_right = {
     love.graphics.newImage("assets/sprites/player_character_walk01.png"),
     love.graphics.newImage("assets/sprites/player_character_walk02.png"),
+  },
+  move_down = {
+    love.graphics.newImage("assets/sprites/player_character_move_down01.png"),
+    love.graphics.newImage("assets/sprites/player_character_move_down02.png"),
+    love.graphics.newImage("assets/sprites/player_character_move_down03.png"),
   },
 }
 
