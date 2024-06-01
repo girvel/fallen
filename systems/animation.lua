@@ -8,7 +8,6 @@ return Tiny.processingSystem({
       animation.current = "idle"
       animation.frame = 1
     end
-    Log.trace(animation.current, animation.frame)
 
     entity.sprite.image = animation.pack[animation.current][animation.frame]
   end,
