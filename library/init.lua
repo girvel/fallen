@@ -59,13 +59,18 @@ module.creature = function()
   }
 end
 
-local move = function(direction)
+local move = function(direction_name)
   return function(entity, state)
     if (
       entity.turn_resources.movement > 0 and
-      level.move(state.grids[entity.layer], entity, entity.position + direction)
+      level.move(state.grids[entity.layer], entity, entity.position + Vector[direction_name])
     ) then
       entity.turn_resources.movement = entity.turn_resources.movement - 1
+
+      if entity.animation then
+        entity.animation.current = "move_" .. direction_name
+        entity.animation.frame = 0
+      end
     end
   end
 end
@@ -94,10 +99,10 @@ local hand_attack = function(entity, state, target)
 end
 
 local hotkeys = {
-  w = move(Vector({0, -1})),
-  a = move(Vector({-1, 0})),
-  s = move(Vector({0, 1})),
-  d = move(Vector({1, 0})),
+  w = move("up"),
+  a = move("left"),
+  s = move("down"),
+  d = move("right"),
 
   space = function()
     return true
@@ -108,11 +113,26 @@ local hotkeys = {
   end,
 }
 
+local player_character_pack = {
+  idle = {
+    love.graphics.newImage("assets/sprites/player_character.png"),
+  },
+  move_right = {
+    love.graphics.newImage("assets/sprites/player_character_walk01.png"),
+    love.graphics.newImage("assets/sprites/player_character_walk02.png"),
+  },
+}
+
 module.player = function()
   return common.extend(module.creature(), {
     name = "player",
     sprite = {
-      image = love.graphics.newImage("assets/sprites/fighter.png"),
+      image = love.graphics.newImage("assets/sprites/player_character.png"),
+    },
+    animation = {
+      pack = player_character_pack,
+      current = "idle",
+      frame = 1,
     },
     ai = function(self, state)
       local action = hotkeys[self.last_pressed_key]
@@ -141,9 +161,7 @@ module.bat = function()
       if random.chance(0.5) then
         return true
       end
-      move(Vector(random.choice({
-        {1, 0}, {0, 1}, {-1, 0}, {0, -1},
-      })))(self, state)
+      move(random.choice({"up", "down", "left", "right"}))(self, state)
     end,
   })
 end

@@ -1,3 +1,5 @@
+love.graphics.setDefaultFilter("nearest", "nearest")
+
 Tiny = require("lib.tiny")
 Vector = require("lib.vector")
 Log = require("lib.log")
@@ -42,8 +44,6 @@ love.load = function()
       self.move_order.list = Fun.iter(self.move_order.list)
         :filter(function(e) return e ~= entity end)
         :totable()
-
-      return entity
     end,
 
     load_level = function(self, path, scheme)
@@ -69,7 +69,6 @@ love.load = function()
 	}
 	state.camera:setScale(2)
 	state.camera:setPosition(0, 0)
-	love.graphics.setDefaultFilter("nearest", "nearest")
 
   state:load_level("assets/levels/demo.txt", {
     tiles = {
