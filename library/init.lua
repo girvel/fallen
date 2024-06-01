@@ -114,16 +114,17 @@ local hotkeys = {
 
 local player_character_pack = {
   idle = {
-    love.graphics.newImage("assets/sprites/player_character.png"),
+    love.graphics.newImage("assets/sprites/player_character/idle_right.png"),
   },
   move_right = {
-    love.graphics.newImage("assets/sprites/player_character_walk01.png"),
-    love.graphics.newImage("assets/sprites/player_character_walk02.png"),
+    love.graphics.newImage("assets/sprites/player_character/move_right_01.png"),
+    love.graphics.newImage("assets/sprites/player_character/move_right_02.png"),
+    love.graphics.newImage("assets/sprites/player_character/move_right_03.png"),
   },
   move_down = {
-    love.graphics.newImage("assets/sprites/player_character_move_down01.png"),
-    love.graphics.newImage("assets/sprites/player_character_move_down02.png"),
-    love.graphics.newImage("assets/sprites/player_character_move_down03.png"),
+    love.graphics.newImage("assets/sprites/player_character/move_down_01.png"),
+    love.graphics.newImage("assets/sprites/player_character/move_down_02.png"),
+    love.graphics.newImage("assets/sprites/player_character/move_down_03.png"),
   },
 }
 
@@ -131,7 +132,6 @@ module.player = function()
   return common.extend(module.creature(), {
     name = "player",
     sprite = {
-      image = love.graphics.newImage("assets/sprites/player_character.png"),
     },
     animation = {
       pack = player_character_pack,
