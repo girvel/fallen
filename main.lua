@@ -19,7 +19,7 @@ love.load = function()
 
   math.randomseed(os.time())
 
-  local GRID_LAYERS = {"tiles", "solids"}
+  local GRID_LAYERS = {"tiles", "solids", "sfx"}
 
 	state = {
     -- grids
@@ -55,7 +55,7 @@ love.load = function()
       for _, layer in ipairs(GRID_LAYERS) do
         for y, line in ipairs(level_lines) do
           for _, x, character in Fun.iter(line):enumerate() do
-            local factory = scheme[layer][character]
+            local factory = (scheme[layer] or {})[character]
             if factory then
               local e = self:add(common.extend(factory(), {position = Vector({x, y}), layer = layer}))
               if character == "@" then

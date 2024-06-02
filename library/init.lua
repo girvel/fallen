@@ -41,7 +41,7 @@ local hotkeys = {
   end,
 
   f = function(entity, state)
-    return actions.hand_attack(entity, state, state.grids.solids[entity.position + Vector[entity.direction]])
+    actions.hand_attack(entity, state, state.grids.solids[entity.position + Vector[entity.direction]])
   end,
 }
 
@@ -96,7 +96,7 @@ local bat_pack = load_animation_pack("assets/sprites/bat")
 module.bat = function()
   return common.extend(creature(bat_pack), {
     name = "bat",
-    hp = 2,
+    hp = 200,
     hungry = true,
     ai = function(self, state, event)
       local dt = unpack(event)

@@ -1,6 +1,7 @@
 local creature = require("core.creature")
 local level = require("level")
 local random = require("utils.random")
+local special = require("special")
 
 
 local module = {}
@@ -40,7 +41,10 @@ module.hand_attack = function(entity, state, target)
     attack_roll .. ", armor: " .. target:get_armor()
   )
 
-  if attack_roll < target:get_armor() then return false end
+  if attack_roll < target:get_armor() then
+    state:add(special.floating_damage("-", target.position))
+    return false
+  end
 
   local damage_roll
   if entity.inventory.main_hand then
@@ -53,6 +57,7 @@ module.hand_attack = function(entity, state, target)
 
   local damage = math.max(0, damage_roll)
   Log.info("damage: " .. damage)
+  state:add(special.floating_damage(damage, target.position))
 
   target.hp = target.hp - damage
   if target.hp <= 0 then

@@ -5,4 +5,5 @@ return {
   require("systems.input"),
   require("systems.ai"),
   require("systems.animation"),
+  require("systems.timed_death"),
 }
