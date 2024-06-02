@@ -143,4 +143,12 @@ module.smooth_wall = function()
   }
 end
 
+module.crooked_wall = function()
+  return {
+    sprite = {
+      image = love.graphics.newImage("assets/sprites/crooked_wall.png")
+    }
+  }
+end
+
 return module
