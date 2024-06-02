@@ -34,30 +34,41 @@ local get_modifier = function(ability_score)
 end
 
 -- TODO extract abstract shit
-module.get_turn_resources = function(creature)
-  return {
-    movement = 6,
-    actions = 1,
-  }
-end
-
--- TODO extract abstract shit
-module.creature = function()
-  return {
-    turn_resources = {
-      movement = 6,
-      actions = 1,
+module.creature = function(animation_pack)
+  local result = {
+    animation = {
+      pack = animation_pack,
     },
+    sprite = {},
     abilities = {
       strength = 10,
       dexterity = 10,
     },
-    direction = "right",
+
+    animate = function(self, animation_name)
+      self.animation.current = animation_name .. "_" .. (self.direction or "nil")
+      if not self.animation.pack[self.animation.current] then
+        self.animation.current = animation_name
+      end
+      self.animation.frame = 1
+    end,
 
     get_armor = function(self)
       return 10 + get_modifier(self.abilities.dexterity)
     end,
+
+    get_turn_resources = function(_)
+      return {
+        movement = 6,
+        actions = 1,
+      }
+    end
   }
+
+  result.turn_resources = result:get_turn_resources()
+  result:animate("idle")
+
+  return result
 end
 
 local move = function(direction_name)
@@ -136,15 +147,9 @@ end
 local player_character_pack = load_animation_pack("assets/sprites/player_character")
 
 module.player = function()
-  return common.extend(module.creature(), {
+  return common.extend(module.creature(player_character_pack), {
     name = "player",
-    sprite = {
-    },
-    animation = {
-      pack = player_character_pack,
-      current = "idle_right",
-      frame = 1,
-    },
+    direction = "right",
     ai = function(self, state)
       local action = hotkeys[self.last_pressed_key]
       self.last_pressed_key = nil
@@ -160,20 +165,9 @@ end
 local bat_pack = load_animation_pack("assets/sprites/bat")
 
 module.bat = function()
-  return common.extend(module.creature(), {
+  return common.extend(module.creature(bat_pack), {
     name = "bat",
     hp = 2,
-    sprite = {
-    },
-    animation = { -- TODO animation()
-      pack = bat_pack,
-      current = "idle",
-      frame = 1,
-    },
-    turn_resources = {
-      movement = 6,
-      actions = 1,
-    },
     ai = function(self, state)
       if random.chance(0.5) then
         return true
