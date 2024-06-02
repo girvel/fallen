@@ -70,7 +70,7 @@ local move = function(direction_name)
       entity.turn_resources.movement = entity.turn_resources.movement - 1
 
       if entity.animation then
-        entity.animation.current = "move_" .. direction_name
+        entity.animation.current = "move_" .. direction_name -- TODO something like animation:play
       end
     end
   end
@@ -117,7 +117,7 @@ local hotkeys = {
 local load_animation_pack = function(folder_path)
   local result = {}
   for _, file_name in ipairs(love.filesystem.getDirectoryItems(folder_path)) do
-    local i = file_name:find(".png$")
+    local i = file_name:find("%.png$")
     local frame_number = tonumber(file_name:sub(i - 2, i - 1))
     local animation_name
     if frame_number then
@@ -132,31 +132,6 @@ local load_animation_pack = function(folder_path)
   end
   return result
 end
-
-local player_character_pack = {
-  idle_up = {
-    love.graphics.newImage("assets/sprites/player_character/idle_up.png"),
-  },
-  idle_left = {
-    love.graphics.newImage("assets/sprites/player_character/idle_left.png"),
-  },
-  idle_down = {
-    love.graphics.newImage("assets/sprites/player_character/idle_down.png"),
-  },
-  idle_right = {
-    love.graphics.newImage("assets/sprites/player_character/idle_right.png"),
-  },
-  move_right = {
-    love.graphics.newImage("assets/sprites/player_character/move_right_01.png"),
-    love.graphics.newImage("assets/sprites/player_character/move_right_02.png"),
-    love.graphics.newImage("assets/sprites/player_character/move_right_03.png"),
-  },
-  move_down = {
-    love.graphics.newImage("assets/sprites/player_character/move_down_01.png"),
-    love.graphics.newImage("assets/sprites/player_character/move_down_02.png"),
-    love.graphics.newImage("assets/sprites/player_character/move_down_03.png"),
-  },
-}
 
 local player_character_pack = load_animation_pack("assets/sprites/player_character")
 
@@ -182,12 +157,18 @@ module.player = function()
   })
 end
 
+local bat_pack = load_animation_pack("assets/sprites/bat")
+
 module.bat = function()
   return common.extend(module.creature(), {
     name = "bat",
     hp = 2,
     sprite = {
-      image = love.graphics.newImage("assets/sprites/bat.png")
+    },
+    animation = { -- TODO animation()
+      pack = bat_pack,
+      current = "idle",
+      frame = 1,
     },
     turn_resources = {
       movement = 6,
