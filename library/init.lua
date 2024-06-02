@@ -96,10 +96,14 @@ module.bat = function()
   return common.extend(creature(bat_pack), {
     name = "bat",
     hp = 2,
-    ai = function(self, state)
-      if random.chance(0.5) then
+    ai = function(self, state, event)
+      local dt = unpack(event)
+      if not common.period(self, .25, dt) then return end
+
+      if random.chance(0.05) then
         return true
       end
+
       actions.move(random.choice({"up", "down", "left", "right"}))(self, state)
     end,
   })
