@@ -13,6 +13,10 @@ module_mt.__call = function(_, animation_pack)
       dexterity = 10,
     },
     direction = "right",
+    proficiency_bonus = 2,
+    inventory = {
+      bag = {},
+    },
 
     animate = function(self, animation_name)
       self.animation.current = animation_name .. "_" .. self.direction

@@ -1,4 +1,4 @@
-local level = require("level")
+local actions = require("core.actions")
 local random = require("utils.random")
 local common = require("utils.common")
 local creature = require("core.creature")
@@ -30,57 +30,18 @@ module.grass = function()
   }
 end
 
-local move = function(direction_name)
-  return function(entity, state)
-    entity.direction = direction_name
-    if (
-      entity.turn_resources.movement > 0 and
-      level.move(state.grids[entity.layer], entity, entity.position + Vector[direction_name])
-    ) then
-      entity.turn_resources.movement = entity.turn_resources.movement - 1
-
-      if entity.animation then
-        entity.animation.current = "move_" .. direction_name -- TODO something like animation:play
-      end
-    end
-  end
-end
-
-local hand_attack = function(entity, state, target)
-  if entity.turn_resources.actions <= 0 then return end
-  if not target or not target.hp then return end
-  entity.turn_resources.actions = entity.turn_resources.actions - 1
-
-  local attack_roll = random.d(20) + creature.get_modifier(entity.abilities.strength)
-  Log.info(
-    entity.name .. " attacks " .. target.name .. "; attack roll: " ..
-    attack_roll .. ", armor: " .. target:get_armor()
-  )
-
-  if attack_roll < target:get_armor() then return end
-
-  local damage = math.max(1, (entity.abilities.strength - 10) / 2)
-  Log.info("damage: " .. damage)
-
-  target.hp = target.hp - damage
-  if target.hp <= 0 then
-    state:remove(target)
-    Log.info(target.name .. " is killed")
-  end
-end
-
 local hotkeys = {
-  w = move("up"),
-  a = move("left"),
-  s = move("down"),
-  d = move("right"),
+  w = actions.move("up"),
+  a = actions.move("left"),
+  s = actions.move("down"),
+  d = actions.move("right"),
 
   space = function()
     return true
   end,
 
   f = function(entity, state)
-    return hand_attack(entity, state, state.grids.solids[entity.position + Vector.right])
+    return actions.hand_attack(entity, state, state.grids.solids[entity.position + Vector.right])
   end,
 }
 
@@ -106,7 +67,7 @@ end
 local player_character_pack = load_animation_pack("assets/sprites/player_character")
 
 module.player = function()
-  return common.extend(creature(player_character_pack), {
+  local result = common.extend(creature(player_character_pack), {
     name = "player",
     direction = "right",
     ai = function(self, state)
@@ -119,6 +80,14 @@ module.player = function()
       dexterity = 10,
     },
   })
+
+  result.main_hand = {
+    name = "dagger",
+    dice_sides = 4,
+    bonus = 1,
+  }
+
+  return result
 end
 
 local bat_pack = load_animation_pack("assets/sprites/bat")
@@ -131,7 +100,7 @@ module.bat = function()
       if random.chance(0.5) then
         return true
       end
-      move(random.choice({"up", "down", "left", "right"}))(self, state)
+      actions.move(random.choice({"up", "down", "left", "right"}))(self, state)
     end,
   })
 end
