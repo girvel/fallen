@@ -41,7 +41,7 @@ local hotkeys = {
   end,
 
   f = function(entity, state)
-    return actions.hand_attack(entity, state, state.grids.solids[entity.position + Vector.right])
+    return actions.hand_attack(entity, state, state.grids.solids[entity.position + Vector[entity.direction]])
   end,
 }
 
@@ -81,9 +81,9 @@ module.player = function()
     },
   })
 
-  result.main_hand = {
+  result.inventory.main_hand = {
     name = "dagger",
-    dice_sides = 4,
+    die_sides = 4,
     bonus = 1,
   }
 

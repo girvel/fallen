@@ -14,8 +14,8 @@ module.move = function(direction_name)
     ) then
       entity.turn_resources.movement = entity.turn_resources.movement - 1
 
-      if entity.animation then
-        entity.animation.current = "move_" .. direction_name -- TODO something like animation:play
+      if entity.animate then
+        entity:animate("move")
       end
     end
   end
@@ -26,7 +26,10 @@ module.hand_attack = function(entity, state, target)
   if not target or not target.hp then return end
   entity.turn_resources.actions = entity.turn_resources.actions - 1
 
-  local attack_roll = random.d(20) + creature.get_modifier(entity.abilities.strength)
+  local attack_roll = random.d(20)
+    + creature.get_modifier(entity.abilities.strength)
+    + entity.proficiency_bonus
+
   Log.info(
     entity.name .. " attacks " .. target.name .. "; attack roll: " ..
     attack_roll .. ", armor: " .. target:get_armor()
@@ -34,7 +37,15 @@ module.hand_attack = function(entity, state, target)
 
   if attack_roll < target:get_armor() then return end
 
-  local damage = math.max(1, (entity.abilities.strength - 10) / 2)
+  local damage_roll
+  if entity.inventory.main_hand then
+    damage_roll = random.d(entity.inventory.main_hand.die_sides)
+      + creature.get_modifier(entity.abilities.strength)
+      + entity.inventory.main_hand.bonus
+  else
+    damage_roll = creature.get_modifier(entity.abilities.strength)
+  end
+  local damage = math.max(1, damage_roll)
   Log.info("damage: " .. damage)
 
   target.hp = target.hp - damage
