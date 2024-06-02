@@ -5,7 +5,8 @@ local module = {}
 local module_mt = {}
 setmetatable(module, module_mt)
 
-local vector_mt = {}
+local vector_methods = {}
+local vector_mt = {__index = vector_methods}
 
 module_mt.__call = function(_, base_object)
   assert(#base_object == 2 and fun.iter(pairs(base_object)):length() == 2)
@@ -51,6 +52,10 @@ end
 
 vector_mt.__gt = function(self, other)
   return other < self
+end
+
+vector_methods.ceil = function(self)
+  return module({math.ceil(self[1]), math.ceil(self[2])})
 end
 
 return module

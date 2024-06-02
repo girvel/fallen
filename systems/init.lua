@@ -6,4 +6,5 @@ return {
   require("systems.ai"),
   require("systems.animation"),
   require("systems.timed_death"),
+  require("systems.drift"),
 }
