@@ -84,12 +84,14 @@ love.load = function()
     },
   })
 
-  local bat = state.grids.solids[Vector({9, 5})]
+  local bats = Fun.iter(pairs(state.grids.solids._inner_array))
+    :filter(function(e) return e and e.name == "bat" end)
+    :totable()
 
   state.move_order = {
     list = {
       state.player,
-      bat,
+      unpack(bats),
     },
     current_i = 1,
   }
