@@ -18,6 +18,9 @@ module.down = module({0, 1})
 module.left = module({-1, 0})
 module.right = module({1, 0})
 
+module.direction_names = {"up", "left", "down", "right"}
+module.directions = {module.up, module.left, module.down, module.right}
+
 vector_mt.__add = function(self, other)
   return module({self[1] + other[1], self[2] + other[2]})
 end

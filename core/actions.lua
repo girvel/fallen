@@ -22,8 +22,13 @@ module.move = function(direction_name)
 end
 
 module.hand_attack = function(entity, state, target)
-  if entity.turn_resources.actions <= 0 then return end
-  if not target or not target.hp then return end
+  if entity.turn_resources.actions <= 0
+    or not target
+    or not target.hp
+  then
+    return false
+  end
+
   entity.turn_resources.actions = entity.turn_resources.actions - 1
 
   local attack_roll = random.d(20)
@@ -35,7 +40,7 @@ module.hand_attack = function(entity, state, target)
     attack_roll .. ", armor: " .. target:get_armor()
   )
 
-  if attack_roll < target:get_armor() then return end
+  if attack_roll < target:get_armor() then return false end
 
   local damage_roll
   if entity.inventory.main_hand then
@@ -43,9 +48,10 @@ module.hand_attack = function(entity, state, target)
       + creature.get_modifier(entity.abilities.strength)
       + entity.inventory.main_hand.bonus
   else
-    damage_roll = creature.get_modifier(entity.abilities.strength)
+    damage_roll = creature.get_modifier(entity.abilities.strength) + 1
   end
-  local damage = math.max(1, damage_roll)
+
+  local damage = math.max(0, damage_roll)
   Log.info("damage: " .. damage)
 
   target.hp = target.hp - damage
@@ -53,6 +59,8 @@ module.hand_attack = function(entity, state, target)
     state:remove(target)
     Log.info(target.name .. " is killed")
   end
+
+  return true
 end
 
 return module

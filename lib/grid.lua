@@ -15,6 +15,11 @@ local grid_methods = {
   can_fit = function(self, v)
     return Vector.zero < v and self.size >= v
   end,
+
+  safe_get = function(self, v, default)
+    if not self:can_fit(v) then return default end
+    return self[v]
+  end,
 }
 
 grid_mt.__index = function(self, v)

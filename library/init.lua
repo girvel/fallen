@@ -69,6 +69,7 @@ local player_character_pack = load_animation_pack("assets/sprites/player_charact
 module.player = function()
   local result = common.extend(creature(player_character_pack), {
     name = "player",
+    hp = 5,
     direction = "right",
     ai = function(self, state)
       local action = hotkeys[self.last_pressed_key]
@@ -96,13 +97,19 @@ module.bat = function()
   return common.extend(creature(bat_pack), {
     name = "bat",
     hp = 2,
+    hungry = true,
     ai = function(self, state, event)
       local dt = unpack(event)
       if not common.period(self, .25, dt) then return end
       if not self._ai_coroutine then
         self._ai_coroutine = coroutine.create(self.async_ai)
       end
-      coroutine.resume(self._ai_coroutine, self, state)
+
+      local success, message = coroutine.resume(self._ai_coroutine, self, state)
+      if not success then
+        Log.error("Coroutine error: " .. message)
+      end
+
       if coroutine.status(self._ai_coroutine) == "dead" then
         self._ai_coroutine = nil
         return true
@@ -110,7 +117,18 @@ module.bat = function()
     end,
     async_ai = function(self, state)
       for _ in Fun.range(self.turn_resources.movement) do
-        actions.move(random.choice({"up", "down", "left", "right"}))(self, state)
+        if self.hungry then
+          local target = Fun.iter(Vector.directions)
+            :map(function(v) return state.grids.solids:safe_get(self.position + v) end)
+            :filter(function(e) return e and e.hp end)
+            :nth(1)
+
+          if target and actions.hand_attack(self, state, target) then
+            self.hungry = false
+          end
+        end
+
+        actions.move(random.choice(Vector.direction_names))(self, state)
         coroutine.yield()
       end
     end,
