@@ -99,12 +99,20 @@ module.bat = function()
     ai = function(self, state, event)
       local dt = unpack(event)
       if not common.period(self, .25, dt) then return end
-
-      if random.chance(0.05) then
+      if not self._ai_coroutine then
+        self._ai_coroutine = coroutine.create(self.async_ai)
+      end
+      coroutine.resume(self._ai_coroutine, self, state)
+      if coroutine.status(self._ai_coroutine) == "dead" then
+        self._ai_coroutine = nil
         return true
       end
-
-      actions.move(random.choice({"up", "down", "left", "right"}))(self, state)
+    end,
+    async_ai = function(self, state)
+      for _ in Fun.range(self.turn_resources.movement) do
+        actions.move(random.choice({"up", "down", "left", "right"}))(self, state)
+        coroutine.yield()
+      end
     end,
   })
 end
