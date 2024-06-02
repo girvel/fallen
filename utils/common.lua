@@ -7,4 +7,11 @@ module.extend = function(base, extension)
   return base
 end
 
+module.concat = function(base, extension)
+  for _, v in ipairs(extension) do
+    table.insert(base, v)
+  end
+  return base
+end
+
 return module
