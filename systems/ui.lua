@@ -9,7 +9,7 @@ return Tiny.system({
   update = function(_, state)
     local lines = {
       "Resources:",
-      "  Movement: " .. state.player.turn_resources.movement .. "/?",
+      "  Movement: " .. state.player.turn_resources.movement .. "/" .. state.player:get_turn_resources().movement,
       "  Actions: " .. state.player.turn_resources.actions,
     }
 
