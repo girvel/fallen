@@ -1,6 +1,7 @@
 local level = require("level")
 local random = require("utils.random")
 local common = require("utils.common")
+local creature = require("core.creature")
 
 
 local module = {}
@@ -29,48 +30,6 @@ module.grass = function()
   }
 end
 
-local get_modifier = function(ability_score)
-  return math.floor((ability_score - 10) / 2)
-end
-
--- TODO extract abstract shit
-module.creature = function(animation_pack)
-  local result = {
-    animation = {
-      pack = animation_pack,
-    },
-    sprite = {},
-    abilities = {
-      strength = 10,
-      dexterity = 10,
-    },
-
-    animate = function(self, animation_name)
-      self.animation.current = animation_name .. "_" .. (self.direction or "nil")
-      if not self.animation.pack[self.animation.current] then
-        self.animation.current = animation_name
-      end
-      self.animation.frame = 1
-    end,
-
-    get_armor = function(self)
-      return 10 + get_modifier(self.abilities.dexterity)
-    end,
-
-    get_turn_resources = function(_)
-      return {
-        movement = 6,
-        actions = 1,
-      }
-    end
-  }
-
-  result.turn_resources = result:get_turn_resources()
-  result:animate("idle")
-
-  return result
-end
-
 local move = function(direction_name)
   return function(entity, state)
     entity.direction = direction_name
@@ -92,7 +51,7 @@ local hand_attack = function(entity, state, target)
   if not target or not target.hp then return end
   entity.turn_resources.actions = entity.turn_resources.actions - 1
 
-  local attack_roll = random.d(20) + get_modifier(entity.abilities.strength)
+  local attack_roll = random.d(20) + creature.get_modifier(entity.abilities.strength)
   Log.info(
     entity.name .. " attacks " .. target.name .. "; attack roll: " ..
     attack_roll .. ", armor: " .. target:get_armor()
@@ -147,7 +106,7 @@ end
 local player_character_pack = load_animation_pack("assets/sprites/player_character")
 
 module.player = function()
-  return common.extend(module.creature(player_character_pack), {
+  return common.extend(creature(player_character_pack), {
     name = "player",
     direction = "right",
     ai = function(self, state)
@@ -165,7 +124,7 @@ end
 local bat_pack = load_animation_pack("assets/sprites/bat")
 
 module.bat = function()
-  return common.extend(module.creature(bat_pack), {
+  return common.extend(creature(bat_pack), {
     name = "bat",
     hp = 2,
     ai = function(self, state)
