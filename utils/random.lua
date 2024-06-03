@@ -5,11 +5,11 @@ module.chance = function(chance)
 end
 
 module.choice = function(list)
-	return list[math.ceil(math.random() * #list)]
+	return list[math.ceil(math.random(#list))]
 end
 
 module.d = function(sides)
-  return math.ceil(math.random() * sides)
+  return math.random(sides)
 end
 
 return module

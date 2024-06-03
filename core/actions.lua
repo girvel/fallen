@@ -32,7 +32,8 @@ module.hand_attack = function(entity, state, target)
 
   entity.turn_resources.actions = entity.turn_resources.actions - 1
 
-  local attack_roll = random.d(20)
+  local core_attack_roll = random.d(20)
+  local attack_roll = core_attack_roll
     + creature.get_modifier(entity.abilities.strength)
     + entity.proficiency_bonus
 
@@ -41,23 +42,37 @@ module.hand_attack = function(entity, state, target)
     attack_roll .. ", armor: " .. target:get_armor()
   )
 
-  if attack_roll < target:get_armor() then
+  local is_critical = core_attack_roll == 20 and attack_roll >= target:get_armor()
+
+  if attack_roll < target:get_armor() and core_attack_roll ~= 20 then
     state:add(special.floating_damage("-", target.position))
     return false
   end
 
   local damage_roll
   if entity.inventory.main_hand then
-    damage_roll = random.d(entity.inventory.main_hand.die_sides)
-      + creature.get_modifier(entity.abilities.strength)
-      + entity.inventory.main_hand.bonus
+    if is_critical then
+      damage_roll = random.d(entity.inventory.main_hand.die_sides)
+        + random.d(entity.inventory.main_hand.die_sides)
+        + creature.get_modifier(entity.abilities.strength)
+        + entity.inventory.main_hand.bonus
+    else
+      damage_roll = random.d(entity.inventory.main_hand.die_sides)
+        + creature.get_modifier(entity.abilities.strength)
+        + entity.inventory.main_hand.bonus
+    end
   else
     damage_roll = creature.get_modifier(entity.abilities.strength) + 1
   end
 
   local damage = math.max(0, damage_roll)
   Log.info("damage: " .. damage)
-  state:add(special.floating_damage(damage, target.position))
+
+  if is_critical then
+    state:add(special.floating_damage(damage .. "!", target.position))
+  else
+    state:add(special.floating_damage(damage, target.position))
+  end
 
   target.hp = target.hp - damage
   if target.hp <= 0 then
