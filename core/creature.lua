@@ -1,9 +1,12 @@
+local common = require("utils.common")
+
+
 local module = {}
 local module_mt = {}
 setmetatable(module, module_mt)
 
-module_mt.__call = function(_, animation_pack)
-  local result = {
+module_mt.__call = function(_, animation_pack, object)
+  local result = common.extend({
     animation = {
       pack = animation_pack,
     },
@@ -11,6 +14,7 @@ module_mt.__call = function(_, animation_pack)
     abilities = {
       strength = 10,
       dexterity = 10,
+      constitution = 10,
     },
     direction = "right",
     proficiency_bonus = 2,
@@ -37,9 +41,18 @@ module_mt.__call = function(_, animation_pack)
         bonus_actions = 1,
         reactions = 1,
       }
-    end
-  }
+    end,
 
+    get_max_hp = function(self)
+      assert(self.max_hp or self.class)
+      if self.max_hp then return self.max_hp end
+      local con_bonus = module.get_modifier(self.abilities.constitution)
+      return self.class.hp_die + con_bonus
+        + (self.level - 1) * (self.class.hp_die / 2 + 1 + con_bonus)
+      end,
+  }, object or {})
+
+  result.hp = result:get_max_hp()
   result.turn_resources = result:get_turn_resources()
   result:animate("idle")
 

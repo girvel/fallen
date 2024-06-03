@@ -10,7 +10,7 @@ return Tiny.system({
     local max = state.player:get_turn_resources()
 
     local lines = {
-      "HP: " .. state.player.hp .. "/?",
+      "HP: " .. state.player.hp .. "/" .. state.player:get_max_hp(),
       "",
       "Resources:",
       "  Movement: " .. state.player.turn_resources.movement .. "/" .. max.movement,

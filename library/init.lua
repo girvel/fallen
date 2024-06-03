@@ -3,6 +3,7 @@ local random = require("utils.random")
 local common = require("utils.common")
 local creature = require("core.creature")
 local mech = require("core.mech")
+local classes = require("core.classes")
 
 
 local module = {}
@@ -81,9 +82,10 @@ end
 local player_character_pack = load_animation_pack("assets/sprites/player_character")
 
 module.player = function()
-  local result = common.extend(creature(player_character_pack), {
+  local result = creature(player_character_pack, {
     name = "player",
-    hp = 5,
+    class = classes.rogue,
+    level = 1,
     direction = "right",
     ai = function(self, state)
       local action = hotkeys[self.last_pressed_key]
@@ -93,6 +95,7 @@ module.player = function()
     abilities = {
       strength = 12,
       dexterity = 10,
+      constitution = 14,
     },
   })
 
@@ -108,9 +111,9 @@ end
 local bat_pack = load_animation_pack("assets/sprites/bat")
 
 module.bat = function()
-  return common.extend(creature(bat_pack), {
+  return creature(bat_pack, {
     name = "bat",
-    hp = 200,
+    max_hp = 200,
     hungry = true,
     ai = function(self, state, event)
       local dt = unpack(event)
