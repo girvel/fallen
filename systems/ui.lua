@@ -9,15 +9,16 @@ return Tiny.system({
   update = function(_, state)
     local max = state.player:get_turn_resources()
 
-    local lines = {
-      "HP: " .. state.player.hp .. "/" .. state.player:get_max_hp(),
-      "",
-      "Resources:",
-      "  Movement: " .. state.player.turn_resources.movement .. "/" .. max.movement,
-      "  Actions: " .. state.player.turn_resources.actions .. "/" .. max.actions,
-      "  Bonus actions: " .. state.player.turn_resources.bonus_actions .. "/" .. max.bonus_actions,
-      "  Reactions: " .. state.player.turn_resources.reactions .. "/" .. max.reactions,
-    }
+    local lines = common.concat(
+      {
+        "HP: " .. state.player.hp .. "/" .. state.player:get_max_hp(),
+        "",
+        "Resources:",
+      },
+      Fun.iter(state.player.turn_resources)
+        :map(function(k, v) return "  " .. k .. ": " .. tostring(v) .. "/" .. tostring(max[k]) end)
+        :totable()
+    )
 
     if state.move_order then
       common.concat(lines, {

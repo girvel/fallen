@@ -16,16 +16,19 @@ module.roll = function(dice, bonus)
 end
 
 module_mt.__call = function(_, sides_n)
-  return module.roll({sides_n}, 0)
+  return module.roll({{sides_n = sides_n, advantage = false}}, 0)
 end
 
 d_mt.__add = function(self, other)
   if type(other) == "number" then
-    return module.roll({unpack(self.dice)}, self.bonus + other)
+    return module.roll(common.deep_copy(self.dice), self.bonus + other)
   end
 
   if type(other) == "table" then
-    return module.roll(common.concat({unpack(self.dice)}, other.dice), self.bonus + other.bonus)
+    return module.roll(
+      common.concat(common.deep_copy(self.dice), other.dice),
+      self.bonus + other.bonus
+    )
   end
 
   assert(false)
@@ -37,15 +40,52 @@ d_mt.__mul = function(self, other)
     Fun.iter(self.dice)
       :cycle()
       :take_n(#self.dice * other)
+      :map(function(d) return common.deep_copy(d) end)
       :totable(),
     self.bonus * other
   )
 end
 
+local roll_die = function(die)
+  if die.advantage then
+    return math.max(math.random(die.sides_n), math.random(die.sides_n))
+  end
+  return math.random(die.sides_n)
+end
+
 d_methods.roll = function(self)
+  local rolls = Fun.iter(self.dice)
+    :map(roll_die)
+    :totable()
+  local result = Fun.iter(rolls):sum() + self.bonus
+
+  Log.debug(
+    table.concat(
+      Fun.zip(self.dice, rolls)
+        :map(function(d, r) return r .. " (d" .. d.sides_n .. (d.advantage and ", Advantage" or "") .. ")" end)
+        :totable(),
+      " + "
+    ) .. " + " .. self.bonus .. " = " .. result
+  )
+
+  return result
+end
+
+d_methods.max = function(self)
   return Fun.iter(self.dice)
-    :map(function(sides) return math.random(sides) end)
+    :map(function(d) return d.sides_n end)
     :sum() + self.bonus
+end
+
+d_methods.with_advantage = function(self, value)
+  return module.roll(
+    Fun.iter(self.dice)
+      :map(function(x)
+        return common.extend(common.deep_copy(x), {advantage = value})
+      end)
+      :totable(),
+    self.bonus
+  )
 end
 
 return module

@@ -14,6 +14,26 @@ module.concat = function(base, extension)
   return base
 end
 
+module.deep_copy = function(o, seen)
+  seen = seen or {}
+  if o == nil then return nil end
+  if seen[o] then return seen[o] end
+
+  local no
+  if type(o) == 'table' then
+    no = {}
+    seen[o] = no
+
+    for k, v in next, o, nil do
+      no[module.deep_copy(k, seen)] = module.deep_copy(v, seen)
+    end
+    setmetatable(no, module.deep_copy(getmetatable(o), seen))
+  else
+    no = o
+  end
+  return no
+end
+
 module._periods = {}
 
 module.period = function(identifier, period, dt)

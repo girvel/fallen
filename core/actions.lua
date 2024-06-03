@@ -42,8 +42,10 @@ module.hand_attack = function(entity, state, target)
   end
 
   return mech.attack(
-    state, target,
-    D(20) + creature.get_modifier(entity.abilities.strength) + entity.proficiency_bonus,
+    entity, state, target,
+    D(20)
+      + creature.get_modifier(entity.abilities.strength)
+      + entity.proficiency_bonus,
     damage_roll
   )
 end
@@ -61,12 +63,25 @@ module.sneak_attack = function(entity, state, target)
   entity.turn_resources.actions = entity.turn_resources.actions - 1
 
   return mech.attack(
-    state, target,
+    entity, state, target,
     D(20) + creature.get_modifier(entity.abilities.strength) + entity.proficiency_bonus,
     entity.inventory.main_hand.damage_roll
       + D(6) * math.ceil(entity.level / 2)
       + creature.get_modifier(entity.abilities.strength)
   )
+end
+
+module.aim = function(entity)
+  if entity.turn_resources.bonus_actions <= 0
+    or entity.turn_resources.movement < 6 -- TODO magic constant
+  then
+    return false
+  end
+
+  entity.turn_resources.bonus_actions = entity.turn_resources.bonus_actions - 1
+  entity.turn_resources.movement = entity.turn_resources.movement - 6
+
+  entity.turn_resources.has_advantage = true
 end
 
 return module

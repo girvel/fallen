@@ -62,6 +62,10 @@ local hotkeys = {
         mech.damage(e, state, 1, false)
       end)
   end,
+
+  z = function(entity)
+    actions.aim(entity)
+  end,
 }
 
 local load_animation_pack = function(folder_path)

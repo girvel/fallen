@@ -4,11 +4,12 @@ local special = require("special")
 local module = {}
 
 --- Attacks with given attack/damage rolls
-module.attack = function(state, target, attack_roll, damage_roll)
-  local attack, is_nat = attack_roll:roll()
+module.attack = function(entity, state, target, attack_roll, damage_roll)
+  local attack = attack_roll:with_advantage(entity.turn_resources.has_advantage):roll()
+  local is_nat = attack == attack_roll:max()
 
   Log.info(
-    target.name .. " is attacked; attack roll: " ..
+    entity.name .. " attacks " .. target.name .. "; attack roll: " ..
     attack .. ", armor: " .. target:get_armor()
   )
 
