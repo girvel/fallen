@@ -2,6 +2,7 @@ local actions = require("core.actions")
 local random = require("utils.random")
 local common = require("utils.common")
 local creature = require("core.creature")
+local mech = require("core.mech")
 
 
 local module = {}
@@ -42,6 +43,19 @@ local hotkeys = {
 
   f = function(entity, state)
     actions.hand_attack(entity, state, state.grids.solids[entity.position + Vector[entity.direction]])
+  end,
+
+  q = function(entity, state)
+    if entity.turn_resources.bonus_actions <= 0 then return end
+    entity.turn_resources.bonus_actions = entity.turn_resources.bonus_actions - 1
+
+    Fun.iter(pairs(state.grids.solids._inner_array))
+      :filter(function(e)
+        return e and e.hp and e ~= entity and (e.position - entity.position):abs() <= 3
+      end)
+      :each(function(e)
+        mech.damage(e, state, 1, false)
+      end)
   end,
 }
 

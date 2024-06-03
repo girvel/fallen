@@ -7,12 +7,16 @@ return Tiny.system({
   base_callback = "draw",
 
   update = function(_, state)
+    local max = state.player:get_turn_resources()
+
     local lines = {
       "HP: " .. state.player.hp .. "/?",
       "",
       "Resources:",
-      "  Movement: " .. state.player.turn_resources.movement .. "/" .. state.player:get_turn_resources().movement,
-      "  Actions: " .. state.player.turn_resources.actions,
+      "  Movement: " .. state.player.turn_resources.movement .. "/" .. max.movement,
+      "  Actions: " .. state.player.turn_resources.actions .. "/" .. max.actions,
+      "  Bonus actions: " .. state.player.turn_resources.bonus_actions .. "/" .. max.bonus_actions,
+      "  Reactions: " .. state.player.turn_resources.reactions .. "/" .. max.reactions,
     }
 
     if state.move_order then

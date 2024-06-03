@@ -58,4 +58,8 @@ vector_methods.ceil = function(self)
   return module({math.ceil(self[1]), math.ceil(self[2])})
 end
 
+vector_methods.abs = function(self)
+  return math.abs(self[1]) + math.abs(self[2])
+end
+
 return module
