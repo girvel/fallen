@@ -1,4 +1,5 @@
 local common = require("utils.common")
+local library = require("library")
 
 
 local ui_font = love.graphics.newFont("assets/fonts/BigBlueTerm437NerdFontMono-Regular.ttf", 12)
@@ -37,8 +38,16 @@ return Tiny.system({
       )
     end
 
+    local potential_interaction = library.get_interactive(state.player, state)
+    if potential_interaction then
+      common.concat(lines, {
+        "",
+        "Press [E] to interact with " .. potential_interaction.name,
+      })
+    end
+
     for i, line in ipairs(lines) do
-      love.graphics.print(line, ui_font, 600, i * 15)
+      love.graphics.print(line, ui_font, 500, i * 15)
     end
   end,
 
