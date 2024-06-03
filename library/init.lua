@@ -101,9 +101,12 @@ module.player = function()
       if action ~= nil then return action(self, state) end
     end,
     abilities = {
-      strength = 12,
-      dexterity = 10,
+      strength = 8,
+      dexterity = 18,
       constitution = 14,
+      intelligence = 12,
+      wisdom = 12,
+      charisma = 11,
     },
   })
 
