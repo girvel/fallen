@@ -75,6 +75,7 @@ love.load = function()
     tiles = {
       _ = library.planks,
       [","] = library.grass,
+      ["c"] = library.scripture_straight,
     },
     solids = {
       ["#"] = library.wall,

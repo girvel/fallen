@@ -186,4 +186,12 @@ module.crooked_wall = function()
   }
 end
 
+module.scripture_straight = function()
+  return {
+    sprite = {
+      image = love.graphics.newImage("assets/sprites/scripture_straight.png")
+    }
+  }
+end
+
 return module
