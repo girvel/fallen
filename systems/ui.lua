@@ -6,7 +6,11 @@ local ui_font = love.graphics.newFont("assets/fonts/BigBlueTerm437NerdFontMono-R
 return Tiny.system({
   base_callback = "draw",
 
-  update = function(_, state)
+  update = function(self, state)
+    if state.player.reads then
+      return self.display_text(state.player.reads)
+    end
+
     local max = state.player:get_turn_resources()
 
     local lines = common.concat(
@@ -36,5 +40,12 @@ return Tiny.system({
     for i, line in ipairs(lines) do
       love.graphics.print(line, ui_font, 600, i * 15)
     end
+  end,
+
+  display_text = function(text)
+    local w = love.graphics.getWidth()
+
+    love.graphics.clear()
+    love.graphics.printf(text, ui_font, 20, 20, w - 40)
   end,
 })
