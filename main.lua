@@ -6,6 +6,7 @@ Log = require("lib.log")
 Grid = require("lib.grid")
 Inspect = require("lib.inspect")
 Fun = require("lib.fun")
+D = require("lib.d")
 require("lib.strong")
 
 local gamera = require("lib.gamera")

@@ -40,6 +40,7 @@ module_mt.__call = function(_, animation_pack, object)
         actions = 1,
         bonus_actions = 1,
         reactions = 1,
+        has_advantage = true,  -- TODO RM
       }
     end,
 

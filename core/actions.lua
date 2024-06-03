@@ -33,42 +33,40 @@ module.hand_attack = function(entity, state, target)
 
   entity.turn_resources.actions = entity.turn_resources.actions - 1
 
-  local core_attack_roll = random.d(20)
-  local attack_roll = core_attack_roll
-    + creature.get_modifier(entity.abilities.strength)
-    + entity.proficiency_bonus
+  local damage_roll
+  if entity.inventory.main_hand then
+    damage_roll = entity.inventory.main_hand.damage_roll
+      + creature.get_modifier(entity.abilities.strength)
+  else
+    damage_roll = D.roll({}, creature.get_modifier(entity.abilities.strength) + 1)
+  end
 
-  Log.info(
-    entity.name .. " attacks " .. target.name .. "; attack roll: " ..
-    attack_roll .. ", armor: " .. target:get_armor()
+  return mech.attack(
+    state, target,
+    D(20) + creature.get_modifier(entity.abilities.strength) + entity.proficiency_bonus,
+    damage_roll
   )
+end
 
-  local is_critical = core_attack_roll == 20 and attack_roll >= target:get_armor()
-
-  if attack_roll < target:get_armor() and core_attack_roll ~= 20 then
-    state:add(special.floating_damage("-", target.position))
+module.sneak_attack = function(entity, state, target)
+  if entity.turn_resources.actions <= 0
+    or not target
+    or not target.hp
+    or not entity.inventory.main_hand
+    or not entity.turn_resources.has_advantage
+  then
     return false
   end
 
-  local damage_roll
-  if entity.inventory.main_hand then
-    if is_critical then
-      damage_roll = random.d(entity.inventory.main_hand.die_sides)
-        + random.d(entity.inventory.main_hand.die_sides)
-        + creature.get_modifier(entity.abilities.strength)
-        + entity.inventory.main_hand.bonus
-    else
-      damage_roll = random.d(entity.inventory.main_hand.die_sides)
-        + creature.get_modifier(entity.abilities.strength)
-        + entity.inventory.main_hand.bonus
-    end
-  else
-    damage_roll = creature.get_modifier(entity.abilities.strength) + 1
-  end
+  entity.turn_resources.actions = entity.turn_resources.actions - 1
 
-  mech.damage(target, state, damage_roll, is_critical)
-
-  return true
+  return mech.attack(
+    state, target,
+    D(20) + creature.get_modifier(entity.abilities.strength) + entity.proficiency_bonus,
+    entity.inventory.main_hand.damage_roll
+      + D(6) * math.ceil(entity.level / 2)
+      + creature.get_modifier(entity.abilities.strength)
+  )
 end
 
 return module

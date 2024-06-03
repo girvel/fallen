@@ -46,6 +46,10 @@ local hotkeys = {
     actions.hand_attack(entity, state, state.grids.solids[entity.position + Vector[entity.direction]])
   end,
 
+  g = function(entity, state)
+    actions.sneak_attack(entity, state, state.grids.solids[entity.position + Vector[entity.direction]])
+  end,
+
   q = function(entity, state)
     if entity.turn_resources.bonus_actions <= 0 then return end
     entity.turn_resources.bonus_actions = entity.turn_resources.bonus_actions - 1
@@ -101,8 +105,7 @@ module.player = function()
 
   result.inventory.main_hand = {
     name = "dagger",
-    die_sides = 4,
-    bonus = 1,
+    damage_roll = D(4) + 1,
   }
 
   return result
