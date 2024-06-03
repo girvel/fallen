@@ -1,4 +1,5 @@
 local common = require("utils.common")
+local animated = require("animated")
 
 
 local module = {}
@@ -6,10 +7,7 @@ local module_mt = {}
 setmetatable(module, module_mt)
 
 module_mt.__call = function(_, animation_pack, object)
-  local result = common.extend({
-    animation = {
-      pack = animation_pack,
-    },
+  local result = common.extend(animated(animation_pack), {  -- consider moving to mixins and extracting animated
     sprite = {},
     abilities = {
       strength = 10,
@@ -22,19 +20,11 @@ module_mt.__call = function(_, animation_pack, object)
       bag = {},
     },
 
-    animate = function(self, animation_name)
-      self.animation.current = animation_name .. "_" .. self.direction
-      if not self.animation.pack[self.animation.current] then
-        self.animation.current = animation_name
-      end
-      self.animation.frame = 1
-    end,
-
     get_armor = function(self)
       return 10 + module.get_modifier(self.abilities.dexterity)
     end,
 
-    get_turn_resources = function(_)
+    get_turn_resources = function()
       return {
         movement = 6,
         actions = 1,

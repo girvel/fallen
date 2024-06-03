@@ -4,6 +4,7 @@ local common = require("utils.common")
 local creature = require("core.creature")
 local mech = require("core.mech")
 local classes = require("core.classes")
+local animated = require("animated")
 
 
 local module = {}
@@ -80,7 +81,7 @@ local hotkeys = {
     if not entity_to_interact then return end
     entity.turn_resources.bonus_actions = entity.turn_resources.bonus_actions - 1
 
-    entity_to_interact:interact(entity)
+    entity_to_interact:interact(entity, state)
   end,
 
   escape = function(entity)
@@ -202,11 +203,26 @@ module.crooked_wall = function()
   }
 end
 
+local highlight_pack = load_animation_pack("assets/sprites/highlight")
+
+module.highlight = function()
+  return common.extend(animated(highlight_pack), {layer = "sfx"})
+end
+
 module.scripture_straight = function()
   return {
     was_interacted_with = false,
-    interact = function(_, other)
+    interact = function(self, other, state)
       other.reads = "Hello, VSauce! Michael here.\n\nLorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
+
+      self.was_interacted_with = true
+      if self._highlight then
+        state:remove(self._highlight)
+        self._highlight = nil
+      end
+    end,
+    on_load = function(self, state)
+      self._highlight = state:add(common.extend(module.highlight(), {position = self.position}))
     end,
     sprite = {
       image = love.graphics.newImage("assets/sprites/scripture_straight.png")

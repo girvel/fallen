@@ -1,10 +1,12 @@
 local module = {}
 
-module.extend = function(base, extension)
+module.extend = function(base, extension, ...)
+  if extension == nil then return base end
+
   for k, v in pairs(extension) do
     base[k] = v
   end
-  return base
+  return module.extend(base, ...)
 end
 
 module.concat = function(base, extension)

@@ -62,6 +62,7 @@ love.load = function()
               if character == "@" then
                 self.player = e
               end
+              if e.on_load then e:on_load(self) end
             end
           end
         end
