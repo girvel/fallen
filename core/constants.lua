@@ -1,0 +1,3 @@
+return {
+  DEFAULT_MOVEMENT_SPEED = 6,
+}

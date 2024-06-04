@@ -1,5 +1,6 @@
 local common = require("utils.common")
 local animated = require("animated")
+local constants = require("core.constants")
 
 
 local module = {}
@@ -26,7 +27,7 @@ module_mt.__call = function(_, animation_pack, object)
 
     get_turn_resources = function()
       return {
-        movement = 6,
+        movement = constants.DEFAULT_MOVEMENT_SPEED,
         actions = 1,
         bonus_actions = 1,
         reactions = 1,

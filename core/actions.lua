@@ -1,6 +1,7 @@
 local creature = require("core.creature")
 local level = require("level")
 local mech = require("core.mech")
+local constants = require("core.constants")
 
 
 local module = {}
@@ -54,6 +55,7 @@ local get_melee_damage_roll = function(entity)
         entity.abilities.strength,
         entity.abilities.dexterity
       ))
+      + entity.inventory.main_hand.bonus
   end
 
   return entity.inventory.main_hand.damage_roll
@@ -106,13 +108,13 @@ end
 
 module.aim = function(entity)
   if entity.turn_resources.bonus_actions <= 0
-    or entity.turn_resources.movement < 6 -- TODO magic constant
+    or entity.turn_resources.movement < constants.DEFAULT_MOVEMENT_SPEED
   then
     return false
   end
 
   entity.turn_resources.bonus_actions = entity.turn_resources.bonus_actions - 1
-  entity.turn_resources.movement = entity.turn_resources.movement - 6
+  entity.turn_resources.movement = entity.turn_resources.movement - constants.DEFAULT_MOVEMENT_SPEED
 
   entity.turn_resources.has_advantage = true
 end
