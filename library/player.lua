@@ -88,7 +88,7 @@ module_mt.__call = function()
     name = "dagger",
     damage_roll = D(4),
     is_finesse = true,
-    bonus = 1,
+    bonus = 0,
   }
 
   return result

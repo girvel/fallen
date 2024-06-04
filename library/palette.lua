@@ -13,6 +13,7 @@ return {
     ["#"] = static.wall,
     ["%"] = static.crooked_wall,
     S = static.smooth_wall,
+    M = static.mannequin,
     ["@"] = player,
     b = mobs.bat,
     m = mobs.moose_dude,
