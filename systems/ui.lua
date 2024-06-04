@@ -60,9 +60,12 @@ return Tiny.system({
       })
     end
 
-    for i, line in ipairs(lines) do
-      love.graphics.print(line, ui_font, 500, i * 15)
-    end
+    local WIDTH = 300
+    love.graphics.printf(
+      table.concat(lines, "\n"), ui_font,
+      love.graphics.getWidth() - WIDTH, 15,
+      WIDTH - 15
+    )
   end,
 
   display_text = function(text)

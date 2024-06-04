@@ -23,6 +23,7 @@ love.load = function()
   state = stateful()
 	state.camera:setScale(2)
 	state.camera:setPosition(0, 0)
+  state.camera:setWindow(0, 0, 9999, 9999)
 
   state:load_level("assets/levels/demo.txt", palette)
 end
