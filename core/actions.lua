@@ -23,7 +23,6 @@ module.move = function(direction_name)
 end
 
 local get_melee_attack_roll = function(entity)
-  Log.trace(entity.inventory.main_hand)
   local roll = D(20) + entity.proficiency_bonus
 
   local weapon = entity.inventory.main_hand

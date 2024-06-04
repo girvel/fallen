@@ -1,17 +1,19 @@
-local library = require("library")
+local static = require("library.static")
+local player = require("library.player")
+local mobs = require("library.mobs")
 
 
 return {
   tiles = {
-    _ = library.planks,
-    [","] = library.grass,
-    ["c"] = library.scripture_straight,
+    _ = static.planks,
+    [","] = static.grass,
+    ["c"] = static.scripture_straight,
   },
   solids = {
-    ["#"] = library.wall,
-    ["%"] = library.crooked_wall,
-    S = library.smooth_wall,
-    ["@"] = library.player,
-    b = library.bat,
+    ["#"] = static.wall,
+    ["%"] = static.crooked_wall,
+    S = static.smooth_wall,
+    ["@"] = player,
+    b = mobs.bat,
   },
 }
