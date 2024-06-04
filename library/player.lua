@@ -3,7 +3,7 @@ local mech = require("core.mech")
 local classes = require("core.classes")
 local animated = require("tech.animated")
 local creature = require("core.creature")
-local interactive = require("library.interactive")
+local interactive = require("tech.interactive")
 
 
 local module_mt = {}

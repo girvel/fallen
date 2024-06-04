@@ -1,5 +1,5 @@
 local common = require("utils.common")
-local interactive = require("library.interactive")
+local interactive = require("tech.interactive")
 
 
 local ui_font = love.graphics.newFont("assets/fonts/joystix.monospace-regular.otf", 12)

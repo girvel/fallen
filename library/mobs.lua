@@ -3,6 +3,7 @@ local random = require("utils.random")
 local common = require("utils.common")
 local creature = require("core.creature")
 local animated = require("tech.animated")
+local interactive = require("tech.interactive")
 
 
 local module = {}
@@ -69,6 +70,24 @@ module.barrel_dude = function()
     name = "barrel dude",
     max_hp = 15,
   })
+end
+
+local exploding_dude_pack = animated.load_pack("assets/sprites/exploding_dude")
+
+module.exploding_dude = function()
+  return common.extend(
+    animated(exploding_dude_pack),
+    interactive(function(self, _, state)
+      self.interact = nil
+      self:animate("explode")
+      self:when_animation_ends(function()
+        state:remove(self)
+      end)
+    end),
+    {
+      name = "exploding dude",
+    }
+  )
 end
 
 return module
