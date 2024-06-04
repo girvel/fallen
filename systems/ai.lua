@@ -2,9 +2,15 @@ return Tiny.processingSystem({
   filter = Tiny.requireAll("ai"),
   base_callback = "update",
   process = function(_, entity, state, event)
-    if not state.move_order then
+    if not state.move_order or #state.move_order.list <= 1 then
+      state.move_order = nil
       entity:ai(state, event)
       entity.turn_resources = entity:get_turn_resources()
+      return
+    end
+
+    if #state.move_order.list <= 1 then
+      state.move_order = nil
       return
     end
 

@@ -29,9 +29,7 @@ module_mt.__call = function()
       end
 
       if self.move_order then
-        self.move_order.list = Fun.iter(self.move_order.list)
-          :filter(function(e) return e ~= entity end)
-          :totable()
+        self.move_order:remove(entity)
       end
     end,
 

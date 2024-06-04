@@ -5,6 +5,7 @@ local creature = require("core.creature")
 local animated = require("tech.animated")
 local interactive = require("tech.interactive")
 local special = require("tech.special")
+local turn_order = require("tech.turn_order")
 
 
 local module = {}
@@ -84,11 +85,31 @@ local exploding_dude_pack = animated.load_pack("assets/sprites/exploding_dude")
 module.exploding_dude = function()
   return common.extend(
     animated(exploding_dude_pack),
-    interactive(function(self, _, state)
+    interactive(function(self, other, state)
       self.interact = nil
       self:animate("explode")
       self:when_animation_ends(function()
         state:remove(self)
+
+        local bats = {}
+        for _ = 1, 3 do
+          local v
+          for _ = 1, 1000 do
+            v = self.position + Vector({
+              math.random(11) - 6,
+              math.random(11) - 6,
+            })
+            if state.grids.solids:safe_get(v) == nil then break end
+          end
+
+          local bat = state:add(common.extend(module.bat(), {position = v}))
+          bat:animate("appear")
+          table.insert(bats, bat)
+        end
+
+        bats[#bats]:when_animation_ends(function()
+          state.move_order = turn_order(common.concat(bats, {other}))
+        end)
       end)
     end),
     {

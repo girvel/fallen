@@ -20,6 +20,7 @@ module_mt.__call = function(_, animation_pack, object)
     inventory = {
       bag = {},
     },
+    layer = "solids",
 
     get_armor = function(self)
       return 10 + module.get_modifier(self.abilities.dexterity)
