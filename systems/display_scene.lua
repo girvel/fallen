@@ -1,5 +1,5 @@
 local CELL_DISPLAY_SIZE = 16
-local default_font = love.graphics.newFont("assets/fonts/BigBlueTerm437NerdFontMono-Regular.ttf", 7)
+local default_font = love.graphics.newFont("assets/fonts/joystix.monospace-regular.otf", 7)
 
 return Tiny.processingSystem({
   filter = function(_, e) return e.sprite and (e.position or e.off_grid_position) end,

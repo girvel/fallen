@@ -19,15 +19,15 @@ local hotkeys = {
     return true
   end,
 
-  f = function(entity, state)
+  ["1"] = function(entity, state)
     actions.hand_attack(entity, state, state.grids.solids[entity.position + Vector[entity.direction]])
   end,
 
-  g = function(entity, state)
+  ["5"] = function(entity, state)
     actions.sneak_attack(entity, state, state.grids.solids[entity.position + Vector[entity.direction]])
   end,
 
-  q = function(entity, state)
+  ["3"] = function(entity, state)
     if entity.turn_resources.bonus_actions <= 0 then return end
     entity.turn_resources.bonus_actions = entity.turn_resources.bonus_actions - 1
 
@@ -40,7 +40,7 @@ local hotkeys = {
       end)
   end,
 
-  z = function(entity)
+  ["4"] = function(entity)
     actions.aim(entity)
   end,
 

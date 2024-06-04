@@ -2,7 +2,7 @@ local common = require("utils.common")
 local interactive = require("library.interactive")
 
 
-local ui_font = love.graphics.newFont("assets/fonts/BigBlueTerm437NerdFontMono-Regular.ttf", 12)
+local ui_font = love.graphics.newFont("assets/fonts/joystix.monospace-regular.otf", 12)
 
 return Tiny.system({
   base_callback = "draw",
@@ -36,7 +36,20 @@ return Tiny.system({
         :map(function(i, e) return (state.move_order.current_i == i and "x " or "- ") .. (e.name or "_") end)
         :totable()
       )
+
+      common.concat(lines, {
+        "",
+        "Space - закончить ход",
+      })
     end
+
+    common.concat(lines, {
+      "1 - атака рукой",
+      "2 - ничего не делать",
+      "3 - отравляющая тирада",
+      "4 - прицелиться",
+      "5 - мощная атака",
+    })
 
     local potential_interaction = interactive.get_for(state.player, state)
     if potential_interaction then

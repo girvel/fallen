@@ -4,7 +4,7 @@ local common = require("utils.common")
 
 local module = {}
 
-local font = love.graphics.newFont("assets/fonts/BigBlueTerm437NerdFontMono-Regular.ttf", 7)
+local font = love.graphics.newFont("assets/fonts/joystix.monospace-regular.otf", 7)
 
 module.floating_damage = function(number, position)
   return {
