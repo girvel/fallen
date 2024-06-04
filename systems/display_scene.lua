@@ -10,24 +10,25 @@ return Tiny.processingSystem({
   end,
 
   process = function(_, entity, state)
+    if entity.off_grid_position then
+      local position = Vector({state.camera:toScreen(unpack(entity.off_grid_position))})
+        + Vector({
+          CELL_DISPLAY_SIZE - default_font:getWidth(entity.sprite.text),
+          CELL_DISPLAY_SIZE - default_font:getHeight(),
+        }) / 2
+
+      love.graphics.print(
+        {entity.sprite.color, entity.sprite.text},
+        entity.sprite.font or default_font,
+        unpack(position)
+      )
+
+      return
+    end
+
 		state.camera:draw(function()
-			local scaled_position = (entity.off_grid_position
-        or (entity.position - Vector({1, 1})) * CELL_DISPLAY_SIZE):ceil()
-
-			if entity.sprite.text then
-				scaled_position = scaled_position + Vector({
-					CELL_DISPLAY_SIZE - default_font:getWidth(entity.sprite.text),
-					CELL_DISPLAY_SIZE - default_font:getHeight(),
-				}) / 2
-
-				love.graphics.print(
-          {entity.sprite.color, entity.sprite.text},
-          entity.sprite.font or default_font,
-          unpack(scaled_position)
-        )
-			else
-				love.graphics.draw(entity.sprite.image, unpack(scaled_position))
-			end
+			local scaled_position = ((entity.position - Vector({1, 1})) * CELL_DISPLAY_SIZE):ceil()
+      love.graphics.draw(entity.sprite.image, unpack(scaled_position))
 		end)
   end,
 })

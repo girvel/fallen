@@ -4,6 +4,7 @@ local common = require("utils.common")
 local creature = require("core.creature")
 local animated = require("tech.animated")
 local interactive = require("tech.interactive")
+local special = require("tech.special")
 
 
 local module = {}
@@ -57,10 +58,16 @@ end
 local moose_dude_pack = animated.load_pack("assets/sprites/moose_dude")
 
 module.moose_dude = function()
-  return creature(moose_dude_pack, {
-    name = "moose dude",
-    max_hp = 10,
-  })
+  return common.extend(
+    creature(moose_dude_pack, {
+      name = "moose dude",
+      max_hp = 10,
+    }),
+    interactive(function(self, _, state)
+      state:add(special.floating_line("//Видят//Ждут//", self.position))
+      self.interact = nil
+    end)
+  )
 end
 
 local barrel_dude_pack = animated.load_pack("assets/sprites/barrel_dude")
