@@ -1,4 +1,5 @@
 local common = require("utils.common")
+local sfx = require("library.sfx")
 
 
 local module = {}
@@ -26,7 +27,7 @@ module.scripture_straight = function()
       end
     end,
     on_load = function(self, state)
-      self._highlight = state:add(common.extend(module.highlight(), {position = self.position}))
+      self._highlight = state:add(common.extend(sfx.highlight(), {position = self.position}))
     end,
     sprite = {
       image = love.graphics.newImage("assets/sprites/scripture_straight.png")

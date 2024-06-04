@@ -51,4 +51,22 @@ module.bat = function()
   })
 end
 
+local moose_dude_pack = animated.load_pack("assets/sprites/moose_dude")
+
+module.moose_dude = function()
+  return creature(moose_dude_pack, {
+    name = "moose dude",
+    max_hp = 10,
+  })
+end
+
+local barrel_dude_pack = animated.load_pack("assets/sprites/barrel_dude")
+
+module.barrel_dude = function()
+  return creature(barrel_dude_pack, {
+    name = "barrel dude",
+    max_hp = 15,
+  })
+end
+
 return module

@@ -1,13 +1,14 @@
 local static = require("library.static")
 local player = require("library.player")
 local mobs = require("library.mobs")
+local interactive = require("library.interactive")
 
 
 return {
   tiles = {
     _ = static.planks,
     [","] = static.grass,
-    ["c"] = static.scripture_straight,
+    ["c"] = interactive.scripture_straight,
   },
   solids = {
     ["#"] = static.wall,
@@ -15,5 +16,6 @@ return {
     S = static.smooth_wall,
     ["@"] = player,
     b = mobs.bat,
+    m = mobs.moose_dude,
   },
 }
