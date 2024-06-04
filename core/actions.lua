@@ -1,7 +1,5 @@
 local creature = require("core.creature")
 local level = require("level")
-local random = require("utils.random")
-local special = require("special")
 local mech = require("core.mech")
 
 
@@ -23,6 +21,45 @@ module.move = function(direction_name)
   end
 end
 
+local get_melee_attack_roll = function(entity)
+  Log.trace(entity.inventory.main_hand)
+  local roll = D(20) + entity.proficiency_bonus
+
+  local weapon = entity.inventory.main_hand
+  if not weapon then
+    return roll + creature.get_modifier(entity.abilities.strength)
+  end
+
+  roll = roll + weapon.bonus
+  if weapon.is_finesse then
+    roll = roll + creature.get_modifier(math.max(
+      entity.abilities.strength,
+      entity.abilities.dexterity
+    ))
+  else
+    roll = roll + creature.get_modifier(entity.abilities.strength)
+  end
+
+  return roll
+end
+
+local get_melee_damage_roll = function(entity)
+  if not entity.inventory.main_hand then
+    return D.roll({}, creature.get_modifier(entity.abilities.strength) + 1)
+  end
+
+  if entity.inventory.main_hand.is_finesse then
+    return entity.inventory.main_hand.damage_roll
+      + creature.get_modifier(math.max(
+        entity.abilities.strength,
+        entity.abilities.dexterity
+      ))
+  end
+
+  return entity.inventory.main_hand.damage_roll
+    + creature.get_modifier(entity.abilities.strength)
+end
+
 module.hand_attack = function(entity, state, target)
   if entity.turn_resources.actions <= 0
     or not target
@@ -34,21 +71,11 @@ module.hand_attack = function(entity, state, target)
   entity.turn_resources.actions = entity.turn_resources.actions - 1
 
   entity:animate("attack")
-  entity:when_ends(function()
-    local damage_roll
-    if entity.inventory.main_hand then
-      damage_roll = entity.inventory.main_hand.damage_roll
-        + creature.get_modifier(entity.abilities.strength)
-    else
-      damage_roll = D.roll({}, creature.get_modifier(entity.abilities.strength) + 1)
-    end
-
+  entity:when_animation_ends(function()
     mech.attack(
       entity, state, target,
-      D(20)
-        + creature.get_modifier(entity.abilities.strength)
-        + entity.proficiency_bonus,
-      damage_roll
+      get_melee_attack_roll(entity),
+      get_melee_damage_roll(entity)
     )
   end)
 end
@@ -58,6 +85,7 @@ module.sneak_attack = function(entity, state, target)
     or not target
     or not target.hp
     or not entity.inventory.main_hand
+    or not entity.inventory.main_hand.is_finesse
     or not entity.turn_resources.has_advantage
   then
     return false
@@ -65,13 +93,15 @@ module.sneak_attack = function(entity, state, target)
 
   entity.turn_resources.actions = entity.turn_resources.actions - 1
 
-  return mech.attack(
-    entity, state, target,
-    D(20) + creature.get_modifier(entity.abilities.strength) + entity.proficiency_bonus,
-    entity.inventory.main_hand.damage_roll
-      + D(6) * math.ceil(entity.level / 2)
-      + creature.get_modifier(entity.abilities.strength)
-  )
+  entity:animate("attack")
+  entity:when_animation_ends(function()
+    mech.attack(
+      entity, state, target,
+      get_melee_attack_roll(entity),
+      get_melee_damage_roll(entity)
+        + D(6) * math.ceil(entity.level / 2)
+    )
+  end)
 end
 
 module.aim = function(entity)

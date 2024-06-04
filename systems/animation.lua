@@ -11,9 +11,9 @@ return Tiny.processingSystem({
     if not animation.pack[animation.current] or math.floor(animation.frame) > #animation.pack[animation.current] then
       entity:animate("idle")
 
-      if entity._on_end then
-        entity:_on_end()
-        entity._on_end = nil
+      if entity._on_animation_end then
+        entity:_on_animation_end()
+        entity._on_animation_end = nil
       end
     end
 

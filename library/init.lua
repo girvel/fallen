@@ -138,7 +138,9 @@ module.player = function()
 
   result.inventory.main_hand = {
     name = "dagger",
-    damage_roll = D(4) + 1,
+    damage_roll = D(4),
+    is_finesse = true,
+    bonus = 1,
   }
 
   return result
