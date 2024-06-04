@@ -17,5 +17,6 @@ return {
     ["@"] = player,
     b = mobs.bat,
     m = mobs.moose_dude,
+    e = interactive.exploding_dude,
   },
 }
