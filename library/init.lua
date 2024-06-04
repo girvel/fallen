@@ -4,7 +4,7 @@ local common = require("utils.common")
 local creature = require("core.creature")
 local mech = require("core.mech")
 local classes = require("core.classes")
-local animated = require("animated")
+local animated = require("tech.animated")
 
 
 local module = {}

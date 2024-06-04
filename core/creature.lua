@@ -1,5 +1,5 @@
 local common = require("utils.common")
-local animated = require("animated")
+local animated = require("tech.animated")
 local constants = require("core.constants")
 
 

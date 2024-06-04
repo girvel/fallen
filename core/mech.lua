@@ -1,4 +1,4 @@
-local special = require("special")
+local special = require("tech.special")
 
 
 local module = {}

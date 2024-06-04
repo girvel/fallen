@@ -1,5 +1,5 @@
 local creature = require("core.creature")
-local level = require("level")
+local level = require("tech.level")
 local mech = require("core.mech")
 local constants = require("core.constants")
 
