@@ -1,0 +1,14 @@
+name: "Autoset project"
+
+on:
+  issues:
+    types: ["labeled", "milestoned"]
+
+jobs:
+  add-to-project:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/add-to-project@v0.5.0
+      with:
+        project-url: https://github.com/users/girvel/projects/3
+        github-token: ${{ secrets.ADD_TO_PROJECT_PAT }}
