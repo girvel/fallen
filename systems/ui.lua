@@ -18,7 +18,7 @@ return Tiny.system({
       {
         "HP: " .. state.player.hp .. "/" .. state.player:get_max_hp(),
         "",
-        "Resources:",
+        "Ресурсы:",
       },
       Fun.iter(state.player.turn_resources)
         :map(function(k, v) return "  " .. k .. ": " .. tostring(v) .. "/" .. tostring(max[k]) end)
@@ -28,7 +28,7 @@ return Tiny.system({
     if state.move_order then
       common.concat(lines, {
         "",
-        "Move order:",
+        "Очередь ходов:",
       })
 
       common.concat(lines, Fun.iter(state.move_order.list)
@@ -44,6 +44,7 @@ return Tiny.system({
     end
 
     common.concat(lines, {
+      "",
       "1 - атака рукой",
       "2 - ничего не делать",
       "3 - отравляющая тирада",
