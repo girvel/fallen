@@ -25,18 +25,6 @@ love.load = function()
 	state.camera:setPosition(0, 0)
 
   state:load_level("assets/levels/demo.txt", palette)
-
-  local bats = Fun.iter(pairs(state.grids.solids._inner_array))
-    :filter(function(e) return e and e.name == "bat" end)
-    :totable()
-
-  state.move_order = {
-    list = {
-      state.player,
-      unpack(bats),
-    },
-    current_i = 1,
-  }
 end
 
 for _, callback_name in ipairs({"draw", "keypressed", "update"}) do

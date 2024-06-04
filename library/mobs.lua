@@ -15,6 +15,8 @@ module.bat = function()
     max_hp = 3,
     hungry = true,
     ai = function(self, state, event)
+      if not state.move_order then return end
+
       local dt = unpack(event)
       if not common.period(self, .25, dt) then return end
       if not self._ai_coroutine then

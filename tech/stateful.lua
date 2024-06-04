@@ -28,9 +28,11 @@ module_mt.__call = function()
         self.grids[entity.layer][entity.position] = nil
       end
 
-      self.move_order.list = Fun.iter(self.move_order.list)
-        :filter(function(e) return e ~= entity end)
-        :totable()
+      if self.move_order then
+        self.move_order.list = Fun.iter(self.move_order.list)
+          :filter(function(e) return e ~= entity end)
+          :totable()
+      end
     end,
 
     load_level = function(self, path, palette)
