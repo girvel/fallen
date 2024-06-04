@@ -33,21 +33,24 @@ module.hand_attack = function(entity, state, target)
 
   entity.turn_resources.actions = entity.turn_resources.actions - 1
 
-  local damage_roll
-  if entity.inventory.main_hand then
-    damage_roll = entity.inventory.main_hand.damage_roll
-      + creature.get_modifier(entity.abilities.strength)
-  else
-    damage_roll = D.roll({}, creature.get_modifier(entity.abilities.strength) + 1)
-  end
+  entity:animate("attack")
+  entity:when_ends(function()
+    local damage_roll
+    if entity.inventory.main_hand then
+      damage_roll = entity.inventory.main_hand.damage_roll
+        + creature.get_modifier(entity.abilities.strength)
+    else
+      damage_roll = D.roll({}, creature.get_modifier(entity.abilities.strength) + 1)
+    end
 
-  return mech.attack(
-    entity, state, target,
-    D(20)
-      + creature.get_modifier(entity.abilities.strength)
-      + entity.proficiency_bonus,
-    damage_roll
-  )
+    mech.attack(
+      entity, state, target,
+      D(20)
+        + creature.get_modifier(entity.abilities.strength)
+        + entity.proficiency_bonus,
+      damage_roll
+    )
+  end)
 end
 
 module.sneak_attack = function(entity, state, target)

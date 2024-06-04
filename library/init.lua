@@ -149,7 +149,7 @@ local bat_pack = load_animation_pack("assets/sprites/bat")
 module.bat = function()
   return creature(bat_pack, {
     name = "bat",
-    max_hp = 200,
+    max_hp = 3,
     hungry = true,
     ai = function(self, state, event)
       local dt = unpack(event)
