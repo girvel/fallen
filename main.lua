@@ -8,10 +8,10 @@ Inspect = require("lib.inspect")
 Fun = require("lib.fun")
 D = require("lib.d")
 require("lib.strong")
+Gamera = require("lib.gamera")
 
-local gamera = require("lib.gamera")
-local common = require("utils.common")
-local library = require("library")
+local palette = require("library.palette")
+local stateful = require("tech.stateful")
 
 
 local state
@@ -20,72 +20,11 @@ love.load = function()
 
   math.randomseed(os.time())
 
-  local GRID_LAYERS = {"tiles", "solids", "sfx"}
-
-	state = {
-    -- grids
-		camera = gamera.new(0, 0, 9999, 9999),
-    world = Tiny.world(unpack(require("systems"))),
-
-    add = function(self, entity)
-      self.world:add(entity)
-      if entity.position then
-        self.grids[entity.layer][entity.position] = entity
-      end
-      return entity
-    end,
-
-    remove = function(self, entity)
-      self.world:remove(entity)
-
-      if entity.position then
-        self.grids[entity.layer][entity.position] = nil
-      end
-
-      self.move_order.list = Fun.iter(self.move_order.list)
-        :filter(function(e) return e ~= entity end)
-        :totable()
-    end,
-
-    load_level = function(self, path, scheme)
-      local level_lines = love.filesystem.read(path):split("\n")
-      self.grids = Fun.iter(GRID_LAYERS)
-        :map(function(layer) return layer, Grid(Vector({#level_lines[1], #level_lines})) end)
-        :tomap()
-
-      for _, layer in ipairs(GRID_LAYERS) do
-        for y, line in ipairs(level_lines) do
-          for _, x, character in Fun.iter(line):enumerate() do
-            local factory = (scheme[layer] or {})[character]
-            if factory then
-              local e = self:add(common.extend(factory(), {position = Vector({x, y}), layer = layer}))
-              if character == "@" then
-                self.player = e
-              end
-              if e.on_load then e:on_load(self) end
-            end
-          end
-        end
-      end
-    end,
-	}
+  state = stateful()
 	state.camera:setScale(2)
 	state.camera:setPosition(0, 0)
 
-  state:load_level("assets/levels/demo.txt", {
-    tiles = {
-      _ = library.planks,
-      [","] = library.grass,
-      ["c"] = library.scripture_straight,
-    },
-    solids = {
-      ["#"] = library.wall,
-      ["%"] = library.crooked_wall,
-      S = library.smooth_wall,
-      ["@"] = library.player,
-      b = library.bat,
-    },
-  })
+  state:load_level("assets/levels/demo.txt", palette)
 
   local bats = Fun.iter(pairs(state.grids.solids._inner_array))
     :filter(function(e) return e and e.name == "bat" end)
