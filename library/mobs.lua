@@ -59,7 +59,7 @@ local moose_dude_pack = animated.load_pack("assets/sprites/moose_dude")
 module.moose_dude = function()
   return common.extend(
     creature(moose_dude_pack, {
-      name = "moose dude",
+      name = "silent figure",
       max_hp = 10,
     }),
     interactive(function(self, _, state)
@@ -73,7 +73,7 @@ local barrel_dude_pack = animated.load_pack("assets/sprites/barrel_dude")
 
 module.barrel_dude = function()
   return creature(barrel_dude_pack, {
-    name = "barrel dude",
+    name = "silent figure",
     max_hp = 15,
   })
 end
@@ -111,7 +111,7 @@ module.exploding_dude = function()
       end)
     end),
     {
-      name = "exploding dude",
+      name = "silent figure",
     }
   )
 end

@@ -41,8 +41,8 @@ module.planks = function()
   return static("assets/sprites/planks.png")
 end
 
-module.grass = function()
-  return static("assets/sprites/grass.png")
+module.bushes = function()
+  return static("assets/sprites/bushes.png")
 end
 
 module.smooth_wall = function()
