@@ -109,13 +109,22 @@ module.aim = function(entity)
   if entity.turn_resources.bonus_actions <= 0
     or entity.turn_resources.movement < constants.DEFAULT_MOVEMENT_SPEED
   then
-    return false
+    return
   end
 
   entity.turn_resources.bonus_actions = entity.turn_resources.bonus_actions - 1
   entity.turn_resources.movement = entity.turn_resources.movement - constants.DEFAULT_MOVEMENT_SPEED
 
   entity.turn_resources.has_advantage = true
+end
+
+module.dash = function(entity)
+  if entity.turn_resources.actions <= 0 then
+    return
+  end
+
+  entity.turn_resources.actions = entity.turn_resources.actions - 1
+  entity.turn_resources.movement = entity.turn_resources.movement + entity:get_turn_resources().movement
 end
 
 return module

@@ -45,11 +45,16 @@ local hotkeys = {
   end,
 
   e = function(entity, state)
+    -- TODO action
     if entity.turn_resources.bonus_actions <= 0 then return end
     local entity_to_interact = interactive.get_for(entity, state)
     if not entity_to_interact then return end
     entity.turn_resources.bonus_actions = entity.turn_resources.bonus_actions - 1
     entity_to_interact:interact(entity, state)
+  end,
+
+  z = function(entity, state)
+    actions.dash(entity)
   end,
 
   escape = function(entity)

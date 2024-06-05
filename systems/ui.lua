@@ -50,6 +50,7 @@ return Tiny.system({
       "3 - отравляющая тирада",
       "4 - прицелиться",
       "5 - мощная атака",
+      "z - рывок",
     })
 
     local potential_interaction = interactive.get_for(state.player, state)
