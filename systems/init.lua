@@ -1,6 +1,7 @@
 return {
   -- TODO group by callback & period
   require("systems.display_scene"),
+  require("systems.display_off_grid"),
   require("systems.ui"),
   require("systems.input"),
   require("systems.ai"),
