@@ -16,7 +16,7 @@ module.bat = function()
   return creature(bat_pack, {
     name = "bat",
     max_hp = 3,
-    hungry = true,
+    faction = "monster",
     ai = function(self, state, event)
       if not state.move_order then return end
 
@@ -44,9 +44,7 @@ module.bat = function()
             :filter(function(e) return e and e.hp end)
             :nth(1)
 
-          if target and actions.hand_attack(self, state, target) then
-            self.hungry = false
-          end
+          if target then actions.hand_attack(self, state, target) end
         end
 
         actions.move(random.choice(Vector.direction_names))(self, state)

@@ -21,6 +21,16 @@ module.right = module({1, 0})
 
 module.direction_names = {"up", "left", "down", "right"}
 module.directions = {module.up, module.left, module.down, module.right}
+module.name_from_direction = function(v)
+  if v == Vector.up then return "up" end
+  if v == Vector.down then return "down" end
+  if v == Vector.left then return "left" end
+  if v == Vector.right then return "right" end
+end
+
+vector_mt.__eq = function(self, other)
+  return #other == 2 and self[1] == other[1] and self[2] == other[2]
+end
 
 vector_mt.__add = function(self, other)
   return module({self[1] + other[1], self[2] + other[2]})

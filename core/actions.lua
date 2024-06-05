@@ -6,22 +6,6 @@ local constants = require("core.constants")
 
 local module = {}
 
-module.move = function(direction_name)
-  return function(entity, state)
-    entity.direction = direction_name
-    if (
-      entity.turn_resources.movement > 0 and
-      level.move(state.grids[entity.layer], entity, entity.position + Vector[direction_name])
-    ) then
-      entity.turn_resources.movement = entity.turn_resources.movement - 1
-
-      if entity.animate then
-        entity:animate("move")
-      end
-    end
-  end
-end
-
 local get_melee_attack_roll = function(entity)
   local roll = D(20) + entity.proficiency_bonus
 
@@ -59,6 +43,44 @@ local get_melee_damage_roll = function(entity)
 
   return entity.inventory.main_hand.damage_roll
     + creature.get_modifier(entity.abilities.strength)
+end
+
+module.move = function(direction_name)
+  return function(entity, state)
+    entity.direction = direction_name
+    local old_position = entity.position
+    if (
+      entity.turn_resources.movement > 0 and
+      level.move(state.grids[entity.layer], entity, entity.position + Vector[direction_name])
+    ) then
+      entity.turn_resources.movement = entity.turn_resources.movement - 1
+
+      Fun.iter(Vector.directions)
+        :map(function(d) return state.grids.solids:safe_get(old_position + d) end)
+        :filter(function(e)
+          return e
+            and e ~= entity
+            and creature.are_hostile(entity, e)
+            and e.turn_resources.reactions > 0
+          end)
+        :each(function(e)
+          e.turn_resources.reactions = e.turn_resources.reactions - 1
+          e.direction = Vector.name_from_direction(old_position - e.position)
+          e:animate("attack")
+          e:when_animation_ends(function()
+            mech.attack(
+              e, state, entity,
+              get_melee_attack_roll(e),
+              get_melee_damage_roll(e)
+            )
+          end)
+        end)
+
+      if entity.animate then
+        entity:animate("move")
+      end
+    end
+  end
 end
 
 module.hand_attack = function(entity, state, target)

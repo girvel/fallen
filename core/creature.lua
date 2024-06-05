@@ -56,4 +56,8 @@ module.get_modifier = function(ability_score)
   return math.floor((ability_score - 10) / 2)
 end
 
+module.are_hostile = function(first, second)
+  return first.faction == "monster" or second.faction == "monster" and first.faction ~= second.faction
+end
+
 return module
