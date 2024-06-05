@@ -56,4 +56,10 @@ module.hex_color = function(str)
     :totable()
 end
 
+module.median = function(...)
+  local t = {...}
+  table.sort(t)
+  return t[math.ceil(#t / 2)]
+end
+
 return module

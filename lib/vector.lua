@@ -14,6 +14,7 @@ module_mt.__call = function(_, base_object)
 end
 
 module.zero = module({0, 0})
+module.one = module({1, 1})
 module.up = module({0, -1})
 module.down = module({0, 1})
 module.left = module({-1, 0})

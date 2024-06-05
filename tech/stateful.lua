@@ -15,6 +15,7 @@ module_mt.__call = function()
     -- grids
     world = Tiny.world(unpack(require("systems"))),
     transform = transform,
+    camera = {position = Vector.zero},
     CELL_DISPLAY_SIZE = 16,
 
     add = function(self, entity)
