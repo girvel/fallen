@@ -10,7 +10,6 @@ local GRID_LAYERS = {"tiles", "solids", "sfx"}
 module_mt.__call = function()
 	return {
     -- grids
-		camera = Gamera.new(0, 0, 9999, 9999),
     world = Tiny.world(unpack(require("systems"))),
 
     add = function(self, entity)

@@ -28,9 +28,12 @@ return Tiny.processingSystem({
 
     if not entity.sprite.image then return end
 
-		state.camera:draw(function()
-			local scaled_position = ((entity.position - Vector({1, 1})) * CELL_DISPLAY_SIZE):ceil()
-      love.graphics.draw(entity.sprite.image, unpack(scaled_position))
-		end)
+    love.graphics.push()
+    love.graphics.scale(2)
+
+    local scaled_position = ((entity.position - Vector({1, 1})) * CELL_DISPLAY_SIZE):ceil()
+    love.graphics.draw(entity.sprite.image, unpack(scaled_position))
+
+    love.graphics.pop()
   end,
 })
