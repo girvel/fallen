@@ -60,7 +60,9 @@ module.move = function(direction_name)
         :filter(function(e)
           return e
             and e ~= entity
+            and e.abilities
             and creature.are_hostile(entity, e)
+            and e.turn_resources
             and e.turn_resources.reactions > 0
           end)
         :each(function(e)
