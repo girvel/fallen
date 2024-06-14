@@ -15,6 +15,7 @@ return {
     [","] = static.bushes,
     M = static.mannequin,
     D = static.door,
+    l = static.lever,
     ["@"] = player,
     b = mobs.bat,
     m = mobs.moose_dude,

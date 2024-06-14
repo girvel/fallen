@@ -14,6 +14,26 @@ local static_sprite = function(path)
   }
 end
 
+local lever_packs = {
+  on = animated.load_pack("assets/sprites/lever_on"),
+  off = animated.load_pack("assets/sprites/lever_off"),
+}
+
+module.lever = function()
+  return common.extend(
+    animated(lever_packs.off),
+    interactive(function(self)
+      self.is_on = self.animation.pack ~= lever_packs.on
+      local next_state = self.is_on and "on" or "off"
+      self:animate("turn_" .. next_state)
+      self:when_animation_ends(function(self)
+        self.animation.pack = lever_packs[next_state]
+      end)
+    end),
+    {name = "lever", is_on = false,}
+  )
+end
+
 local closed_door_pack = animated.load_pack("assets/sprites/closed_door")
 local open_door_pack = animated.load_pack("assets/sprites/open_door")
 
