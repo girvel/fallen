@@ -4,6 +4,19 @@ local interactive = require("tech.interactive")
 
 local ui_font = love.graphics.newFont("assets/fonts/joystix.monospace-regular.otf", 12)
 
+local resource_translations = {
+  bonus_actions = "бонусные действия",
+  movement = "движение",
+  reactions = "реакции",
+  actions = "действия",
+  has_advantage = "преимущество",
+}
+
+local value_translations = {
+  [true] = "да",
+  [false] = "нет",
+}
+
 return Tiny.system({
   base_callback = "draw",
 
@@ -16,12 +29,18 @@ return Tiny.system({
 
     local lines = common.concat(
       {
-        "HP: " .. state.player.hp .. "/" .. state.player:get_max_hp(),
+        "Здоровье: " .. state.player.hp .. "/" .. state.player:get_max_hp(),
         "",
         "Ресурсы:",
       },
       Fun.iter(state.player.turn_resources)
-        :map(function(k, v) return "  " .. k .. ": " .. tostring(v) .. "/" .. tostring(max[k]) end)
+        :map(function(k, v)
+          return (
+            "  " .. (resource_translations[k] or k) ..
+            ": " .. (value_translations[v] or tostring(v))
+            .. "/" .. (value_translations[max[k]] or tostring(max[k]))
+          )
+        end)
         :totable()
     )
 
@@ -57,7 +76,7 @@ return Tiny.system({
     if potential_interaction then
       common.concat(lines, {
         "",
-        "Press [E] to interact with " .. potential_interaction.name,
+        "Нажмите [E] чтобы взаимодействовать с " .. potential_interaction.name,
       })
     end
 

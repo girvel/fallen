@@ -14,7 +14,7 @@ local bat_pack = animated.load_pack("assets/sprites/bat")
 
 module.bat = function()
   return creature(bat_pack, {
-    name = "bat",
+    name = "летучая мышь",
     max_hp = 3,
     faction = "monster",
     ai = function(self, state, event)
@@ -59,7 +59,7 @@ local moose_dude_pack = animated.load_pack("assets/sprites/moose_dude")
 module.moose_dude = function()
   return common.extend(
     creature(moose_dude_pack, {
-      name = "silent figure",
+      name = "таинственный силуэт",
       max_hp = 10,
     }),
     interactive(function(self, _, state)
@@ -73,7 +73,7 @@ local barrel_dude_pack = animated.load_pack("assets/sprites/barrel_dude")
 
 module.barrel_dude = function()
   return creature(barrel_dude_pack, {
-    name = "silent figure",
+    name = "таинственный силуэт",
     max_hp = 15,
   })
 end
@@ -111,7 +111,7 @@ module.exploding_dude = function()
       end)
     end),
     {
-      name = "silent figure",
+      name = "таинственный силуэт",
     }
   )
 end
