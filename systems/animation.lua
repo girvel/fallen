@@ -3,7 +3,7 @@ local FPS = 6
 return Tiny.processingSystem({
   base_callback = "update",
   filter = Tiny.requireAll("animation"),
-  process = function(_, entity, _, event)
+  process = function(_, entity, state, event)
     local dt = unpack(event)
     local animation = entity.animation
     animation.frame = animation.frame + dt * FPS
@@ -12,7 +12,7 @@ return Tiny.processingSystem({
       entity:animate("idle")
 
       if entity._on_animation_end then
-        entity:_on_animation_end()
+        entity:_on_animation_end(state)
         entity._on_animation_end = nil
       end
     end

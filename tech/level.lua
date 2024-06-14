@@ -14,4 +14,12 @@ module.move = function(grid, entity, position)
   return true
 end
 
+module.change_layer = function(grids, entity, new_layer)
+  if grids[new_layer][entity.position] then return false end
+  grids[entity.layer][entity.position] = nil
+  grids[new_layer][entity.position] = entity
+  entity.layer = new_layer
+  return true
+end
+
 return module

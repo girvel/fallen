@@ -14,6 +14,7 @@ return {
     S = static.smooth_wall,
     [","] = static.bushes,
     M = static.mannequin,
+    D = static.door,
     ["@"] = player,
     b = mobs.bat,
     m = mobs.moose_dude,
