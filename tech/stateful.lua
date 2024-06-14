@@ -39,9 +39,16 @@ module_mt.__call = function()
     end,
 
     load_level = function(self, path, palette)
-      local level_lines = love.filesystem.read(path):split("\n")
+      local level_lines = love.filesystem.read(path .. "/grid.txt"):split("\n")
+      local level_size = Vector({#level_lines[1], #level_lines})
+
+      local grid_of_args = Grid(level_size)
+      for k, v in pairs(loadstring(love.filesystem.read(path .. "/grid_args.lua"))()) do
+        grid_of_args[k] = v
+      end
+
       self.grids = Fun.iter(module.GRID_LAYERS)
-        :map(function(layer) return layer, Grid(Vector({#level_lines[1], #level_lines})) end)
+        :map(function(layer) return layer, Grid(level_size) end)
         :tomap()
 
       for _, layer in ipairs(module.GRID_LAYERS) do
@@ -49,7 +56,12 @@ module_mt.__call = function()
           for _, x, character in Fun.iter(line):enumerate() do
             local factory = (palette[layer] or {})[character]
             if factory then
-              local e = self:add(common.extend(factory(), {position = Vector({x, y}), layer = layer}))
+              local position = Vector({x, y})
+              local e = self:add(common.extend(
+                factory(unpack(grid_of_args[position] or {})), 
+                {position = position, layer = layer}
+              ))
+
               if character == "@" then
                 self.player = e
               end

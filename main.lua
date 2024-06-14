@@ -21,7 +21,7 @@ love.load = function()
 
   state = stateful()
 
-  state:load_level("assets/levels/demo.txt", palette)
+  state:load_level("assets/levels/demo", palette)
 end
 
 for _, callback_name in ipairs({"draw", "keypressed", "update"}) do
