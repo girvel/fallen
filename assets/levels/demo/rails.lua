@@ -1,4 +1,24 @@
 return {
+  scenes = {
+    {
+      enabled = true,
+
+      start_predicate = function(self, rails)
+        return not rails.entities.door.is_open and Fun.iter(rails.entities.levers)
+          :enumerate()
+          :map(function(i, lever) return lever.is_on and math.pow(2, 4 - i) or 0 end)
+          :sum() == 13
+      end,
+
+      run = function(self, rails)
+        self.enabled = false
+        rails.entities.door:open()
+      end,
+    }
+  },
+
+  active_coroutines = {},
+
   initialize = function(self, state)
     self.entities = {
       door = state.grids.solids[Vector({21, 13})],
@@ -9,12 +29,15 @@ return {
   end,
 
   update = function(self, state, event)
-    if not self.entities.door.is_open and Log.trace(Fun.iter(self.entities.levers)
-      :enumerate()
-      :map(function(i, lever) return lever.is_on and math.pow(2, 4 - i) or 0 end)
-      :sum()) == 13
-    then
-      self.entities.door:open()
-    end
+    self.active_coroutines = Fun.iter(self.active_coroutines):chain(
+      Fun.iter(self.scenes)
+        :filter(function(s) return s.enabled and s:start_predicate(self) end)
+        :map(function(s) return coroutine.create(function() return s:run(self) end) end)
+    )
+      :filter(function(c)
+        coroutine.resume(c)
+        return coroutine.status(c) ~= "dead"
+      end)
+      :totable()
   end,
 }
