@@ -44,7 +44,7 @@ module_mt.__call = function()
 
       local grid_of_args = Grid(level_size)
       for k, v in pairs(loadstring(love.filesystem.read(path .. "/grid_args.lua"))()) do
-        grid_of_args[k] = v
+        grid_of_args[Vector(k)] = v
       end
 
       self.grids = Fun.iter(module.GRID_LAYERS)
@@ -58,7 +58,7 @@ module_mt.__call = function()
             if factory then
               local position = Vector({x, y})
               local e = self:add(common.extend(
-                factory(unpack(grid_of_args[position] or {})), 
+                factory(unpack(grid_of_args[position] or {})),
                 {position = position, layer = layer}
               ))
 

@@ -6,7 +6,7 @@ local mobs = require("library.mobs")
 return {
   tiles = {
     _ = static.planks,
-    ["c"] = static.scripture_straight,
+    ["c"] = static.scripture,
   },
   solids = {
     ["#"] = static.wall,

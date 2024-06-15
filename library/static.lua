@@ -37,27 +37,32 @@ end
 local closed_door_pack = animated.load_pack("assets/sprites/closed_door")
 local open_door_pack = animated.load_pack("assets/sprites/open_door")
 
-module.door = function()
+module.door = function(disable_interaction)
   return common.extend(
     animated(closed_door_pack),
-    interactive(function(self)
+    disable_interaction and {} or interactive(function(self)
       self.interact = nil
-      self:animate("open")
-      self:when_animation_ends(function(self, state)
-        self.animation.pack = open_door_pack
-        level.change_layer(state.grids, self, "tiles")
-      end)
     end),
-    {name = "дверь"}
+    {
+      name = "дверь",
+      open = function(self)
+        self:animate("open")
+        self:when_animation_ends(function(_, state)
+          self.animation.pack = open_door_pack
+          level.change_layer(state.grids, self, "tiles")
+        end)
+      end,
+    }
   )
 end
 
-module.scripture_straight = function()
+module.scripture = function(kind, text)
+  assert(kind and text, "scripture requires 2 arguments: kind of scripture and its content")
   return common.extend(
     interactive(function(_, other)
-      other.reads = "Hello, VSauce! Michael here.\n\nLorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
+      other.reads = text
     end),
-    static_sprite("assets/sprites/scripture_straight.png"),
+    static_sprite("assets/sprites/scripture_" .. (kind or "straight") .. ".png"),
     {name = "древняя надпись"}
   )
 end

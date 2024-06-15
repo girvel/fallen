@@ -31,3 +31,4 @@ for _, callback_name in ipairs({"draw", "keypressed", "update"}) do
     end, state, {...})
   end
 end
+
