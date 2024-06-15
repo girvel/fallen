@@ -45,11 +45,13 @@ module.door = function(disable_interaction)
     end),
     {
       name = "дверь",
+      is_open = false,
       open = function(self)
         self:animate("open")
         self:when_animation_ends(function(_, state)
           self.animation.pack = open_door_pack
           level.change_layer(state.grids, self, "tiles")
+          self.is_open = true
         end)
       end,
     }

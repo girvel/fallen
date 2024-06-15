@@ -8,4 +8,5 @@ return {
   require("systems.animation"),
   require("systems.timed_death"),
   require("systems.drift"),
+  require("systems.railing"),
 }

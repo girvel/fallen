@@ -13,6 +13,7 @@ module_mt.__call = function()
 
 	return {
     -- grids
+    -- rails
     world = Tiny.world(unpack(require("systems"))),
     transform = transform,
     camera = {position = Vector.zero},
@@ -70,6 +71,9 @@ module_mt.__call = function()
           end
         end
       end
+
+      self.rails = loadstring(love.filesystem.read(path .. "/rails.lua"))()
+      self.rails:initialize(self)
     end,
 	}
 end
