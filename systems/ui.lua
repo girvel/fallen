@@ -25,6 +25,10 @@ return Tiny.system({
       return self.display_text(state.player.reads)
     end
 
+    if state.player.hears then
+      return self.display_line(state.player.hears)
+    end
+
     local max = state.player:get_turn_resources()
 
     local lines = common.concat(
@@ -93,5 +97,11 @@ return Tiny.system({
 
     love.graphics.clear()
     love.graphics.printf(text, ui_font, 20, 20, w - 40)
+  end,
+
+  display_line = function(line)
+    local w = love.graphics.getWidth()
+    local h = love.graphics.getHeight()
+    love.graphics.printf(line, ui_font, 20, h - 120, w - 40)
   end,
 })

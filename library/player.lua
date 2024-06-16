@@ -62,6 +62,11 @@ local hotkeys = {
       entity.reads = nil
       return
     end
+
+    if entity.hears then
+      entity.hears = nil
+      return
+    end
   end,
 }
 

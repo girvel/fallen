@@ -1,6 +1,17 @@
 return {
   scenes = {
     {
+      name = "Introduction",
+      enabled = true,
+      start_predicate = function() return true end,
+
+      run = function(self, rails, state)
+        self.enabled = false
+        state.player.hears = "Hello, world!"
+      end,
+    },
+    {
+      name = "Door opens",
       enabled = true,
 
       start_predicate = function(self, rails)
@@ -14,7 +25,7 @@ return {
         self.enabled = false
         rails.entities.door:open()
       end,
-    }
+    },
   },
 
   active_coroutines = {},
@@ -31,8 +42,11 @@ return {
   update = function(self, state, event)
     self.active_coroutines = Fun.iter(self.active_coroutines):chain(
       Fun.iter(self.scenes)
-        :filter(function(s) return s.enabled and s:start_predicate(self) end)
-        :map(function(s) return coroutine.create(function() return s:run(self) end) end)
+        :filter(function(s) return s.enabled and s:start_predicate(self, state) end)
+        :map(function(s)
+          Log.info("Scene `" .. s.name .. "` starts")
+          return coroutine.create(function() return s:run(self, state) end)
+        end)
     )
       :filter(function(c)
         coroutine.resume(c)
