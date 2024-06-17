@@ -20,70 +20,56 @@ end
 local MODES = {"free", "fight", "dialogue", "reading"}
 local hotkeys = Fun.iter(MODES):map(function(m) return m, {} end):tomap()
 
-define_hotkey(hotkeys, {"free", "fight"}, {"w"}, actions.move("up"))
-define_hotkey(hotkeys, {"free", "fight"}, {"a"}, actions.move("left"))
-define_hotkey(hotkeys, {"dialogue"}, {"space"}, function(entity) entity.hears = nil end)
+for _, pair in ipairs({
+  {{"w"}, "up"},
+  {{"a"}, "left"},
+  {{"s"}, "down"},
+  {{"d"}, "right"},
+}) do
+  define_hotkey(hotkeys, {"free", "fight"}, pair[1], actions.move[pair[2]])
+end
 
--- local hotkeys = {
---   w = modal(actions.move("up"), {"free", "fight"}),
---   a = modal(actions.move("left"), {"free", "fight"}),
---   s = modal(actions.move("down"), {"free", "fight"}),
---   d = modal(actions.move("right"), {"free", "fight"}),
--- 
---   -- space = function()
---   --   return true
---   -- end,
--- 
---   -- ["1"] = function(entity, state)
---   --   actions.hand_attack(entity, state, state.grids.solids[entity.position + Vector[entity.direction]])
---   -- end,
--- 
---   -- ["5"] = function(entity, state)
---   --   actions.sneak_attack(entity, state, state.grids.solids[entity.position + Vector[entity.direction]])
---   -- end,
--- 
---   -- ["3"] = function(entity, state)
---   --   if entity.turn_resources.bonus_actions <= 0 then return end
---   --   entity.turn_resources.bonus_actions = entity.turn_resources.bonus_actions - 1
--- 
---   --   Fun.iter(pairs(state.grids.solids._inner_array))
---   --     :filter(function(e)
---   --       return e and e.hp and e ~= entity and (e.position - entity.position):abs() <= 3
---   --     end)
---   --     :each(function(e)
---   --       mech.damage(e, state, 1, false)
---   --     end)
---   -- end,
--- 
---   -- ["4"] = function(entity)
---   --   actions.aim(entity)
---   -- end,
--- 
---   -- e = function(entity, state)
---   --   -- TODO action
---   --   if entity.turn_resources.bonus_actions <= 0 then return end
---   --   local entity_to_interact = interactive.get_for(entity, state)
---   --   if not entity_to_interact then return end
---   --   entity.turn_resources.bonus_actions = entity.turn_resources.bonus_actions - 1
---   --   entity_to_interact:interact(entity, state)
---   -- end,
--- 
---   -- z = function(entity, state)
---   --   actions.dash(entity)
---   -- end,
--- 
---   escape = modal(function(entity)
---     if entity.reads then
---       entity.reads = nil
---       return
---     end
--- 
---     if entity.hears then
---       entity.hears = nil
---       return
---     end
---   end, {"reading", "dialogue"}),
--- }
+define_hotkey(hotkeys, {"fight"}, {"space"}, function() return true end)
+define_hotkey(hotkeys, {"dialogue"}, {"space"}, function(entity) entity.hears = nil end)
+define_hotkey(hotkeys, {"reading"}, {"escape"}, function(entity) entity.reads = nil end)
+
+define_hotkey(hotkeys, {"free", "fight"}, {"1"}, function(entity, state)
+  actions.hand_attack(entity, state, state.grids.solids[entity.position + Vector[entity.direction]])
+end)
+
+define_hotkey(hotkeys, {"free", "fight"}, {"3"}, function(entity, state)
+  if entity.turn_resources.bonus_actions <= 0 then return end
+  entity.turn_resources.bonus_actions = entity.turn_resources.bonus_actions - 1
+
+  Fun.iter(pairs(state.grids.solids._inner_array))
+    :filter(function(e)
+      return e and e.hp and e ~= entity and (e.position - entity.position):abs() <= 3
+    end)
+    :each(function(e)
+      mech.damage(e, state, 1, false)
+    end)
+end)
+
+define_hotkey(hotkeys, {"fight"}, {"4"}, function(entity)
+  actions.aim(entity)
+end)
+
+define_hotkey(hotkeys, {"free", "fight"}, {"5"}, function(entity, state)
+  actions.sneak_attack(entity, state, state.grids.solids[entity.position + Vector[entity.direction]])
+end)
+
+define_hotkey(hotkeys, {"free", "fight"}, {"e"}, function(entity, state)
+  -- TODO action
+  if entity.turn_resources.bonus_actions <= 0 then return end
+  local entity_to_interact = interactive.get_for(entity, state)
+  if not entity_to_interact then return end
+  entity.turn_resources.bonus_actions = entity.turn_resources.bonus_actions - 1
+  entity_to_interact:interact(entity, state)
+end)
+
+define_hotkey(hotkeys, {"fight"}, {"z"}, function(entity, state)
+  actions.dash(entity)
+end)
 
 local player_character_pack = animated.load_pack("assets/sprites/player_character")
 

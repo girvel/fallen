@@ -47,7 +47,7 @@ module.bat = function()
           if target then actions.hand_attack(self, state, target) end
         end
 
-        actions.move(random.choice(Vector.direction_names))(self, state)
+        actions.move[random.choice(Vector.direction_names)](self, state)
         coroutine.yield()
       end
     end,

@@ -6,6 +6,12 @@ local constants = require("core.constants")
 
 local module = {}
 
+-- Post-Plot MVP refactor plans:
+-- Action: {cost, _isAvailable(), execute()}
+-- Level-dependency is stored in class
+-- Hotkey is stored in player AI
+-- Picture, description etc. is stored in GUI
+
 local get_melee_attack_roll = function(entity)
   local roll = D(20) + entity.proficiency_bonus
 
@@ -45,8 +51,8 @@ local get_melee_damage_roll = function(entity)
     + creature.get_modifier(entity.abilities.strength)
 end
 
-module.move = function(direction_name)
-  return function(entity, state)
+module.move = Fun.iter(Vector.direction_names):map(function(direction_name)
+  return direction_name, function(entity, state)
     entity.direction = direction_name
     local old_position = entity.position
     if (
@@ -83,7 +89,7 @@ module.move = function(direction_name)
       end
     end
   end
-end
+end):tomap()
 
 module.hand_attack = function(entity, state, target)
   if entity.turn_resources.actions <= 0
