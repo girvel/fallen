@@ -14,14 +14,15 @@ local stateful = require("tech.stateful")
 
 
 local state
-love.load = function()
+love.load = function(args)
   Log.info("Game started")
-
   math.randomseed(os.time())
-
   state = stateful()
-
   state:load_level("assets/levels/demo", palette)
+
+  for _, arg in ipairs(args) do
+    state.rails.scenes[arg].enabled = true
+  end
 end
 
 for _, callback_name in ipairs({"draw", "keypressed", "update"}) do

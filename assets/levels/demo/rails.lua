@@ -84,9 +84,16 @@ return {
         rails.entities.door:open()
       end,
     },
-    -- left_the_room = {
+    outside_the_room = {
+      name = "Player left the room -- testing point",
+      enabled = false,
 
-    -- },
+      start_predicate = function() return true end,
+      run = function(self, rails, state)
+        self.enabled = false
+        state.player.position = Vector({23, 13})
+      end
+    },
     {
       name = "Player leaves the starting room",
       enabled = true,
@@ -125,7 +132,7 @@ return {
 
   update = function(self, state, event)
     self.active_coroutines = Fun.iter(self.active_coroutines)
-      :chain(Fun.iter(self.scenes)
+      :chain(Fun.iter(pairs(self.scenes))
         :filter(function(s) return s.enabled and s:start_predicate(self, state) end)
         :map(function(s)
           Log.info("Scene `" .. s.name .. "` starts")
