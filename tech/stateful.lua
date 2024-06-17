@@ -1,11 +1,10 @@
 local common = require("utils.common")
+local level = require("tech.level")
 
 
 local module = {}
 local module_mt = {}
 setmetatable(module, module_mt)
-
-module.GRID_LAYERS = {"tiles", "solids", "sfx"}
 
 module_mt.__call = function()
   local transform = love.math.newTransform()
@@ -40,39 +39,23 @@ module_mt.__call = function()
     end,
 
     load_level = function(self, path, palette)
-      local level_lines = love.filesystem.read(path .. "/grid.txt"):split("\n")
-      local level_size = Vector({#level_lines[1], #level_lines})
+      local level_size, new_entities = level.load_entities(
+        love.filesystem.read(path .. "/grid.txt"),
+        require(path .. "/grid_args"),
+        palette
+      )
 
-      local grid_of_args = Grid(level_size)
-      for k, v in pairs(loadstring(love.filesystem.read(path .. "/grid_args.lua"))()) do
-        grid_of_args[Vector(k)] = v
-      end
-
-      self.grids = Fun.iter(module.GRID_LAYERS)
+      self.grids = Fun.iter(level.GRID_LAYERS)
         :map(function(layer) return layer, Grid(level_size) end)
         :tomap()
 
-      for _, layer in ipairs(module.GRID_LAYERS) do
-        for y, line in ipairs(level_lines) do
-          for _, x, character in Fun.iter(line):enumerate() do
-            local factory = (palette[layer] or {})[character]
-            if factory then
-              local position = Vector({x, y})
-              local e = self:add(common.extend(
-                factory(unpack(grid_of_args[position] or {})),
-                {position = position, layer = layer}
-              ))
-
-              if character == "@" then
-                self.player = e
-              end
-              if e.on_load then e:on_load(self) end
-            end
-          end
-        end
+      for _, entity in ipairs(new_entities) do
+        local e = self:add(entity)
+        if e.player_flag then self.player = e end
+        if e.on_load then e:on_load(self) end
       end
 
-      self.rails = loadstring(love.filesystem.read(path .. "/rails.lua"))()
+      self.rails = require(path .. "/rails")
       self.rails:initialize(self)
     end,
 	}

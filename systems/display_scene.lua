@@ -1,4 +1,4 @@
-local stateful = require("tech.stateful")
+local level = require("tech.level")
 local common = require("utils.common")
 
 
@@ -38,7 +38,7 @@ return Tiny.system({
     state.transform:translate(unpack(old_camera_position - state.camera.position))
 
     local grid_size = state.grids.solids.size
-    for _, l in ipairs(stateful.GRID_LAYERS) do
+    for _, l in ipairs(level.GRID_LAYERS) do
       for x = 1, grid_size[1] do
         for y = 1, grid_size[2] do
           local entity = state.grids[l][Vector({x, y})]
