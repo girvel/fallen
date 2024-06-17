@@ -3,6 +3,13 @@ local line = function(state, line)
   while state.player.hears == line do coroutine.yield() end
 end
 
+local center_camera = function(state)
+  state.camera.position = (
+    state.player.position * state.CELL_DISPLAY_SIZE
+    - Vector({love.graphics.getWidth(), love.graphics.getHeight()}) / 2 / state.SCALING_FACTOR
+  )
+end
+
 return {
   scenes = {
     {
@@ -12,10 +19,50 @@ return {
 
       run = function(self, rails, state)
         self.enabled = false
-        state.camera.position = Log.trace(state.player.position * state.CELL_DISPLAY_SIZE) - Log.trace(Vector({love.graphics.getWidth(), love.graphics.getHeight()}) / 2 / state.SCALING_FACTOR)
+        center_camera(state)
         line(state, "Ты оказываешься в потусторонне-мрачной комнате.")
         line(state, "Ты не совсем уверен, что такое “ты” и как именно ты здесь оказался.")
         line(state, "Вроде бы у тебя была какая-то цель.")
+      end,
+    },
+    {
+      name = "Player comes to the door",
+      enabled = true,
+
+      start_predicate = function(self, rails, state)
+        return not rails.entities.door.is_open and state.player.position == Vector({20, 13})
+      end,
+
+      run = function(self, rails, state)
+        self.enabled = false
+        line(state, "Тяжёлая дубовая дверь заперта.")
+      end,
+    },
+    {
+      name = "Player comes to the scripture",
+      enabled = true,
+
+      start_predicate = function(self, rails, state)
+        return state.player.position == Vector({17, 12})
+      end,
+
+      run = function(self, rails, state)
+        self.enabled = false
+        line(state, "Надпись на полу как будто бы выжжена в камне.")
+        line(state, "Почерк выглядит знакомым.")
+      end,
+    },
+    {
+      name = "Player comes to the levers",
+      enabled = true,
+
+      start_predicate = function(self, rails, state)
+        return state.player.position[2] == 16 and not rails.entities.door.is_open
+      end,
+
+      run = function(self, rails, state)
+        self.enabled = false
+        line(state, "Древний механизм из каменных рычагов и шестерней.")
       end,
     },
     {
@@ -34,6 +81,17 @@ return {
         rails.entities.door:open()
       end,
     },
+    -- {
+    --   name = "Player leaves the starting room",
+    --   enabled = true,
+
+    --   start_predicate = function(self, rails, state) return state.player.position == Vector({22, 13}) end,
+
+    --   run = function(self)
+    --     self.enabled = false
+    --     line(state, "
+    --   end,
+    -- },
   },
 
   active_coroutines = {},
