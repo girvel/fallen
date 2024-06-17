@@ -8,11 +8,11 @@ return Tiny.system({
   filter = Tiny.requireAll("sprite", "position"),
   base_callback = "draw",
 
-  update = function(self, state, event)
-    local old_camera_position = state.camera.position
+  old_camera_position = Vector.zero,
 
-    local window_w = love.graphics.getWidth() / 2  -- TODO scaling factor
-    local window_h = love.graphics.getHeight() / 2
+  update = function(self, state, event)
+    local window_w = love.graphics.getWidth() / state.SCALING_FACTOR
+    local window_h = love.graphics.getHeight() / state.SCALING_FACTOR
     local border_w = math.floor(window_w / 3)
     local border_h = math.floor(window_h / 3)
     local player_x, player_y = unpack(state.player.position * state.CELL_DISPLAY_SIZE)
@@ -22,20 +22,21 @@ return Tiny.system({
       common.median(
         0,
         player_x - window_w + border_w,
-        old_camera_position[1],
+        state.camera.position[1],
         player_x - border_w,
         grid_w - window_w
       ),
       common.median(
         0,
         player_y - window_h + border_h,
-        old_camera_position[2],
+        state.camera.position[2],
         player_y - border_h,
         grid_h - window_h
       )
     })
 
-    state.transform:translate(unpack(old_camera_position - state.camera.position))
+    state.transform:translate(unpack(self.old_camera_position - state.camera.position))
+    self.old_camera_position = state.camera.position
 
     local grid_size = state.grids.solids.size
     for _, l in ipairs(level.GRID_LAYERS) do

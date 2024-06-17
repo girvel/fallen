@@ -1,3 +1,8 @@
+local line = function(state, line)
+  state.player.hears = line
+  while state.player.hears == line do coroutine.yield() end
+end
+
 return {
   scenes = {
     {
@@ -7,7 +12,10 @@ return {
 
       run = function(self, rails, state)
         self.enabled = false
-        state.player.hears = "Hello, world!"
+        state.camera.position = Log.trace(state.player.position * state.CELL_DISPLAY_SIZE) - Log.trace(Vector({love.graphics.getWidth(), love.graphics.getHeight()}) / 2 / state.SCALING_FACTOR)
+        line(state, "Ты оказываешься в потусторонне-мрачной комнате.")
+        line(state, "Ты не совсем уверен, что такое “ты” и как именно ты здесь оказался.")
+        line(state, "Вроде бы у тебя была какая-то цель.")
       end,
     },
     {
@@ -40,8 +48,8 @@ return {
   end,
 
   update = function(self, state, event)
-    self.active_coroutines = Fun.iter(self.active_coroutines):chain(
-      Fun.iter(self.scenes)
+    self.active_coroutines = Fun.iter(self.active_coroutines)
+      :chain(Fun.iter(self.scenes)
         :filter(function(s) return s.enabled and s:start_predicate(self, state) end)
         :map(function(s)
           Log.info("Scene `" .. s.name .. "` starts")
@@ -50,7 +58,7 @@ return {
             Log.info("Scene `" .. s.name .. "` ends")
           end)
         end)
-    )
+      )
       :filter(function(c)
         coroutine.resume(c)
         return coroutine.status(c) ~= "dead"

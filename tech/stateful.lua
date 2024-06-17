@@ -1,4 +1,3 @@
-local common = require("utils.common")
 local level = require("tech.level")
 
 
@@ -7,8 +6,9 @@ local module_mt = {}
 setmetatable(module, module_mt)
 
 module_mt.__call = function()
+  local SCALING_FACTOR = 2
   local transform = love.math.newTransform()
-  transform:scale(2)
+  transform:scale(SCALING_FACTOR)
 
 	return {
     -- grids
@@ -16,7 +16,9 @@ module_mt.__call = function()
     world = Tiny.world(unpack(require("systems"))),
     transform = transform,
     camera = {position = Vector.zero},
+
     CELL_DISPLAY_SIZE = 16,
+    SCALING_FACTOR = SCALING_FACTOR,
 
     add = function(self, entity)
       self.world:add(entity)

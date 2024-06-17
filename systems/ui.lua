@@ -102,6 +102,10 @@ return Tiny.system({
   display_line = function(line)
     local w = love.graphics.getWidth()
     local h = love.graphics.getHeight()
+
+    love.graphics.setColor(0, 0, 0)
+    love.graphics.rectangle("fill", 0, h - 140, w, 140)
+    love.graphics.setColor(1, 1, 1)
     love.graphics.printf(line, ui_font, 20, h - 120, w - 40)
   end,
 })
