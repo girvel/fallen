@@ -60,7 +60,8 @@ return {
       enabled = true,
 
       start_predicate = function(self, rails, state)
-        return state.player.position[2] == 16 and not rails.entities.door.is_open
+        return Fun.iter(rails.entities.levers)
+          :any(function(l) return (l.position - state.player.position):abs() == 1 end)
       end,
 
       run = function(self, rails, state)
@@ -115,6 +116,27 @@ return {
           "Единственный новый объект посреди черноты — ещё одно разрушенное здание на некотором " ..
           "расстоянии впереди."
         )
+      end,
+    },
+    {
+      name = "Player encounters the edge of the world",
+      enabled = true,
+
+      start_predicate = function(self, rails, state)
+        return (
+             state.player.position[1] == 1
+          or state.player.position[2] == 1
+          or state.player.position[1] == state.grids.solids.size[1]
+          or state.player.position[2] == state.grids.solids.size[2]
+        )
+      end,
+
+      run = function(self, rails, state)
+        self.enabled = false
+        line(state, "У тёмного мира есть граница; она невидима, неосязаема и даже в какой-то степени непостижима.")
+        line(state, "Единственный признак того, что она существует — движение в эту сторону перестало иметь любой эффект; можно переставлять ноги сколько угодно, но все видимые объекты остаются ровно на той же дистанции.")
+        line(state, "С другой стороны, ты точно выяснил что-то новое: границы этого места кажутся прямоугольными.")
+        line(state, "Может быть, оно рукотворно?")
       end,
     },
   },
