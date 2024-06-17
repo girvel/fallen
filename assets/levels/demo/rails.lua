@@ -1,3 +1,6 @@
+local common = require("utils.common")
+
+
 local line = function(state, line)
   state.player.hears = line
   while state.player.hears == line do coroutine.yield() end
@@ -81,17 +84,32 @@ return {
         rails.entities.door:open()
       end,
     },
-    -- {
-    --   name = "Player leaves the starting room",
-    --   enabled = true,
+    -- left_the_room = {
 
-    --   start_predicate = function(self, rails, state) return state.player.position == Vector({22, 13}) end,
-
-    --   run = function(self)
-    --     self.enabled = false
-    --     line(state, "
-    --   end,
     -- },
+    {
+      name = "Player leaves the starting room",
+      enabled = true,
+
+      start_predicate = function(self, rails, state)
+        return state.player.position == Vector({22, 13})
+      end,
+
+      run = function(self, rails, state)
+        self.enabled = false
+        line(state, "Ты стоишь посреди бескрайнего тёмного пространства.")
+        line(state, "Здесь нет ни неба, ни земли, ни горизонта.")
+        line(state, "Здесь не темно — своё тело ты видишь вполне чётко — здесь просто ничего нет.")
+        line(state, {
+          common.hex_color("c0edef"), "Протагонист: ",
+          {1, 1, 1}, "Ну, по крайней мере я знаю, что я не в реальности.",
+        })
+        line(state,
+          "Единственный новый объект посреди черноты — ещё одно разрушенное здание на некотором " ..
+          "расстоянии впереди."
+        )
+      end,
+    },
   },
 
   active_coroutines = {},
