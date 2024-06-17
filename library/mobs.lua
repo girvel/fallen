@@ -116,4 +116,13 @@ module.exploding_dude = function()
   )
 end
 
+local first_pack = animated.load_pack("assets/sprites/first")
+module.first = function()
+  return creature(first_pack, {
+    name = "Первый",
+    max_hp = 1,
+    direction = "left",
+  })
+end
+
 return module

@@ -80,24 +80,21 @@ module.mannequin = function()
   )
 end
 
-module.wall = function()
-  return static_sprite("assets/sprites/wall.png")
+local kid_pack = animated.load_pack("assets/sprites/kid")
+module.kid = function()
+  return common.extend(
+    animated(kid_pack),
+    {name = "ребёнок", direction = "down"}
+  )
 end
 
-module.planks = function()
-  return static_sprite("assets/sprites/planks.png")
-end
-
-module.bushes = function()
-  return static_sprite("assets/sprites/bushes.png")
-end
-
-module.smooth_wall = function()
-  return static_sprite("assets/sprites/smooth_wall.png")
-end
-
-module.crooked_wall = function()
-  return static_sprite("assets/sprites/crooked_wall.png")
+for _, name in ipairs({
+  "wall", "planks", "bushes", "smooth_wall", "crooked_wall", "sand", "teacher",
+  "key_point",
+}) do
+  module[name] = function()
+    return static_sprite("assets/sprites/" .. name .. ".png")
+  end
 end
 
 return module

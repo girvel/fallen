@@ -148,8 +148,15 @@ return {
       door = state.grids.solids[Vector({21, 13})],
       levers = Fun.iter({15, 16, 17, 18})
         :map(function(x) return state.grids.solids[Vector({x, 17})] end)
-        :totable()
+        :totable(),
+      kids = Fun.iter(pairs(state.grids.solids._inner_array))
+        :filter(function(k) return k.name == "ребёнок" end)
+        :totable(),
     }
+
+    Fun.iter(self.entities.kids)
+      :filter(function(k) return k.position[2] > 13 end)
+      :each(function(k) k.direction = "up" end)
   end,
 
   update = function(self, state, event)

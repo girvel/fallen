@@ -8,6 +8,7 @@ return {
     tiles = {
       _ = static.planks,
       ["c"] = static.scripture,
+      s = static.sand,
     },
     solids = {
       ["#"] = static.wall,
@@ -17,11 +18,18 @@ return {
       M = static.mannequin,
       D = static.door,
       l = static.lever,
+      k = static.kid,
+      t = static.teacher,
+
       ["@"] = player,
       b = mobs.bat,
       m = mobs.moose_dude,
       e = mobs.exploding_dude,
+      f = mobs.first,
     },
+    sfx = {
+      O = static.key_point,
+    }
   },
   transparents = {
     M = true,
@@ -30,5 +38,7 @@ return {
     b = true,
     m = true,
     e = true,
+    f = true,
+    O = true,
   },
 }
