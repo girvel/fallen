@@ -7,6 +7,7 @@ local interactive = require("tech.interactive")
 local special = require("tech.special")
 local turn_order = require("tech.turn_order")
 local classes = require("core.classes")
+local weapons = require("library.weapons")
 
 
 local module = {}
@@ -119,7 +120,7 @@ end
 
 local first_pack = animated.load_pack("assets/sprites/first")
 module.first = function()
-  return creature(first_pack, {
+  local result = creature(first_pack, {
     name = "Первый",
     code_name = "first",
     class = classes.paladin,
@@ -163,6 +164,9 @@ module.first = function()
       actions.hand_attack(self, state, state.player)
     end,
   })
+
+  result.inventory.main_hand = weapons.rapier()
+  return result
 end
 
 return module

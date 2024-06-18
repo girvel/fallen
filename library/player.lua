@@ -4,6 +4,7 @@ local classes = require("core.classes")
 local animated = require("tech.animated")
 local creature = require("core.creature")
 local interactive = require("tech.interactive")
+local weapons = require("library.weapons")
 
 
 local module_mt = {}
@@ -89,12 +90,7 @@ module_mt.__call = function()
     reads = nil,
   })
 
-  result.inventory.main_hand = {
-    name = "рапира",
-    damage_roll = D(8),
-    is_finesse = true,
-    bonus = 0,
-  }
+  result.inventory.main_hand = weapons.rapier()
 
   result.turn_resources.second_wind = 1
   result.turn_resources.action_surge = 1
