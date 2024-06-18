@@ -1,4 +1,5 @@
 local common = require("utils.common")
+local sfx = require("library.sfx")
 
 
 local line = function(state, line)
@@ -139,6 +140,43 @@ return {
         line(state, "Может быть, оно рукотворно?")
       end,
     },
+    {
+      name = "Gymnasium's yard",
+      enabled = true,
+
+      start_predicate = function(self, rails, state)
+        return state.player.position[1] == 47
+      end,
+
+      run = function(self, rails, state)
+        self.enabled = false
+        line(state, "Внутренний двор гимназии.")
+        line(state, "Шепчущаяся толпа кадетов выстроилась вокруг небольшой песчаной дорожки.")
+        line(state, {common.hex_color("60b37e"), "Тренер: ", {1, 1, 1}, "Пара — на позиции!"})
+        rails.entities.gym_key_point = state:add(common.extend(sfx.highlight(), {position = Vector({57, 13})}))
+      end,
+    },
+    {
+      name = "Start the fight",
+      enabled = true,
+
+      start_predicate = function(self, rails, state)
+        return (
+          rails.entities.gym_key_point
+          and state.player.position == rails.entities.gym_key_point.position
+        )
+      end,
+
+      run = function(self, rails, state)
+        self.enabled = false
+        state:remove(rails.entities.gym_key_point)
+        line(state, "Горячий песок.")
+        line(state, "Дрожь в коленях.")
+        line(state, "Тяжесть клинка.")
+        line(state, {common.hex_color("e64e4b"), "Первый: ", {1, 1, 1}, "Тебе конец."})
+        line(state, {common.hex_color("60b37e"), "Тренер: ", {1, 1, 1}, "Ан гард!"})
+      end,
+    },
   },
 
   active_coroutines = {},
@@ -172,7 +210,10 @@ return {
         end)
       )
       :filter(function(c)
-        coroutine.resume(c)
+        local success, message = coroutine.resume(c)
+        if not success then
+          Log.trace("Coroutine error: " .. message)
+        end
         return coroutine.status(c) ~= "dead"
       end)
       :totable()

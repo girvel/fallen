@@ -103,7 +103,7 @@ return Tiny.system({
     local w = love.graphics.getWidth()
     local h = love.graphics.getHeight()
 
-    love.graphics.setColor(0, 0, 0)
+    love.graphics.setColor(common.hex_color("31222c"))
     love.graphics.rectangle("fill", 0, h - 140, w, 140)
     love.graphics.setColor(1, 1, 1)
     love.graphics.printf(line, ui_font, 20, h - 120, w - 40)

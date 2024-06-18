@@ -5,6 +5,7 @@ local mobs = require("library.mobs")
 
 return {
   factories = {
+    -- TODO do we really need layers in palette? Aren't they already set?
     tiles = {
       _ = static.planks,
       ["c"] = static.scripture,
