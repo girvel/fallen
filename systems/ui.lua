@@ -22,11 +22,11 @@ return Tiny.system({
 
   update = function(self, state)
     if state.player.reads then
-      return self.display_text(state.player.reads)
+      return self:display_text(state.player.reads)
     end
 
     if state.player.hears then
-      return self.display_line(state.player.hears)
+      return self:display_line(state.player.hears)
     end
 
     local max = state.player:get_turn_resources()
@@ -92,20 +92,31 @@ return Tiny.system({
     )
   end,
 
-  display_text = function(text)
-    local w = love.graphics.getWidth()
+  TEXT_MAX_W = 1000,
+  TEXT_MAX_H = 800,
+
+  display_text = function(self, text)
+    local window_w = love.graphics.getWidth()
+    local window_h = love.graphics.getHeight()
+    local text_w = math.min(window_w - 40, self.TEXT_MAX_W)
+    local text_h = math.min(window_h - 40, self.TEXT_MAX_H)
 
     love.graphics.clear()
-    love.graphics.printf(text, ui_font, 20, 20, w - 40)
+    love.graphics.printf(
+      text, ui_font,
+      math.ceil((window_w - text_w) / 2), math.ceil((window_h - text_h) / 2),
+      text_w
+    )
   end,
 
-  display_line = function(line)
-    local w = love.graphics.getWidth()
-    local h = love.graphics.getHeight()
+  display_line = function(self, line)
+    local window_w = love.graphics.getWidth()
+    local window_h = love.graphics.getHeight()
+    local text_w = math.min(window_w - 40, self.TEXT_MAX_W)
 
     love.graphics.setColor(common.hex_color("31222c"))
-    love.graphics.rectangle("fill", 0, h - 140, w, 140)
+    love.graphics.rectangle("fill", 0, window_h - 140, window_w, 140)
     love.graphics.setColor(1, 1, 1)
-    love.graphics.printf(line, ui_font, 20, h - 120, w - 40)
+    love.graphics.printf(line, ui_font, math.ceil((window_w - text_w) / 2), window_h - 120, text_w)
   end,
 })
