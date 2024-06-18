@@ -6,6 +6,7 @@ return Tiny.processingSystem({
   process = function(_, entity, state, event)
     local dt = unpack(event)
     local animation = entity.animation
+    if animation.paused then return end
     animation.frame = animation.frame + dt * FPS
 
     if not animation.pack[animation.current] or math.floor(animation.frame) > #animation.pack[animation.current] then
@@ -17,6 +18,6 @@ return Tiny.processingSystem({
       end
     end
 
-    entity.sprite.image = animation.pack[animation.current][math.floor(animation.frame)]
+    entity:animation_refresh()
   end,
 })

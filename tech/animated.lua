@@ -2,6 +2,7 @@ local module_mt = {}
 local module = setmetatable({}, module_mt)
 
 
+-- TODO just assign them directly
 local animation_methods = {
   animate = function(self, animation_name)
     self.animation.current = animation_name .. "_" .. (self.direction or "")
@@ -9,11 +10,17 @@ local animation_methods = {
       self.animation.current = animation_name
     end
     self.animation.frame = 1
+    self:animation_refresh()
   end,
 
   when_animation_ends = function(self, callback)
     self._on_animation_end = callback
   end,
+
+  animation_refresh = function(self)
+    if not self.animation.pack[self.animation.current] then return end
+    self.sprite.image = self.animation.pack[self.animation.current][math.floor(self.animation.frame)]
+  end
 }
 
 local animation_mt = {__index = animation_methods}
@@ -22,6 +29,7 @@ module_mt.__call = function(_, pack)
   local result = setmetatable({
     animation = {
       pack = pack,
+      paused = false,
     },
     sprite = {},
     _on_animation_end = nil,

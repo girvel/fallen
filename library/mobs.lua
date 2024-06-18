@@ -128,6 +128,7 @@ module.first = function()
     direction = "left",
     faction = "monster",
     abilities = creature.abilities(12, 10, 10, 10, 10, 10),
+    immortal = true,
     ai = function(self, state, event)
       if not state.move_order then return end
 

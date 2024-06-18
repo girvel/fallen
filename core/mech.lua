@@ -40,7 +40,7 @@ module.damage = function(target, state, damage, is_critical)
   end
 
   target.hp = target.hp - damage
-  if target.hp <= 0 then
+  if target.hp <= 0 and not target.immortal then
     state:remove(target)
     Log.info(target.name .. " is killed")
   end

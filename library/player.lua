@@ -63,6 +63,7 @@ module_mt.__call = function()
     class = classes.charming_leader,
     level = 2,
     direction = "right",
+    immortal = true,
     ai = function(self, state)
       local mode
       if self.reads then

@@ -215,7 +215,47 @@ return {
         self.enabled = false
         line(state, "Твой оппонент довольно ухмыляется.")
         line(state, {common.hex_color("60b37e"), "Тренер: ", {1, 1, 1}, "Выход за пределы поля, победил Первый."})
-        line(state, "\"Первый\" это странное имя.")
+        line(state, "“Первый” это странное имя.")
+        rails.scenes.yard_ending.enabled = true
+      end,
+    },
+    player_wins_yard_fight = {
+      name = "Player wins the yard fight",
+      enabled = true,
+
+      start_predicate = function(self, rails, state)
+        return rails.entities.first.hp <= 0
+      end,
+
+      run = function(self, rails, state)
+        state.move_order = nil
+        self.enabled = false
+        rails.scenes.player_loses_yard_fight.enabled = false
+        rails.scenes.yard_fight_bounds.enabled = false
+        rails.entities.first:animate("defeat")
+        rails.entities.first.animation.paused = true
+        line(state, {common.hex_color("e64e4b"), "Первый: ", {1, 1, 1}, "Ты никому не нравишься."})
+        line(state, {common.hex_color("60b37e"), "Тренер: ", {1, 1, 1}, "Капитуляция, победил Марвин."})
+        line(state, "Ты почти уверен, что тебя зовут не Марвин.")
+        rails.scenes.yard_ending.enabled = true
+      end,
+    },
+    player_loses_yard_fight = {
+      name = "Player loses the yard fight",
+      enabled = true,
+
+      start_predicate = function(self, rails, state)
+        return state.player.hp <= 0
+      end,
+
+      run = function(self, rails, state)
+        state.move_order = nil
+        self.enabled = false
+        rails.scenes.player_wins_yard_fight.enabled = false
+        rails.scenes.yard_fight_bounds.enabled = false
+        line(state, {common.hex_color("e64e4b"), "Первый: ", {1, 1, 1}, "Это было жалко."})
+        line(state, {common.hex_color("60b37e"), "Тренер: ", {1, 1, 1}, "Капитуляция, победил Первый."})
+        line(state, "“Первый” это странное имя.")
         rails.scenes.yard_ending.enabled = true
       end,
     },
@@ -226,6 +266,7 @@ return {
 
       run = function(self, rails, state)
         self.enabled = false
+        rails.entities.first.animation.paused = false
         Fun.chain(rails.entities.kids, {rails.entities.first, rails.entities.teacher})
           :each(function(e)
             e:animate("disappear")
@@ -233,6 +274,12 @@ return {
               state:remove(e)
             end)
           end)
+
+        local t = love.timer.getTime()
+        while love.timer.getTime() - t < 3 do coroutine.yield() end
+
+        line(state, "Необычно.")
+        line(state, "Было похоже на сцену, разыгранную специально для тебя.")
       end,
     },
   },
