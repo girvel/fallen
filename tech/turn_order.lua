@@ -1,4 +1,9 @@
-return function(list)
+local module_mt = {}
+local module = setmetatable({}, module_mt)
+
+module.TURN_END_SIGNAL = {}
+
+module_mt.__call = function(_, list)
   return {
     list = list,
     current_i = 1,
@@ -14,3 +19,5 @@ return function(list)
     end,
   }
 end
+
+return module

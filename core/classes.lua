@@ -8,4 +8,8 @@ module.charming_leader = {
   hp_die = 10,
 }
 
+module.paladin = {
+  hp_die = 10,
+}
+
 return module

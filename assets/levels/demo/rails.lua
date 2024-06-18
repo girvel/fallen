@@ -1,5 +1,7 @@
 local common = require("utils.common")
 local sfx = require("library.sfx")
+local turn_order = require("tech.turn_order")
+local creature = require("core.creature")
 
 
 local line = function(state, line)
@@ -176,6 +178,21 @@ return {
         line(state, "Тяжесть клинка.")
         line(state, {common.hex_color("e64e4b"), "Первый: ", {1, 1, 1}, "Тебе конец."})
         line(state, {common.hex_color("60b37e"), "Тренер: ", {1, 1, 1}, "Ан гард!"})
+
+        local initiative_rolls = Fun.iter({state.player, rails.entities.first})
+          :map(function(e) return {e, (D(20) + creature.get_modifier(e.abilities.dexterity)):roll()} end)
+          :totable()
+
+        table.sort(
+          initiative_rolls,
+          function(a, b) return a[2] > b[2] end
+        )
+
+        local pure_order = Fun.iter(initiative_rolls)
+          :map(function(x) return x[1] end)
+          :totable()
+
+        state.move_order = turn_order(pure_order)
       end,
     },
   },
@@ -189,8 +206,11 @@ return {
         :map(function(x) return state.grids.solids[Vector({x, 17})] end)
         :totable(),
       kids = Fun.iter(pairs(state.grids.solids._inner_array))
-        :filter(function(k) return k.name == "ребёнок" end)
+        :filter(function(k) return k.code_name == "kid" end)
         :totable(),
+      first = Fun.iter(pairs(state.grids.solids._inner_array))
+        :filter(function(k) return k.code_name == "first" end)
+        :nth(1)
     }
 
     Fun.iter(self.entities.kids)
@@ -213,7 +233,7 @@ return {
       :filter(function(c)
         local success, message = coroutine.resume(c)
         if not success then
-          Log.trace("Coroutine error: " .. message)
+          Log.trace("Coroutine error: " .. message .. "\n" .. debug.traceback(c))
         end
         return coroutine.status(c) ~= "dead"
       end)

@@ -1,5 +1,5 @@
 local actions = require("core.actions")
-local mech = require("core.mech")
+local turn_order = require("tech.turn_order")
 local classes = require("core.classes")
 local animated = require("tech.animated")
 local creature = require("core.creature")
@@ -29,7 +29,7 @@ for _, pair in ipairs({
   define_hotkey(hotkeys, {"free", "fight"}, pair[1], actions.move[pair[2]])
 end
 
-define_hotkey(hotkeys, {"fight"}, {"space"}, function() return true end)
+define_hotkey(hotkeys, {"fight"}, {"space"}, function() return turn_order.TURN_END_SIGNAL end)
 define_hotkey(hotkeys, {"dialogue"}, {"space"}, function(entity) entity.hears = nil end)
 define_hotkey(hotkeys, {"reading"}, {"escape"}, function(entity) entity.reads = nil end)
 
@@ -90,11 +90,14 @@ module_mt.__call = function()
   })
 
   result.inventory.main_hand = {
-    name = "кинжал",
-    damage_roll = D(4),
+    name = "рапира",
+    damage_roll = D(8),
     is_finesse = true,
     bonus = 0,
   }
+
+  result.turn_resources.second_wind = 1
+  result.turn_resources.action_surge = 1
 
   return result
 end

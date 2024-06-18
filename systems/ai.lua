@@ -1,4 +1,5 @@
 local common = require("utils.common")
+local turn_order = require("tech.turn_order")
 
 
 return Tiny.processingSystem({
@@ -19,7 +20,7 @@ return Tiny.processingSystem({
 
     if state.move_order.list[state.move_order.current_i] ~= entity then return end
 
-    if entity:ai(state, event) then
+    if entity:ai(state, event) == turn_order.TURN_END_SIGNAL then
       common.extend(entity.turn_resources, entity:get_turn_resources())
 
       state.move_order.current_i = state.move_order.current_i + 1

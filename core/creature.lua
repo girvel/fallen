@@ -47,8 +47,6 @@ module_mt.__call = function(_, animation_pack, object)
 
   result.hp = result:get_max_hp()
   result.turn_resources = result:get_turn_resources()
-  result.turn_resources.second_wind = 1
-  result.turn_resources.action_surge = 1
   result:animate("idle")
 
   return result
@@ -58,8 +56,19 @@ module.get_modifier = function(ability_score)
   return math.floor((ability_score - 10) / 2)
 end
 
+module.abilities = function(str, dex, con, int, wis, cha)
+  return {
+    strength = str,
+    dexterity = dex,
+    constitution = con,
+    intelligence = int,
+    wisdon = wis,
+    charisma = cha,
+  }
+end
+
 module.are_hostile = function(first, second)
-  return first.faction == "monster" or second.faction == "monster" and first.faction ~= second.faction
+  return (first.faction or second.faction) and first.faction ~= second.faction
 end
 
 return module

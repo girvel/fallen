@@ -84,7 +84,7 @@ local kid_pack = animated.load_pack("assets/sprites/kid")
 module.kid = function()
   return common.extend(
     animated(kid_pack),
-    {name = "ребёнок", direction = "down"}
+    {name = "ребёнок", direction = "down", code_name = "kid"}
   )
 end
 

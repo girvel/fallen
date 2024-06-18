@@ -55,39 +55,42 @@ module.move = Fun.iter(Vector.direction_names):map(function(direction_name)
   return direction_name, function(entity, state)
     entity.direction = direction_name
     local old_position = entity.position
-    if (
-      entity.turn_resources.movement > 0 and
-      level.move(state.grids[entity.layer], entity, entity.position + Vector[direction_name])
-    ) then
-      entity.turn_resources.movement = entity.turn_resources.movement - 1
-
-      Fun.iter(Vector.directions)
-        :map(function(d) return state.grids.solids:safe_get(old_position + d) end)
-        :filter(function(e)
-          return e
-            and e ~= entity
-            and e.abilities
-            and creature.are_hostile(entity, e)
-            and e.turn_resources
-            and e.turn_resources.reactions > 0
-          end)
-        :each(function(e)
-          e.turn_resources.reactions = e.turn_resources.reactions - 1
-          e.direction = Vector.name_from_direction(old_position - e.position)
-          e:animate("attack")
-          e:when_animation_ends(function()
-            mech.attack(
-              e, state, entity,
-              get_melee_attack_roll(e),
-              get_melee_damage_roll(e)
-            )
-          end)
-        end)
-
-      if entity.animate then
-        entity:animate("move")
-      end
+    if entity.turn_resources.movement <= 0
+      or not level.move(state.grids[entity.layer], entity, entity.position + Vector[direction_name])
+    then
+      return false
     end
+
+    entity.turn_resources.movement = entity.turn_resources.movement - 1
+
+    Fun.iter(Vector.directions)
+      :map(function(d) return state.grids.solids:safe_get(old_position + d) end)
+      :filter(function(e)
+        return e
+          and e ~= entity
+          and e.abilities
+          and creature.are_hostile(entity, e)
+          and e.turn_resources
+          and e.turn_resources.reactions > 0
+        end)
+      :each(function(e)
+        e.turn_resources.reactions = e.turn_resources.reactions - 1
+        e.direction = Vector.name_from_direction(old_position - e.position)
+        e:animate("attack")
+        e:when_animation_ends(function()
+          mech.attack(
+            e, state, entity,
+            get_melee_attack_roll(e),
+            get_melee_damage_roll(e)
+          )
+        end)
+      end)
+
+    if entity.animate then
+      entity:animate("move")
+    end
+
+    return true
   end
 end):tomap()
 

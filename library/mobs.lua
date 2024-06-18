@@ -6,6 +6,7 @@ local animated = require("tech.animated")
 local interactive = require("tech.interactive")
 local special = require("tech.special")
 local turn_order = require("tech.turn_order")
+local classes = require("core.classes")
 
 
 local module = {}
@@ -120,8 +121,47 @@ local first_pack = animated.load_pack("assets/sprites/first")
 module.first = function()
   return creature(first_pack, {
     name = "Первый",
-    max_hp = 1,
+    code_name = "first",
+    class = classes.paladin,
+    level = 1,
     direction = "left",
+    faction = "monster",
+    abilities = creature.abilities(12, 10, 10, 10, 10, 10),
+    ai = function(self, state, event)
+      if not state.move_order then return end
+
+      local dt = unpack(event)
+      if not common.period(self, .25, dt) then return end
+      if not self._ai_coroutine then
+        self._ai_coroutine = coroutine.create(self.async_ai)
+      end
+
+      local success, message = coroutine.resume(self._ai_coroutine, self, state)
+      if not success then
+        Log.error("Coroutine error: " .. message)
+      end
+
+      if coroutine.status(self._ai_coroutine) == "dead" then
+        self._ai_coroutine = nil
+        return turn_order.TURN_END_SIGNAL
+      end
+    end,
+    async_ai = function(self, state)
+      local is_next_to_player = false
+      while true do
+        local direction = state.player.position - self.position
+        is_next_to_player = direction:abs() <= 1
+        if is_next_to_player
+          or not actions.move[Vector.name_from_direction(direction:normalized())](self, state)
+        then
+          break
+        end
+        coroutine.yield()
+      end
+      if not is_next_to_player then return end
+
+      actions.hand_attack(self, state, state.player)
+    end,
   })
 end
 
