@@ -37,26 +37,8 @@ define_hotkey(hotkeys, {"free", "fight"}, {"1"}, function(entity, state)
   actions.hand_attack(entity, state, state.grids.solids[entity.position + Vector[entity.direction]])
 end)
 
-define_hotkey(hotkeys, {"free", "fight"}, {"3"}, function(entity, state)
-  if entity.turn_resources.bonus_actions <= 0 then return end
-  entity.turn_resources.bonus_actions = entity.turn_resources.bonus_actions - 1
-
-  Fun.iter(pairs(state.grids.solids._inner_array))
-    :filter(function(e)
-      return e and e.hp and e ~= entity and (e.position - entity.position):abs() <= 3
-    end)
-    :each(function(e)
-      mech.damage(e, state, 1, false)
-    end)
-end)
-
-define_hotkey(hotkeys, {"fight"}, {"4"}, function(entity)
-  actions.aim(entity)
-end)
-
-define_hotkey(hotkeys, {"free", "fight"}, {"5"}, function(entity, state)
-  actions.sneak_attack(entity, state, state.grids.solids[entity.position + Vector[entity.direction]])
-end)
+define_hotkey(hotkeys, {"free", "fight"}, {"3"}, actions.second_wind)
+define_hotkey(hotkeys, {"fight"}, {"4"}, actions.action_surge)
 
 define_hotkey(hotkeys, {"free", "fight"}, {"e"}, function(entity, state)
   -- TODO action
@@ -76,9 +58,9 @@ local player_character_pack = animated.load_pack("assets/sprites/player_characte
 module_mt.__call = function()
   local result = creature(player_character_pack, {
     player_flag = true,
-    name = "игрок",
-    class = classes.rogue,
-    level = 1,
+    name = "протагонист",
+    class = classes.charming_leader,
+    level = 2,
     direction = "right",
     ai = function(self, state)
       local mode

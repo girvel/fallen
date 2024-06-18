@@ -47,6 +47,8 @@ module_mt.__call = function(_, animation_pack, object)
 
   result.hp = result:get_max_hp()
   result.turn_resources = result:get_turn_resources()
+  result.turn_resources.second_wind = 1
+  result.turn_resources.action_surge = 1
   result:animate("idle")
 
   return result

@@ -157,4 +157,25 @@ module.dash = function(entity)
   entity.turn_resources.movement = entity.turn_resources.movement + entity:get_turn_resources().movement
 end
 
+module.second_wind = function(entity)
+  if entity.turn_resources.bonus_actions <= 0
+    or entity.turn_resources.second_wind <= 0
+  then
+    return
+  end
+
+  entity.turn_resources.bonus_actions = entity.turn_resources.bonus_actions - 1
+  entity.turn_resources.second_wind = entity.turn_resources.second_wind - 1
+
+  entity.hp = math.min(entity:get_max_hp(), entity.hp + (D(10) + entity.level):roll())
+end
+
+module.action_surge = function(entity)
+  if entity.turn_resources.action_surge <= 0 then
+    return
+  end
+  entity.turn_resources.action_surge = entity.turn_resources.action_surge - 1
+  entity.turn_resources.actions = entity.turn_resources.actions + 1
+end
+
 return module

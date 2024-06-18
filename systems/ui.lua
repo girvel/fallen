@@ -10,6 +10,8 @@ local resource_translations = {
   reactions = "реакции",
   actions = "действия",
   has_advantage = "преимущество",
+  second_wind = "второе дыхание",
+  action_surge = "всплеск действий",
 }
 
 local value_translations = {
@@ -42,7 +44,7 @@ return Tiny.system({
           return (
             "  " .. (resource_translations[k] or k) ..
             ": " .. (value_translations[v] or tostring(v))
-            .. "/" .. (value_translations[max[k]] or tostring(max[k]))
+            .. (max[k] == nil and "" or "/" .. (value_translations[max[k]] or tostring(max[k])))
           )
         end)
         :totable()
@@ -70,9 +72,8 @@ return Tiny.system({
       "",
       "1 - атака рукой",
       "2 - ничего не делать",
-      "3 - отравляющая тирада",
-      "4 - прицелиться",
-      "5 - мощная атака",
+      "3 - второе дыхание",
+      "4 - всплеск действий",
       "z - рывок",
     })
 
