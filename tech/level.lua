@@ -28,7 +28,7 @@ module.change_layer = function(grids, entity, new_layer)
 end
 
 module.load_entities = function(text_representation, arguments, palette)
-  local level_lines = text_representation:split("\n")
+  local level_lines = text_representation:strip():split("\n")
   local level_size = Vector({#level_lines[1], #level_lines})
 
   local grid_of_args = Grid(level_size)
