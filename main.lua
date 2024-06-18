@@ -1,4 +1,5 @@
 love.graphics.setDefaultFilter("nearest", "nearest")
+love.keyboard.setKeyRepeat(true)
 
 Tiny = require("lib.tiny")
 Vector = require("lib.vector")

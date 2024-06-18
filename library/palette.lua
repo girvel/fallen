@@ -9,6 +9,7 @@ return {
       _ = static.planks,
       ["c"] = static.scripture,
       s = static.sand,
+      w = static.walkway,
     },
     solids = {
       ["#"] = static.wall,

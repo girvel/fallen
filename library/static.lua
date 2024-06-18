@@ -90,7 +90,7 @@ end
 
 for _, name in ipairs({
   "wall", "planks", "bushes", "smooth_wall", "crooked_wall", "sand", "teacher",
-  "key_point",
+  "key_point", "walkway",
 }) do
   module[name] = function()
     return static_sprite("assets/sprites/" .. name .. ".png")
