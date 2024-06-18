@@ -193,6 +193,46 @@ return {
           :totable()
 
         state.move_order = turn_order(pure_order)
+
+        rails.scenes.yard_fight_bounds.enabled = true
+      end,
+    },
+    yard_fight_bounds = {
+      name = "Player goes out of bounds",
+      enabled = false,
+
+      start_predicate = function(self, rails, state)
+        return (
+             state.player.position[1] < 56
+          or state.player.position[1] > 64
+          or state.player.position[2] < 12
+          or state.player.position[2] > 14
+        )
+      end,
+
+      run = function(self, rails, state)
+        state.move_order = nil
+        self.enabled = false
+        line(state, "Твой оппонент довольно ухмыляется.")
+        line(state, {common.hex_color("60b37e"), "Тренер: ", {1, 1, 1}, "Выход за пределы поля, победил Первый."})
+        line(state, "\"Первый\" это странное имя.")
+        rails.scenes.yard_ending.enabled = true
+      end,
+    },
+    yard_ending = {
+      name = "Yard ending",
+      enabled = false,
+      start_predicate = function() return true end,
+
+      run = function(self, rails, state)
+        self.enabled = false
+        Fun.chain(rails.entities.kids, {rails.entities.first, rails.entities.teacher})
+          :each(function(e)
+            e:animate("disappear")
+            e:when_animation_ends(function()
+              state:remove(e)
+            end)
+          end)
       end,
     },
   },
@@ -210,7 +250,10 @@ return {
         :totable(),
       first = Fun.iter(pairs(state.grids.solids._inner_array))
         :filter(function(k) return k.code_name == "first" end)
-        :nth(1)
+        :nth(1),
+      teacher = Fun.iter(pairs(state.grids.solids._inner_array))
+        :filter(function(k) return k.code_name == "teacher" end)
+        :nth(1),
     }
 
     Fun.iter(self.entities.kids)

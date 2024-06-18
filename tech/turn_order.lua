@@ -1,7 +1,7 @@
 local module_mt = {}
 local module = setmetatable({}, module_mt)
 
-module.TURN_END_SIGNAL = {}
+module.TURN_END_SIGNAL = 666
 
 module_mt.__call = function(_, list)
   return {

@@ -88,12 +88,23 @@ module.kid = function()
   )
 end
 
+local teacher_pack = animated.load_pack("assets/sprites/teacher")
+module.teacher = function()
+  return common.extend(
+    animated(teacher_pack),
+    {name = "тренер", direction = "down", code_name = "teacher"}
+  )
+end
+
 for _, name in ipairs({
-  "wall", "planks", "bushes", "smooth_wall", "crooked_wall", "sand", "teacher",
+  "wall", "planks", "bushes", "smooth_wall", "crooked_wall", "sand",
   "key_point", "walkway",
 }) do
   module[name] = function()
-    return static_sprite("assets/sprites/" .. name .. ".png")
+    return common.extend(
+      static_sprite("assets/sprites/" .. name .. ".png"),
+      {code_name = name}
+    )
   end
 end
 
