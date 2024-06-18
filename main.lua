@@ -12,6 +12,7 @@ require("lib.strong")
 
 local palette = require("library.palette")
 local stateful = require("tech.stateful")
+local cli = require("tech.cli")
 
 
 local state
@@ -21,8 +22,18 @@ love.load = function(args)
   state = stateful()
   state:load_level("assets/levels/demo", palette)
 
-  for _, arg in ipairs(args) do
-    state.rails.scenes[arg].enabled = true
+  args = cli.parse(args)
+  Log.info("Command line arguments:", args)
+
+  for _, scene in ipairs(args.checkpoints) do
+    state.rails.scenes[scene].enabled = true
+  end
+
+  if not args.debug then
+    local background_sound = love.audio.newSource("assets/sounds/740904__green__light__09.wav", "static")
+    background_sound:setVolume(0.05)
+    background_sound:setLooping(true)
+    background_sound:play()
   end
 end
 
