@@ -97,7 +97,7 @@ module.teacher = function()
 end
 
 for _, name in ipairs({
-  "wall", "planks", "bushes", "smooth_wall", "crooked_wall", "sand",
+  "wall", "planks", "bushes", "smooth_wall", "crooked_wall", "sand", "wall_with_vines",
   "key_point", "walkway",
 }) do
   module[name] = function()

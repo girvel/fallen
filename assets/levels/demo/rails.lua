@@ -130,7 +130,6 @@ return {
         return (
              state.player.position[1] == 1
           or state.player.position[2] == 1
-          or state.player.position[1] == state.grids.solids.size[1]
           or state.player.position[2] == state.grids.solids.size[2]
         )
       end,

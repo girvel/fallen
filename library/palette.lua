@@ -16,6 +16,7 @@ return {
       ["#"] = static.wall,
       ["%"] = static.crooked_wall,
       S = static.smooth_wall,
+      V = static.wall_with_vines,
       [","] = static.bushes,
       M = static.mannequin,
       D = static.door,
