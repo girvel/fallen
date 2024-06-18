@@ -33,18 +33,28 @@ return Tiny.system({
 
     local max = state.player:get_turn_resources()
 
-    local lines = common.concat(
-      {
-        "Здоровье: " .. state.player.hp .. "/" .. state.player:get_max_hp(),
+    local lines = {
+      "Здоровье: " .. state.player.hp .. "/" .. state.player:get_max_hp(),
+      "",
+    }
+
+    local weapon = state.player.inventory.main_hand
+    if weapon then
+      common.concat(lines, {
+        "Оружие: " .. weapon.name .. " (" .. weapon.damage_roll:to_string() .. ")",
         "",
-        "Ресурсы:",
-      },
+      })
+    end
+
+    common.concat(
+      lines,
+      {"Ресурсы:"},
       Fun.iter(state.player.turn_resources)
         :map(function(k, v)
           return (
             "  " .. (resource_translations[k] or k) ..
-            ": " .. (value_translations[v] or tostring(v))
-            .. (max[k] == nil and "" or "/" .. (value_translations[max[k]] or tostring(max[k])))
+            ": " .. (value_translations[v] or tostring(v)) ..
+            (max[k] == nil and "" or "/" .. (value_translations[max[k]] or tostring(max[k])))
           )
         end)
         :totable()

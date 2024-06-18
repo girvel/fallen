@@ -88,4 +88,13 @@ d_methods.with_advantage = function(self, value)
   )
 end
 
+d_methods.to_string = function(self)
+  return table.concat(
+    Fun.iter(self.dice)
+      :map(function(die) return "d" .. die.sides_n end)
+      :totable(),
+    " + "
+  ) .. (self.bonus > 0 and (" + " .. self.bonus) or "")
+end
+
 return module
