@@ -1,4 +1,3 @@
-local common = require("utils.common")
 local animated = require("tech.animated")
 local constants = require("core.constants")
 
@@ -8,7 +7,7 @@ local module_mt = {}
 setmetatable(module, module_mt)
 
 module_mt.__call = function(_, animation_pack, object)
-  local result = common.extend(animated(animation_pack), {  -- consider moving to mixins and extracting animated
+  local result = Tablex.extend(animated(animation_pack), {  -- consider moving to mixins and extracting animated
     sprite = {},
     abilities = {
       strength = 10,

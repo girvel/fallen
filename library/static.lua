@@ -1,4 +1,3 @@
-local common = require("utils.common")
 local interactive = require("tech.interactive")
 local animated = require("tech.animated")
 local level = require("tech.level")
@@ -20,7 +19,7 @@ local lever_packs = {
 }
 
 module.lever = function()
-  return common.extend(
+  return Tablex.extend(
     animated(lever_packs.off),
     interactive(function(self)
       self.is_on = self.animation.pack ~= lever_packs.on
@@ -38,7 +37,7 @@ local closed_door_pack = animated.load_pack("assets/sprites/closed_door")
 local open_door_pack = animated.load_pack("assets/sprites/open_door")
 
 module.door = function(disable_interaction)
-  return common.extend(
+  return Tablex.extend(
     animated(closed_door_pack),
     disable_interaction and {} or interactive(function(self)
       self.interact = nil
@@ -60,7 +59,7 @@ end
 
 module.scripture = function(kind, text)
   assert(kind and text, "scripture requires 2 arguments: kind of scripture and its content")
-  return common.extend(
+  return Tablex.extend(
     interactive(function(_, other)
       other.reads = text
     end),
@@ -70,7 +69,7 @@ module.scripture = function(kind, text)
 end
 
 module.mannequin = function()
-  return common.extend(
+  return Tablex.extend(
     static_sprite("assets/sprites/mannequin.png"),
     {
       name = "манекен",
@@ -82,7 +81,7 @@ end
 
 local kid_pack = animated.load_pack("assets/sprites/kid")
 module.kid = function()
-  return common.extend(
+  return Tablex.extend(
     animated(kid_pack),
     {name = "ребёнок", direction = "down", code_name = "kid"}
   )
@@ -90,7 +89,7 @@ end
 
 local teacher_pack = animated.load_pack("assets/sprites/teacher")
 module.teacher = function()
-  return common.extend(
+  return Tablex.extend(
     animated(teacher_pack),
     {name = "тренер", direction = "down", code_name = "teacher"}
   )
@@ -101,7 +100,7 @@ for _, name in ipairs({
   "key_point", "walkway",
 }) do
   module[name] = function()
-    return common.extend(
+    return Tablex.extend(
       static_sprite("assets/sprites/" .. name .. ".png"),
       {code_name = name}
     )

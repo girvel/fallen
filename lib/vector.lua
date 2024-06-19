@@ -73,11 +73,9 @@ vector_methods.abs = function(self)
   return math.abs(self[1]) + math.abs(self[2])
 end
 
-local sign = function(x) return x / math.abs(x) end
-
 vector_methods.normalized = function(self)
-  if self[1] ~= 0 then return Vector({sign(self[1]), 0}) end
-  if self[2] ~= 0 then return Vector({0, sign(self[2])}) end
+  if self[1] ~= 0 then return Vector({Mathx.sign(self[1]), 0}) end
+  if self[2] ~= 0 then return Vector({0, Mathx.sign(self[2])}) end
   assert(false, "Can not normalize Vector.zero")
 end
 

@@ -1,6 +1,5 @@
 local actions = require("core.actions")
 local random = require("utils.random")
-local common = require("utils.common")
 local creature = require("core.creature")
 local animated = require("tech.animated")
 local interactive = require("tech.interactive")
@@ -23,7 +22,7 @@ module.bat = function()
       if not state.move_order then return end
 
       local dt = unpack(event)
-      if not common.period(self, .25, dt) then return end
+      if not Commonperiod(self, .25, dt) then return end
       if not self._ai_coroutine then
         self._ai_coroutine = coroutine.create(self.async_ai)
       end
@@ -59,7 +58,7 @@ end
 local moose_dude_pack = animated.load_pack("assets/sprites/moose_dude")
 
 module.moose_dude = function()
-  return common.extend(
+  return Tablex.extend(
     creature(moose_dude_pack, {
       name = "таинственный силуэт",
       max_hp = 10,
@@ -83,7 +82,7 @@ end
 local exploding_dude_pack = animated.load_pack("assets/sprites/exploding_dude")
 
 module.exploding_dude = function()
-  return common.extend(
+  return Tablex.extend(
     animated(exploding_dude_pack),
     interactive(function(self, other, state)
       self.interact = nil
@@ -102,13 +101,13 @@ module.exploding_dude = function()
             if state.grids.solids:safe_get(v) == nil then break end
           end
 
-          local bat = state:add(common.extend(module.bat(), {position = v}))
+          local bat = state:add(Tablex.extend(module.bat(), {position = v}))
           bat:animate("appear")
           table.insert(bats, bat)
         end
 
         bats[#bats]:when_animation_ends(function()
-          state.move_order = turn_order(common.concat(bats, {other}))
+          state.move_order = turn_order(Tablex.concat(bats, {other}))
         end)
       end)
     end),
@@ -133,7 +132,7 @@ module.first = function()
       if not state.move_order then return end
 
       local dt = unpack(event)
-      if not common.period(self, .25, dt) then return end
+      if not Commonperiod(self, .25, dt) then return end
       if not self._ai_coroutine then
         self._ai_coroutine = coroutine.create(self.async_ai)
       end

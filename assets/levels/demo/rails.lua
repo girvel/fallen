@@ -1,4 +1,3 @@
-local common = require("utils.common")
 local sfx = require("library.sfx")
 local turn_order = require("tech.turn_order")
 local creature = require("core.creature")
@@ -124,7 +123,7 @@ return {
         line(state, "Тусклый пурпурный свет равномерно покрывает твоё тело.")
         line(state, "Здесь не темно; здесь просто ничего нет.")
         line(state, {
-          common.hex_color("c0edef"), "Протагонист: ",
+          Common.hex_color("c0edef"), "Протагонист: ",
           {1, 1, 1}, "Ну, по крайней мере я знаю, что я не в реальности.",
         })
         line(state,
@@ -166,8 +165,8 @@ return {
         self.enabled = false
         line(state, "Внутренний двор гимназии.")
         line(state, "Шепчущаяся толпа кадетов выстроилась вокруг небольшой песчаной дорожки.")
-        line(state, {common.hex_color("60b37e"), "Тренер: ", {1, 1, 1}, "Пара — на позиции!"})
-        rails.entities.gym_key_point = state:add(common.extend(sfx.highlight(), {position = Vector({57, 13})}))
+        line(state, {Common.hex_color("60b37e"), "Тренер: ", {1, 1, 1}, "Пара — на позиции!"})
+        rails.entities.gym_key_point = state:add(Tablex.extend(sfx.highlight(), {position = Vector({57, 13})}))
       end,
     },
     {
@@ -187,8 +186,8 @@ return {
         line(state, "Горячий песок.")
         line(state, "Дрожь в коленях.")
         line(state, "Тяжесть клинка.")
-        line(state, {common.hex_color("e64e4b"), "Первый: ", {1, 1, 1}, "Тебе конец."})
-        line(state, {common.hex_color("60b37e"), "Тренер: ", {1, 1, 1}, "Ан гард!"})
+        line(state, {Common.hex_color("e64e4b"), "Первый: ", {1, 1, 1}, "Тебе конец."})
+        line(state, {Common.hex_color("60b37e"), "Тренер: ", {1, 1, 1}, "Ан гард!"})
 
         local initiative_rolls = Fun.iter({state.player, rails.entities.first})
           :map(function(e) return {e, (D(20) + creature.get_modifier(e.abilities.dexterity)):roll()} end)
@@ -225,7 +224,7 @@ return {
         state.move_order = nil
         self.enabled = false
         line(state, "Твой оппонент довольно ухмыляется.")
-        line(state, {common.hex_color("60b37e"), "Тренер: ", {1, 1, 1}, "Выход за пределы поля, победил Первый."})
+        line(state, {Common.hex_color("60b37e"), "Тренер: ", {1, 1, 1}, "Выход за пределы поля, победил Первый."})
         line(state, "“Первый” это странное имя.")
         rails.scenes.yard_ending.enabled = true
       end,
@@ -245,8 +244,8 @@ return {
         rails.scenes.yard_fight_bounds.enabled = false
         rails.entities.first:animate("defeat")
         rails.entities.first.animation.paused = true
-        line(state, {common.hex_color("e64e4b"), "Первый: ", {1, 1, 1}, "Ты никому не нравишься."})
-        line(state, {common.hex_color("60b37e"), "Тренер: ", {1, 1, 1}, "Капитуляция, победил Марвин."})
+        line(state, {Common.hex_color("e64e4b"), "Первый: ", {1, 1, 1}, "Ты никому не нравишься."})
+        line(state, {Common.hex_color("60b37e"), "Тренер: ", {1, 1, 1}, "Капитуляция, победил Марвин."})
         line(state, "Ты почти уверен, что тебя зовут не Марвин.")
         rails.scenes.yard_ending.enabled = true
       end,
@@ -264,8 +263,8 @@ return {
         self.enabled = false
         rails.scenes.player_wins_yard_fight.enabled = false
         rails.scenes.yard_fight_bounds.enabled = false
-        line(state, {common.hex_color("e64e4b"), "Первый: ", {1, 1, 1}, "Это было жалко."})
-        line(state, {common.hex_color("60b37e"), "Тренер: ", {1, 1, 1}, "Капитуляция, победил Первый."})
+        line(state, {Common.hex_color("e64e4b"), "Первый: ", {1, 1, 1}, "Это было жалко."})
+        line(state, {Common.hex_color("60b37e"), "Тренер: ", {1, 1, 1}, "Капитуляция, победил Первый."})
         line(state, "“Первый” это странное имя.")
         rails.scenes.yard_ending.enabled = true
       end,

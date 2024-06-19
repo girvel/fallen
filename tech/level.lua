@@ -1,6 +1,3 @@
-local common = require("utils.common")
-
-
 local module = {}
 
 module.GRID_LAYERS = {"tiles", "solids", "sfx"}
@@ -44,7 +41,7 @@ module.load_entities = function(text_representation, arguments, palette)
         local factory = (palette.factories[layer] or {})[character]
         if factory then
           local position = Vector({x, y})
-          table.insert(result, common.extend(
+          table.insert(result, Tablex.extend(
             factory(unpack(grid_of_args[position] or {})),
             {position = position, layer = layer}
           ))
@@ -75,7 +72,7 @@ module.load_entities = function(text_representation, arguments, palette)
           local most_frequent_tile = Fun.iter(tiles_around_ns)
             :max_by(function(c, n) return n end)
 
-          table.insert(result, common.extend(
+          table.insert(result, Tablex.extend(
             palette.factories.tiles[most_frequent_tile](),
             {position = position, layer = "tiles"}
           ))

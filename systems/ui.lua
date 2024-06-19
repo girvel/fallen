@@ -1,4 +1,3 @@
-local common = require("utils.common")
 local interactive = require("tech.interactive")
 
 
@@ -39,13 +38,13 @@ return Tiny.system({
 
     local weapon = state.player.inventory.main_hand
     if weapon then
-      common.concat(lines, {
+      Tablex.concat(lines, {
         "",
         "Оружие: " .. weapon.name .. " (" .. weapon.damage_roll:to_string() .. ")",
       })
     end
 
-    common.concat(
+    Tablex.concat(
       lines,
       {"", "Ресурсы:"},
       Fun.iter(state.player.turn_resources)
@@ -60,24 +59,24 @@ return Tiny.system({
     )
 
     if state.move_order then
-      common.concat(lines, {
+      Tablex.concat(lines, {
         "",
         "Очередь ходов:",
       })
 
-      common.concat(lines, Fun.iter(state.move_order.list)
+      Tablex.concat(lines, Fun.iter(state.move_order.list)
         :enumerate()
         :map(function(i, e) return (state.move_order.current_i == i and "x " or "- ") .. (e.name or "_") end)
         :totable()
       )
 
-      common.concat(lines, {
+      Tablex.concat(lines, {
         "",
         "Space - закончить ход",
       })
     end
 
-    common.concat(lines, {
+    Tablex.concat(lines, {
       "",
       "Действия:",
       "  1 - атака рукой",
@@ -89,7 +88,7 @@ return Tiny.system({
 
     local potential_interaction = interactive.get_for(state.player, state)
     if potential_interaction then
-      common.concat(lines, {
+      Tablex.concat(lines, {
         "",
         "Нажмите [E] чтобы взаимодействовать с " .. potential_interaction.name,
       })
@@ -125,7 +124,7 @@ return Tiny.system({
     local window_h = love.graphics.getHeight()
     local text_w = math.min(window_w - 40, self.TEXT_MAX_W)
 
-    love.graphics.setColor(common.hex_color("31222c"))
+    love.graphics.setColor(Common.hex_color("31222c"))
     love.graphics.rectangle("fill", 0, window_h - 140, window_w, 140)
     love.graphics.setColor(1, 1, 1)
     love.graphics.printf(line, ui_font, math.ceil((window_w - text_w) / 2), window_h - 120, text_w)

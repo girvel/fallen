@@ -1,5 +1,4 @@
 local random = require("utils.random")
-local common = require("utils.common")
 
 
 local module = {}
@@ -15,7 +14,7 @@ module.floating_damage = function(number, position)
     sprite = {
       text = number,
       font = font,
-      color = common.hex_color("e64e4b"),
+      color = Common.hex_color("e64e4b"),
     },
     life_time = 3,
   }
@@ -30,7 +29,7 @@ module.floating_line = function(text, position)
     sprite = {
       text = text,
       font = line_font,
-      color = common.hex_color("ededed"),
+      color = Common.hex_color("ededed"),
     },
     life_time = 10,
   }

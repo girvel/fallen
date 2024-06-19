@@ -1,4 +1,3 @@
-local common = require("utils.common")
 local sfx = require("library.sfx")
 
 
@@ -18,7 +17,7 @@ module_mt.__call = function(_, callback)
   return {
     was_interacted_with = false,
     on_load = function(self, state)
-      self._highlight = state:add(common.extend(sfx.highlight(), {position = self.position}))
+      self._highlight = state:add(Tablex.extend(sfx.highlight(), {position = self.position}))
     end,
     interact = function(self, other, state)
       self.was_interacted_with = true

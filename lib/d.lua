@@ -1,6 +1,3 @@
-local common = require("utils.common")
-
-
 local module = {}
 local module_mt = {}
 setmetatable(module, module_mt)
@@ -21,12 +18,12 @@ end
 
 d_mt.__add = function(self, other)
   if type(other) == "number" then
-    return module.roll(common.deep_copy(self.dice), self.bonus + other)
+    return module.roll(Tablex.deep_copy(self.dice), self.bonus + other)
   end
 
   if type(other) == "table" then
     return module.roll(
-      common.concat(common.deep_copy(self.dice), other.dice),
+      Tablex.concat(Tablex.deep_copy(self.dice), other.dice),
       self.bonus + other.bonus
     )
   end
@@ -40,7 +37,7 @@ d_mt.__mul = function(self, other)
     Fun.iter(self.dice)
       :cycle()
       :take_n(#self.dice * other)
-      :map(function(d) return common.deep_copy(d) end)
+      :map(function(d) return Tablex.deep_copy(d) end)
       :totable(),
     self.bonus * other
   )
@@ -81,7 +78,7 @@ d_methods.with_advantage = function(self, value)
   return module.roll(
     Fun.iter(self.dice)
       :map(function(x)
-        return common.extend(common.deep_copy(x), {advantage = value})
+        return Tablex.extend(Tablex.deep_copy(x), {advantage = value})
       end)
       :totable(),
     self.bonus

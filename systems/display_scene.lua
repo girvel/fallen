@@ -1,7 +1,4 @@
 local level = require("tech.level")
-local common = require("utils.common")
-
-
 local no_transform = love.math.newTransform()
 
 return Tiny.system({
@@ -19,14 +16,14 @@ return Tiny.system({
     local grid_w, grid_h = unpack(state.grids.solids.size * state.CELL_DISPLAY_SIZE)
 
     state.camera.position = Vector({
-      common.median(
+      Mathx.median(
         0,
         player_x - window_w + border_w,
         state.camera.position[1],
         player_x - border_w,
         grid_w - window_w
       ),
-      common.median(
+      Mathx.median(
         0,
         player_y - window_h + border_h,
         state.camera.position[2],
