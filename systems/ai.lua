@@ -4,27 +4,27 @@ local turn_order = require("tech.turn_order")
 return Tiny.processingSystem({
   filter = Tiny.requireAll("ai"),
   base_callback = "update",
-  process = function(_, entity, state, event)
-    if not state.move_order or #state.move_order.list <= 1 then
-      state.move_order = nil
-      entity:ai(state, event)
+  process = function(_, entity, event)
+    if not State.move_order or #State.move_order.list <= 1 then
+      State.move_order = nil
+      entity:ai(event)
       Tablex.extend(entity.turn_resources, entity:get_turn_resources())
       return
     end
 
-    if #state.move_order.list <= 1 then
-      state.move_order = nil
+    if #State.move_order.list <= 1 then
+      State.move_order = nil
       return
     end
 
-    if state.move_order.list[state.move_order.current_i] ~= entity then return end
+    if State.move_order.list[State.move_order.current_i] ~= entity then return end
 
-    if entity:ai(state, event) == turn_order.TURN_END_SIGNAL then
+    if entity:ai(event) == turn_order.TURN_END_SIGNAL then
       Tablex.extend(entity.turn_resources, entity:get_turn_resources())
 
-      state.move_order.current_i = state.move_order.current_i + 1
-      if state.move_order.current_i > #state.move_order.list then
-        state.move_order.current_i = 1
+      State.move_order.current_i = State.move_order.current_i + 1
+      if State.move_order.current_i > #State.move_order.list then
+        State.move_order.current_i = 1
       end
     end
   end,

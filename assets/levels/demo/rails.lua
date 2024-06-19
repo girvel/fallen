@@ -3,9 +3,9 @@ local turn_order = require("tech.turn_order")
 local creature = require("core.creature")
 
 
-local line = function(state, line)
-  state.player.hears = line
-  while state.player.hears == line do coroutine.yield() end
+local line = function(line)
+  State.player.hears = line
+  while State.player.hears == line do coroutine.yield() end
 end
 
 local wait_seconds = function(s)
@@ -13,10 +13,10 @@ local wait_seconds = function(s)
   while love.timer.getTime() - t < s do coroutine.yield() end
 end
 
-local center_camera = function(state)
-  state.camera.position = (
-    state.player.position * state.CELL_DISPLAY_SIZE
-    - Vector({love.graphics.getWidth(), love.graphics.getHeight()}) / 2 / state.SCALING_FACTOR
+local center_camera = function()
+  State.camera.position = (
+    State.player.position * State.CELL_DISPLAY_SIZE
+    - Vector({love.graphics.getWidth(), love.graphics.getHeight()}) / 2 / State.SCALING_FACTOR
   )
 end
 
@@ -27,53 +27,53 @@ return {
       enabled = true,
       start_predicate = function() return true end,
 
-      run = function(self, rails, state)
+      run = function(self, rails)
         self.enabled = false
-        center_camera(state)
-        line(state, "Ты оказываешься в потусторонне-мрачной комнате.")
-        line(state, "Ты не совсем уверен, что такое “ты” и как именно ты здесь оказался.")
-        line(state, "Вроде бы у тебя была какая-то цель.")
+        center_camera()
+        line("Ты оказываешься в потусторонне-мрачной комнате.")
+        line("Ты не совсем уверен, что такое “ты” и как именно ты здесь оказался.")
+        line("Вроде бы у тебя была какая-то цель.")
       end,
     },
     {
       name = "Player comes to the door",
       enabled = true,
 
-      start_predicate = function(self, rails, state)
-        return not rails.entities.door.is_open and state.player.position == Vector({20, 13})
+      start_predicate = function(self, rails)
+        return not rails.entities.door.is_open and State.player.position == Vector({20, 13})
       end,
 
-      run = function(self, rails, state)
+      run = function(self, rails)
         self.enabled = false
-        line(state, "Тяжёлая дубовая дверь заперта.")
+        line("Тяжёлая дубовая дверь заперта.")
       end,
     },
     {
       name = "Player comes to the scripture",
       enabled = true,
 
-      start_predicate = function(self, rails, state)
-        return state.player.position == Vector({17, 12})
+      start_predicate = function(self, rails)
+        return State.player.position == Vector({17, 12})
       end,
 
-      run = function(self, rails, state)
+      run = function(self, rails)
         self.enabled = false
-        line(state, "Надпись на полу как будто бы выжжена в дереве.")
-        line(state, "Почерк выглядит знакомым.")
+        line("Надпись на полу как будто бы выжжена в дереве.")
+        line("Почерк выглядит знакомым.")
       end,
     },
     {
       name = "Player comes to the levers",
       enabled = true,
 
-      start_predicate = function(self, rails, state)
+      start_predicate = function(self, rails)
         return Fun.iter(rails.entities.levers)
-          :any(function(l) return (l.position - state.player.position):abs() == 1 end)
+          :any(function(l) return (l.position - State.player.position):abs() == 1 end)
       end,
 
-      run = function(self, rails, state)
+      run = function(self, rails)
         self.enabled = false
-        line(state, "Древний механизм из каменных рычагов и шестерней.")
+        line("Древний механизм из каменных рычагов и шестерней.")
       end,
     },
     {
@@ -87,12 +87,12 @@ return {
           :sum() == 13
       end,
 
-      run = function(self, rails, state)
+      run = function(self, rails)
         self.enabled = false
         rails.entities.door:open()
         Fun.iter(rails.entities.levers):each(function(l)
           if l._highlight then
-            state:remove(l._highlight)
+            State:remove(l._highlight)
             l._highlight = nil
           end
         end)
@@ -103,31 +103,30 @@ return {
       enabled = false,
 
       start_predicate = function() return true end,
-      run = function(self, rails, state)
+      run = function(self, rails)
         self.enabled = false
-        state.player.position = Vector({23, 13})
+        State.player.position = Vector({23, 13})
       end
     },
     {
       name = "Player leaves the starting room",
       enabled = true,
 
-      start_predicate = function(self, rails, state)
-        return state.player.position == Vector({22, 13})
+      start_predicate = function(self, rails)
+        return State.player.position == Vector({22, 13})
       end,
 
-      run = function(self, rails, state)
+      run = function(self, rails)
         self.enabled = false
-        line(state, "Ты стоишь посреди бескрайнего тёмного пространства.")
-        line(state, "Здесь нет ни неба, ни земли, ни горизонта.")
-        line(state, "Тусклый пурпурный свет равномерно покрывает твоё тело.")
-        line(state, "Здесь не темно; здесь просто ничего нет.")
-        line(state, {
+        line("Ты стоишь посреди бескрайнего тёмного пространства.")
+        line("Здесь нет ни неба, ни земли, ни горизонта.")
+        line("Тусклый пурпурный свет равномерно покрывает твоё тело.")
+        line("Здесь не темно; здесь просто ничего нет.")
+        line({
           Common.hex_color("c0edef"), "Протагонист: ",
           {1, 1, 1}, "Ну, по крайней мере я знаю, что я не в реальности.",
         })
-        line(state,
-          "Единственный новый объект посреди черноты — ещё одно здание на некотором " ..
+        line(          "Единственный новый объект посреди черноты — ещё одно здание на некотором " ..
           "расстоянии впереди."
         )
       end,
@@ -136,60 +135,60 @@ return {
       name = "Player encounters the edge of the world",
       enabled = true,
 
-      start_predicate = function(self, rails, state)
+      start_predicate = function(self, rails)
         return (
-             state.player.position[1] == 1
-          or state.player.position[2] == 1
-          or state.player.position[1] == state.grids.solids.size[1]
-          or state.player.position[2] == state.grids.solids.size[2]
+             State.player.position[1] == 1
+          or State.player.position[2] == 1
+          or State.player.position[1] == State.grids.solids.size[1]
+          or State.player.position[2] == State.grids.solids.size[2]
         )
       end,
 
-      run = function(self, rails, state)
+      run = function(self, rails)
         self.enabled = false
-        line(state, "У тёмного мира всё-таки есть граница; она невидима, неосязаема и даже в какой-то степени непостижима.")
-        line(state, "Единственный признак того, что она существует — движение в эту сторону перестало иметь любой эффект; можно переставлять ноги сколько угодно, но все видимые объекты остаются ровно на той же дистанции.")
-        line(state, "С другой стороны, ты точно выяснил что-то новое: границы этого места кажутся прямоугольными.")
-        line(state, "Может быть, оно рукотворно?")
+        line("У тёмного мира всё-таки есть граница; она невидима, неосязаема и даже в какой-то степени непостижима.")
+        line("Единственный признак того, что она существует — движение в эту сторону перестало иметь любой эффект; можно переставлять ноги сколько угодно, но все видимые объекты остаются ровно на той же дистанции.")
+        line("С другой стороны, ты точно выяснил что-то новое: границы этого места кажутся прямоугольными.")
+        line("Может быть, оно рукотворно?")
       end,
     },
     {
       name = "Gymnasium's yard",
       enabled = true,
 
-      start_predicate = function(self, rails, state)
-        return state.player.position[1] == 47
+      start_predicate = function(self, rails)
+        return State.player.position[1] == 47
       end,
 
-      run = function(self, rails, state)
+      run = function(self, rails)
         self.enabled = false
-        line(state, "Внутренний двор гимназии.")
-        line(state, "Шепчущаяся толпа кадетов выстроилась вокруг небольшой песчаной дорожки.")
-        line(state, {Common.hex_color("60b37e"), "Тренер: ", {1, 1, 1}, "Пара — на позиции!"})
-        rails.entities.gym_key_point = state:add(Tablex.extend(sfx.highlight(), {position = Vector({57, 13})}))
+        line("Внутренний двор гимназии.")
+        line("Шепчущаяся толпа кадетов выстроилась вокруг небольшой песчаной дорожки.")
+        line({Common.hex_color("60b37e"), "Тренер: ", {1, 1, 1}, "Пара — на позиции!"})
+        rails.entities.gym_key_point = State:add(Tablex.extend(sfx.highlight(), {position = Vector({57, 13})}))
       end,
     },
     {
       name = "Start the fight",
       enabled = true,
 
-      start_predicate = function(self, rails, state)
+      start_predicate = function(self, rails)
         return (
           rails.entities.gym_key_point
-          and state.player.position == rails.entities.gym_key_point.position
+          and State.player.position == rails.entities.gym_key_point.position
         )
       end,
 
-      run = function(self, rails, state)
+      run = function(self, rails)
         self.enabled = false
-        state:remove(rails.entities.gym_key_point)
-        line(state, "Горячий песок.")
-        line(state, "Дрожь в коленях.")
-        line(state, "Тяжесть клинка.")
-        line(state, {Common.hex_color("e64e4b"), "Первый: ", {1, 1, 1}, "Тебе конец."})
-        line(state, {Common.hex_color("60b37e"), "Тренер: ", {1, 1, 1}, "Ан гард!"})
+        State:remove(rails.entities.gym_key_point)
+        line("Горячий песок.")
+        line("Дрожь в коленях.")
+        line("Тяжесть клинка.")
+        line({Common.hex_color("e64e4b"), "Первый: ", {1, 1, 1}, "Тебе конец."})
+        line({Common.hex_color("60b37e"), "Тренер: ", {1, 1, 1}, "Ан гард!"})
 
-        local initiative_rolls = Fun.iter({state.player, rails.entities.first})
+        local initiative_rolls = Fun.iter({State.player, rails.entities.first})
           :map(function(e) return {e, (D(20) + creature.get_modifier(e.abilities.dexterity)):roll()} end)
           :totable()
 
@@ -202,7 +201,7 @@ return {
           :map(function(x) return x[1] end)
           :totable()
 
-        state.move_order = turn_order(pure_order)
+        State.move_order = turn_order(pure_order)
 
         rails.scenes.yard_fight_bounds.enabled = true
       end,
@@ -211,21 +210,21 @@ return {
       name = "Player goes out of bounds",
       enabled = false,
 
-      start_predicate = function(self, rails, state)
+      start_predicate = function(self, rails)
         return (
-             state.player.position[1] < 56
-          or state.player.position[1] > 64
-          or state.player.position[2] < 12
-          or state.player.position[2] > 14
+             State.player.position[1] < 56
+          or State.player.position[1] > 64
+          or State.player.position[2] < 12
+          or State.player.position[2] > 14
         )
       end,
 
-      run = function(self, rails, state)
-        state.move_order = nil
+      run = function(self, rails)
+        State.move_order = nil
         self.enabled = false
-        line(state, "Твой оппонент довольно ухмыляется.")
-        line(state, {Common.hex_color("60b37e"), "Тренер: ", {1, 1, 1}, "Выход за пределы поля, победил Первый."})
-        line(state, "“Первый” это странное имя.")
+        line("Твой оппонент довольно ухмыляется.")
+        line({Common.hex_color("60b37e"), "Тренер: ", {1, 1, 1}, "Выход за пределы поля, победил Первый."})
+        line("“Первый” это странное имя.")
         rails.scenes.yard_ending.enabled = true
       end,
     },
@@ -233,20 +232,20 @@ return {
       name = "Player wins the yard fight",
       enabled = true,
 
-      start_predicate = function(self, rails, state)
+      start_predicate = function(self, rails)
         return rails.entities.first.hp <= 0
       end,
 
-      run = function(self, rails, state)
-        state.move_order = nil
+      run = function(self, rails)
+        State.move_order = nil
         self.enabled = false
         rails.scenes.player_loses_yard_fight.enabled = false
         rails.scenes.yard_fight_bounds.enabled = false
         rails.entities.first:animate("defeat")
         rails.entities.first.animation.paused = true
-        line(state, {Common.hex_color("e64e4b"), "Первый: ", {1, 1, 1}, "Ты никому не нравишься."})
-        line(state, {Common.hex_color("60b37e"), "Тренер: ", {1, 1, 1}, "Капитуляция, победил Марвин."})
-        line(state, "Ты почти уверен, что тебя зовут не Марвин.")
+        line({Common.hex_color("e64e4b"), "Первый: ", {1, 1, 1}, "Ты никому не нравишься."})
+        line({Common.hex_color("60b37e"), "Тренер: ", {1, 1, 1}, "Капитуляция, победил Марвин."})
+        line("Ты почти уверен, что тебя зовут не Марвин.")
         rails.scenes.yard_ending.enabled = true
       end,
     },
@@ -254,18 +253,18 @@ return {
       name = "Player loses the yard fight",
       enabled = true,
 
-      start_predicate = function(self, rails, state)
-        return state.player.hp <= 0
+      start_predicate = function(self, rails)
+        return State.player.hp <= 0
       end,
 
-      run = function(self, rails, state)
-        state.move_order = nil
+      run = function(self, rails)
+        State.move_order = nil
         self.enabled = false
         rails.scenes.player_wins_yard_fight.enabled = false
         rails.scenes.yard_fight_bounds.enabled = false
-        line(state, {Common.hex_color("e64e4b"), "Первый: ", {1, 1, 1}, "Это было жалко."})
-        line(state, {Common.hex_color("60b37e"), "Тренер: ", {1, 1, 1}, "Капитуляция, победил Первый."})
-        line(state, "“Первый” это странное имя.")
+        line({Common.hex_color("e64e4b"), "Первый: ", {1, 1, 1}, "Это было жалко."})
+        line({Common.hex_color("60b37e"), "Тренер: ", {1, 1, 1}, "Капитуляция, победил Первый."})
+        line("“Первый” это странное имя.")
         rails.scenes.yard_ending.enabled = true
       end,
     },
@@ -274,42 +273,42 @@ return {
       enabled = false,
       start_predicate = function() return true end,
 
-      run = function(self, rails, state)
+      run = function(self, rails)
         self.enabled = false
         rails.entities.first.animation.paused = false
         Fun.chain(rails.entities.kids, {rails.entities.first, rails.entities.teacher})
           :each(function(e)
             e:animate("disappear")
             e:when_animation_ends(function()
-              state:remove(e)
+              State:remove(e)
             end)
           end)
 
         wait_seconds(3)
-        line(state, "Необычно.")
-        line(state, "Было похоже на сцену, разыгранную специально для тебя.")
+        line("Необычно.")
+        line("Было похоже на сцену, разыгранную специально для тебя.")
 
         wait_seconds(5)
-        line(state, "~КОНЕЦ КОНТЕНТА В ОСНОВНОЙ КВЕСТОВОЙ ЦЕПОЧКЕ~")
+        line("~КОНЕЦ КОНТЕНТА В ОСНОВНОЙ КВЕСТОВОЙ ЦЕПОЧКЕ~")
       end,
     },
   },
 
   active_coroutines = {},
 
-  initialize = function(self, state)
+  initialize = function(self)
     self.entities = {
-      door = state.grids.solids[Vector({21, 13})],
+      door = State.grids.solids[Vector({21, 13})],
       levers = Fun.iter({15, 16, 17, 18})
-        :map(function(x) return state.grids.solids[Vector({x, 17})] end)
+        :map(function(x) return State.grids.solids[Vector({x, 17})] end)
         :totable(),
-      kids = Fun.iter(pairs(state.grids.solids._inner_array))
+      kids = Fun.iter(pairs(State.grids.solids._inner_array))
         :filter(function(k) return k.code_name == "kid" end)
         :totable(),
-      first = Fun.iter(pairs(state.grids.solids._inner_array))
+      first = Fun.iter(pairs(State.grids.solids._inner_array))
         :filter(function(k) return k.code_name == "first" end)
         :nth(1),
-      teacher = Fun.iter(pairs(state.grids.solids._inner_array))
+      teacher = Fun.iter(pairs(State.grids.solids._inner_array))
         :filter(function(k) return k.code_name == "teacher" end)
         :nth(1),
     }
@@ -319,14 +318,14 @@ return {
       :each(function(k) k.direction = "up" end)
   end,
 
-  update = function(self, state, event)
+  update = function(self, event)
     self.active_coroutines = Fun.iter(self.active_coroutines)
       :chain(Fun.iter(pairs(self.scenes))
-        :filter(function(s) return s.enabled and s:start_predicate(self, state) end)
+        :filter(function(s) return s.enabled and s:start_predicate(self) end)
         :map(function(s)
           Log.info("Scene `" .. s.name .. "` starts")
           return coroutine.create(function()
-            s:run(self, state)
+            s:run(self)
             Log.info("Scene `" .. s.name .. "` ends")
           end)
         end)

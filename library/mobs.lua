@@ -18,8 +18,8 @@ module.bat = function()
     name = "летучая мышь",
     max_hp = 3,
     faction = "monster",
-    ai = function(self, state, event)
-      if not state.move_order then return end
+    ai = function(self, event)
+      if not State.move_order then return end
 
       local dt = unpack(event)
       if not Commonperiod(self, .25, dt) then return end
@@ -27,7 +27,7 @@ module.bat = function()
         self._ai_coroutine = coroutine.create(self.async_ai)
       end
 
-      local success, message = coroutine.resume(self._ai_coroutine, self, state)
+      local success, message = coroutine.resume(self._ai_coroutine, self)
       if not success then
         Log.error("Coroutine error: " .. message)
       end
@@ -37,18 +37,18 @@ module.bat = function()
         return true
       end
     end,
-    async_ai = function(self, state)
+    async_ai = function(self)
       for _ in Fun.range(self.turn_resources.movement) do
         if self.hungry then
           local target = Fun.iter(Vector.directions)
-            :map(function(v) return state.grids.solids:safe_get(self.position + v) end)
+            :map(function(v) return State.grids.solids:safe_get(self.position + v) end)
             :filter(function(e) return e and e.hp end)
             :nth(1)
 
-          if target then actions.hand_attack(self, state, target) end
+          if target then actions.hand_attack(self, target) end
         end
 
-        actions.move[random.choice(Vector.direction_names)](self, state)
+        actions.move[random.choice(Vector.direction_names)](self)
         coroutine.yield()
       end
     end,
@@ -63,8 +63,8 @@ module.moose_dude = function()
       name = "таинственный силуэт",
       max_hp = 10,
     }),
-    interactive(function(self, _, state)
-      state:add(special.floating_line("//Видят//Ждут//", self.position))
+    interactive(function(self, _)
+      State:add(special.floating_line("//Видят//Ждут//", self.position))
       self.interact = nil
     end)
   )
@@ -84,11 +84,11 @@ local exploding_dude_pack = animated.load_pack("assets/sprites/exploding_dude")
 module.exploding_dude = function()
   return Tablex.extend(
     animated(exploding_dude_pack),
-    interactive(function(self, other, state)
+    interactive(function(self, other)
       self.interact = nil
       self:animate("explode")
       self:when_animation_ends(function()
-        state:remove(self)
+        State:remove(self)
 
         local bats = {}
         for _ = 1, 3 do
@@ -98,16 +98,16 @@ module.exploding_dude = function()
               math.random(11) - 6,
               math.random(11) - 6,
             })
-            if state.grids.solids:safe_get(v) == nil then break end
+            if State.grids.solids:safe_get(v) == nil then break end
           end
 
-          local bat = state:add(Tablex.extend(module.bat(), {position = v}))
+          local bat = State:add(Tablex.extend(module.bat(), {position = v}))
           bat:animate("appear")
           table.insert(bats, bat)
         end
 
         bats[#bats]:when_animation_ends(function()
-          state.move_order = turn_order(Tablex.concat(bats, {other}))
+          State.move_order = turn_order(Tablex.concat(bats, {other}))
         end)
       end)
     end),
@@ -128,8 +128,8 @@ module.first = function()
     faction = "monster",
     abilities = creature.abilities(12, 10, 10, 10, 10, 10),
     immortal = true,
-    ai = function(self, state, event)
-      if not state.move_order then return end
+    ai = function(self, Stateevent)
+      if not State.move_order then return end
 
       local dt = unpack(event)
       if not Commonperiod(self, .25, dt) then return end
@@ -137,7 +137,7 @@ module.first = function()
         self._ai_coroutine = coroutine.create(self.async_ai)
       end
 
-      local success, message = coroutine.resume(self._ai_coroutine, self, state)
+      local success, message = coroutine.resume(self._ai_coroutine, self)
       if not success then
         Log.error("Coroutine error: " .. message)
       end
@@ -147,13 +147,13 @@ module.first = function()
         return turn_order.TURN_END_SIGNAL
       end
     end,
-    async_ai = function(self, state)
+    async_ai = function(self)
       local is_next_to_player = false
       while true do
-        local direction = state.player.position - self.position
+        local direction = State.player.position - self.position
         is_next_to_player = direction:abs() <= 1
         if is_next_to_player
-          or not actions.move[Vector.name_from_direction(direction:normalized())](self, state)
+          or not actions.move[Vector.name_from_direction(direction:normalized())](self)
         then
           break
         end
@@ -161,7 +161,7 @@ module.first = function()
       end
       if not is_next_to_player then return end
 
-      actions.hand_attack(self, state, state.player)
+      actions.hand_attack(self, Statestate.player)
     end,
   })
 

@@ -52,11 +52,11 @@ local get_melee_damage_roll = function(entity)
 end
 
 module.move = Fun.iter(Vector.direction_names):map(function(direction_name)
-  return direction_name, function(entity, state)
+  return direction_name, function(entity)
     entity.direction = direction_name
     local old_position = entity.position
     if entity.turn_resources.movement <= 0
-      or not level.move(state.grids[entity.layer], entity, entity.position + Vector[direction_name])
+      or not level.move(State.grids[entity.layer], entity, entity.position + Vector[direction_name])
     then
       return false
     end
@@ -64,7 +64,7 @@ module.move = Fun.iter(Vector.direction_names):map(function(direction_name)
     entity.turn_resources.movement = entity.turn_resources.movement - 1
 
     Fun.iter(Vector.directions)
-      :map(function(d) return state.grids.solids:safe_get(old_position + d) end)
+      :map(function(d) return State.grids.solids:safe_get(old_position + d) end)
       :filter(function(e)
         return e
           and e ~= entity
@@ -79,7 +79,7 @@ module.move = Fun.iter(Vector.direction_names):map(function(direction_name)
         e:animate("attack")
         e:when_animation_ends(function()
           mech.attack(
-            e, state, entity,
+            e, entity,
             get_melee_attack_roll(e),
             get_melee_damage_roll(e)
           )
@@ -94,7 +94,7 @@ module.move = Fun.iter(Vector.direction_names):map(function(direction_name)
   end
 end):tomap()
 
-module.hand_attack = function(entity, state, target)
+module.hand_attack = function(entity, target)
   if entity.turn_resources.actions <= 0
     or not target
     or not target.hp
@@ -107,14 +107,14 @@ module.hand_attack = function(entity, state, target)
   entity:animate("attack")
   entity:when_animation_ends(function()
     mech.attack(
-      entity, state, target,
+      entity, target,
       get_melee_attack_roll(entity),
       get_melee_damage_roll(entity)
     )
   end)
 end
 
-module.sneak_attack = function(entity, state, target)
+module.sneak_attack = function(entity, target)
   if entity.turn_resources.actions <= 0
     or not target
     or not target.hp
@@ -130,7 +130,7 @@ module.sneak_attack = function(entity, state, target)
   entity:animate("attack")
   entity:when_animation_ends(function()
     mech.attack(
-      entity, state, target,
+      entity, target,
       get_melee_attack_roll(entity),
       get_melee_damage_roll(entity)
         + D(6) * math.ceil(entity.level / 2)

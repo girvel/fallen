@@ -34,23 +34,23 @@ define_hotkey(hotkeys, {"fight"}, {"space"}, function() return turn_order.TURN_E
 define_hotkey(hotkeys, {"dialogue"}, {"space"}, function(entity) entity.hears = nil end)
 define_hotkey(hotkeys, {"reading"}, {"escape"}, function(entity) entity.reads = nil end)
 
-define_hotkey(hotkeys, {"free", "fight"}, {"1"}, function(entity, state)
-  actions.hand_attack(entity, state, state.grids.solids[entity.position + Vector[entity.direction]])
+define_hotkey(hotkeys, {"free", "fight"}, {"1"}, function(entity)
+  actions.hand_attack(entity.grids.solids[entity.position + Vector[entity.direction]])
 end)
 
 define_hotkey(hotkeys, {"free", "fight"}, {"3"}, actions.second_wind)
 define_hotkey(hotkeys, {"fight"}, {"4"}, actions.action_surge)
 
-define_hotkey(hotkeys, {"free", "fight"}, {"e"}, function(entity, state)
+define_hotkey(hotkeys, {"free", "fight"}, {"e"}, function(entity)
   -- TODO action
   if entity.turn_resources.bonus_actions <= 0 then return end
-  local entity_to_interact = interactive.get_for(entity, state)
+  local entity_to_interact = interactive.get_for(entity)
   if not entity_to_interact then return end
   entity.turn_resources.bonus_actions = entity.turn_resources.bonus_actions - 1
-  entity_to_interact:interact(entity, state)
+  entity_to_interact:interact(entity)
 end)
 
-define_hotkey(hotkeys, {"fight"}, {"z"}, function(entity, state)
+define_hotkey(hotkeys, {"fight"}, {"z"}, function(entity)
   actions.dash(entity)
 end)
 
@@ -64,13 +64,13 @@ module_mt.__call = function()
     level = 2,
     direction = "right",
     immortal = true,
-    ai = function(self, state)
+    ai = function(self)
       local mode
       if self.reads then
         mode = "reading"
       elseif self.hears then
         mode = "dialogue"
-      elseif state.move_order then
+      elseif State.move_order then
         mode = "fight"
       else
         mode = "free"
@@ -78,7 +78,7 @@ module_mt.__call = function()
 
       local action = hotkeys[mode][self.last_pressed_key]
       self.last_pressed_key = nil
-      if action ~= nil then return action(self, state) end
+      if action ~= nil then return action(self) end
     end,
     abilities = {
       strength = 8,

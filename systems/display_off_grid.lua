@@ -4,11 +4,11 @@ return Tiny.processingSystem({
   filter = Tiny.requireAll("sprite", "off_grid_position"),
   base_callback = "draw",
 
-  process = function(_, entity, state)
-    local position = Vector({state.transform:transformPoint(unpack(entity.off_grid_position))})
+  process = function(_, entity)
+    local position = Vector({State.transform:transformPoint(unpack(entity.off_grid_position))})
       + Vector({
-        state.CELL_DISPLAY_SIZE - default_font:getWidth(entity.sprite.text),
-        state.CELL_DISPLAY_SIZE - default_font:getHeight(),
+        State.CELL_DISPLAY_SIZE - default_font:getWidth(entity.sprite.text),
+        State.CELL_DISPLAY_SIZE - default_font:getHeight(),
       }) / 2
 
     love.graphics.print(

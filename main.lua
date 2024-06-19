@@ -20,18 +20,17 @@ local stateful = require("tech.stateful")
 local cli = require("tech.cli")
 
 
-local state
 love.load = function(args)
   Log.info("Game started")
   math.randomseed(os.time())
-  state = stateful()
-  state:load_level("assets/levels/demo", palette)
+  State = stateful()
+  State:load_level("assets/levels/demo", palette)
 
   args = cli.parse(args)
   Log.info("Command line arguments:", args)
 
   for _, scene in ipairs(args.checkpoints) do
-    state.rails.scenes[scene].enabled = true
+    State.rails.scenes[scene].enabled = true
   end
 
   if not args.debug then
@@ -44,9 +43,9 @@ end
 
 for _, callback_name in ipairs({"draw", "keypressed", "update"}) do
   love[callback_name] = function(...)
-    state.world:update(function(_, entity)
+    State.world:update(function(_, entity)
       return entity.base_callback == callback_name
-    end, state, {...})
+    end, {...})
   end
 end
 

@@ -21,22 +21,22 @@ local value_translations = {
 return Tiny.system({
   base_callback = "draw",
 
-  update = function(self, state)
-    if state.player.reads then
-      return self:display_text(state.player.reads)
+  update = function(self)
+    if State.player.reads then
+      return self:display_text(State.player.reads)
     end
 
-    if state.player.hears then
-      return self:display_line(state.player.hears)
+    if State.player.hears then
+      return self:display_line(State.player.hears)
     end
 
-    local max = state.player:get_turn_resources()
+    local max = State.player:get_turn_resources()
 
     local lines = {
-      "Здоровье: " .. state.player.hp .. "/" .. state.player:get_max_hp(),
+      "Здоровье: " .. State.player.hp .. "/" .. State.player:get_max_hp(),
     }
 
-    local weapon = state.player.inventory.main_hand
+    local weapon = State.player.inventory.main_hand
     if weapon then
       Tablex.concat(lines, {
         "",
@@ -47,7 +47,7 @@ return Tiny.system({
     Tablex.concat(
       lines,
       {"", "Ресурсы:"},
-      Fun.iter(state.player.turn_resources)
+      Fun.iter(State.player.turn_resources)
         :map(function(k, v)
           return (
             "  " .. (resource_translations[k] or k) ..
@@ -58,15 +58,15 @@ return Tiny.system({
         :totable()
     )
 
-    if state.move_order then
+    if State.move_order then
       Tablex.concat(lines, {
         "",
         "Очередь ходов:",
       })
 
-      Tablex.concat(lines, Fun.iter(state.move_order.list)
+      Tablex.concat(lines, Fun.iter(State.move_order.list)
         :enumerate()
-        :map(function(i, e) return (state.move_order.current_i == i and "x " or "- ") .. (e.name or "_") end)
+        :map(function(i, e) return (State.move_order.current_i == i and "x " or "- ") .. (e.name or "_") end)
         :totable()
       )
 
@@ -86,7 +86,7 @@ return Tiny.system({
       "  z - рывок",
     })
 
-    local potential_interaction = interactive.get_for(state.player, state)
+    local potential_interaction = interactive.get_for(State.player)
     if potential_interaction then
       Tablex.concat(lines, {
         "",
