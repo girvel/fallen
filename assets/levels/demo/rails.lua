@@ -88,9 +88,15 @@ return {
           :sum() == 13
       end,
 
-      run = function(self, rails)
+      run = function(self, rails, state)
         self.enabled = false
         rails.entities.door:open()
+        Fun.iter(rails.entities.levers):each(function(l)
+          if l._highlight then
+            state:remove(l._highlight)
+            l._highlight = nil
+          end
+        end)
       end,
     },
     outside_the_room = {
