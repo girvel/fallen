@@ -35,20 +35,19 @@ return Tiny.system({
 
     local lines = {
       "Здоровье: " .. state.player.hp .. "/" .. state.player:get_max_hp(),
-      "",
     }
 
     local weapon = state.player.inventory.main_hand
     if weapon then
       common.concat(lines, {
-        "Оружие: " .. weapon.name .. " (" .. weapon.damage_roll:to_string() .. ")",
         "",
+        "Оружие: " .. weapon.name .. " (" .. weapon.damage_roll:to_string() .. ")",
       })
     end
 
     common.concat(
       lines,
-      {"Ресурсы:"},
+      {"", "Ресурсы:"},
       Fun.iter(state.player.turn_resources)
         :map(function(k, v)
           return (
@@ -80,11 +79,12 @@ return Tiny.system({
 
     common.concat(lines, {
       "",
-      "1 - атака рукой",
-      "2 - ничего не делать",
-      "3 - второе дыхание",
-      "4 - всплеск действий",
-      "z - рывок",
+      "Действия:",
+      "  1 - атака рукой",
+      "  2 - ничего не делать",
+      "  3 - второе дыхание",
+      "  4 - всплеск действий",
+      "  z - рывок",
     })
 
     local potential_interaction = interactive.get_for(state.player, state)

@@ -2,18 +2,18 @@ local module = {}
 
 module.extend = function(base, extension, ...)
   if extension == nil then return base end
-
   for k, v in pairs(extension) do
     base[k] = v
   end
   return module.extend(base, ...)
 end
 
-module.concat = function(base, extension)
+module.concat = function(base, extension, ...)
+  if extension == nil then return base end
   for _, v in ipairs(extension) do
     table.insert(base, v)
   end
-  return base
+  return module.concat(base, ...)
 end
 
 module.deep_copy = function(o, seen)
