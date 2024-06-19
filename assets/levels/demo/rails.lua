@@ -9,6 +9,11 @@ local line = function(state, line)
   while state.player.hears == line do coroutine.yield() end
 end
 
+local wait_seconds = function(s)
+  local t = love.timer.getTime()
+  while love.timer.getTime() - t < s do coroutine.yield() end
+end
+
 local center_camera = function(state)
   state.camera.position = (
     state.player.position * state.CELL_DISPLAY_SIZE
@@ -54,7 +59,7 @@ return {
 
       run = function(self, rails, state)
         self.enabled = false
-        line(state, "Надпись на полу как будто бы выжжена в камне.")
+        line(state, "Надпись на полу как будто бы выжжена в дереве.")
         line(state, "Почерк выглядит знакомым.")
       end,
     },
@@ -110,14 +115,14 @@ return {
         self.enabled = false
         line(state, "Ты стоишь посреди бескрайнего тёмного пространства.")
         line(state, "Здесь нет ни неба, ни земли, ни горизонта.")
-        line(state, "Тусклый пурпурный свет равномерно покрывает твоё тело")
+        line(state, "Тусклый пурпурный свет равномерно покрывает твоё тело.")
         line(state, "Здесь не темно; здесь просто ничего нет.")
         line(state, {
           common.hex_color("c0edef"), "Протагонист: ",
           {1, 1, 1}, "Ну, по крайней мере я знаю, что я не в реальности.",
         })
         line(state,
-          "Единственный новый объект посреди черноты — ещё одно разрушенное здание на некотором " ..
+          "Единственный новый объект посреди черноты — ещё одно здание на некотором " ..
           "расстоянии впереди."
         )
       end,
@@ -137,7 +142,7 @@ return {
 
       run = function(self, rails, state)
         self.enabled = false
-        line(state, "У тёмного мира есть граница; она невидима, неосязаема и даже в какой-то степени непостижима.")
+        line(state, "У тёмного мира всё-таки есть граница; она невидима, неосязаема и даже в какой-то степени непостижима.")
         line(state, "Единственный признак того, что она существует — движение в эту сторону перестало иметь любой эффект; можно переставлять ноги сколько угодно, но все видимые объекты остаются ровно на той же дистанции.")
         line(state, "С другой стороны, ты точно выяснил что-то новое: границы этого места кажутся прямоугольными.")
         line(state, "Может быть, оно рукотворно?")
@@ -275,11 +280,12 @@ return {
             end)
           end)
 
-        local t = love.timer.getTime()
-        while love.timer.getTime() - t < 3 do coroutine.yield() end
-
+        wait_seconds(3)
         line(state, "Необычно.")
         line(state, "Было похоже на сцену, разыгранную специально для тебя.")
+
+        wait_seconds(5)
+        line(state, "~КОНЕЦ КОНТЕНТА В ОСНОВНОЙ КВЕСТОВОЙ ЦЕПОЧКЕ~")
       end,
     },
   },
