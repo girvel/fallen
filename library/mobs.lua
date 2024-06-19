@@ -22,7 +22,7 @@ module.bat = function()
       if not State.move_order then return end
 
       local dt = unpack(event)
-      if not Commonperiod(self, .25, dt) then return end
+      if not Common.period(self, .25, dt) then return end
       if not self._ai_coroutine then
         self._ai_coroutine = coroutine.create(self.async_ai)
       end
@@ -128,11 +128,11 @@ module.first = function()
     faction = "monster",
     abilities = creature.abilities(12, 10, 10, 10, 10, 10),
     immortal = true,
-    ai = function(self, Stateevent)
+    ai = function(self, event)
       if not State.move_order then return end
 
       local dt = unpack(event)
-      if not Commonperiod(self, .25, dt) then return end
+      if not Common.period(self, .25, dt) then return end
       if not self._ai_coroutine then
         self._ai_coroutine = coroutine.create(self.async_ai)
       end
@@ -161,7 +161,7 @@ module.first = function()
       end
       if not is_next_to_player then return end
 
-      actions.hand_attack(self, Statestate.player)
+      actions.hand_attack(self, State.player)
     end,
   })
 

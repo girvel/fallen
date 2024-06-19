@@ -3,9 +3,13 @@ local turn_order = require("tech.turn_order")
 local creature = require("core.creature")
 
 
-local line = function(line)
-  State.player.hears = line
-  while State.player.hears == line do coroutine.yield() end
+local narration = function(text)
+  State.player.hears = text
+  while State.player.hears == text do coroutine.yield() end
+end
+
+local line = function(entity, text)
+  narration({entity.sprite.color, (entity.name or "?") .. ": ", {1, 1, 1}, text})
 end
 
 local wait_seconds = function(s)
@@ -30,9 +34,9 @@ return {
       run = function(self, rails)
         self.enabled = false
         center_camera()
-        line("Ты оказываешься в потусторонне-мрачной комнате.")
-        line("Ты не совсем уверен, что такое “ты” и как именно ты здесь оказался.")
-        line("Вроде бы у тебя была какая-то цель.")
+        narration("Ты оказываешься в потусторонне-мрачной комнате.")
+        narration("Ты не совсем уверен, что такое “ты” и как именно ты здесь оказался.")
+        narration("Вроде бы у тебя была какая-то цель.")
       end,
     },
     {
@@ -45,7 +49,7 @@ return {
 
       run = function(self, rails)
         self.enabled = false
-        line("Тяжёлая дубовая дверь заперта.")
+        narration("Тяжёлая дубовая дверь заперта.")
       end,
     },
     {
@@ -58,8 +62,8 @@ return {
 
       run = function(self, rails)
         self.enabled = false
-        line("Надпись на полу как будто бы выжжена в дереве.")
-        line("Почерк выглядит знакомым.")
+        narration("Надпись на полу как будто бы выжжена в дереве.")
+        narration("Почерк выглядит знакомым.")
       end,
     },
     {
@@ -73,7 +77,7 @@ return {
 
       run = function(self, rails)
         self.enabled = false
-        line("Древний механизм из каменных рычагов и шестерней.")
+        narration("Древний механизм из каменных рычагов и шестерней.")
       end,
     },
     {
@@ -118,15 +122,12 @@ return {
 
       run = function(self, rails)
         self.enabled = false
-        line("Ты стоишь посреди бескрайнего тёмного пространства.")
-        line("Здесь нет ни неба, ни земли, ни горизонта.")
-        line("Тусклый пурпурный свет равномерно покрывает твоё тело.")
-        line("Здесь не темно; здесь просто ничего нет.")
-        line({
-          Common.hex_color("c0edef"), "Протагонист: ",
-          {1, 1, 1}, "Ну, по крайней мере я знаю, что я не в реальности.",
-        })
-        line(          "Единственный новый объект посреди черноты — ещё одно здание на некотором " ..
+        narration("Ты стоишь посреди бескрайнего тёмного пространства.")
+        narration("Здесь нет ни неба, ни земли, ни горизонта.")
+        narration("Тусклый пурпурный свет равномерно покрывает твоё тело.")
+        narration("Здесь не темно; здесь просто ничего нет.")
+        line(State.player, "Ну, по крайней мере я знаю, что я не в реальности.")
+        narration("Единственный новый объект посреди черноты — ещё одно здание на некотором " ..
           "расстоянии впереди."
         )
       end,
@@ -146,10 +147,10 @@ return {
 
       run = function(self, rails)
         self.enabled = false
-        line("У тёмного мира всё-таки есть граница; она невидима, неосязаема и даже в какой-то степени непостижима.")
-        line("Единственный признак того, что она существует — движение в эту сторону перестало иметь любой эффект; можно переставлять ноги сколько угодно, но все видимые объекты остаются ровно на той же дистанции.")
-        line("С другой стороны, ты точно выяснил что-то новое: границы этого места кажутся прямоугольными.")
-        line("Может быть, оно рукотворно?")
+        narration("У тёмного мира всё-таки есть граница; она невидима, неосязаема и даже в какой-то степени непостижима.")
+        narration("Единственный признак того, что она существует — движение в эту сторону перестало иметь любой эффект; можно переставлять ноги сколько угодно, но все видимые объекты остаются ровно на той же дистанции.")
+        narration("С другой стороны, ты точно выяснил что-то новое: границы этого места кажутся прямоугольными.")
+        narration("Может быть, оно рукотворно?")
       end,
     },
     {
@@ -162,9 +163,9 @@ return {
 
       run = function(self, rails)
         self.enabled = false
-        line("Внутренний двор гимназии.")
-        line("Шепчущаяся толпа кадетов выстроилась вокруг небольшой песчаной дорожки.")
-        line({Common.hex_color("60b37e"), "Тренер: ", {1, 1, 1}, "Пара — на позиции!"})
+        narration("Внутренний двор гимназии.")
+        narration("Шепчущаяся толпа кадетов выстроилась вокруг небольшой песчаной дорожки.")
+        line(rails.entities.teacher, "Пара — на позиции!")
         rails.entities.gym_key_point = State:add(Tablex.extend(sfx.highlight(), {position = Vector({57, 13})}))
       end,
     },
@@ -182,11 +183,11 @@ return {
       run = function(self, rails)
         self.enabled = false
         State:remove(rails.entities.gym_key_point)
-        line("Горячий песок.")
-        line("Дрожь в коленях.")
-        line("Тяжесть клинка.")
-        line({Common.hex_color("e64e4b"), "Первый: ", {1, 1, 1}, "Тебе конец."})
-        line({Common.hex_color("60b37e"), "Тренер: ", {1, 1, 1}, "Ан гард!"})
+        narration("Горячий песок.")
+        narration("Дрожь в коленях.")
+        narration("Тяжесть клинка.")
+        line(rails.entities.first, "Тебе конец.")
+        line(rails.entities.teacher, "Ан гард!")
 
         local initiative_rolls = Fun.iter({State.player, rails.entities.first})
           :map(function(e) return {e, (D(20) + creature.get_modifier(e.abilities.dexterity)):roll()} end)
@@ -222,9 +223,9 @@ return {
       run = function(self, rails)
         State.move_order = nil
         self.enabled = false
-        line("Твой оппонент довольно ухмыляется.")
-        line({Common.hex_color("60b37e"), "Тренер: ", {1, 1, 1}, "Выход за пределы поля, победил Первый."})
-        line("“Первый” это странное имя.")
+        narration("Твой оппонент довольно ухмыляется.")
+        line(rails.entities.teacher, "Выход за пределы поля, победил Первый.")
+        narration("“Первый” это странное имя.")
         rails.scenes.yard_ending.enabled = true
       end,
     },
@@ -243,9 +244,9 @@ return {
         rails.scenes.yard_fight_bounds.enabled = false
         rails.entities.first:animate("defeat")
         rails.entities.first.animation.paused = true
-        line({Common.hex_color("e64e4b"), "Первый: ", {1, 1, 1}, "Ты никому не нравишься."})
-        line({Common.hex_color("60b37e"), "Тренер: ", {1, 1, 1}, "Капитуляция, победил Марвин."})
-        line("Ты почти уверен, что тебя зовут не Марвин.")
+        line(rails.entities.first, "Ты никому не нравишься.")
+        line(rails.entities.teacher, "Капитуляция, победил Марвин.")
+        narration("Ты почти уверен, что тебя зовут не Марвин.")
         rails.scenes.yard_ending.enabled = true
       end,
     },
@@ -262,9 +263,9 @@ return {
         self.enabled = false
         rails.scenes.player_wins_yard_fight.enabled = false
         rails.scenes.yard_fight_bounds.enabled = false
-        line({Common.hex_color("e64e4b"), "Первый: ", {1, 1, 1}, "Это было жалко."})
-        line({Common.hex_color("60b37e"), "Тренер: ", {1, 1, 1}, "Капитуляция, победил Первый."})
-        line("“Первый” это странное имя.")
+        line(rails.entities.first, "Это было жалко.")
+        line(rails.entities.teacher, "Капитуляция, победил Первый.")
+        narration("“Первый” это странное имя.")
         rails.scenes.yard_ending.enabled = true
       end,
     },
@@ -285,11 +286,11 @@ return {
           end)
 
         wait_seconds(3)
-        line("Необычно.")
-        line("Было похоже на сцену, разыгранную специально для тебя.")
+        narration("Необычно.")
+        narration("Было похоже на сцену, разыгранную специально для тебя.")
 
         wait_seconds(5)
-        line("~КОНЕЦ КОНТЕНТА В ОСНОВНОЙ КВЕСТОВОЙ ЦЕПОЧКЕ~")
+        narration("~КОНЕЦ КОНТЕНТА В ОСНОВНОЙ КВЕСТОВОЙ ЦЕПОЧКЕ~")
       end,
     },
   },
@@ -333,7 +334,7 @@ return {
       :filter(function(c)
         local success, message = coroutine.resume(c)
         if not success then
-          Log.trace("Coroutine error: " .. message .. "\n" .. debug.traceback(c))
+          Log.error("Coroutine error: " .. message .. "\n" .. debug.traceback(c))
         end
         return coroutine.status(c) ~= "dead"
       end)

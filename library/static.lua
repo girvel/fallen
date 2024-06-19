@@ -8,7 +8,8 @@ local module = {}
 local static_sprite = function(path)
   return {
     sprite = {
-      image = love.graphics.newImage(path)
+      image = love.graphics.newImage(path),
+      color = Common.get_color(love.image.newImageData(path)),
     }
   }
 end

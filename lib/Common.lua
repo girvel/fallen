@@ -20,4 +20,14 @@ module.hex_color = function(str)
     :totable()
 end
 
+module.get_color = function(image_data)
+  for x = 0, image_data:getWidth() - 1 do
+    for y = 0, image_data:getHeight() - 1 do
+      local color = {image_data:getPixel(x, y)}
+      if color[4] > 0 then return color end
+    end
+  end
+end
+
+
 return module

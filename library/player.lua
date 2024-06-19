@@ -35,7 +35,7 @@ define_hotkey(hotkeys, {"dialogue"}, {"space"}, function(entity) entity.hears = 
 define_hotkey(hotkeys, {"reading"}, {"escape"}, function(entity) entity.reads = nil end)
 
 define_hotkey(hotkeys, {"free", "fight"}, {"1"}, function(entity)
-  actions.hand_attack(entity.grids.solids[entity.position + Vector[entity.direction]])
+  actions.hand_attack(entity, State.grids.solids[entity.position + Vector[entity.direction]])
 end)
 
 define_hotkey(hotkeys, {"free", "fight"}, {"3"}, actions.second_wind)

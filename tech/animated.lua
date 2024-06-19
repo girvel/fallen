@@ -19,7 +19,7 @@ local animation_methods = {
 
   animation_refresh = function(self)
     if not self.animation.pack[self.animation.current] then return end
-    self.sprite.image = self.animation.pack[self.animation.current][math.floor(self.animation.frame)]
+    self.sprite = self.animation.pack[self.animation.current][math.floor(self.animation.frame)]
   end
 }
 
@@ -53,7 +53,10 @@ module.load_pack = function(folder_path)
     end
 
     if not result[animation_name] then result[animation_name] = {} end
-    result[animation_name][frame_number] = love.graphics.newImage(folder_path .. "/" .. file_name)
+    result[animation_name][frame_number] = {
+      image = love.graphics.newImage(folder_path .. "/" .. file_name),
+      color = Common.get_color(love.image.newImageData(folder_path .. "/" .. file_name))
+    }
   end
   return result
 end
