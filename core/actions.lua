@@ -2,6 +2,7 @@ local creature = require("core.creature")
 local level = require("tech.level")
 local mech = require("core.mech")
 local constants = require("core.constants")
+local random = require("utils.random")
 
 
 local module = {}
@@ -88,6 +89,11 @@ module.move = Fun.iter(Vector.direction_names):map(function(direction_name)
 
     if entity.animate then
       entity:animate("move")
+    end
+
+    local old_tile = State.grids.tiles[old_position]
+    if old_tile and old_tile.sounds and old_tile.sounds.move then
+      random.choice(old_tile.sounds.move):play()
     end
 
     return true

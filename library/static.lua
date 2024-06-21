@@ -96,8 +96,28 @@ module.teacher = function()
   )
 end
 
+local planks_sounds = {
+  move = Fun.range(4)
+    :map(function(n)
+      local sound = love.audio.newSource("assets/sounds/move_planks_0" .. n .. ".wav", "static")
+      sound:setVolume(0.1)
+      return sound
+    end)
+    :totable(),
+}
+
+module.planks = function()
+  return Tablex.extend(
+    static_sprite("assets/sprites/planks.png"),
+    {
+      code_name = "planks",
+      sounds = planks_sounds,
+    }
+  )
+end
+
 for _, name in ipairs({
-  "wall", "planks", "bushes", "smooth_wall", "crooked_wall", "sand", "wall_with_vines",
+  "wall", "bushes", "smooth_wall", "crooked_wall", "sand", "wall_with_vines",
   "key_point", "walkway",
 }) do
   module[name] = function()
