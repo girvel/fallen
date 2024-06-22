@@ -1,5 +1,6 @@
 local animated = require("tech.animated")
 local constants = require("core.constants")
+local actions = require("core.actions")
 
 
 local module = {}
@@ -21,6 +22,10 @@ module_mt.__call = function(_, animation_pack, object)
     },
     layer = "solids",
 
+    actions = Fun.iter(actions.move)
+      :map(function(_, a) return a end)
+      :totable(),
+
     get_armor = function(self)
       return 10 + module.get_modifier(self.abilities.dexterity)
     end,
@@ -41,7 +46,7 @@ module_mt.__call = function(_, animation_pack, object)
       local con_bonus = module.get_modifier(self.abilities.constitution)
       return self.class.hp_die + con_bonus
         + (self.level - 1) * (self.class.hp_die / 2 + 1 + con_bonus)
-      end,
+    end,
   }, object or {})
 
   result.hp = result:get_max_hp()
