@@ -1,5 +1,4 @@
 local level = require("tech.level")
-local special = require("tech.special")
 
 
 local module = {}
@@ -62,22 +61,7 @@ module_mt.__call = function()
       self.rails:initialize(self)
     end,
 
-    gui = {
-      font = love.graphics.newFont("assets/fonts/joystix.monospace-regular.otf", 12),
-      show_page = function(self, path)
-        local content = love.filesystem.read(path)
-        self.text_entities = {
-          State:add(special.text(content, self.font, Vector({0, 0})))
-        }
-      end,
-      exit_wiki = function(self)
-        if not self.text_entities then return end
-        for _, e in ipairs(self.text_entities) do
-          State:remove(e)
-        end
-        self.text_entities = nil
-      end,
-    }
+    gui = require("tech.stateful.gui"),
 	}
 end
 

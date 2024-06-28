@@ -50,6 +50,10 @@ define_hotkey(hotkeys, {"free", "fight"}, {"e"}, function(entity)
   entity_to_interact:interact(entity)
 end)
 
+define_hotkey(hotkeys, {"free", "fight"}, {"j"}, function(entity)
+  State.gui:show_page("assets/wiki/angels_01.md")
+end)
+
 define_hotkey(hotkeys, {"fight"}, {"z"}, function(entity)
   actions.dash(entity)
 end)
