@@ -121,6 +121,7 @@ local generate_entities = function(token_lines, font)
 end
 
 return {
+  LINK_COLOR = Common.hex_color("60b37e"),
   font = love.graphics.newFont("assets/fonts/joystix.monospace-regular.otf", 12),
 
   show_page = function(self, path)

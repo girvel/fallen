@@ -5,6 +5,7 @@ return {
   require("systems.display_scene"),
   require("systems.display_off_grid"),
   require("systems.display_gui"),
+  require("systems.display_hovered_links"),
 
   require("systems.input"),
   require("systems.ai"),

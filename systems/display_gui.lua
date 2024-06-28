@@ -105,7 +105,7 @@ return Tiny.processingSystem({
   end,
 
   process = function(_, entity)
-    local display = entity.link and {Common.hex_color("60b37e"), entity.sprite.text} or entity.sprite.text
+    local display = entity.link and {State.gui.LINK_COLOR, entity.sprite.text} or entity.sprite.text
     love.graphics.print(display, entity.sprite.font, unpack(entity.gui_position))
   end,
 
