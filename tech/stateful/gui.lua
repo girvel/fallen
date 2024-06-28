@@ -95,6 +95,7 @@ local wrap_lines = function(token_lines, font, max_w)
         else
           table.insert(result[#result], {
             content = current_content:sub(1, break_i),
+            x = current_w,
             link = token.link,
           })
           current_content = current_content:sub(break_i + 1)
@@ -111,7 +112,7 @@ local generate_entities = function(token_lines, font)
   for y, line in ipairs(token_lines) do
     for _, token in ipairs(line) do
       table.insert(result, Tablex.extend(
-        special.text(token.content, font, Vector({0, font:getHeight() * y})),
+        special.text(token.content, font, Vector({token.x, font:getHeight() * y})),
         {link = token.link}
       ))
     end

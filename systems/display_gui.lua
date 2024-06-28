@@ -105,7 +105,8 @@ return Tiny.processingSystem({
   end,
 
   process = function(_, entity)
-    love.graphics.print(entity.sprite.text, entity.sprite.font, unpack(entity.gui_position))
+    local display = entity.link and {Common.hex_color("60b37e"), entity.sprite.text} or entity.sprite.text
+    love.graphics.print(display, entity.sprite.font, unpack(entity.gui_position))
   end,
 
   TEXT_MAX_W = 1000,
