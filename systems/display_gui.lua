@@ -109,8 +109,6 @@ return Tiny.processingSystem({
     love.graphics.print(display, entity.sprite.font, unpack(entity.gui_position))
   end,
 
-  TEXT_MAX_H = 800,
-
   -- display_wiki_background = function(self)
   --   local window_w = love.graphics.getWidth()
   --   local window_h = love.graphics.getHeight()
@@ -128,7 +126,7 @@ return Tiny.processingSystem({
   display_line = function(self, line)
     local window_w = love.graphics.getWidth()
     local window_h = love.graphics.getHeight()
-    local text_w = math.min(window_w - 40, State.gui.TEXT_MAX_W)
+    local text_w = math.min(window_w - 40, State.gui.TEXT_MAX_SIZE[1])
 
     love.graphics.setColor(Common.hex_color("31222c"))
     love.graphics.rectangle("fill", 0, window_h - 140, window_w, 140)
