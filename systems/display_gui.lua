@@ -102,11 +102,16 @@ return Tiny.processingSystem({
       love.graphics.getWidth() - WIDTH, 15,
       WIDTH - 15
     )
+
+    State.gui.current_wiki_offset = ((Vector({love.graphics.getDimensions()}) - State.gui.TEXT_MAX_SIZE) / 2):ceil()
   end,
 
-  process = function(_, entity)
-    local display = entity.link and {State.gui.LINK_COLOR, entity.sprite.text} or entity.sprite.text
-    love.graphics.print(display, entity.sprite.font, unpack(entity.gui_position))
+  process = function(self, entity)
+    local display = entity.link
+      and {State.gui.LINK_COLOR, entity.sprite.text}
+      or entity.sprite.text
+
+    love.graphics.print(display, entity.sprite.font, unpack(entity.gui_position + State.gui.current_wiki_offset))
   end,
 
   -- display_wiki_background = function(self)

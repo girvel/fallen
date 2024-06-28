@@ -2,9 +2,10 @@ local wrapping = require("tech.stateful.wrapping")
 
 
 return {
-  LINK_COLOR = Common.hex_color("60b37e"),
+  LINK_COLOR = Common.hex_color("3f5d92"),
   TEXT_MAX_SIZE = Vector({1000, 800}),
   font = love.graphics.newFont("assets/fonts/joystix.monospace-regular.otf", 12),
+  current_wiki_offset = Vector.zero,
 
   show_page = function(self, path)
     self.text_entities = Fun.iter(wrapping.generate_wiki_page(
