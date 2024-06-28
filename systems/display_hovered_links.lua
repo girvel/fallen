@@ -7,10 +7,11 @@ return Tiny.processingSystem({
   end,
 
   process = function(_, entity)
-    local start = State.gui.current_wiki_offset + entity.gui_position + Vector.down * entity.sprite.font:getHeight()
-    local finish = start + Vector.right * entity.sprite.font:getWidth(entity.sprite.text)
+    local offset_position = entity.gui_position + State.gui.current_wiki_offset
+    local start = offset_position + Vector.down * entity.size[2]
+    local finish = offset_position + entity.size
     local mouse_position = Vector({love.mouse.getPosition()})
-    if not (mouse_position >= entity.gui_position and mouse_position < finish) then return end
+    if not (mouse_position >= offset_position and mouse_position < finish) then return end
     love.graphics.line(start[1], start[2], unpack(finish))
   end,
 

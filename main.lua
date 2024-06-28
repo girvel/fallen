@@ -19,11 +19,13 @@ local palette = require("library.palette")
 local stateful = require("tech.stateful")
 local cli = require("tech.cli")
 
+local systems = require("systems")
+
 
 love.load = function(args)
-  Log.info("Game started")
+  Log.info("Game started")  -- TODO better launch logging (for timestamps)
   math.randomseed(os.time())
-  State = stateful()
+  State = stateful(systems)
   State:load_level("assets/levels/demo", palette)
 
   args = cli.parse(args)
@@ -41,7 +43,13 @@ love.load = function(args)
   end
 end
 
-for _, callback_name in ipairs({"draw", "keypressed", "update"}) do
+for callback_name, _ in pairs(
+  Fun.iter(systems)
+    :reduce(function(acc, system)
+      acc[system.base_callback] = true
+      return acc
+    end, {})
+) do
   love[callback_name] = function(...)
     State.world:update(function(_, entity)
       return entity.base_callback == callback_name

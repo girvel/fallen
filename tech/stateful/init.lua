@@ -5,7 +5,7 @@ local module = {}
 local module_mt = {}
 setmetatable(module, module_mt)
 
-module_mt.__call = function()
+module_mt.__call = function(_, systems)
   local SCALING_FACTOR = 2
   local transform = love.math.newTransform()
   transform:scale(SCALING_FACTOR)
@@ -13,7 +13,7 @@ module_mt.__call = function()
 	return {
     -- grids
     -- rails
-    world = Tiny.world(unpack(require("systems"))),
+    world = Tiny.world(unpack(systems)),
     transform = transform,
     camera = {position = Vector.zero},
 

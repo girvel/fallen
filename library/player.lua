@@ -50,8 +50,8 @@ define_hotkey(hotkeys, {"free", "fight"}, {"e"}, function(entity)
   entity_to_interact:interact(entity)
 end)
 
-define_hotkey(hotkeys, {"free", "fight"}, {"j"}, function(entity)
-  State.gui:show_page("assets/wiki/lorem.md")
+define_hotkey(hotkeys, {"free", "fight"}, {"k"}, function(entity)
+  State.gui:show_page("lorem")
 end)
 
 define_hotkey(hotkeys, {"fight"}, {"z"}, function(entity)
