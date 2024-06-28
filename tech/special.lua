@@ -10,7 +10,6 @@ module.floating_damage = function(number, position)
     off_grid_position = (position - Vector({1, 1})) * 16
       + Vector({random.d(12) - 6, random.d(12) - 6}),  -- TODO fix magic number
     drift = Vector({0, -6}),
-    layer = "sfx",
     sprite = {
       text = number,
       font = damage_font,
@@ -25,7 +24,6 @@ local line_font = love.graphics.newFont("assets/fonts/joystix.monospace-regular.
 module.floating_line = function(text, position)
   return {
     off_grid_position = (position - Vector({1, 1.5})) * 16,
-    layer = "sfx",
     sprite = {
       text = text,
       font = line_font,
@@ -38,7 +36,6 @@ end
 module.text = function(text, font, position)
   return {
     gui_position = position,
-    layer = "gui",
     sprite = {
       text = text,
       font = font,
