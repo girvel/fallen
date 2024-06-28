@@ -60,6 +60,12 @@ module_mt.__call = function()
       self.rails = require(path .. "/rails")
       self.rails:initialize(self)
     end,
+
+    gui = {
+      show_page = function(self, path)
+        self.page_content = love.filesystem.read(path)
+      end,
+    }
 	}
 end
 

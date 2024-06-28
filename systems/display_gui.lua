@@ -22,8 +22,8 @@ return Tiny.system({
   base_callback = "draw",
 
   update = function(self)
-    if State.player.reads then
-      return self:display_text(State.player.reads)
+    if State.gui.page_content then
+      return self:display_text(State.gui.page_content)
     end
 
     if State.player.hears then

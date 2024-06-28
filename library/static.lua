@@ -58,14 +58,14 @@ module.door = function(disable_interaction)
   )
 end
 
-module.scripture = function(kind, text)
-  assert(kind and text, "scripture requires 2 arguments: kind of scripture and its content")
+module.scripture = function(kind, path)
+  assert(kind and path, "scripture requires 2 arguments: kind of scripture and its content")
   return Tablex.extend(
-    interactive(function(_, other)
-      other.reads = text
+    interactive(function(self)
+      State.gui:show_page(self.path)
     end),
     static_sprite("assets/sprites/scripture_" .. (kind or "straight") .. ".png"),
-    {name = "древняя надпись"}
+    {name = "древняя надпись", path = path}
   )
 end
 
