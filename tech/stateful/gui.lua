@@ -54,9 +54,6 @@ local convert_line_breaks = function(token_list)
   return result
 end
 
--- TODO UTF-8
--- TODO fast implementation
--- TODO whitespace-based
 -- local _find_break = function(line, font, w)
 --   local break_i = #line
 --   while true do
@@ -71,20 +68,43 @@ end
 --   end
 -- end
 
--- local _find_break = function(line, font, w)
---   if font:getWidth(
--- end
--- 
--- local wrap_lines = function(token_lines, font, max_w)
---   local result = {}
---   for _, line in ipairs(token_lines) do
---     table.insert(result, {})
---     for _, token in ipairs(line) do
---       if 
---     end
---   end
---   return result
--- end
+-- TODO UTF-8
+-- TODO fast implementation
+-- TODO whitespace-based
+local _find_break = function(line, font, max_w)
+  local break_i = #line
+  while true do
+    local w = font:getWidth(line:sub(1, break_i))
+    if w < max_w then return break_i, w end
+    break_i = break_i - 1
+  end
+end
+
+local wrap_lines = function(token_lines, font, max_w)
+  local result = {}
+  for _, line in ipairs(token_lines) do
+    table.insert(result, {})
+    local current_w = 0
+    for _, token in ipairs(line) do
+      local current_content = token.content
+      while #current_content > 0 do
+        local break_i, w = _find_break(current_content, font, max_w - current_w)
+        if break_i == 0 then
+          table.insert(result, {})
+          current_w = 0
+        else
+          table.insert(result[#result], {
+            content = current_content:sub(1, break_i),
+            link = token.link,
+          })
+          current_content = current_content:sub(break_i + 1)
+          current_w = current_w + w
+        end
+      end
+    end
+  end
+  return result
+end
 
 local generate_entities = function(token_lines, font)
   local result = {}
@@ -105,12 +125,16 @@ return {
   show_page = function(self, path)
     local content = love.filesystem.read(path)
     self.text_entities = Fun.iter(
-      Log.trace(generate_entities(
-        convert_line_breaks(
-          parse_markdown(content)
+      generate_entities(
+        wrap_lines(
+          convert_line_breaks(
+            parse_markdown(content)
+          ),
+          self.font,
+          100
         ),
         self.font
-      ))
+      )
     )
       :map(function(e) return State:add(e) end)
       :totable()
