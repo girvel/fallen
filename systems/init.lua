@@ -1,4 +1,4 @@
-return Log.trace({
+return {
   -- TODO group by callback & period
 
   -- love.draw systems --
@@ -14,4 +14,4 @@ return Log.trace({
   require("systems.drift"),
   require("systems.railing"),
   require("systems.use_hyperlinks"),
-})
+}

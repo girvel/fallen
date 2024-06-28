@@ -22,7 +22,7 @@ return {
   font = love.graphics.newFont("assets/fonts/joystix.monospace-regular.otf", 12),
   current_wiki_offset = Vector.zero,
 
-  wiki_pages = Log.trace(load_wiki("assets/wiki")),
+  wiki_pages = load_wiki("assets/wiki"),
   discovered_pages = {lorem = 1, angels = 1},
 
   show_page = function(self, id)

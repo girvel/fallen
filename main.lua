@@ -1,11 +1,10 @@
-love.graphics.setDefaultFilter("nearest", "nearest")
-love.keyboard.setKeyRepeat(true)
-
+Log = require("lib.log")
 Fun = require("lib.fun")
 Tiny = require("lib.tiny")
-Log = require("lib.log")
 Inspect = require("lib.inspect")
 require("lib.strong")
+
+Log.info("Starting basic LOVE setup")
 
 Tablex = require("lib.tablex")
 Mathx = require("lib.mathx")
@@ -15,6 +14,9 @@ Vector = require("lib.vector")
 Grid = require("lib.grid")
 D = require("lib.d")
 
+love.graphics.setDefaultFilter("nearest", "nearest")
+love.keyboard.setKeyRepeat(true)
+
 local palette = require("library.palette")
 local stateful = require("tech.stateful")
 local cli = require("tech.cli")
@@ -23,7 +25,7 @@ local systems = require("systems")
 
 
 love.load = function(args)
-  Log.info("Game started")  -- TODO better launch logging (for timestamps)
+  Log.info("Loading the game")
   math.randomseed(os.time())
   State = stateful(systems)
   State:load_level("assets/levels/demo", palette)
@@ -41,6 +43,8 @@ love.load = function(args)
     background_sound:setLooping(true)
     background_sound:play()
   end
+
+  Log.info("Game is loaded")
 end
 
 for callback_name, _ in pairs(
