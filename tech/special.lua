@@ -3,7 +3,7 @@ local random = require("utils.random")
 
 local module = {}
 
-local font = love.graphics.newFont("assets/fonts/joystix.monospace-regular.otf", 14)
+local damage_font = love.graphics.newFont("assets/fonts/joystix.monospace-regular.otf", 14)
 
 module.floating_damage = function(number, position)
   return {
@@ -13,8 +13,8 @@ module.floating_damage = function(number, position)
     layer = "sfx",
     sprite = {
       text = number,
-      font = font,
-      color = Common.hex_color("e64e4b"),
+      font = damage_font,
+      color = Common.hex_color("e64e4b"),  -- TODO join w/ text as {color, text}
     },
     life_time = 3,
   }
@@ -29,9 +29,20 @@ module.floating_line = function(text, position)
     sprite = {
       text = text,
       font = line_font,
-      color = Common.hex_color("ededed"),
+      color = Common.hex_color("ededed"),  -- TODO join w/ text as {color, text}
     },
     life_time = 10,
+  }
+end
+
+module.text = function(text, font, position)
+  return {
+    gui_position = position,
+    layer = "gui",
+    sprite = {
+      text = text,
+      font = font,
+    },
   }
 end
 

@@ -18,12 +18,14 @@ local value_translations = {
   [false] = "нет",
 }
 
-return Tiny.system({
+return Tiny.processingSystem({
+  filter = Tiny.requireAll("gui_position", "sprite"),
   base_callback = "draw",
 
-  update = function(self)
-    if State.gui.page_content then
-      return self:display_text(State.gui.page_content)
+  preProcess = function(self)
+    if State.gui.text_entities then
+      love.graphics.clear()
+      return
     end
 
     if State.player.hears then
@@ -102,22 +104,26 @@ return Tiny.system({
     )
   end,
 
+  process = function(_, entity)
+    love.graphics.print(entity.sprite.text, entity.sprite.font, unpack(entity.gui_position))
+  end,
+
   TEXT_MAX_W = 1000,
   TEXT_MAX_H = 800,
 
-  display_text = function(self, text)
-    local window_w = love.graphics.getWidth()
-    local window_h = love.graphics.getHeight()
-    local text_w = math.min(window_w - 40, self.TEXT_MAX_W)
-    local text_h = math.min(window_h - 40, self.TEXT_MAX_H)
+  -- display_wiki_background = function(self)
+  --   local window_w = love.graphics.getWidth()
+  --   local window_h = love.graphics.getHeight()
+  --   local text_w = math.min(window_w - 40, self.TEXT_MAX_W)
+  --   local text_h = math.min(window_h - 40, self.TEXT_MAX_H)
 
-    love.graphics.clear()
-    love.graphics.printf(
-      text, ui_font,
-      math.ceil((window_w - text_w) / 2), math.ceil((window_h - text_h) / 2),
-      text_w
-    )
-  end,
+  --   love.graphics.clear()
+  --   love.graphics.printf(
+  --     text, ui_font,
+  --     math.ceil((window_w - text_w) / 2), math.ceil((window_h - text_h) / 2),
+  --     text_w
+  --   )
+  -- end,
 
   display_line = function(self, line)
     local window_w = love.graphics.getWidth()

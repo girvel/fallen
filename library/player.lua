@@ -32,7 +32,7 @@ end
 
 define_hotkey(hotkeys, {"fight"}, {"space"}, function() return turn_order.TURN_END_SIGNAL end)
 define_hotkey(hotkeys, {"dialogue"}, {"space"}, function(entity) entity.hears = nil end)
-define_hotkey(hotkeys, {"reading"}, {"escape"}, function() State.gui.page_content = nil end)
+define_hotkey(hotkeys, {"reading"}, {"escape"}, function() State.gui:exit_wiki() end)
 
 define_hotkey(hotkeys, {"free", "fight"}, {"1"}, function(entity)
   actions.hand_attack(entity, State.grids.solids[entity.position + Vector[entity.direction]])
@@ -66,7 +66,7 @@ module_mt.__call = function()
     immortal = true,
     ai = function(self)
       local mode
-      if State.gui.page_content then
+      if State.gui.text_entities then
         mode = "reading"
       elseif self.hears then
         mode = "dialogue"
