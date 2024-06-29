@@ -24,11 +24,12 @@ return {
 
   wiki_pages = load_wiki("assets/wiki"),
   discovered_pages = {lorem = 1, angels = 1},
+  history = {},
+  current_history_index = 0,
 
-  show_page = function(self, id)
-    assert(self.wiki_pages[id], "Wiki page \"" .. id .. "\" does not exist")
-
-    self:exit_wiki()
+  _render_current_page = function(self)
+    self:_close_page()
+    local id = self.history[self.current_history_index]
 
     local page = self.discovered_pages[id]
       and self.wiki_pages[id][self.discovered_pages[id]]
@@ -41,11 +42,35 @@ return {
       :totable()
   end,
 
-  exit_wiki = function(self)
+  show_page = function(self, id)
+    assert(self.wiki_pages[id], "Wiki page \"" .. id .. "\" does not exist")
+
+    self.history = Fun.iter(self.history)
+      :take_n(self.current_history_index)
+      :chain({id})
+      :totable()
+
+    self.current_history_index = self.current_history_index + 1
+    self:_render_current_page()
+  end,
+
+  _close_page = function(self)
     if not self.text_entities then return end
     for _, e in ipairs(self.text_entities) do
       State:remove(e)
     end
     self.text_entities = nil
+  end,
+
+  exit_wiki = function(self)
+    self:_close_page()
+    self.history = {}
+    self.current_history_index = 0
+  end,
+
+  move_wiki_back = function(self)
+    if self.current_history_index <= 1 then return end
+    self.current_history_index = self.current_history_index - 1
+    self:_render_current_page()
   end,
 }
