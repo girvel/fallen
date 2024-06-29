@@ -3,7 +3,6 @@ return {
   [{60, 5}] = {true},
   [{59, 5}] = {true},
   [{17, 12}] = {
-    "straight",
-    "/assets/text/demo_scripture.txt"
+    "straight"
   }
 }
