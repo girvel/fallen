@@ -68,9 +68,17 @@ return {
     self.current_history_index = 0
   end,
 
-  move_wiki_back = function(self)
-    if self.current_history_index <= 1 then return end
-    self.current_history_index = self.current_history_index - 1
+  move_in_wiki_history = function(self, direction)
+    assert(direction == -1 or direction == 1)
+
+    if
+      direction < 0 and self.current_history_index <= 1 or
+      direction > 0 and self.current_history_index == #self.history
+    then
+      return
+    end
+
+    self.current_history_index = self.current_history_index + direction
     self:_render_current_page()
   end,
 }
