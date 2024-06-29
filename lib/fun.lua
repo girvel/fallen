@@ -6,6 +6,8 @@
 --- Distributed under the MIT/X11 License. See COPYING.md for more details.
 ---
 
+--- MODIFIED
+
 local exports = {}
 local methods = {}
 
@@ -814,6 +816,18 @@ local map = function(fun, gen, param, state)
 end
 methods.map = method1(map)
 exports.map = export1(map)
+
+methods.group_by = function(self, fun)
+  fun = fun or function(x) return x end
+  return Fun.iter(self:reduce(
+    function(acc, e)
+      local key = fun(e)
+      if not acc[key] then acc[key] = {} end
+      table.insert(acc[key], e)
+    end,
+    {}
+  ))
+end
 
 local enumerate_gen_call = function(state, i, state_x, ...)
     if state_x == nil then
