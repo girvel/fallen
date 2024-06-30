@@ -54,30 +54,20 @@ local convert_line_breaks = function(token_list)
   return result
 end
 
--- local _find_break = function(line, font, w)
---   local break_i = #line
---   while true do
---     if font:getWidth(line:sub(1, break_i)) <= w then
---       if (break_i == #line or font:getWidth(line:sub(1, break_i + 1)) > w) then
---         return break_i
---       end
--- 
---       break_i = 
---     end
---     
---   end
--- end
-
 -- TODO UTF-8
 -- TODO fast implementation
--- TODO whitespace-based
-local _find_break = function(line, font, max_w)
-  local break_i = #line
-  while true do
-    local w = font:getWidth(line:sub(1, break_i))
-    if w < max_w then return break_i, w end
-    break_i = break_i - 1
+local _find_break = function(words, font, max_w)
+  local last_line = ""
+  local w = 0
+  for i, word in ipairs(words) do
+    local current_line = last_line .. (i == 1 and "" or " ") .. word
+    w = font:getWidth(current_line)
+    if w > max_w then
+      return i - 1, w, last_line
+    end
+    last_line = current_line
   end
+  return #words, w, last_line
 end
 
 local wrap_lines = function(token_lines, font, max_w)
@@ -86,19 +76,21 @@ local wrap_lines = function(token_lines, font, max_w)
     table.insert(result, {})
     local current_w = 0
     for _, token in ipairs(line) do
-      local current_content = token.content
+      local current_content = token.content:split(" ")
       while #current_content > 0 do
-        local break_i, w = _find_break(current_content, font, max_w - current_w)
+        local break_i, w, inserted_line = _find_break(current_content, font, max_w - current_w)
         if break_i == 0 then
           table.insert(result, {})
           current_w = 0
         else
           table.insert(result[#result], {
-            content = current_content:sub(1, break_i),
+            content = inserted_line,
             x = current_w,
             link = token.link,
           })
-          current_content = current_content:sub(break_i + 1)
+          current_content = Fun.iter(current_content)
+            :drop_n(break_i)
+            :totable()
           current_w = current_w + w
         end
       end
