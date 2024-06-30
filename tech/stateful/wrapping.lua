@@ -1,4 +1,5 @@
 local special = require("tech.special")
+local utf8 = require("utf8")
 
 
 -- each token is in format {content: string, link: string?}
@@ -17,7 +18,7 @@ local parse_markdown = function(content)
         content = content:sub(1, i - 1),
       })
       table.insert(result, {
-        content = link_text,
+        content = link_text:gsub(" ", utf8.char(tonumber("00A0", 16))),
         link = link,
       })
       content = content:sub(j + 1)
