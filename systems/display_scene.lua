@@ -61,13 +61,12 @@ return Tiny.system({
       entity.inventory and
       entity.inventory.main_hand and
       entity.inventory.main_hand.sprite and
-      entity.inventory.main_hand.anchor and
-      entity.anchors and
-      entity.anchors.main_hand
+      entity.inventory.main_hand.sprite.anchor and
+      entity.sprite.anchor
     then
       love.graphics.draw(
         entity.inventory.main_hand.sprite.image,
-        unpack(scaled_position + entity.anchors.main_hand - entity.inventory.main_hand.anchor)
+        unpack(scaled_position + entity.sprite.anchor - entity.inventory.main_hand.sprite.anchor)
       )
     end
 

@@ -5,6 +5,7 @@ local module = setmetatable({}, module_mt)
 -- TODO just assign them directly
 local animation_methods = {
   animate = function(self, animation_name)
+    animation_name = animation_name or "idle"
     self.animation.current = animation_name .. "_" .. (self.direction or "")
     if not self.animation.pack[self.animation.current] then
       self.animation.current = animation_name
@@ -23,8 +24,6 @@ local animation_methods = {
   end
 }
 
-local animation_mt = {__index = animation_methods}
-
 module_mt.__call = function(_, pack)
   local result = Tablex.extend({
     animation = {
@@ -39,7 +38,9 @@ module_mt.__call = function(_, pack)
   return result
 end
 
-module.load_pack = function(folder_path)
+module.load_pack = function(folder_path, anchors)
+  anchors = anchors or {}
+
   local result = {}
   for _, file_name in ipairs(love.filesystem.getDirectoryItems(folder_path)) do
     local i = file_name:find("%.png$")
@@ -53,10 +54,12 @@ module.load_pack = function(folder_path)
     end
 
     if not result[animation_name] then result[animation_name] = {} end
-    result[animation_name][frame_number] = {
+
+    local anchor = anchors[animation_name] and anchors[animation_name][frame_number]
+    result[animation_name][frame_number] = Tablex.extend({
       image = love.graphics.newImage(folder_path .. "/" .. file_name),
       color = Common.get_color(love.image.newImageData(folder_path .. "/" .. file_name))
-    }
+    }, anchor and {anchor = anchor} or {})
   end
   return result
 end

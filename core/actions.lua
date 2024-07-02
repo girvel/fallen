@@ -55,6 +55,12 @@ end
 module.move = Fun.iter(Vector.direction_names):map(function(direction_name)
   return direction_name, function(entity)
     entity.direction = direction_name
+
+    if entity.inventory and entity.inventory.main_hand then
+      entity.inventory.main_hand.direction = entity.direction
+      entity.inventory.main_hand:animate()
+    end
+
     local old_position = entity.position
     if entity.turn_resources.movement <= 0
       or not level.move(State.grids[entity.layer], entity, entity.position + Vector[direction_name])

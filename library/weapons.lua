@@ -1,5 +1,6 @@
 local interactive = require("tech.interactive")
 local animated = require("tech.animated")
+local animation_packs = require("library.animation_packs")
 
 
 local module = {}
@@ -18,11 +19,10 @@ local weapon_mixin = function()
   )
 end
 
-local rapier_pack = animated.load_pack("assets/sprites/rapier")
 module.rapier = function()
   return Tablex.extend(
     weapon_mixin(),
-    animated(rapier_pack),
+    animated(animation_packs.rapier),
     {
       direction = "right",
       name = "рапира",

@@ -5,6 +5,7 @@ local animated = require("tech.animated")
 local creature = require("core.creature")
 local interactive = require("tech.interactive")
 local weapons = require("library.weapons")
+local animation_packs = require("library.animation_packs")
 
 
 local module_mt = {}
@@ -61,10 +62,8 @@ define_hotkey(hotkeys, {"fight"}, {"z"}, function(entity)
   actions.dash(entity)
 end)
 
-local player_character_pack = animated.load_pack("assets/sprites/player_character")
-
 module_mt.__call = function()
-  local result = creature(player_character_pack, {
+  local result = creature(animation_packs.player_character, {
     anchors = {
       main_hand = Vector({3, 12}),
     },
@@ -99,8 +98,6 @@ module_mt.__call = function()
       charisma = 11,
     },
   })
-
-  result.inventory.main_hand = weapons.rapier()
 
   result.turn_resources.second_wind = 1
   result.turn_resources.action_surge = 1
