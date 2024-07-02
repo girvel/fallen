@@ -6,7 +6,7 @@ local module_mt = {}
 setmetatable(module, module_mt)
 
 module_mt.__call = function(_, systems)
-  local SCALING_FACTOR = 2
+  local SCALING_FACTOR = 4
   local transform = love.math.newTransform()
   transform:scale(SCALING_FACTOR)
 
