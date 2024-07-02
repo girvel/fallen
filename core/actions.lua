@@ -22,7 +22,7 @@ local get_melee_attack_roll = function(entity)
   end
 
   roll = roll + weapon.bonus
-  if weapon.is_finesse then
+  if weapon.tags.finesse then
     roll = roll + creature.get_modifier(math.max(
       entity.abilities.strength,
       entity.abilities.dexterity
