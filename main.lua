@@ -42,6 +42,10 @@ love.load = function(args)
     background_sound:setVolume(0.15)
     background_sound:setLooping(true)
     background_sound:play()
+  else
+    love.errorhandler = function(msg)
+      Log.fatal(debug.traceback("Error: " .. tostring(msg), 2):gsub("\n[^\n]+$", ""))
+    end
   end
 
   Log.info("Game is loaded")
