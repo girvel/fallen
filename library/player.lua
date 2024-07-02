@@ -66,7 +66,7 @@ local player_character_pack = animated.load_pack("assets/sprites/player_characte
 module_mt.__call = function()
   local result = creature(player_character_pack, {
     anchors = {
-      main_hand = Vector({4, 12}),
+      main_hand = Vector({3, 12}),
     },
     player_flag = true,
     name = "протагонист",
