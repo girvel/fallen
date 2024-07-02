@@ -1,5 +1,5 @@
-local static_sprite = require("tech.static_sprite")
 local interactive = require("tech.interactive")
+local animated = require("tech.animated")
 
 
 local module = {}
@@ -18,10 +18,11 @@ local weapon_mixin = function()
   )
 end
 
+local rapier_pack = animated.load_pack("assets/sprites/rapier")
 module.rapier = function()
   return Tablex.extend(
     weapon_mixin(),
-    static_sprite("assets/sprites/rapier.png"),
+    animated(rapier_pack),
     {
       name = "рапира",
       damage_roll = D(8),
@@ -34,21 +35,21 @@ module.rapier = function()
   )
 end
 
-module.shortsword = function()
-  return Tablex.extend(
-    weapon_mixin(),
-    static_sprite("assets/sprites/shortsword.png"),
-    {
-      name = "короткий меч",
-      damage_roll = D(6),
-      bonus = 0,
-      tags = {
-        finesse = true,
-        light = true,
-      },
-      anchor = Vector({4, 14}),
-    }
-  )
-end
+-- module.shortsword = function()
+--   return Tablex.extend(
+--     weapon_mixin(),
+--     static_sprite("assets/sprites/shortsword.png"),
+--     {
+--       name = "короткий меч",
+--       damage_roll = D(6),
+--       bonus = 0,
+--       tags = {
+--         finesse = true,
+--         light = true,
+--       },
+--       anchor = Vector({4, 14}),
+--     }
+--   )
+-- end
 
 return module

@@ -44,7 +44,7 @@ module_mt.__call = function(_, systems)
     load_level = function(self, path, palette)
       local level_size, new_entities = level.load_entities(
         love.filesystem.read(path .. "/grid.txt"),
-        require(path .. "/grid_args"),
+        love.filesystem.getInfo(path .. "/grid_args.lua") and require(path .. "/grid_args") or {},
         palette
       )
 
@@ -58,8 +58,10 @@ module_mt.__call = function(_, systems)
         if e.on_load then e:on_load(self) end
       end
 
-      self.rails = require(path .. "/rails")
-      self.rails:initialize(self)
+      if love.filesystem.getInfo(path .. "/rails.lua") then
+        self.rails = require(path .. "/rails")
+        self.rails:initialize(self)
+      end
     end,
 
     gui = require("tech.stateful.gui"),

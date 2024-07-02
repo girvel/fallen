@@ -36,6 +36,7 @@ return {
     },
     items = {
       d = weapons.shortsword,
+      r = weapons.rapier,
     },
   },
   transparents = {

@@ -26,14 +26,14 @@ local animation_methods = {
 local animation_mt = {__index = animation_methods}
 
 module_mt.__call = function(_, pack)
-  local result = setmetatable({
+  local result = Tablex.extend({
     animation = {
       pack = pack,
       paused = false,
     },
     sprite = {},
     _on_animation_end = nil,
-  }, animation_mt)
+  }, animation_methods)
 
   result:animate("idle")
   return result

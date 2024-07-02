@@ -28,7 +28,7 @@ love.load = function(args)
   Log.info("Loading the game")
   math.randomseed(os.time())
   State = stateful(systems)
-  State:load_level("assets/levels/demo", palette)
+  State:load_level("assets/levels/polygon", palette)
 
   args = cli.parse(args)
   Log.info("Command line arguments:", args)
