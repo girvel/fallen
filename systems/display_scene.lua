@@ -55,20 +55,27 @@ return Tiny.system({
     love.graphics.applyTransform(State.transform)
     local scaled_position = ((entity.position - Vector({1, 1})) * State.CELL_DISPLAY_SIZE):ceil()
 
+    local display_main_hand = function()
+      if
+        entity.inventory and
+        entity.inventory.main_hand and
+        entity.inventory.main_hand.sprite and
+        entity.inventory.main_hand.sprite.anchor and
+        entity.sprite.anchor
+      then
+        love.graphics.draw(
+          entity.inventory.main_hand.sprite.image,
+          unpack(scaled_position + entity.sprite.anchor - entity.inventory.main_hand.sprite.anchor)
+        )
+      end
+    end
+
+    local is_weapon_in_background = entity.direction == "up"
+    if is_weapon_in_background then display_main_hand() end
+
     love.graphics.draw(entity.sprite.image, unpack(scaled_position))
 
-    if
-      entity.inventory and
-      entity.inventory.main_hand and
-      entity.inventory.main_hand.sprite and
-      entity.inventory.main_hand.sprite.anchor and
-      entity.sprite.anchor
-    then
-      love.graphics.draw(
-        entity.inventory.main_hand.sprite.image,
-        unpack(scaled_position + entity.sprite.anchor - entity.inventory.main_hand.sprite.anchor)
-      )
-    end
+    if not is_weapon_in_background then display_main_hand() end
 
     love.graphics.replaceTransform(no_transform)
   end,
