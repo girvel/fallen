@@ -24,13 +24,14 @@ module.rapier = function()
     weapon_mixin(),
     animated(rapier_pack),
     {
+      direction = "right",
       name = "рапира",
       damage_roll = D(8),
       bonus = 0,
       tags = {
         finesse = true,
       },
-      anchor = Vector({4, 14}),
+      anchor = Vector({4, 11}),
     }
   )
 end

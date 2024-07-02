@@ -49,5 +49,6 @@ return {
     f = true,
     O = true,
     d = true,
+    r = true,
   },
 }
