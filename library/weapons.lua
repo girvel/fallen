@@ -31,7 +31,7 @@ module.rapier = function()
       tags = {
         finesse = true,
       },
-      anchor = Vector({4, 11}),
+      anchor = Vector({5, 11}),
     }
   )
 end
