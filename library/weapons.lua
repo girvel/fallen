@@ -29,6 +29,7 @@ module.rapier = function()
       tags = {
         finesse = true,
       },
+      anchor = Vector({4, 14}),
     }
   )
 end
@@ -45,6 +46,7 @@ module.shortsword = function()
         finesse = true,
         light = true,
       },
+      anchor = Vector({4, 14}),
     }
   )
 end

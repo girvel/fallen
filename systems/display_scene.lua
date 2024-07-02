@@ -53,9 +53,23 @@ return Tiny.system({
     if not entity.sprite.image then return end
 
     love.graphics.applyTransform(State.transform)
-
     local scaled_position = ((entity.position - Vector({1, 1})) * State.CELL_DISPLAY_SIZE):ceil()
+
     love.graphics.draw(entity.sprite.image, unpack(scaled_position))
+
+    if
+      entity.inventory and
+      entity.inventory.main_hand and
+      entity.inventory.main_hand.sprite and
+      entity.inventory.main_hand.anchor and
+      entity.anchors and
+      entity.anchors.main_hand
+    then
+      love.graphics.draw(
+        entity.inventory.main_hand.sprite.image,
+        unpack(scaled_position + entity.anchors.main_hand - entity.inventory.main_hand.anchor)
+      )
+    end
 
     love.graphics.replaceTransform(no_transform)
   end,
