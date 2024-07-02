@@ -47,6 +47,26 @@ module.player_character = animated.load_pack("assets/sprites/player_character", 
     Vector({11, 13}),
     Vector({11, 8}),
   },
+  move_right = {
+    Vector({3, 12}),
+    Vector({3, 12}),
+    Vector({3, 12}),
+  },
+  move_left = {
+    Vector({11, 12}),
+    Vector({11, 12}),
+    Vector({11, 12}),
+  },
+  move_down = {
+    Vector({3, 12}),
+    Vector({3, 12}),
+    Vector({3, 12}),
+  },
+  move_up = {
+    Vector({11, 12}),
+    Vector({11, 12}),
+    Vector({11, 12}),
+  },
 })
 
 return module
