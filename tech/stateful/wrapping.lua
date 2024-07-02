@@ -55,7 +55,6 @@ local convert_line_breaks = function(token_list)
   return result
 end
 
--- TODO UTF-8
 -- TODO fast implementation
 local _find_break = function(words, font, max_w)
   local last_line = ""

@@ -1,6 +1,7 @@
 local static = require("library.static")
 local player = require("library.player")
 local mobs = require("library.mobs")
+local weapons = require("library.weapons")
 
 
 return {
@@ -32,7 +33,10 @@ return {
     },
     sfx = {
       O = static.key_point,
-    }
+    },
+    items = {
+      d = weapons.shortsword,
+    },
   },
   transparents = {
     M = true,
@@ -43,5 +47,6 @@ return {
     e = true,
     f = true,
     O = true,
+    d = true,
   },
 }

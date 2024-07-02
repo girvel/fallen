@@ -1,18 +1,10 @@
 local interactive = require("tech.interactive")
 local animated = require("tech.animated")
 local level = require("tech.level")
+local static_sprite = require("tech.static_sprite")
 
 
 local module = {}
-
-local static_sprite = function(path)
-  return {
-    sprite = {
-      image = love.graphics.newImage(path),
-      color = Common.get_color(love.image.newImageData(path)),
-    }
-  }
-end
 
 local lever_packs = {
   on = animated.load_pack("assets/sprites/lever_on"),

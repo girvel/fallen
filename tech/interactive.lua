@@ -6,6 +6,7 @@ local module = setmetatable({}, module_mt)
 
 module.get_for = function(entity)
   return Fun.iter(pairs({
+    State.grids.items[entity.position],
     State.grids.tiles[entity.position],
     State.grids.solids:safe_get(entity.position + Vector[entity.direction]),
   }))

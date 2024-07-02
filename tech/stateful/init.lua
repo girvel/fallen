@@ -38,6 +38,7 @@ module_mt.__call = function(_, systems)
       if self.move_order then
         self.move_order:remove(entity)
       end
+      return entity
     end,
 
     load_level = function(self, path, palette)
