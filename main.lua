@@ -39,7 +39,7 @@ love.load = function(args)
 
   if not args.debug then
     local background_sound = love.audio.newSource("assets/sounds/740904__green__light__09.wav", "static")
-    background_sound:setVolume(0.05)
+    background_sound:setVolume(0.15)
     background_sound:setLooping(true)
     background_sound:play()
   end
