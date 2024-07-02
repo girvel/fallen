@@ -25,6 +25,9 @@ module_mt.__call = function(_, systems)
       if entity.position then
         self.grids[entity.layer][entity.position] = entity
       end
+      if entity.inventory and entity.inventory.main_hand then
+        self:add(entity.inventory.main_hand)
+      end
       return entity
     end,
 

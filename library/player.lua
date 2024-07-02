@@ -100,6 +100,8 @@ module_mt.__call = function()
     },
   })
 
+  result.inventory.main_hand = weapons.rapier()
+
   result.turn_resources.second_wind = 1
   result.turn_resources.action_surge = 1
 
