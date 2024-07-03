@@ -90,12 +90,12 @@ module_mt.__call = function()
       if action ~= nil then return action(self) end
     end,
     abilities = {
-      strength = 8,
+      strength = 16,
       dexterity = 18,
       constitution = 14,
-      intelligence = 12,
-      wisdom = 12,
-      charisma = 11,
+      intelligence = 8,
+      wisdom = 10,
+      charisma = 8,
     },
   })
 

@@ -36,6 +36,23 @@ module.rapier = function()
   )
 end
 
+module.greatsword = function()
+  return Tablex.extend(
+    weapon_mixin(),
+    animated(animation_packs.greatsword),
+    {
+      direction = "right",
+      name = "двуручный меч",
+      damage_roll = D(6) * 2,
+      bonus = 0,
+      tags = {
+        finesse = true,
+      },
+      anchor = Vector({4, 11}),
+    }
+  )
+end
+
 -- module.shortsword = function()
 --   return Tablex.extend(
 --     weapon_mixin(),

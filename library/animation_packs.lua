@@ -18,6 +18,21 @@ module.rapier = animated.load_pack("assets/sprites/rapier", {
   },
 })
 
+module.greatsword = animated.load_pack("assets/sprites/greatsword", {
+  idle_right = {
+    Vector({2, 11}),
+  },
+  idle_left = {
+    Vector({11, 11}),
+  },
+  idle_down = {
+    Vector({7, 6}),
+  },
+  idle_up = {
+    Vector({7, 13}),
+  },
+})
+
 module.player_character = animated.load_pack("assets/sprites/player_character", {
   idle_right = {
     Vector({3, 12}),

@@ -35,7 +35,7 @@ return {
       O = static.key_point,
     },
     items = {
-      d = weapons.shortsword,
+      g = weapons.greatsword,
       r = weapons.rapier,
     },
   },
@@ -48,7 +48,7 @@ return {
     e = true,
     f = true,
     O = true,
-    d = true,
+    g = true,
     r = true,
   },
 }
