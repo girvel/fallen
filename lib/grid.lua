@@ -20,6 +20,10 @@ local grid_methods = {
     if not self:can_fit(v) then return default end
     return self[v]
   end,
+
+  iter_table = function(self)
+    return Fun.iter(self._inner_array)
+  end,
 }
 
 grid_mt.__index = function(self, v)

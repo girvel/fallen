@@ -3,6 +3,7 @@ local mech = require("core.mech")
 local constants = require("core.constants")
 local random = require("utils.random")
 local core = require("core")
+local static_sprite = require("tech.static_sprite")
 
 
 local module = {}
@@ -106,27 +107,33 @@ module.move = Fun.iter(Vector.direction_names):map(function(direction_name)
   end
 end):tomap()
 
-module.hand_attack = setmetatable({
-  icon = love.graphics.newImage("assets/sprites/icons/melee_attack.png")
-}, {__call = function(_, entity, target)
-  if entity.turn_resources.actions <= 0
-    or not target
-    or not target.hp
-  then
-    return false
-  end
+module.hand_attack = setmetatable(
+  Tablex.extend(
+    static_sprite("assets/sprites/icons/melee_attack.png"),
+    {scale = Vector({2, 2})}
+  ),
+  {
+    __call = function(_, entity, target)
+      if entity.turn_resources.actions <= 0
+        or not target
+        or not target.hp
+      then
+        return false
+      end
 
-  entity.turn_resources.actions = entity.turn_resources.actions - 1
+      entity.turn_resources.actions = entity.turn_resources.actions - 1
 
-  entity:animate("attack")
-  entity:when_animation_ends(function()
-    mech.attack(
-      entity, target,
-      get_melee_attack_roll(entity),
-      get_melee_damage_roll(entity)
-    )
-  end)
-end})
+      entity:animate("attack")
+      entity:when_animation_ends(function()
+        mech.attack(
+          entity, target,
+          get_melee_attack_roll(entity),
+          get_melee_damage_roll(entity)
+        )
+      end)
+    end
+  }
+)
 
 module.sneak_attack = function(entity, target)
   if entity.turn_resources.actions <= 0
@@ -174,20 +181,26 @@ module.dash = function(entity)
   entity.turn_resources.movement = entity.turn_resources.movement + entity:get_turn_resources().movement
 end
 
-module.second_wind = setmetatable({
-  icon = love.graphics.newImage("assets/sprites/icons/second_wind.png"),
-}, {__call = function(_, entity)
-  if entity.turn_resources.bonus_actions <= 0
-    or entity.turn_resources.second_wind <= 0
-  then
-    return
-  end
+module.second_wind = setmetatable(
+  Tablex.extend(
+    static_sprite("assets/sprites/icons/second_wind.png"),
+    {scale = Vector({2, 2})}
+  ),
+  {
+    __call = function(_, entity)
+      if entity.turn_resources.bonus_actions <= 0
+        or entity.turn_resources.second_wind <= 0
+      then
+        return
+      end
 
-  entity.turn_resources.bonus_actions = entity.turn_resources.bonus_actions - 1
-  entity.turn_resources.second_wind = entity.turn_resources.second_wind - 1
+      entity.turn_resources.bonus_actions = entity.turn_resources.bonus_actions - 1
+      entity.turn_resources.second_wind = entity.turn_resources.second_wind - 1
 
-  entity.hp = math.min(entity:get_max_hp(), entity.hp + (D(10) + entity.level):roll())
-end})
+      entity.hp = math.min(entity:get_max_hp(), entity.hp + (D(10) + entity.level):roll())
+    end
+  }
+)
 
 module.action_surge = function(entity)
   if entity.turn_resources.action_surge <= 0 then

@@ -36,10 +36,12 @@ return Tiny.processingSystem({
       return self:display_line(State.player.hears)
     end
 
-    self:_display_actions()
     self:_display_text_info()
 
-    State.gui.current_wiki_offset = ((Vector({love.graphics.getDimensions()}) - State.gui.TEXT_MAX_SIZE) / 2):ceil()
+    State.gui.anchors = {
+      wiki = ((Vector({love.graphics.getDimensions()}) - State.gui.TEXT_MAX_SIZE) / 2):ceil(),
+      actions = Vector({love.graphics.getWidth() - self.SIDEBAR_W, 15})
+    }
   end,
 
   _display_actions = function(self)
@@ -131,26 +133,17 @@ return Tiny.processingSystem({
   end,
 
   process = function(self, entity)
-    local display = entity.link
-      and {State.gui.LINK_COLOR, entity.sprite.text}
-      or entity.sprite.text
+    local x, y = unpack(entity.gui_position + State.gui.anchors[entity.gui_anchor])
+    if entity.sprite.text then
+      local display = entity.link
+        and {State.gui.LINK_COLOR, entity.sprite.text}
+        or entity.sprite.text
 
-    love.graphics.print(display, entity.sprite.font, unpack(entity.gui_position + State.gui.current_wiki_offset))
+      love.graphics.print(display, entity.sprite.font, x, y)
+    else
+      love.graphics.draw(entity.sprite.image, x, y, 0, unpack(entity.scale or Vector.zero))
+    end
   end,
-
-  -- display_wiki_background = function(self)
-  --   local window_w = love.graphics.getWidth()
-  --   local window_h = love.graphics.getHeight()
-  --   local text_w = math.min(window_w - 40, self.TEXT_MAX_W)
-  --   local text_h = math.min(window_h - 40, self.TEXT_MAX_H)
-
-  --   love.graphics.clear()
-  --   love.graphics.printf(
-  --     text, ui_font,
-  --     math.ceil((window_w - text_w) / 2), math.ceil((window_h - text_h) / 2),
-  --     text_w
-  --   )
-  -- end,
 
   display_line = function(self, line)
     local window_w = love.graphics.getWidth()

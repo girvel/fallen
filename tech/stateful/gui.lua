@@ -20,14 +20,14 @@ return {
   LINK_COLOR = Common.hex_color("3f5d92"),
   TEXT_MAX_SIZE = Vector({1000, 800}),
   font = love.graphics.newFont("assets/fonts/joystix.monospace-regular.otf", 12),
-  current_wiki_offset = Vector.zero,
+  anchors = {},
 
   wiki_pages = load_wiki("assets/wiki"),
   discovered_pages = {lorem = 1, angels = 1},
   history = {},
   current_history_index = 0,
 
-  action_grid = nil,
+  action_entities = {},
 
   _render_current_page = function(self)
     self:_close_page()
@@ -84,13 +84,24 @@ return {
     self:_render_current_page()
   end,
 
+  ACTION_GRID_W = 5,
+
   update_action_grid = function(self)
-    self.action_grid = Grid(Vector({5, 5}))
-    for i, action in pairs(State.player:get_actions()) do
-      self.action_grid[Vector({
-        (i - 1) % self.action_grid.size[1] + 1,
-        math.ceil(i / self.action_grid.size[1])
-      })] = action
-    end
+    Fun.iter(self.action_entities):each(function(a)
+      State:remove(a)
+    end)
+
+    self.action_entities = Fun.iter(State.player:get_actions())
+      :enumerate()
+      :map(function(i, action)
+        State:add(Tablex.extend({
+          gui_position = Vector({
+            (i - 1) % self.ACTION_GRID_W,
+            math.floor(i / self.ACTION_GRID_W)
+          }) * 48,
+          gui_anchor = "actions",
+        }, action))
+      end)
+      :totable()
   end,
 }
