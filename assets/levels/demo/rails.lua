@@ -1,6 +1,6 @@
 local sfx = require("library.sfx")
 local turn_order = require("tech.turn_order")
-local creature = require("core.creature")
+local core = require("core")
 
 
 local narration = function(text)
@@ -190,7 +190,7 @@ return {
         line(rails.entities.teacher, "Ан гард!")
 
         local initiative_rolls = Fun.iter({State.player, rails.entities.first})
-          :map(function(e) return {e, (D(20) + creature.get_modifier(e.abilities.dexterity)):roll()} end)
+          :map(function(e) return {e, (D(20) + core.get_modifier(e.abilities.dexterity)):roll()} end)
           :totable()
 
         table.sort(

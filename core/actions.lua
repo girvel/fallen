@@ -1,8 +1,8 @@
-local creature = require("core.creature")
 local level = require("tech.level")
 local mech = require("core.mech")
 local constants = require("core.constants")
 local random = require("utils.random")
+local core = require("core")
 
 
 local module = {}
@@ -18,17 +18,17 @@ local get_melee_attack_roll = function(entity)
 
   local weapon = entity.inventory.main_hand
   if not weapon then
-    return roll + creature.get_modifier(entity.abilities.strength)
+    return roll + core.get_modifier(entity.abilities.strength)
   end
 
   roll = roll + weapon.bonus
   if weapon.tags.finesse then
-    roll = roll + creature.get_modifier(math.max(
+    roll = roll + core.get_modifier(math.max(
       entity.abilities.strength,
       entity.abilities.dexterity
     ))
   else
-    roll = roll + creature.get_modifier(entity.abilities.strength)
+    roll = roll + core.get_modifier(entity.abilities.strength)
   end
 
   return roll
@@ -36,12 +36,12 @@ end
 
 local get_melee_damage_roll = function(entity)
   if not entity.inventory.main_hand then
-    return D.roll({}, creature.get_modifier(entity.abilities.strength) + 1)
+    return D.roll({}, core.get_modifier(entity.abilities.strength) + 1)
   end
 
   if entity.inventory.main_hand.tags.finesse then
     return entity.inventory.main_hand.damage_roll
-      + creature.get_modifier(math.max(
+      + core.get_modifier(math.max(
         entity.abilities.strength,
         entity.abilities.dexterity
       ))
@@ -49,7 +49,7 @@ local get_melee_damage_roll = function(entity)
   end
 
   return entity.inventory.main_hand.damage_roll
-    + creature.get_modifier(entity.abilities.strength)
+    + core.get_modifier(entity.abilities.strength)
 end
 
 module.move = Fun.iter(Vector.direction_names):map(function(direction_name)
@@ -76,7 +76,7 @@ module.move = Fun.iter(Vector.direction_names):map(function(direction_name)
         return e
           and e ~= entity
           and e.abilities
-          and creature.are_hostile(entity, e)
+          and core.are_hostile(entity, e)
           and e.turn_resources
           and e.turn_resources.reactions > 0
         end)
@@ -106,7 +106,9 @@ module.move = Fun.iter(Vector.direction_names):map(function(direction_name)
   end
 end):tomap()
 
-module.hand_attack = function(entity, target)
+module.hand_attack = setmetatable({
+  icon = love.graphics.newImage("assets/sprites/icons/melee_attack.png")
+}, {__call = function(_, entity, target)
   if entity.turn_resources.actions <= 0
     or not target
     or not target.hp
@@ -124,7 +126,7 @@ module.hand_attack = function(entity, target)
       get_melee_damage_roll(entity)
     )
   end)
-end
+end})
 
 module.sneak_attack = function(entity, target)
   if entity.turn_resources.actions <= 0
@@ -172,7 +174,9 @@ module.dash = function(entity)
   entity.turn_resources.movement = entity.turn_resources.movement + entity:get_turn_resources().movement
 end
 
-module.second_wind = function(entity)
+module.second_wind = setmetatable({
+  icon = love.graphics.newImage("assets/sprites/icons/second_wind.png"),
+}, {__call = function(_, entity)
   if entity.turn_resources.bonus_actions <= 0
     or entity.turn_resources.second_wind <= 0
   then
@@ -183,7 +187,7 @@ module.second_wind = function(entity)
   entity.turn_resources.second_wind = entity.turn_resources.second_wind - 1
 
   entity.hp = math.min(entity:get_max_hp(), entity.hp + (D(10) + entity.level):roll())
-end
+end})
 
 module.action_surge = function(entity)
   if entity.turn_resources.action_surge <= 0 then

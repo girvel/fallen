@@ -14,6 +14,11 @@ Vector = require("lib.vector")
 Grid = require("lib.grid")
 D = require("lib.d")
 
+local love_errorhandler = love.errorhandler
+love.errorhandler = function(msg)
+  Log.fatal(debug.traceback("Error: " .. tostring(msg), 2):gsub("\n[^\n]+$", ""))
+end
+
 love.graphics.setDefaultFilter("nearest", "nearest")
 love.keyboard.setKeyRepeat(true)
 
@@ -42,10 +47,7 @@ love.load = function(args)
     background_sound:setVolume(0.15)
     background_sound:setLooping(true)
     background_sound:play()
-  else
-    love.errorhandler = function(msg)
-      Log.fatal(debug.traceback("Error: " .. tostring(msg), 2):gsub("\n[^\n]+$", ""))
-    end
+    love.errorhandler = love_errorhandler
   end
 
   Log.info("Game is loaded")

@@ -7,6 +7,7 @@ local special = require("tech.special")
 local turn_order = require("tech.turn_order")
 local classes = require("core.classes")
 local weapons = require("library.weapons")
+local core = require("core")
 
 
 local module = {}
@@ -126,7 +127,7 @@ module.first = function()
     level = 2,
     direction = "left",
     faction = "monster",
-    abilities = creature.abilities(12, 10, 10, 10, 10, 10),
+    abilities = core.abilities(12, 10, 10, 10, 10, 10),
     immortal = true,
     ai = function(self, event)
       if not State.move_order then return end

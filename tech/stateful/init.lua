@@ -20,6 +20,8 @@ module_mt.__call = function(_, systems)
     CELL_DISPLAY_SIZE = 16,
     SCALING_FACTOR = SCALING_FACTOR,
 
+    gui = require("tech.stateful.gui"),
+
     add = function(self, entity)
       self.world:add(entity)
       if entity.position then
@@ -65,9 +67,9 @@ module_mt.__call = function(_, systems)
         self.rails = require(path .. "/rails")
         self.rails:initialize(self)
       end
-    end,
 
-    gui = require("tech.stateful.gui"),
+      self.gui:update_action_grid()
+    end,
 	}
 end
 

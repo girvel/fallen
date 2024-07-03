@@ -1,5 +1,7 @@
 local animated = require("tech.animated")
 local constants = require("core.constants")
+local actions = require("core.actions")
+local core = require("core")
 
 
 local module = {}
@@ -7,7 +9,7 @@ local module_mt = {}
 setmetatable(module, module_mt)
 
 module_mt.__call = function(_, animation_pack, object)
-  local result = Tablex.extend(animated(animation_pack), {  -- consider moving to mixins and extracting animated
+  local result = Tablex.extend(animated(animation_pack), {  -- TODO consider moving to mixins and extracting animated
     sprite = {},
     abilities = {
       strength = 10,
@@ -22,7 +24,7 @@ module_mt.__call = function(_, animation_pack, object)
     layer = "solids",
 
     get_armor = function(self)
-      return 10 + module.get_modifier(self.abilities.dexterity)
+      return 10 + core.get_modifier(self.abilities.dexterity)
     end,
 
     get_turn_resources = function()
@@ -38,10 +40,17 @@ module_mt.__call = function(_, animation_pack, object)
     get_max_hp = function(self)
       assert(self.max_hp or self.class)
       if self.max_hp then return self.max_hp end
-      local con_bonus = module.get_modifier(self.abilities.constitution)
+      local con_bonus = core.get_modifier(self.abilities.constitution)
       return self.class.hp_die + con_bonus
         + (self.level - 1) * (self.class.hp_die / 2 + 1 + con_bonus)
-      end,
+    end,
+
+    get_actions = function(self)
+      return {
+        actions.hand_attack,
+        actions.second_wind,
+      }
+    end,
   }, object or {})
 
   result.hp = result:get_max_hp()
@@ -49,25 +58,6 @@ module_mt.__call = function(_, animation_pack, object)
   result:animate("idle")
 
   return result
-end
-
-module.get_modifier = function(ability_score)
-  return math.floor((ability_score - 10) / 2)
-end
-
-module.abilities = function(str, dex, con, int, wis, cha)
-  return {
-    strength = str,
-    dexterity = dex,
-    constitution = con,
-    intelligence = int,
-    wisdon = wis,
-    charisma = cha,
-  }
-end
-
-module.are_hostile = function(first, second)
-  return (first.faction or second.faction) and first.faction ~= second.faction
 end
 
 return module

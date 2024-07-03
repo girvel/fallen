@@ -22,6 +22,10 @@ return Tiny.processingSystem({
   filter = Tiny.requireAll("gui_position", "sprite"),
   base_callback = "draw",
 
+  SIDEBAR_W = 300,
+
+  _unknown_icon = love.graphics.newImage("assets/sprites/icons/unknown.png"),
+
   preProcess = function(self)
     if State.gui.text_entities then
       love.graphics.clear()
@@ -32,6 +36,29 @@ return Tiny.processingSystem({
       return self:display_line(State.player.hears)
     end
 
+    self:_display_actions()
+    self:_display_text_info()
+
+    State.gui.current_wiki_offset = ((Vector({love.graphics.getDimensions()}) - State.gui.TEXT_MAX_SIZE) / 2):ceil()
+  end,
+
+  _display_actions = function(self)
+    for x = 1, State.gui.action_grid.size[1] do
+      for y = 1, State.gui.action_grid.size[2] do
+        local action = State.gui.action_grid[Vector({x, y})]
+        if action then
+          love.graphics.draw(
+            action.icon or self._unknown_icon,
+            love.graphics.getWidth() - self.SIDEBAR_W + (x - 1) * 48,
+            15 + (y - 1) * 48,
+            0, 2, 2
+          )
+        end
+      end
+    end
+  end,
+
+  _display_text_info = function(self)
     local max = State.player:get_turn_resources()
 
     local lines = {
@@ -78,15 +105,15 @@ return Tiny.processingSystem({
       })
     end
 
-    Tablex.concat(lines, {
-      "",
-      "Действия:",
-      "  1 - атака рукой",
-      "  2 - ничего не делать",
-      "  3 - второе дыхание",
-      "  4 - всплеск действий",
-      "  z - рывок",
-    })
+    -- Tablex.concat(lines, {
+    --   "",
+    --   "Действия:",
+    --   "  1 - атака рукой",
+    --   "  2 - ничего не делать",
+    --   "  3 - второе дыхание",
+    --   "  4 - всплеск действий",
+    --   "  z - рывок",
+    -- })
 
     local potential_interaction = interactive.get_for(State.player)
     if potential_interaction then
@@ -96,14 +123,11 @@ return Tiny.processingSystem({
       })
     end
 
-    local WIDTH = 300
     love.graphics.printf(
       table.concat(lines, "\n"), ui_font,
-      love.graphics.getWidth() - WIDTH, 15,
-      WIDTH - 15
+      love.graphics.getWidth() - self.SIDEBAR_W, 15 + 400,
+      self.SIDEBAR_W - 15
     )
-
-    State.gui.current_wiki_offset = ((Vector({love.graphics.getDimensions()}) - State.gui.TEXT_MAX_SIZE) / 2):ceil()
   end,
 
   process = function(self, entity)

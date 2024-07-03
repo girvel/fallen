@@ -27,6 +27,8 @@ return {
   history = {},
   current_history_index = 0,
 
+  action_grid = nil,
+
   _render_current_page = function(self)
     self:_close_page()
     local id = self.history[self.current_history_index]
@@ -80,5 +82,15 @@ return {
 
     self.current_history_index = self.current_history_index + direction
     self:_render_current_page()
+  end,
+
+  update_action_grid = function(self)
+    self.action_grid = Grid(Vector({5, 5}))
+    for i, action in pairs(State.player:get_actions()) do
+      self.action_grid[Vector({
+        (i - 1) % self.action_grid.size[1] + 1,
+        math.ceil(i / self.action_grid.size[1])
+      })] = action
+    end
   end,
 }
