@@ -7,7 +7,7 @@ return Tiny.processingSystem({
   end,
 
   process = function(_, entity)
-    local offset_position = entity.gui_position + State.gui.anchors[entity.gui_anchor]
+    local offset_position = State.gui.views[entity.view]:apply(entity.gui_position)
     local start = offset_position + Vector.down * entity.size[2]
     local finish = offset_position + entity.size
     local mouse_position = Vector({love.mouse.getPosition()})

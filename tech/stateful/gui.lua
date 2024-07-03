@@ -98,8 +98,8 @@ return {
           gui_position = Vector({
             (i - 1) % self.ACTION_GRID_W,
             math.floor(i / self.ACTION_GRID_W)
-          }) * 48,
-          gui_anchor = "actions",
+          }) * 24,
+          view = "actions",
         }, action))
       end)
       :totable()

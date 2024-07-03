@@ -106,7 +106,7 @@ local generate_entities = function(token_lines, font)
       table.insert(result, Tablex.extend(
         special.text(token.content, font, Vector({token.x, font:getHeight() * y})),
         {
-          gui_anchor = "wiki",
+          view = "wiki",
           link = token.link,
           size = Vector({font:getWidth(token.content), font:getHeight()})
         }

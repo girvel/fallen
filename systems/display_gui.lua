@@ -1,4 +1,5 @@
 local interactive = require("tech.interactive")
+local view = require("utils.view")
 
 
 local ui_font = love.graphics.newFont("assets/fonts/joystix.monospace-regular.otf", 12)
@@ -38,26 +39,16 @@ return Tiny.processingSystem({
 
     self:_display_text_info()
 
-    State.gui.anchors = {
-      wiki = ((Vector({love.graphics.getDimensions()}) - State.gui.TEXT_MAX_SIZE) / 2):ceil(),
-      actions = Vector({love.graphics.getWidth() - self.SIDEBAR_W, 15})
+    State.gui.views = {
+      wiki = view(
+        ((Vector({love.graphics.getDimensions()}) - State.gui.TEXT_MAX_SIZE) / 2):ceil(),
+        1
+      ),
+      actions = view(
+        Vector({love.graphics.getWidth() - self.SIDEBAR_W, 15}),
+        2
+      ),
     }
-  end,
-
-  _display_actions = function(self)
-    for x = 1, State.gui.action_grid.size[1] do
-      for y = 1, State.gui.action_grid.size[2] do
-        local action = State.gui.action_grid[Vector({x, y})]
-        if action then
-          love.graphics.draw(
-            action.icon or self._unknown_icon,
-            love.graphics.getWidth() - self.SIDEBAR_W + (x - 1) * 48,
-            15 + (y - 1) * 48,
-            0, 2, 2
-          )
-        end
-      end
-    end
   end,
 
   _display_text_info = function(self)
@@ -133,7 +124,7 @@ return Tiny.processingSystem({
   end,
 
   process = function(self, entity)
-    local x, y = unpack(entity.gui_position + State.gui.anchors[entity.gui_anchor])
+    local x, y = unpack(State.gui.views[entity.view]:apply(entity.gui_position))
     if entity.sprite.text then
       local display = entity.link
         and {State.gui.LINK_COLOR, entity.sprite.text}
