@@ -10,6 +10,8 @@ local weapon_mixin = function()
     interactive(function(self, other)
       local dropped_weapon = other.inventory.main_hand
       other.inventory.main_hand = State:remove(self)
+      self.direction = other.direction
+      self:animate()
       if dropped_weapon then
         dropped_weapon.position = self.position
         State:add(dropped_weapon)
