@@ -31,7 +31,6 @@ module.rapier = function()
       tags = {
         finesse = true,
       },
-      anchor = Vector({4, 11}),
     }
   )
 end
@@ -46,28 +45,11 @@ module.greatsword = function()
       damage_roll = D(6) * 2,
       bonus = 0,
       tags = {
-        finesse = true,
+        two_handed = true,
+        heavy = true,
       },
-      anchor = Vector({4, 11}),
     }
   )
 end
-
--- module.shortsword = function()
---   return Tablex.extend(
---     weapon_mixin(),
---     static_sprite("assets/sprites/shortsword.png"),
---     {
---       name = "короткий меч",
---       damage_roll = D(6),
---       bonus = 0,
---       tags = {
---         finesse = true,
---         light = true,
---       },
---       anchor = Vector({4, 14}),
---     }
---   )
--- end
 
 return module

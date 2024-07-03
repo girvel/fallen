@@ -23,10 +23,10 @@ module.greatsword = animated.load_pack("assets/sprites/greatsword", {
     Vector({2, 11}),
   },
   idle_left = {
-    Vector({11, 11}),
+    Vector({13, 11}),
   },
   idle_down = {
-    Vector({7, 6}),
+    Vector({7, 5}),
   },
   idle_up = {
     Vector({7, 13}),
