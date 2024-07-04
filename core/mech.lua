@@ -20,7 +20,7 @@ module.attack = function(entity, target, attack_roll, damage_roll)
 
   local is_critical = is_nat and attack >= target:get_armor()
   if is_critical then
-    damage_roll = damage_roll + (#damage_roll.dice == 0 and 0 or D(damage_roll.dice[1].sides_n))
+    damage_roll = damage_roll + D.roll(damage_roll.dice, 0)
   end
 
   module.damage(target, damage_roll:roll(), is_critical)
