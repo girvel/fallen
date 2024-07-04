@@ -1,5 +1,4 @@
 local interactive = require("tech.interactive")
-local view = require("utils.view")
 
 
 local ui_font = love.graphics.newFont("assets/fonts/joystix.monospace-regular.otf", 12)
@@ -39,16 +38,10 @@ return Tiny.processingSystem({
 
     self:_display_text_info()
 
-    State.gui.views = {
-      wiki = view(
-        ((Vector({love.graphics.getDimensions()}) - State.gui.TEXT_MAX_SIZE) / 2):ceil(),
-        1
-      ),
-      actions = view(
-        Vector({love.graphics.getWidth() - self.SIDEBAR_W, 15}),
-        2
-      ),
-    }
+    State.gui.views.wiki.offset = (
+      (Vector({love.graphics.getDimensions()}) - State.gui.TEXT_MAX_SIZE) / 2
+    ):ceil()
+    State.gui.views.actions.offset = Vector({love.graphics.getWidth() - self.SIDEBAR_W, 15})
   end,
 
   _display_text_info = function(self)
@@ -124,7 +117,8 @@ return Tiny.processingSystem({
   end,
 
   process = function(self, entity)
-    local x, y = unpack(State.gui.views[entity.view]:apply(entity.gui_position))
+    local current_view = State.gui.views[entity.view]
+    local x, y = unpack(current_view:apply(entity.gui_position))
     if entity.sprite.text then
       local display = entity.link
         and {State.gui.LINK_COLOR, entity.sprite.text}
@@ -132,7 +126,7 @@ return Tiny.processingSystem({
 
       love.graphics.print(display, entity.sprite.font, x, y)
     else
-      love.graphics.draw(entity.sprite.image, x, y, 0, unpack(entity.scale or Vector.zero))
+      love.graphics.draw(entity.sprite.image, x, y, 0, current_view.scale)
     end
   end,
 

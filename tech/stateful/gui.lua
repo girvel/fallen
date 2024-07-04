@@ -1,4 +1,5 @@
 local wrapping = require("tech.stateful.wrapping")
+local view = require("utils.view")
 
 
 local load_wiki = function(path)
@@ -28,6 +29,11 @@ return {
   current_history_index = 0,
 
   action_entities = {},
+
+  views = {
+    wiki = view(Vector.zero, 1, 0),
+    actions = view(Vector.zero, 2, 24),
+  },
 
   _render_current_page = function(self)
     self:_close_page()
@@ -98,7 +104,7 @@ return {
           gui_position = Vector({
             (i - 1) % self.ACTION_GRID_W,
             math.floor(i / self.ACTION_GRID_W)
-          }) * 24,
+          }),
           view = "actions",
         }, action))
       end)
