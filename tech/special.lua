@@ -5,17 +5,23 @@ local module = {}
 
 local damage_font = love.graphics.newFont("assets/fonts/joystix.monospace-regular.otf", 14)
 
-module.floating_damage = function(number, position)
+module.floating_damage = function(number, scene_position)
+  number = tostring(number)
   return {
-    off_grid_position = (position - Vector({1, 1})) * 16
-      + Vector({random.d(12) - 6, random.d(12) - 6}),  -- TODO fix magic number
-    drift = Vector({0, -6}),
+    gui_position = (scene_position - Vector({1, 1})) * State.CELL_DISPLAY_SIZE * State.SCALING_FACTOR
+      + Vector({random.d(12) - 6, random.d(12) - 6})
+      + Vector({
+        State.CELL_DISPLAY_SIZE - damage_font:getWidth(number),
+        State.CELL_DISPLAY_SIZE - damage_font:getHeight(),
+      }) / 2,  -- TODO fix magic number
+    view = "scene_fx",
+    -- drift = Vector({0, -24}),
     sprite = {
       text = number,
       font = damage_font,
       color = Common.hex_color("e64e4b"),  -- TODO join w/ text as {color, text}
     },
-    life_time = 3,
+    -- life_time = 3,
   }
 end
 

@@ -34,6 +34,7 @@ return {
   views = {
     wiki = view(Vector.zero, 1, 1),
     actions = view(Vector.zero, 2, 24),
+    scene_fx = view(Vector.zero, 1, 1),
   },
 
   _render_current_page = function(self)

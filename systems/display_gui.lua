@@ -18,11 +18,62 @@ local value_translations = {
   [false] = "нет",
 }
 
+local last_offset
+local get_scene_offset = function()
+  local window_w = love.graphics.getWidth()
+  local window_h = love.graphics.getHeight()
+  local border_w = math.floor(window_w / 3)
+  local border_h = math.floor(window_h / 3)
+  local player_x, player_y = unpack(State.player.position * State.CELL_DISPLAY_SIZE * State.SCALING_FACTOR)
+  local grid_w, grid_h = unpack(State.grids.solids.size * State.CELL_DISPLAY_SIZE * State.SCALING_FACTOR)
+
+  local result = -Vector({
+    Mathx.median(
+      0,
+      player_x - window_w + border_w,
+      State.gui.views.scene_fx.offset[1],
+      player_x - border_w,
+      grid_w - window_w
+    ),
+    Mathx.median(
+      0,
+      player_y - window_h + border_h,
+      State.gui.views.scene_fx.offset[2],
+      player_y - border_h,
+      grid_h - window_h
+    )
+  })
+
+  if result ~= last_offset then
+    last_offset = result
+    Log.trace(
+      "Xs:",
+      0,
+      player_x - window_w + border_w,
+      State.gui.views.scene_fx.offset[1],
+      player_x - border_w,
+      grid_w - window_w
+    )
+    Log.trace(
+      "Ys:",
+      0,
+      player_y - window_h + border_h,
+      State.gui.views.scene_fx.offset[2],
+      player_y - border_h,
+      grid_h - window_h
+    )
+    Log.trace("Result:", result)
+  end
+
+  return result
+end
+
 return Tiny.processingSystem({
   filter = Tiny.requireAll("gui_position", "sprite"),
   base_callback = "draw",
 
   SIDEBAR_W = 300,
+  _old_camera_position = Vector.zero,
 
   _unknown_icon = love.graphics.newImage("assets/sprites/icons/unknown.png"),
 
@@ -37,11 +88,17 @@ return Tiny.processingSystem({
     end
 
     self:_display_text_info()
+    self:_update_views()
+  end,
 
-    State.gui.views.wiki.offset = (
-      (Vector({love.graphics.getDimensions()}) - State.gui.TEXT_MAX_SIZE) / 2
-    ):ceil()
-    State.gui.views.actions.offset = Vector({love.graphics.getWidth() - self.SIDEBAR_W, 15})
+  _update_views = function(self)
+    for key, value in pairs({
+      wiki = ((Vector({love.graphics.getDimensions()}) - State.gui.TEXT_MAX_SIZE) / 2):ceil(),
+      actions = Vector({love.graphics.getWidth() - self.SIDEBAR_W, 15}),
+      scene_fx = get_scene_offset(),
+    }) do
+      State.gui.views[key].offset = value
+    end
   end,
 
   process = function(self, entity)
@@ -56,6 +113,17 @@ return Tiny.processingSystem({
     else
       love.graphics.draw(entity.sprite.image, x, y, 0, current_view.scale)
     end
+  end,
+
+  display_line = function(self, line)
+    local window_w = love.graphics.getWidth()
+    local window_h = love.graphics.getHeight()
+    local text_w = math.min(window_w - 40, State.gui.TEXT_MAX_SIZE[1])
+
+    love.graphics.setColor(Common.hex_color("31222c"))
+    love.graphics.rectangle("fill", 0, window_h - 140, window_w, 140)
+    love.graphics.setColor(1, 1, 1)
+    love.graphics.printf(line, ui_font, math.ceil((window_w - text_w) / 2), window_h - 120, text_w)
   end,
 
   _display_text_info = function(self)
@@ -128,16 +196,5 @@ return Tiny.processingSystem({
       love.graphics.getWidth() - self.SIDEBAR_W, 15 + 400,
       self.SIDEBAR_W - 15
     )
-  end,
-
-  display_line = function(self, line)
-    local window_w = love.graphics.getWidth()
-    local window_h = love.graphics.getHeight()
-    local text_w = math.min(window_w - 40, State.gui.TEXT_MAX_SIZE[1])
-
-    love.graphics.setColor(Common.hex_color("31222c"))
-    love.graphics.rectangle("fill", 0, window_h - 140, window_w, 140)
-    love.graphics.setColor(1, 1, 1)
-    love.graphics.printf(line, ui_font, math.ceil((window_w - text_w) / 2), window_h - 120, text_w)
   end,
 })

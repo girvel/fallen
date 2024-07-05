@@ -49,6 +49,10 @@ vector_mt.__div = function(self, other)
   return module({self[1] / other, self[2] / other})
 end
 
+vector_mt.__unm = function(self)
+  return module({-self[1], -self[2]})
+end
+
 vector_mt.__le = function(self, other)
   return self[1] <= other[1] and self[2] <= other[2]
 end
