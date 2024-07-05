@@ -31,7 +31,7 @@ return {
   action_entities = {},
 
   views = {
-    wiki = view(Vector.zero, 1, 0),
+    wiki = view(Vector.zero, 1, 1),
     actions = view(Vector.zero, 2, 24),
   },
 

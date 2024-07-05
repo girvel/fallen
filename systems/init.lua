@@ -13,5 +13,5 @@ return {
   require("systems.timed_death"),
   require("systems.drift"),
   require("systems.railing"),
-  require("systems.use_hyperlinks"),
+  require("systems.on_click_calls"),
 }

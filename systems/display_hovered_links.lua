@@ -1,10 +1,6 @@
 return Tiny.processingSystem({
   base_callback = "draw",
-  filter = Tiny.requireAll("gui_position", "sprite", "link"),
-
-  preProcess = function()
-    love.graphics.setColor(State.gui.LINK_COLOR)
-  end,
+  filter = Tiny.requireAll("gui_position", "sprite", "link_flag"),
 
   process = function(_, entity)
     local offset_position = State.gui.views[entity.view]:apply(entity.gui_position)
@@ -12,10 +8,11 @@ return Tiny.processingSystem({
     local finish = offset_position + entity.size
     local mouse_position = Vector({love.mouse.getPosition()})
     if not (mouse_position >= offset_position and mouse_position < finish) then return end
-    love.graphics.line(start[1], start[2], unpack(finish))
-  end,
 
-  postProcess = function()
+    if type(entity.sprite.text) == "table" then
+      love.graphics.setColor(entity.sprite.text[1])
+    end
+    love.graphics.line(start[1], start[2], unpack(finish))
     love.graphics.setColor({1, 1, 1})
   end,
 })

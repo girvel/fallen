@@ -33,12 +33,14 @@ module.floating_line = function(text, position)
   }
 end
 
-module.text = function(text, font, position)
+module.text = function(text, font, position, decorations)
+  decorations = decorations or {}
   return {
     gui_position = position,
     sprite = {
       text = text,
       font = font,
+      is_underlined = decorations.underline or nil
     },
   }
 end

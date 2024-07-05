@@ -99,16 +99,25 @@ local wrap_lines = function(token_lines, font, max_w)
   return result
 end
 
+local LINK_COLOR = Common.hex_color("3f5d92")
+
 local generate_entities = function(token_lines, font)
   local result = {}
   for y, line in ipairs(token_lines) do
     for _, token in ipairs(line) do
       table.insert(result, Tablex.extend(
-        special.text(token.content, font, Vector({token.x, font:getHeight() * y})),
+        special.text(
+          token.link and {LINK_COLOR, token.content} or token.content,
+          font,
+          Vector({token.x, font:getHeight() * y})
+        ),
         {
           view = "wiki",
-          link = token.link,
-          size = Vector({font:getWidth(token.content), font:getHeight()})
+          on_click = token.link and function()
+            State.gui:show_page(token.link)
+          end or nil,
+          size = Vector({font:getWidth(token.content), font:getHeight()}),
+          link_flag = token.link or nil,
         }
       ))
     end
