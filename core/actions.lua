@@ -110,7 +110,11 @@ end):tomap()
 module.hand_attack = setmetatable(
   Tablex.extend(
     static_sprite("assets/sprites/icons/melee_attack.png"),
-    {scale = Vector({2, 2})}
+    {
+      scale = Vector({2, 2}),
+      on_click = function(self) return self() end,
+      size = Vector.one * 16,
+    }
   ),
   {
     __call = function(_, entity, target)
