@@ -39,7 +39,7 @@ define_hotkey(hotkeys, {"reading"}, {"left"}, function() State.gui:move_in_wiki_
 define_hotkey(hotkeys, {"reading"}, {"right"}, function() State.gui:move_in_wiki_history(1) end)
 
 define_hotkey(hotkeys, {"free", "fight"}, {"1"}, function(entity)
-  actions.hand_attack(entity, State.grids.solids[entity.position + Vector[entity.direction]])
+  actions.hand_attack(entity)
 end)
 
 define_hotkey(hotkeys, {"free", "fight"}, {"3"}, actions.second_wind)

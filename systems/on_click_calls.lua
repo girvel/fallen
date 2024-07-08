@@ -10,6 +10,6 @@ return Tiny.processingSystem({
       return
     end
 
-    entity:on_click()
+    entity:on_click(State.player)
   end,
 })

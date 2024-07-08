@@ -112,29 +112,34 @@ module.hand_attack = setmetatable(
     static_sprite("assets/sprites/icons/melee_attack.png"),
     {
       scale = Vector({2, 2}),
-      on_click = function(self) return self() end,
-      size = Vector.one * 16,
+      on_click = function(self, entity) return self:run(entity) end,
+      size = Vector.one * 0.67,
+      run = function(self, entity)
+        local target = State.grids.solids:safe_get(entity.position + Vector[entity.direction])
+
+        if entity.turn_resources.actions <= 0
+          or not target
+          or not target.hp
+        then
+          return false
+        end
+
+        entity.turn_resources.actions = entity.turn_resources.actions - 1
+
+        entity:animate("attack")
+        entity:when_animation_ends(function()
+          mech.attack(
+            entity, target,
+            get_melee_attack_roll(entity),
+            get_melee_damage_roll(entity)
+          )
+        end)
+      end
     }
   ),
   {
-    __call = function(_, entity, target)
-      if entity.turn_resources.actions <= 0
-        or not target
-        or not target.hp
-      then
-        return false
-      end
-
-      entity.turn_resources.actions = entity.turn_resources.actions - 1
-
-      entity:animate("attack")
-      entity:when_animation_ends(function()
-        mech.attack(
-          entity, target,
-          get_melee_attack_roll(entity),
-          get_melee_damage_roll(entity)
-        )
-      end)
+    __call = function(self, entity)
+      self:run(entity)
     end
   }
 )
