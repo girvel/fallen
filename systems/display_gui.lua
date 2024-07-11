@@ -31,14 +31,14 @@ local get_scene_offset = function()
     Mathx.median(
       0,
       player_x - window_w + border_w,
-      State.gui.views.scene_fx.offset[1],
+      -State.gui.views.scene_fx.offset[1],
       player_x - border_w,
       grid_w - window_w
     ),
     Mathx.median(
       0,
       player_y - window_h + border_h,
-      State.gui.views.scene_fx.offset[2],
+      -State.gui.views.scene_fx.offset[2],
       player_y - border_h,
       grid_h - window_h
     )

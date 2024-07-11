@@ -32,6 +32,18 @@ return Tiny.system({
       )
     })
 
+    if self.old_camera_position ~= State.camera.position then
+      Log.trace(
+        "Xs:",
+        0,
+        player_x - window_w + border_w,
+        State.camera.position[1],
+        player_x - border_w,
+        grid_w - window_w
+      )
+      Log.trace("Camera position:", State.camera.position)
+    end
+
     State.transform:translate(unpack(self.old_camera_position - State.camera.position))
     self.old_camera_position = State.camera.position
 
