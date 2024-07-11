@@ -32,18 +32,6 @@ return Tiny.system({
       )
     })
 
-    if self.old_camera_position ~= State.camera.position then
-      Log.trace(
-        "Xs:",
-        0,
-        player_x - window_w + border_w,
-        State.camera.position[1],
-        player_x - border_w,
-        grid_w - window_w
-      )
-      Log.trace("Camera position:", State.camera.position)
-    end
-
     State.transform:translate(unpack(self.old_camera_position - State.camera.position))
     self.old_camera_position = State.camera.position
 
@@ -68,16 +56,11 @@ return Tiny.system({
     local scaled_position = ((entity.position - Vector({1, 1})) * State.CELL_DISPLAY_SIZE):ceil()
 
     local display_main_hand = function()
-      if
-        entity.inventory and
-        entity.inventory.main_hand and
-        entity.inventory.main_hand.sprite and
-        entity.inventory.main_hand.sprite.anchor and
-        entity.sprite.anchor
-      then
+      local weapon_sprite = -Query(entity.inventory).main_hand.sprite
+      if weapon_sprite and weapon_sprite.anchor and entity.sprite.anchor then
         love.graphics.draw(
-          entity.inventory.main_hand.sprite.image,
-          unpack(scaled_position + entity.sprite.anchor - entity.inventory.main_hand.sprite.anchor)
+          weapon_sprite.image,
+          unpack(scaled_position + entity.sprite.anchor - weapon_sprite.anchor)
         )
       end
     end

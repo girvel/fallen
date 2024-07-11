@@ -7,6 +7,7 @@ require("lib.strong")
 Log.info("Starting basic LOVE setup")
 
 Tablex = require("lib.tablex")
+Query = require("lib.query")
 Mathx = require("lib.mathx")
 Common = require("lib.common")
 
