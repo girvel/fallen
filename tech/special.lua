@@ -15,13 +15,12 @@ module.floating_damage = function(number, scene_position)
         State.CELL_DISPLAY_SIZE - damage_font:getHeight(),
       }) / 2,  -- TODO fix magic number
     view = "scene_fx",
-    -- drift = Vector({0, -24}),
+    drift = Vector({0, -24}),
     sprite = {
-      text = number,
+      text = {Common.hex_color("e64e4b"), number},
       font = damage_font,
-      color = Common.hex_color("e64e4b"),  -- TODO join w/ text as {color, text}
     },
-    -- life_time = 3,
+    life_time = 3,
   }
 end
 
