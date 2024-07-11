@@ -1,5 +1,6 @@
 local wrapping = require("tech.stateful.wrapping")
 local view = require("utils.view")
+local static_sprite = require("tech.static_sprite")
 
 
 local load_wiki = function(path)
@@ -28,6 +29,7 @@ return {
   current_history_index = 0,
 
   action_entities = {},
+  action_background = nil,
 
   views = {
     wiki = view(Vector.zero, 1, 1),
@@ -108,5 +110,12 @@ return {
         }, action))
       end)
       :totable()
+
+    if not self.action_background then
+      State:add(Tablex.extend(static_sprite("assets/sprites/gui_background.png"), {
+        gui_position = Vector({-0.33, -0.33}),
+        view = "actions",
+      }))
+    end
   end,
 }

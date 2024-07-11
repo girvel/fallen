@@ -128,11 +128,15 @@ module.hand_attack = setmetatable(
 
         entity:animate("attack")
         entity:when_animation_ends(function()
-          mech.attack(
+          if not mech.attack(
             entity, target,
             get_melee_attack_roll(entity),
             get_melee_damage_roll(entity)
-          )
+          ) then return end
+
+          if target and target.sounds and target.sounds.hit then
+            random.choice(target.sounds.hit):play()
+          end
         end)
       end
     }
@@ -193,20 +197,26 @@ end
 module.second_wind = setmetatable(
   Tablex.extend(
     static_sprite("assets/sprites/icons/second_wind.png"),
-    {scale = Vector({2, 2})}
+    {
+      size = Vector.one * 0.67,
+      on_click = function(self, entity) return self:run(entity) end,
+      run = function(self, entity)
+        if entity.turn_resources.bonus_actions <= 0
+          or entity.turn_resources.second_wind <= 0
+        then
+          return
+        end
+
+        entity.turn_resources.bonus_actions = entity.turn_resources.bonus_actions - 1
+        entity.turn_resources.second_wind = entity.turn_resources.second_wind - 1
+
+        entity.hp = math.min(entity:get_max_hp(), entity.hp + (D(10) + entity.level):roll())
+      end,
+    }
   ),
   {
-    __call = function(_, entity)
-      if entity.turn_resources.bonus_actions <= 0
-        or entity.turn_resources.second_wind <= 0
-      then
-        return
-      end
-
-      entity.turn_resources.bonus_actions = entity.turn_resources.bonus_actions - 1
-      entity.turn_resources.second_wind = entity.turn_resources.second_wind - 1
-
-      entity.hp = math.min(entity:get_max_hp(), entity.hp + (D(10) + entity.level):roll())
+    __call = function(self, entity)
+      self:run(entity)
     end
   }
 )

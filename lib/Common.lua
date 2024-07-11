@@ -29,5 +29,10 @@ module.get_color = function(image_data)
   end
 end
 
+module.volumed_sound = function(path, volume)
+  local result = love.audio.newSource(path, "static")
+  result:setVolume(volume)
+  return result
+end
 
 return module

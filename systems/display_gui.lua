@@ -44,6 +44,20 @@ return Tiny.processingSystem({
     State.gui.views.actions.offset = Vector({love.graphics.getWidth() - self.SIDEBAR_W, 15})
   end,
 
+  process = function(self, entity)
+    local current_view = State.gui.views[entity.view]
+    local x, y = unpack(current_view:apply(entity.gui_position))
+    if entity.sprite.text then
+      local display = entity.link
+        and {State.gui.LINK_COLOR, entity.sprite.text}
+        or entity.sprite.text
+
+      love.graphics.print(display, entity.sprite.font, x, y)
+    else
+      love.graphics.draw(entity.sprite.image, x, y, 0, current_view.scale)
+    end
+  end,
+
   _display_text_info = function(self)
     local max = State.player:get_turn_resources()
 
@@ -114,20 +128,6 @@ return Tiny.processingSystem({
       love.graphics.getWidth() - self.SIDEBAR_W, 15 + 400,
       self.SIDEBAR_W - 15
     )
-  end,
-
-  process = function(self, entity)
-    local current_view = State.gui.views[entity.view]
-    local x, y = unpack(current_view:apply(entity.gui_position))
-    if entity.sprite.text then
-      local display = entity.link
-        and {State.gui.LINK_COLOR, entity.sprite.text}
-        or entity.sprite.text
-
-      love.graphics.print(display, entity.sprite.font, x, y)
-    else
-      love.graphics.draw(entity.sprite.image, x, y, 0, current_view.scale)
-    end
   end,
 
   display_line = function(self, line)

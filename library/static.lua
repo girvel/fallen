@@ -61,13 +61,18 @@ module.scripture = function(kind, path)
   )
 end
 
+local mannequin_sounds = {
+  hit = {Common.volumed_sound("assets/sounds/hits_soft_wood.wav", 0.3)},
+}
+
 module.mannequin = function()
   return Tablex.extend(
     static_sprite("assets/sprites/mannequin.png"),
     {
       name = "манекен",
       hp = 1000,
-      get_armor = function() return 10 end,
+      get_armor = function() return 5 end,
+      sounds = mannequin_sounds,
     }
   )
 end

@@ -1,4 +1,4 @@
-return function(path)
+return function(path, anchor)
   return {
     sprite = {
       image = love.graphics.newImage(path),
