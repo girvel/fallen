@@ -2,6 +2,7 @@ local interactive = require("tech.interactive")
 local animated = require("tech.animated")
 local level = require("tech.level")
 local static_sprite = require("tech.static_sprite")
+local atlas_sprite = require("tech.atlas_sprite")
 
 
 local module = {}
@@ -109,11 +110,21 @@ for _, name in ipairs({
   end
 end
 
-module.pipe_forward_down = function()
-  return Tablex.extend(
-    static_sprite("assets/sprites/pipe_left_down.png", true),
-    {code_name = "pipe_forward_down"}
-  )
+local pipe_atlas = love.graphics.newImage("assets/atlases/pipes.png")
+local canvas = love.graphics.newCanvas(pipe_atlas:getDimensions())
+love.graphics.setCanvas(canvas)
+love.graphics.draw(pipe_atlas)
+love.graphics.setCanvas()
+
+for i, name in ipairs({
+  "pipe_horizontal", "pipe_vertical"
+}) do
+  module[name] = function()
+    return Tablex.extend(
+      atlas_sprite(canvas, i),
+      {code_name = name}
+    )
+  end
 end
 
 return module
