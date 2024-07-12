@@ -24,6 +24,39 @@ module.change_layer = function(grids, entity, new_layer)
   return true
 end
 
+local throw_tiles_under = function(level_lines, palette, result)
+  for y, line in ipairs(level_lines) do
+    for _, x, character in Fun.iter(line):enumerate() do
+      if palette.transparents[character] then
+        local position = Vector({x, y})
+        local tiles_around = Fun.iter(Vector.extended_directions)
+          :map(function(d)
+            local p = position + d;
+            return (level_lines[p[2]] or {})[p[1]]
+          end)
+          :filter(function(c) return palette.factories.tiles[c] end)
+          :totable()
+
+        if #tiles_around >= 1 then
+          local tiles_around_ns = Fun.iter(tiles_around)
+            :reduce(function(acc, c)
+              acc[c] = (acc[c] or 0) + 1
+              return acc
+            end, {})
+
+          local most_frequent_tile = Fun.iter(tiles_around_ns)
+            :max_by(function(c, n) return n end)
+
+          table.insert(result, Tablex.extend(
+            palette.factories.tiles[most_frequent_tile](),
+            {position = position, layer = "tiles", view = "scene"}
+          ))
+        end
+      end
+    end
+  end
+end
+
 module.load_entities = function(text_representation, arguments, palette)
   local level_lines = text_representation:strip():split("\n")
   local level_size = Vector({#level_lines[1], #level_lines})
@@ -50,36 +83,7 @@ module.load_entities = function(text_representation, arguments, palette)
     end
   end
 
-  for y, line in ipairs(level_lines) do
-    for _, x, character in Fun.iter(line):enumerate() do
-      if palette.transparents[character] then
-        local position = Vector({x, y})
-        local tiles_around = Fun.iter(Vector.directions)
-          :map(function(d)
-            local p = position + d;
-            return (level_lines[p[2]] or {})[p[1]]
-          end)
-          :filter(function(c) return palette.factories.tiles[c] end)
-          :totable()
-
-        if #tiles_around >= 1 then
-          local tiles_around_ns = Fun.iter(tiles_around)
-            :reduce(function(acc, c)
-              acc[c] = (acc[c] or 0) + 1
-              return acc
-            end, {})
-
-          local most_frequent_tile = Fun.iter(tiles_around_ns)
-            :max_by(function(c, n) return n end)
-
-          table.insert(result, Tablex.extend(
-            palette.factories.tiles[most_frequent_tile](),
-            {position = position, layer = "tiles", view = "scene"}
-          ))
-        end
-      end
-    end
-  end
+  throw_tiles_under(level_lines, palette, result)
 
   return level_size, result
 end

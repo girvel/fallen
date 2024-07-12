@@ -22,11 +22,15 @@ module.right = module({1, 0})
 
 module.direction_names = {"up", "left", "down", "right"}
 module.directions = {module.up, module.left, module.down, module.right}
+module.extended_directions = {
+  module.up, module.left, module.down, module.right,
+  module({1, 1}), module({1, -1}), module({-1, -1}), module({-1, 1})
+}
 module.name_from_direction = function(v)
-  if v == Vector.up then return "up" end
-  if v == Vector.down then return "down" end
-  if v == Vector.left then return "left" end
-  if v == Vector.right then return "right" end
+  if v == module.up then return "up" end
+  if v == module.down then return "down" end
+  if v == module.left then return "left" end
+  if v == module.right then return "right" end
 end
 
 vector_mt.__eq = function(self, other)
@@ -78,8 +82,8 @@ vector_methods.abs = function(self)
 end
 
 vector_methods.normalized = function(self)
-  if self[1] ~= 0 then return Vector({Mathx.sign(self[1]), 0}) end
-  if self[2] ~= 0 then return Vector({0, Mathx.sign(self[2])}) end
+  if self[1] ~= 0 then return module({Mathx.sign(self[1]), 0}) end
+  if self[2] ~= 0 then return module({0, Mathx.sign(self[2])}) end
   assert(false, "Can not normalize Vector.zero")
 end
 
