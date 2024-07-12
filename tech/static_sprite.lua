@@ -4,6 +4,7 @@ return function(path)
   return {
     sprite = {
       image = love.graphics.newImage(image_data),
+      image_data = image_data,
       color = Common.get_color(image_data),
     }
   }

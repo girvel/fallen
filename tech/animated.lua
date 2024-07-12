@@ -40,6 +40,7 @@ end
 
 module.load_pack = function(folder_path, anchors)
   anchors = anchors or {}
+  assert(love.filesystem.getInfo(folder_path), "No folder " .. folder_path)
 
   local result = {}
   for _, file_name in ipairs(love.filesystem.getDirectoryItems(folder_path)) do
@@ -56,12 +57,37 @@ module.load_pack = function(folder_path, anchors)
     if not result[animation_name] then result[animation_name] = {} end
 
     local anchor = anchors[animation_name] and anchors[animation_name][frame_number]
-    result[animation_name][frame_number] = Tablex.extend({
-      image = love.graphics.newImage(folder_path .. "/" .. file_name),
+    local image_data = love.image.newImageData(folder_path .. "/" .. file_name)
+    result[animation_name][frame_number] = Tablex.extend({  -- TODO unify w/ static_sprite
+      image = love.graphics.newImage(image_data),
+      image_data = image_data,
       color = Common.get_color(love.image.newImageData(folder_path .. "/" .. file_name))
     }, anchor and {anchor = anchor} or {})
   end
   return result
+end
+
+module.colored_pack = function(base_pack, color)
+  return Fun.iter(base_pack)
+    :map(function(animation_name, animation)
+      return animation_name, Fun.iter(animation)
+        :map(function(sprite)
+          local image_data = sprite.image_data
+          image_data:mapPixel(function(_, _, r, g, b, a)
+            if a == 0 then return 0, 0, 0, 0 end
+            if r == 0 and g == 0 and b == 0 then return 0, 0, 0, 1 end
+            return unpack(color)
+          end)
+          return {
+            image = love.graphics.newImage(image_data),
+            image_data = image_data,
+            color = color,
+            anchor = sprite.anchor,
+          }
+        end)
+        :totable()
+    end)
+    :tomap()
 end
 
 return module

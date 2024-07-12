@@ -9,6 +9,7 @@ local module_mt = {}
 setmetatable(module, module_mt)
 
 module_mt.__call = function(_, animation_pack, object)
+  assert(object.max_hp or object.class)
   local result = Tablex.extend(animated(animation_pack), {  -- TODO consider moving to mixins and extracting animated
     sprite = {},
     abilities = {
@@ -38,7 +39,6 @@ module_mt.__call = function(_, animation_pack, object)
     end,
 
     get_max_hp = function(self)
-      assert(self.max_hp or self.class)
       if self.max_hp then return self.max_hp end
       local con_bonus = core.get_modifier(self.abilities.constitution)
       return self.class.hp_die + con_bonus

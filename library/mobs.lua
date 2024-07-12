@@ -56,30 +56,6 @@ module.bat = function()
   })
 end
 
-local moose_dude_pack = animated.load_pack("assets/sprites/moose_dude")
-
-module.moose_dude = function()
-  return Tablex.extend(
-    creature(moose_dude_pack, {
-      name = "таинственный силуэт",
-      max_hp = 10,
-    }),
-    interactive(function(self, _)
-      State:add(special.floating_line("//Видят//Ждут//", self.position))
-      self.interact = nil
-    end)
-  )
-end
-
-local barrel_dude_pack = animated.load_pack("assets/sprites/barrel_dude")
-
-module.barrel_dude = function()
-  return creature(barrel_dude_pack, {
-    name = "таинственный силуэт",
-    max_hp = 15,
-  })
-end
-
 local exploding_dude_pack = animated.load_pack("assets/sprites/exploding_dude")
 
 module.exploding_dude = function()

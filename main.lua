@@ -2,6 +2,7 @@ Log = require("lib.log")
 Fun = require("lib.fun")
 Tiny = require("lib.tiny")
 Inspect = require("lib.inspect")
+Memoize = require("lib.memoize")
 require("lib.strong")
 
 Log.info("Starting basic LOVE setup")

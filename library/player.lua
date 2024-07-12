@@ -1,11 +1,8 @@
 local actions = require("core.actions")
 local turn_order = require("tech.turn_order")
 local classes = require("core.classes")
-local animated = require("tech.animated")
-local creature = require("core.creature")
+local humanoid = require("core.humanoid")
 local interactive = require("tech.interactive")
-local weapons = require("library.weapons")
-local animation_packs = require("library.animation_packs")
 
 
 local module_mt = {}
@@ -67,13 +64,14 @@ define_hotkey(hotkeys, Tablex.deep_copy(MODES), {"S-q"}, function()
 end)
 
 module_mt.__call = function()
-  local result = creature(animation_packs.player_character, {
-    anchors = {
-      main_hand = Vector({3, 12}),
-    },
+  local result = humanoid({
     player_flag = true,
     name = "протагонист",
     class = classes.charming_leader,
+    race = {
+      codename = "player_character",
+      skin_color = Common.hex_color("8ed3dc"),
+    },
     level = 2,
     direction = "right",
     immortal = true,

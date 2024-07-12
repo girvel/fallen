@@ -19,6 +19,7 @@ module_mt.__call = function(self, canvas, index)
   return {
     sprite = {
       image = love.graphics.newImage(image_data),
+      image_data = image_data,
       color = Common.get_color(image_data),
     }
   }
