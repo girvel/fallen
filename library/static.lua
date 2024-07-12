@@ -111,7 +111,7 @@ end
 
 module.pipe_forward_down = function()
   return Tablex.extend(
-    static_sprite("assets/sprites/pipe_left_down.png", true),
+    static_sprite("assets/sprites/pipe_left_down.png", 2),
     {code_name = "pipe_forward_down"}
   )
 end
