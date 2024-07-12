@@ -30,6 +30,8 @@ return {
       ["/"] = static.pipe_forward_left,
       F = static.pipe_right_forward,
       B = static.pipe_back_right,
+      ["}"] = static.pipe_left_down,
+      ["{"] = static.pipe_right_down,
 
       M = static.mannequin,
       D = static.door,
