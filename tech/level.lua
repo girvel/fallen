@@ -43,7 +43,7 @@ module.load_entities = function(text_representation, arguments, palette)
           local position = Vector({x, y})
           table.insert(result, Tablex.extend(
             factory(unpack(grid_of_args[position] or {})),
-            {position = position, layer = layer}
+            {position = position, layer = layer, view = "scene"}
           ))
         end
       end
@@ -74,7 +74,7 @@ module.load_entities = function(text_representation, arguments, palette)
 
           table.insert(result, Tablex.extend(
             palette.factories.tiles[most_frequent_tile](),
-            {position = position, layer = "tiles"}
+            {position = position, layer = "tiles", view = "scene"}
           ))
         end
       end

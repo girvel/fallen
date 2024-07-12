@@ -32,9 +32,14 @@ return {
   action_background = nil,
 
   views = {
+    scene = view(Vector.zero, 4, 16),
     wiki = view(Vector.zero, 1, 1),
     actions = view(Vector.zero, 2, 24),
     scene_fx = view(Vector.zero, 1, 1),
+  },
+
+  views_order = {
+    "scene", "wiki", "actions", "scene_fx"
   },
 
   _render_current_page = function(self)
@@ -103,7 +108,7 @@ return {
       :enumerate()
       :map(function(i, action)
         State:add(Tablex.extend({
-          gui_position = Vector({
+          position = Vector({
             (i - 1) % self.ACTION_GRID_W,
             math.floor(i / self.ACTION_GRID_W)
           }),
@@ -114,7 +119,7 @@ return {
 
     if not self.action_background then
       State:add(Tablex.extend(static_sprite("assets/sprites/gui_background.png"), {
-        gui_position = Vector({-0.33, -0.33}),
+        position = Vector({-0.33, -0.33}),
         view = "actions",
       }))
     end

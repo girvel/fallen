@@ -24,7 +24,7 @@ module_mt.__call = function(_, systems)
 
     add = function(self, entity)
       self.world:add(entity)
-      if entity.position then
+      if entity.layer then
         self.grids[entity.layer][entity.position] = entity
       end
       if entity.inventory and entity.inventory.main_hand then
@@ -36,7 +36,7 @@ module_mt.__call = function(_, systems)
     remove = function(self, entity)
       self.world:remove(entity)
 
-      if entity.position then
+      if entity.layer then
         self.grids[entity.layer][entity.position] = nil
       end
 

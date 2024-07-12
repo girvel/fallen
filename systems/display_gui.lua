@@ -1,4 +1,5 @@
 local interactive = require("tech.interactive")
+local level = require("tech.level")
 
 
 local ui_font = love.graphics.newFont("assets/fonts/joystix.monospace-regular.otf", 12)
@@ -47,14 +48,32 @@ local get_scene_offset = function()
   return result
 end
 
-return Tiny.processingSystem({
-  filter = Tiny.requireAll("gui_position", "sprite"),
+return Tiny.sortedProcessingSystem({
+  filter = Tiny.requireAll("position", "sprite", "view"),
   base_callback = "draw",
 
   SIDEBAR_W = 300,
   _old_camera_position = Vector.zero,
 
   _unknown_icon = love.graphics.newImage("assets/sprites/icons/unknown.png"),
+
+  compare = function(self, first, second)
+    if first.view ~= second.view then
+      local iterator = Fun.iter(State.gui.views_order):enumerate()
+      return (
+        select(1, iterator:filter(function(i, name) return name == first.view end):nth(1))
+        < select(1, iterator:filter(function(i, name) return name == second.view end):nth(1))
+      )
+    end
+
+    if not first.layer or first.layer == second.layer then return end
+
+    local iterator = Fun.iter(level.GRID_LAYERS):enumerate()
+    return (
+      select(1, iterator:filter(function(i, name) return name == first.layer end):nth(1))
+      < select(1, iterator:filter(function(i, name) return name == second.layer end):nth(1))
+    )
+  end,
 
   preProcess = function(self)
     if State.gui.text_entities then
@@ -75,6 +94,7 @@ return Tiny.processingSystem({
       wiki = ((Vector({love.graphics.getDimensions()}) - State.gui.TEXT_MAX_SIZE) / 2):ceil(),
       actions = Vector({love.graphics.getWidth() - self.SIDEBAR_W, 15}),
       scene_fx = get_scene_offset(),
+      scene = get_scene_offset(),
     }) do
       State.gui.views[key].offset = value
     end
@@ -82,7 +102,7 @@ return Tiny.processingSystem({
 
   process = function(self, entity)
     local current_view = State.gui.views[entity.view]
-    local x, y = unpack(current_view:apply(entity.gui_position))
+    local x, y = unpack(current_view:apply(entity.position))
     if entity.sprite.text then
       local display = entity.link
         and {State.gui.LINK_COLOR, entity.sprite.text}
@@ -90,7 +110,20 @@ return Tiny.processingSystem({
 
       love.graphics.print(display, entity.sprite.font, x, y)
     else
+      local display_main_hand = function()
+        local weapon_sprite = -Query(entity.inventory).main_hand.sprite
+        if weapon_sprite and weapon_sprite.anchor and entity.sprite.anchor then
+          local wx, wy = unpack(Vector({x, y}) + (entity.sprite.anchor - weapon_sprite.anchor) * current_view.scale)
+          love.graphics.draw(weapon_sprite.image, wx, wy, 0, current_view.scale)
+        end
+      end
+
+      local is_weapon_in_background = entity.direction == "up"
+      if is_weapon_in_background then display_main_hand() end
+
       love.graphics.draw(entity.sprite.image, x, y, 0, current_view.scale)
+
+      if not is_weapon_in_background then display_main_hand() end
     end
   end,
 
