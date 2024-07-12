@@ -54,4 +54,18 @@ module.greatsword = function()
   )
 end
 
+module.gas_key = function()
+  return Tablex.extend(
+    weapon_mixin(),
+    animated(animation_packs.gas_key),
+    {
+      direction = "right",
+      name = "Газовый ключ",
+      damage_roll = D(4),
+      bonus = 1,
+      tags = {},
+    }
+  )
+end
+
 return module

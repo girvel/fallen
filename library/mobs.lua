@@ -14,12 +14,13 @@ local races = require("core.races")
 local module = {}
 
 for i, race in ipairs({races.half_elf, races.halfling, races.half_orc, races.dwarf}) do
-  module[i] = function(direction)
+  module[i] = function(direction, inventory)
     return humanoid({
       name = "инженер",
       race = race,
       max_hp = 1,  -- TODO class dude
       direction = direction,
+      inventory = inventory,
     })
   end
 end

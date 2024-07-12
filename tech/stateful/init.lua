@@ -26,7 +26,7 @@ module_mt.__call = function(_, systems, debug_mode)
 
     add = function(self, entity)
       self.world:add(entity)
-      if entity.layer then
+      if entity.position and entity.layer then
         self.grids[entity.layer][entity.position] = entity
       end
       if entity.inventory and entity.inventory.main_hand then
@@ -37,13 +37,15 @@ module_mt.__call = function(_, systems, debug_mode)
 
     remove = function(self, entity)
       self.world:remove(entity)
-
       if entity.layer then
         self.grids[entity.layer][entity.position] = nil
       end
-
       if self.move_order then
         self.move_order:remove(entity)
+      end
+      local main_hand = -Query(entity).inventory.main_hand
+      if main_hand then
+        
       end
       return entity
     end,

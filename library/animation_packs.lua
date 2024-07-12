@@ -33,4 +33,20 @@ module.greatsword = animated.load_pack("assets/sprites/greatsword", {
   },
 })
 
+module.gas_key = animated.load_pack("assets/sprites/gas_key", {
+  idle_right = {
+    Vector({6, 10}),
+  },
+  idle_left = {
+    Vector({9, 10}),
+  },
+  idle_down = {
+    Vector({8, 7}),
+  },
+  idle_up = {
+    Vector({8, 11}),
+  },
+})
+
+
 return module

@@ -57,6 +57,12 @@ module_mt.__call = function(_, animation_pack, object)
   result.turn_resources = result:get_turn_resources()
   result:animate("idle")
 
+  local main_hand = -Query(result).inventory.main_hand
+  if main_hand then
+    main_hand.direction = result.direction
+    main_hand:animate()
+  end
+
   return result
 end
 
