@@ -8,12 +8,8 @@ local damage_font = love.graphics.newFont("assets/fonts/joystix.monospace-regula
 module.floating_damage = function(number, scene_position)
   number = tostring(number)
   return {
-    position = (scene_position - Vector({1, 1})) * State.CELL_DISPLAY_SIZE * State.SCALING_FACTOR
-      + Vector({random.d(12) - 6, random.d(12) - 6})
-      + Vector({
-        State.CELL_DISPLAY_SIZE - damage_font:getWidth(number),
-        State.CELL_DISPLAY_SIZE - damage_font:getHeight(),
-      }) / 2,  -- TODO fix magic number
+    position = scene_position * State.CELL_DISPLAY_SIZE * State.SCALING_FACTOR
+      + Vector({random.d(12) - 6, random.d(12) - 6}),
     view = "scene_fx",
     drift = Vector({0, -24}),
     sprite = {
