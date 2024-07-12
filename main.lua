@@ -36,7 +36,7 @@ love.load = function(args)
 
   Log.info("Loading the game")
   math.randomseed(os.time())
-  State = stateful(systems)
+  State = stateful(systems, args.debug)
   State:load_level("assets/levels/" .. args.level, palette)
 
   for _, scene in ipairs(args.checkpoints) do
@@ -66,6 +66,10 @@ for callback_name, _ in pairs(
       return entity.base_callback == callback_name
     end, {...})
   end
+end
+
+love.quit = function()
+  Log.info("Exited smoothly")
 end
 
 Log.info("Finished setup")

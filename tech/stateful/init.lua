@@ -5,7 +5,7 @@ local module = {}
 local module_mt = {}
 setmetatable(module, module_mt)
 
-module_mt.__call = function(_, systems)
+module_mt.__call = function(_, systems, debug_mode)
   local SCALING_FACTOR = 4
   local transform = love.math.newTransform()
   transform:scale(SCALING_FACTOR)
@@ -16,6 +16,8 @@ module_mt.__call = function(_, systems)
     world = Tiny.world(unpack(systems)),
     transform = transform,
     camera = {position = Vector.zero},
+
+    debug_mode = debug_mode,
 
     CELL_DISPLAY_SIZE = 16,
     SCALING_FACTOR = SCALING_FACTOR,

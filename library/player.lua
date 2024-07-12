@@ -62,6 +62,10 @@ define_hotkey(hotkeys, {"fight"}, {"z"}, function(entity)
   actions.dash(entity)
 end)
 
+define_hotkey(hotkeys, Tablex.deep_copy(MODES), {"S-q"}, function()
+  if State.debug_mode then love.event.push("quit") end
+end)
+
 module_mt.__call = function()
   local result = creature(animation_packs.player_character, {
     anchors = {
