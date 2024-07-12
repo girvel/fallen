@@ -2,8 +2,7 @@ return {
   -- TODO group by callback & period
 
   -- love.draw systems --
-  require("systems.display_gui"),
-  require("systems.display_hovered_links"),
+  require("systems.display"),
 
   require("systems.input"),
   require("systems.ai"),

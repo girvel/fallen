@@ -76,16 +76,6 @@ return Tiny.sortedProcessingSystem({
   end,
 
   preProcess = function(self)
-    if State.gui.text_entities then
-      love.graphics.clear()
-      return
-    end
-
-    if State.player.hears then
-      return self:display_line(State.player.hears)
-    end
-
-    self:_display_text_info()
     self:_update_views()
   end,
 
@@ -101,19 +91,30 @@ return Tiny.sortedProcessingSystem({
   end,
 
   process = function(self, entity)
-    local current_view = State.gui.views[entity.view]
-    local x, y = unpack(current_view:apply(entity.position))
-    if entity.sprite.text then
-      local display = entity.link
-        and {State.gui.LINK_COLOR, entity.sprite.text}
-        or entity.sprite.text
+    if State.gui.text_entities and entity.view ~= "wiki" then return end
 
-      love.graphics.print(display, entity.sprite.font, x, y)
+    local current_view = State.gui.views[entity.view]
+    local offset_position = current_view:apply(entity.position)
+    if entity.sprite.text then
+      love.graphics.print(entity.sprite.text, entity.sprite.font, unpack(offset_position))
+
+      if entity.link_flag then
+        local start = offset_position + Vector.down * entity.size[2]
+        local finish = offset_position + entity.size  -- TODO here size is outside the view, for mousepressed it is inside
+        local mouse_position = Vector({love.mouse.getPosition()})
+        if not (mouse_position >= offset_position and mouse_position < finish) then return end
+
+        if type(entity.sprite.text) == "table" then
+          love.graphics.setColor(entity.sprite.text[1])
+        end
+        love.graphics.line(start[1], start[2], unpack(finish))
+        love.graphics.setColor({1, 1, 1})
+      end
     else
       local display_main_hand = function()
         local weapon_sprite = -Query(entity.inventory).main_hand.sprite
         if weapon_sprite and weapon_sprite.anchor and entity.sprite.anchor then
-          local wx, wy = unpack(Vector({x, y}) + (entity.sprite.anchor - weapon_sprite.anchor) * current_view.scale)
+          local wx, wy = unpack(offset_position + (entity.sprite.anchor - weapon_sprite.anchor) * current_view.scale)
           love.graphics.draw(weapon_sprite.image, wx, wy, 0, current_view.scale)
         end
       end
@@ -121,10 +122,21 @@ return Tiny.sortedProcessingSystem({
       local is_weapon_in_background = entity.direction == "up"
       if is_weapon_in_background then display_main_hand() end
 
+      local x, y = unpack(offset_position)
       love.graphics.draw(entity.sprite.image, x, y, 0, current_view.scale)
 
       if not is_weapon_in_background then display_main_hand() end
     end
+  end,
+
+  postProcess = function(self)
+    if State.gui.text_entities then return end
+
+    if State.player.hears then
+      return self:display_line(State.player.hears)
+    end
+
+    self:_display_text_info()
   end,
 
   display_line = function(self, line)
