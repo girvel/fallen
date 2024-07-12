@@ -26,6 +26,7 @@ return {
       ["B"] = static.braced_pipe,
       ["\\"] = static.pipe_left_back,
       ["}"] = static.pipe_left_down,
+      ["F"] = static.pipe_forward_down,
 
       M = static.mannequin,
       D = static.door,

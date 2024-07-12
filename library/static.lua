@@ -109,4 +109,11 @@ for _, name in ipairs({
   end
 end
 
+module.pipe_forward_down = function()
+  return Tablex.extend(
+    static_sprite("assets/sprites/pipe_left_down.png", true),
+    {code_name = "pipe_forward_down"}
+  )
+end
+
 return module
