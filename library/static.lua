@@ -116,6 +116,7 @@ for i, name in ipairs({
   "pipe_horizontal", "pipe_vertical", "pipe_horizontal_braced", "pipe_vertical_braced",
   "pipe_left_back", "pipe_forward_left", "pipe_right_forward", "pipe_back_right",
   "pipe_left_down", "pipe_forward_down", "pipe_right_down", "pipe_back_down",
+  "pipe_T", "pipe_x",
 }) do
   module[name] = function()
     return Tablex.extend(
