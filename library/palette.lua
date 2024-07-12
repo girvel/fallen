@@ -38,15 +38,5 @@ return {
       r = weapons.rapier,
     },
   },
-  transparents = {
-    M = true,
-    l = true,
-    ["@"] = true,
-    g = true,
-    r = true,
-    [">"] = true,
-    B = true,
-    ["\\"] = true,
-    ["}"] = true,
-  },
+  transparents = Common.set("Ml@gr>B\\}"),
 }

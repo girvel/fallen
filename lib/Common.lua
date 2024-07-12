@@ -35,4 +35,10 @@ module.volumed_sound = function(path, volume)
   return result
 end
 
+module.set = function(list)
+  return Fun.iter(list)
+    :map(function(e) return e, true end)
+    :tomap()
+end
+
 return module
