@@ -16,6 +16,13 @@ return {
       :args("?")
       :default({})
 
+    parser:option(
+      "-l --level",
+      "Name of the level to load."
+    )
+      :args(1)
+      :default("demo")
+
     parser:flag(
       "-d --debug",
       "Enable debug mode"

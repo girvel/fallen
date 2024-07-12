@@ -24,11 +24,11 @@ local line_font = love.graphics.newFont("assets/fonts/joystix.monospace-regular.
 
 module.floating_line = function(text, position)
   return {
-    off_grid_position = (position - Vector({1, 1.5})) * 16,
+    position = (position - Vector({1, 1.5})) * 16,
+    view = "scene_fx",
     sprite = {
-      text = text,
+      text = {Common.hex_color("ededed"), text},
       font = line_font,
-      color = Common.hex_color("ededed"),  -- TODO join w/ text as {color, text}
     },
     life_time = 10,
   }

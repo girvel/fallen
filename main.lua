@@ -31,13 +31,13 @@ local systems = require("systems")
 
 
 love.load = function(args)
+  args = cli.parse(args)
+  Log.info("Command line arguments:", args)
+
   Log.info("Loading the game")
   math.randomseed(os.time())
   State = stateful(systems)
-  State:load_level("assets/levels/polygon", palette)
-
-  args = cli.parse(args)
-  Log.info("Command line arguments:", args)
+  State:load_level("assets/levels/" .. args.level, palette)
 
   for _, scene in ipairs(args.checkpoints) do
     State.rails.scenes[scene].enabled = true
@@ -68,3 +68,4 @@ for callback_name, _ in pairs(
   end
 end
 
+Log.info("Finished setup")

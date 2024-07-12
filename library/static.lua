@@ -77,22 +77,6 @@ module.mannequin = function()
   )
 end
 
-local kid_pack = animated.load_pack("assets/sprites/kid")
-module.kid = function()
-  return Tablex.extend(
-    animated(kid_pack),
-    {name = "ребёнок", direction = "down", code_name = "kid"}
-  )
-end
-
-local teacher_pack = animated.load_pack("assets/sprites/teacher")
-module.teacher = function()
-  return Tablex.extend(
-    animated(teacher_pack),
-    {name = "тренер", direction = "down", code_name = "teacher"}
-  )
-end
-
 local planks_sounds = {
   move = Fun.range(4)
     :map(function(n)
@@ -115,7 +99,7 @@ end
 
 for _, name in ipairs({
   "wall", "bushes", "smooth_wall", "crooked_wall", "sand", "wall_with_vines",
-  "key_point", "walkway",
+  "key_point", "walkway", "steel_wall",
 }) do
   module[name] = function()
     return Tablex.extend(
