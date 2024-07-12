@@ -24,10 +24,12 @@ return {
 
       [">"] = static.pipe_horizontal,
       v = static.pipe_vertical,
-      -- ["B"] = static.braced_pipe,
-      -- ["\\"] = static.pipe_left_back,
-      -- ["}"] = static.pipe_left_down,
-      -- ["F"] = static.pipe_forward_down,
+      ["<"] = static.pipe_horizontal_braced,
+      ["^"] = static.pipe_vertical_braced,
+      ["\\"] = static.pipe_left_back,
+      ["/"] = static.pipe_forward_left,
+      F = static.pipe_right_forward,
+      B = static.pipe_back_right,
 
       M = static.mannequin,
       D = static.door,
@@ -40,5 +42,5 @@ return {
       r = weapons.rapier,
     },
   },
-  transparents = Common.set("Ml@gr>v}"),
+  transparents = Common.set("Ml@gr>v<^\\/FB}{"),
 }

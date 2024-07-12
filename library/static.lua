@@ -100,7 +100,7 @@ end
 
 for _, name in ipairs({
   "wall", "bushes", "smooth_wall", "crooked_wall", "sand", "wall_with_vines",
-  "key_point", "walkway", "steel_wall", "pipe", "braced_pipe", "pipe_left_down", "pipe_left_back",
+  "key_point", "walkway", "steel_wall",
 }) do
   module[name] = function()
     return Tablex.extend(
@@ -117,7 +117,8 @@ love.graphics.draw(pipe_atlas)
 love.graphics.setCanvas()
 
 for i, name in ipairs({
-  "pipe_horizontal", "pipe_vertical"
+  "pipe_horizontal", "pipe_vertical", "pipe_horizontal_braced", "pipe_vertical_braced",
+  "pipe_left_back", "pipe_forward_left", "pipe_right_forward", "pipe_back_right"
 }) do
   module[name] = function()
     return Tablex.extend(

@@ -1,6 +1,8 @@
 return function(canvas, index)
   local size = State.CELL_DISPLAY_SIZE
-  local image_data = canvas:newImageData(nil, nil, (index - 1) * size, 0, size, size)
+  local w = canvas:getWidth()
+  index = (index - 1) * size
+  local image_data = canvas:newImageData(nil, nil, index % w, math.floor(index / w) * size, size, size)
 
   return {
     sprite = {
