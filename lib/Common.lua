@@ -41,4 +41,8 @@ module.set = function(list)
     :tomap()
 end
 
+module.get_name = function(entity)
+  return -Query(entity).name or -Query(entity).codename or "???"
+end
+
 return module

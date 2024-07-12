@@ -39,6 +39,10 @@ return {
       D = static.door,
       l = static.lever,
 
+      ["1"] = mobs[1],
+      ["2"] = mobs[2],
+      ["3"] = mobs[3],
+      ["4"] = mobs[4],
       ["@"] = player,
     },
     items = {
@@ -46,5 +50,5 @@ return {
       r = weapons.rapier,
     },
   },
-  transparents = Common.set("Ml@gr>v<^\\/FB}{T+"),
+  transparents = Common.set("Ml@gr>v<^\\/FB}{T+1234"),
 }

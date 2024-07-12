@@ -9,7 +9,7 @@ module.attack = function(entity, target, attack_roll, damage_roll)
   local is_nat = attack == attack_roll:max()
 
   Log.info(
-    entity.name .. " attacks " .. target.name .. "; attack roll: " ..
+    Common.get_name(entity) .. " attacks " .. Common.get_name(target) .. "; attack roll: " ..
     attack .. ", armor: " .. target:get_armor()
   )
 
@@ -42,7 +42,7 @@ module.damage = function(target, damage, is_critical)
   target.hp = target.hp - damage
   if target.hp <= 0 and not target.immortal then
     State:remove(target)
-    Log.info(target.name .. " is killed")
+    Log.info(Common.get_name(target) .. " is killed")
   end
 end
 

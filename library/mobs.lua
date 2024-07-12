@@ -1,16 +1,28 @@
 local actions = require("core.actions")
 local random = require("utils.random")
 local creature = require("core.creature")
+local humanoid = require("core.humanoid")
 local animated = require("tech.animated")
 local interactive = require("tech.interactive")
-local special = require("tech.special")
 local turn_order = require("tech.turn_order")
 local classes = require("core.classes")
 local weapons = require("library.weapons")
 local core = require("core")
+local races = require("core.races")
 
 
 local module = {}
+
+for i, race in ipairs({races.half_elf, races.halfling, races.half_orc, races.dwarf}) do
+  module[i] = function(direction)
+    return humanoid({
+      name = "инженер",
+      race = race,
+      max_hp = 1,  -- TODO class dude
+      direction = direction,
+    })
+  end
+end
 
 local bat_pack = animated.load_pack("assets/sprites/bat")
 
@@ -95,7 +107,7 @@ module.exploding_dude = function()
 end
 
 local first_pack = animated.load_pack("assets/sprites/first")
-module.first = function()
+module._first = function()
   local result = creature(first_pack, {
     name = "Первый",
     code_name = "first",
