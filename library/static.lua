@@ -110,11 +110,7 @@ for _, name in ipairs({
   end
 end
 
-local pipe_atlas = love.graphics.newImage("assets/atlases/pipes.png")
-local canvas = love.graphics.newCanvas(pipe_atlas:getDimensions())
-love.graphics.setCanvas(canvas)
-love.graphics.draw(pipe_atlas)
-love.graphics.setCanvas()
+local pipe_atlas = atlas_sprite.atlas("assets/atlases/pipes.png")
 
 for i, name in ipairs({
   "pipe_horizontal", "pipe_vertical", "pipe_horizontal_braced", "pipe_vertical_braced",
@@ -123,7 +119,7 @@ for i, name in ipairs({
 }) do
   module[name] = function()
     return Tablex.extend(
-      atlas_sprite(canvas, i),
+      atlas_sprite(pipe_atlas, i),
       {code_name = name}
     )
   end
