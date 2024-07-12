@@ -19,7 +19,13 @@ return {
       S = static.smooth_wall,
       V = static.wall_with_vines,
       W = static.steel_wall,
+
       [","] = static.bushes,
+
+      [">"] = static.pipe,
+      ["B"] = static.braced_pipe,
+      ["\\"] = static.pipe_left_back,
+      ["}"] = static.pipe_left_down,
 
       M = static.mannequin,
       D = static.door,
@@ -38,5 +44,9 @@ return {
     ["@"] = true,
     g = true,
     r = true,
+    [">"] = true,
+    B = true,
+    ["\\"] = true,
+    ["}"] = true,
   },
 }

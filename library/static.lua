@@ -99,7 +99,7 @@ end
 
 for _, name in ipairs({
   "wall", "bushes", "smooth_wall", "crooked_wall", "sand", "wall_with_vines",
-  "key_point", "walkway", "steel_wall",
+  "key_point", "walkway", "steel_wall", "pipe", "braced_pipe", "pipe_left_down", "pipe_left_back",
 }) do
   module[name] = function()
     return Tablex.extend(
