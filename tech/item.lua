@@ -3,10 +3,20 @@ local interactive = require("tech.interactive")
 
 local module = {}
 
-module.mixin = function()
+module.drop = function(parent)
+  local weapon = -Query(parent).inventory.main_hand
+  if not weapon then return end
+
+  parent.inventory.main_hand = nil
+  weapon.position = parent.position
+  State:refresh(weapon)
+  State.grids[weapon.layer][weapon.position] = weapon
+end
+
+module.weapon_mixin = function()
   return Tablex.extend(
     interactive(function(self, other)
-      local dropped_weapon = other.inventory.main_hand
+      module.drop(other)
       other.inventory.main_hand = self
 
       State.grids[self.layer][self.position] = nil
@@ -15,12 +25,6 @@ module.mixin = function()
 
       self.direction = other.direction
       self:animate()
-
-      if dropped_weapon then
-        dropped_weapon.position = other.position
-        State:refresh(dropped_weapon)
-        State.grids[dropped_weapon.layer][dropped_weapon.position] = dropped_weapon
-      end
     end),
     {layer = "items", view = "scene"}
   )

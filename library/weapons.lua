@@ -1,13 +1,13 @@
 local animated = require("tech.animated")
 local animation_packs = require("library.animation_packs")
-local weapon = require("tech.weapon")
+local item = require("tech.item")
 
 
 local module = {}
 
 module.rapier = function()
   return Tablex.extend(
-    weapon.mixin(),
+    item.weapon_mixin(),
     animated(animation_packs.rapier),
     {
       direction = "right",
@@ -23,7 +23,7 @@ end
 
 module.greatsword = function()
   return Tablex.extend(
-    weapon.mixin(),
+    item.weapon_mixin(),
     animated(animation_packs.greatsword),
     {
       direction = "right",
@@ -41,7 +41,7 @@ end
 
 module.gas_key = function()
   return Tablex.extend(
-    weapon.mixin(),
+    item.weapon_mixin(),
     animated(animation_packs.gas_key),
     {
       direction = "right",

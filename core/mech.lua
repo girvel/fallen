@@ -1,4 +1,5 @@
 local special = require("tech.special")
+local item = require("tech.item")
 
 
 local module = {}
@@ -41,6 +42,7 @@ module.damage = function(target, damage, is_critical)
 
   target.hp = target.hp - damage
   if target.hp <= 0 and not target.immortal then
+    item.drop(target)
     State:remove(target)
     Log.info(Common.get_name(target) .. " is killed")
   end

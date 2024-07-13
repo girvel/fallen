@@ -40,17 +40,17 @@ local get_melee_damage_roll = function(entity)
     return D.roll({}, core.get_modifier(entity.abilities.strength) + 1)
   end
 
-  if entity.inventory.main_hand.tags.finesse then
-    return entity.inventory.main_hand.damage_roll
-      + core.get_modifier(math.max(
-        entity.abilities.strength,
-        entity.abilities.dexterity
-      ))
-      + entity.inventory.main_hand.bonus
-  end
+  local ability_modifier = core.get_modifier(entity.inventory.main_hand.tags.finesse
+    and math.max(
+      entity.abilities.strength,
+      entity.abilities.dexterity
+    )
+    or entity.abilities.strength
+  )
 
   return entity.inventory.main_hand.damage_roll
-    + core.get_modifier(entity.abilities.strength)
+    + ability_modifier
+    + entity.inventory.main_hand.bonus
 end
 
 module.move = Fun.iter(Vector.direction_names):map(function(direction_name)
