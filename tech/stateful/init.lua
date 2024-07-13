@@ -37,17 +37,17 @@ module_mt.__call = function(_, systems, debug_mode)
 
     remove = function(self, entity)
       self.world:remove(entity)
-      if entity.layer then
+      if entity.position and entity.layer then
         self.grids[entity.layer][entity.position] = nil
       end
       if self.move_order then
         self.move_order:remove(entity)
       end
-      local main_hand = -Query(entity).inventory.main_hand
-      if main_hand then
-        
-      end
       return entity
+    end,
+
+    refresh = function(self, entity)
+      self.world:add(entity)
     end,
 
     load_level = function(self, path, palette)

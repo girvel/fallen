@@ -49,6 +49,7 @@ local get_scene_offset = function()
 end
 
 return Tiny.sortedProcessingSystem({
+  codename = "display",
   filter = Tiny.requireAll("position", "sprite", "view"),
   base_callback = "draw",
 
