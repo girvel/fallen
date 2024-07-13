@@ -133,8 +133,7 @@ return Tiny.sortedProcessingSystem({
       love.graphics.draw(entity.sprite.image, x, y, 0, current_view.scale)
 
       display_slot("gloves")
-      if not is_weapon_in_background then display_slot("main_hand") end
-    end
+      if not is_weapon_in_background then display_slot("main_hand") end end
   end,
 
   postProcess = function(self)
@@ -167,9 +166,13 @@ return Tiny.sortedProcessingSystem({
 
     local weapon = State.player.inventory.main_hand
     if weapon then
+      local roll = weapon.damage_roll:to_string()
+      if weapon.bonus > 0 then
+        roll = roll .. "+" .. weapon.bonus
+      end
       Tablex.concat(lines, {
         "",
-        "Оружие: " .. weapon.name .. " (" .. weapon.damage_roll:to_string() .. ")",
+        "Оружие: " .. weapon.name .. " (" .. roll .. ")",
       })
     end
 
