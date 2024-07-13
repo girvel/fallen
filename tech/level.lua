@@ -57,7 +57,14 @@ module.load_entities = function(text_representation, arguments, palette)
 
   local grid_of_args = Grid(level_size)
   for k, v in pairs(arguments) do
-    grid_of_args[Vector(k)] = v
+    k = Vector(k)
+    assert(
+      grid_of_args:can_fit(k),
+      "Grid arguments %s, %s do not fit level size %s" % {
+        k, Inspect(v), level_size
+      }
+    )
+    grid_of_args[k] = v
   end
 
   local result = {}

@@ -35,7 +35,7 @@ grid_mt.__index = function(self, v)
 end
 
 grid_mt.__newindex = function(self, v, value)
-  assert(self:can_fit(v))
+  assert(self:can_fit(v), tostring(v) .. " does not fit into grid size " .. tostring(self.size))
   self._inner_array[v[1] + (v[2] - 1) * self.size[1]] = value
 end
 
