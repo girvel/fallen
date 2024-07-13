@@ -18,10 +18,12 @@ module.mixin = function()
     interactive(function(self, other)
       if other.inventory[self.slot] then
         module.drop(other, self.slot)
+      else
+        State.grids[self.layer][self.position] = nil
       end
+
       other.inventory[self.slot] = self
 
-      State.grids[self.layer][self.position] = nil
       self.position = nil
       State:refresh(self)
 
