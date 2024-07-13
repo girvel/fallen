@@ -129,7 +129,10 @@ end
 local pipe_valve_pack = animated.load_pack("assets/sprites/pipe_valve")
 module.pipe_valve = function()
   return Tablex.extend(
-    
+    animated(pipe_valve_pack),
+    {
+      code_name = "pipe_valve",
+    }
   )
 end
 
