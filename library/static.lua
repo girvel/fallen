@@ -3,6 +3,7 @@ local animated = require("tech.animated")
 local level = require("tech.level")
 local static_sprite = require("tech.static_sprite")
 local atlas_sprite = require("tech.atlas_sprite")
+local sfx = require("library.sfx")
 
 
 local module = {}
@@ -148,6 +149,23 @@ module.pipe_valve = function()
     animated(pipe_valve_pack),
     {
       code_name = "pipe_valve",
+    }
+  )
+end
+
+module.leaking_pipe_left_down = function()
+  return Tablex.extend(
+    atlas_sprite(pipe_atlas, 9),
+    {
+      ai = function(self, event)
+        if Common.period(self, 10, event[1]) then
+          State:add(Tablex.extend(
+            sfx.steam("right"),
+            {position = self.position}
+          ))
+        end
+      end,
+      code_name = "leaking_pipe_left_down"
     }
   )
 end

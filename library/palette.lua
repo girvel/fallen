@@ -35,6 +35,7 @@ return {
       T = static.pipe_T,
       ["+"] = static.pipe_x,
       o = static.pipe_valve,
+      L = static.leaking_pipe_left_down,
 
       M = static.mannequin,
       D = static.door,
@@ -51,5 +52,5 @@ return {
       r = weapons.rapier,
     },
   },
-  transparents = Common.set("Ml@gr>v<^\\/FB}{T+o1234"),
+  transparents = Common.set("Ml@gr>v<^\\/FB}{T+o1234L"),
 }

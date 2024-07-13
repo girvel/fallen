@@ -11,7 +11,7 @@ local animation_methods = {
       self.animation.current = animation_name
     end
     if not self.animation.pack[self.animation.current] and animation_name ~= "idle" then
-      self:animate()
+      return self:animate()
     end
     self.animation.frame = 1
     self:animation_refresh()

@@ -8,7 +8,7 @@ return Tiny.processingSystem({
     if not State.move_order or #State.move_order.list <= 1 then
       State.move_order = nil
       entity:ai(event)
-      Tablex.extend(entity.turn_resources, entity:get_turn_resources())
+      if entity.get_turn_resources then Tablex.extend(entity.turn_resources, entity:get_turn_resources()) end
       return
     end
 
