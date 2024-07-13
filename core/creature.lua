@@ -19,9 +19,7 @@ module_mt.__call = function(_, animation_pack, object)
     },
     direction = "right",
     proficiency_bonus = 2,
-    inventory = {
-      bag = {},
-    },
+    inventory = {},
     layer = "solids",
 
     get_armor = function(self)

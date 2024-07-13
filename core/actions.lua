@@ -40,7 +40,8 @@ local get_melee_damage_roll = function(entity)
     return D.roll({}, core.get_modifier(entity.abilities.strength) + 1)
   end
 
-  local ability_modifier = core.get_modifier(entity.inventory.main_hand.tags.finesse
+  local ability_modifier = core.get_modifier(
+    entity.inventory.main_hand.tags.finesse
     and math.max(
       entity.abilities.strength,
       entity.abilities.dexterity

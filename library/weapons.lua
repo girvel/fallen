@@ -7,7 +7,7 @@ local module = {}
 
 module.rapier = function()
   return Tablex.extend(
-    item.weapon_mixin(),
+    item.mixin(),
     animated(animation_packs.rapier),
     {
       direction = "right",
@@ -17,13 +17,14 @@ module.rapier = function()
       tags = {
         finesse = true,
       },
+      slot = "main_hand",
     }
   )
 end
 
 module.greatsword = function()
   return Tablex.extend(
-    item.weapon_mixin(),
+    item.mixin(),
     animated(animation_packs.greatsword),
     {
       direction = "right",
@@ -34,14 +35,14 @@ module.greatsword = function()
         two_handed = true,
         heavy = true,
       },
-      debug_flag = true,
+      slot = "main_hand",
     }
   )
 end
 
 module.gas_key = function()
   return Tablex.extend(
-    item.weapon_mixin(),
+    item.mixin(),
     animated(animation_packs.gas_key),
     {
       direction = "right",
@@ -49,6 +50,20 @@ module.gas_key = function()
       damage_roll = D(4),
       bonus = 1,
       tags = {},
+      slot = "main_hand",
+    }
+  )
+end
+
+module.yellow_glove = function()
+  return Tablex.extend(
+    item.mixin(),
+    animated(animation_packs.yellow_glove),
+    {
+      direction = "right",
+      name = "Жёлтая перчатка",
+      codename = "yellow_glove",
+      slot = "main_glove",
     }
   )
 end

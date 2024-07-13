@@ -48,5 +48,20 @@ module.gas_key = animated.load_pack("assets/sprites/gas_key", {
   },
 })
 
+module.yellow_glove = animated.load_pack("assets/sprites/yellow_glove", {
+  idle_right = {
+    Vector.zero,
+  },
+  idle_left = {
+    Vector.zero,
+  },
+  idle_down = {
+    Vector.zero,
+  },
+  idle_up = {
+    Vector.zero,
+  },
+})
+
 
 return module

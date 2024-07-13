@@ -42,7 +42,7 @@ module.damage = function(target, damage, is_critical)
 
   target.hp = target.hp - damage
   if target.hp <= 0 and not target.immortal then
-    item.drop(target)
+    Fun.iter(target.inventory):each(function(slot) item.drop(target, slot) end)
     State:remove(target)
     Log.info(Common.get_name(target) .. " is killed")
   end

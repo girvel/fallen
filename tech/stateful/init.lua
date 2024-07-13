@@ -1,4 +1,5 @@
 local level = require("tech.level")
+local item = require("tech.item")
 
 
 local module = {}
@@ -29,8 +30,11 @@ module_mt.__call = function(_, systems, debug_mode)
       if entity.position and entity.layer then
         self.grids[entity.layer][entity.position] = entity
       end
-      if entity.inventory and entity.inventory.main_hand then
-        self:add(entity.inventory.main_hand)
+      if entity.inventory then
+        Fun.iter(item.SLOTS)
+          :map(function(slot) return entity.inventory[slot] end)
+          :filter(function(it) return it end)
+          :each(function(it) self:add(it) end)
       end
       return entity
     end,

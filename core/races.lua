@@ -2,7 +2,7 @@ local module = {}
 
 module.half_orc = {
   codename = "half_orc",
-  skin_color = Common.hex_color("b3daa3"),
+  skin_color = Common.hex_color("60b37e"),
 }
 
 module.half_elf = {

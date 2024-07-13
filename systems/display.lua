@@ -112,21 +112,30 @@ return Tiny.sortedProcessingSystem({
         love.graphics.setColor({1, 1, 1})
       end
     else
-      local display_main_hand = function()
-        local weapon_sprite = -Query(entity.inventory).main_hand.sprite
-        if weapon_sprite and weapon_sprite.anchor and entity.sprite.anchor then
-          local wx, wy = unpack(offset_position + (entity.sprite.anchor - weapon_sprite.anchor) * current_view.scale)
-          love.graphics.draw(weapon_sprite.image, wx, wy, 0, current_view.scale)
+      local display_slot = function(slot)
+        local item_sprite = -Query(entity.inventory)[slot].sprite
+        if slot == "main_glove" and item_sprite then
+          Log.trace(entity.sprite.anchor)
+          Log.trace(item_sprite)
+        end
+        if item_sprite and item_sprite.anchor and entity.sprite.anchor then
+          local wx, wy = unpack(offset_position + (entity.sprite.anchor[slot] - item_sprite.anchor) * current_view.scale)
+          if slot == "main_glove" then
+            Log.trace(offset_position)
+            Log.trace(wx, wy)
+          end
+          love.graphics.draw(item_sprite.image, wx, wy, 0, current_view.scale)
         end
       end
 
       local is_weapon_in_background = entity.direction == "up"
-      if is_weapon_in_background then display_main_hand() end
+      if is_weapon_in_background then display_slot("main_hand") end
 
       local x, y = unpack(offset_position)
       love.graphics.draw(entity.sprite.image, x, y, 0, current_view.scale)
 
-      if not is_weapon_in_background then display_main_hand() end
+      display_slot("main_glove")
+      if not is_weapon_in_background then display_slot("main_hand") end
     end
   end,
 
