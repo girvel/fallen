@@ -114,16 +114,8 @@ return Tiny.sortedProcessingSystem({
     else
       local display_slot = function(slot)
         local item_sprite = -Query(entity.inventory)[slot].sprite
-        if slot == "main_glove" and item_sprite then
-          Log.trace(entity.sprite.anchor)
-          Log.trace(item_sprite)
-        end
         if item_sprite and item_sprite.anchor and entity.sprite.anchor then
           local wx, wy = unpack(offset_position + (entity.sprite.anchor[slot] - item_sprite.anchor) * current_view.scale)
-          if slot == "main_glove" then
-            Log.trace(offset_position)
-            Log.trace(wx, wy)
-          end
           love.graphics.draw(item_sprite.image, wx, wy, 0, current_view.scale)
         end
       end
