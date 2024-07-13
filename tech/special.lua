@@ -1,4 +1,5 @@
 local random = require("utils.random")
+local animated = require("tech.animated")
 
 
 local module = {}
@@ -44,6 +45,12 @@ module.text = function(text, font, position, decorations)
       is_underlined = decorations.underline or nil
     },
   }
+end
+
+local highlight_pack = animated.load_pack("assets/sprites/highlight")
+
+module.highlight = function()
+  return Tablex.extend(animated(highlight_pack), {layer = "sfx", view = "scene"})
 end
 
 return module
