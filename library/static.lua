@@ -157,12 +157,15 @@ module.leaking_pipe_left_down = function()
   return Tablex.extend(
     atlas_sprite(pipe_atlas, 9),
     {
+      trigger_seconds = 5,
       ai = function(self, event)
-        if Common.period(self, 10, event[1]) then
+        if Common.period(self, self.trigger_seconds, event[1]) then
+          self.trigger_seconds = 8 + math.random() * 4
           State:add(Tablex.extend(
             sfx.steam("right"),
             {position = self.position}
           ))
+          Common.volumed_sound("assets/sounds/steam_hissing.wav", 1):play()
         end
       end,
       code_name = "leaking_pipe_left_down"
