@@ -28,6 +28,11 @@ return {
       "Enable debug mode"
     )
 
+    parser:flag(
+      "-A --disable-ambient",
+      "Disable background sound"
+    )
+
     return parser:parse(args)
   end,
 }

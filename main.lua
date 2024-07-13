@@ -44,11 +44,19 @@ love.load = function(args)
     State.rails.scenes[scene].enabled = true
   end
 
+  if not args.disable_ambient then
+    local doom = love.audio.newSource("assets/sounds/doom.wav", "static")
+    doom:setVolume(0.15)
+    doom:setLooping(true)
+    doom:play()
+
+    local engine = love.audio.newSource("assets/sounds/ship_engine.wav", "static")
+    engine:setVolume(0.5)
+    engine:setLooping(true)
+    engine:play()
+  end
+
   if not args.debug then
-    local background_sound = love.audio.newSource("assets/sounds/740904__green__light__09.wav", "static")
-    background_sound:setVolume(0.15)
-    background_sound:setLooping(true)
-    background_sound:play()
     love.errorhandler = love_errorhandler
   end
 
