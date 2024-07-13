@@ -3,7 +3,7 @@ local interactive = require("tech.interactive")
 
 local module = {}
 
-module.SLOTS = {"main_hand", "main_glove"}
+module.SLOTS = {"main_hand", "gloves"}
 
 module.drop = function(parent, slot)
   local item = parent.inventory[slot]

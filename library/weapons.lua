@@ -63,7 +63,7 @@ module.yellow_glove = function()
       direction = "right",
       name = "Жёлтая перчатка",
       codename = "yellow_glove",
-      slot = "main_glove",
+      slot = "gloves",
     }
   )
 end

@@ -132,7 +132,7 @@ return Tiny.sortedProcessingSystem({
       local x, y = unpack(offset_position)
       love.graphics.draw(entity.sprite.image, x, y, 0, current_view.scale)
 
-      display_slot("main_glove")
+      display_slot("gloves")
       if not is_weapon_in_background then display_slot("main_hand") end
     end
   end,
