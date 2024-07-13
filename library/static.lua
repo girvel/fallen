@@ -81,9 +81,7 @@ end
 local planks_sounds = {
   move = Fun.range(4)
     :map(function(n)
-      local sound = love.audio.newSource("assets/sounds/move_planks_0" .. n .. ".wav", "static")
-      sound:setVolume(0.1)
-      return sound
+      return Common.volumed_sound("assets/sounds/move_planks_0" .. n .. ".wav", 0.1)
     end)
     :totable(),
 }
@@ -98,9 +96,27 @@ module.planks = function()
   )
 end
 
+local walkway_sounds = {
+  move = Fun.range(4)
+    :map(function(n)
+      return Common.volumed_sound("assets/sounds/move_walkway_0" .. n .. ".wav", 0.1)
+    end)
+    :totable(),
+}
+
+module.walkway = function()
+  return Tablex.extend(
+    static_sprite("assets/sprites/walkway.png"),
+    {
+      code_name = "walkway",
+      sounds = walkway_sounds,
+    }
+  )
+end
+
 for _, name in ipairs({
   "wall", "bushes", "smooth_wall", "crooked_wall", "sand", "wall_with_vines",
-  "key_point", "walkway", "steel_wall",
+  "key_point", "steel_wall",
 }) do
   module[name] = function()
     return Tablex.extend(

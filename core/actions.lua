@@ -101,9 +101,9 @@ module.move = Fun.iter(Vector.direction_names):map(function(direction_name)
       entity:animate("move")
     end
 
-    local old_tile = State.grids.tiles[old_position]
-    if old_tile and old_tile.sounds and old_tile.sounds.move then
-      random.choice(old_tile.sounds.move):play()
+    local tile = State.grids.tiles[entity.position]
+    if tile and tile.sounds and tile.sounds.move then
+      random.choice(tile.sounds.move):play()
     end
 
     return true
