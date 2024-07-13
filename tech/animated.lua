@@ -10,8 +10,17 @@ local animation_methods = {
     if not self.animation.pack[self.animation.current] then
       self.animation.current = animation_name
     end
+    if not self.animation.pack[self.animation.current] and animation_name ~= "idle" then
+      self:animate()
+    end
     self.animation.frame = 1
     self:animation_refresh()
+
+    if self.inventory then
+      Fun.iter(self.inventory):each(function(slot, it)
+        it:animate(animation_name)
+      end)
+    end
   end,
 
   when_animation_ends = function(self, callback)

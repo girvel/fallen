@@ -126,4 +126,11 @@ for i, name in ipairs({
   end
 end
 
+local pipe_valve_pack = animated.load_pack("assets/sprites/pipe_valve")
+module.pipe_valve = function()
+  return Tablex.extend(
+    
+  )
+end
+
 return module

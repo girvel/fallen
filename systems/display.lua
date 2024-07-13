@@ -114,10 +114,16 @@ return Tiny.sortedProcessingSystem({
     else
       local display_slot = function(slot)
         local item_sprite = -Query(entity.inventory)[slot].sprite
-        if item_sprite and item_sprite.anchor and entity.sprite.anchor then
-          local wx, wy = unpack(offset_position + (entity.sprite.anchor[slot] - item_sprite.anchor) * current_view.scale)
-          love.graphics.draw(item_sprite.image, wx, wy, 0, current_view.scale)
+        if not item_sprite then return end
+
+        local anchor_offset
+        if item_sprite.anchor and entity.sprite.anchor then
+          anchor_offset = (entity.sprite.anchor[slot] - item_sprite.anchor) * current_view.scale
+        else
+          anchor_offset = Vector.zero
         end
+        local wx, wy = unpack(offset_position + anchor_offset)
+        love.graphics.draw(item_sprite.image, wx, wy, 0, current_view.scale)
       end
 
       local is_weapon_in_background = entity.direction == "up"

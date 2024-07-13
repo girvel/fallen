@@ -3,6 +3,7 @@ local turn_order = require("tech.turn_order")
 local classes = require("core.classes")
 local humanoid = require("core.humanoid")
 local interactive = require("tech.interactive")
+local weapons = require("library.weapons")
 
 
 local module_mt = {}
@@ -103,6 +104,8 @@ module_mt.__call = function()
 
   result.turn_resources.second_wind = 1
   result.turn_resources.action_surge = 1
+
+  result.inventory.main_glove = weapons.yellow_glove()
 
   return result
 end
