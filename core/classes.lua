@@ -6,6 +6,7 @@ module.rogue = {
 
 module.charming_leader = {
   hp_die = 10,
+  save_proficiencies = Common.set({"strength", "constitution"}),
 }
 
 module.paladin = {

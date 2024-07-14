@@ -55,6 +55,14 @@ module_mt.__call = function(_, animation_pack, object)
   result.turn_resources = result:get_turn_resources()
   result:animate("idle")
 
+  result.saving_rolls = Fun.iter(result.abilities)
+    :map(function(name, value)
+      return name, D(20)
+        + core.get_modifier(value)
+        + (-Query(result).class.save_proficiencies[name] and 2 or 0)
+    end)
+    :tomap()
+
   local main_hand = -Query(result).inventory.main_hand
   if main_hand then
     main_hand.direction = result.direction
