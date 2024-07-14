@@ -21,6 +21,8 @@ for i, race in ipairs({races.half_elf, races.halfling, races.half_orc, races.dwa
       max_hp = 1,  -- TODO class dude
       direction = direction,
       inventory = inventory,
+
+      ai = function() end,
     })
   end
 end

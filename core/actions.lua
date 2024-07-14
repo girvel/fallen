@@ -4,6 +4,7 @@ local constants = require("core.constants")
 local random = require("utils.random")
 local core = require("core")
 local static_sprite = require("tech.static_sprite")
+local interactive = require("tech.interactive")
 
 
 local module = {}
@@ -230,6 +231,14 @@ module.action_surge = function(entity)
   end
   entity.turn_resources.action_surge = entity.turn_resources.action_surge - 1
   entity.turn_resources.actions = entity.turn_resources.actions + 1
+end
+
+module.interact = function(entity)
+  if entity.turn_resources.bonus_actions <= 0 then return end
+  local entity_to_interact = interactive.get_for(entity)
+  if not entity_to_interact then return end
+  entity.turn_resources.bonus_actions = entity.turn_resources.bonus_actions - 1
+  entity_to_interact:interact(entity)
 end
 
 return module

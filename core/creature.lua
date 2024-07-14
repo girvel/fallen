@@ -49,7 +49,7 @@ module_mt.__call = function(_, animation_pack, object)
         actions.second_wind,
       }
     end,
-  }, object or {})
+  }, object)
 
   result.hp = result:get_max_hp()
   result.turn_resources = result:get_turn_resources()

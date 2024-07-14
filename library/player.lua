@@ -2,8 +2,6 @@ local actions = require("core.actions")
 local turn_order = require("tech.turn_order")
 local classes = require("core.classes")
 local humanoid = require("core.humanoid")
-local interactive = require("tech.interactive")
-local weapons = require("library.weapons")
 
 
 local module_mt = {}
@@ -43,14 +41,7 @@ end)
 define_hotkey(hotkeys, {"free", "fight"}, {"3"}, actions.second_wind)
 define_hotkey(hotkeys, {"fight"}, {"4"}, actions.action_surge)
 
-define_hotkey(hotkeys, {"free", "fight"}, {"e"}, function(entity)
-  -- TODO action
-  if entity.turn_resources.bonus_actions <= 0 then return end
-  local entity_to_interact = interactive.get_for(entity)
-  if not entity_to_interact then return end
-  entity.turn_resources.bonus_actions = entity.turn_resources.bonus_actions - 1
-  entity_to_interact:interact(entity)
-end)
+define_hotkey(hotkeys, {"free", "fight"}, {"e"}, actions.interact)
 
 define_hotkey(hotkeys, {"free", "fight"}, {"k"}, function(entity)
   State.gui:show_page("lorem")
