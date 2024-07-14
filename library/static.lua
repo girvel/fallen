@@ -153,22 +153,46 @@ module.pipe_valve = function()
   )
 end
 
+local steam_hissing_sound = Common.volumed_sound("assets/sounds/steam_hissing.wav", 0.8)
+
 module.leaking_pipe_left_down = function()
+  local sound = Common.volumed_sound("assets/sounds/steam_hissing_loop.wav", 1)
+  sound:setLooping(true)
+
   return Tablex.extend(
     atlas_sprite(pipe_atlas, 9),
     {
+      code_name = "leaking_pipe_left_down",
       trigger_seconds = 5,
+      overflow_counter = 0,
+      sound_loop = sound,
+
       ai = function(self, event)
-        if Common.period(self, self.trigger_seconds, event[1]) then
+        local dt = unpack(event)
+        self.overflow_counter = self.overflow_counter + dt
+
+        if self.overflow_counter >= 60 then
+          self.sound_loop:play()
+          if Common.period(self, 1, dt) then
+            self:burst_with_steam()
+          end
+          return
+        end
+        self.sound_loop:stop()
+
+        if Common.period(self, self.trigger_seconds, dt) then
           self.trigger_seconds = 8 + math.random() * 4
-          State:add(Tablex.extend(
-            sfx.steam("right"),
-            {position = self.position}
-          ))
-          Common.volumed_sound("assets/sounds/steam_hissing.wav", 1):play()
+          self:burst_with_steam()
         end
       end,
-      code_name = "leaking_pipe_left_down"
+
+      burst_with_steam = function(self)
+        State:add(Tablex.extend(
+          sfx.steam("right"),
+          {position = self.position}
+        ))
+        steam_hissing_sound:play()
+      end,
     }
   )
 end
