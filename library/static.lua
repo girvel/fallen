@@ -110,7 +110,7 @@ end
 
 for _, name in ipairs({
   "wall", "bushes", "smooth_wall", "crooked_wall", "sand", "wall_with_vines",
-  "key_point", "steel_wall",
+  "key_point", "steel_wall", "steel_wall_variant",
 }) do
   module[name] = function()
     return Tablex.extend(

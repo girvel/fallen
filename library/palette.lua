@@ -17,8 +17,8 @@ return {
       ["#"] = static.wall,
       ["%"] = static.crooked_wall,
       S = static.smooth_wall,
-      V = static.wall_with_vines,
       W = static.steel_wall,
+      V = static.steel_wall_variant,
 
       [","] = static.bushes,
 
