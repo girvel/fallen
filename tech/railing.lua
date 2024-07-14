@@ -21,6 +21,13 @@ railing.api.center_camera = function()
   )
 end
 
+railing.api.options = function(options)
+  State.player.selected_option_i = nil
+  State.player.dialogue_options = Tablex.extend({current_i = 1}, options)
+  while not State.player.selected_option_i do coroutine.yield() end
+  return State.player.selected_option_i
+end
+
 railing.mixin = function()
   return {
     update = function(self, event)

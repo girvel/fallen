@@ -31,15 +31,35 @@ return Tablex.extend(railing.mixin(), {
 
       run = function(self, rails, dt)
         rails.entities[1].talking_to = nil
-        api.line(rails.entities[1], "Hi!")
-        State.player.selected_option_i = nil
-        State.player.dialogue_options = {
-          current_i = 1,
-          "First",
-          "Second",
-        }
-        while not State.player.selected_option_i do coroutine.yield() end
-        Log.trace(State.player.selected_option_i)
+
+        api.narration("Когда вы подходите ближе, измазанный сажей полуэльф всё так же не оборачивается.")
+        api.narration("Его глаза, не отрываясь, смотрят прямо на приборы.")
+        api.narration("Полуповисшая рука мертвой хваткой сжимает газовый ключ.")
+        while true do
+          local picked_option = api.options({
+            "Какую работу ты выполняешь?",
+            "Наблюдал что-то необычное в последнее время?",
+            "Подозреваешь кого-то в этой комнате?",
+            "*Уйти*",
+          })
+          if picked_option == 1 then
+            api.line(rails.entities[1], "Главный инженер")
+            api.line(rails.entities[1], "Моя работа - наблюдать за приборами")
+            api.line(rails.entities[1], "В данный момент слежу за показателями давления")
+          elseif picked_option == 2 then
+            api.line(rails.entities[1], "Наблюдать могу только оборудование")
+            api.line(rails.entities[1], "Но слышал громкий звук удара по металлу")
+            api.line(rails.entities[1], "Несколько раз")
+            api.line(rails.entities[1], "Потом крик")
+            api.line(rails.entities[1], "Ещё громкий звук пара")
+            api.line(rails.entities[1], "Несколько раз")
+          elseif picked_option == 3 then
+            api.line(rails.entities[1], "Я не знаю")
+          elseif picked_option == 4 then
+            break
+          end
+        end
+        Log.trace()
       end,
     }
   },
