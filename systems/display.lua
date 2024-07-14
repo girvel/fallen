@@ -222,7 +222,7 @@ return Tiny.sortedProcessingSystem({
     if potential_interaction then
       Tablex.concat(lines, {
         "",
-        "Нажмите [E] чтобы взаимодействовать с " .. potential_interaction.name,
+        "Нажмите [E] чтобы взаимодействовать с " .. Common.get_name(potential_interaction),
       })
     end
 

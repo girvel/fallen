@@ -7,4 +7,5 @@ return {
   [{5, 8}] = {"down"},
   [{5, 3}] = {"left", {gloves = weapons.yellow_glove()}},
   [{8, 3}] = {"up"},
+  [{5, 9}] = {Vector({7, 10})},
 }

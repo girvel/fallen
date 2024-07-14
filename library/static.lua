@@ -144,10 +144,15 @@ for i, name in ipairs({
 end
 
 local pipe_valve_pack = animated.load_pack("assets/sprites/pipe_valve")
-module.pipe_valve = function()
+module.pipe_valve = function(leaking_pipe_position)
   return Tablex.extend(
     animated(pipe_valve_pack),
+    interactive(function(self, other)
+      self:animate("rotate")
+      State.grids.solids[leaking_pipe_position].overflow_counter = 0
+    end, true),
     {
+      name = "Вентиль",
       code_name = "pipe_valve",
     }
   )
@@ -171,7 +176,7 @@ module.leaking_pipe_left_down = function()
         local dt = unpack(event)
         self.overflow_counter = self.overflow_counter + dt
 
-        if self.overflow_counter >= 60 then
+        if self.overflow_counter >= 10 then
           self.sound_loop:play()
           if Common.period(self, 1, dt) then
             self:burst_with_steam()

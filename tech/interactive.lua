@@ -14,11 +14,13 @@ module.get_for = function(entity)
     :nth(1)
 end
 
-module_mt.__call = function(_, callback)
+module_mt.__call = function(_, callback, disable_highlight)
   return {
     was_interacted_with = false,
     on_load = function(self)
-      self._highlight = State:add(Tablex.extend(special.highlight(), {position = self.position}))
+      if not disable_highlight then
+        self._highlight = State:add(Tablex.extend(special.highlight(), {position = self.position}))
+      end
     end,
     interact = function(self, other)
       self.was_interacted_with = true
