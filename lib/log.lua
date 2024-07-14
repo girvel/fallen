@@ -13,8 +13,13 @@ local inspect = require("lib.inspect")
 
 local log = { _version = "0.1.0" }
 
+local log_directory = love.filesystem.getSaveDirectory() .. "/logs"
+if not love.filesystem.getInfo(log_directory) then
+  love.filesystem.createDirectory("/logs")
+end
+
 log.usecolor = true
-log.outfile = nil
+log.outfile = "/logs/" .. os.date("%Y-%m-%d_%H-%M-%S") .. ".txt"
 log.level = "trace"
 
 
@@ -62,7 +67,7 @@ end
 for i, x in ipairs(modes) do
   local nameupper = x.name:upper()
   log[x.name] = function(...)
-    
+
     -- Return early if we're below the log level
     if i < levels[log.level] then
       return
@@ -83,11 +88,9 @@ for i, x in ipairs(modes) do
 
     -- Output to log file
     if log.outfile then
-      local fp = io.open(log.outfile, "a")
-      local str = string.format("[%-6s%s] %s: %s\n",
-                                nameupper, os.date(), lineinfo, msg)
-      fp:write(str)
-      fp:close()
+      love.filesystem.append(
+        log.outfile, string.format("[%-6s%s] %s: %s\n", nameupper, os.date(), lineinfo, msg)
+      )
     end
 
 		return ...
