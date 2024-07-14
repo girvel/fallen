@@ -59,9 +59,131 @@ return Tablex.extend(railing.mixin(), {
             break
           end
         end
-        Log.trace()
       end,
-    }
+    },
+    {
+      name = "Talking to the second",
+      enabled = true,
+      start_predicate = function(self, rails, dt)
+        return rails.entities[2].talking_to == State.player
+      end,
+
+      run = function(self, rails, dt)
+        rails.entities[2].talking_to = nil
+        rails.entities[2].direction = Vector.name_from_direction(
+          State.player.position - rails.entities[2].position
+        )
+        rails.entities[2]:animate()
+
+        api.narration("Уродливый полурослик с перевязанным лицом делает один оборот массивного красного вентиля.")
+        api.narration("А спустя 10 секунд - ещё один.")
+        api.narration("И снова.")
+        api.narration("Похоже, свежие ожоги от пара не стимулируют его остановиться.")
+        api.narration("Некоторое время он, кажется, не замечает ваше приближение, но вскоре слегка оборачивается.")
+
+        while true do
+          local picked_option = api.options({
+            "Какую работу ты выполняешь?",
+            "Наблюдал что-то необычное в последнее время?",
+            "Подозреваешь кого-то в этой комнате?",
+            "*Уйти*",
+          })
+          if picked_option == 1 then
+            api.line(rails.entities[2], "Инженер")
+            api.line(rails.entities[2], "Моя работа - обслуживание оборудования")
+            api.line(rails.entities[2], "В данный момент спускаю давление")
+          elseif picked_option == 2 then
+            api.line(rails.entities[2], "Наблюдаю больше давления")
+            api.line(rails.entities[2], "Стало больше пара")
+            api.line(rails.entities[2], "Уши плохо слышат")
+            api.line(rails.entities[2], "Тело плохо отвечает")
+          elseif picked_option == 3 then
+            api.line(rails.entities[2], "Я не знаю")
+          elseif picked_option == 4 then
+            break
+          end
+        end
+      end,
+    },
+    {
+      name = "Talking to the third",
+      enabled = true,
+      start_predicate = function(self, rails, dt)
+        return rails.entities[3].talking_to == State.player
+      end,
+
+      run = function(self, rails, dt)
+        rails.entities[3].talking_to = nil
+
+        api.narration("Сутулый полуорк в ярко-жёлтых огнеупорных перчатках работает с незнакомым вам устройством.")
+        api.narration("Панель с множеством непонятных кнопок, рычагов и приборов серьёзно повреждена.")
+        api.narration("Сталь вмята в нескольких местах, будто от сильных ударов, а счётчики скачут, как бесы на сковородке.")
+        api.narration("Полуорк, не замечая повреждений, продолжает работать с неисправной машиной.")
+        api.narration("С пустым взглядом он дергает за отсутствующие рычаги и нажимает на выбитые кнопки.")
+
+        while true do
+          local picked_option = api.options({
+            "Какую работу ты выполняешь?",
+            "Наблюдал что-то необычное в последнее время?",
+            "Подозреваешь кого-то в этой комнате?",
+            "*Уйти*",
+          })
+          if picked_option == 1 then
+            api.line(rails.entities[3], "Инженер.")
+            api.line(rails.entities[3], "Моя работа - обслуживать оборудование")
+            api.line(rails.entities[3], "В данный момент работаю с машиной")
+          elseif picked_option == 2 then
+            api.line(rails.entities[3], "Был громкий шум")
+            api.line(rails.entities[3], "Потом кто-то ударил")
+            api.line(rails.entities[3], "Всё")
+          elseif picked_option == 3 then
+            api.line(rails.entities[3], "Не знаю")
+          elseif picked_option == 4 then
+            break
+          end
+        end
+      end,
+    },
+    {
+      name = "Talking to the fourth",
+      enabled = true,
+      start_predicate = function(self, rails, dt)
+        return rails.entities[4].talking_to == State.player
+      end,
+
+      run = function(self, rails, dt)
+        rails.entities[4].talking_to = nil
+        rails.entities[4].direction = Vector.name_from_direction(
+          State.player.position - rails.entities[4].position
+        )
+        rails.entities[4]:animate()
+
+        api.narration("Дварфийка покрытыми волдырями руками засовывает вглубь небольшой печи очередную порцию чего-то, похожего на чёрную смолу.")
+        api.narration("Похоже, её пальцы совсем не могут двигаться.")
+        api.narration("При вашем приближении она слегка оборачивается в вашу сторону, продолжая работать.")
+
+        while true do
+          local picked_option = api.options({
+            "Какую работу ты выполняешь?",
+            "Наблюдал что-то необычное в последнее время?",
+            "Подозреваешь кого-то в этой комнате?",
+            "*Уйти*",
+          })
+          if picked_option == 1 then
+            api.line(rails.entities[4], "Инженер")
+            api.line(rails.entities[4], "Моя работа - обслуживать печь")
+            api.line(rails.entities[4], "В данный момент добавляю больше топлива")
+          elseif picked_option == 2 then
+            api.line(rails.entities[4], "Стало горячо рукам")
+            api.line(rails.entities[4], "Потом шум, но не настолько как горячо рукам")
+          elseif picked_option == 3 then
+            api.line(rails.entities[4], "Я не знаю")
+          elseif picked_option == 4 then
+            break
+          end
+        end
+      end,
+    },
   },
 
   active_coroutines = {},
@@ -74,6 +196,8 @@ return Tablex.extend(railing.mixin(), {
     self.entities = {
       State.grids.solids[Vector({7, 9})],
       State.grids.solids[self.positions[2]],
+      State.grids.solids[Vector({5, 3})],
+      State.grids.solids[Vector({8, 3})],
     }
 
     self.entities[1]:animate("holding")
