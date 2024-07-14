@@ -167,8 +167,10 @@ module.pipe_valve = function(leaking_pipe_position)
       local target = State.grids.solids[leaking_pipe_position]
       self:animate("rotate")
       random.choice(valve_rotating_sounds):play()
-      target.overflow_counter = 0
-      target:burst_with_steam()
+      self:when_animation_ends(function()
+        target.overflow_counter = 0
+        target:burst_with_steam()
+      end)
     end, true),
     {
       layer = "solids",
