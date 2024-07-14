@@ -141,6 +141,16 @@ return Tiny.sortedProcessingSystem({
 
     if State.player.hears then
       return self:display_line(State.player.hears)
+    elseif State.player.dialogue_options then
+      return self:display_line(Fun.iter(State.player.dialogue_options)
+        :enumerate()
+        :map(function(i, o)
+          return "%s %s. %s\n" % {
+            State.player.dialogue_options.current_i == i and ">" or " ", i, o
+          }
+        end)
+        :reduce(Fun.op.concat, "")
+      )
     end
 
     self:_display_text_info()

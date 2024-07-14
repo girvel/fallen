@@ -32,6 +32,14 @@ return Tablex.extend(railing.mixin(), {
       run = function(self, rails, dt)
         rails.entities[1].talking_to = nil
         api.line(rails.entities[1], "Hi!")
+        State.player.selected_option_i = nil
+        State.player.dialogue_options = {
+          current_i = 1,
+          "First",
+          "Second",
+        }
+        while not State.player.selected_option_i do coroutine.yield() end
+        Log.trace(State.player.selected_option_i)
       end,
     }
   },

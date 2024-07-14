@@ -15,7 +15,7 @@ local define_hotkey = function(collection, modes, keys, action)
   end
 end
 
-local MODES = {"free", "fight", "dialogue", "reading"}
+local MODES = {"free", "fight", "dialogue", "dialogue_options", "reading"}
 local hotkeys = Fun.iter(MODES):map(function(m) return m, {} end):tomap()
 
 for _, pair in ipairs({
@@ -55,6 +55,28 @@ define_hotkey(hotkeys, Tablex.deep_copy(MODES), {"S-q"}, function()
   if State.debug_mode then love.event.push("quit") end
 end)
 
+define_hotkey(hotkeys, {"dialogue_options"}, {"w", "up"}, function(entity)
+  entity.dialogue_options.current_i = math.max(1, (entity.dialogue_options.current_i) - 1)
+end)
+
+define_hotkey(hotkeys, {"dialogue_options"}, {"s", "down"}, function(entity)
+  entity.dialogue_options.current_i = math.min(#entity.dialogue_options, (entity.dialogue_options.current_i) + 1)
+end)
+
+define_hotkey(hotkeys, {"dialogue_options"}, {"e", "return"}, function(entity)
+  entity.selected_option_i = entity.dialogue_options.current_i
+  entity.dialogue_options = nil
+end)
+
+Fun.range(1, 9):each(function(i)
+  define_hotkey(hotkeys, {"dialogue_options"}, {tostring(i)}, function(entity)
+    if i <= #entity.dialogue_options then
+      entity.selected_option_i = i
+      entity.dialogue_options = nil
+    end
+  end)
+end)
+
 module_mt.__call = function()
   local result = humanoid({
     player_flag = true,
@@ -73,6 +95,8 @@ module_mt.__call = function()
         mode = "reading"
       elseif self.hears then
         mode = "dialogue"
+      elseif self.dialogue_options then
+        mode = "dialogue_options"
       elseif State.move_order then
         mode = "fight"
       else
