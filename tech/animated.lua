@@ -5,6 +5,7 @@ local module = setmetatable({}, module_mt)
 -- TODO just assign them directly
 local animation_methods = {
   animate = function(self, animation_name)
+    self.animation.paused = false
     animation_name = animation_name or "idle"
     self.animation.current = animation_name .. "_" .. (self.direction or "")
     if not self.animation.pack[self.animation.current] then

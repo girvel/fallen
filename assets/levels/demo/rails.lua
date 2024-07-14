@@ -51,8 +51,12 @@ return {
     }
 
     self.entities = {
+      first = State.grids.solids[Vector({7, 9})],
       second = State.grids.solids[self.positions.second],
     }
+
+    self.entities.first:animate("holding")
+    self.entities.first.animation.paused = true
   end,
 
   update = function(self, event)
