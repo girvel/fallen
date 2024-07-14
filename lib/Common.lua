@@ -29,10 +29,19 @@ module.get_color = function(image_data)
   end
 end
 
-module.volumed_sound = function(path, volume)
-  local result = love.audio.newSource(path, "static")
-  result:setVolume(volume)
-  return result
+module.volumed_sounds = function(path_beginning, volume)
+  volume = volume or 1
+  local _, _, directory = path_beginning:find("^(.*)/[^/]*$")
+  return Fun.iter(love.filesystem.getDirectoryItems(directory))
+    :map(function(filename) return directory .. "/" .. filename end)
+    :filter(function(path) return path:startsWith(path_beginning) end)
+    :map(function(path)
+      local result = love.audio.newSource(path, "static")
+      Log.trace(path)
+      result:setVolume(volume)
+      return result
+    end)
+    :totable()
 end
 
 module.set = function(list)

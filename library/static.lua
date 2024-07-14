@@ -4,6 +4,7 @@ local level = require("tech.level")
 local static_sprite = require("tech.static_sprite")
 local atlas_sprite = require("tech.atlas_sprite")
 local sfx = require("library.sfx")
+local random = require("utils.random")
 
 
 local module = {}
@@ -64,7 +65,7 @@ module.scripture = function(kind, path)
 end
 
 local mannequin_sounds = {
-  hit = {Common.volumed_sound("assets/sounds/hits_soft_wood.wav", 0.3)},
+  hit = Common.volumed_sounds("assets/sounds/hits_soft_wood", 0.3),
 }
 
 module.mannequin = function()
@@ -80,11 +81,7 @@ module.mannequin = function()
 end
 
 local planks_sounds = {
-  move = Fun.range(4)
-    :map(function(n)
-      return Common.volumed_sound("assets/sounds/move_planks_0" .. n .. ".wav", 0.1)
-    end)
-    :totable(),
+  move = Common.volumed_sounds("assets/sounds/move_planks", 0.1)
 }
 
 module.planks = function()
@@ -98,11 +95,7 @@ module.planks = function()
 end
 
 local walkway_sounds = {
-  move = Fun.range(4)
-    :map(function(n)
-      return Common.volumed_sound("assets/sounds/move_walkway_0" .. n .. ".wav", 0.1)
-    end)
-    :totable(),
+  move = Common.volumed_sounds("assets/sounds/move_walkway", 0.1),
 }
 
 module.walkway = function()
@@ -143,7 +136,7 @@ for i, name in ipairs({
   end
 end
 
-local valve_rotating_sound = Common.volumed_sound("assets/sounds/valve_rotate_01.wav", 0.1)
+local valve_rotating_sounds = Common.volumed_sounds("assets/sounds/valve_rotate", 0.1)
 local pipe_valve_pack = animated.load_pack("assets/sprites/pipe_valve")
 
 module.pipe_valve = function(leaking_pipe_position)
@@ -152,7 +145,7 @@ module.pipe_valve = function(leaking_pipe_position)
     interactive(function(self, other)
       local target = State.grids.solids[leaking_pipe_position]
       self:animate("rotate")
-      valve_rotating_sound:play()
+      random.choice(valve_rotating_sounds):play()
       target.overflow_counter = 0
       target:burst_with_steam()
     end, true),
@@ -163,10 +156,10 @@ module.pipe_valve = function(leaking_pipe_position)
   )
 end
 
-local steam_hissing_sound = Common.volumed_sound("assets/sounds/steam_hissing.wav", 0.8)
+local steam_hissing_sound = Common.volumed_sounds("assets/sounds/steam_hissing.wav", 0.8)[1]
 
 module.leaking_pipe_left_down = function()
-  local sound = Common.volumed_sound("assets/sounds/steam_hissing_loop.wav", 1)
+  local sound = Common.volumed_sounds("assets/sounds/steam_hissing_loop.wav", 1)[1]
   sound:setLooping(true)
 
   return Tablex.extend(
