@@ -82,10 +82,11 @@ return Tiny.sortedProcessingSystem({
 
   _update_views = function(self)
     for key, value in pairs({
-      wiki = ((Vector({love.graphics.getDimensions()}) - State.gui.TEXT_MAX_SIZE) / 2):ceil(),
-      actions = Vector({love.graphics.getWidth() - self.SIDEBAR_W, 15}),
       scene_fx = get_scene_offset(),
       scene = get_scene_offset(),
+      actions = Vector({love.graphics.getWidth() - self.SIDEBAR_W, 64 + 15}),
+      gui = Vector({love.graphics.getWidth() - self.SIDEBAR_W - 17, 0}),
+      wiki = ((Vector({love.graphics.getDimensions()}) - State.gui.TEXT_MAX_SIZE) / 2):ceil(),
     }) do
       State.gui.views[key].offset = value
     end

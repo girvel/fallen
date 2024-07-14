@@ -56,4 +56,16 @@ module.highlight = function()
   return Tablex.extend(animated(highlight_pack), {layer = "sfx", view = "scene"})
 end
 
+local hp_bar_pack = animated.load_pack("assets/sprites/hp_bar")
+module.hp_bar = function()
+  return Tablex.extend(
+    animated(hp_bar_pack),
+    {
+      codename = "hp_bar",
+      view = "gui",
+      position = Vector.zero,
+    }
+  )
+end
+
 return module

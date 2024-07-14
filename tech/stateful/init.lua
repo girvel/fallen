@@ -82,6 +82,7 @@ module_mt.__call = function(_, systems, debug_mode)
       end
 
       self.gui:update_action_grid()
+      self.gui:create_gui_entities()
     end,
 	}
 end

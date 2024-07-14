@@ -1,6 +1,7 @@
 local wrapping = require("tech.stateful.wrapping")
 local view = require("utils.view")
 local static_sprite = require("tech.static_sprite")
+local special = require("tech.special")
 
 
 local load_wiki = function(path)
@@ -33,13 +34,14 @@ return {
 
   views = {
     scene = view(Vector.zero, 4, 16),
-    wiki = view(Vector.zero, 1, 1),
-    actions = view(Vector.zero, 2, 24),
     scene_fx = view(Vector.zero, 1, 1),
+    actions = view(Vector.zero, 2, 24),
+    gui = view(Vector.zero, 2, 1),
+    wiki = view(Vector.zero, 1, 1),
   },
 
   views_order = {
-    "scene", "wiki", "actions", "scene_fx"
+    "scene", "scene_fx", "actions", "gui", "wiki",
   },
 
   _render_current_page = function(self)
@@ -123,5 +125,10 @@ return {
         view = "actions",
       }))
     end
+  end,
+
+  create_gui_entities = function(self)
+    State:add(special.hp_bar())
+    -- State:add(special.hp_bar_background())
   end,
 }
