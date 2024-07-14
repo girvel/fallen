@@ -5,7 +5,7 @@ return {
   require("systems.display"),
 
   require("systems.input"),
-  require("systems.ai"),
+  require("systems.acting"),
   require("systems.animation"),
   require("systems.timed_death"),
   require("systems.drift"),

@@ -53,4 +53,11 @@ module.get_name = function(entity)
   return -Query(entity).name or -Query(entity).codename or "???"
 end
 
+module.resume_logged = function(coroutine_, ...)
+    local success, message = coroutine.resume(coroutine_, ...)
+    if not success then
+      Log.error("Coroutine error: " .. message)
+    end
+end
+
 return module
