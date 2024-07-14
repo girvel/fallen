@@ -23,6 +23,7 @@ module_mt.__call = function(_, animation_pack, object)
     proficiency_bonus = 2,
     inventory = {},
     layer = "solids",
+    view = "scene",
 
     get_armor = function(self)
       return 10 + core.get_modifier(self.abilities.dexterity)

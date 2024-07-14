@@ -1,6 +1,4 @@
 return {
-  -- TODO group by callback & period
-
   -- for keypressed/mousepressed order is not guaranteed
   -- love.keypressed systems --
   require("systems.input"),

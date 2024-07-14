@@ -28,7 +28,7 @@ local throw_tiles_under = function(level_lines, palette, result)
             local p = position + d;
             return (level_lines[p[2]] or {})[p[1]]
           end)
-          :filter(function(c) return palette.factories.tiles[c] end)
+          :filter(function(c) return palette.throwables[c] end)
           :totable()
 
         if #tiles_around >= 1 then
@@ -42,7 +42,7 @@ local throw_tiles_under = function(level_lines, palette, result)
             :max_by(function(c, n) return n end)
 
           table.insert(result, Tablex.extend(
-            palette.factories.tiles[most_frequent_tile](),
+            palette.factories[most_frequent_tile](),
             {position = position, layer = "tiles", view = "scene"}
           ))
         end
@@ -69,17 +69,15 @@ module.load_entities = function(text_representation, arguments, palette)
 
   local result = {}
 
-  for _, layer in ipairs(module.GRID_LAYERS) do
-    for y, line in ipairs(level_lines) do
-      for _, x, character in Fun.iter(line):enumerate() do
-        local factory = (palette.factories[layer] or {})[character]
-        if factory then
-          local position = Vector({x, y})
-          table.insert(result, Tablex.extend(
-            factory(unpack(grid_of_args[position] or {})),
-            {position = position, layer = layer, view = "scene"}
-          ))
-        end
+  for y, line in ipairs(level_lines) do
+    for _, x, character in Fun.iter(line):enumerate() do
+      local factory = palette.factories[character]
+      if factory then
+        local position = Vector({x, y})
+        table.insert(result, Tablex.extend(
+          factory(unpack(grid_of_args[position] or {})),
+          {position = position}
+        ))
       end
     end
   end

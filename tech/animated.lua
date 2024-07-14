@@ -2,7 +2,6 @@ local module_mt = {}
 local module = setmetatable({}, module_mt)
 
 
--- TODO just assign them directly
 local animation_methods = {
   animate = function(self, animation_name)
     self.animation.paused = false

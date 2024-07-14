@@ -39,6 +39,8 @@ module.door = function(disable_interaction)
       self.interact = nil
     end),
     {
+      layer = "solids",
+      view = "scene",
       name = "дверь",
       is_open = false,
       open = function(self)
@@ -60,7 +62,12 @@ module.scripture = function(kind, path)
       State.gui:show_page(self.path)
     end) or {},
     static_sprite("assets/sprites/scripture_" .. (kind or "straight") .. ".png"),
-    {name = "древняя надпись", path = path}
+    {
+      layer = "tiles",
+      view = "scene",
+      name = "древняя надпись",
+      path = path
+    }
   )
 end
 
@@ -72,6 +79,8 @@ module.mannequin = function()
   return Tablex.extend(
     static_sprite("assets/sprites/mannequin.png"),
     {
+      layer = "solids",
+      view = "scene",
       name = "манекен",
       hp = 1000,
       get_armor = function() return 5 end,
@@ -88,6 +97,8 @@ module.planks = function()
   return Tablex.extend(
     static_sprite("assets/sprites/planks.png"),
     {
+      layer = "tiles",
+      view = "scene",
       codename = "planks",
       sounds = planks_sounds,
     }
@@ -102,6 +113,8 @@ module.walkway = function()
   return Tablex.extend(
     static_sprite("assets/sprites/walkway.png"),
     {
+      layer = "tiles",
+      view = "scene",
       codename = "walkway",
       sounds = walkway_sounds,
     }
@@ -115,7 +128,11 @@ for _, name in ipairs({
   module[name] = function()
     return Tablex.extend(
       static_sprite("assets/sprites/" .. name .. ".png"),
-      {codename = name}
+      {
+        layer = "solids",
+        view = "scene",
+        codename = name,
+      }
     )
   end
 end
@@ -131,7 +148,11 @@ for i, name in ipairs({
   module[name] = function()
     return Tablex.extend(
       atlas_sprite(pipe_atlas, i),
-      {codename = name}
+      {
+        layer = "solids",
+        view = "scene",
+        codename = name,
+      }
     )
   end
 end
@@ -150,6 +171,8 @@ module.pipe_valve = function(leaking_pipe_position)
       target:burst_with_steam()
     end, true),
     {
+      layer = "solids",
+      view = "scene",
       name = "Вентиль",
       codename = "pipe_valve",
     }
@@ -165,6 +188,9 @@ module.leaking_pipe_left_down = function()
   return Tablex.extend(
     atlas_sprite(pipe_atlas, 9),
     {
+      layer = "solids",
+      view = "scene",
+
       codename = "leaking_pipe_left_down",
       trigger_seconds = 5,
       overflow_counter = 0,
