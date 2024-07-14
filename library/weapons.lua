@@ -61,7 +61,7 @@ module.yellow_glove = function()
     animated(animation_packs.yellow_glove),
     {
       direction = "right",
-      name = "Жёлтая перчатка",
+      name = "Огнеупорные перчатки",
       codename = "yellow_glove",
       slot = "gloves",
     }
