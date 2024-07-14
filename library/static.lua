@@ -200,12 +200,12 @@ module.leaking_pipe_left_down = function()
   )
 end
 
-local device_panel_atlas = atlas_sprite.atlas("assets/sprites/device_panel_atlas.png")
+local decorations_atlas = atlas_sprite.atlas("assets/sprites/decorations_atlas.png")
 
-for i, name in ipairs({"device_panel", "device_panel_broken"}) do
+for i, name in ipairs({"device_panel", "device_panel_broken", "furnace"}) do
   module[name] = function()
     return Tablex.extend(
-      atlas_sprite(device_panel_atlas, i),
+      atlas_sprite(decorations_atlas, i),
       {code_name = name}
     )
   end

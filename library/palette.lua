@@ -39,6 +39,7 @@ return {
 
       p = static.device_panel,
       P = static.device_panel_broken,
+      f = static.furnace,
 
       M = static.mannequin,
       D = static.door,
