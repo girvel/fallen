@@ -237,7 +237,7 @@ module.interact = function(entity)
   if entity.turn_resources.bonus_actions <= 0 then return end
   local entity_to_interact = interactive.get_for(entity)
   if not entity_to_interact then return end
-  if entity_to_interact.position ~= entity.position then
+  if entity_to_interact.position ~= entity.position and not entity_to_interact.hp then
     entity:animate("attack")
   end
   entity.turn_resources.bonus_actions = entity.turn_resources.bonus_actions - 1

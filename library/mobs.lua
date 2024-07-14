@@ -15,15 +15,22 @@ local module = {}
 
 for i, race in ipairs({races.half_elf, races.halfling, races.half_orc, races.dwarf}) do
   module[i] = function(direction, inventory)
-    return humanoid({
-      name = "инженер",
-      race = race,
-      max_hp = 1,  -- TODO class dude
-      direction = direction,
-      inventory = inventory,
+    return Tablex.extend(
+      humanoid({
+        name = "инженер",
+        race = race,
+        max_hp = 1,  -- TODO class dude
+        direction = direction,
+        inventory = inventory,
 
-      ai = function() end,
-    })
+        ai = function() end,
+
+        talking_to = nil,
+      }),
+      interactive(function(self, other)
+        self.talking_to = other
+      end)
+    )
   end
 end
 

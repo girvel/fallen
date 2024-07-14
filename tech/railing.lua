@@ -6,7 +6,7 @@ railing.api.narration = function(text)
 end
 
 railing.api.line = function(entity, text)
-  railing.narration({entity.sprite.color, (entity.name or "?") .. ": ", {1, 1, 1}, text})
+  railing.api.narration({entity.sprite.color, (entity.name or "?") .. ": ", {1, 1, 1}, text})
 end
 
 railing.api.wait_seconds = function(s)
