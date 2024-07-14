@@ -53,7 +53,7 @@ return Tiny.sortedProcessingSystem({
   filter = Tiny.requireAll("position", "sprite", "view"),
   base_callback = "draw",
 
-  SIDEBAR_W = 300,
+  SIDEBAR_W = 256,
   _old_camera_position = Vector.zero,
 
   _unknown_icon = love.graphics.newImage("assets/sprites/icons/unknown.png"),
@@ -84,8 +84,9 @@ return Tiny.sortedProcessingSystem({
     for key, value in pairs({
       scene_fx = get_scene_offset(),
       scene = get_scene_offset(),
-      actions = Vector({love.graphics.getWidth() - self.SIDEBAR_W, 64 + 15}),
-      gui = Vector({love.graphics.getWidth() - self.SIDEBAR_W - 17, 0}),
+      actions = Vector({love.graphics.getWidth() - self.SIDEBAR_W + 16, 64 + 15}),
+      gui_background = Vector({love.graphics.getWidth() - self.SIDEBAR_W, 0}),
+      gui = Vector({love.graphics.getWidth() - self.SIDEBAR_W, 0}),
       wiki = ((Vector({love.graphics.getDimensions()}) - State.gui.TEXT_MAX_SIZE) / 2):ceil(),
     }) do
       State.gui.views[key].offset = value

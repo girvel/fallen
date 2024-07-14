@@ -1,6 +1,7 @@
 local module_mt = {}
 local module = setmetatable({}, module_mt)
 
+module._packs_cache = {}
 
 local animation_methods = {
   animate = function(self, animation_name)
@@ -33,7 +34,14 @@ local animation_methods = {
   end
 }
 
-module_mt.__call = function(_, pack)
+module_mt.__call = function(self, pack)
+  if type(pack) == "string" then
+    if not self._packs_cache[pack] then
+      self._packs_cache[pack] = module.load_pack(pack)
+    end
+    pack = self._packs_cache[pack]
+  end
+
   local result = Tablex.extend({
     animation = {
       pack = pack,

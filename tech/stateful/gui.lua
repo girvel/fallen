@@ -36,12 +36,13 @@ return {
     scene = view(Vector.zero, 4, 16),
     scene_fx = view(Vector.zero, 1, 1),
     actions = view(Vector.zero, 2, 24),
+    gui_background = view(Vector.zero, 2, 1),
     gui = view(Vector.zero, 2, 1),
     wiki = view(Vector.zero, 1, 1),
   },
 
   views_order = {
-    "scene", "scene_fx", "actions", "gui", "wiki",
+    "scene", "scene_fx", "actions", "gui_background", "gui", "wiki",
   },
 
   _render_current_page = function(self)
@@ -118,17 +119,10 @@ return {
         }, action))
       end)
       :totable()
-
-    if not self.action_background then
-      State:add(Tablex.extend(static_sprite("assets/sprites/gui_background.png"), {
-        position = Vector({-0.33, -0.33}),
-        view = "actions",
-      }))
-    end
   end,
 
   create_gui_entities = function(self)
+    State:add(special.gui_background())
     State:add(special.hp_bar())
-    -- State:add(special.hp_bar_background())
   end,
 }
