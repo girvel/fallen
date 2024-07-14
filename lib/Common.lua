@@ -37,7 +37,6 @@ module.volumed_sounds = function(path_beginning, volume)
     :filter(function(path) return path:startsWith(path_beginning) end)
     :map(function(path)
       local result = love.audio.newSource(path, "static")
-      Log.trace(path)
       result:setVolume(volume)
       return result
     end)

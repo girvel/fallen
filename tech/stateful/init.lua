@@ -54,6 +54,10 @@ module_mt.__call = function(_, systems, debug_mode)
       self.world:add(entity)
     end,
 
+    exists = function(self, entity)
+      return self.world.entities[entity]
+    end,
+
     load_level = function(self, path, palette)
       local level_size, new_entities = level.load_entities(
         love.filesystem.read(path .. "/grid.txt"),
