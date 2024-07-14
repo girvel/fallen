@@ -13,6 +13,7 @@ module.steam = function(direction)
   local result = Tablex.extend(
     animated(steam_pack),
     {
+      codename = "steam",
       layer = "sfx",
       view = "scene",
       direction = direction,
@@ -21,11 +22,7 @@ module.steam = function(direction)
       ai = function(self, event)
         local target = State.grids.solids[self.position + Vector[self.direction]]
         if target and target.hp and not self.harmed_entities[target] then
-          if target.saving_rolls.dexterity:roll() < 15 then
-            mech.damage(target, 1)
-          else
-            State:add(special.floating_damage("-", target.position))
-          end
+          mech.attack_save(target, "dexterity", 15, D.roll({}, 1))
           self.harmed_entities[target] = true
         end
       end,

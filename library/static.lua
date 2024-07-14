@@ -88,7 +88,7 @@ module.planks = function()
   return Tablex.extend(
     static_sprite("assets/sprites/planks.png"),
     {
-      code_name = "planks",
+      codename = "planks",
       sounds = planks_sounds,
     }
   )
@@ -102,7 +102,7 @@ module.walkway = function()
   return Tablex.extend(
     static_sprite("assets/sprites/walkway.png"),
     {
-      code_name = "walkway",
+      codename = "walkway",
       sounds = walkway_sounds,
     }
   )
@@ -115,7 +115,7 @@ for _, name in ipairs({
   module[name] = function()
     return Tablex.extend(
       static_sprite("assets/sprites/" .. name .. ".png"),
-      {code_name = name}
+      {codename = name}
     )
   end
 end
@@ -131,7 +131,7 @@ for i, name in ipairs({
   module[name] = function()
     return Tablex.extend(
       atlas_sprite(pipe_atlas, i),
-      {code_name = name}
+      {codename = name}
     )
   end
 end
@@ -151,7 +151,7 @@ module.pipe_valve = function(leaking_pipe_position)
     end, true),
     {
       name = "Вентиль",
-      code_name = "pipe_valve",
+      codename = "pipe_valve",
     }
   )
 end
@@ -165,7 +165,7 @@ module.leaking_pipe_left_down = function()
   return Tablex.extend(
     atlas_sprite(pipe_atlas, 9),
     {
-      code_name = "leaking_pipe_left_down",
+      codename = "leaking_pipe_left_down",
       trigger_seconds = 5,
       overflow_counter = 0,
       sound_loop = sound,
@@ -202,13 +202,34 @@ end
 
 local decorations_atlas = atlas_sprite.atlas("assets/sprites/decorations_atlas.png")
 
-for i, name in ipairs({"device_panel", "device_panel_broken", "furnace"}) do
+Fun.iter({false, "device_panel_broken", "furnace"}):enumerate():each(function(i, name)
+  if not name then return end
   module[name] = function()
     return Tablex.extend(
       atlas_sprite(decorations_atlas, i),
-      {code_name = name}
+      {
+        view = "scene",
+        layer = "solids",
+        codename = name,
+      }
     )
   end
+end)
+
+module.device_panel = function()
+  return Tablex.extend(
+    atlas_sprite(decorations_atlas, 1),
+    {
+      view = "scene",
+      layer = "solids",
+      codename = "device_panel",
+      hp = 1,
+      hardness = 15,
+      on_remove = function(self)
+        State:add(Tablex.extend(module.device_panel_broken(), {position = self.position}))
+      end,
+    }
+  )
 end
 
 return module

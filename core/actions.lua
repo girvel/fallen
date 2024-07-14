@@ -141,6 +141,10 @@ module.hand_attack = setmetatable(
           if target and target.sounds and target.sounds.hit then
             random.choice(target.sounds.hit):play()
           end
+
+          if target.hardness and not -Query(entity).inventory.main_hand then
+            mech.attack_save(entity, "constitution", target.hardness, D.roll({}, 1))
+          end
         end)
       end
     }

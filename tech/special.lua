@@ -9,6 +9,7 @@ local damage_font = love.graphics.newFont("assets/fonts/joystix.monospace-regula
 module.floating_damage = function(number, scene_position)
   number = tostring(number)
   return {
+    codename = "floating_damage",
     position = scene_position * State.CELL_DISPLAY_SIZE * State.SCALING_FACTOR
       + Vector({random.d(12) - 6, random.d(12) - 6}),
     view = "scene_fx",
@@ -25,6 +26,7 @@ local line_font = love.graphics.newFont("assets/fonts/joystix.monospace-regular.
 
 module.floating_line = function(text, position)
   return {
+    codename = "floating_line",
     position = (position - Vector({1, 1.5})) * 16,
     view = "scene_fx",
     sprite = {
@@ -38,6 +40,7 @@ end
 module.text = function(text, font, position, decorations)
   decorations = decorations or {}
   return {
+    codename = "text",
     position = position,
     sprite = {
       text = text,

@@ -11,6 +11,8 @@ setmetatable(module, module_mt)
 module_mt.__call = function(_, animation_pack, object)
   assert(object.max_hp or object.class)
   local result = Tablex.extend(animated(animation_pack), {  -- TODO consider moving to mixins and extracting animated
+    creature_flag = true,
+
     sprite = {},
     abilities = {
       strength = 10,

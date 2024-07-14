@@ -47,6 +47,7 @@ module_mt.__call = function(_, systems, debug_mode)
       if self.move_order then
         self.move_order:remove(entity)
       end
+      Query(entity):on_remove()
       return entity
     end,
 
