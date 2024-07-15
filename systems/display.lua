@@ -78,6 +78,7 @@ return Tiny.sortedProcessingSystem({
 
   preProcess = function(self)
     self:_update_views()
+    self:_update_indicators()
   end,
 
   _update_views = function(self)
@@ -87,10 +88,31 @@ return Tiny.sortedProcessingSystem({
       actions = Vector({love.graphics.getWidth() - self.SIDEBAR_W + 16, 64 + 15}),
       gui_background = Vector({love.graphics.getWidth() - self.SIDEBAR_W, 0}),
       gui = Vector({love.graphics.getWidth() - self.SIDEBAR_W, 0}),
+      gui_text = Vector({love.graphics.getWidth() - self.SIDEBAR_W, 0}),
       wiki = ((Vector({love.graphics.getDimensions()}) - State.gui.TEXT_MAX_SIZE) / 2):ceil(),
     }) do
       State.gui.views[key].offset = value
     end
+  end,
+
+  _update_indicators = function(self)
+    local text = "%s/%s" % {State.player.hp, State.player:get_max_hp()}
+    local hp_text = State.gui.hp_text
+    local font = hp_text.sprite.font
+
+    hp_text.sprite.text = text
+    hp_text.position = Vector({
+      (self.SIDEBAR_W - font:getWidth(text)) / 2,
+      32 - font:getHeight() / 2
+    })
+
+    local hp_bar = State.gui.hp_bar
+    hp_bar.sprite.quad = love.graphics.newQuad(
+      0, 0,
+      hp_bar.sprite.image:getWidth() * State.player.hp / State.player:get_max_hp(),
+      hp_bar.sprite.image:getHeight(),
+      hp_bar.sprite.image:getDimensions()
+    )
   end,
 
   process = function(self, entity)
@@ -132,7 +154,11 @@ return Tiny.sortedProcessingSystem({
       if is_weapon_in_background then display_slot("main_hand") end
 
       local x, y = unpack(offset_position)
-      love.graphics.draw(entity.sprite.image, x, y, 0, current_view.scale)
+      if entity.sprite.quad then
+        love.graphics.draw(entity.sprite.image, entity.sprite.quad, x, y, 0, current_view.scale)
+      else
+        love.graphics.draw(entity.sprite.image, x, y, 0, current_view.scale)
+      end
 
       display_slot("gloves")
       if not is_weapon_in_background then display_slot("main_hand") end end

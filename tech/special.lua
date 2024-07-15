@@ -63,9 +63,21 @@ module.hp_bar = function()
     {
       codename = "hp_bar",
       view = "gui",
-      position = Vector.zero,
+      position = Vector({9, 9}),
     }
   )
+end
+
+module.hp_text = function()
+  return {
+    codename = "hp_text",
+    view = "gui_text",
+    position = Vector.zero,
+    sprite = {
+      text = "",
+      font = love.graphics.newFont("assets/fonts/joystix.monospace-regular.otf", 20),
+    },
+  }
 end
 
 module.gui_background = function()
