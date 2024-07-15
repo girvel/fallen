@@ -6,6 +6,28 @@ local api = railing.api
 return Tablex.extend(railing.mixin(), {
   scenes = {
     {
+      name = "Introduction",
+      enabled = true,
+      start_predicate = function(self, rails, dt) return true end,
+
+      run = function(self, rails, dt)
+        self.enabled = false
+        rails.entities.leaking_valve.paused = true
+        api.narration("Резкий запах мазута, керосина и ржавчины заставляет непроизвольно зажмуриться.")
+        api.narration("Помещение забито трубами и приборами непонятного назначения.")
+        api.narration("Три фигуры в защитных спецовках резко оборачиваются в вашу сторону и так же быстро возвращаются к работе.")
+        api.narration("А вот полуэльф в паре метрах, похоже, не замечает вашего присутствия.")
+        api.narration("Он лишь пялится на непонятные вам устройства и раз в несколько секунд выкрикивает странный набор букв и цифр.")
+        api.line(State.player, "(Диверсант - один из четырёх рабочих)")
+        api.line(State.player, "(Возможно я смогу вычислить его из показаний остальных)")
+        api.line(State.player, "(Надеюсь, они видели или слышали что-то подозрительное)")
+
+        rails.entities.leaking_valve.paused = false
+        rails.entities.leaking_valve:burst_with_steam()
+        api.narration("Мощный поток горячего пара от ближайшей трубы прерывает ваши мысли")
+      end,
+    },
+    {
       name = "Second rotates the valve",
       enabled = true,
       start_predicate = function(self, _, dt) return Common.period(self, 30, dt) end,
@@ -198,6 +220,7 @@ return Tablex.extend(railing.mixin(), {
       State.grids.solids[self.positions[2]],
       State.grids.solids[Vector({5, 3})],
       State.grids.solids[Vector({8, 3})],
+      leaking_valve = State.grids.solids[Vector({7, 10})],
     }
 
     self.entities[1]:animate("holding")

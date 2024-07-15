@@ -197,8 +197,11 @@ module.leaking_pipe_left_down = function()
       trigger_seconds = 5,
       overflow_counter = 0,
       sound_loop = sound,
+      paused = false,
 
       ai = function(self, event)
+        if self.paused then return end
+
         local dt = unpack(event)
         self.overflow_counter = self.overflow_counter + dt
 
