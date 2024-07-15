@@ -32,18 +32,32 @@ local systems = require("systems")
 
 
 love.load = function(args)
+  local closure_args = Tablex.deep_copy(args)
+  love.reload = function()
+    State.world:clearEntities()
+    State.world:clearSystems()
+    State.world:refresh()
+    return love.load(closure_args)
+  end
+
   args = cli.parse(args)
   Log.info("Command line arguments:", args)
 
   Log.info("Loading the game")
   math.randomseed(os.time())
   State = stateful(systems, args.debug)
+  State.callback_set = Fun.iter(systems)
+    :reduce(function(acc, system)
+      acc[system.base_callback] = true
+      return acc
+    end, {})
   State:load_level("assets/levels/" .. args.level, palette)
 
   for _, scene in ipairs(args.checkpoints) do
     State.rails.scenes[scene].enabled = true
   end
 
+  love.audio.stop()
   if not args.disable_ambient then
     local doom = love.audio.newSource("assets/sounds/doom.wav", "static")
     doom:setVolume(0.15)
@@ -61,6 +75,53 @@ love.load = function(args)
   end
 
   Log.info("Game is loaded")
+end
+
+love.run = function()
+	if love.load then love.load(love.arg.parseGameArguments(arg), arg) end
+
+	-- We don't want the first frame's dt to include time taken by love.load.
+	if love.timer then love.timer.step() end
+
+	local dt = 0
+
+	-- Main loop time.
+	return function()
+    if love.reload_flag then
+      love.reload()
+      love.reload_flag = nil
+    end
+
+		-- Process events.
+		if love.event then
+			love.event.pump()
+			for name, a,b,c,d,e,f in love.event.poll() do
+				if name == "quit" then
+					if not love.quit or not love.quit() then
+						return a or 0
+					end
+				end
+				love.handlers[name](a,b,c,d,e,f)
+			end
+		end
+
+		-- Update dt, as we'll be passing it to update
+		if love.timer then dt = love.timer.step() end
+
+		-- Call update and draw
+		if love.update then love.update(dt) end -- will pass 0 if love.timer is disabled
+
+		if love.graphics and love.graphics.isActive() then
+			love.graphics.origin()
+			love.graphics.clear(love.graphics.getBackgroundColor())
+
+			if love.draw then love.draw() end
+
+			love.graphics.present()
+		end
+
+		if love.timer then love.timer.sleep(0.001) end
+	end
 end
 
 for callback_name, _ in pairs(

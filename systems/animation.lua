@@ -1,6 +1,7 @@
 local FPS = 6
 
 return Tiny.processingSystem({
+  codename = "animation",
   base_callback = "update",
   filter = Tiny.requireAll("animation"),
   process = function(_, entity, event)

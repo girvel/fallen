@@ -47,6 +47,7 @@ define_hotkey(hotkeys, {"fight"}, {"z"}, function(entity)
 end)
 
 define_hotkey(hotkeys, Tablex.deep_copy(MODES), {"S-q"}, function()
+  Log.trace("Shift + Q")
   if State.debug_mode then love.event.push("quit") end
 end)
 
@@ -73,7 +74,7 @@ Fun.range(1, 9):each(function(i)
 end)
 
 define_hotkey(hotkeys, {"death"}, {"return", "e"}, function(entity)
-  love.event.push("quit")
+  love.reload_flag = true
 end)
 
 return hotkeys

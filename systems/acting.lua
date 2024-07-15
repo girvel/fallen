@@ -2,6 +2,7 @@ local turn_order = require("tech.turn_order")
 
 
 return Tiny.processingSystem({
+  codename = "acting",
   filter = Tiny.requireAll("ai"),
   base_callback = "update",
   process = function(_, entity, event)

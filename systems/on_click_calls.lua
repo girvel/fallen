@@ -1,4 +1,5 @@
 return Tiny.processingSystem({
+  codename = "on_click_calls",
   base_callback = "mousepressed",
   filter = Tiny.requireAll("on_click", "position", "size"),
   process = function(_, entity)

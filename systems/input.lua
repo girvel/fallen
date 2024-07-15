@@ -1,4 +1,5 @@
 return Tiny.system({
+  codename = "input",
   base_callback = "keypressed",
   update = function(_, event)
     local _, scancode = unpack(event)

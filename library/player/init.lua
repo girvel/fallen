@@ -42,9 +42,8 @@ module_mt.__call = function()
         mode = "free"
       end
 
-      local action = hotkeys[mode][self.last_pressed_key]
+      Query(hotkeys[mode])[self.last_pressed_key](self)
       self.last_pressed_key = nil
-      if action ~= nil then return action(self) end
     end,
     abilities = {
       strength = 16,

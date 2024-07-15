@@ -1,4 +1,5 @@
 return Tiny.processingSystem({
+  codename = "timed_death",
   filter = Tiny.requireAll("life_time"),
   base_callback = "update",
   process = function(_, entity, event)

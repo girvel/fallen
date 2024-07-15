@@ -1,4 +1,5 @@
 return Tiny.processingSystem({
+  codename = "drift",
   filter = Tiny.requireAll("drift"),
   base_callback = "update",
   process = function(_, entity, event)
