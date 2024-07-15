@@ -116,7 +116,7 @@ return Tiny.sortedProcessingSystem({
   end,
 
   process = function(self, entity)
-    if State.gui.text_entities and entity.view ~= "wiki" then return end
+    if State.player.hp <= 0 or State.gui.text_entities and entity.view ~= "wiki" then return end
 
     local current_view = State.gui.views[entity.view]
     local offset_position = current_view:apply(entity.position)
@@ -165,6 +165,8 @@ return Tiny.sortedProcessingSystem({
   end,
 
   postProcess = function(self)
+    if State.player.hp <= 0 then return self._display_death_message() end
+
     if State.gui.text_entities then return end
 
     if State.player.hears then
@@ -182,6 +184,22 @@ return Tiny.sortedProcessingSystem({
     end
 
     self:_display_text_info()
+  end,
+
+  _display_death_message = function(self)
+    local draw_centered = function(message, font, x, y)
+      love.graphics.print(
+        message,
+        font,
+        (love.graphics.getWidth() - font:getWidth(message)) / 2 + x,
+        (love.graphics.getHeight() - font:getHeight()) / 2 + y
+      )
+    end
+
+    local heading_font = love.graphics.newFont("assets/fonts/joystix.monospace-regular.otf", 72)
+    local subheading_font = love.graphics.newFont("assets/fonts/joystix.monospace-regular.otf", 24)
+    draw_centered("Game over", heading_font, 0, 0)
+    draw_centered("Press [Enter] to restart", subheading_font, 0, 80)
   end,
 
   display_line = function(self, line)

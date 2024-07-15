@@ -10,7 +10,7 @@ local define_hotkey = function(collection, modes, keys, action)
   end
 end
 
-local MODES = {"free", "fight", "dialogue", "dialogue_options", "reading"}
+local MODES = {"free", "fight", "dialogue", "dialogue_options", "reading", "death"}
 local hotkeys = Fun.iter(MODES):map(function(m) return m, {} end):tomap()
 
 for _, pair in ipairs({
@@ -70,6 +70,10 @@ Fun.range(1, 9):each(function(i)
       entity.dialogue_options = nil
     end
   end)
+end)
+
+define_hotkey(hotkeys, {"death"}, {"return", "e"}, function(entity)
+  love.event.push("quit")
 end)
 
 return hotkeys

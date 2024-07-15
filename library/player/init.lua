@@ -6,7 +6,6 @@ local hotkeys = require("library.player.hotkeys")
 local module_mt = {}
 local module = setmetatable({}, module_mt)
 
-
 module_mt.__call = function()
   local result = humanoid({
     player_flag = true,
@@ -29,6 +28,8 @@ module_mt.__call = function()
         mode = "dialogue_options"
       elseif State.move_order then
         mode = "fight"
+      elseif self.hp <= 0 then
+        mode = "death"
       else
         mode = "free"
       end
@@ -46,6 +47,7 @@ module_mt.__call = function()
       charisma = 8,
     },
   })
+  result.hp = 1  -- TODO RM
 
   result.turn_resources.second_wind = 1
   result.turn_resources.action_surge = 1
