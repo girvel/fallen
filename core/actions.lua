@@ -57,9 +57,7 @@ end
 
 module.move = Fun.iter(Vector.direction_names):map(function(direction_name)
   return direction_name, function(entity)
-    entity.direction = direction_name
-    Fun.iter(entity.inventory or {})
-      :each(function(_, e) e.direction = direction_name end)
+    entity:rotate(direction_name)
 
     if entity.inventory and entity.inventory.main_hand then
       entity.inventory.main_hand.direction = entity.direction

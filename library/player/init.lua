@@ -1,6 +1,7 @@
 local classes = require("core.classes")
 local humanoid = require("core.humanoid")
 local hotkeys = require("library.player.hotkeys")
+local animation_packs = require("library.animation_packs")
 
 
 local module_mt = {}
@@ -17,7 +18,14 @@ module_mt.__call = function()
     },
     level = 2,
     direction = "right",
+
     immortal = true,
+    on_death = function(self)
+      self:rotate("left")
+      self.animation.pack = animation_packs.skeleton
+      self:animate()
+    end,
+
     ai = function(self)
       local mode
       if State.gui.text_entities then

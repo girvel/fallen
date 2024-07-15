@@ -121,51 +121,60 @@ return Tiny.sortedProcessingSystem({
     local current_view = State.gui.views[entity.view]
     local offset_position = current_view:apply(entity.position)
     if entity.sprite.text then
-      love.graphics.print(entity.sprite.text, entity.sprite.font, unpack(offset_position))
-
-      if entity.link_flag then
-        local start = offset_position + Vector.down * entity.size[2]
-        local finish = offset_position + entity.size  -- TODO here size is outside the view, for mousepressed it is inside
-        local mouse_position = Vector({love.mouse.getPosition()})
-        if not (mouse_position >= offset_position and mouse_position < finish) then return end
-
-        if type(entity.sprite.text) == "table" then
-          love.graphics.setColor(entity.sprite.text[1])
-        end
-        love.graphics.line(start[1], start[2], unpack(finish))
-        love.graphics.setColor({1, 1, 1})
-      end
+      self:_process_text_sprite(entity, offset_position)
     else
-      local display_slot = function(slot)
-        local item_sprite = -Query(entity.inventory)[slot].sprite
-        if not item_sprite then return end
+      self:_process_image_sprite(entity, offset_position, current_view.scale)
+    end
+  end,
 
-        local anchor_offset
-        if item_sprite.anchor and entity.sprite.anchor then
-          anchor_offset = (entity.sprite.anchor[slot] - item_sprite.anchor) * current_view.scale
-        else
-          anchor_offset = Vector.zero
-        end
-        local wx, wy = unpack(offset_position + anchor_offset)
-        love.graphics.draw(item_sprite.image, wx, wy, 0, current_view.scale)
+  _process_text_sprite = function(self, entity, offset_position)
+    love.graphics.print(entity.sprite.text, entity.sprite.font, unpack(offset_position))
+
+    if entity.link_flag then
+      local start = offset_position + Vector.down * entity.size[2]
+      local finish = offset_position + entity.size  -- TODO here size is outside the view, for mousepressed it is inside
+      local mouse_position = Vector({love.mouse.getPosition()})
+      if not (mouse_position >= offset_position and mouse_position < finish) then return end
+
+      if type(entity.sprite.text) == "table" then
+        love.graphics.setColor(entity.sprite.text[1])
       end
+      love.graphics.line(start[1], start[2], unpack(finish))
+      love.graphics.setColor({1, 1, 1})
+    end
+  end,
 
-      local is_weapon_in_background = entity.direction == "up"
-      if is_weapon_in_background then display_slot("main_hand") end
+  _process_image_sprite = function(self, entity, offset_position, scale)
+    local display_slot = function(slot)
+      local item_sprite = -Query(entity.inventory)[slot].sprite
+      if not item_sprite then return end
 
-      local x, y = unpack(offset_position)
-      if entity.sprite.quad then
-        love.graphics.draw(entity.sprite.image, entity.sprite.quad, x, y, 0, current_view.scale)
+      local anchor_offset
+      if item_sprite.anchor and entity.sprite.anchor then
+        anchor_offset = (entity.sprite.anchor[slot] - item_sprite.anchor) * scale
       else
-        love.graphics.draw(entity.sprite.image, x, y, 0, current_view.scale)
+        anchor_offset = Vector.zero
       end
+      local wx, wy = unpack(offset_position + anchor_offset)
+      love.graphics.draw(item_sprite.image, wx, wy, 0, scale)
+    end
 
-      display_slot("gloves")
-      if not is_weapon_in_background then display_slot("main_hand") end end
+    local is_weapon_in_background = entity.direction == "up"
+    if is_weapon_in_background then display_slot("main_hand") end
+
+    local x, y = unpack(offset_position)
+    if entity.sprite.quad then
+      love.graphics.draw(entity.sprite.image, entity.sprite.quad, x, y, 0, scale)
+    else
+      love.graphics.draw(entity.sprite.image, x, y, 0, scale)
+    end
+
+    display_slot("gloves")
+    if not is_weapon_in_background then display_slot("main_hand") end
   end,
 
   postProcess = function(self)
-    if State.player.hp <= 0 then return self._display_death_message() end
+    if State.player.hp <= 0 then return self:_display_death_message() end
 
     if State.gui.text_entities then return end
 
@@ -195,6 +204,15 @@ return Tiny.sortedProcessingSystem({
         (love.graphics.getHeight() - font:getHeight()) / 2 + y
       )
     end
+
+    local scale = 16
+    self:_process_image_sprite(
+      State.player,
+      (Vector({love.graphics.getDimensions()})
+      - Vector({State.player.sprite.image:getDimensions()}) * scale) / 2
+      + Vector.up * 400,
+      scale
+    )
 
     local heading_font = love.graphics.newFont("assets/fonts/joystix.monospace-regular.otf", 72)
     local subheading_font = love.graphics.newFont("assets/fonts/joystix.monospace-regular.otf", 24)

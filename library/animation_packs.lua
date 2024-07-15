@@ -1,4 +1,5 @@
 local animated = require("tech.animated")
+local humanoid_anchors = require("core.humanoid.anchors")
 
 
 local module = {}
@@ -50,5 +51,6 @@ module.gas_key = animated.load_pack("assets/sprites/gas_key", {
 
 module.yellow_glove = animated.load_pack("assets/sprites/yellow_glove")
 
+module.skeleton = animated.load_pack("assets/sprites/skeleton", humanoid_anchors)
 
 return module
