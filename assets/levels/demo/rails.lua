@@ -175,6 +175,7 @@ return Tablex.extend(railing.mixin(), {
 
       run = function(self, rails, dt)
         rails.entities[4].talking_to = nil
+        local old_direction = rails.entities[4].direction
         rails.entities[4].direction = Vector.name_from_direction(
           State.player.position - rails.entities[4].position
         )
@@ -204,6 +205,7 @@ return Tablex.extend(railing.mixin(), {
             break
           end
         end
+        rails.entities[4].direction = old_direction
       end,
     },
   },
