@@ -101,7 +101,7 @@ end
 
 local LINK_COLOR = Common.hex_color("3f5d92")
 
-local generate_entities = function(token_lines, font)
+local generate_entities = function(token_lines, font, view)
   local result = {}
   for y, line in ipairs(token_lines) do
     for _, token in ipairs(line) do
@@ -112,12 +112,13 @@ local generate_entities = function(token_lines, font)
           Vector({token.x, font:getHeight() * y})
         ),
         {
-          view = "wiki",
+          view = view,
           on_click = token.link and function()
             State.gui:show_page(token.link)
           end or nil,
           size = Vector({font:getWidth(token.content), font:getHeight()}),
           link_flag = token.link or nil,
+          debug_flag = true,
         }
       ))
     end
@@ -126,7 +127,7 @@ local generate_entities = function(token_lines, font)
 end
 
 return {
-  generate_wiki_page = function(content, font, w)
+  generate_wiki_page = function(content, font, w, view)
     return generate_entities(
       wrap_lines(
         convert_line_breaks(
@@ -134,7 +135,7 @@ return {
         ),
         font, w
       ),
-      font
+      font, view
     )
   end
 }

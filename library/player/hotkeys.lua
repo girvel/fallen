@@ -23,7 +23,7 @@ for _, pair in ipairs({
 end
 
 define_hotkey(hotkeys, {"fight"}, {"space"}, function() return turn_order.TURN_END_SIGNAL end)
-define_hotkey(hotkeys, {"dialogue"}, {"space"}, function(entity) entity.hears = nil end)
+define_hotkey(hotkeys, {"dialogue"}, {"space"}, function() State.gui:skip_line() end)
 define_hotkey(hotkeys, {"reading"}, {"escape"}, function() State.gui:exit_wiki() end)
 
 define_hotkey(hotkeys, {"reading"}, {"left"}, function() State.gui:move_in_wiki_history(-1) end)

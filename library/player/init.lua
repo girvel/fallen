@@ -30,7 +30,7 @@ module_mt.__call = function()
       local mode
       if State.gui.text_entities then
         mode = "reading"
-      elseif self.hears then
+      elseif State.gui.line_entities then
         mode = "dialogue"
       elseif self.dialogue_options then
         mode = "dialogue_options"

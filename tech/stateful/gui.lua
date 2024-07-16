@@ -31,6 +31,8 @@ return {
   action_entities = {},
   hp_bar = nil,
 
+  line_entities = nil, -- TODO use single storage table?
+
   views = {
     scene = view(Vector.zero, 4, 16),
     scene_fx = view(Vector.zero, 1, 1),
@@ -38,12 +40,27 @@ return {
     gui_background = view(Vector.zero, 2, 1),
     gui = view(Vector.zero, 2, 1),
     gui_text = view(Vector.zero, 1, 1),
+    dialogue_text = view(Vector.zero, 1, 1),
     wiki = view(Vector.zero, 1, 1),
   },
 
   views_order = {
-    "scene", "scene_fx", "actions", "gui_background", "gui", "gui_text", "wiki",
+    "scene", "scene_fx",
+    "actions", "gui_background", "gui", "gui_text",
+    "dialogue_text", "wiki",
   },
+
+  show_line = function(self, line)
+    self.line_entities = State:add_multiple(wrapping.generate_wiki_page(
+      line, self.font, math.min(love.graphics.getWidth() - 40, self.TEXT_MAX_SIZE[1]),
+      "dialogue_text"
+    ))
+  end,
+
+  skip_line = function(self)
+    State:remove_multiple(self.line_entities)
+    self.line_entities = nil
+  end,
 
   _render_current_page = function(self)
     self:_close_page()
@@ -53,11 +70,9 @@ return {
       and self.wiki_pages[id][self.discovered_pages[id]]
       or "~ Нет информации ~"
 
-    self.text_entities = Fun.iter(wrapping.generate_wiki_page(
-      page, self.font, State.gui.TEXT_MAX_SIZE[1]
+    self.text_entities = State:add_multiple(wrapping.generate_wiki_page(
+      page, self.font, State.gui.TEXT_MAX_SIZE[1], "wiki"
     ))
-      :map(function(e) return State:add(e) end)
-      :totable()
   end,
 
   show_page = function(self, id)
@@ -74,9 +89,7 @@ return {
 
   _close_page = function(self)
     if not self.text_entities then return end
-    for _, e in ipairs(self.text_entities) do
-      State:remove(e)
-    end
+    State:remove_multiple(self.text_entities)
     self.text_entities = nil
   end,
 

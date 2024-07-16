@@ -2,8 +2,6 @@ local interactive = require("tech.interactive")
 local level = require("tech.level")
 
 
-local ui_font = love.graphics.newFont("assets/fonts/joystix.monospace-regular.otf", 12)
-
 local resource_translations = {
   bonus_actions = "бонусные действия",
   movement = "движение",
@@ -48,6 +46,14 @@ local get_scene_offset = function()
   return result
 end
 
+local get_dialogue_offset = function()
+  local window_w = love.graphics.getWidth()
+  local window_h = love.graphics.getHeight()
+  local text_w = math.min(window_w - 40, State.gui.TEXT_MAX_SIZE[1])
+
+  return Vector({math.ceil((window_w - text_w) / 2), window_h - 120})
+end
+
 return Tiny.sortedProcessingSystem({
   codename = "display",
   filter = Tiny.requireAll("position", "sprite", "view"),
@@ -89,6 +95,7 @@ return Tiny.sortedProcessingSystem({
       gui_background = Vector({love.graphics.getWidth() - self.SIDEBAR_W, 0}),
       gui = Vector({love.graphics.getWidth() - self.SIDEBAR_W, 0}),
       gui_text = Vector({love.graphics.getWidth() - self.SIDEBAR_W, 0}),
+      dialogue_text = get_dialogue_offset(),
       wiki = ((Vector({love.graphics.getDimensions()}) - State.gui.TEXT_MAX_SIZE) / 2):ceil(),
     }) do
       State.gui.views[key].offset = value
@@ -117,6 +124,7 @@ return Tiny.sortedProcessingSystem({
 
   process = function(self, entity)
     if State.player.hp <= 0 or State.gui.text_entities and entity.view ~= "wiki" then return end
+    if entity.debug_flag then Log.trace(entity) end
 
     local current_view = State.gui.views[entity.view]
     local offset_position = current_view:apply(entity.position)
@@ -178,19 +186,19 @@ return Tiny.sortedProcessingSystem({
 
     if State.gui.text_entities then return end
 
-    if State.player.hears then
-      return self:display_line(State.player.hears)
-    elseif State.player.dialogue_options then
-      return self:display_line(Fun.iter(State.player.dialogue_options)
-        :enumerate()
-        :map(function(i, o)
-          return "%s %s. %s\n" % {
-            State.player.dialogue_options.current_i == i and ">" or " ", i, o
-          }
-        end)
-        :reduce(Fun.op.concat, "")
-      )
-    end
+    -- if State.player.hears then
+    --   return self:display_line(State.player.hears)
+    -- elseif State.player.dialogue_options then
+    --   return self:display_line(Fun.iter(State.player.dialogue_options)
+    --     :enumerate()
+    --     :map(function(i, o)
+    --       return "%s %s. %s\n" % {
+    --         State.player.dialogue_options.current_i == i and ">" or " ", i, o
+    --       }
+    --     end)
+    --     :reduce(Fun.op.concat, "")
+    --   )
+    -- end
 
     self:_display_text_info()
   end,
@@ -228,7 +236,7 @@ return Tiny.sortedProcessingSystem({
     love.graphics.setColor(Common.hex_color("31222c"))
     love.graphics.rectangle("fill", 0, window_h - 140, window_w, 140)
     love.graphics.setColor(1, 1, 1)
-    love.graphics.printf(line, ui_font, math.ceil((window_w - text_w) / 2), window_h - 120, text_w)
+    love.graphics.printf(line, State.gui.font, math.ceil((window_w - text_w) / 2), window_h - 120, text_w)
   end,
 
   _display_text_info = function(self)
@@ -301,7 +309,7 @@ return Tiny.sortedProcessingSystem({
     end
 
     love.graphics.printf(
-      table.concat(lines, "\n"), ui_font,
+      table.concat(lines, "\n"), State.gui.font,
       love.graphics.getWidth() - self.SIDEBAR_W, 15 + 400,
       self.SIDEBAR_W - 15
     )

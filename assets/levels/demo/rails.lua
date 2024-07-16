@@ -13,6 +13,7 @@ return function()
         run = function(self, rails, dt)
           self.enabled = false
           rails.entities.leaking_valve.paused = true
+          api.narration("Сергей Хабаров, посмотрите, у нас [есть Markdown в диалогах](lorem)")
           api.narration("Резкий запах мазута, керосина и ржавчины заставляет непроизвольно зажмуриться.")
           api.narration("Помещение забито трубами и приборами непонятного назначения.")
           api.narration("Три фигуры в защитных спецовках резко оборачиваются в вашу сторону и так же быстро возвращаются к работе.")

@@ -9,7 +9,10 @@ local vector_methods = {}
 local vector_mt = {__index = vector_methods}
 
 module_mt.__call = function(_, base_object)
-  assert(#base_object == 2 and fun.iter(pairs(base_object)):length() == 2)
+  assert(
+    #base_object == 2 and fun.iter(pairs(base_object)):length() == 2,
+    "Vector base should be a list of length 2"
+  )
   return setmetatable(base_object, vector_mt)
 end
 

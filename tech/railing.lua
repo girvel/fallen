@@ -1,12 +1,13 @@
 local railing = {api = {}}
 
 railing.api.narration = function(text)
-  State.player.hears = text
-  while State.player.hears == text do coroutine.yield() end
+  State.gui:show_line(text)
+  while State.gui.line_entities do coroutine.yield() end
 end
 
 railing.api.line = function(entity, text)
-  railing.api.narration({entity.sprite.color, (entity.name or "?") .. ": ", {1, 1, 1}, text})
+  -- TODO get color back
+  railing.api.narration(Common.get_name(entity) .. ": " .. text)
 end
 
 railing.api.wait_seconds = function(s)

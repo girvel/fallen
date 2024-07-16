@@ -39,6 +39,12 @@ module_mt.__call = function(_, systems, debug_mode)
       return entity
     end,
 
+    add_multiple = function(self, list)
+      return Fun.iter(list)
+        :map(function(e) return self:add(e) end)
+        :totable()
+    end,
+
     remove = function(self, entity)
       self.world:remove(entity)
       if entity.position and entity.layer then
@@ -49,6 +55,12 @@ module_mt.__call = function(_, systems, debug_mode)
       end
       Query(entity):on_remove()
       return entity
+    end,
+
+    remove_multiple = function(self, list)
+      return Fun.iter(list)
+        :map(function(e) return self:remove(e) end)
+        :totable()
     end,
 
     refresh = function(self, entity)
