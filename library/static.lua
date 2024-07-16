@@ -59,7 +59,7 @@ module.scripture = function(kind, path)
   assert(kind)
   return Tablex.extend(
     path and interactive(function(self)
-      State.gui:show_page(self.path)
+      State.gui.wiki:show(self.path)
     end) or {},
     static_sprite("assets/sprites/scripture_" .. (kind or "straight") .. ".png"),
     {

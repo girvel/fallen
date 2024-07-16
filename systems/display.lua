@@ -123,8 +123,7 @@ return Tiny.sortedProcessingSystem({
   end,
 
   process = function(self, entity)
-    if State.player.hp <= 0 or State.gui.text_entities and entity.view ~= "wiki" then return end
-    if entity.debug_flag then Log.trace(entity) end
+    if State.player.hp <= 0 or State:get_mode() == "reading" and entity.view ~= "wiki" then return end
 
     local current_view = State.gui.views[entity.view]
     local offset_position = current_view:apply(entity.position)
@@ -184,7 +183,7 @@ return Tiny.sortedProcessingSystem({
   postProcess = function(self)
     if State.player.hp <= 0 then return self:_display_death_message() end
 
-    if State.gui.text_entities then return end
+    if State:get_mode() == "reading" then return end
 
     -- if State.player.hears then
     --   return self:display_line(State.player.hears)

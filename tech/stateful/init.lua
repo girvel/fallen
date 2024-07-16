@@ -23,7 +23,7 @@ module_mt.__call = function(_, systems, debug_mode)
     CELL_DISPLAY_SIZE = 16,
     SCALING_FACTOR = SCALING_FACTOR,
 
-    gui = require("tech.stateful.gui"),
+    gui = require("tech.stateful.gui")(),
 
     add = function(self, entity)
       self.world:add(entity)
@@ -95,6 +95,24 @@ module_mt.__call = function(_, systems, debug_mode)
 
       self.gui:update_action_grid()
       self.gui:create_gui_entities()
+    end,
+
+    MODES = {"free", "fight", "dialogue", "dialogue_options", "reading", "death"},
+
+    get_mode = function(self)
+      if self.player.hp <= 0 then
+        return "death"
+      elseif self.gui.wiki.text_entities then
+        return "reading"
+      elseif self.gui.line_entities then
+        return "dialogue"
+      -- elseif self.dialogue_options then
+      --   return "dialogue_options"
+      elseif self.move_order then
+        return "fight"
+      else
+        return "free"
+      end
     end,
 	}
 end

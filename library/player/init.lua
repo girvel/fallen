@@ -1,6 +1,5 @@
 local classes = require("core.classes")
 local humanoid = require("core.humanoid")
-local hotkeys = require("library.player.hotkeys")
 local animation_packs = require("library.animation_packs")
 
 
@@ -26,25 +25,12 @@ module_mt.__call = function()
       self:animate()
     end,
 
+    hotkeys = require("library.player.hotkeys")(),
     ai = function(self)
-      local mode
-      if State.gui.text_entities then
-        mode = "reading"
-      elseif State.gui.line_entities then
-        mode = "dialogue"
-      elseif self.dialogue_options then
-        mode = "dialogue_options"
-      elseif State.move_order then
-        mode = "fight"
-      elseif self.hp <= 0 then
-        mode = "death"
-      else
-        mode = "free"
-      end
-
-      Query(hotkeys[mode])[self.last_pressed_key](self)
+      Query(self.hotkeys[State:get_mode()])[self.last_pressed_key](self)
       self.last_pressed_key = nil
     end,
+
     abilities = {
       strength = 16,
       dexterity = 18,
@@ -54,7 +40,6 @@ module_mt.__call = function()
       charisma = 8,
     },
   })
-  result.hp = 1  -- TODO RM
 
   result.turn_resources.second_wind = 1
   result.turn_resources.action_surge = 1

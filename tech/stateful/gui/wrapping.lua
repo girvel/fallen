@@ -114,11 +114,10 @@ local generate_entities = function(token_lines, font, view)
         {
           view = view,
           on_click = token.link and function()
-            State.gui:show_page(token.link)
+            State.gui.wiki:show(token.link)
           end or nil,
           size = Vector({font:getWidth(token.content), font:getHeight()}),
           link_flag = token.link or nil,
-          debug_flag = true,
         }
       ))
     end
@@ -127,7 +126,7 @@ local generate_entities = function(token_lines, font, view)
 end
 
 return {
-  generate_wiki_page = function(content, font, w, view)
+  generate_page = function(content, font, w, view)
     return generate_entities(
       wrap_lines(
         convert_line_breaks(
