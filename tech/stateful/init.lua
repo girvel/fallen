@@ -77,7 +77,7 @@ module_mt.__call = function(_, systems, debug_mode)
       end
 
       if love.filesystem.getInfo(path .. "/rails.lua") then
-        self.rails = require(path .. "/rails")
+        self.rails = require(path .. "/rails")()
         self.rails:initialize(self)
       end
 
