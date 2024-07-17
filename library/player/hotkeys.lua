@@ -34,10 +34,6 @@ return function()
 
   define_hotkey(hotkeys, {"free", "fight"}, {"e"}, actions.interact)
 
-  define_hotkey(hotkeys, {"free", "fight"}, {"k"}, function(entity)
-    State.gui.wiki:show("lorem")
-  end)
-
   define_hotkey(hotkeys, {"fight"}, {"z"}, function(entity)
     actions.dash(entity)
   end)
@@ -86,6 +82,10 @@ return function()
   -- universal --
   define_hotkey(hotkeys, Tablex.deep_copy(State.MODES), {"S-q"}, function()
     if State.debug_mode then love.event.push("quit") end
+  end)
+
+  define_hotkey(hotkeys, {"free", "fight", "dialogue", "dialogue_options"}, {"k"}, function(entity)
+    State.gui.wiki:show("lorem")
   end)
 
   return hotkeys

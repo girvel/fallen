@@ -2,7 +2,7 @@ local railing = {api = {}}
 
 railing.api.narration = function(text)
   State.gui.dialogue:show(text)
-  while State:get_mode() == "dialogue" do coroutine.yield() end
+  while State:get_mode() ~= "free" do coroutine.yield() end
 end
 
 railing.api.line = function(entity, text)
@@ -24,7 +24,7 @@ end
 
 railing.api.options = function(options)
   State.gui.dialogue:options_present(options)
-  while State:get_mode() == "dialogue_options" do coroutine.yield() end
+  while State:get_mode() ~= "free" do coroutine.yield() end
   return State.gui.dialogue.selected_option_i
 end
 
