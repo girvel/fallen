@@ -14,6 +14,7 @@ return function()
       gui_background = view(Vector.zero, 2, 1),
       gui = view(Vector.zero, 2, 1),
       gui_text = view(Vector.zero, 1, 1),
+      dialogue_background = view(Vector.zero, 1, 1),
       dialogue_text = view(Vector.zero, 1, 1),
       wiki = view(Vector.zero, 1, 1),
     },
@@ -21,7 +22,7 @@ return function()
     views_order = {
       "scene", "scene_fx",
       "actions", "gui_background", "gui", "gui_text",
-      "dialogue_text", "wiki",
+      "dialogue_background", "dialogue_text", "wiki",
     },
   }
 

@@ -9,7 +9,7 @@ return function(offset, scale, cell_size)
     apply_inverse = function(self, v)
       return (v - self.offset) / self.scale / self.cell_size
     end,
-    apply_scale = function(self, v)
+    apply_multiplier = function(self, v)
       return v * self.scale * self.cell_size
     end,
   }

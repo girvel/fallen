@@ -95,6 +95,7 @@ return Tiny.sortedProcessingSystem({
       gui_background = Vector({love.graphics.getWidth() - self.SIDEBAR_W, 0}),
       gui = Vector({love.graphics.getWidth() - self.SIDEBAR_W, 0}),
       gui_text = Vector({love.graphics.getWidth() - self.SIDEBAR_W, 0}),
+      dialogue_background = Vector.zero,
       dialogue_text = get_dialogue_offset(),
       wiki = ((Vector({love.graphics.getDimensions()}) - State.gui.TEXT_MAX_SIZE) / 2):ceil(),
     }) do
@@ -129,8 +130,15 @@ return Tiny.sortedProcessingSystem({
     local offset_position = current_view:apply(entity.position)
     if entity.sprite.text then
       self:_process_text_sprite(entity, offset_position)
-    else
+    elseif entity.sprite.image then
       self:_process_image_sprite(entity, offset_position, current_view.scale)
+    elseif entity.sprite.rect_color then
+      local x, y = unpack(offset_position)
+      love.graphics.setColor(entity.sprite.rect_color)
+      love.graphics.rectangle("fill", x, y, unpack(current_view:apply_multiplier(entity.size)))
+      love.graphics.setColor({1, 1, 1})
+    else
+      error("Wrong sprite format of %s:\n%s" % {Common.get_name(entity), Inspect(entity.sprite)})
     end
   end,
 

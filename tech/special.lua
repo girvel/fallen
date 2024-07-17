@@ -91,4 +91,16 @@ module.gui_background = function()
   )
 end
 
+module.dialogue_background = function()
+  local window_w, window_h = love.graphics.getDimensions()
+  return {
+    view = "dialogue_background",
+    position = Vector({0, window_h - 140}),
+    size = Vector({window_w, 140}),
+    sprite = {
+      rect_color = Common.hex_color("31222c"),
+    },
+  }
+end
+
 return module

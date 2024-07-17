@@ -1,4 +1,5 @@
 local wrapping = require("tech.stateful.gui.wrapping")
+local special = require("tech.special")
 
 
 return function()
@@ -12,11 +13,14 @@ return function()
         line, State.gui.font, math.min(love.graphics.getWidth() - 40, State.gui.TEXT_MAX_SIZE[1]),
         "dialogue_text"
       ))
+      self.background = State:add(special.dialogue_background())
     end,
 
     skip = function(self)
       if self.text_entities then State:remove_multiple(self.text_entities) end
+      if self.background then State:remove(self.background) end
       self.text_entities = nil
+      self.background = nil
     end,
 
     options_refresh = function(self)
