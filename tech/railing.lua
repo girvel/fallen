@@ -32,15 +32,22 @@ end
 
 railing.api.notification = function(rails, text, time_seconds)
   rails:run_task(function()
-    time_seconds = time_seconds or 15
+    time_seconds = time_seconds or 10
     State.gui.sidebar.notification:set_text(text)
     local dt = 0
     local uid = {}
     while not Common.period(uid, time_seconds, dt) do
       dt = coroutine.yield()
     end
-    State.gui.sidebar.notification:set_text("")
+    if State.gui.sidebar.notification.sprite.text == text then
+      State.gui.sidebar.notification:set_text("")
+    end
   end)
+end
+
+railing.api.discover_wiki = function(rails, page, level)
+  State.gui.wiki.discovered_pages[page] = level
+  railing.api.notification(rails, "Информация в Кодексе обновлена")  -- TODO mention page name
 end
 
 railing.mixin = function()

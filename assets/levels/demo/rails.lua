@@ -86,6 +86,7 @@ return function()
               break
             end
           end
+          rails.dreamers_talked_to = rails.dreamers_talked_to + 1
         end,
       },
       {
@@ -130,6 +131,7 @@ return function()
               break
             end
           end
+          rails.dreamers_talked_to = rails.dreamers_talked_to + 1
         end,
       },
       {
@@ -169,6 +171,7 @@ return function()
               break
             end
           end
+          rails.dreamers_talked_to = rails.dreamers_talked_to + 1
         end,
       },
       {
@@ -225,6 +228,18 @@ return function()
             end
           end
           rails.entities[4].direction = old_direction
+          rails.dreamers_talked_to = rails.dreamers_talked_to + 1
+        end,
+      },
+
+      {
+        name = "Player talked to all dreamers",
+        enabled = true,
+        start_predicate = function(self, rails) return rails.dreamers_talked_to == 4 end,
+        run = function(self, rails)
+          self.enabled = false
+          State.gui.wiki.discovered_pages.codex = 2
+          api.discover_wiki(rails, "dreamers", 1)
         end,
       },
     },
@@ -248,6 +263,8 @@ return function()
 
       self.entities[1]:animate("holding")
       self.entities[1].animation.paused = true
+
+      self.dreamers_talked_to = 0
     end,
   })
 end

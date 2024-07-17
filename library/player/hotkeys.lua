@@ -85,7 +85,7 @@ return function()
   end)
 
   define_hotkey(hotkeys, {"free", "fight", "dialogue", "dialogue_options"}, {"k"}, function(entity)
-    State.gui.wiki:show("lorem")
+    State.gui.wiki:show("codex")
   end)
 
   return hotkeys

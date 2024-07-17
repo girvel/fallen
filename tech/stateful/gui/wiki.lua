@@ -19,7 +19,7 @@ end
 return function()
   return {
     pages = load_wiki("assets/wiki"),
-    discovered_pages = {lorem = 1, angels = 1},
+    discovered_pages = {codex = 1},
     history = {},
     current_history_index = 0,
     text_entities = nil,
