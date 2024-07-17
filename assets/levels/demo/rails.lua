@@ -191,12 +191,18 @@ return function()
           api.narration("При вашем приближении она слегка оборачивается в вашу сторону, продолжая работать.")
 
           while true do
-            local picked_option = api.options({
+            local options = {
               "Какую работу ты выполняешь?",
               "Наблюдал что-то необычное в последнее время?",
               "Подозреваешь кого-то в этой комнате?",
               "*Уйти*",
-            })
+            }
+
+            if State.player.inventory.gloves == rails.entities.gloves then
+              table.insert(options, 4, "*отдать перчатки*")
+            end
+
+            local picked_option = api.options(options)
             if picked_option == 1 then
               api.line(rails.entities[4], "Инженер")
               api.line(rails.entities[4], "Моя работа - обслуживать печь")
@@ -206,8 +212,16 @@ return function()
               api.line(rails.entities[4], "Потом шум, но не настолько как горячо рукам")
             elseif picked_option == 3 then
               api.line(rails.entities[4], "Я не знаю")
-            elseif picked_option == 4 then
+            elseif picked_option == #options then
               break
+            elseif picked_option == 4 then
+              local gloves = State.player.inventory.gloves
+              rails.entities[4].inventory.gloves = gloves
+              State.player.inventory.gloves = nil
+
+              api.narration("Дварфийка с пустым взглядом надевает перчатки на обожженные руки")
+              api.line(rails.entities[4], "Благодарю")
+              api.line(rails.entities[4], "Теперь смогу проработать дольше")
             end
           end
           rails.entities[4].direction = old_direction
@@ -229,6 +243,8 @@ return function()
         State.grids.solids[Vector({8, 3})],
         leaking_valve = State.grids.solids[Vector({7, 10})],
       }
+
+      self.entities.gloves = self.entities[3].inventory.gloves
 
       self.entities[1]:animate("holding")
       self.entities[1].animation.paused = true
