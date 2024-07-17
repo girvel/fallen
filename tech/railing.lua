@@ -30,14 +30,17 @@ railing.api.options = function(options)
   return State.gui.dialogue.selected_option_i
 end
 
-railing.api.notification = function(text, time_seconds)
-  State.gui.sidebar.notification:set_text(text)
-  local dt = 0
-  local uid = {}
-  while not Common.period(uid, time_seconds, dt) do
-    dt = coroutine.yield()
-  end
-  State.gui.sidebar.notification:set_text("")
+railing.api.notification = function(rails, text, time_seconds)
+  rails:run_task(function()
+    time_seconds = time_seconds or 15
+    State.gui.sidebar.notification:set_text(text)
+    local dt = 0
+    local uid = {}
+    while not Common.period(uid, time_seconds, dt) do
+      dt = coroutine.yield()
+    end
+    State.gui.sidebar.notification:set_text("")
+  end)
 end
 
 railing.mixin = function()

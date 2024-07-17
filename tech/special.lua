@@ -94,8 +94,7 @@ module.notification = function()
       self.sprite.text = text
       local inner_text = type(text) == "table"
         and Fun.iter(text)
-          :enumerate()
-          :filter(function(i) return i % 2 == 1 end)
+          :filter(function(x) return type(x) == "string" end)
           :reduce(Fun.op.concat, "")
         or text
       self.position = Vector({-15 - self.sprite.font:getWidth(inner_text), 15})

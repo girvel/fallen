@@ -2,6 +2,8 @@ local actions = require("core.actions")
 local railing = require("tech.railing")
 local api = railing.api
 
+local RED = Common.hex_color("e64e4b")
+
 return function()
   return Tablex.extend(railing.mixin(), {
     scenes = {
@@ -13,9 +15,9 @@ return function()
         run = function(self, rails, dt)
           self.enabled = false
           rails.entities.leaking_valve.paused = true
-          rails:run_task(function() api.notification("Hello world", 3) end)
           api.center_camera()
-          api.narration("Сергей Хабаров, посмотрите, у нас [есть Markdown в диалогах](lorem)")
+
+          api.notification(rails, {RED, "Вычислить и устранить диверсанта"})
           api.narration("Резкий запах мазута, керосина и ржавчины заставляет непроизвольно зажмуриться.")
           api.narration("Помещение забито трубами и приборами непонятного назначения.")
           api.narration("Три фигуры в защитных спецовках резко оборачиваются в вашу сторону и так же быстро возвращаются к работе.")
