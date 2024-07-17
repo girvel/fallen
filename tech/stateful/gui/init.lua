@@ -1,16 +1,12 @@
 local wrapping = require("tech.stateful.gui.wrapping")
 local view = require("utils.view")
-local special = require("tech.special")
 
 
-return function() 
+return function()
   local result = {
     TEXT_MAX_SIZE = Vector({1000, 800}),
     font = love.graphics.newFont("assets/fonts/joystix.monospace-regular.otf", 12),
     anchors = {},
-
-    action_entities = {},
-    hp_bar = nil,
 
     line_entities = nil, -- TODO use single storage table?
 
@@ -42,36 +38,10 @@ return function()
       State:remove_multiple(self.line_entities)
       self.line_entities = nil
     end,
-
-    ACTION_GRID_W = 5,
-
-    update_action_grid = function(self)
-      Fun.iter(self.action_entities):each(function(a)
-        State:remove(a)
-      end)
-
-      self.action_entities = Fun.iter(State.player:get_actions())
-        :enumerate()
-        :map(function(i, action)
-          State:add(Tablex.extend({
-            position = Vector({
-              (i - 1) % self.ACTION_GRID_W,
-              math.floor(i / self.ACTION_GRID_W)
-            }),
-            view = "actions",
-          }, action))
-        end)
-        :totable()
-    end,
-
-    create_gui_entities = function(self)
-      State:add(special.gui_background())
-      self.hp_bar = State:add(special.hp_bar())
-      self.hp_text = State:add(special.hp_text())
-    end,
   }
 
   result.wiki = require("tech.stateful.gui.wiki")(result)
+  result.sidebar = require("tech.stateful.gui.sidebar")()
 
   return result
 end

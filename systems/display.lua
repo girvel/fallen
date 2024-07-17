@@ -104,7 +104,7 @@ return Tiny.sortedProcessingSystem({
 
   _update_indicators = function(self)
     local text = "%s/%s" % {State.player.hp, State.player:get_max_hp()}
-    local hp_text = State.gui.hp_text
+    local hp_text = State.gui.sidebar.hp_text
     local font = hp_text.sprite.font
 
     hp_text.sprite.text = text
@@ -113,7 +113,7 @@ return Tiny.sortedProcessingSystem({
       32 - font:getHeight() / 2
     })
 
-    local hp_bar = State.gui.hp_bar
+    local hp_bar = State.gui.sidebar.hp_bar
     hp_bar.sprite.quad = love.graphics.newQuad(
       0, 0,
       hp_bar.sprite.image:getWidth() * State.player.hp / State.player:get_max_hp(),
