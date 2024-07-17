@@ -30,6 +30,16 @@ railing.api.options = function(options)
   return State.gui.dialogue.selected_option_i
 end
 
+railing.api.notification = function(text, time_seconds)
+  State.gui.sidebar.notification:set_text(text)
+  local dt = 0
+  local uid = {}
+  while not Common.period(uid, time_seconds, dt) do
+    dt = coroutine.yield()
+  end
+  State.gui.sidebar.notification:set_text("")
+end
+
 railing.mixin = function()
   return {
     update = function(self, event)
@@ -46,10 +56,23 @@ railing.mixin = function()
           end)
         )
         :filter(function(c)
-          Common.resume_logged(c)
+          Common.resume_logged(c, dt)
           return coroutine.status(c) ~= "dead"
         end)
         :totable()
+    end,
+
+    run_task = function(self, task)
+      table.insert(self.scenes, {
+        name = "Some task",
+        enabled = true,
+        start_predicate = function() return true end,
+        run = function(self_scene, rails, dt)
+          self_scene.enabled = false
+          task(self_scene, rails, dt)
+          Tablex.remove(self.scenes, self_scene)
+        end,
+      })
     end,
   }
 end

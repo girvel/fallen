@@ -36,4 +36,10 @@ module.deep_copy = function(o, seen)
   return no
 end
 
+module.remove = function(t, item)
+  return Fun.iter(pairs(t))
+    :filter(function(k, v) return v ~= item end)
+    :tomap()
+end
+
 return module

@@ -13,7 +13,7 @@ return function()
         run = function(self, rails, dt)
           self.enabled = false
           rails.entities.leaking_valve.paused = true
-          State.gui.sidebar.notification:set_text("Hello world")
+          rails:run_task(function() api.notification("Hello world", 3) end)
           api.center_camera()
           api.narration("Сергей Хабаров, посмотрите, у нас [есть Markdown в диалогах](lorem)")
           api.narration("Резкий запах мазута, керосина и ржавчины заставляет непроизвольно зажмуриться.")
