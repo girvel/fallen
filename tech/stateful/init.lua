@@ -101,7 +101,7 @@ module_mt.__call = function(_, systems, debug_mode)
         return "death"
       elseif self.gui.wiki.text_entities then
         return "reading"
-      elseif self.gui.line_entities then
+      elseif self.gui.dialogue.text_entities then
         return "dialogue"
       -- elseif self.dialogue_options then
       --   return "dialogue_options"

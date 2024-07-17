@@ -23,7 +23,7 @@ return function()
   end
 
   define_hotkey(hotkeys, {"fight"}, {"space"}, function() return turn_order.TURN_END_SIGNAL end)
-  define_hotkey(hotkeys, {"dialogue"}, {"space"}, function() State.gui:skip_line() end)
+  define_hotkey(hotkeys, {"dialogue"}, {"space"}, function() State.gui.dialogue:skip() end)
   define_hotkey(hotkeys, {"reading"}, {"escape"}, function() State.gui.wiki:exit() end)
 
   define_hotkey(hotkeys, {"reading"}, {"left"}, function() State.gui.wiki:move_in_history(-1) end)

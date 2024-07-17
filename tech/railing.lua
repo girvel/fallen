@@ -1,8 +1,8 @@
 local railing = {api = {}}
 
 railing.api.narration = function(text)
-  State.gui:show_line(text)
-  while State.gui.line_entities do coroutine.yield() end
+  State.gui.dialogue:show(text)
+  while State:get_mode() == "dialogue" do coroutine.yield() end
 end
 
 railing.api.line = function(entity, text)

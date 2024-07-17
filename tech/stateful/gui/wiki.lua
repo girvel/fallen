@@ -16,10 +16,8 @@ local load_wiki = function(path)
     end, {})
 end
 
-return function(gui)
+return function()
   return {
-    _gui = gui,
-
     pages = load_wiki("assets/wiki"),
     discovered_pages = {lorem = 1, angels = 1},
     history = {},
@@ -47,7 +45,7 @@ return function(gui)
         or "~ Нет информации ~"
 
       self.text_entities = State:add_multiple(wrapping.generate_page(
-        page, self._gui.font, self._gui.TEXT_MAX_SIZE[1], "wiki"
+        page, State.gui.font, State.gui.TEXT_MAX_SIZE[1], "wiki"
       ))
     end,
 
