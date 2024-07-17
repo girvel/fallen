@@ -13,25 +13,73 @@ local races = require("core.races")
 
 local module = {}
 
-for i, race in ipairs({races.half_elf, races.halfling, races.half_orc, races.dwarf}) do
-  module[i] = function(direction, inventory)
-    return Tablex.extend(
-      humanoid({
-        name = "инженер",
-        race = race,
-        max_hp = 1,  -- TODO class dude
-        direction = direction,
-        inventory = inventory,
+local engineer_mixin = function()
+  return Tablex.extend(
+    interactive(function(self, other)
+      self.talking_to = other
+    end),
+    {name = "инженер"}
+  )
+end
 
-        ai = function() end,
+-- [{7, 9}] = {"down", {main_hand = weapons.gas_key()}},
+-- [{5, 8}] = {"down"},
+-- [{5, 3}] = {"up", {gloves = weapons.yellow_glove()}},
+-- [{8, 3}] = {"up"},
 
-        talking_to = nil,
-      }),
-      interactive(function(self, other)
-        self.talking_to = other
-      end)
-    )
-  end
+module[1] = function()
+  return humanoid(Tablex.extend({
+    race = races.half_elf,
+    max_hp = 1,
+    direction = "down",
+    inventory = {main_hand = weapons.gas_key()},
+
+    ai = function() end,
+
+    talking_to = nil,
+  }, engineer_mixin()))
+end
+
+module[2] = function()
+  return humanoid(Tablex.extend({
+    race = races.halfling,
+    max_hp = 1,
+    direction = "down",
+    inventory = {},
+
+    ai = function() end,
+
+    talking_to = nil,
+  }, engineer_mixin()))
+end
+
+module[3] = function()
+  return humanoid(Tablex.extend({
+    race = races.half_orc,
+    max_hp = 22,
+    direction = "up",
+    inventory = {gloves = weapons.yellow_glove()},
+
+    abilities = core.abilities(16, 12, 12, 8, 8, 8),
+    save_proficiencies = {dexterity = true},
+
+    ai = function() end,
+
+    talking_to = nil,
+  }, engineer_mixin()))
+end
+
+module[4] = function()
+  return humanoid(Tablex.extend({
+    race = races.dwarf,
+    max_hp = 1,
+    direction = "up",
+    inventory = {},
+
+    ai = function() end,
+
+    talking_to = nil,
+  }, engineer_mixin()))
 end
 
 local bat_pack = animated.load_pack("assets/sprites/bat")

@@ -30,7 +30,7 @@ module.attack = function(entity, target, attack_roll, damage_roll)
 end
 
 module.attack_save = function(target, ability, save_dc, damage_roll)
-  local save = -Query(target).saving_rolls[ability]:roll()
+  local save = -Query(target).saving_throws[ability]:roll()
   if not save then return false end
 
   Log.info("%s rolls %s save %s against %s" % {

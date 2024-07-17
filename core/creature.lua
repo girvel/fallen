@@ -64,11 +64,14 @@ module_mt.__call = function(_, animation_pack, object)
   result.turn_resources = result:get_turn_resources()
   result:animate("idle")
 
-  result.saving_rolls = Fun.iter(result.abilities)
+  result.saving_throws = Fun.iter(result.abilities)
     :map(function(name, value)
       return name, D(20)
         + core.get_modifier(value)
-        + (-Query(result).class.save_proficiencies[name] and 2 or 0)
+        + ((-Query(result).class.save_proficiencies[name]
+          or -Query(result).save_proficiencies[name])
+          and 2
+          or 0)
     end)
     :tomap()
 

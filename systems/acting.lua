@@ -5,16 +5,21 @@ return Tiny.processingSystem({
   codename = "acting",
   filter = Tiny.requireAll("ai"),
   base_callback = "update",
-  process = function(_, entity, event)
-    if not State.move_order or #State.move_order.list <= 1 then
+
+  preProcess = function()
+    if State.move_order and #State.move_order.list == 1 then
       State.move_order = nil
+      Log.info(
+        "Fight ends as only %s is left standing"
+        % Common.get_name(State.move_order.list[1])
+      )
+    end
+  end,
+
+  process = function(_, entity, event)
+    if not State.move_order then
       entity:ai(event)
       if entity.get_turn_resources then Tablex.extend(entity.turn_resources, entity:get_turn_resources()) end
-      return
-    end
-
-    if #State.move_order.list <= 1 then
-      State.move_order = nil
       return
     end
 

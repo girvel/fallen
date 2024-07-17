@@ -28,7 +28,7 @@ d_mt.__add = function(self, other)
     )
   end
 
-  assert(false)
+  error("Trying to add %s to a dice roll" % type(other))
 end
 
 d_mt.__mul = function(self, other)

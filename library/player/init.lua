@@ -27,8 +27,9 @@ module_mt.__call = function()
 
     hotkeys = require("library.player.hotkeys")(),
     ai = function(self)
-      Query(self.hotkeys[State:get_mode()])[self.last_pressed_key](self)
+      local result = -Query(self.hotkeys[State:get_mode()])[self.last_pressed_key](self)
       self.last_pressed_key = nil
+      return result
     end,
 
     abilities = {
