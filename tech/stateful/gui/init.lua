@@ -10,10 +10,10 @@ return function()
     views = {
       scene = view(Vector.zero, 4, 16),
       scene_fx = view(Vector.zero, 1, 1),
+      sidebar_background = view(Vector.zero, 2, 1),
       actions = view(Vector.zero, 2, 24),
-      gui_background = view(Vector.zero, 2, 1),
-      gui = view(Vector.zero, 2, 1),
-      gui_text = view(Vector.zero, 1, 1),
+      sidebar = view(Vector.zero, 2, 1),
+      sidebar_text = view(Vector.zero, 1, 1),
       dialogue_background = view(Vector.zero, 1, 1),
       dialogue_text = view(Vector.zero, 1, 1),
       wiki = view(Vector.zero, 1, 1),
@@ -21,7 +21,7 @@ return function()
 
     views_order = {
       "scene", "scene_fx",
-      "actions", "gui_background", "gui", "gui_text",
+      "sidebar_background", "actions", "sidebar", "sidebar_text",
       "dialogue_background", "dialogue_text", "wiki",
     },
   }

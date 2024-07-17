@@ -51,7 +51,7 @@ local get_dialogue_offset = function()
   local window_h = love.graphics.getHeight()
   local text_w = math.min(window_w - 40, State.gui.TEXT_MAX_SIZE[1])
 
-  return Vector({math.ceil((window_w - text_w) / 2), window_h - 120})
+  return Vector({math.ceil((window_w - text_w) / 2), window_h - 130})
 end
 
 return Tiny.sortedProcessingSystem({
@@ -92,9 +92,9 @@ return Tiny.sortedProcessingSystem({
       scene_fx = get_scene_offset(),
       scene = get_scene_offset(),
       actions = Vector({love.graphics.getWidth() - self.SIDEBAR_W + 16, 64 + 15}),
-      gui_background = Vector({love.graphics.getWidth() - self.SIDEBAR_W, 0}),
-      gui = Vector({love.graphics.getWidth() - self.SIDEBAR_W, 0}),
-      gui_text = Vector({love.graphics.getWidth() - self.SIDEBAR_W, 0}),
+      sidebar_background = Vector({love.graphics.getWidth() - self.SIDEBAR_W, 0}),
+      sidebar = Vector({love.graphics.getWidth() - self.SIDEBAR_W, 0}),
+      sidebar_text = Vector({love.graphics.getWidth() - self.SIDEBAR_W, 0}),
       dialogue_background = Vector.zero,
       dialogue_text = get_dialogue_offset(),
       wiki = ((Vector({love.graphics.getDimensions()}) - State.gui.TEXT_MAX_SIZE) / 2):ceil(),
@@ -190,23 +190,7 @@ return Tiny.sortedProcessingSystem({
 
   postProcess = function(self)
     if State.player.hp <= 0 then return self:_display_death_message() end
-
     if State:get_mode() == "reading" then return end
-
-    -- if State.player.hears then
-    --   return self:display_line(State.player.hears)
-    -- elseif State.player.dialogue_options then
-    --   return self:display_line(Fun.iter(State.player.dialogue_options)
-    --     :enumerate()
-    --     :map(function(i, o)
-    --       return "%s %s. %s\n" % {
-    --         State.player.dialogue_options.current_i == i and ">" or " ", i, o
-    --       }
-    --     end)
-    --     :reduce(Fun.op.concat, "")
-    --   )
-    -- end
-
     self:_display_text_info()
   end,
 
@@ -233,17 +217,6 @@ return Tiny.sortedProcessingSystem({
     local subheading_font = love.graphics.newFont("assets/fonts/joystix.monospace-regular.otf", 24)
     draw_centered("Game over", heading_font, 0, 0)
     draw_centered("Press [Enter] to restart", subheading_font, 0, 80)
-  end,
-
-  display_line = function(self, line)
-    local window_w = love.graphics.getWidth()
-    local window_h = love.graphics.getHeight()
-    local text_w = math.min(window_w - 40, State.gui.TEXT_MAX_SIZE[1])
-
-    love.graphics.setColor(Common.hex_color("31222c"))
-    love.graphics.rectangle("fill", 0, window_h - 140, window_w, 140)
-    love.graphics.setColor(1, 1, 1)
-    love.graphics.printf(line, State.gui.font, math.ceil((window_w - text_w) / 2), window_h - 120, text_w)
   end,
 
   _display_text_info = function(self)

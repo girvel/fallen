@@ -62,7 +62,7 @@ module.hp_bar = function()
     animated("assets/sprites/hp_bar"),
     {
       codename = "hp_bar",
-      view = "gui",
+      view = "sidebar",
       position = Vector({9, 9}),
     }
   )
@@ -71,7 +71,7 @@ end
 module.hp_text = function()
   return {
     codename = "hp_text",
-    view = "gui_text",
+    view = "sidebar_text",
     position = Vector.zero,
     sprite = {
       text = "",
@@ -84,8 +84,8 @@ module.gui_background = function()
   return Tablex.extend(
     static_sprite("assets/sprites/gui_background.png"),
     {
-      codename = "gui_background",
-      view = "gui_background",
+      codename = "sidebar_background",
+      view = "sidebar_background",
       position = Vector.zero,
     }
   )
