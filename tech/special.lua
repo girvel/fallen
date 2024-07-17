@@ -80,6 +80,29 @@ module.hp_text = function()
   }
 end
 
+module.notification = function()
+  return {
+    codename = "notification",
+    view = "sidebar_text",
+    position = Vector.zero,
+    sprite = {
+      text = {{1, 1, 1}, ""},
+      font = love.graphics.newFont("assets/fonts/joystix.monospace-regular.otf", 14),
+    },
+
+    set_text = function(self, text)
+      self.sprite.text = text
+      local inner_text = type(text) == "table"
+        and Fun.iter(text)
+          :enumerate()
+          :filter(function(i) return i % 2 == 1 end)
+          :reduce(Fun.op.concat, "")
+        or text
+      self.position = Vector({-15 - self.sprite.font:getWidth(inner_text), 15})
+    end,
+  }
+end
+
 module.gui_background = function()
   return Tablex.extend(
     static_sprite("assets/sprites/gui_background.png"),
@@ -94,6 +117,7 @@ end
 module.dialogue_background = function()
   local window_w, window_h = love.graphics.getDimensions()
   return {
+    codename = "dialogue_background",
     view = "dialogue_background",
     position = Vector({0, window_h - 140}),
     size = Vector({window_w, 140}),

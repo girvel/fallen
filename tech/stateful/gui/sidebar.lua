@@ -6,6 +6,7 @@ return function()
     action_entities = {},
     hp_bar = nil,
     hp_text = nil,
+    notification = nil,
 
     ACTION_GRID_W = 5,
 
@@ -30,6 +31,7 @@ return function()
       State:add(special.gui_background())
       self.hp_bar = State:add(special.hp_bar())
       self.hp_text = State:add(special.hp_text())
+      self.notification = State:add(special.notification())
     end,
   }
 end

@@ -16,10 +16,12 @@ railing.api.wait_seconds = function(s)
 end
 
 railing.api.center_camera = function()
-  State.camera.position = (
-    State.player.position * State.CELL_DISPLAY_SIZE
-    - Vector({love.graphics.getWidth(), love.graphics.getHeight()}) / 2 / State.SCALING_FACTOR
-  )
+  Fun.iter({"scene", "scene_fx"}):each(function(view)
+    State.gui.views[view].offset = (
+      - State.gui.views.scene:apply_multiplier(State.player.position)
+      + Vector({love.graphics.getDimensions()}) / 2
+    )
+  end)
 end
 
 railing.api.options = function(options)
