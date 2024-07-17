@@ -4,6 +4,8 @@ local wrapping = require("tech.stateful.gui.wrapping")
 return function()
   return {
     text_entities = nil,
+    selected_option_i = nil,
+    options = nil,
 
     show = function(self, line)
       self.text_entities = State:add_multiple(wrapping.generate_page(
@@ -13,8 +15,33 @@ return function()
     end,
 
     skip = function(self)
-      State:remove_multiple(self.text_entities)
+      if self.text_entities then State:remove_multiple(self.text_entities) end
       self.text_entities = nil
+    end,
+
+    options_refresh = function(self)
+      self:skip()
+      self:show(Fun.iter(self.options)
+        :enumerate()
+        :map(function(i, o)
+          return "%s %s. %s\n" % {
+            self.selected_option_i == i and ">" or " ", i, o
+          }
+        end)
+        :reduce(Fun.op.concat, "")
+      )
+    end,
+
+    options_present = function(self, options)
+      assert(#options > 0)
+      self.selected_option_i = 1
+      self.options = options
+      self:options_refresh()
+    end,
+
+    options_select = function(self)
+      self:skip()
+      self.options = nil
     end,
   }
 end

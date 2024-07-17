@@ -13,6 +13,7 @@ end
 return function()
   local hotkeys = Fun.iter(State.MODES):map(function(m) return m, {} end):tomap()
 
+  -- normal mode --
   for _, pair in ipairs({
     {{"w"}, "up"},
     {{"a"}, "left"},
@@ -23,11 +24,6 @@ return function()
   end
 
   define_hotkey(hotkeys, {"fight"}, {"space"}, function() return turn_order.TURN_END_SIGNAL end)
-  define_hotkey(hotkeys, {"dialogue"}, {"space"}, function() State.gui.dialogue:skip() end)
-  define_hotkey(hotkeys, {"reading"}, {"escape"}, function() State.gui.wiki:exit() end)
-
-  define_hotkey(hotkeys, {"reading"}, {"left"}, function() State.gui.wiki:move_in_history(-1) end)
-  define_hotkey(hotkeys, {"reading"}, {"right"}, function() State.gui.wiki:move_in_history(1) end)
 
   define_hotkey(hotkeys, {"free", "fight"}, {"1"}, function(entity)
     actions.hand_attack(entity)
@@ -46,34 +42,50 @@ return function()
     actions.dash(entity)
   end)
 
-  define_hotkey(hotkeys, Tablex.deep_copy(State.MODES), {"S-q"}, function()
-    if State.debug_mode then love.event.push("quit") end
-  end)
+  -- reading --
+  define_hotkey(hotkeys, {"reading"}, {"escape"}, function() State.gui.wiki:exit() end)
+  define_hotkey(hotkeys, {"reading"}, {"left"}, function() State.gui.wiki:move_in_history(-1) end)
+  define_hotkey(hotkeys, {"reading"}, {"right"}, function() State.gui.wiki:move_in_history(1) end)
 
+  -- dialogue --
+  define_hotkey(hotkeys, {"dialogue"}, {"space"}, function() State.gui.dialogue:skip() end)
+
+  -- dialogue options --
   define_hotkey(hotkeys, {"dialogue_options"}, {"w", "up"}, function(entity)
-    entity.dialogue_options.current_i = math.max(1, (entity.dialogue_options.current_i) - 1)
+    State.gui.dialogue.selected_option_i = math.max(
+      1, (State.gui.dialogue.selected_option_i) - 1
+    )
+    State.gui.dialogue:options_refresh()
   end)
 
   define_hotkey(hotkeys, {"dialogue_options"}, {"s", "down"}, function(entity)
-    entity.dialogue_options.current_i = math.min(#entity.dialogue_options, (entity.dialogue_options.current_i) + 1)
+    State.gui.dialogue.selected_option_i = math.min(
+      #State.gui.dialogue.options, (State.gui.dialogue.selected_option_i) + 1
+    )
+    State.gui.dialogue:options_refresh()
   end)
 
   define_hotkey(hotkeys, {"dialogue_options"}, {"e", "return"}, function(entity)
-    entity.selected_option_i = entity.dialogue_options.current_i
-    entity.dialogue_options = nil
+    State.gui.dialogue:options_select()
   end)
 
   Fun.range(1, 9):each(function(i)
     define_hotkey(hotkeys, {"dialogue_options"}, {tostring(i)}, function(entity)
-      if i <= #entity.dialogue_options then
-        entity.selected_option_i = i
-        entity.dialogue_options = nil
+      if i <= #State.gui.dialogue.options then
+        State.gui.dialogue.selected_option_i = i
+        State.gui.dialogue:options_select()
       end
     end)
   end)
 
+  -- death --
   define_hotkey(hotkeys, {"death"}, {"return", "e"}, function(entity)
     love.reload_flag = true
+  end)
+
+  -- universal --
+  define_hotkey(hotkeys, Tablex.deep_copy(State.MODES), {"S-q"}, function()
+    if State.debug_mode then love.event.push("quit") end
   end)
 
   return hotkeys
