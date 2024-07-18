@@ -22,7 +22,11 @@ local grid_methods = {
   end,
 
   iter_table = function(self)
-    return Fun.iter(self._inner_array)
+    return Fun.iter(pairs(self._inner_array))
+  end,
+
+  coordinates_from_index = function(self, i)
+    return i % self.size[1], math.ceil(i / self.size[1])
   end,
 }
 

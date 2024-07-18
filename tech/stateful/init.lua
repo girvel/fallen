@@ -12,6 +12,8 @@ module_mt.__call = function(_, systems, debug_mode)
     -- rails
     world = Tiny.world(unpack(systems)),
     grids = nil,
+    collision_map = nil,
+    collision_jgrid = nil,
     transform = 4,
     camera = {position = Vector.zero},
 
@@ -78,6 +80,10 @@ module_mt.__call = function(_, systems, debug_mode)
       self.grids = Fun.iter(level.GRID_LAYERS)
         :map(function(layer) return layer, Grid(level_size) end)
         :tomap()
+
+      self.collision_map = Fun.range(level_size[2])
+        :map(function() return {} end)
+        :totable()
 
       for _, entity in ipairs(new_entities) do
         local e = self:add(entity)

@@ -5,10 +5,12 @@ local humanoid = require("core.humanoid")
 local animated = require("tech.animated")
 local interactive = require("tech.interactive")
 local turn_order = require("tech.turn_order")
-local classes = require("core.classes")
 local weapons = require("library.weapons")
 local core = require("core")
 local races = require("core.races")
+local ai = require("tech.ai")
+local pathfinder = require("lib.jumper.pathfinder")
+local jgrid = require("lib.jumper.grid")
 
 
 local module = {}
@@ -63,7 +65,22 @@ module[3] = function()
     abilities = core.abilities(16, 12, 12, 8, 8, 8),
     save_proficiencies = {dexterity = true},
 
-    ai = function() end,
+    ai = function(self)
+      -- TODO optimize
+
+      local self_x, self_y = unpack(self.position)
+      local other_x, other_y = unpack(State.player.position)
+
+      State.collision_map[self_y][self_x] = 0
+      State.collision_map[other_y][other_x] = 0
+
+      local finder = pathfinder(jgrid(State.collision_map), "JPS", 0)
+      pathfinder:setMode("ORTHOGONAL")
+      local path = finder:getPath(self_x, self_y, unpack(State.player.position))
+      for node, count in path:nodes() do
+        Log.trace(node:getX(), node:getY(), count)
+      end
+    end,
 
     talking_to = nil,
   }, engineer_mixin()))

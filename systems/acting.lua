@@ -14,6 +14,14 @@ return Tiny.processingSystem({
         % Common.get_name(State.move_order.list[1])
       )
     end
+
+    -- TODO optimize
+    local solids = State.grids.solids
+    for x = 1, solids.size[1] do
+      for y = 1, solids.size[2] do
+        State.collision_map[y][x] = solids[Vector({x, y})] and 1 or 0
+      end
+    end
   end,
 
   process = function(_, entity, event)
