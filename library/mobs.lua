@@ -9,8 +9,6 @@ local weapons = require("library.weapons")
 local core = require("core")
 local races = require("core.races")
 local ai = require("tech.ai")
-local pathfinder = require("lib.jumper.pathfinder")
-local jgrid = require("lib.jumper.grid")
 
 
 local module = {}

@@ -25,8 +25,8 @@ local grid_methods = {
     return Fun.iter(pairs(self._inner_array))
   end,
 
-  coordinates_from_index = function(self, i)
-    return i % self.size[1], math.ceil(i / self.size[1])
+  find_path = function(self, start, finish)
+    
   end,
 }
 
