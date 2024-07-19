@@ -1,8 +1,6 @@
 return {
   async = function(fun)
     return function(self, event)
-      if not State.move_order then return end
-
       local dt = unpack(event)
       if not Common.period(self, .25, dt) then return end
       if not self._ai_coroutine then
