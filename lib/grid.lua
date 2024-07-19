@@ -11,6 +11,16 @@ module_mt.__call = function(_, size)
   }, grid_mt)
 end
 
+module.from_matrix = function(matrix, size)
+  local result = module(size)
+  for x = 1, size[1] do
+    for y = 1, size[2] do
+      result._inner_array[result:_get_inner_index(x, y)] = matrix[y][x]
+    end
+  end
+  return result
+end
+
 local grid_methods = {
   can_fit = function(self, v)
     return Vector.zero < v and self.size >= v
@@ -28,6 +38,10 @@ local grid_methods = {
   find_path = function(self, start, finish)
     
   end,
+
+  _get_inner_index = function(self, x, y)
+    return x + (y - 1) * self.size[1]
+  end,
 }
 
 grid_mt.__index = function(self, v)
@@ -35,12 +49,12 @@ grid_mt.__index = function(self, v)
   if method then return method end
 
   assert(self:can_fit(v))
-  return self._inner_array[v[1] + (v[2] - 1) * self.size[1]]
+  return self._inner_array[self:_get_inner_index(unpack(v))]
 end
 
 grid_mt.__newindex = function(self, v, value)
   assert(self:can_fit(v), tostring(v) .. " does not fit into grid size " .. tostring(self.size))
-  self._inner_array[v[1] + (v[2] - 1) * self.size[1]] = value
+  self._inner_array[self:_get_inner_index(unpack(v))] = value
 end
 
 return module
