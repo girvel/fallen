@@ -67,53 +67,28 @@ module[3] = function()
     ai = ai.async(function(self)
       if not State.move_order then return end
 
-      local direction = State.player.position - self.position
-      if direction:abs() > 1 then
-        local self_x, self_y = unpack(self.position)
-        local other_x, other_y = unpack(State.player.position)
+      if (State.player.position - self.position):abs() > 1 then
+        local path = State.grids.solids:find_path(self.position, State.player.position)
+        table.remove(path)
 
-        State.collision_map[self_y][self_x] = 0
-        State.collision_map[other_y][other_x] = 0
-
-        local finder = pathfinder(jgrid(State.collision_map), "ASTAR", 0)
-        pathfinder:setMode("ORTHOGONAL")
-        local path = finder:getPath(self_x, self_y, unpack(State.player.position))
-
-        local result = {}
-        for node, count in path:nodes() do
-          table.insert(result, Vector({node:getX(), node:getY()}))
-        end
-
-        Log.trace(result)
-
-        local i = 1
-        local is_moving = true
-        while is_moving do
+        for _, position in ipairs(path) do
           if self.turn_resources.movement <= 0 then
             if self.turn_resources.actions > 0 then
               actions.dash(self)
             else
-              is_moving = false
               break
             end
           end
 
-          if i > #result then
-            return
-          end
-
-          local destination = result[i]
-          direction = (destination - self.position)
-          if direction:abs() > 0 then
-            actions.move[Log.trace(Vector.name_from_direction(direction:normalized()))](self)
-            coroutine.yield()
-          else
-            i = i + 1
-          end
+          local direction = (position - self.position)
+          actions.move[Log.trace(Vector.name_from_direction(direction:normalized()))](self)
+          coroutine.yield()
         end
       end
 
-      self.direction = direction
+      self.direction = Vector.name_from_direction(
+        (State.player.position - self.position):normalized()
+      )
       actions.hand_attack(self)
     end),
 

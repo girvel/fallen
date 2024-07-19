@@ -1,3 +1,6 @@
+local turn_order = require("tech.turn_order")
+
+
 return {
   async = function(fun)
     return function(self, event)
@@ -11,7 +14,7 @@ return {
 
       if coroutine.status(self._ai_coroutine) == "dead" then
         self._ai_coroutine = nil
-        return true
+        return turn_order.TURN_END_SIGNAL
       end
     end
   end,
