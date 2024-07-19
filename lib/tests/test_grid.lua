@@ -20,9 +20,9 @@ describe("Grid library", function()
   describe("find_path", function()
     it("should find paths", function()
       local grid = grid.from_matrix({
-        {0, 0, 0},
-        {0, 1, 0},
-        {0, 0, 0},
+        {nil, nil, nil},
+        {nil, 1,   nil},
+        {nil, nil, nil},
       }, vector({3, 3}))
 
       assert.are_same(

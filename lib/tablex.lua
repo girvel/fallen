@@ -1,3 +1,6 @@
+local fun = require("lib.fun")
+
+
 local module = {}
 
 module.extend = function(base, extension, ...)
@@ -37,7 +40,7 @@ module.deep_copy = function(o, seen)
 end
 
 module.remove = function(t, item)
-  return Fun.iter(pairs(t))
+  return fun.iter(pairs(t))
     :filter(function(k, v) return v ~= item end)
     :tomap()
 end

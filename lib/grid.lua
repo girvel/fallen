@@ -1,3 +1,11 @@
+unpack = unpack or table.unpack
+
+local vector = require("lib.vector")
+local tablex = require("lib.tablex")
+local fun = require("lib.fun")
+local inspect = require("lib.inspect")
+
+
 local module = {}
 local module_mt = {}
 setmetatable(module, module_mt)
@@ -23,7 +31,7 @@ end
 
 local grid_methods = {
   can_fit = function(self, v)
-    return Vector.zero < v and self.size >= v
+    return vector.zero < v and self.size >= v
   end,
 
   safe_get = function(self, v, default)
@@ -32,11 +40,63 @@ local grid_methods = {
   end,
 
   iter_table = function(self)
-    return Fun.iter(pairs(self._inner_array))
+    return fun.iter(pairs(self._inner_array))
   end,
 
   find_path = function(self, start, finish)
-    
+    if start == finish then return {} end
+
+    local distance_to = module(self.size)
+    local way_back = module(self.size)
+    local visited_vertices = module(self.size)
+    local vertices_to_visit = {start}  -- TODO OPT use sorted list
+    distance_to[start] = 0
+
+    local current_vertex_i = 1
+    local current_vertex = start
+    while true do  -- TODO for
+      for _, direction in ipairs(vector.directions) do
+        local neighbour = current_vertex + direction
+
+        if neighbour == finish then
+          local result = {}
+          local current = finish
+          way_back[current] = current_vertex
+          for i = distance_to[current_vertex] + 1, 1, -1 do
+            result[i] = current
+            current = way_back[current]
+          end
+          return result
+        end
+
+        if
+          not self:safe_get(neighbour, true)
+          and not visited_vertices:safe_get(neighbour)
+          and self:can_fit(neighbour)
+          and (distance_to[neighbour] or 999999) > distance_to[current_vertex]  -- TODO OPT current_distance
+        then
+          distance_to[neighbour] = distance_to[current_vertex] + 1
+          way_back[neighbour] = current_vertex
+          table.insert(vertices_to_visit, neighbour)
+        end
+      end
+      -- TODO use Tablex.breaking_remove_at
+      vertices_to_visit[current_vertex_i] = vertices_to_visit[#vertices_to_visit]
+      vertices_to_visit[#vertices_to_visit] = nil
+      visited_vertices[current_vertex] = true
+
+      if #vertices_to_visit == 0 then return end
+
+      local current_distance = 999999
+      for i, vertex in ipairs(vertices_to_visit) do
+        local new_distance = distance_to[vertex]
+        if new_distance < current_distance then
+          current_vertex = vertex
+          current_vertex_i = i
+          current_distance = new_distance
+        end
+      end
+    end
   end,
 
   _get_inner_index = function(self, x, y)
