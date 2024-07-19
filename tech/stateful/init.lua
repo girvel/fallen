@@ -12,8 +12,6 @@ module_mt.__call = function(_, systems, debug_mode)
     -- rails
     world = Tiny.world(unpack(systems)),
     grids = nil,
-    collision_map = nil,
-    collision_jgrid = nil,
     transform = 4,
     camera = {position = Vector.zero},
 

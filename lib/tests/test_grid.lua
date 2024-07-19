@@ -30,5 +30,18 @@ describe("Grid library", function()
         grid:find_path(vector({1, 2}), vector({3, 1}))
       )
     end)
+
+    it("should work with start & end occupied", function()
+      local grid = grid.from_matrix({
+        {nil, nil, 1  },
+        {1,   1,   nil},
+        {nil, nil, nil},
+      }, vector({3, 3}))
+
+      assert.are_same(
+        {vector({1, 1}), vector({2, 1}), vector({3, 1})},
+        grid:find_path(vector({1, 2}), vector({3, 1}))
+      )
+    end)
   end)
 end)

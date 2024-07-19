@@ -3,7 +3,6 @@ unpack = unpack or table.unpack
 local vector = require("lib.vector")
 local tablex = require("lib.tablex")
 local fun = require("lib.fun")
-local inspect = require("lib.inspect")
 
 
 local module = {}
@@ -54,6 +53,7 @@ local grid_methods = {
 
     local current_vertex_i = 1
     local current_vertex = start
+    local current_distance = 0
     while true do  -- TODO for
       for _, direction in ipairs(vector.directions) do
         local neighbour = current_vertex + direction
@@ -62,7 +62,7 @@ local grid_methods = {
           local result = {}
           local current = finish
           way_back[current] = current_vertex
-          for i = distance_to[current_vertex] + 1, 1, -1 do
+          for i = current_distance + 1, 1, -1 do
             result[i] = current
             current = way_back[current]
           end
@@ -73,21 +73,20 @@ local grid_methods = {
           not self:safe_get(neighbour, true)
           and not visited_vertices:safe_get(neighbour)
           and self:can_fit(neighbour)
-          and (distance_to[neighbour] or 999999) > distance_to[current_vertex]  -- TODO OPT current_distance
+          and (distance_to[neighbour] or 999999) > current_distance
         then
-          distance_to[neighbour] = distance_to[current_vertex] + 1
+          distance_to[neighbour] = current_distance + 1
           way_back[neighbour] = current_vertex
           table.insert(vertices_to_visit, neighbour)
         end
       end
-      -- TODO use Tablex.breaking_remove_at
-      vertices_to_visit[current_vertex_i] = vertices_to_visit[#vertices_to_visit]
-      vertices_to_visit[#vertices_to_visit] = nil
+
+      tablex.remove_breaking_at(vertices_to_visit, current_vertex_i)
       visited_vertices[current_vertex] = true
 
       if #vertices_to_visit == 0 then return end
 
-      local current_distance = 999999
+      current_distance = 999999
       for i, vertex in ipairs(vertices_to_visit) do
         local new_distance = distance_to[vertex]
         if new_distance < current_distance then

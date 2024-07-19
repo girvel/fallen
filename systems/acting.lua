@@ -8,19 +8,11 @@ return Tiny.processingSystem({
 
   preProcess = function()
     if State.move_order and #State.move_order.list == 1 then
-      State.move_order = nil
       Log.info(
         "Fight ends as only %s is left standing"
         % Common.get_name(State.move_order.list[1])
       )
-    end
-
-    -- TODO optimize
-    local solids = State.grids.solids
-    for x = 1, solids.size[1] do
-      for y = 1, solids.size[2] do
-        State.collision_map[y][x] = solids[Vector({x, y})] and 1 or 0
-      end
+      State.move_order = nil
     end
   end,
 

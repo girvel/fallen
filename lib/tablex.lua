@@ -45,4 +45,9 @@ module.remove = function(t, item)
     :tomap()
 end
 
+module.remove_breaking_at = function(t, i)
+  t[i] = t[#t]
+  t[#t] = nil
+end
+
 return module
