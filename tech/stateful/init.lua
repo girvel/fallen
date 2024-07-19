@@ -22,6 +22,8 @@ module_mt.__call = function(_, systems, debug_mode)
 
     gui = require("tech.stateful.gui")(),
 
+    dependencies = {},
+
     add = function(self, entity)
       self.world:add(entity)
       if entity.position and entity.layer then
@@ -51,6 +53,8 @@ module_mt.__call = function(_, systems, debug_mode)
         self.move_order:remove(entity)
       end
       Query(entity):on_remove()
+      Fun.iter(self.dependencies[entity] or {})
+        :each(function(e) return self:remove(e) end)
       return entity
     end,
 
@@ -66,6 +70,13 @@ module_mt.__call = function(_, systems, debug_mode)
 
     exists = function(self, entity)
       return self.world.entities[entity]
+    end,
+
+    add_dependency = function(self, parent, child)
+      if not self.dependencies[parent] then
+        self.dependencies[parent] = {}
+      end
+      table.insert(self.dependencies[parent], child)
     end,
 
     load_level = function(self, path, palette)
