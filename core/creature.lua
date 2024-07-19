@@ -60,7 +60,7 @@ module_mt.__call = function(_, animation_pack, object)
     end,
   }, object)
 
-  result.hp = result:get_max_hp()
+  result.hp = result.hp or result:get_max_hp()
   result.turn_resources = result:get_turn_resources()
   result:animate("idle")
 

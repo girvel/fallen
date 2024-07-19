@@ -248,7 +248,7 @@ return function()
       {
         name = "Player attacks half-orc",
         enabled = true,
-        start_predicate = function(self, rails) return rails.entities[3].hp < rails.entities[3]:get_max_hp() end,
+        start_predicate = function(self, rails) return rails.entities[3].hp < rails.orc_old_hp end,
         run = function(self, rails)
           self.enabled = false
           local initiative_rolls = Fun.iter({State.player, rails.entities[3]})
@@ -287,6 +287,7 @@ return function()
       self.entities[1].animation.paused = true
 
       self.dreamers_talked_to = 0
+      self.orc_old_hp = self.entities[3].hp
     end,
   })
 end

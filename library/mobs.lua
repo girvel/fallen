@@ -56,6 +56,7 @@ end
 module[3] = function()
   return humanoid(Tablex.extend({
     race = races.half_orc,
+    hp = 21,
     max_hp = 22,
     direction = "up",
     inventory = {gloves = weapons.yellow_glove()},
