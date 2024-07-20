@@ -4,7 +4,7 @@ local humanoid_anchors = require("core.humanoid.anchors")
 
 local module = {}
 
-module.rapier = animated.load_pack("assets/sprites/rapier", {
+local small_weapon_anchors = {
   idle_right = {
     Vector({4, 11}),
   },
@@ -17,7 +17,10 @@ module.rapier = animated.load_pack("assets/sprites/rapier", {
   idle_up = {
     Vector({7, 13}),
   },
-})
+}
+
+module.rapier = animated.load_pack("assets/sprites/rapier", small_weapon_anchors)
+module.dagger = animated.load_pack("assets/sprites/dagger", small_weapon_anchors)
 
 module.greatsword = animated.load_pack("assets/sprites/greatsword", {
   idle_right = {

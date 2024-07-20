@@ -10,9 +10,24 @@ module.rapier = function()
     item.mixin(),
     animated(animation_packs.rapier),
     {
-      direction = "right",
       name = "рапира",
       damage_roll = D(8),
+      bonus = 0,
+      tags = {
+        finesse = true,
+      },
+      slot = "main_hand",
+    }
+  )
+end
+
+module.dagger = function()
+  return Tablex.extend(
+    item.mixin(),
+    animated(animation_packs.dagger),
+    {
+      name = "кинжал",
+      damage_roll = D(4),
       bonus = 0,
       tags = {
         finesse = true,

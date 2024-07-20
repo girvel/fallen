@@ -1,6 +1,7 @@
 local classes = require("core.classes")
 local humanoid = require("core.humanoid")
 local animation_packs = require("library.animation_packs")
+local weapons = require("library.weapons")
 
 
 local module_mt = {}
@@ -45,6 +46,8 @@ module_mt.__call = function()
 
   result.turn_resources.second_wind = 1
   result.turn_resources.action_surge = 1
+
+  result.inventory.main_hand = weapons.dagger()
 
   return result
 end

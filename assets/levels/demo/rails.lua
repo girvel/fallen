@@ -254,6 +254,24 @@ return function()
           State:start_combat({State.player, rails.entities[3]})
         end,
       },
+
+      {
+        name = "Player attacks one of the dreamers",
+        enabled = true,
+        start_predicate = function(self, rails, dt)
+          return Fun.iter({1, 2, 4})
+            :any(function(i) return rails.entities[i].hp < rails.old_hp[i] end)
+        end,
+
+        run = function(self, rails, dt)
+          self.enabled = false
+          State.player.faction = "rebellion"
+          State:start_combat({
+            State.player, rails.entities[1],
+            rails.entities[2], rails.entities[4],
+          })
+        end,
+      },
     },
 
     active_coroutines = {},

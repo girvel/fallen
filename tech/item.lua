@@ -30,7 +30,11 @@ module.mixin = function()
       self.direction = other.direction
       self:animate()
     end),
-    {layer = "items", view = "scene"}
+    {
+      layer = "items",
+      view = "scene",
+      direction = "right",
+    }
   )
 end
 
