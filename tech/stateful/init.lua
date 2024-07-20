@@ -1,5 +1,7 @@
 local level = require("tech.level")
 local item = require("tech.item")
+local turn_order = require("tech.turn_order")
+local core = require("core")
 
 
 local module = {}
@@ -125,6 +127,25 @@ module_mt.__call = function(_, systems, debug_mode)
       else
         return "free"
       end
+    end,
+
+    start_combat = function(self, list)
+      local initiative_rolls = Fun.iter(list)
+        :map(function(e)
+          return {
+            entity = e,
+            roll = (D(20) + core.get_modifier(e.abilities.dexterity)):roll()
+          }
+        end)
+        :totable()
+
+      table.sort(initiative_rolls, function(a, b) return a.roll > b.roll end)
+
+      local pure_order = Fun.iter(initiative_rolls)
+        :map(function(x) return x.entity end)
+        :totable()
+
+      self.move_order = turn_order(pure_order)
     end,
 	}
 end

@@ -2,7 +2,6 @@ local actions = require("core.actions")
 local railing = require("tech.railing")
 local api = railing.api
 local core = require("core")
-local turn_order = require("tech.turn_order")
 
 local RED = Common.hex_color("e64e4b")
 
@@ -248,20 +247,11 @@ return function()
       {
         name = "Player attacks half-orc",
         enabled = true,
-        start_predicate = function(self, rails) return rails.entities[3].hp < rails.orc_old_hp end,
+        start_predicate = function(self, rails) return rails.entities[3].hp < rails.old_hp[3] end,
         run = function(self, rails)
           self.enabled = false
-          local initiative_rolls = Fun.iter({State.player, rails.entities[3]})
-            :map(function(e) return {e, (D(20) + core.get_modifier(e.abilities.dexterity)):roll()} end)
-            :totable()
-
-          table.sort(initiative_rolls, function(a, b) return a[2] > b[2] end)
-
-          local pure_order = Fun.iter(initiative_rolls)
-            :map(function(x) return x[1] end)
-            :totable()
-
-          State.move_order = turn_order(pure_order)
+          rails.entities[3].faction = "rebellion"
+          State:start_combat({State.player, rails.entities[3]})
         end,
       },
     },
@@ -287,7 +277,9 @@ return function()
       self.entities[1].animation.paused = true
 
       self.dreamers_talked_to = 0
-      self.orc_old_hp = self.entities[3].hp
+      self.old_hp = Fun.range(4)
+        :map(function(i) return self.entities[i].hp end)
+        :totable()
     end,
   })
 end

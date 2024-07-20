@@ -38,7 +38,7 @@ end
 
 local get_melee_damage_roll = function(entity)
   if not entity.inventory.main_hand then
-    return D.roll({}, core.get_modifier(entity.abilities.strength) + 1)
+    return D.roll({}, core.get_modifier(entity.abilities.strength))
   end
 
   local ability_modifier = core.get_modifier(
@@ -144,12 +144,13 @@ module.hand_attack = setmetatable(
             mech.attack_save(entity, "constitution", target.hardness, D.roll({}, 1))
           end
         end)
+        return true
       end
     }
   ),
   {
     __call = function(self, entity)
-      self:run(entity)
+      return self:run(entity)
     end
   }
 )

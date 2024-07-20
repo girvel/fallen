@@ -9,6 +9,7 @@ local weapons = require("library.weapons")
 local core = require("core")
 local races = require("core.races")
 local ai = require("tech.ai")
+local constants = require("core.constants")
 
 
 local module = {}
@@ -18,7 +19,57 @@ local engineer_mixin = function()
     interactive(function(self, other)
       self.talking_to = other
     end),
-    {name = "инженер"}
+    {
+      name = "инженер",
+      talking_to = nil,
+
+      -- TODO optimize
+      ai = ai.async(function(self)
+        if
+          not State.move_order
+          or not Fun.iter(State.move_order.list):any(function(e) return e == self end)
+        then return end
+
+        if (State.player.position - self.position):abs() > 1 then
+          local path = State.grids.solids:find_path(self.position, State.player.position)
+          table.remove(path)
+
+          for _, position in ipairs(path) do
+            if self.turn_resources.movement <= 0 then
+              if self.turn_resources.actions > 0 then
+                actions.dash(self)
+              else
+                break
+              end
+            end
+
+            local direction = (position - self.position)
+            actions.move[Vector.name_from_direction(direction:normalized())](self)
+            coroutine.yield()
+          end
+        end
+
+        self.direction = Vector.name_from_direction(
+          (State.player.position - self.position):normalized()
+        )
+        while actions.hand_attack(self) do
+          while not self.animation.current:startsWith("idle") do
+            coroutine.yield()
+          end
+        end
+      end),
+    }
+  )
+end
+
+local dreamer_engineer_mixin = function()
+  return Tablex.extend(
+    engineer_mixin(),
+    {
+      max_hp = 22,
+      abilities = core.abilities(14, 14, 12, 8, 8, 8),
+      faction = "dreamers",
+    }
   )
 end
 
@@ -30,84 +81,50 @@ end
 module[1] = function()
   return humanoid(Tablex.extend({
     race = races.half_elf,
-    max_hp = 1,
     direction = "down",
     inventory = {main_hand = weapons.gas_key()},
-
-    ai = function() end,
-
-    talking_to = nil,
-  }, engineer_mixin()))
+  }, dreamer_engineer_mixin()))
 end
 
 module[2] = function()
   return humanoid(Tablex.extend({
     race = races.halfling,
-    max_hp = 1,
     direction = "down",
     inventory = {},
-
-    ai = function() end,
-
-    talking_to = nil,
-  }, engineer_mixin()))
+  }, dreamer_engineer_mixin()))
 end
 
 module[3] = function()
   return humanoid(Tablex.extend({
     race = races.half_orc,
-    hp = 21,
-    max_hp = 22,
+    hp = 34,
+    max_hp = 35,
     direction = "up",
     inventory = {gloves = weapons.yellow_glove()},
+    faction = "dreamers",
 
-    abilities = core.abilities(16, 12, 12, 8, 8, 8),
+    abilities = core.abilities(18, 6, 12, 8, 8, 8),
     save_proficiencies = {dexterity = true},
 
-    -- TODO optimize
-    ai = ai.async(function(self)
-      if not State.move_order then return end
-
-      if (State.player.position - self.position):abs() > 1 then
-        local path = State.grids.solids:find_path(self.position, State.player.position)
-        table.remove(path)
-
-        for _, position in ipairs(path) do
-          if self.turn_resources.movement <= 0 then
-            if self.turn_resources.actions > 0 then
-              actions.dash(self)
-            else
-              break
-            end
-          end
-
-          local direction = (position - self.position)
-          actions.move[Log.trace(Vector.name_from_direction(direction:normalized()))](self)
-          coroutine.yield()
-        end
-      end
-
-      self.direction = Vector.name_from_direction(
-        (State.player.position - self.position):normalized()
-      )
-      actions.hand_attack(self)
-    end),
-
     talking_to = nil,
+
+    get_turn_resources = function()
+      return {
+        movement = constants.DEFAULT_MOVEMENT_SPEED,
+        actions = 2,
+        bonus_actions = 1,
+        reactions = 1,
+      }
+    end,
   }, engineer_mixin()))
 end
 
 module[4] = function()
   return humanoid(Tablex.extend({
     race = races.dwarf,
-    max_hp = 1,
     direction = "up",
     inventory = {},
-
-    ai = function() end,
-
-    talking_to = nil,
-  }, engineer_mixin()))
+  }, dreamer_engineer_mixin()))
 end
 
 local bat_pack = animated.load_pack("assets/sprites/bat")

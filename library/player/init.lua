@@ -17,6 +17,7 @@ module_mt.__call = function()
     },
     level = 2,
     direction = "right",
+    faction = "dreamers",
 
     immortal = true,
     on_death = function(self)
