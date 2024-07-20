@@ -48,8 +48,19 @@ local grid_methods = {
     local distance_to = module(self.size)
     local way_back = module(self.size)
     local visited_vertices = module(self.size)
+    local visited_vertices_list = {}
     local vertices_to_visit = {start}  -- TODO OPT use sorted list
     distance_to[start] = 0
+
+    local reconstruct_from = function(last)
+      local result = {}
+      local current = last
+      for i = distance_to[last], 1, -1 do
+        result[i] = current
+        current = way_back[current]
+      end
+      return result
+    end
 
     local current_vertex_i = 1
     local current_vertex = start
@@ -59,14 +70,9 @@ local grid_methods = {
         local neighbour = current_vertex + direction
 
         if neighbour == finish then
-          local result = {}
-          local current = finish
-          way_back[current] = current_vertex
-          for i = current_distance + 1, 1, -1 do
-            result[i] = current
-            current = way_back[current]
-          end
-          return result
+          distance_to[finish] = current_distance + 1
+          way_back[finish] = current_vertex
+          return reconstruct_from(finish)
         end
 
         if
@@ -83,8 +89,15 @@ local grid_methods = {
 
       tablex.remove_breaking_at(vertices_to_visit, current_vertex_i)
       visited_vertices[current_vertex] = true
+      table.insert(visited_vertices_list, current_vertex)
 
-      if #vertices_to_visit == 0 then return end
+      if #vertices_to_visit == 0 then
+        local next_best_finish = fun.iter(visited_vertices_list)
+          :min_by(function(a, b)
+            return (a - finish):abs() < (b - finish):abs() and a or b
+          end)
+        return reconstruct_from(next_best_finish)
+      end
 
       current_distance = 999999
       for i, vertex in ipairs(vertices_to_visit) do

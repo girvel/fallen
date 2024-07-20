@@ -43,5 +43,18 @@ describe("Grid library", function()
         grid:find_path(vector({1, 2}), vector({3, 1}))
       )
     end)
+
+    it("should find the next best thing if there is no full path", function()
+      local grid = grid.from_matrix({
+        {1,   1,   1  },
+        {1,   1,   1  },
+        {nil, nil, nil},
+      }, vector({3, 3}))
+
+      assert.are_same(
+        {vector({2, 3}), vector({3, 3})},
+        grid:find_path(vector({1, 3}), vector({3, 1}))
+      )
+    end)
   end)
 end)
