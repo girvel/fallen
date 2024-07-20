@@ -2,10 +2,11 @@ local module_mt = {}
 local module = setmetatable({}, module_mt)
 
 module.TURN_END_SIGNAL = 666
+module.WORLD_TURN = {codename = "WORLD_TURN"}
 
 module_mt.__call = function(_, list)
   return {
-    list = list,
+    list = Tablex.concat({}, list, {module.WORLD_TURN}),
     current_i = 1,
     remove = function(self, item)
       self.list = Fun.iter(self.list)

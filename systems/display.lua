@@ -260,6 +260,7 @@ return Tiny.sortedProcessingSystem({
 
       Tablex.concat(lines, Fun.iter(State.move_order.list)
         :enumerate()
+        :take_n(#State.move_order.list - 1)
         :map(function(i, e) return (State.move_order.current_i == i and "x " or "- ") .. (e.name or "_") end)
         :totable()
       )

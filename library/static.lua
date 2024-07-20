@@ -200,8 +200,6 @@ module.leaking_pipe_left_down = function()
       paused = false,
 
       ai = function(self, event)
-        if self.paused then return end
-
         local dt = unpack(event)
         self.overflow_counter = self.overflow_counter + dt
 
@@ -221,6 +219,8 @@ module.leaking_pipe_left_down = function()
       end,
 
       burst_with_steam = function(self)
+        if self.paused then return end
+
         State:add(Tablex.extend(
           sfx.steam("right"),
           {position = self.position}
