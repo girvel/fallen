@@ -33,7 +33,11 @@ end
 railing.api.notification = function(rails, text, time_seconds)
   time_seconds = time_seconds or 10
 
-  rails:run_task(function()
+  if rails._notification_task then
+    rails:cancel_scene(rails._notification_task)
+  end
+
+  rails._notification_task = rails:run_task(function()
     State.gui.sidebar.notification:set_text(text)
     railing.api.wait_seconds(time_seconds)
     if State.gui.sidebar.notification.sprite.text == text then
@@ -56,21 +60,24 @@ railing.mixin = function()
           :filter(function(s) return s.enabled and s:start_predicate(self, dt) end)
           :map(function(s)
             Log.info("Scene `" .. s.name .. "` starts")
-            return coroutine.create(function()
-              s:run(self, dt)
-              Log.info("Scene `" .. s.name .. "` ends")
-            end)
+            return {
+              coroutine = coroutine.create(function()
+                s:run(self, dt)
+                Log.info("Scene `" .. s.name .. "` ends")
+              end),
+              base_scene = s,
+            }
           end)
         )
         :filter(function(c)
-          Common.resume_logged(c, dt)
-          return coroutine.status(c) ~= "dead"
+          Common.resume_logged(c.coroutine, dt)
+          return coroutine.status(c.coroutine) ~= "dead"
         end)
         :totable()
     end,
 
     run_task = function(self, task)
-      table.insert(self.scenes, {
+      local result = {
         name = "Some task",
         enabled = true,
         start_predicate = function() return true end,
@@ -79,7 +86,19 @@ railing.mixin = function()
           task(self_scene, rails, dt)
           Tablex.remove(self.scenes, self_scene)
         end,
-      })
+      }
+      table.insert(self.scenes, result)
+      return result
+    end,
+
+    cancel_scene = function(self, scene)
+      self.active_coroutines = Fun.iter(self.active_coroutines)
+        :filter(function(c) return c.base_scene ~= scene end)
+        :totable()
+
+      self.scenes = Fun.iter(self.scenes)
+        :filter(function(s) return scene ~= s end)
+        :totable()
     end,
   }
 end
