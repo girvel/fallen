@@ -31,14 +31,11 @@ railing.api.options = function(options)
 end
 
 railing.api.notification = function(rails, text, time_seconds)
+  time_seconds = time_seconds or 10
+
   rails:run_task(function()
-    time_seconds = time_seconds or 10
     State.gui.sidebar.notification:set_text(text)
-    local dt = 0
-    local uid = {}
-    while not Common.period(uid, time_seconds, dt) do
-      dt = coroutine.yield()
-    end
+    railing.api.wait_seconds(time_seconds)
     if State.gui.sidebar.notification.sprite.text == text then
       State.gui.sidebar.notification:set_text("")
     end

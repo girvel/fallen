@@ -266,10 +266,34 @@ return function()
         run = function(self, rails, dt)
           self.enabled = false
           State.player.faction = "rebellion"
-          State:start_combat({
-            State.player, rails.entities[1],
-            rails.entities[2], rails.entities[4],
-          })
+          rails.entities[3].faction = "rebellion"
+          local engineers = Fun.range(1, 4):map(function(i) return rails.entities[i] end):totable()
+          State:start_combat(Tablex.concat({State.player}, engineers))
+          Fun.iter(engineers):each(function(e)
+            if e._highlight then
+              State:remove(e._highlight)
+              e._highlight = nil
+            end
+          end)
+          rails.entities[3].run_away_to = rails.positions.exit
+
+          api.notification(rails, {RED, "Это была ошибка"})
+          api.wait_seconds(5)
+          api.notification(rails, {RED, "Устранить агрессивных инженеров"})
+        end,
+      },
+
+      {
+        name = "Half-orc runs away",
+        enabled = true,
+        start_predicate = function(self, rails, dt)
+          return rails.entities[3].run_away_to == rails.positions.exit
+            and rails.entities[3].position == rails.positions.exit
+        end,
+
+        run = function(self, rails, dt)
+          api.wait_seconds(0.5)
+          State:remove(rails.entities[3])
         end,
       },
     },
@@ -278,7 +302,8 @@ return function()
 
     initialize = function(self)
       self.positions = {
-        [2] = Vector({5, 8})
+        [2] = Vector({5, 8}),
+        exit = Vector({7, 11}),
       }
 
       self.entities = {

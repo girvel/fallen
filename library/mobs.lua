@@ -25,10 +25,28 @@ local engineer_mixin = function()
 
       -- TODO optimize
       ai = ai.async(function(self)
-        if
-          not State.move_order
-          or not Fun.iter(State.move_order.list):any(function(e) return e == self end)
+        if not State.move_order
         then return end
+
+        if self.run_away_to then
+          local path = State.grids.solids:find_path(self.position, self.run_away_to)
+          Log.trace("%s runs away; path: %s" % {Common.get_name(self), Inspect(path)})
+
+          for _, position in ipairs(path) do
+            if self.turn_resources.movement <= 0 then
+              if self.turn_resources.actions > 0 then
+                actions.dash(self)
+              else
+                break
+              end
+            end
+
+            local direction = (position - self.position)
+            actions.move[Vector.name_from_direction(direction:normalized())](self)
+            coroutine.yield()
+          end
+          return
+        end
 
         if (State.player.position - self.position):abs() > 1 then
           local path = State.grids.solids:find_path(self.position, State.player.position)
@@ -49,12 +67,13 @@ local engineer_mixin = function()
           end
         end
 
-        self.direction = Vector.name_from_direction(
-          (State.player.position - self.position):normalized()
-        )
-        while actions.hand_attack(self) do
-          while not self.animation.current:startsWith("idle") do
-            coroutine.yield()
+        local direction = State.player.position - self.position
+        if direction:abs() == 1 then
+          self.direction = Vector.name_from_direction(direction)  -- TODO direction change method
+          while actions.hand_attack(self) do
+            while not self.animation.current:startsWith("idle") do
+              coroutine.yield()
+            end
           end
         end
       end),
