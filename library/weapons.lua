@@ -27,7 +27,7 @@ module.dagger = function()
     animated(animation_packs.dagger),
     {
       name = "кинжал",
-      damage_roll = D(4),
+      damage_roll = D(40),
       bonus = 0,
       tags = {
         finesse = true,

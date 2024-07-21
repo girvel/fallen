@@ -25,12 +25,6 @@ module_mt.__call = function(_, animation_pack, object)
     layer = "solids",
     view = "scene",
 
-    rotate = function(self, direction_name)
-      self.direction = direction_name
-      Fun.iter(self.inventory or {})
-        :each(function(_, e) e.direction = direction_name end)
-    end,
-
     get_armor = function(self)
       return 10 + core.get_modifier(self.abilities.dexterity)
     end,
@@ -56,6 +50,16 @@ module_mt.__call = function(_, animation_pack, object)
         actions.hand_attack,
         actions.second_wind,
       }
+    end,
+
+    rotate = function(self, direction_name)
+      self.direction = direction_name
+      self:animate()
+
+      Fun.iter(self.inventory or {}):each(function(slot, item)
+        item.direction = direction_name
+        item:animate()
+      end)
     end,
   }, object)
 

@@ -42,7 +42,7 @@ local engineer_mixin = function()
             end
 
             local direction = (position - self.position)
-            actions.move[Vector.name_from_direction(direction:normalized())](self)
+            if not actions.move[Vector.name_from_direction(direction:normalized())](self) then return end
             coroutine.yield()
           end
           return
@@ -62,14 +62,14 @@ local engineer_mixin = function()
             end
 
             local direction = (position - self.position)
-            actions.move[Vector.name_from_direction(direction:normalized())](self)
+            if not actions.move[Vector.name_from_direction(direction:normalized())](self) then return end
             coroutine.yield()
           end
         end
 
         local direction = State.player.position - self.position
         if direction:abs() == 1 then
-          self.direction = Vector.name_from_direction(direction)  -- TODO direction change method
+          self:rotate(direction)
           while actions.hand_attack(self) do
             while not self.animation.current:startsWith("idle") do
               coroutine.yield()

@@ -33,7 +33,7 @@ return function()
           api.narration("Мощный поток горячего пара от ближайшей трубы прерывает ваши мысли")
         end,
       },
-      {
+      second_rotates_valve = {
         name = "Second rotates the valve",
         enabled = true,
         start_predicate = function(self, _, dt) return Common.period(self, 30, dt) end,
@@ -244,7 +244,7 @@ return function()
         end,
       },
 
-      {
+      player_attacks_half_orc = {
         name = "Player attacks half-orc",
         enabled = true,
         start_predicate = function(self, rails) return rails.entities[3].hp < rails.old_hp[3] end,
@@ -255,7 +255,7 @@ return function()
         end,
       },
 
-      {
+      player_attacks_dreamer = {
         name = "Player attacks one of the dreamers",
         enabled = true,
         start_predicate = function(self, rails, dt)
@@ -265,8 +265,13 @@ return function()
 
         run = function(self, rails, dt)
           self.enabled = false
+          rails.scenes.second_rotates_valve.enabled = false
+          rails.scenes.player_wins_dreamers.enabled = true
+          rails.scenes.player_attacks_half_orc.enabled = false
+
           State.player.faction = "rebellion"
           rails.entities[3].faction = "rebellion"
+
           local engineers = Fun.range(1, 4):map(function(i) return rails.entities[i] end):totable()
           State:start_combat(Tablex.concat({State.player}, engineers))
           Fun.iter(engineers):each(function(e)
@@ -283,6 +288,18 @@ return function()
         end,
       },
 
+      player_wins_dreamers = {
+        name = "Player wins the fight against dreamers",
+        enabled = false,
+        start_predicate = function(self, rails, dt) return Log.trace(State.player.hp) > 0 and not Log.trace(State.move_order) end,
+
+        run = function(self, rails, dt)
+          self.enabled = false
+          api.notification(rails, "Задача выполнена неудовлетворительно")
+          api.notification(rails, "Ожидайте следующее задание")
+        end,
+      },
+
       {
         name = "Half-orc runs away",
         enabled = true,
@@ -292,6 +309,7 @@ return function()
         end,
 
         run = function(self, rails, dt)
+          self.enabled = false
           api.wait_seconds(0.5)
           State:remove(rails.entities[3])
         end,
