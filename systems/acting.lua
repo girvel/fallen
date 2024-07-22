@@ -31,7 +31,10 @@ return Tiny.processingSystem({
       event = {6}  -- 1 round is 6 seconds
     elseif State.move_order:get_current() ~= entity then return end
 
-    local was_timeout_reached = not entity.player_flag and Common.period(self, entity, 20, event[1])
+    local was_timeout_reached = (
+      not entity.player_flag
+      and Common.period(self, State.move_order:get_current(), 20, event[1])
+    )
 
     if was_timeout_reached then
       Log.warn("%s's turn timed out" % Common.get_name(entity))
@@ -41,6 +44,7 @@ return Tiny.processingSystem({
       entity:ai(event) == turn_order.TURN_END_SIGNAL and not is_world_turn
       or was_timeout_reached
     then
+      Common.reset_period(self, State.move_order:get_current())
       Tablex.extend(entity.turn_resources, entity:get_turn_resources())
       State.move_order:move_to_next()
       Log.info("%s's turn" % Common.get_name(State.move_order:get_current()))

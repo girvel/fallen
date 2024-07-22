@@ -301,7 +301,9 @@ return function()
       player_wins_dreamers = {
         name = "Player wins the fight against dreamers",
         enabled = false,
-        start_predicate = function(self, rails, dt) return Log.trace(State.player.hp) > 0 and not Log.trace(State.move_order) end,
+        start_predicate = function(self, rails, dt)
+          return State.player.hp > 0 and not State.move_order
+        end,
 
         run = function(self, rails, dt)
           self.enabled = false

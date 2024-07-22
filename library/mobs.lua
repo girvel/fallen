@@ -23,9 +23,13 @@ local engineer_mixin = function()
       talking_to = nil,
 
       -- TODO optimize
-      ai = ai.async(function(self)
-        Log.debug("--- %s ---" % Common.get_name(self))
+      ai = ai.async(function(self, dt)
         if not State.move_order then return end
+        Log.debug("--- %s ---" % Common.get_name(self))
+
+        while not Common.period("ai", self, 50, dt) do
+          coroutine.yield()
+        end
 
         if self.run_away_to then
           Log.trace("Attempt at building path to run away")

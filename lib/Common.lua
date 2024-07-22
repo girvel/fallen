@@ -41,6 +41,10 @@ module.period = function(...)
   return result
 end
 
+module.reset_period = function(...)
+  module.set_by_path(module._periods, {...}, 0)
+end
+
 module.hex_color = function(str)
   return fun.range(3)
     :map(function(i) return tonumber(str:sub(i * 2 - 1, i * 2), 16) / 255 end)
