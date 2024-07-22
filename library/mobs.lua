@@ -20,15 +20,14 @@ local engineer_mixin = function()
       self.talking_to = other
     end),
     {
-      name = "инженер",
       talking_to = nil,
 
       -- TODO optimize
       ai = ai.async(function(self)
-        if not State.move_order
-        then return end
+        if not State.move_order then return end
 
         if self.run_away_to then
+          Log.trace("Attempt at building path to run away")
           local path = State.grids.solids:find_path(self.position, self.run_away_to)
           Log.trace("%s runs away; path: %s" % {Common.get_name(self), Inspect(path)})
 
@@ -49,7 +48,9 @@ local engineer_mixin = function()
         end
 
         if (State.player.position - self.position):abs() > 1 then
-          local path = State.grids.solids:find_path(self.position, State.player.position)
+          Log.debug("Attempt at building path towards player")
+          local path = Log.trace(State.grids.solids:find_path(self.position, State.player.position))
+          Log.debug("Path is built")
           table.remove(path)
 
           for _, position in ipairs(path) do
@@ -69,7 +70,8 @@ local engineer_mixin = function()
 
         local direction = State.player.position - self.position
         if direction:abs() == 1 then
-          self:rotate(direction)
+          Log.debug("Attempt at attacking the player")
+          self:rotate(Vector.name_from_direction(direction))
           while actions.hand_attack(self) do
             while not self.animation.current:startsWith("idle") do
               coroutine.yield()
@@ -99,6 +101,7 @@ end
 
 module[1] = function()
   return humanoid(Tablex.extend({
+    name = "инженер #1",
     race = races.half_elf,
     direction = "down",
     inventory = {main_hand = weapons.gas_key()},
@@ -107,6 +110,7 @@ end
 
 module[2] = function()
   return humanoid(Tablex.extend({
+    name = "инженер #2",
     race = races.halfling,
     direction = "down",
     inventory = {},
@@ -115,6 +119,7 @@ end
 
 module[3] = function()
   return humanoid(Tablex.extend({
+    name = "инженер #3",
     race = races.half_orc,
     hp = 34,
     max_hp = 35,
@@ -140,6 +145,7 @@ end
 
 module[4] = function()
   return humanoid(Tablex.extend({
+    name = "инженер #4",
     race = races.dwarf,
     direction = "up",
     inventory = {},

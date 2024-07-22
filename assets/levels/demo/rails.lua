@@ -46,7 +46,7 @@ return function()
             return
           end
 
-          rails.entities[2].direction = "down"
+          rails.entities[2]:rotate("down")
           actions.interact(rails.entities[2])
         end,
       },
@@ -99,9 +99,10 @@ return function()
 
         run = function(self, rails, dt)
           rails.entities[2].talking_to = nil
-          rails.entities[2].direction = Vector.name_from_direction(
+          local old_direction = rails.entities[2].direction
+          rails.entities[2]:rotate(Vector.name_from_direction(
             State.player.position - rails.entities[2].position
-          )
+          ))
           rails.entities[2]:animate()
 
           api.narration("Уродливый полурослик с перевязанным лицом делает один оборот массивного красного вентиля.")
@@ -133,6 +134,7 @@ return function()
             end
           end
           rails.dreamers_talked_to = rails.dreamers_talked_to + 1
+          rails.entities[2]:rotate(old_direction)
         end,
       },
       {
@@ -185,9 +187,9 @@ return function()
         run = function(self, rails, dt)
           rails.entities[4].talking_to = nil
           local old_direction = rails.entities[4].direction
-          rails.entities[4].direction = Vector.name_from_direction(
+          rails.entities[4]:rotate(Vector.name_from_direction(
             State.player.position - rails.entities[4].position
-          )
+          ))
           rails.entities[4]:animate()
 
           api.narration("Дварфийка покрытыми волдырями руками засовывает вглубь небольшой печи очередную порцию чего-то, похожего на чёрную смолу.")
@@ -228,7 +230,7 @@ return function()
               api.line(rails.entities[4], "Теперь смогу проработать дольше")
             end
           end
-          rails.entities[4].direction = old_direction
+          rails.entities[4]:rotate(old_direction)
           rails.dreamers_talked_to = rails.dreamers_talked_to + 1
         end,
       },

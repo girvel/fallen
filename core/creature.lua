@@ -64,7 +64,7 @@ module_mt.__call = function(_, animation_pack, object)
   }, object)
 
   result.hp = result.hp or result:get_max_hp()
-  result.turn_resources = result:get_turn_resources()
+  result.turn_resources = result.turn_resources or result:get_turn_resources()
   result:animate("idle")
 
   result.saving_throws = Fun.iter(result.abilities)
@@ -78,11 +78,7 @@ module_mt.__call = function(_, animation_pack, object)
     end)
     :tomap()
 
-  local main_hand = -Query(result).inventory.main_hand
-  if main_hand then
-    main_hand.direction = result.direction
-    main_hand:animate()
-  end
+  result:rotate(result.direction)
 
   return result
 end
