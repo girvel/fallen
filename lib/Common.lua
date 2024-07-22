@@ -85,10 +85,16 @@ common.get_name = function(entity)
 end
 
 common.resume_logged = function(coroutine_, ...)
-    local success, message = coroutine.resume(coroutine_, ...)
-    if not success then
-      Log.error("Coroutine error: " .. message .. "\n" .. debug.traceback(coroutine_))
-    end
+  local success, message = coroutine.resume(coroutine_, ...)
+  if not success then
+    Log.error("Coroutine error: " .. message .. "\n" .. debug.traceback(coroutine_))
+  end
+end
+
+common.number_type = function(number)
+  if type(number) ~= "number" then return end
+  if math.floor(number) == number then return "integer" end
+  return "float"
 end
 
 return common

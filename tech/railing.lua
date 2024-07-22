@@ -10,6 +10,15 @@ railing.api.line = function(entity, text)
   railing.api.narration(Common.get_name(entity) .. ": " .. text)
 end
 
+local order_sound = Common.volumed_sounds("assets/sounds/electricity.wav", 0.08)[1]
+local ORDER_COLOR = Common.hex_color("e64e4b")
+
+railing.api.order = function(rails, text)
+  railing.api.notification(rails, {ORDER_COLOR, text})
+  order_sound:play()
+end
+
+
 railing.api.wait_seconds = function(s)
   local t = love.timer.getTime()
   while love.timer.getTime() - t < s do coroutine.yield() end

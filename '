@@ -32,7 +32,7 @@ tablex.join = function(base, extension, ...)
   if extension == nil then return base end
   local length = #base
   for k, v in pairs(extension) do
-    if type(k) == "number" and math.floor(k) == k then
+    if math.type(k) == "integer" then
       base[length + k] = v
     else
       base[k] = v
