@@ -41,6 +41,17 @@ tablex.join = function(base, extension, ...)
   return tablex.join(base, ...)
 end
 
+--- Checks if the two tables are isomorphic on the first level on recursion
+tablex.shallow_same = function(t1, t2)
+  for k, v in pairs(t1) do
+    if v ~= t2[k] then return false end
+  end
+  for k, _ in pairs(t2) do
+    if not t1[k] then return false end
+  end
+  return true
+end
+
 tablex.deep_copy = function(o, seen)
   seen = seen or {}
   if o == nil then return nil end
