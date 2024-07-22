@@ -27,10 +27,6 @@ local engineer_mixin = function()
         if not State.move_order then return end
         Log.debug("--- %s ---" % Common.get_name(self))
 
-        while not Common.period("ai", self, 50, dt) do
-          coroutine.yield()
-        end
-
         if self.run_away_to then
           Log.trace("Attempt at building path to run away")
           local path = State.grids.solids:find_path(self.position, self.run_away_to)

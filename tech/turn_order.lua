@@ -6,7 +6,10 @@ module.WORLD_TURN = {codename = "WORLD_TURN"}
 
 module_mt.__call = function(_, list)
   return {
-    list = Tablex.concat({}, list, {module.WORLD_TURN}),
+    list = Fun.iter(list)
+      :filter(function(e) return State:exists(e) end)
+      :chain({module.WORLD_TURN})
+      :totable(),
     current_i = 1,
     remove = function(self, item)
       self.list = Fun.iter(self.list)

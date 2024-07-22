@@ -24,10 +24,12 @@ module_mt.__call = function(_, systems, debug_mode)
 
     gui = require("tech.stateful.gui")(),
 
+    entities = {},
     dependencies = {},
 
     add = function(self, entity)
       self.world:add(entity)
+      self.entities[entity] = true
       if entity.position and entity.layer then
         self.grids[entity.layer][entity.position] = entity
       end
@@ -49,6 +51,7 @@ module_mt.__call = function(_, systems, debug_mode)
     remove = function(self, entity)
       Log.debug("State:remove(%s)" % Common.get_name(entity))
       self.world:remove(entity)
+      self.entities[entity] = nil
       if entity.position and entity.layer then
         self.grids[entity.layer][entity.position] = nil
       end
@@ -72,7 +75,7 @@ module_mt.__call = function(_, systems, debug_mode)
     end,
 
     exists = function(self, entity)
-      return self.world.entities[entity]
+      return self.entities[entity]
     end,
 
     add_dependency = function(self, parent, child)
