@@ -1,16 +1,16 @@
 local fun = require("lib.fun")
 
 
-local module = {}
+local common = {}
 
-module.get_by_path = function(t, identifier, i)
+common.get_by_path = function(t, identifier, i)
   i = i or 1
   if t == nil then return end
   if i > #identifier then return t end
-  return module.get_by_path(t[identifier[i]], identifier, i + 1)
+  return common.get_by_path(t[identifier[i]], identifier, i + 1)
 end
 
-module.set_by_path = function(t, identifier, value, i)
+common.set_by_path = function(t, identifier, value, i)
   i = i or 1
   if i == #identifier then
     t[identifier[i]] = value
@@ -19,39 +19,39 @@ module.set_by_path = function(t, identifier, value, i)
   if not t[identifier[i]] then
     t[identifier[i]] = {}
   end
-  return module.set_by_path(t[identifier[i]], identifier, value, i + 1)
+  return common.set_by_path(t[identifier[i]], identifier, value, i + 1)
 end
 
-module._periods = {}
+common._periods = {}
 
-module.period = function(...)
+common.period = function(...)
   local args = {...}
   local period = args[#args - 1]
   local dt = args[#args]
   local identifier = fun.iter(args):take_n(#args - 2):totable()
 
   local result = false
-  local value = module.get_by_path(module._periods, identifier) or 0
+  local value = common.get_by_path(common._periods, identifier) or 0
   value = value + dt
   if value > period then
     value = value - period
     result = true
   end
-  module.set_by_path(module._periods, identifier, value)
+  common.set_by_path(common._periods, identifier, value)
   return result
 end
 
-module.reset_period = function(...)
-  module.set_by_path(module._periods, {...}, 0)
+common.reset_period = function(...)
+  common.set_by_path(common._periods, {...}, 0)
 end
 
-module.hex_color = function(str)
+common.hex_color = function(str)
   return fun.range(3)
     :map(function(i) return tonumber(str:sub(i * 2 - 1, i * 2), 16) / 255 end)
     :totable()
 end
 
-module.get_color = function(image_data)
+common.get_color = function(image_data)
   for x = 0, image_data:getWidth() - 1 do
     for y = 0, image_data:getHeight() - 1 do
       local color = {image_data:getPixel(x, y)}
@@ -60,7 +60,7 @@ module.get_color = function(image_data)
   end
 end
 
-module.volumed_sounds = function(path_beginning, volume)
+common.volumed_sounds = function(path_beginning, volume)
   volume = volume or 1
   local _, _, directory = path_beginning:find("^(.*)/[^/]*$")
   return fun.iter(love.filesystem.getDirectoryItems(directory))
@@ -74,21 +74,21 @@ module.volumed_sounds = function(path_beginning, volume)
     :totable()
 end
 
-module.set = function(list)
+common.set = function(list)
   return fun.iter(list)
     :map(function(e) return e, true end)
     :tomap()
 end
 
-module.get_name = function(entity)
+common.get_name = function(entity)
   return -Query(entity).name or -Query(entity).codename or "???"
 end
 
-module.resume_logged = function(coroutine_, ...)
+common.resume_logged = function(coroutine_, ...)
     local success, message = coroutine.resume(coroutine_, ...)
     if not success then
       Log.error("Coroutine error: " .. message .. "\n" .. debug.traceback(coroutine_))
     end
 end
 
-return module
+return common
