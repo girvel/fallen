@@ -7,9 +7,15 @@ return function()
     player_attacks_half_orc = {
       name = "Player attacks half-orc",
       enabled = true,
-      start_predicate = function(self, rails) return rails.entities[3].hp < rails.old_hp[3] end,
+      start_predicate = function(self, rails)
+        return Fun.iter(State.agression_log)
+          :any(function(pair)
+            return Tablex.shallow_same(pair, {State.player, rails.entities[3]})
+          end)
+      end,
       run = function(self, rails)
         self.enabled = false
+        rails.scenes.half_orc_begs.enabled = true
         rails.entities[3].faction = "rebellion"
         State:start_combat({State.player, rails.entities[3]})
       end,
@@ -17,7 +23,7 @@ return function()
 
     half_orc_begs = {
       name = "Half-orc begs for his life",
-      enabled = true,
+      enabled = false,
       start_predicate = function(self, rails, dt)
         return rails.entities[3].hp <= rails.old_hp[3] / 2
       end,
@@ -34,7 +40,12 @@ return function()
       enabled = true,
       start_predicate = function(self, rails, dt)
         return Fun.iter({1, 2, 4})
-          :any(function(i) return rails.entities[i].hp < rails.old_hp[i] end)
+          :any(function(i)
+            return Fun.iter(State.agression_log)
+              :any(function(pair)
+                return Tablex.shallow_same(pair, {State.player, rails.entities[i]})
+              end)
+          end)
       end,
 
       run = function(self, rails, dt)
@@ -71,7 +82,8 @@ return function()
 
       run = function(self, rails, dt)
         self.enabled = false
-        State.wiki.discovered_pages.dreamers = 2
+        State.gui.wiki.discovered_pages.dreamers = 2
+        State.gui.wiki.discovered_pages.codex = 2
         api.order(rails, "Задача выполнена неудовлетворительно")
         api.wait_seconds(10)
         api.order(rails, "Ожидайте следующее задание")

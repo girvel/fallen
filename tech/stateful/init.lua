@@ -27,6 +27,8 @@ module_mt.__call = function(_, systems, debug_mode)
     entities = {},
     dependencies = {},
 
+    agression_log = {},
+
     add = function(self, entity)
       self.world:add(entity)
       self.entities[entity] = true

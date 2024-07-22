@@ -7,6 +7,7 @@ return Tiny.processingSystem({
   base_callback = "update",
 
   preProcess = function()
+    State.agression_log = {}
     if State.move_order and #State.move_order.list == 2 then
       Log.info(
         "Fight ends as only %s is left standing"
@@ -36,7 +37,7 @@ return Tiny.processingSystem({
     )
 
     if was_timeout_reached then
-      Log.warn("%s's turn timed out" % Common.get_name(entity))
+      Log.warn("%s's turn timed out" % Common.get_name(State.move_order:get_current()))
     end
 
     if

@@ -73,9 +73,16 @@ tablex.deep_copy = function(o, seen)
 end
 
 tablex.remove = function(t, item)
-  return fun.iter(pairs(t))
-    :filter(function(k, v) return v ~= item end)
-    :tomap()
+  for k, v in pairs(t) do
+    if v == item then
+      if math.ceil(k) == k then
+        table.remove(t, k)
+      else
+        t[k] = nil
+      end
+    end
+  end
+  return t
 end
 
 tablex.remove_breaking_at = function(t, i)

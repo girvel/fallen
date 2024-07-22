@@ -34,9 +34,7 @@ local engineer_mixin = function()
         end
 
         if self.run_away_to then
-          Log.trace("Attempt at building path to run away")
           local path = State.grids.solids:find_path(self.position, self.run_away_to)
-          Log.trace("%s runs away; path: %s" % {Common.get_name(self), Inspect(path)})
 
           for _, position in ipairs(path) do
             if self.turn_resources.movement <= 0 then
@@ -56,7 +54,7 @@ local engineer_mixin = function()
 
         if (State.player.position - self.position):abs() > 1 then
           Log.debug("Attempt at building path towards player")
-          local path = Log.trace(State.grids.solids:find_path(self.position, State.player.position))
+          local path = State.grids.solids:find_path(self.position, State.player.position)
           Log.debug("Path is built")
           table.remove(path)
 

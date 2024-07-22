@@ -105,9 +105,7 @@ railing.mixin = function()
         :filter(function(c) return c.base_scene ~= scene end)
         :totable()
 
-      self.scenes = Fun.iter(self.scenes)
-        :filter(function(s) return scene ~= s end)
-        :totable()
+      Tablex.remove(self.scenes, scene)
     end,
   }
 end
