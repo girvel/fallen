@@ -3,7 +3,14 @@ local railing = require("tech.railing")
 local api = railing.api
 local core = require("core")
 
-local RED = Common.hex_color("e64e4b")
+
+local order_sound = Common.volumed_sounds("assets/sounds/electricity.wav", 0.08)[1]
+local ORDER_COLOR = Common.hex_color("e64e4b")
+
+local order = function(rails, text)
+  api.notification(rails, {ORDER_COLOR, text})
+  order_sound:play()
+end
 
 return function()
   return Tablex.extend(railing.mixin(), {
@@ -18,7 +25,8 @@ return function()
           rails.entities.leaking_valve.paused = true
           api.center_camera()
 
-          api.notification(rails, {RED, "Вычислить и устранить диверсанта"})
+          order(rails, "Вычислить и устранить диверсанта")
+
           api.narration("Резкий запах мазута, керосина и ржавчины заставляет непроизвольно зажмуриться.")
           api.narration("Помещение забито трубами и приборами непонятного назначения.")
           api.narration("Три фигуры в защитных спецовках резко оборачиваются в вашу сторону и так же быстро возвращаются к работе.")
@@ -284,9 +292,9 @@ return function()
           end)
           rails.entities[3].run_away_to = rails.positions.exit
 
-          api.notification(rails, {RED, "Это была ошибка"})
+          order(rails, "Это была ошибка")
           api.wait_seconds(5)
-          api.notification(rails, {RED, "Устранить агрессивных инженеров"})
+          order(rails, "Устранить агрессивных инженеров")
         end,
       },
 
@@ -297,8 +305,8 @@ return function()
 
         run = function(self, rails, dt)
           self.enabled = false
-          api.notification(rails, "Задача выполнена неудовлетворительно")
-          api.notification(rails, "Ожидайте следующее задание")
+          order(rails, "Задача выполнена неудовлетворительно")
+          order(rails, "Ожидайте следующее задание")
         end,
       },
 

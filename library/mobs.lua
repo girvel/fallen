@@ -24,6 +24,7 @@ local engineer_mixin = function()
 
       -- TODO optimize
       ai = ai.async(function(self)
+        Log.debug("--- %s ---" % Common.get_name(self))
         if not State.move_order then return end
 
         if self.run_away_to then

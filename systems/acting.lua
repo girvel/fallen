@@ -39,6 +39,8 @@ return Tiny.processingSystem({
       if State.move_order.current_i > #State.move_order.list then
         State.move_order.current_i = 1
       end
+
+      Log.info("%s's turn" % Common.get_name(State.move_order.list[State.move_order.current_i]))
     end
   end,
 

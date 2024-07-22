@@ -87,7 +87,7 @@ module.notification = function()
     position = Vector.zero,
     sprite = {
       text = {{1, 1, 1}, ""},
-      font = love.graphics.newFont("assets/fonts/joystix.monospace-regular.otf", 14),
+      font = love.graphics.newFont("assets/fonts/joystix.monospace-regular.otf", 18),
     },
 
     set_text = function(self, text)
