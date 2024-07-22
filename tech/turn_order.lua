@@ -18,6 +18,15 @@ module_mt.__call = function(_, list)
         :map(function(_, e) return e end)
         :totable()
     end,
+    get_current = function(self)
+      return self.list[self.current_i]
+    end,
+    move_to_next = function(self)
+      self.current_i = self.current_i + 1
+      if self.current_i > #self.list then
+        self.current_i = 1
+      end
+    end,
   }
 end
 

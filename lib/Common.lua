@@ -1,21 +1,48 @@
+local fun = require("lib.fun")
+
+
 local module = {}
+
+module.get_by_path = function(t, identifier, i)
+  i = i or 1
+  if t == nil then return end
+  if i > #identifier then return t end
+  return module.get_by_path(t[identifier[i]], identifier, i + 1)
+end
+
+module.set_by_path = function(t, identifier, value, i)
+  i = i or 1
+  if i == #identifier then
+    t[identifier[i]] = value
+    return
+  end
+  if not t[identifier[i]] then
+    t[identifier[i]] = {}
+  end
+  return module.set_by_path(t[identifier[i]], identifier, value, i + 1)
+end
 
 module._periods = {}
 
-module.period = function(identifier, period, dt)
+module.period = function(...)
+  local args = {...}
+  local period = args[#args - 1]
+  local dt = args[#args]
+  local identifier = fun.iter(args):take_n(#args - 2):totable()
+
   local result = false
-  local value = module._periods[identifier] or 0
+  local value = module.get_by_path(module._periods, identifier) or 0
   value = value + dt
   if value > period then
     value = value - period
     result = true
   end
-  module._periods[identifier] = value
+  module.set_by_path(module._periods, identifier, value)
   return result
 end
 
 module.hex_color = function(str)
-  return Fun.range(3)
+  return fun.range(3)
     :map(function(i) return tonumber(str:sub(i * 2 - 1, i * 2), 16) / 255 end)
     :totable()
 end
@@ -32,7 +59,7 @@ end
 module.volumed_sounds = function(path_beginning, volume)
   volume = volume or 1
   local _, _, directory = path_beginning:find("^(.*)/[^/]*$")
-  return Fun.iter(love.filesystem.getDirectoryItems(directory))
+  return fun.iter(love.filesystem.getDirectoryItems(directory))
     :map(function(filename) return directory .. "/" .. filename end)
     :filter(function(path) return path:startsWith(path_beginning) end)
     :map(function(path)
@@ -44,7 +71,7 @@ module.volumed_sounds = function(path_beginning, volume)
 end
 
 module.set = function(list)
-  return Fun.iter(list)
+  return fun.iter(list)
     :map(function(e) return e, true end)
     :tomap()
 end

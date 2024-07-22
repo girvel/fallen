@@ -47,6 +47,7 @@ module_mt.__call = function(_, systems, debug_mode)
     end,
 
     remove = function(self, entity)
+      Log.debug("State:remove(%s)" % Common.get_name(entity))
       self.world:remove(entity)
       if entity.position and entity.layer then
         self.grids[entity.layer][entity.position] = nil
