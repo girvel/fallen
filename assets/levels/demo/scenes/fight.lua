@@ -1,4 +1,5 @@
 local api = require("tech.railing").api
+local special = require("tech.special")
 
 
 return function()
@@ -11,6 +12,20 @@ return function()
         self.enabled = false
         rails.entities[3].faction = "rebellion"
         State:start_combat({State.player, rails.entities[3]})
+      end,
+    },
+
+    half_orc_begs = {
+      name = "Half-orc begs for his life",
+      enabled = true,
+      start_predicate = function(self, rails, dt)
+        return rails.entities[3].hp <= rails.old_hp[3] / 2
+      end,
+
+      run = function(self, rails, dt)
+        self.enabled = false
+        rails.entities[3].skip_turn = true
+        State:add(special.floating_line("Стой! Остановись, мужик!!!", rails.entities[3].position))
       end,
     },
 
@@ -56,7 +71,9 @@ return function()
 
       run = function(self, rails, dt)
         self.enabled = false
+        State.wiki.discovered_pages.dreamers = 2
         api.order(rails, "Задача выполнена неудовлетворительно")
+        api.wait_seconds(10)
         api.order(rails, "Ожидайте следующее задание")
       end,
     },

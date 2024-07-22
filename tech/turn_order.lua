@@ -30,6 +30,9 @@ module_mt.__call = function(_, list)
         self.current_i = 1
       end
     end,
+    contains = function(self, entity)
+      return Fun.iter(self.list):any(function(e) return e == entity end)
+    end,
   }
 end
 

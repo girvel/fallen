@@ -23,12 +23,14 @@ module.floating_damage = function(number, scene_position)
   }
 end
 
-local line_font = love.graphics.newFont("assets/fonts/joystix.monospace-regular.otf", 10)
+local line_font = love.graphics.newFont("assets/fonts/joystix.monospace-regular.otf", 14)
 
 module.floating_line = function(text, position)
   return {
     codename = "floating_line",
-    position = (position - Vector({1, 1.5})) * 16,
+    position = (position - Vector({0, 0.5}))
+      * State.CELL_DISPLAY_SIZE * State.SCALING_FACTOR
+      + Vector.left * line_font:getWidth(text) / 2,
     view = "scene_fx",
     sprite = {
       text = {Common.hex_color("ededed"), text},

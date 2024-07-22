@@ -26,8 +26,7 @@ return Tiny.processingSystem({
     local is_world_turn = State.move_order:get_current() == turn_order.WORLD_TURN
 
     if is_world_turn then
-      if Fun.iter(State.move_order.list):any(function(e) return e == entity end)
-      then return end
+      if State.move_order:contains(entity) then return end
       event = {6}  -- 1 round is 6 seconds
     elseif State.move_order:get_current() ~= entity then return end
 
@@ -45,7 +44,9 @@ return Tiny.processingSystem({
       or was_timeout_reached
     then
       Common.reset_period(self, State.move_order:get_current())
-      Tablex.extend(entity.turn_resources, entity:get_turn_resources())
+      if entity.get_turn_resources then
+        Tablex.extend(entity.turn_resources, entity:get_turn_resources())
+      end
       State.move_order:move_to_next()
       Log.info("%s's turn" % Common.get_name(State.move_order:get_current()))
     end

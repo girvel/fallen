@@ -24,8 +24,14 @@ local engineer_mixin = function()
 
       -- TODO optimize
       ai = ai.async(function(self, dt)
-        if not State.move_order then return end
+        if not -Query(State.move_order):contains(self) then return end
         Log.debug("--- %s ---" % Common.get_name(self))
+
+        if self.skip_turn then
+          Log.debug("Skips turn")
+          self.skip_turn = nil
+          return
+        end
 
         if self.run_away_to then
           Log.trace("Attempt at building path to run away")
