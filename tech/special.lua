@@ -91,17 +91,18 @@ module.notification = function()
       text = {{1, 1, 1}, ""},
       font = love.graphics.newFont("assets/fonts/joystix.monospace-regular.otf", 18),
     },
-
-    set_text = function(self, text)
-      self.sprite.text = text
-      local inner_text = type(text) == "table"
-        and Fun.iter(text)
-          :filter(function(x) return type(x) == "string" end)
-          :reduce(Fun.op.concat, "")
-        or text
-      self.position = Vector({-15 - self.sprite.font:getWidth(inner_text), 15})
-    end,
   }
+end
+
+module.notification_fx = function()
+  return Tablex.extend(
+    animated("assets/sprites/notification_fx"),
+    {
+      codename = "notification_fx",
+      view = "sidebar",
+      position = Vector({-117, 4})
+    }
+  )
 end
 
 module.gui_background = function()

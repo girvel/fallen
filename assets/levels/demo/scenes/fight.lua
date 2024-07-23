@@ -68,9 +68,9 @@ return function()
         end)
         rails.entities[3].ai.mode = engineer_ai.modes.run_away_to(rails.positions.exit)
 
-        api.order(rails, "Это была ошибка")
+        api.notification(rails, "Это была ошибка", true)
         api.wait_seconds(5)
-        api.order(rails, "Устранить агрессивных инженеров")
+        api.notification(rails, "Устранить агрессивных инженеров", true)
       end,
     },
 
@@ -85,9 +85,9 @@ return function()
         self.enabled = false
         State.gui.wiki.discovered_pages.dreamers = 2
         State.gui.wiki.discovered_pages.codex = 2
-        api.order(rails, "Задача выполнена неудовлетворительно")
+        api.notification(rails, "Задача выполнена неудовлетворительно", true)
         api.wait_seconds(10)
-        api.order(rails, "Ожидайте следующее задание")
+        api.notification(rails, "Ожидайте следующее задание", true)
       end,
     },
 

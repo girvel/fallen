@@ -10,15 +10,6 @@ railing.api.line = function(entity, text)
   railing.api.narration(Common.get_name(entity) .. ": " .. text)
 end
 
-local order_sound = Common.volumed_sounds("assets/sounds/electricity.wav", 0.08)[1]
-local ORDER_COLOR = Common.hex_color("e64e4b")
-
-railing.api.order = function(rails, text)
-  railing.api.notification(rails, {ORDER_COLOR, text})
-  order_sound:play()
-end
-
-
 railing.api.wait_seconds = function(s)
   local t = love.timer.getTime()
   while love.timer.getTime() - t < s do coroutine.yield() end
@@ -39,19 +30,15 @@ railing.api.options = function(options)
   return State.gui.dialogue.selected_option_i
 end
 
-railing.api.notification = function(rails, text, time_seconds)
-  time_seconds = time_seconds or 10
-
+railing.api.notification = function(rails, text, is_order)
   if rails._notification_task then
     rails:cancel_scene(rails._notification_task)
   end
 
   rails._notification_task = rails:run_task(function()
-    State.gui.sidebar.notification:set_text(text)
-    railing.api.wait_seconds(time_seconds)
-    if State.gui.sidebar.notification.sprite.text == text then
-      State.gui.sidebar.notification:set_text("")
-    end
+    State.gui.sidebar:push_notification(text, is_order)
+    railing.api.wait_seconds(10)
+    State.gui.sidebar:end_notification()
   end)
 end
 
