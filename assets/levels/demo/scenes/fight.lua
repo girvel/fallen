@@ -96,7 +96,7 @@ return function()
       enabled = true,
       start_predicate = function(self, rails, dt)
         Log.trace(getmetatable(rails.entities[3].ai.mode) == getmetatable(engineer_ai.modes.run_away_to(rails.positions.exit)))
-        Log.trace(rails.entities[3].ai.mode.enum_variant == engineer_ai.modes.run_away_to().enum_variant)
+        Log.trace(getmetatable(rails.entities[3].ai.mode.enum_variant) == getmetatable(engineer_ai.modes.run_away_to().enum_variant))
         return rails.entities[3].ai.mode == engineer_ai.modes.run_away_to(rails.positions.exit)
           and rails.entities[3].position == rails.positions.exit
       end,

@@ -1,7 +1,7 @@
 local enum = require("lib.enum")
 
 describe("Enum module", function()
-  local tested_enum = enum({
+  local tested_enum = enum("lib.tests.test_enum.tested_enum", {
     first = {},
     second = {"argument"},
   })
