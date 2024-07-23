@@ -282,7 +282,7 @@ return Tiny.sortedProcessingSystem({
     -- })
 
     local potential_interaction = interactive.get_for(State.player)
-    if potential_interaction then
+    if potential_interaction and State:get_mode() == "free" then
       Tablex.concat(lines, {
         "",
         "Нажмите [E] чтобы взаимодействовать с " .. Common.get_name(potential_interaction),

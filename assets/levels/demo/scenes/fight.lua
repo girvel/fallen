@@ -18,6 +18,10 @@ return function()
         self.enabled = false
         rails.scenes.half_orc_begs.enabled = true
         rails.entities[3].faction = "rebellion"
+        rails.entities[3].interact = nil
+        if rails.entities[3]._highlight then
+          State:remove(rails.entities[3]._highlight)
+        end
         State:start_combat({State.player, rails.entities[3]})
       end,
     },
@@ -61,6 +65,7 @@ return function()
         local engineers = Fun.range(1, 4):map(function(i) return rails.entities[i] end):totable()
         State:start_combat(Tablex.concat({State.player}, engineers))
         Fun.iter(engineers):each(function(e)
+          e.interact = nil
           if e._highlight then
             State:remove(e._highlight)
             e._highlight = nil
@@ -86,7 +91,7 @@ return function()
         State.gui.wiki.discovered_pages.dreamers = 2
         State.gui.wiki.discovered_pages.codex = 2
         api.notification(rails, "Задача выполнена неудовлетворительно", true)
-        api.wait_seconds(10)
+        api.wait_seconds(11)
         api.notification(rails, "Ожидайте следующее задание", true)
       end,
     },
