@@ -15,21 +15,29 @@ engineer_ai_mt.__call = function(_)
   return {
     mode = engineer_ai.modes.normal(),
 
-    look_for_agression = nil,
+    look_for_agression = false,
     was_attacked_by = {},
 
     -- TODO optimize
     run = ai.async(function(self, dt)
-      if not -Query(State.move_order):contains(self) then return end
       Log.debug("--- %s ---" % Common.get_name(self))
 
       local was_attacked_by = self.was_attacked_by
       self.was_attacked_by = {}
 
+      if self.look_for_agression then
+        self.look_for_agression = false
+        if Fun.iter(was_attacked_by):all(function(e) return e ~= State.player end) then
+          self.faction = State.player.faction
+          return
+        end
+      end
+
       local mode_type = self.ai.mode.enum_variant
       if mode_type == engineer_ai.modes.skip_turn then
         Log.debug("Skips turn")
         self.ai.mode = engineer_ai.modes.normal()
+        self.look_for_agression = true
         return
       end
 

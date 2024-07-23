@@ -8,12 +8,20 @@ return Tiny.processingSystem({
 
   preProcess = function()
     State.agression_log = {}
-    if State.move_order and #State.move_order.list == 2 then
-      Log.info(
-        "Fight ends as only %s is left standing"
-        % Common.get_name(State.move_order.list[1])
-      )
-      State.move_order = nil
+    if State.move_order then
+      local combatants = Fun.iter(State.move_order.list)
+        :filter(function(e) return e ~= turn_order.WORLD_TURN end)
+        :totable()
+
+      if Fun.iter(combatants):all(function(e) return e.faction == combatants[1].faction end) then
+        Log.info(
+          "Fight ends as only %s are left standing"
+           % table.concat(Fun.iter(combatants)
+            :map(Common.get_name)
+            :totable(), ", ")
+        )
+        State.move_order = nil
+      end
     end
   end,
 

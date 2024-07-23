@@ -92,6 +92,7 @@ module[4] = function()
     race = races.dwarf,
     direction = "up",
     inventory = {},
+    debug_flag = true,
   }, dreamer_engineer_mixin()))
 end
 

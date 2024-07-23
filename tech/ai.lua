@@ -4,6 +4,7 @@ local turn_order = require("tech.turn_order")
 return {
   async = function(fun)
     return function(self, event)
+      if not -Query(State.move_order):contains(self) then return end
       local dt = unpack(event)
       if not Common.period(self, .25, dt) then return end
       if not self._ai_coroutine then
