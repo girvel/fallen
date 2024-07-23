@@ -24,9 +24,12 @@ railing.api.center_camera = function()
   end)
 end
 
-railing.api.options = function(options)
+railing.api.options = function(options, remove_picked)
   State.gui.dialogue:options_present(options)
   while State:get_mode() ~= "free" do coroutine.yield() end
+  if remove_picked then
+    table.remove(options, State.gui.dialogue.selected_option_i)
+  end
   return State.gui.dialogue.selected_option_i
 end
 

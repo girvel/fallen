@@ -7,7 +7,9 @@ return Tiny.processingSystem({
   base_callback = "update",
 
   preProcess = function()
-    State.agression_log = {}
+    State.agression_log = State._next_agression_log
+    State._next_agression_log = {}
+    if #State.agression_log > 0 then Log.trace("AGRESSION!") end
     if State.move_order then
       local combatants = Fun.iter(State.move_order.list)
         :filter(function(e) return e ~= turn_order.WORLD_TURN end)
@@ -26,6 +28,7 @@ return Tiny.processingSystem({
   end,
 
   process = function(self, entity, event)
+    Query(entity.ai).observe(entity, event)
     if not State.move_order then
       entity.ai.run(entity, event)
       if entity.get_turn_resources then Tablex.extend(entity.turn_resources, entity:get_turn_resources()) end

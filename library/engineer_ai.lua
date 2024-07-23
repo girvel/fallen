@@ -22,12 +22,14 @@ engineer_ai_mt.__call = function(_)
     run = ai.async(function(self, dt)
       Log.debug("--- %s ---" % Common.get_name(self))
 
-      local was_attacked_by = self.was_attacked_by
-      self.was_attacked_by = {}
+      local was_attacked_by = self.ai.was_attacked_by
+      self.ai.was_attacked_by = {}
+      Log.trace(was_attacked_by)
 
-      if self.look_for_agression then
-        self.look_for_agression = false
+      if self.ai.look_for_agression then
+        self.ai.look_for_agression = false
         if Fun.iter(was_attacked_by):all(function(e) return e ~= State.player end) then
+          Log.trace(1)
           self.faction = State.player.faction
           return
         end
@@ -37,7 +39,7 @@ engineer_ai_mt.__call = function(_)
       if mode_type == engineer_ai.modes.skip_turn then
         Log.debug("Skips turn")
         self.ai.mode = engineer_ai.modes.normal()
-        self.look_for_agression = true
+        self.ai.look_for_agression = true
         return
       end
 
@@ -95,7 +97,17 @@ engineer_ai_mt.__call = function(_)
     end),
 
     observe = function(self, event)
-      Tablex.concat(self.was_attacked_by, Fun.iter(State.agression_log)
+      if #State.agression_log > 0 then
+        Log.trace(Fun.iter(State.agression_log)
+          :map(function(p) return {Common.get_name(p[1]), Common.get_name(p[2])} end)
+          :totable())
+        Log.trace(State.agression_log[1][2] == self)
+        Log.trace(Fun.iter(State.agression_log)
+          :filter(function(pair) return pair[2] == self end)
+          :map(function(pair) return pair[1] end)
+          :totable())
+      end
+      Tablex.concat(self.ai.was_attacked_by, Fun.iter(State.agression_log)
         :filter(function(pair) return pair[2] == self end)
         :map(function(pair) return pair[1] end)
         :totable())

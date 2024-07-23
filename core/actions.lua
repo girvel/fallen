@@ -123,7 +123,7 @@ module.hand_attack = setmetatable(
 
         entity.turn_resources.actions = entity.turn_resources.actions - 1
 
-        table.insert(State.agression_log, {entity, target})
+        State:register_agression(entity, target)
 
         entity:animate("attack")
         entity:when_animation_ends(function()

@@ -28,6 +28,7 @@ module_mt.__call = function(_, systems, debug_mode)
     dependencies = {},
 
     agression_log = {},
+    _next_agression_log = {},
 
     add = function(self, entity)
       self.world:add(entity)
@@ -152,6 +153,10 @@ module_mt.__call = function(_, systems, debug_mode)
         :totable()
 
       self.move_order = turn_order(pure_order)
+    end,
+
+    register_agression = function(self, source, target)
+      table.insert(self._next_agression_log, {source, target})
     end,
 	}
 end

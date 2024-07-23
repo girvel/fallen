@@ -37,6 +37,104 @@ return function()
         self.enabled = false
         rails.entities[3].ai.mode = engineer_ai.modes.skip_turn()
         State:add(special.floating_line("Стой! Остановись, мужик!!!", rails.entities[3].position))
+        rails.scenes.half_orc_mercy.enabled = true
+      end,
+    },
+
+    half_orc_mercy = {
+      name = "Half-orc talks after player spares him",
+      enabled = false,
+      start_predicate = function(self, rails, dt) return rails.entities[3].faction == State.player.faction end,
+
+      run = function(self, rails, dt)
+        self.enabled = false
+        api.narration("Полуорк несколько секунд тяжело дышит, опираясь о ближайшую стену.")
+        api.narration("В его взгляде нет ярости, только первобытный страх.")
+        api.line(State.player, "(Его родичи известны буйным нравом)")
+        api.line(State.player, "(И сдаваться они не умеют)")
+        api.line(State.player, "(Он же больше смахивает на нежного городского жителя)")
+
+        local options = {
+          "Кто ты такой?",
+          "Это ты вызвал диверсию?",
+          "Куда ты пойдешь, если я тебя отпущу?",
+          "Может ты видел или слышал что-то интересное?",
+          "Я принял решение."
+        }
+
+        while true do
+          local picked_option = api.options(options, true)
+
+          if picked_option == 1 then
+            api.line(rails.entities[3], "")
+            api.line(rails.entities[3], "")
+            api.line(rails.entities[3], "")
+            api.line(rails.entities[3], "")
+
+            local picked_suboption = api.options({
+              "",
+              "",
+            })
+
+            if picked_suboption == 1 then
+              api.line(rails.entities[3], "")
+              api.line(rails.entities[3], "")
+              api.line(rails.entities[3], "")
+              api.line(rails.entities[3], "")
+              api.line(rails.entities[3], "")
+            else
+              api.line(rails.entities[3], "")
+              api.line(rails.entities[3], "")
+              api.line(rails.entities[3], "")
+              api.line(rails.entities[3], "")
+              api.line(rails.entities[3], "")
+              api.line(rails.entities[3], "")
+            end
+          elseif picked_option == 2 then
+            api.line(rails.entities[3], "")
+            api.line(rails.entities[3], "")
+            api.line(rails.entities[3], "")
+            api.line(rails.entities[3], "")
+
+            local picked_suboption = api.options({
+              "",
+              "",
+            })
+
+            if picked_suboption == 1 then
+              api.line(rails.entities[3], "")
+              api.line(rails.entities[3], "")
+              api.line(rails.entities[3], "")
+            else
+              api.line(rails.entities[3], "")
+              api.line(rails.entities[3], "")
+            end
+          elseif picked_option == 3 then
+            api.line(rails.entities[3], "")
+            api.line(rails.entities[3], "")
+            api.line(rails.entities[3], "")
+          elseif picked_option == 4 then
+            api.line(rails.entities[3], "")
+            api.line(rails.entities[3], "")
+            api.line(rails.entities[3], "")
+            api.line(rails.entities[3], "")
+          elseif picked_option == 5 then
+            api.line(rails.entities[3], "")
+
+            local picked_suboption = api.options({
+              "",
+              "",
+              "",
+              "",
+            })
+
+            if picked_suboption == 1 or picked_suboption == 2 then
+              rails.entities[3].faction = "rebellion"
+              State:start_combat({State.player, rails.entities[3]})
+            end
+            break
+          end
+        end
       end,
     },
 
