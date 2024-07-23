@@ -66,66 +66,66 @@ return function()
           local picked_option = api.options(options, true)
 
           if picked_option == 1 then
-            api.line(rails.entities[3], "")
-            api.line(rails.entities[3], "")
-            api.line(rails.entities[3], "")
-            api.line(rails.entities[3], "")
+            api.line(rails.entities[3], "Я..?")
+            api.line(rails.entities[3], "Меня зовут Рронт. С двумя Р…")
+            api.line(rails.entities[3], "Фамилия - Бобински")
+            api.line(rails.entities[3], "Получается Рронт Бобински, да")
 
             local picked_suboption = api.options({
-              "",
-              "",
+              "Понятно, Ронт, а что ты здесь делаешь?",
+              "Да я не имя твоё спрашивал, **идиот**. Кто такой и что здесь делаешь? По существу.",
             })
 
             if picked_suboption == 1 then
-              api.line(rails.entities[3], "")
-              api.line(rails.entities[3], "")
-              api.line(rails.entities[3], "")
-              api.line(rails.entities[3], "")
-              api.line(rails.entities[3], "")
+              api.line(rails.entities[3], "Я… Я не знаю")
+              api.line(rails.entities[3], "Помню мы с друзьями, ну, культурно отдыхали")
+              api.line(rails.entities[3], "С алкоголем")
+              api.line(rails.entities[3], "А потом я здесь, а вокруг эти… как зомби себя ведут")
+              api.line(rails.entities[3], "И правильно Рронт, две р")
             else
-              api.line(rails.entities[3], "")
-              api.line(rails.entities[3], "")
-              api.line(rails.entities[3], "")
-              api.line(rails.entities[3], "")
-              api.line(rails.entities[3], "")
-              api.line(rails.entities[3], "")
+              api.line(rails.entities[3], "Не надо кричать!")
+              api.line(rails.entities[3], "Я просто выпивал с друзьями")
+              api.line(rails.entities[3], "Потом проснулся здесь")
+              api.line(rails.entities[3], "Я ничего не помню!")
+              api.line(rails.entities[3], "Я ничего не понимаю!!")
+              api.line(rails.entities[3], "Отпусти меня!!!")
             end
           elseif picked_option == 2 then
-            api.line(rails.entities[3], "")
-            api.line(rails.entities[3], "")
-            api.line(rails.entities[3], "")
-            api.line(rails.entities[3], "")
+            api.line(rails.entities[3], "Я не вызывал никакой диверсии!")
+            api.line(rails.entities[3], "Просто пытался выбраться")
+            api.line(rails.entities[3], "И шумел чтоб снаружи услышал кто")
+            api.line(rails.entities[3], "Ещё подумал, что дверь откроется, если сломать эту вот хренотеть")
 
             local picked_suboption = api.options({
-              "",
-              "",
+              "А насчёт остального? Твои перчатки, весь этот бардак, ложь в показаниях?",
+              "У тебя верно с головой не в порядке. И актёр ты никудышный. Вычислить обман было проще, чем опрокинуть ведро.",
             })
 
             if picked_suboption == 1 then
-              api.line(rails.entities[3], "")
-              api.line(rails.entities[3], "")
-              api.line(rails.entities[3], "")
+              api.line(rails.entities[3], "Я просто испугался")
+              api.line(rails.entities[3], "И подумал притвориться одним из этих")
+              api.line(rails.entities[3], "Видимо неудачно")
             else
-              api.line(rails.entities[3], "")
-              api.line(rails.entities[3], "")
+              api.line(rails.entities[3], "Я всего лишь хотел найти момент, чтобы сбежать из этого ада")
+              api.line(rails.entities[3], "И вредить я никому не хотел, только выбраться")
             end
           elseif picked_option == 3 then
-            api.line(rails.entities[3], "")
-            api.line(rails.entities[3], "")
-            api.line(rails.entities[3], "")
+            api.line(rails.entities[3], "Не знаю…")
+            api.line(rails.entities[3], "О, я попробую найти выход, буду искать и точно найду.")
+            api.line(rails.entities[3], "Верно.")
           elseif picked_option == 4 then
-            api.line(rails.entities[3], "")
-            api.line(rails.entities[3], "")
-            api.line(rails.entities[3], "")
-            api.line(rails.entities[3], "")
+            api.line(rails.entities[3], "Ничего!")
+            api.line(rails.entities[3], "Пока ты не открыл дверь, я был заперт здесь")
+            api.line(rails.entities[3], "Как в тюрьме")
+            api.line(rails.entities[3], "Или во гробу")
           elseif picked_option == 5 then
-            api.line(rails.entities[3], "")
+            api.line(rails.entities[3], "И какое?")
 
             local picked_suboption = api.options({
-              "",
-              "",
-              "",
-              "",
+              "Я внимательно выслушал тебя, диверсант, но боюсь, что должен тебя уничтожить. Ничего личного.",
+              "Слушать тебя было бессмысленно, мертвым от такого идиота будет больше пользы.",
+              "Можешь идти, не думаю, что ты виноват в какой-либо диверсии.",
+              "И на такого идиота я потратил ценные минуты своей жизни?! Долой с глаз моих! И чтоб больше я тебя не видел!",
             })
 
             if picked_suboption == 1 or picked_suboption == 2 then

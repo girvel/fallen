@@ -24,13 +24,26 @@ railing.api.center_camera = function()
   end)
 end
 
+local convert = function(index, removed_indices)
+  for _, removed_index in ipairs(removed_indices) do
+    if index < removed_index then break end
+    index = index + 1
+  end
+  return index
+end
+
 railing.api.options = function(options, remove_picked)
   State.gui.dialogue:options_present(options)
   while State:get_mode() ~= "free" do coroutine.yield() end
+  local converted_i = State.gui.dialogue.selected_option_i
   if remove_picked then
+    options.removed = options.removed or {}
+    converted_i = convert(converted_i, options.removed)
     table.remove(options, State.gui.dialogue.selected_option_i)
+    table.insert(options.removed, converted_i)
+    table.sort(options.removed)
   end
-  return State.gui.dialogue.selected_option_i
+  return converted_i
 end
 
 railing.api.notification = function(rails, text, is_order)
