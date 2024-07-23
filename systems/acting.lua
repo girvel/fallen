@@ -36,8 +36,11 @@ return Tiny.processingSystem({
 
     if is_world_turn then
       if State.move_order:contains(entity) then return end
-      event = {6}  -- 1 round is 6 seconds
     elseif State.move_order:get_current() ~= entity then return end
+
+    if is_world_turn then
+      event = {6}  -- 1 round is 6 seconds
+    end
 
     local was_timeout_reached = (
       not entity.player_flag
