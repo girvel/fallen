@@ -8,8 +8,8 @@ local turn_order = require("tech.turn_order")
 local weapons = require("library.weapons")
 local core = require("core")
 local races = require("core.races")
-local ai = require("tech.ai")
 local constants = require("core.constants")
+local engineer_ai = require("library.engineer_ai")
 
 
 local module = {}
@@ -21,69 +21,7 @@ local engineer_mixin = function()
     end),
     {
       talking_to = nil,
-
-      -- TODO optimize
-      ai = ai.async(function(self, dt)
-        if not -Query(State.move_order):contains(self) then return end
-        Log.debug("--- %s ---" % Common.get_name(self))
-
-        if self.skip_turn then
-          Log.debug("Skips turn")
-          self.skip_turn = nil
-          return
-        end
-
-        if self.run_away_to then
-          local path = State.grids.solids:find_path(self.position, self.run_away_to)
-
-          for _, position in ipairs(path) do
-            if self.turn_resources.movement <= 0 then
-              if self.turn_resources.actions > 0 then
-                actions.dash(self)
-              else
-                break
-              end
-            end
-
-            local direction = (position - self.position)
-            if not actions.move[Vector.name_from_direction(direction:normalized())](self) then return end
-            coroutine.yield()
-          end
-          return
-        end
-
-        if (State.player.position - self.position):abs() > 1 then
-          Log.debug("Attempt at building path towards player")
-          local path = State.grids.solids:find_path(self.position, State.player.position)
-          Log.debug("Path is built")
-          table.remove(path)
-
-          for _, position in ipairs(path) do
-            if self.turn_resources.movement <= 0 then
-              if self.turn_resources.actions > 0 then
-                actions.dash(self)
-              else
-                break
-              end
-            end
-
-            local direction = (position - self.position)
-            if not actions.move[Vector.name_from_direction(direction:normalized())](self) then return end
-            coroutine.yield()
-          end
-        end
-
-        local direction = State.player.position - self.position
-        if direction:abs() == 1 then
-          Log.debug("Attempt at attacking the player")
-          self:rotate(Vector.name_from_direction(direction))
-          while actions.hand_attack(self) do
-            while not self.animation.current:startsWith("idle") do
-              coroutine.yield()
-            end
-          end
-        end
-      end),
+      ai = engineer_ai(),
     }
   )
 end

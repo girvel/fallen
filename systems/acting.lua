@@ -19,7 +19,7 @@ return Tiny.processingSystem({
 
   process = function(self, entity, event)
     if not State.move_order then
-      entity:ai(event)
+      entity.ai.run(entity, event)
       if entity.get_turn_resources then Tablex.extend(entity.turn_resources, entity:get_turn_resources()) end
       return
     end
@@ -41,7 +41,7 @@ return Tiny.processingSystem({
     end
 
     if
-      entity:ai(event) == turn_order.TURN_END_SIGNAL and not is_world_turn
+      entity.ai.run(entity, event) == turn_order.TURN_END_SIGNAL and not is_world_turn
       or was_timeout_reached
     then
       Common.reset_period(self, State.move_order:get_current())

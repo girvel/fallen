@@ -30,7 +30,7 @@ return function()
 
       run = function(self, rails, dt)
         self.enabled = false
-        rails.entities[3].skip_turn = true
+        rails.entities[3].ai.skip_turn = true
         State:add(special.floating_line("Стой! Остановись, мужик!!!", rails.entities[3].position))
       end,
     },
@@ -65,7 +65,7 @@ return function()
             e._highlight = nil
           end
         end)
-        rails.entities[3].run_away_to = rails.positions.exit
+        rails.entities[3].ai.run_away_to = rails.positions.exit
 
         api.order(rails, "Это была ошибка")
         api.wait_seconds(5)
@@ -94,7 +94,7 @@ return function()
       name = "Half-orc runs away",
       enabled = true,
       start_predicate = function(self, rails, dt)
-        return rails.entities[3].run_away_to == rails.positions.exit
+        return rails.entities[3].ai.run_away_to == rails.positions.exit
           and rails.entities[3].position == rails.positions.exit
       end,
 

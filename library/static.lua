@@ -199,7 +199,7 @@ module.leaking_pipe_left_down = function()
       sound_loop = sound,
       paused = false,
 
-      ai = function(self, event)
+      ai = {run = function(self, event)
         local dt = unpack(event)
         self.overflow_counter = self.overflow_counter + dt
 
@@ -216,7 +216,7 @@ module.leaking_pipe_left_down = function()
           self.trigger_seconds = 8 + math.random() * 4
           self:burst_with_steam()
         end
-      end,
+      end},
 
       burst_with_steam = function(self)
         if self.paused then return end

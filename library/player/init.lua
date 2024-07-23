@@ -28,11 +28,11 @@ module_mt.__call = function()
     end,
 
     hotkeys = require("library.player.hotkeys")(),
-    ai = function(self)
+    ai = {run = function(self)
       local result = -Query(self.hotkeys[State:get_mode()])[self.last_pressed_key](self)
       self.last_pressed_key = nil
       return result
-    end,
+    end},
 
     abilities = {
       strength = 16,
