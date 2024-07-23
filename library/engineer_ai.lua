@@ -5,7 +5,7 @@ local actions = require("core.actions")
 local engineer_ai_mt = {}
 local engineer_ai = setmetatable({}, engineer_ai_mt)
 
-engineer_ai.modes = Enum("library.engineer_ai.modes", {
+engineer_ai.modes = Enum({
   run_away_to = {"destination"},
   skip_turn = {},
   normal = {},
