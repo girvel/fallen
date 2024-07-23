@@ -138,6 +138,19 @@ return function()
       end,
     },
 
+    {
+      name = "Half orc was killed",
+      enabled = true,
+      start_predicate = function(self, rails, dt) return rails.entities[3].hp <= 0 end,
+
+      run = function(self, rails, dt)
+        self.enabled = false
+        api.notification(rails, "Задача выполнена", true)
+        api.wait_seconds(5)
+        api.notification(rails, "Ожидайте следующее задание", true)
+      end,
+    },
+
     player_attacks_dreamer = {
       name = "Player attacks one of the dreamers",
       enabled = true,
