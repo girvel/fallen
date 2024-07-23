@@ -107,7 +107,7 @@ end
 
 module.gui_background = function()
   return Tablex.extend(
-    static_sprite("assets/sprites/gui_background.png"),
+    static_sprite("assets/sprites/hp_background.png"),
     {
       codename = "sidebar_background",
       view = "sidebar_background",

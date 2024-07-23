@@ -271,15 +271,15 @@ return Tiny.sortedProcessingSystem({
       })
     end
 
-    -- Tablex.concat(lines, {
-    --   "",
-    --   "Действия:",
-    --   "  1 - атака рукой",
-    --   "  2 - ничего не делать",
-    --   "  3 - второе дыхание",
-    --   "  4 - всплеск действий",
-    --   "  z - рывок",
-    -- })
+    Tablex.concat(lines, {
+      "",
+      "Действия:",
+      "  1 - атака рукой",
+      "  2 - ничего не делать",
+      "  3 - второе дыхание",
+      "  4 - всплеск действий",
+      "  z - рывок",
+    })
 
     local potential_interaction = interactive.get_for(State.player)
     if potential_interaction and (State:get_mode() == "free" or State:get_mode() == "fight") then
@@ -291,7 +291,7 @@ return Tiny.sortedProcessingSystem({
 
     love.graphics.printf(
       table.concat(lines, "\n"), State.gui.font,
-      love.graphics.getWidth() - self.SIDEBAR_W, 15 + 400,
+      love.graphics.getWidth() - self.SIDEBAR_W, 115,
       self.SIDEBAR_W - 15
     )
   end,
