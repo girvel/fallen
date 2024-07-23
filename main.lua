@@ -12,6 +12,7 @@ Query = require("lib.query")
 Mathx = require("lib.mathx")
 Common = require("lib.common")
 
+Enum = require("lib.enum")
 Vector = require("lib.vector")
 Grid = require("lib.grid")
 D = require("lib.d")
