@@ -5,10 +5,16 @@ local actions = require("core.actions")
 local engineer_ai_mt = {}
 local engineer_ai = setmetatable({}, engineer_ai_mt)
 
+engineer_ai.modes = Enum({
+  run_away_to = {"destination"},
+  skip_turn = {},
+  normal = {},
+})
+
 engineer_ai_mt.__call = function(_)
   return {
-    run_away_to = nil,  -- TODO redo as enum
-    skip_turn = nil,
+    mode = engineer_ai.modes.normal(),
+
     look_for_agression = nil,
     was_attacked_by = {},
 
@@ -20,14 +26,16 @@ engineer_ai_mt.__call = function(_)
       local was_attacked_by = self.was_attacked_by
       self.was_attacked_by = {}
 
-      if self.ai.skip_turn then
+      local mode_type = self.ai.mode.enum_variant
+      if mode_type == engineer_ai.modes.skip_turn then
         Log.debug("Skips turn")
-        self.ai.skip_turn = nil
+        self.ai.mode = engineer_ai.modes.normal()
         return
       end
 
-      if self.ai.run_away_to then
-        local path = State.grids.solids:find_path(self.position, self.ai.run_away_to)
+      if mode_type == engineer_ai.modes.run_away_to then
+        local destination = self.ai.mode:unpack()
+        local path = State.grids.solids:find_path(self.position, destination)
 
         for _, position in ipairs(path) do
           if self.turn_resources.movement <= 0 then

@@ -1,5 +1,6 @@
 local api = require("tech.railing").api
 local special = require("tech.special")
+local engineer_ai = require("library.engineer_ai")
 
 
 return function()
@@ -30,7 +31,7 @@ return function()
 
       run = function(self, rails, dt)
         self.enabled = false
-        rails.entities[3].ai.skip_turn = true
+        rails.entities[3].ai.mode = engineer_ai.modes.skip_turn()
         State:add(special.floating_line("Стой! Остановись, мужик!!!", rails.entities[3].position))
       end,
     },
@@ -65,7 +66,7 @@ return function()
             e._highlight = nil
           end
         end)
-        rails.entities[3].ai.run_away_to = rails.positions.exit
+        rails.entities[3].ai.mode = engineer_ai.modes.run_away_to(rails.positions.exit)
 
         api.order(rails, "Это была ошибка")
         api.wait_seconds(5)
@@ -94,7 +95,9 @@ return function()
       name = "Half-orc runs away",
       enabled = true,
       start_predicate = function(self, rails, dt)
-        return rails.entities[3].ai.run_away_to == rails.positions.exit
+        Log.trace(getmetatable(rails.entities[3].ai.mode) == getmetatable(engineer_ai.modes.run_away_to(rails.positions.exit)))
+        Log.trace(rails.entities[3].ai.mode.enum_variant == engineer_ai.modes.run_away_to().enum_variant)
+        return rails.entities[3].ai.mode == engineer_ai.modes.run_away_to(rails.positions.exit)
           and rails.entities[3].position == rails.positions.exit
       end,
 
