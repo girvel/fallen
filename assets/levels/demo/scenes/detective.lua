@@ -14,7 +14,7 @@ return function()
         rails.entities.leaking_valve.paused = true
         api.center_camera()
 
-        api.notification(rails, "Вычислить и устранить диверсанта", false)  -- TODO RM
+        api.notification(rails, "Вычислить и устранить диверсанта", true)
 
         api.narration("Резкий запах мазута, керосина и ржавчины заставляет непроизвольно зажмуриться.")
         api.narration("Помещение забито трубами и приборами непонятного назначения.")

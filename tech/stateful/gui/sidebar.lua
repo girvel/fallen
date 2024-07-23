@@ -2,7 +2,7 @@ local special = require("tech.special")
 
 
 local order_sound = Common.volumed_sounds("assets/sounds/electricity.wav", 0.08)[1]
-local ORDER_COLOR = Common.hex_color("e64e4b")
+local ORDER_COLOR = Common.hex_color("f7e5b2")
 local NOTIFICATION_COLOR = Common.hex_color("ededed")
 
 return function()
