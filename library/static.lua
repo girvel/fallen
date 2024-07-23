@@ -256,6 +256,9 @@ module.device_panel = function()
       codename = "device_panel",
       hp = 1,
       hardness = 15,
+      sounds = {
+        hit = Common.volumed_sounds("assets/sounds/glass_breaking", 0.5),
+      },
       on_remove = function(self)
         State:add(Tablex.extend(module.device_panel_broken(), {position = self.position}))
       end,
