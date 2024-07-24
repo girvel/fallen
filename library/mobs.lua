@@ -14,14 +14,14 @@ local engineer_ai = require("library.engineer_ai")
 
 local module = {}
 
-local engineer_mixin = function()
+local engineer_mixin = function(ai_outside_of_combat)
   return Tablex.extend(
     interactive(function(self, other)
       self.talking_to = other
     end),
     {
       talking_to = nil,
-      ai = engineer_ai(),
+      ai = engineer_ai(ai_outside_of_combat),
     }
   )
 end
@@ -83,7 +83,7 @@ module[3] = function()
         reactions = 1,
       }
     end,
-  }, engineer_mixin()))
+  }, engineer_mixin(true)))
 end
 
 module[4] = function()

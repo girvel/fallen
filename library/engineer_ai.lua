@@ -12,7 +12,7 @@ engineer_ai.modes = Enum({
   normal = {},
 })
 
-engineer_ai_mt.__call = function(_)
+engineer_ai_mt.__call = function(_, works_outside_of_combat)
   return {
     mode = engineer_ai.modes.normal(),
 
@@ -21,6 +21,11 @@ engineer_ai_mt.__call = function(_)
 
     -- TODO optimize
     run = ai.async(function(self, dt)
+      if
+        not State.move_order
+        and self.ai.mode.enum_variant ~= engineer_ai.modes.run_away_to
+      then return end
+
       Log.debug("--- %s ---" % Common.get_name(self))
 
       local was_attacked_by = self.ai.was_attacked_by
@@ -94,7 +99,7 @@ engineer_ai_mt.__call = function(_)
           end
         end
       end
-    end),
+    end, works_outside_of_combat),
 
     observe = function(self, event)
       Tablex.concat(self.ai.was_attacked_by, Fun.iter(State.agression_log)

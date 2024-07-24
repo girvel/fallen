@@ -134,6 +134,8 @@ return function()
             if picked_suboption == 1 or picked_suboption == 2 then
               rails.entities[3].faction = "rebellion"
               State:start_combat({State.player, rails.entities[3]})
+            else
+              rails.entities[3].ai.mode = engineer_ai.modes.run_away_to(rails.positions.exit)
             end
             break
           end
