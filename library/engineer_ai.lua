@@ -1,5 +1,6 @@
 local ai = require("tech.ai")
 local actions = require("core.actions")
+local special = require("tech.special")
 
 
 local engineer_ai_mt = {}
@@ -38,6 +39,7 @@ engineer_ai_mt.__call = function(_)
       local mode_type = self.ai.mode.enum_variant
       if mode_type == engineer_ai.modes.skip_turn then
         Log.debug("Skips turn")
+        State:add(special.floating_line("Стой! Остановись, мужик!!!", self.position))
         self.ai.mode = engineer_ai.modes.normal()
         self.ai.look_for_agression = true
         return

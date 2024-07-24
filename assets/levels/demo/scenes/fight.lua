@@ -1,5 +1,4 @@
 local api = require("tech.railing").api
-local special = require("tech.special")
 local engineer_ai = require("library.engineer_ai")
 
 
@@ -36,7 +35,6 @@ return function()
       run = function(self, rails, dt)
         self.enabled = false
         rails.entities[3].ai.mode = engineer_ai.modes.skip_turn()
-        State:add(special.floating_line("Стой! Остановись, мужик!!!", rails.entities[3].position))
         rails.scenes.half_orc_mercy.enabled = true
       end,
     },
