@@ -99,20 +99,14 @@ engineer_ai_mt.__call = function(_)
     end),
 
     observe = function(self, event)
-      if #State.agression_log > 0 then
-        Log.trace(Fun.iter(State.agression_log)
-          :map(function(p) return {Common.get_name(p[1]), Common.get_name(p[2])} end)
-          :totable())
-        Log.trace(State.agression_log[1][2] == self)
-        Log.trace(Fun.iter(State.agression_log)
-          :filter(function(pair) return pair[2] == self end)
-          :map(function(pair) return pair[1] end)
-          :totable())
-      end
       Tablex.concat(self.ai.was_attacked_by, Fun.iter(State.agression_log)
         :filter(function(pair) return pair[2] == self end)
         :map(function(pair) return pair[1] end)
         :totable())
+
+      if self.ai.look_for_agression then
+        self.turn_resources.reactions = 0
+      end
     end,
   }
 end
