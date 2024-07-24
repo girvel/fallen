@@ -9,7 +9,6 @@ return Tiny.processingSystem({
   preProcess = function()
     State.agression_log = State._next_agression_log
     State._next_agression_log = {}
-    if #State.agression_log > 0 then Log.trace("AGRESSION!") end
     if State.move_order then
       local combatants = Fun.iter(State.move_order.list)
         :filter(function(e) return e ~= turn_order.WORLD_TURN end)

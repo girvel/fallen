@@ -25,12 +25,10 @@ engineer_ai_mt.__call = function(_)
 
       local was_attacked_by = self.ai.was_attacked_by
       self.ai.was_attacked_by = {}
-      Log.trace(was_attacked_by)
 
       if self.ai.look_for_agression then
         self.ai.look_for_agression = false
         if Fun.iter(was_attacked_by):all(function(e) return e ~= State.player end) then
-          Log.trace(1)
           self.faction = State.player.faction
           return
         end
