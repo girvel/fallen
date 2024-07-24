@@ -252,7 +252,31 @@ return Tiny.sortedProcessingSystem({
         :totable()
     )
 
+    Tablex.concat(lines, {
+      "",
+      "Действия:",
+      "  [1] - атака рукой",
+      "  [2] - ничего не делать",
+      "  [3] - второе дыхание",
+      "  [4] - всплеск действий",
+      "  [z] - рывок",
+      "  [k] - открыть кодекс",
+    })
+
+    local potential_interaction = interactive.get_for(State.player)
+    if potential_interaction and (State:get_mode() == "free" or State:get_mode() == "fight") then
+      Tablex.concat(lines, {
+        "",
+        "  [E] - взаимодействовать с " .. Common.get_name(potential_interaction),
+      })
+    end
+
     if State.move_order then
+      Tablex.concat(lines, {
+        "",
+        "  [Space] - закончить ход",
+      })
+
       Tablex.concat(lines, {
         "",
         "Очередь ходов:",
@@ -264,29 +288,6 @@ return Tiny.sortedProcessingSystem({
         :map(function(i, e) return (State.move_order.current_i == i and "x " or "- ") .. (e.name or "_") end)
         :totable()
       )
-
-      Tablex.concat(lines, {
-        "",
-        "Space - закончить ход",
-      })
-    end
-
-    Tablex.concat(lines, {
-      "",
-      "Действия:",
-      "  1 - атака рукой",
-      "  2 - ничего не делать",
-      "  3 - второе дыхание",
-      "  4 - всплеск действий",
-      "  z - рывок",
-    })
-
-    local potential_interaction = interactive.get_for(State.player)
-    if potential_interaction and (State:get_mode() == "free" or State:get_mode() == "fight") then
-      Tablex.concat(lines, {
-        "",
-        "Нажмите [E] чтобы взаимодействовать с " .. Common.get_name(potential_interaction),
-      })
     end
 
     love.graphics.printf(

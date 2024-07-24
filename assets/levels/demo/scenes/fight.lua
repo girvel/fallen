@@ -44,11 +44,16 @@ return function()
     half_orc_mercy = {
       name = "Half-orc talks after player spares him",
       enabled = false,
-      start_predicate = function(self, rails, dt) return rails.entities[3].faction == State.player.faction end,
+      start_predicate = function(self, rails, dt)
+        return rails.entities[3].faction == State.player.faction
+      end,
 
       run = function(self, rails, dt)
         self.enabled = false
         api.narration("Полуорк несколько секунд тяжело дышит, опираясь о ближайшую стену.")
+        rails.entities[3]:rotate(Vector.name_from_direction(
+          (State.player.position - rails.entities[3].position):normalized()
+        ))
         api.narration("В его взгляде нет ярости, только первобытный страх.")
         api.line(State.player, "(Его родичи известны буйным нравом)")
         api.line(State.player, "(И сдаваться они не умеют)")
