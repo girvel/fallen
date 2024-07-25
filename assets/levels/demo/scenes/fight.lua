@@ -204,11 +204,11 @@ return function()
 
       run = function(self, rails, dt)
         self.enabled = false
-        State.gui.wiki.discovered_pages.dreamers = 2
-        State.gui.wiki.discovered_pages.codex = 2
         api.notification(rails, "Задача выполнена неудовлетворительно", true)
         api.wait_seconds(11)
         api.notification(rails, "Ожидайте следующее задание", true)
+        api.wait_seconds(11)
+        api.discover_wiki(rails, {dreamers = 2, codex = 2})
       end,
     },
 

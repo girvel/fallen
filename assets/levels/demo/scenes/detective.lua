@@ -25,7 +25,7 @@ return function()
         api.line(State.player, "(Я смогу вычислить его из показаний остальных)")
         api.line(State.player, "(Надо начать с допроса)")
         api.line(State.player, "(Надеюсь, они видели или слышали что-то необычное)")
-        
+
         rails.entities.leaking_valve.paused = false
         rails.entities.leaking_valve:burst_with_steam()
         api.narration("Мощный поток горячего пара от ближайшей трубы прерывает ваши мысли")
@@ -239,8 +239,7 @@ return function()
       start_predicate = function(self, rails) return rails.dreamers_talked_to == 4 end,
       run = function(self, rails)
         self.enabled = false
-        State.gui.wiki.discovered_pages.codex = 2
-        api.discover_wiki(rails, "dreamers", 1)
+        api.discover_wiki(rails, {codex = 2, dreamers = 1})
       end,
     },
   }

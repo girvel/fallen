@@ -58,8 +58,10 @@ railing.api.notification = function(rails, text, is_order)
   end)
 end
 
-railing.api.discover_wiki = function(rails, page, level)
-  State.gui.wiki.discovered_pages[page] = level
+railing.api.discover_wiki = function(rails, page_table)
+  for k, v in pairs(page_table) do
+    State.gui.wiki.discovered_pages[k] = v
+  end
   railing.api.notification(rails, "Информация в Кодексе обновлена")  -- TODO mention page name
 end
 
