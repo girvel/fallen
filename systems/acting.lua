@@ -19,6 +19,9 @@ return Tiny.processingSystem({
             :map(Common.get_name)
             :totable(), ", ")
         )
+        Fun.iter(combatants):each(function(e)
+          Tablex.extend(e.turn_resources, -Query(e):get_resources("short") or {})
+        end)
         State.combat = nil
       end
     end
@@ -28,7 +31,7 @@ return Tiny.processingSystem({
     Query(entity.ai).observe(entity, event)
     if not State.combat then
       entity.ai.run(entity, event)
-      if entity.get_turn_resources then Tablex.extend(entity.turn_resources, entity:get_turn_resources()) end
+      Tablex.extend(entity.turn_resources, -Query(entity):get_resources("move") or {})
       return
     end
 
@@ -56,9 +59,7 @@ return Tiny.processingSystem({
       or was_timeout_reached
     then
       Common.reset_period(self, State.combat:get_current())
-      if entity.get_turn_resources then
-        Tablex.extend(entity.turn_resources, entity:get_turn_resources())
-      end
+      Tablex.extend(entity.turn_resources, -Query(entity):get_resources("move") or {})
       State.combat:move_to_next()
       Log.info("%s's turn" % Common.get_name(State.combat:get_current()))
     end

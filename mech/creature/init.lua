@@ -29,13 +29,27 @@ module_mt.__call = function(_, animation_pack, object)
       return 10 + mech.get_modifier(self.abilities.dexterity)
     end,
 
-    get_turn_resources = function()
-      return {
-        movement = constants.DEFAULT_MOVEMENT_SPEED,
-        actions = 1,
-        bonus_actions = 1,
-        reactions = 1,
-      }
+    get_resources = function(self, rest_type)
+      assert(
+        Common.set({"move", "short", "long"})[rest_type],
+        [[allowed values for rest_type: "move", "short", "long"]]
+      )
+
+      local base
+      if rest_type == "move" then
+        base = {
+          movement = constants.DEFAULT_MOVEMENT_SPEED,
+          actions = 1,
+          bonus_actions = 1,
+          reactions = 1,
+        }
+      elseif rest_type == "short" then
+        base = {}
+      else
+        base = {}
+      end
+
+      return Tablex.extend(base, -Query(self.class):get_resources(self.level, rest_type) or {})
     end,
 
     get_max_hp = function(self)
@@ -69,7 +83,12 @@ module_mt.__call = function(_, animation_pack, object)
   }, object)
 
   result.hp = result.hp or result:get_max_hp()
-  result.turn_resources = result.turn_resources or result:get_turn_resources()
+  result.turn_resources = result.turn_resources
+    or Tablex.extend({},
+      result:get_resources("move"),
+      result:get_resources("short"),
+      result:get_resources("long")
+    )
   result.potential_actions = result:get_actions()
   result:animate("idle")
 

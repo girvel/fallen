@@ -47,6 +47,16 @@ module_mt.__call = function(_)
         :take_n(level)
         :reduce(Tablex.concat, {})
     end,
+    _resource_table = {
+      {short = {second_wind = 1}},
+      {short = {action_surge = 1}},
+    },
+    get_resources = function(self, level, rest_type)
+      return Fun.iter(self._resource_table)
+        :take_n(level)
+        :map(function(t) return t[rest_type] end)
+        :reduce(Tablex.extend, {})
+    end,
   }
 end
 

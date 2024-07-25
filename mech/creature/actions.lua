@@ -146,7 +146,7 @@ actions.dash = {
   end,
   _run = function(_, entity)
     entity.turn_resources.actions = entity.turn_resources.actions - 1
-    entity.turn_resources.movement = entity.turn_resources.movement + entity:get_turn_resources().movement
+    entity.turn_resources.movement = entity.turn_resources.movement + entity:get_resources("move").movement
   end,
 }
 

@@ -86,7 +86,11 @@ return function()
     end,
 
     get_text = function(self)
-      local max = State.player:get_turn_resources()
+      local max = Tablex.extend({},
+        State.player:get_resources("move"),
+        State.player:get_resources("short"),
+        State.player:get_resources("long")
+      )
 
       local result = {}
 

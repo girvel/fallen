@@ -70,7 +70,7 @@ module[3] = function()
 
     talking_to = nil,
 
-    get_turn_resources = function()
+    get_resources = function()
       return {
         movement = constants.DEFAULT_MOVEMENT_SPEED,
         actions = 2,
