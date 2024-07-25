@@ -44,7 +44,7 @@ end
 
 module[1] = function()
   return humanoid(Tablex.extend({
-    name = "инженер #1",
+    name = "инженер-полуэльф",
     race = races.half_elf,
     direction = "down",
     inventory = {main_hand = weapons.gas_key()},
@@ -53,7 +53,7 @@ end
 
 module[2] = function()
   return humanoid(Tablex.extend({
-    name = "инженер #2",
+    name = "инженер-полурослик",
     race = races.halfling,
     direction = "down",
     inventory = {},
@@ -62,7 +62,7 @@ end
 
 module[3] = function()
   return humanoid(Tablex.extend({
-    name = "инженер #3",
+    name = "инженер-полуорк",
     race = races.half_orc,
     hp = 34,
     max_hp = 35,
@@ -88,7 +88,7 @@ end
 
 module[4] = function()
   return humanoid(Tablex.extend({
-    name = "инженер #4",
+    name = "инженер-дворф",
     race = races.dwarf,
     direction = "up",
     inventory = {},
