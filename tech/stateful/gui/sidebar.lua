@@ -1,10 +1,14 @@
 local special = require("tech.special")
-local interactive = require("tech.interactive")
+local mech = require("mech")
 
 
 local order_sound = Common.volumed_sounds("assets/sounds/electricity.wav", 0.08)[1]
-local ORDER_COLOR = Common.hex_color("f7e5b2")
-local NOTIFICATION_COLOR = Common.hex_color("ededed")
+local COLOR = {
+  ORDER = Common.hex_color("f7e5b2"),
+  NOTIFICATION = Common.hex_color("ededed"),
+  INACTIVE = Common.hex_color("8b7c99"),
+  HOSTILE = Common.hex_color("e64e4b"),
+}
 local resource_translations = {
   bonus_actions = "бонусные действия",
   movement = "движение",
@@ -62,7 +66,7 @@ return function()
         self.notification_fx:animate("normal")
       end
 
-      self.notification.sprite.text = {is_order and ORDER_COLOR or NOTIFICATION_COLOR, text}
+      self.notification.sprite.text = {is_order and COLOR.ORDER or COLOR.NOTIFICATION, text}
       self.notification.position = Vector({
         -15 - self.notification.sprite.font:getWidth(text),
         16 * State.gui.views.sidebar.scale - self.notification.sprite.font:getHeight() / 2
@@ -74,7 +78,6 @@ return function()
     end,
 
     get_text = function(self)
-      local INACTIVE = Common.hex_color("8b7c99")
       local max = State.player:get_turn_resources()
 
       local result = {}
@@ -125,7 +128,7 @@ return function()
           end)
           :map(function(data, keys)
             return {
-              data.action and not data.action:get_availability(State.player) and INACTIVE or {1, 1, 1},
+              data.action and not data.action:get_availability(State.player) and COLOR.INACTIVE or {1, 1, 1},
               "\n  [%s] - %s" % {table.concat(keys, "/"), Common.get_name(data)},
             }
           end)
@@ -133,16 +136,19 @@ return function()
       )
 
       if State.move_order then
+        append("\n\nОчередь ходов:")
         append(
-          "\n\nОчередь ходов:\n"
-          .. table.concat(
-            Fun.iter(State.move_order.list)
-              :enumerate()
-              :take_n(#State.move_order.list - 1)
-              :map(function(i, e) return (State.move_order.current_i == i and "x " or "- ") .. (e.name or "_") end)
-              :totable(),
-            "\n"
-          )
+          State.move_order:iter_entities_only()
+            :map(function(e)
+              return {
+                mech.are_hostile(State.player, e) and COLOR.HOSTILE or {1, 1, 1},
+                "\n%s %s" % {
+                  State.move_order:get_current() == e and "x" or "-",
+                  Common.get_name(e),
+                },
+              }
+            end)
+            :reduce(Tablex.concat, {})
         )
       end
 

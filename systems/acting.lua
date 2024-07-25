@@ -10,9 +10,7 @@ return Tiny.processingSystem({
     State.agression_log = State._next_agression_log
     State._next_agression_log = {}
     if State.move_order then
-      local combatants = Fun.iter(State.move_order.list)
-        :filter(function(e) return e ~= turn_order.WORLD_TURN end)
-        :totable()
+      local combatants = State.move_order:iter_entities_only():totable()
 
       if Fun.iter(combatants):all(function(e) return e.faction == combatants[1].faction end) then
         Log.info(

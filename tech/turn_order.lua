@@ -30,8 +30,12 @@ module_mt.__call = function(_, list)
         self.current_i = 1
       end
     end,
-    contains = function(self, entity)
+    contains = function(self, entity)  -- TODO replace with Tablex.contains
       return Fun.iter(self.list):any(function(e) return e == entity end)
+    end,
+    iter_entities_only = function(self)
+      return Fun.iter(self.list)
+        :filter(function(e) return e ~= module.WORLD_TURN end)
     end,
   }
 end

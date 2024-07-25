@@ -43,9 +43,9 @@ module_mt.__call = function(_)
       {fighter.action_surge},
     },
     get_actions = function(self, level)
-      return Log.trace(Fun.iter(self._action_table)
+      return Fun.iter(self._action_table)
         :take_n(level)
-        :reduce(Tablex.concat, {}))
+        :reduce(Tablex.concat, {})
     end,
   }
 end

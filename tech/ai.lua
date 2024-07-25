@@ -1,4 +1,3 @@
-local turn_order = require("tech.turn_order")
 local actions = require("mech.creature.actions")
 
 
@@ -21,7 +20,7 @@ ai.async = function(fun, works_outside_of_combat)
 
     if coroutine.status(self._ai_coroutine) == "dead" then
       self._ai_coroutine = nil
-      return turn_order.TURN_END_SIGNAL
+      return self:act(actions.finish_turn)
     end
   end
 end
@@ -35,6 +34,7 @@ ai.api.travel = function(entity, destination)
   Log.debug("Moving to " .. tostring(destination))
   if entity.position == destination then return end
   local path = State.grids.solids:find_path(entity.position, destination)
+  Log.trace(#path, path)
   if State.grids.solids[path[#path]] then table.remove(path) end
 
   for _, position in ipairs(path) do
