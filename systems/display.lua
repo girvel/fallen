@@ -42,7 +42,6 @@ return Tiny.sortedProcessingSystem({
   filter = Tiny.requireAll("position", "sprite", "view"),
   base_callback = "draw",
 
-  SIDEBAR_W = 256,
   _old_camera_position = Vector.zero,
 
   _unknown_icon = love.graphics.newImage("assets/sprites/icons/unknown.png"),
@@ -67,44 +66,23 @@ return Tiny.sortedProcessingSystem({
 
   preProcess = function(self)
     self:_update_views()
-    self:_update_indicators()
+    State.gui.sidebar:update_indicators()
   end,
 
   _update_views = function(self)
     for key, value in pairs({
       scene_fx = get_scene_offset(),
       scene = get_scene_offset(),
-      actions = Vector({love.graphics.getWidth() - self.SIDEBAR_W + 16, 64 + 15}),
-      sidebar_background = Vector({love.graphics.getWidth() - self.SIDEBAR_W, 0}),
-      sidebar = Vector({love.graphics.getWidth() - self.SIDEBAR_W, 0}),
-      sidebar_text = Vector({love.graphics.getWidth() - self.SIDEBAR_W, 0}),
+      actions = Vector({love.graphics.getWidth() - State.gui.sidebar.W + 16, 64 + 15}),
+      sidebar_background = Vector({love.graphics.getWidth() - State.gui.sidebar.W, 0}),
+      sidebar = Vector({love.graphics.getWidth() - State.gui.sidebar.W, 0}),
+      sidebar_text = Vector({love.graphics.getWidth() - State.gui.sidebar.W, 0}),
       dialogue_background = Vector.zero,
       dialogue_text = get_dialogue_offset(),
       wiki = ((Vector({love.graphics.getDimensions()}) - State.gui.TEXT_MAX_SIZE) / 2):ceil(),
     }) do
       State.gui.views[key].offset = value
     end
-  end,
-
-  -- TODO REFACTOR move from here
-  _update_indicators = function(self)
-    local text = "%s/%s" % {State.player.hp, State.player:get_max_hp()}
-    local hp_text = State.gui.sidebar.hp_text
-    local font = hp_text.sprite.font
-
-    hp_text.sprite.text = text
-    hp_text.position = Vector({
-      (self.SIDEBAR_W - font:getWidth(text)) / 2,
-      32 - font:getHeight() / 2
-    })
-
-    local hp_bar = State.gui.sidebar.hp_bar
-    hp_bar.sprite.quad = love.graphics.newQuad(
-      0, 0,
-      hp_bar.sprite.image:getWidth() * State.player.hp / State.player:get_max_hp(),
-      hp_bar.sprite.image:getHeight(),
-      hp_bar.sprite.image:getDimensions()
-    )
   end,
 
   process = function(self, entity)
@@ -206,8 +184,8 @@ return Tiny.sortedProcessingSystem({
   _display_text_info = function(self)
     love.graphics.printf(
       State.gui.sidebar:get_text(), State.gui.font,
-      love.graphics.getWidth() - self.SIDEBAR_W, 115,
-      self.SIDEBAR_W - 15
+      love.graphics.getWidth() - State.gui.sidebar.W, 115,
+      State.gui.sidebar.W - 15
     )
   end,
 })

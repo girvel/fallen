@@ -40,6 +40,26 @@ return function()
     notification = nil,
 
     ACTION_GRID_W = 5,
+    W = 256,
+
+    update_indicators = function(self)
+      local text = "%s/%s" % {State.player.hp, State.player:get_max_hp()}
+      local font = self.hp_text.sprite.font
+
+      self.hp_text.sprite.text = text
+      self.hp_text.position = Vector({
+        (self.W - font:getWidth(text)) / 2,
+        32 - font:getHeight() / 2
+      })
+
+      local hp_bar = self.hp_bar
+      hp_bar.sprite.quad = love.graphics.newQuad(
+        0, 0,
+        hp_bar.sprite.image:getWidth() * State.player.hp / State.player:get_max_hp(),
+        hp_bar.sprite.image:getHeight(),
+        hp_bar.sprite.image:getDimensions()
+      )
+    end,
 
     update_action_grid = function(self)
       -- State:remove_multiple(self.action_entities)
