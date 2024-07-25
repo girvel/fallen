@@ -22,7 +22,7 @@ engineer_ai_mt.__call = function(_, works_outside_of_combat)
     -- TODO optimize
     run = ai.async(function(self, dt)
       if
-        not State.move_order
+        not State.combat
         and self.ai.mode.enum_variant ~= engineer_ai.modes.run_away_to
       then return end
 

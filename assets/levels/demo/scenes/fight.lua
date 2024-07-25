@@ -199,7 +199,7 @@ return function()
       name = "Player wins the fight against dreamers",
       enabled = false,
       start_predicate = function(self, rails, dt)
-        return State.player.hp > 0 and not State.move_order
+        return State.player.hp > 0 and not State.combat
       end,
 
       run = function(self, rails, dt)

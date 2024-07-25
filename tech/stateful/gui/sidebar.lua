@@ -148,22 +148,24 @@ return function()
         Fun.iter(hotkeys_table)
           :map(function(t)
             return {
-              t.data.action and not t.data.action:get_availability(State.player) and COLOR.INACTIVE or {1, 1, 1},
+              t.data.action and not t.data.action:get_availability(State.player)
+                and COLOR.INACTIVE
+                or {1, 1, 1},
               "\n  [%s] - %s" % {table.concat(t.keys, "/"), Common.get_name(t.data)},
             }
           end)
           :reduce(Tablex.concat, {})
       )
 
-      if State.move_order then
+      if State.combat then
         append("\n\nОчередь ходов:")
         append(
-          State.move_order:iter_entities_only()
+          State.combat:iter_entities_only()
             :map(function(e)
               return {
                 mech.are_hostile(State.player, e) and COLOR.HOSTILE or {1, 1, 1},
                 "\n%s %s" % {
-                  State.move_order:get_current() == e and "x" or "-",
+                  State.combat:get_current() == e and "x" or "-",
                   Common.get_name(e),
                 },
               }

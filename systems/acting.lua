@@ -9,8 +9,8 @@ return Tiny.processingSystem({
   preProcess = function()
     State.agression_log = State._next_agression_log
     State._next_agression_log = {}
-    if State.move_order then
-      local combatants = State.move_order:iter_entities_only():totable()
+    if State.combat then
+      local combatants = State.combat:iter_entities_only():totable()
 
       if Fun.iter(combatants):all(function(e) return e.faction == combatants[1].faction end) then
         Log.info(
@@ -19,24 +19,24 @@ return Tiny.processingSystem({
             :map(Common.get_name)
             :totable(), ", ")
         )
-        State.move_order = nil
+        State.combat = nil
       end
     end
   end,
 
   process = function(self, entity, event)
     Query(entity.ai).observe(entity, event)
-    if not State.move_order then
+    if not State.combat then
       entity.ai.run(entity, event)
       if entity.get_turn_resources then Tablex.extend(entity.turn_resources, entity:get_turn_resources()) end
       return
     end
 
-    local is_world_turn = State.move_order:get_current() == combat.WORLD_TURN
+    local is_world_turn = State.combat:get_current() == combat.WORLD_TURN
 
     if is_world_turn then
-      if Tablex.contains(State.move_order.list, entity) then return end
-    elseif State.move_order:get_current() ~= entity then return end
+      if Tablex.contains(State.combat.list, entity) then return end
+    elseif State.combat:get_current() ~= entity then return end
 
     if is_world_turn then
       event = {6}  -- 1 round is 6 seconds
@@ -44,30 +44,30 @@ return Tiny.processingSystem({
 
     local was_timeout_reached = (
       not entity.player_flag
-      and Common.period(self, State.move_order:get_current(), 20, event[1])
+      and Common.period(self, State.combat:get_current(), 20, event[1])
     )
 
     if was_timeout_reached then
-      Log.warn("%s's turn timed out" % Common.get_name(State.move_order:get_current()))
+      Log.warn("%s's turn timed out" % Common.get_name(State.combat:get_current()))
     end
 
     if
       entity.ai.run(entity, event) == combat.TURN_END_SIGNAL and not is_world_turn
       or was_timeout_reached
     then
-      Common.reset_period(self, State.move_order:get_current())
+      Common.reset_period(self, State.combat:get_current())
       if entity.get_turn_resources then
         Tablex.extend(entity.turn_resources, entity:get_turn_resources())
       end
-      State.move_order:move_to_next()
-      Log.info("%s's turn" % Common.get_name(State.move_order:get_current()))
+      State.combat:move_to_next()
+      Log.info("%s's turn" % Common.get_name(State.combat:get_current()))
     end
   end,
 
   postProcess = function()
-    if -Query(State.move_order):get_current() == combat.WORLD_TURN
+    if -Query(State.combat):get_current() == combat.WORLD_TURN
     then
-      State.move_order:move_to_next()
+      State.combat:move_to_next()
     end
   end,
 })

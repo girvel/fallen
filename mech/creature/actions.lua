@@ -172,7 +172,7 @@ actions.finish_turn = {
   get_availability = function() return true end,
   _run = function(_, entity)
     return combat.TURN_END_SIGNAL
-    -- TODO maybe discard that and use a direct call to State.move_order?
+    -- TODO maybe discard that and use a direct call to State.combat?
   end,
 }
 

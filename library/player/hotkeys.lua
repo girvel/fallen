@@ -21,7 +21,7 @@ return function()
     {{"d"}, "right", "вправо"},
   }) do
     local keys, direction_name, direction_translation = unpack(t)
-    define_hotkey(hotkeys, {"free", "fight"}, keys, {
+    define_hotkey(hotkeys, {"free", "combat"}, keys, {
       name = "двигаться " .. direction_translation,
       pre_action = function()
         State.player:rotate(direction_name)
@@ -30,32 +30,32 @@ return function()
     })
   end
 
-  define_hotkey(hotkeys, {"fight"}, {"space"}, {
+  define_hotkey(hotkeys, {"combat"}, {"space"}, {
     name = "закончить ход",
     action = actions.finish_turn,
   })
 
-  define_hotkey(hotkeys, {"free", "fight"}, {"1"}, {
+  define_hotkey(hotkeys, {"free", "combat"}, {"1"}, {
     name = "атака основной рукой",
     action = actions.hand_attack,
   })
 
-  define_hotkey(hotkeys, {"free", "fight"}, {"3"}, {
+  define_hotkey(hotkeys, {"free", "combat"}, {"3"}, {
     name = "второе дыхание",
     action = fighter.second_wind,
   })
 
-  define_hotkey(hotkeys, {"fight"}, {"4"}, {
+  define_hotkey(hotkeys, {"combat"}, {"4"}, {
     name = "всплеск действий",
     action = fighter.action_surge,
   })
 
-  define_hotkey(hotkeys, {"free", "fight"}, {"e"}, {
+  define_hotkey(hotkeys, {"free", "combat"}, {"e"}, {
     name = "взаимодействие",
     action = actions.interact
   })
 
-  define_hotkey(hotkeys, {"fight"}, {"z"}, {
+  define_hotkey(hotkeys, {"combat"}, {"z"}, {
     name = "рывок",
     action = actions.dash
   })
@@ -139,7 +139,7 @@ return function()
     end,
   })
 
-  define_hotkey(hotkeys, {"free", "fight", "dialogue", "dialogue_options"}, {"k"}, {
+  define_hotkey(hotkeys, {"free", "combat", "dialogue", "dialogue_options"}, {"k"}, {
     name = "открыть кодекс",
     pre_action = function() State.gui.wiki:show("codex") end,
   })

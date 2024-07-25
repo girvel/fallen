@@ -58,8 +58,8 @@ module_mt.__call = function(_, systems, debug_mode)
       if entity.position and entity.layer then
         self.grids[entity.layer][entity.position] = nil
       end
-      if self.move_order then
-        self.move_order:remove(entity)
+      if self.combat then
+        self.combat:remove(entity)
       end
       Query(entity):on_remove()
       Fun.iter(self.dependencies[entity] or {})
@@ -118,7 +118,7 @@ module_mt.__call = function(_, systems, debug_mode)
       self.gui.sidebar:create_gui_entities()
     end,
 
-    MODES = {"free", "fight", "dialogue", "dialogue_options", "reading", "death"},
+    MODES = {"free", "combat", "dialogue", "dialogue_options", "reading", "death"},
 
     get_mode = function(self)
       if self.player.hp <= 0 then
@@ -129,8 +129,8 @@ module_mt.__call = function(_, systems, debug_mode)
         return "dialogue_options"
       elseif self.gui.dialogue.text_entities then
         return "dialogue"
-      elseif self.move_order then
-        return "fight"
+      elseif self.combat then
+        return "combat"
       else
         return "free"
       end
@@ -152,7 +152,7 @@ module_mt.__call = function(_, systems, debug_mode)
         :map(function(x) return x.entity end)
         :totable()
 
-      self.move_order = combat(pure_order)
+      self.combat = combat(pure_order)
     end,
 
     register_agression = function(self, source, target)

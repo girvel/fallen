@@ -98,7 +98,7 @@ end
 --     max_hp = 3,
 --     faction = "monster",
 --     ai = function(self, event)
---       if not State.move_order then return end
+--       if not State.combat then return end
 -- 
 --       local dt = unpack(event)
 --       if not Common.period(self, .25, dt) then return end
@@ -162,7 +162,7 @@ end
 --         end
 -- 
 --         bats[#bats]:when_animation_ends(function()
---           State.move_order = combat(Tablex.concat(bats, {other}))
+--           State.combat = combat(Tablex.concat(bats, {other}))
 --         end)
 --       end)
 --     end),
