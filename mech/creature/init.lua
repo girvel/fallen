@@ -1,6 +1,6 @@
 local animated = require("tech.animated")
 local constants = require("mech.constants")
-local actions = require("mech.actions")
+local actions = require("mech.creature.actions")
 local mech = require("mech")
 
 

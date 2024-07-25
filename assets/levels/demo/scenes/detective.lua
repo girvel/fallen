@@ -1,5 +1,5 @@
 local api = require("tech.railing").api
-local actions = require("mech.actions")
+local actions = require("mech.creature.actions")
 
 
 return function()
@@ -45,7 +45,7 @@ return function()
         end
 
         rails.entities[2]:rotate("down")
-        actions.interact(rails.entities[2])
+        actions.interact:run(rails.entities[2])
       end,
     },
     {

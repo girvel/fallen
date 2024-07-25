@@ -1,4 +1,4 @@
-local actions = require("mech.actions")
+local actions = require("mech.creature.actions")
 local turn_order = require("tech.turn_order")
 
 

@@ -1,5 +1,5 @@
 local ai = require("tech.ai")
-local actions = require("mech.actions")
+local actions = require("mech.creature.actions")
 local special = require("tech.special")
 
 
@@ -55,14 +55,14 @@ engineer_ai_mt.__call = function(_, works_outside_of_combat)
         for _, position in ipairs(path) do
           if self.turn_resources.movement <= 0 then
             if self.turn_resources.actions > 0 then
-              actions.dash(self)
+              actions.dash:run(self)
             else
               break
             end
           end
 
           local direction = (position - self.position)
-          if not actions.move[Vector.name_from_direction(direction:normalized())](self) then return end
+          if not actions.move[Vector.name_from_direction(direction:normalized())]:run(self) then return end
           coroutine.yield()
         end
         return
@@ -77,14 +77,14 @@ engineer_ai_mt.__call = function(_, works_outside_of_combat)
         for _, position in ipairs(path) do
           if self.turn_resources.movement <= 0 then
             if self.turn_resources.actions > 0 then
-              actions.dash(self)
+              actions.dash:run(self)
             else
               break
             end
           end
 
           local direction = (position - self.position)
-          if not actions.move[Vector.name_from_direction(direction:normalized())](self) then return end
+          if not actions.move[Vector.name_from_direction(direction:normalized())]:run(self) then return end
           coroutine.yield()
         end
       end
@@ -93,7 +93,7 @@ engineer_ai_mt.__call = function(_, works_outside_of_combat)
       if direction:abs() == 1 then
         Log.debug("Attempt at attacking the player")
         self:rotate(Vector.name_from_direction(direction))
-        while actions.hand_attack(self) do
+        while actions.hand_attack:run(self) do
           while not self.animation.current:startsWith("idle") do
             coroutine.yield()
           end

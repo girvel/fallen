@@ -1,7 +1,7 @@
 local module_mt = {}
 local rogue = setmetatable({}, module_mt)
 
-module.sneak_attack = function(entity, target)
+fighter.sneak_attack = function(entity, target)
   if entity.turn_resources.actions <= 0
     or not target
     or not target.hp
@@ -25,7 +25,7 @@ module.sneak_attack = function(entity, target)
   end)
 end
 
-module.aim = function(entity)
+fighter.aim = function(entity)
   if entity.turn_resources.bonus_actions <= 0
     or entity.turn_resources.movement < constants.DEFAULT_MOVEMENT_SPEED
   then

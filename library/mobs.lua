@@ -1,4 +1,4 @@
-local actions = require("mech.actions")
+local actions = require("mech.creature.actions")
 local random = require("utils.random")
 local creature = require("mech.creature")
 local humanoid = require("mech.humanoid")

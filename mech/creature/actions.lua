@@ -1,10 +1,10 @@
 local level = require("tech.level")
 local attacking = require("mech.attacking")
-local constants = require("mech.constants")
 local random = require("utils.random")
 local mech = require("mech")
 local static_sprite = require("tech.static_sprite")
 local interactive = require("tech.interactive")
+local turn_order = require("tech.turn_order")
 
 
 local actions = {}
@@ -159,7 +159,7 @@ actions.dash = {
 }
 
 actions.interact = {
-  run = function(entity)
+  run = function(_, entity)
     if entity.turn_resources.bonus_actions <= 0 then return end
     local entity_to_interact = interactive.get_for(entity)
     if not entity_to_interact then return end
@@ -169,6 +169,13 @@ actions.interact = {
     entity.turn_resources.bonus_actions = entity.turn_resources.bonus_actions - 1
     entity_to_interact:interact(entity)
   end
+}
+
+actions.finish_turn = {
+  run = function(_, entity)
+    return turn_order.TURN_END_SIGNAL
+    -- TODO maybe discard that and use a direct call to State.move_order?
+  end,
 }
 
 actions.list = {
