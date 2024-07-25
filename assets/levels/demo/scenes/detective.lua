@@ -1,5 +1,5 @@
 local api = require("tech.railing").api
-local actions = require("core.actions")
+local actions = require("mech.actions")
 
 
 return function()

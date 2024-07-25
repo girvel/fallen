@@ -1,8 +1,8 @@
-local creature = require("core.creature")
+local creature = require("mech.creature")
 local animated = require("tech.animated")
 
 
-local base_pack = require("core.humanoid.pack")
+local base_pack = require("mech.humanoid.pack")
 local pack_by_race = Memoize(function(race)
   return animated.colored_pack(base_pack, race.skin_color)
 end)

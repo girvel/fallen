@@ -1,5 +1,5 @@
 local animated = require("tech.animated")
-local humanoid_anchors = require("core.humanoid.anchors")
+local humanoid_anchors = require("mech.humanoid.anchors")
 
 
 local module = {}

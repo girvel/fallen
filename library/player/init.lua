@@ -1,5 +1,5 @@
-local classes = require("core.classes")
-local humanoid = require("core.humanoid")
+local classes = require("mech.classes")
+local humanoid = require("mech.humanoid")
 local animation_packs = require("library.animation_packs")
 local weapons = require("library.weapons")
 

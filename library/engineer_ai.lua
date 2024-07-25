@@ -1,5 +1,5 @@
 local ai = require("tech.ai")
-local actions = require("core.actions")
+local actions = require("mech.actions")
 local special = require("tech.special")
 
 

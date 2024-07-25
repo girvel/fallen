@@ -1,7 +1,7 @@
 local level = require("tech.level")
 local item = require("tech.item")
 local turn_order = require("tech.turn_order")
-local core = require("core")
+local mech = require("mech")
 
 
 local module = {}
@@ -141,7 +141,7 @@ module_mt.__call = function(_, systems, debug_mode)
         :map(function(e)
           return {
             entity = e,
-            roll = (D(20) + core.get_modifier(e.abilities.dexterity)):roll()
+            roll = (D(20) + mech.get_modifier(e.abilities.dexterity)):roll()
           }
         end)
         :totable()

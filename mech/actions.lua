@@ -1,8 +1,8 @@
 local level = require("tech.level")
-local mech = require("core.mech")
-local constants = require("core.constants")
+local attacking = require("mech.attacking")
+local constants = require("mech.constants")
 local random = require("utils.random")
-local core = require("core")
+local mech = require("mech")
 local static_sprite = require("tech.static_sprite")
 local interactive = require("tech.interactive")
 
@@ -20,17 +20,17 @@ local get_melee_attack_roll = function(entity)
 
   local weapon = entity.inventory.main_hand
   if not weapon then
-    return roll + core.get_modifier(entity.abilities.strength)
+    return roll + mech.get_modifier(entity.abilities.strength)
   end
 
   roll = roll + weapon.bonus
   if weapon.tags.finesse then
-    roll = roll + core.get_modifier(math.max(
+    roll = roll + mech.get_modifier(math.max(
       entity.abilities.strength,
       entity.abilities.dexterity
     ))
   else
-    roll = roll + core.get_modifier(entity.abilities.strength)
+    roll = roll + mech.get_modifier(entity.abilities.strength)
   end
 
   return roll
@@ -38,10 +38,10 @@ end
 
 local get_melee_damage_roll = function(entity)
   if not entity.inventory.main_hand then
-    return D.roll({}, core.get_modifier(entity.abilities.strength))
+    return D.roll({}, mech.get_modifier(entity.abilities.strength))
   end
 
-  local ability_modifier = core.get_modifier(
+  local ability_modifier = mech.get_modifier(
     entity.inventory.main_hand.tags.finesse
     and math.max(
       entity.abilities.strength,
@@ -74,7 +74,7 @@ module.move = Fun.iter(Vector.direction_names):map(function(direction_name)
         return e
           and e ~= entity
           and e.abilities
-          and core.are_hostile(entity, e)
+          and mech.are_hostile(entity, e)
           and e.turn_resources
           and e.turn_resources.reactions > 0
         end)
@@ -83,7 +83,7 @@ module.move = Fun.iter(Vector.direction_names):map(function(direction_name)
         e.direction = Vector.name_from_direction(old_position - e.position)
         e:animate("attack")
         e:when_animation_ends(function()
-          mech.attack(
+          attacking.attack(
             e, entity,
             get_melee_attack_roll(e),
             get_melee_damage_roll(e)
@@ -127,7 +127,7 @@ module.hand_attack = setmetatable(
 
         entity:animate("attack")
         entity:when_animation_ends(function()
-          if not mech.attack(
+          if not attacking.attack(
             entity, target,
             get_melee_attack_roll(entity),
             get_melee_damage_roll(entity)
@@ -138,7 +138,7 @@ module.hand_attack = setmetatable(
           end
 
           if target.hardness and not -Query(entity).inventory.main_hand then
-            mech.attack_save(entity, "constitution", target.hardness, D.roll({}, 1))
+            attacking.attack_save(entity, "constitution", target.hardness, D.roll({}, 1))
           end
         end)
         return true
@@ -167,7 +167,7 @@ module.sneak_attack = function(entity, target)
 
   entity:animate("attack")
   entity:when_animation_ends(function()
-    mech.attack(
+    attacking.attack(
       entity, target,
       get_melee_attack_roll(entity),
       get_melee_damage_roll(entity)

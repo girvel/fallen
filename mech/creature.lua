@@ -1,7 +1,7 @@
 local animated = require("tech.animated")
-local constants = require("core.constants")
-local actions = require("core.actions")
-local core = require("core")
+local constants = require("mech.constants")
+local actions = require("mech.actions")
+local mech = require("mech")
 
 
 local module = {}
@@ -26,7 +26,7 @@ module_mt.__call = function(_, animation_pack, object)
     view = "scene",
 
     get_armor = function(self)
-      return 10 + core.get_modifier(self.abilities.dexterity)
+      return 10 + mech.get_modifier(self.abilities.dexterity)
     end,
 
     get_turn_resources = function()
@@ -40,7 +40,7 @@ module_mt.__call = function(_, animation_pack, object)
 
     get_max_hp = function(self)
       if self.max_hp then return self.max_hp end
-      local con_bonus = core.get_modifier(self.abilities.constitution)
+      local con_bonus = mech.get_modifier(self.abilities.constitution)
       return self.class.hp_die + con_bonus
         + (self.level - 1) * (self.class.hp_die / 2 + 1 + con_bonus)
     end,
@@ -70,7 +70,7 @@ module_mt.__call = function(_, animation_pack, object)
   result.saving_throws = Fun.iter(result.abilities)
     :map(function(name, value)
       return name, D(20)
-        + core.get_modifier(value)
+        + mech.get_modifier(value)
         + ((-Query(result).class.save_proficiencies[name]
           or -Query(result).save_proficiencies[name])
           and 2
