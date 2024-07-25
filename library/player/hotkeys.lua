@@ -22,7 +22,8 @@ return function()
   }) do
     local keys, direction_name, direction_translation = unpack(t)
     define_hotkey(hotkeys, {"free", "fight"}, keys, "двигаться " .. direction_translation, function()
-      return actions.move[direction_name]
+      State.player:rotate(direction_name)
+      return actions.move
     end)
   end
 

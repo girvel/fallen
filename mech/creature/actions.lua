@@ -100,48 +100,44 @@ actions.hand_attack = Tablex.extend(
   }
 )
 
-actions.move = Fun.iter(Vector.direction_names):map(function(direction_name)
-  return direction_name, {
-    run = function(_, entity)
-      entity:rotate(direction_name)
+actions.move = {
+  run = function(_, entity)
+    local old_position = entity.position
+    if entity.turn_resources.movement <= 0
+      or not level.move(State.grids[entity.layer], entity, entity.position + Vector[entity.direction])
+    then
+      return false
+    end
 
-      local old_position = entity.position
-      if entity.turn_resources.movement <= 0
-        or not level.move(State.grids[entity.layer], entity, entity.position + Vector[direction_name])
-      then
-        return false
-      end
+    entity.turn_resources.movement = entity.turn_resources.movement - 1
 
-      entity.turn_resources.movement = entity.turn_resources.movement - 1
-
-      Fun.iter(Vector.directions)
-        :map(function(d) return State.grids.solids:safe_get(old_position + d) end)
-        :filter(function(e)
-          return e
-            and e ~= entity
-            and e.abilities
-            and mech.are_hostile(entity, e)
-            and e.turn_resources
-            and e.turn_resources.reactions > 0
-          end)
-        :each(function(e)
-          e.turn_resources.reactions = e.turn_resources.reactions - 1
-          base_attack(e, entity)
+    Fun.iter(Vector.directions)
+      :map(function(d) return State.grids.solids:safe_get(old_position + d) end)
+      :filter(function(e)
+        return e
+          and e ~= entity
+          and e.abilities
+          and mech.are_hostile(entity, e)
+          and e.turn_resources
+          and e.turn_resources.reactions > 0
         end)
+      :each(function(e)
+        e.turn_resources.reactions = e.turn_resources.reactions - 1
+        base_attack(e, entity)
+      end)
 
-      if entity.animate then
-        entity:animate("move")
-      end
+    if entity.animate then
+      entity:animate("move")
+    end
 
-      local tile = State.grids.tiles[entity.position]
-      if tile and tile.sounds and tile.sounds.move then
-        random.choice(tile.sounds.move):play()
-      end
+    local tile = State.grids.tiles[entity.position]
+    if tile and tile.sounds and tile.sounds.move then
+      random.choice(tile.sounds.move):play()
+    end
 
-      return true
-    end,
-  }
-end):tomap()
+    return true
+  end,
+}
 
 actions.dash = {
   run = function(_, entity)
@@ -175,10 +171,7 @@ actions.finish_turn = {
 }
 
 actions.list = {
-  actions.move.up,
-  actions.move.left,
-  actions.move.down,
-  actions.move.right,
+  actions.move,
   actions.hand_attack,
   actions.interact,
   actions.dash,
