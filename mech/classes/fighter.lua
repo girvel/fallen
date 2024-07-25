@@ -28,7 +28,7 @@ fighter.action_surge = {
   get_availability = function(self, entity)
     return entity.turn_resources.action_surge > 0
   end,
-  _run = function(entity)
+  _run = function(self, entity)
     entity.turn_resources.action_surge = entity.turn_resources.action_surge - 1
     entity.turn_resources.actions = entity.turn_resources.actions + 1
   end,
