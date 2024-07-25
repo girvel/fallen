@@ -74,9 +74,24 @@ return function()
     end,
 
     get_text = function(self)
+      local INACTIVE = Common.hex_color("8b7c99")
       local max = State.player:get_turn_resources()
 
-      local result = ""
+      local result = {}
+
+      local append = function(content)
+        if type(content) == "string" then
+          content = {content}
+        end
+        if #result > 0
+          and type(result[#result]) == "string"
+          and type(content[1]) == "string"
+        then
+          result[#result] = result[#result] .. content[1]
+          table.remove(content, 1)
+        end
+        Tablex.concat(result, content)
+      end
 
       local weapon = State.player.inventory.main_hand
       if weapon then
@@ -84,10 +99,10 @@ return function()
         if weapon.bonus > 0 then
           roll = roll .. "+" .. weapon.bonus
         end
-        result = result .. "Оружие: %s (%s)\n\n" % {weapon.name, roll}
+        append("Оружие: %s (%s)\n\n" % {weapon.name, roll})
       end
 
-      result = result .. "Ресурсы:\n" .. table.concat(
+      append("Ресурсы:\n" .. table.concat(
         Fun.iter(State.player.turn_resources)
           :map(function(k, v)
             return "  %s: %s%s" % {
@@ -98,29 +113,28 @@ return function()
           end)
           :totable(),
         "\n"
-      )
+      ))
 
-      result = result
-        .. "\n\nДействия:"
-        .. Fun.iter(State.player.hotkeys[State:get_mode()])
+      append("\n\nДействия:")
+      append(
+        Fun.iter(State.player.hotkeys[State:get_mode()])
           :group_by(function(key, data) return data, key end)
           :filter(function(data, keys)
             return not data.hidden
               and (not data.action or Tablex.contains(State.player.potential_actions, data.action))
           end)
           :map(function(data, keys)
-            return "\n  [%s] - %s" % {table.concat(keys, "/"), Common.get_name(data)}
+            return {
+              data.action and not data.action:get_availability(State.player) and INACTIVE or {1, 1, 1},
+              "\n  [%s] - %s" % {table.concat(keys, "/"), Common.get_name(data)},
+            }
           end)
-          :reduce(Fun.op.concat, "")
-
-      -- local potential_interaction = interactive.get_for(State.player)
-      -- if potential_interaction and (State:get_mode() == "free" or State:get_mode() == "fight") then
-      --   result = result .. "\n\n  [E] - взаимодействовать с " .. Common.get_name(potential_interaction)
-      -- end
+          :reduce(Tablex.concat, {})
+      )
 
       if State.move_order then
-        result = result
-          .. "\n\nОчередь ходов:\n"
+        append(
+          "\n\nОчередь ходов:\n"
           .. table.concat(
             Fun.iter(State.move_order.list)
               :enumerate()
@@ -129,6 +143,7 @@ return function()
               :totable(),
             "\n"
           )
+        )
       end
 
       return result

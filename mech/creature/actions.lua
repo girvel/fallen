@@ -154,6 +154,7 @@ actions.interact = {
   codename = "interact",
   get_availability = function(self, entity)
     return entity.turn_resources.bonus_actions > 0
+      and interactive.get_for(entity)
   end,
   _run = function(_, entity)
     local entity_to_interact = interactive.get_for(entity)
