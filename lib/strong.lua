@@ -29,6 +29,7 @@ local string = mt.__index
 
 -- OPERATORS --
 
+function mt.__div(a, b) return a:split(b, true) end
 function mt.__mod(a, b)
    if type(b) == "table" then
       return a:format(unpack(b))

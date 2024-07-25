@@ -3,21 +3,29 @@ local mech = require("mech")
 
 
 local order_sound = Common.volumed_sounds("assets/sounds/electricity.wav", 0.08)[1]
+
 local COLOR = {
   ORDER = Common.hex_color("f7e5b2"),
   NOTIFICATION = Common.hex_color("ededed"),
   INACTIVE = Common.hex_color("8b7c99"),
   HOSTILE = Common.hex_color("e64e4b"),
 }
+
 local resource_translations = {
   bonus_actions = "бонусные действия",
   movement = "движение",
   reactions = "реакции",
   actions = "действия",
-  has_advantage = "преимущество",
   second_wind = "второе дыхание",
   action_surge = "всплеск действий",
 }
+
+local hotkeys_order = Fun.iter(
+  "w a s d 1 2 3 4 5 6 7 8 9 0 e return z space k Shift+q" / " "
+)
+  :enumerate()
+  :map(function(i, e) return e, i end)
+  :tomap()
 
 local value_translations = {
   [true] = "да",
@@ -119,17 +127,29 @@ return function()
       ))
 
       append("\n\nДействия:")
+
+      local hotkeys_table = Fun.iter(State.player.hotkeys[State:get_mode()])
+        :group_by(function(key, data) return data, key end)
+        :filter(function(data, keys)
+          return not data.hidden
+            and (not data.action or Tablex.contains(State.player.potential_actions, data.action))
+        end)
+        :map(function(data, keys)
+          table.sort(keys)
+          return {data = data, keys = keys}
+        end)
+        :totable()
+
+      table.sort(hotkeys_table, function(a, b)
+        return hotkeys_order[a.keys[1]] < hotkeys_order[b.keys[1]]
+      end)
+
       append(
-        Fun.iter(State.player.hotkeys[State:get_mode()])
-          :group_by(function(key, data) return data, key end)
-          :filter(function(data, keys)
-            return not data.hidden
-              and (not data.action or Tablex.contains(State.player.potential_actions, data.action))
-          end)
-          :map(function(data, keys)
+        Fun.iter(hotkeys_table)
+          :map(function(t)
             return {
-              data.action and not data.action:get_availability(State.player) and COLOR.INACTIVE or {1, 1, 1},
-              "\n  [%s] - %s" % {table.concat(keys, "/"), Common.get_name(data)},
+              t.data.action and not t.data.action:get_availability(State.player) and COLOR.INACTIVE or {1, 1, 1},
+              "\n  [%s] - %s" % {table.concat(t.keys, "/"), Common.get_name(t.data)},
             }
           end)
           :reduce(Tablex.concat, {})
