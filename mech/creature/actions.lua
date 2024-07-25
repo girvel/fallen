@@ -55,6 +55,51 @@ local get_melee_damage_roll = function(entity)
     + entity.inventory.main_hand.bonus
 end
 
+local base_attack = function(entity, target)
+  State:register_agression(entity, target)
+
+  entity:rotate(Vector.name_from_direction((target.position - entity.position):normalized()))
+  entity:animate("attack")
+  entity:when_animation_ends(function()
+    if not attacking.attack(
+      entity, target,
+      get_melee_attack_roll(entity),
+      get_melee_damage_roll(entity)
+    ) then return end
+
+    if target and target.sounds and target.sounds.hit then
+      random.choice(target.sounds.hit):play()
+    end
+
+    if target.hardness and not -Query(entity).inventory.main_hand then
+      attacking.attack_save(entity, "constitution", target.hardness, D.roll({}, 1))
+    end
+  end)
+end
+
+actions.hand_attack = Tablex.extend(
+  static_sprite("assets/sprites/icons/melee_attack.png"),
+  {
+    scale = Vector({2, 2}),
+    on_click = function(self, entity) return self:run(entity) end,
+    size = Vector.one * 0.67,
+    run = function(self, entity)
+      local target = State.grids.solids:safe_get(entity.position + Vector[entity.direction])
+
+      if entity.turn_resources.actions <= 0
+        or not target
+        or not target.hp
+      then
+        return false
+      end
+
+      entity.turn_resources.actions = entity.turn_resources.actions - 1
+      base_attack(entity, target)
+      return true
+    end
+  }
+)
+
 actions.move = Fun.iter(Vector.direction_names):map(function(direction_name)
   return direction_name, {
     run = function(_, entity)
@@ -81,15 +126,7 @@ actions.move = Fun.iter(Vector.direction_names):map(function(direction_name)
           end)
         :each(function(e)
           e.turn_resources.reactions = e.turn_resources.reactions - 1
-          e.direction = Vector.name_from_direction(old_position - e.position)
-          e:animate("attack")
-          e:when_animation_ends(function()
-            attacking.attack(
-              e, entity,
-              get_melee_attack_roll(e),
-              get_melee_damage_roll(e)
-            )
-          end)
+          base_attack(e, entity)
         end)
 
       if entity.animate then
@@ -105,47 +142,6 @@ actions.move = Fun.iter(Vector.direction_names):map(function(direction_name)
     end,
   }
 end):tomap()
-
-actions.hand_attack = Tablex.extend(
-  static_sprite("assets/sprites/icons/melee_attack.png"),
-  {
-    scale = Vector({2, 2}),
-    on_click = function(self, entity) return self:run(entity) end,
-    size = Vector.one * 0.67,
-    run = function(self, entity)
-      local target = State.grids.solids:safe_get(entity.position + Vector[entity.direction])
-
-      if entity.turn_resources.actions <= 0
-        or not target
-        or not target.hp
-      then
-        return false
-      end
-
-      entity.turn_resources.actions = entity.turn_resources.actions - 1
-
-      State:register_agression(entity, target)
-
-      entity:animate("attack")
-      entity:when_animation_ends(function()
-        if not attacking.attack(
-          entity, target,
-          get_melee_attack_roll(entity),
-          get_melee_damage_roll(entity)
-        ) then return end
-
-        if target and target.sounds and target.sounds.hit then
-          random.choice(target.sounds.hit):play()
-        end
-
-        if target.hardness and not -Query(entity).inventory.main_hand then
-          attacking.attack_save(entity, "constitution", target.hardness, D.roll({}, 1))
-        end
-      end)
-      return true
-    end
-  }
-)
 
 actions.dash = {
   run = function(_, entity)
