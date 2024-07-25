@@ -26,6 +26,8 @@ return function()
     },
   }
 
+  result.font:setLineHeight(1.2)
+
   result.wiki = require("tech.stateful.gui.wiki")()
   result.sidebar = require("tech.stateful.gui.sidebar")()
   result.dialogue = require("tech.stateful.gui.dialogue")()
