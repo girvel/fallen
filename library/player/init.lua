@@ -14,6 +14,7 @@ module_mt.__call = function()
     class = fighter(),
     race = {
       codename = "player_character",
+      movement_speed = 6,
       skin_color = Common.hex_color("8ed3dc"),
     },
     level = 2,

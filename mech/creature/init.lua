@@ -38,7 +38,7 @@ module_mt.__call = function(_, animation_pack, object)
       local base
       if rest_type == "move" then
         base = {
-          movement = constants.DEFAULT_MOVEMENT_SPEED,
+          movement = self.race.movement_speed,
           actions = 1,
           bonus_actions = 1,
           reactions = 1,
