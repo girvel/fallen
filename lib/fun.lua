@@ -818,12 +818,12 @@ methods.map = method1(map)
 exports.map = export1(map)
 
 methods.group_by = function(self, fun)
-  fun = fun or function(x) return x end
   return Fun.iter(self:reduce(
-    function(acc, e)
-      local key = fun(e)
+    function(acc, ...)
+      local key, item = fun(...)
       if not acc[key] then acc[key] = {} end
-      table.insert(acc[key], e)
+      table.insert(acc[key], item)
+      return acc
     end,
     {}
   ))

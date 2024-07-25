@@ -103,10 +103,14 @@ return function()
       result = result
         .. "\n\nДействия:"
         .. Fun.iter(State.player.hotkeys[State:get_mode()])
-          :filter(function(key, data)
-            return not data.action or Tablex.contains(State.player.potential_actions, data.action)
+          :group_by(function(key, data) return data, key end)
+          :filter(function(data, keys)
+            return not data.hidden
+              and (not data.action or Tablex.contains(State.player.potential_actions, data.action))
           end)
-          :map(function(key, data) return "\n  [%s] - %s" % {key, Common.get_name(data)} end)
+          :map(function(data, keys)
+            return "\n  [%s] - %s" % {table.concat(keys, "/"), Common.get_name(data)}
+          end)
           :reduce(Fun.op.concat, "")
 
       -- local potential_interaction = interactive.get_for(State.player)

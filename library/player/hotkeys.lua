@@ -112,6 +112,7 @@ return function()
   Fun.range(1, 9):each(function(i)
     define_hotkey(hotkeys, {"dialogue_options"}, {tostring(i)}, {
       name = "выбрать опцию #" .. i,
+      hidden = true,
       pre_action = function()
         if i <= #State.gui.dialogue.options then
           State.gui.dialogue.selected_option_i = i
