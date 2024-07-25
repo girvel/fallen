@@ -74,7 +74,7 @@ engineer_ai_mt.__call = function(_, works_outside_of_combat)
         :totable())
 
       if self.ai.look_for_agression then
-        self.turn_resources.reactions = 0
+        self.resources.reactions = 0
       end
     end,
   }

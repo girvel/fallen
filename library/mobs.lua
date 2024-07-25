@@ -117,7 +117,7 @@ end
 --       end
 --     end,
 --     async_ai = function(self)
---       for _ in Fun.range(self.turn_resources.movement) do
+--       for _ in Fun.range(self.resources.movement) do
 --         if self.hungry then
 --           local target = Fun.iter(Vector.directions)
 --             :map(function(v) return State.grids.solids:safe_get(self.position + v) end)

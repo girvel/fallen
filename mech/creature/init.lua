@@ -83,7 +83,7 @@ module_mt.__call = function(_, animation_pack, object)
   }, object)
 
   result.hp = result.hp or result:get_max_hp()
-  result.turn_resources = result.turn_resources
+  result.resources = result.resources
     or Tablex.extend({},
       result:get_resources("move"),
       result:get_resources("short"),

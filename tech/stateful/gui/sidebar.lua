@@ -118,7 +118,7 @@ return function()
       end
 
       append("Ресурсы:\n" .. table.concat(
-        Fun.iter(State.player.turn_resources)
+        Fun.iter(State.player.resources)
           :map(function(k, v)
             return "  %s: %s%s" % {
               resource_translations[k] or k,

@@ -87,11 +87,11 @@ actions.hand_attack = Tablex.extend(
 
     get_availability = function(self, entity)
       local target = State.grids.solids:safe_get(entity.position + Vector[entity.direction])
-      return entity.turn_resources.actions > 0 and -Query(target).hp
+      return entity.resources.actions > 0 and -Query(target).hp
     end,
     _run = function(self, entity)
       local target = State.grids.solids:safe_get(entity.position + Vector[entity.direction])
-      entity.turn_resources.actions = entity.turn_resources.actions - 1
+      entity.resources.actions = entity.resources.actions - 1
       base_attack(entity, target)
       return true
     end
@@ -101,7 +101,7 @@ actions.hand_attack = Tablex.extend(
 actions.move = {
   codename = "move",
   get_availability = function(self, entity)
-    return entity.turn_resources.movement > 0
+    return entity.resources.movement > 0
   end,
   _run = function(_, entity)
     local old_position = entity.position
@@ -109,7 +109,7 @@ actions.move = {
       return false
     end
 
-    entity.turn_resources.movement = entity.turn_resources.movement - 1
+    entity.resources.movement = entity.resources.movement - 1
 
     Fun.iter(Vector.directions)
       :map(function(d) return State.grids.solids:safe_get(old_position + d) end)
@@ -118,11 +118,11 @@ actions.move = {
           and e ~= entity
           and e.abilities
           and mech.are_hostile(entity, e)
-          and e.turn_resources
-          and e.turn_resources.reactions > 0
+          and e.resources
+          and e.resources.reactions > 0
         end)
       :each(function(e)
-        e.turn_resources.reactions = e.turn_resources.reactions - 1
+        e.resources.reactions = e.resources.reactions - 1
         base_attack(e, entity)
       end)
 
@@ -142,18 +142,18 @@ actions.move = {
 actions.dash = {
   codename = "dash",
   get_availability = function(self, entity)
-    return entity.turn_resources.actions > 0
+    return entity.resources.actions > 0
   end,
   _run = function(_, entity)
-    entity.turn_resources.actions = entity.turn_resources.actions - 1
-    entity.turn_resources.movement = entity.turn_resources.movement + entity:get_resources("move").movement
+    entity.resources.actions = entity.resources.actions - 1
+    entity.resources.movement = entity.resources.movement + entity:get_resources("move").movement
   end,
 }
 
 actions.interact = {
   codename = "interact",
   get_availability = function(self, entity)
-    return entity.turn_resources.bonus_actions > 0
+    return entity.resources.bonus_actions > 0
       and interactive.get_for(entity)
   end,
   _run = function(_, entity)
@@ -162,7 +162,7 @@ actions.interact = {
     if entity_to_interact.position ~= entity.position and not entity_to_interact.hp then
       entity:animate("attack")
     end
-    entity.turn_resources.bonus_actions = entity.turn_resources.bonus_actions - 1
+    entity.resources.bonus_actions = entity.resources.bonus_actions - 1
     entity_to_interact:interact(entity)
   end
 }

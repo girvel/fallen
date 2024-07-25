@@ -2,17 +2,17 @@ local module_mt = {}
 local rogue = setmetatable({}, module_mt)
 
 fighter.sneak_attack = function(entity, target)
-  if entity.turn_resources.actions <= 0
+  if entity.resources.actions <= 0
     or not target
     or not target.hp
     or not entity.inventory.main_hand
     or not entity.inventory.main_hand.is_finesse
-    or not entity.turn_resources.has_advantage
+    or not entity.resources.has_advantage
   then
     return false
   end
 
-  entity.turn_resources.actions = entity.turn_resources.actions - 1
+  entity.resources.actions = entity.resources.actions - 1
 
   entity:animate("attack")
   entity:when_animation_ends(function()
@@ -26,16 +26,16 @@ fighter.sneak_attack = function(entity, target)
 end
 
 fighter.aim = function(entity)
-  if entity.turn_resources.bonus_actions <= 0
-    or entity.turn_resources.movement < constants.DEFAULT_MOVEMENT_SPEED
+  if entity.resources.bonus_actions <= 0
+    or entity.resources.movement < constants.DEFAULT_MOVEMENT_SPEED
   then
     return
   end
 
-  entity.turn_resources.bonus_actions = entity.turn_resources.bonus_actions - 1
-  entity.turn_resources.movement = entity.turn_resources.movement - constants.DEFAULT_MOVEMENT_SPEED
+  entity.resources.bonus_actions = entity.resources.bonus_actions - 1
+  entity.resources.movement = entity.resources.movement - constants.DEFAULT_MOVEMENT_SPEED
 
-  entity.turn_resources.has_advantage = true
+  entity.resources.has_advantage = true
 end
 
 return rogue

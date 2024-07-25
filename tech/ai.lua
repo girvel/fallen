@@ -38,8 +38,8 @@ ai.api.travel = function(entity, destination)
   if State.grids.solids[path[#path]] then table.remove(path) end
 
   for _, position in ipairs(path) do
-    if entity.turn_resources.movement <= 0 then
-      if entity.turn_resources.actions > 0 then
+    if entity.resources.movement <= 0 then
+      if entity.resources.actions > 0 then
         entity:act(actions.dash)
       else
         break
