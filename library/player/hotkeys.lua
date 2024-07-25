@@ -132,7 +132,7 @@ return function()
   })
 
   -- universal --
-  define_hotkey(hotkeys, Tablex.deep_copy(State.MODES), {"S-q"}, {
+  define_hotkey(hotkeys, Tablex.deep_copy(State.MODES), {"Shift+q"}, {
     name = "завершить игру",
     pre_action = function()
       if State.debug_mode then love.event.push("quit") end
