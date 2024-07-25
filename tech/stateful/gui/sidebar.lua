@@ -76,9 +76,7 @@ return function()
     get_text = function(self)
       local max = State.player:get_turn_resources()
 
-      local lines = {
-        "Здоровье: " .. State.player.hp .. "/" .. State.player:get_max_hp(),
-      }
+      local result = ""
 
       local weapon = State.player.inventory.main_hand
       if weapon then
@@ -86,28 +84,24 @@ return function()
         if weapon.bonus > 0 then
           roll = roll .. "+" .. weapon.bonus
         end
-        Tablex.concat(lines, {
-          "",
-          "Оружие: " .. weapon.name .. " (" .. roll .. ")",
-        })
+        result = result .. "Оружие: %s (%s)\n\n" % {weapon.name, roll}
       end
 
-      Tablex.concat(
-        lines,
-        {"", "Ресурсы:"},
+      result = result .. "Ресурсы:\n" .. table.concat(
         Fun.iter(State.player.turn_resources)
           :map(function(k, v)
-            return (
-              "  " .. (resource_translations[k] or k) ..
-              ": " .. (value_translations[v] or tostring(v)) ..
-              (max[k] == nil and "" or "/" .. (value_translations[max[k]] or tostring(max[k])))
-            )
+            return "  %s: %s%s" % {
+              resource_translations[k] or k,
+              value_translations[v] or tostring(v),
+              max[k] == nil and "" or "/" .. (value_translations[max[k]] or tostring(max[k])),
+            }
           end)
-          :totable()
+          :totable(),
+        "\n"
       )
 
-      Tablex.concat(lines, {
-        "",
+      result = result .. table.concat({
+        "\n",
         "Действия:",
         "  [1] - атака рукой",
         "  [2] - ничего не делать",
@@ -115,36 +109,27 @@ return function()
         "  [4] - всплеск действий",
         "  [z] - рывок",
         "  [k] - открыть кодекс",
-      })
+      }, "\n")
 
       local potential_interaction = interactive.get_for(State.player)
       if potential_interaction and (State:get_mode() == "free" or State:get_mode() == "fight") then
-        Tablex.concat(lines, {
-          "",
-          "  [E] - взаимодействовать с " .. Common.get_name(potential_interaction),
-        })
+        result = result .. "\n\n  [E] - взаимодействовать с " .. Common.get_name(potential_interaction)
       end
 
       if State.move_order then
-        Tablex.concat(lines, {
-          "",
-          "  [Space] - закончить ход",
-        })
-
-        Tablex.concat(lines, {
-          "",
-          "Очередь ходов:",
-        })
-
-        Tablex.concat(lines, Fun.iter(State.move_order.list)
-          :enumerate()
-          :take_n(#State.move_order.list - 1)
-          :map(function(i, e) return (State.move_order.current_i == i and "x " or "- ") .. (e.name or "_") end)
-          :totable()
-        )
+        result = result
+          .. "\n\n  [Space] - закончить ход\n\nОчередь ходов:\n"
+          .. table.concat(
+            Fun.iter(State.move_order.list)
+              :enumerate()
+              :take_n(#State.move_order.list - 1)
+              :map(function(i, e) return (State.move_order.current_i == i and "x " or "- ") .. (e.name or "_") end)
+              :totable(),
+            "\n"
+          )
       end
 
-      return table.concat(lines, "\n")
+      return result
     end,
   }
 end
