@@ -1,4 +1,4 @@
-local classes = require("mech.classes")
+local fighter = require("mech.classes.fighter")
 local humanoid = require("mech.humanoid")
 local animation_packs = require("library.animation_packs")
 local weapons = require("library.weapons")
@@ -11,7 +11,7 @@ module_mt.__call = function()
   local result = humanoid({
     player_flag = true,
     name = "протагонист",
-    class = classes.charming_leader,
+    class = fighter(),
     race = {
       codename = "player_character",
       skin_color = Common.hex_color("8ed3dc"),
