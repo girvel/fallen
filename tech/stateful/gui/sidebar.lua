@@ -100,16 +100,11 @@ return function()
         "\n"
       )
 
-      result = result .. table.concat({
-        "\n",
-        "Действия:",
-        "  [1] - атака рукой",
-        "  [2] - ничего не делать",
-        "  [3] - второе дыхание",
-        "  [4] - всплеск действий",
-        "  [z] - рывок",
-        "  [k] - открыть кодекс",
-      }, "\n")
+      result = result
+        .. "\n\nДействия:"
+        .. Fun.iter(State.player.available_actions)
+          :map(function(a) return "\n  [%s] - %s" % {-Query(a).hotkey or "no", Common.get_name(a)} end)
+          :reduce(Fun.op.concat, "")
 
       local potential_interaction = interactive.get_for(State.player)
       if potential_interaction and (State:get_mode() == "free" or State:get_mode() == "fight") then

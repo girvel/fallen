@@ -46,10 +46,10 @@ module_mt.__call = function(_, animation_pack, object)
     end,
 
     get_actions = function(self)
-      return {
-        actions.hand_attack,
-        actions.second_wind,
-      }
+      return Tablex.concat(
+        -Query(self.class):get_actions(self.level) or {},
+        actions.list
+      )
     end,
 
     rotate = function(self, direction_name)
@@ -65,6 +65,7 @@ module_mt.__call = function(_, animation_pack, object)
 
   result.hp = result.hp or result:get_max_hp()
   result.turn_resources = result.turn_resources or result:get_turn_resources()
+  result.available_actions = result:get_actions()
   result:animate("idle")
 
   result.saving_throws = Fun.iter(result.abilities)

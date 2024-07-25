@@ -7,7 +7,7 @@ local static_sprite = require("tech.static_sprite")
 local interactive = require("tech.interactive")
 
 
-local module = {}
+local actions = {}
 
 -- Post-Plot MVP refactor plans:
 -- Action: {cost, _isAvailable(), execute()}
@@ -55,193 +55,146 @@ local get_melee_damage_roll = function(entity)
     + entity.inventory.main_hand.bonus
 end
 
-module.move = Fun.iter(Vector.direction_names):map(function(direction_name)
-  return direction_name, function(entity)
-    entity:rotate(direction_name)
+local direction_translations = {
+  up = "вверх",
+  left = "влево",
+  down = "вниз",
+  right = "вправо",
+}
 
-    local old_position = entity.position
-    if entity.turn_resources.movement <= 0
-      or not level.move(State.grids[entity.layer], entity, entity.position + Vector[direction_name])
-    then
-      return false
-    end
+local directional_hotkeys = {
+  up = "w",
+  left = "a",
+  down = "s",
+  right = "d",
+}
 
-    entity.turn_resources.movement = entity.turn_resources.movement - 1
+actions.move = Fun.iter(Vector.direction_names):map(function(direction_name)
+  return direction_name, {
+    name = "двигаться " .. direction_translations[direction_name],
+    hotkey = directional_hotkeys[direction_name],
+    run = function(_, entity)
+      entity:rotate(direction_name)
 
-    Fun.iter(Vector.directions)
-      :map(function(d) return State.grids.solids:safe_get(old_position + d) end)
-      :filter(function(e)
-        return e
-          and e ~= entity
-          and e.abilities
-          and mech.are_hostile(entity, e)
-          and e.turn_resources
-          and e.turn_resources.reactions > 0
+      local old_position = entity.position
+      if entity.turn_resources.movement <= 0
+        or not level.move(State.grids[entity.layer], entity, entity.position + Vector[direction_name])
+      then
+        return false
+      end
+
+      entity.turn_resources.movement = entity.turn_resources.movement - 1
+
+      Fun.iter(Vector.directions)
+        :map(function(d) return State.grids.solids:safe_get(old_position + d) end)
+        :filter(function(e)
+          return e
+            and e ~= entity
+            and e.abilities
+            and mech.are_hostile(entity, e)
+            and e.turn_resources
+            and e.turn_resources.reactions > 0
+          end)
+        :each(function(e)
+          e.turn_resources.reactions = e.turn_resources.reactions - 1
+          e.direction = Vector.name_from_direction(old_position - e.position)
+          e:animate("attack")
+          e:when_animation_ends(function()
+            attacking.attack(
+              e, entity,
+              get_melee_attack_roll(e),
+              get_melee_damage_roll(e)
+            )
+          end)
         end)
-      :each(function(e)
-        e.turn_resources.reactions = e.turn_resources.reactions - 1
-        e.direction = Vector.name_from_direction(old_position - e.position)
-        e:animate("attack")
-        e:when_animation_ends(function()
-          attacking.attack(
-            e, entity,
-            get_melee_attack_roll(e),
-            get_melee_damage_roll(e)
-          )
-        end)
-      end)
 
-    if entity.animate then
-      entity:animate("move")
-    end
+      if entity.animate then
+        entity:animate("move")
+      end
 
-    local tile = State.grids.tiles[entity.position]
-    if tile and tile.sounds and tile.sounds.move then
-      random.choice(tile.sounds.move):play()
-    end
+      local tile = State.grids.tiles[entity.position]
+      if tile and tile.sounds and tile.sounds.move then
+        random.choice(tile.sounds.move):play()
+      end
 
-    return true
-  end
+      return true
+    end,
+  }
 end):tomap()
 
-module.hand_attack = setmetatable(
-  Tablex.extend(
-    static_sprite("assets/sprites/icons/melee_attack.png"),
-    {
-      scale = Vector({2, 2}),
-      on_click = function(self, entity) return self:run(entity) end,
-      size = Vector.one * 0.67,
-      run = function(self, entity)
-        local target = State.grids.solids:safe_get(entity.position + Vector[entity.direction])
+actions.hand_attack = Tablex.extend(
+  static_sprite("assets/sprites/icons/melee_attack.png"),
+  {
+    scale = Vector({2, 2}),
+    on_click = function(self, entity) return self:run(entity) end,
+    size = Vector.one * 0.67,
+    run = function(self, entity)
+      local target = State.grids.solids:safe_get(entity.position + Vector[entity.direction])
 
-        if entity.turn_resources.actions <= 0
-          or not target
-          or not target.hp
-        then
-          return false
-        end
-
-        entity.turn_resources.actions = entity.turn_resources.actions - 1
-
-        State:register_agression(entity, target)
-
-        entity:animate("attack")
-        entity:when_animation_ends(function()
-          if not attacking.attack(
-            entity, target,
-            get_melee_attack_roll(entity),
-            get_melee_damage_roll(entity)
-          ) then return end
-
-          if target and target.sounds and target.sounds.hit then
-            random.choice(target.sounds.hit):play()
-          end
-
-          if target.hardness and not -Query(entity).inventory.main_hand then
-            attacking.attack_save(entity, "constitution", target.hardness, D.roll({}, 1))
-          end
-        end)
-        return true
+      if entity.turn_resources.actions <= 0
+        or not target
+        or not target.hp
+      then
+        return false
       end
-    }
-  ),
-  {
-    __call = function(self, entity)
-      return self:run(entity)
-    end
-  }
-)
 
-module.sneak_attack = function(entity, target)
-  if entity.turn_resources.actions <= 0
-    or not target
-    or not target.hp
-    or not entity.inventory.main_hand
-    or not entity.inventory.main_hand.is_finesse
-    or not entity.turn_resources.has_advantage
-  then
-    return false
-  end
+      entity.turn_resources.actions = entity.turn_resources.actions - 1
 
-  entity.turn_resources.actions = entity.turn_resources.actions - 1
+      State:register_agression(entity, target)
 
-  entity:animate("attack")
-  entity:when_animation_ends(function()
-    attacking.attack(
-      entity, target,
-      get_melee_attack_roll(entity),
-      get_melee_damage_roll(entity)
-        + D(6) * math.ceil(entity.level / 2)
-    )
-  end)
-end
+      entity:animate("attack")
+      entity:when_animation_ends(function()
+        if not attacking.attack(
+          entity, target,
+          get_melee_attack_roll(entity),
+          get_melee_damage_roll(entity)
+        ) then return end
 
-module.aim = function(entity)
-  if entity.turn_resources.bonus_actions <= 0
-    or entity.turn_resources.movement < constants.DEFAULT_MOVEMENT_SPEED
-  then
-    return
-  end
-
-  entity.turn_resources.bonus_actions = entity.turn_resources.bonus_actions - 1
-  entity.turn_resources.movement = entity.turn_resources.movement - constants.DEFAULT_MOVEMENT_SPEED
-
-  entity.turn_resources.has_advantage = true
-end
-
-module.dash = function(entity)
-  if entity.turn_resources.actions <= 0 then
-    return
-  end
-
-  entity.turn_resources.actions = entity.turn_resources.actions - 1
-  entity.turn_resources.movement = entity.turn_resources.movement + entity:get_turn_resources().movement
-end
-
-module.second_wind = setmetatable(
-  Tablex.extend(
-    static_sprite("assets/sprites/icons/second_wind.png"),
-    {
-      size = Vector.one * 0.67,
-      on_click = function(self, entity) return self:run(entity) end,
-      run = function(self, entity)
-        if entity.turn_resources.bonus_actions <= 0
-          or entity.turn_resources.second_wind <= 0
-        then
-          return
+        if target and target.sounds and target.sounds.hit then
+          random.choice(target.sounds.hit):play()
         end
 
-        entity.turn_resources.bonus_actions = entity.turn_resources.bonus_actions - 1
-        entity.turn_resources.second_wind = entity.turn_resources.second_wind - 1
-
-        entity.hp = math.min(entity:get_max_hp(), entity.hp + (D(10) + entity.level):roll())
-      end,
-    }
-  ),
-  {
-    __call = function(self, entity)
-      self:run(entity)
+        if target.hardness and not -Query(entity).inventory.main_hand then
+          attacking.attack_save(entity, "constitution", target.hardness, D.roll({}, 1))
+        end
+      end)
+      return true
     end
   }
 )
 
-module.action_surge = function(entity)
-  if entity.turn_resources.action_surge <= 0 then
-    return
-  end
-  entity.turn_resources.action_surge = entity.turn_resources.action_surge - 1
-  entity.turn_resources.actions = entity.turn_resources.actions + 1
-end
+actions.dash = {
+  run = function(_, entity)
+    if entity.turn_resources.actions <= 0 then
+      return
+    end
 
-module.interact = function(entity)
-  if entity.turn_resources.bonus_actions <= 0 then return end
-  local entity_to_interact = interactive.get_for(entity)
-  if not entity_to_interact then return end
-  if entity_to_interact.position ~= entity.position and not entity_to_interact.hp then
-    entity:animate("attack")
-  end
-  entity.turn_resources.bonus_actions = entity.turn_resources.bonus_actions - 1
-  entity_to_interact:interact(entity)
-end
+    entity.turn_resources.actions = entity.turn_resources.actions - 1
+    entity.turn_resources.movement = entity.turn_resources.movement + entity:get_turn_resources().movement
+  end,
+}
 
-return module
+actions.interact = {
+  run = function(entity)
+    if entity.turn_resources.bonus_actions <= 0 then return end
+    local entity_to_interact = interactive.get_for(entity)
+    if not entity_to_interact then return end
+    if entity_to_interact.position ~= entity.position and not entity_to_interact.hp then
+      entity:animate("attack")
+    end
+    entity.turn_resources.bonus_actions = entity.turn_resources.bonus_actions - 1
+    entity_to_interact:interact(entity)
+  end
+}
+
+actions.list = {
+  actions.move.up,
+  actions.move.left,
+  actions.move.down,
+  actions.move.right,
+  actions.hand_attack,
+  actions.interact,
+  actions.dash,
+}
+
+return actions
