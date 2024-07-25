@@ -90,4 +90,8 @@ tablex.remove_breaking_at = function(t, i)
   t[#t] = nil
 end
 
+tablex.contains = function(t, item)
+  return Fun.iter(t):any(function(x) return x == item end)
+end
+
 return tablex

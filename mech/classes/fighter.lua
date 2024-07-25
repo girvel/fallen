@@ -7,6 +7,7 @@ local fighter = setmetatable({}, module_mt)
 fighter.second_wind = Tablex.extend(
   static_sprite("assets/sprites/icons/second_wind.png"),
   {
+    codename = "second_wind",
     size = Vector.one * 0.67,
     on_click = function(self, entity) return self:run(entity) end,
     run = function(self, entity)
@@ -25,6 +26,7 @@ fighter.second_wind = Tablex.extend(
 )
 
 fighter.action_surge = {
+  codename = "action_surge",
   run = function(entity)
     if entity.turn_resources.action_surge <= 0 then
       return
@@ -43,9 +45,9 @@ module_mt.__call = function(_)
       {fighter.action_surge},
     },
     get_actions = function(self, level)
-      return Fun.iter(self._action_table)
+      return Log.trace(Fun.iter(self._action_table)
         :take_n(level)
-        :reduce(Tablex.concat, {})
+        :reduce(Tablex.concat, {}))
     end,
   }
 end

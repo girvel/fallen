@@ -12,6 +12,10 @@ return Tiny.system({
     if love.keyboard.isDown("rctrl") or love.keyboard.isDown("lctrl") then
       scancode = "C-" .. scancode
     end
-    State.player.next_action = -Query(State.player.hotkeys)[State:get_mode()][scancode].run()
+
+    local data = -Query(State.player.hotkeys)[State:get_mode()][scancode]
+    if not data then return end
+    Query(data).pre_action()
+    State.player.next_action = data.action
   end,
 })
