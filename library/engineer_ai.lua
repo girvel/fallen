@@ -61,8 +61,7 @@ engineer_ai_mt.__call = function(_, works_outside_of_combat)
             end
           end
 
-          local direction = (position - self.position)
-          if not actions.move[Vector.name_from_direction(direction:normalized())]:run(self) then return end
+          if not ai.api.move(self, position - self.position) then return end
           coroutine.yield()
         end
         return
@@ -84,7 +83,7 @@ engineer_ai_mt.__call = function(_, works_outside_of_combat)
           end
 
           local direction = (position - self.position)
-          if not actions.move[Vector.name_from_direction(direction:normalized())]:run(self) then return end
+          if not ai.api.move(self, position - self.position) then return end
           coroutine.yield()
         end
       end

@@ -1,4 +1,5 @@
 local turn_order = require("tech.turn_order")
+local actions = require("mech.creature.actions")
 
 
 return {
@@ -23,4 +24,11 @@ return {
       end
     end
   end,
+
+  api = {
+    move = function(entity, direction)
+      entity:rotate(Vector.name_from_direction(direction:normalized()))
+      return actions.move:run(entity)
+    end,
+  },
 }

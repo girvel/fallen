@@ -1,5 +1,4 @@
 local actions = require("mech.creature.actions")
-local turn_order = require("tech.turn_order")
 
 
 local define_hotkey = function(collection, modes, keys, name, run)
