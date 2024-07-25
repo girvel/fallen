@@ -1,23 +1,6 @@
-local interactive = require("tech.interactive")
 local level = require("tech.level")
 
 
-local resource_translations = {
-  bonus_actions = "бонусные действия",
-  movement = "движение",
-  reactions = "реакции",
-  actions = "действия",
-  has_advantage = "преимущество",
-  second_wind = "второе дыхание",
-  action_surge = "всплеск действий",
-}
-
-local value_translations = {
-  [true] = "да",
-  [false] = "нет",
-}
-
-local last_offset
 local get_scene_offset = function()
   local window_w = love.graphics.getWidth()
   local window_h = love.graphics.getHeight()
@@ -103,6 +86,7 @@ return Tiny.sortedProcessingSystem({
     end
   end,
 
+  -- TODO REFACTOR move from here
   _update_indicators = function(self)
     local text = "%s/%s" % {State.player.hp, State.player:get_max_hp()}
     local hp_text = State.gui.sidebar.hp_text
@@ -220,78 +204,8 @@ return Tiny.sortedProcessingSystem({
   end,
 
   _display_text_info = function(self)
-    local max = State.player:get_turn_resources()
-
-    local lines = {
-      "Здоровье: " .. State.player.hp .. "/" .. State.player:get_max_hp(),
-    }
-
-    local weapon = State.player.inventory.main_hand
-    if weapon then
-      local roll = weapon.damage_roll:to_string()
-      if weapon.bonus > 0 then
-        roll = roll .. "+" .. weapon.bonus
-      end
-      Tablex.concat(lines, {
-        "",
-        "Оружие: " .. weapon.name .. " (" .. roll .. ")",
-      })
-    end
-
-    Tablex.concat(
-      lines,
-      {"", "Ресурсы:"},
-      Fun.iter(State.player.turn_resources)
-        :map(function(k, v)
-          return (
-            "  " .. (resource_translations[k] or k) ..
-            ": " .. (value_translations[v] or tostring(v)) ..
-            (max[k] == nil and "" or "/" .. (value_translations[max[k]] or tostring(max[k])))
-          )
-        end)
-        :totable()
-    )
-
-    Tablex.concat(lines, {
-      "",
-      "Действия:",
-      "  [1] - атака рукой",
-      "  [2] - ничего не делать",
-      "  [3] - второе дыхание",
-      "  [4] - всплеск действий",
-      "  [z] - рывок",
-      "  [k] - открыть кодекс",
-    })
-
-    local potential_interaction = interactive.get_for(State.player)
-    if potential_interaction and (State:get_mode() == "free" or State:get_mode() == "fight") then
-      Tablex.concat(lines, {
-        "",
-        "  [E] - взаимодействовать с " .. Common.get_name(potential_interaction),
-      })
-    end
-
-    if State.move_order then
-      Tablex.concat(lines, {
-        "",
-        "  [Space] - закончить ход",
-      })
-
-      Tablex.concat(lines, {
-        "",
-        "Очередь ходов:",
-      })
-
-      Tablex.concat(lines, Fun.iter(State.move_order.list)
-        :enumerate()
-        :take_n(#State.move_order.list - 1)
-        :map(function(i, e) return (State.move_order.current_i == i and "x " or "- ") .. (e.name or "_") end)
-        :totable()
-      )
-    end
-
     love.graphics.printf(
-      table.concat(lines, "\n"), State.gui.font,
+      State.gui.sidebar:get_text(), State.gui.font,
       love.graphics.getWidth() - self.SIDEBAR_W, 115,
       self.SIDEBAR_W - 15
     )
