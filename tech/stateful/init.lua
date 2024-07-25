@@ -1,6 +1,6 @@
 local level = require("tech.level")
 local item = require("tech.item")
-local turn_order = require("tech.turn_order")
+local combat = require("tech.combat")
 local mech = require("mech")
 
 
@@ -152,7 +152,7 @@ module_mt.__call = function(_, systems, debug_mode)
         :map(function(x) return x.entity end)
         :totable()
 
-      self.move_order = turn_order(pure_order)
+      self.move_order = combat(pure_order)
     end,
 
     register_agression = function(self, source, target)

@@ -21,7 +21,7 @@ local resource_translations = {
 }
 
 local hotkeys_order = Fun.iter(
-  "w a s d 1 2 3 4 5 6 7 8 9 0 e return z space k Shift+q" / " "
+  "w a s d up left down right 1 2 3 4 5 6 7 8 9 0 e return z space k Shift+q" / " "
 )
   :enumerate()
   :map(function(i, e) return e, i end)

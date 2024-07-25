@@ -162,7 +162,7 @@ end
 --         end
 -- 
 --         bats[#bats]:when_animation_ends(function()
---           State.move_order = turn_order(Tablex.concat(bats, {other}))
+--           State.move_order = combat(Tablex.concat(bats, {other}))
 --         end)
 --       end)
 --     end),

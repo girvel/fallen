@@ -4,7 +4,7 @@ local random = require("utils.random")
 local mech = require("mech")
 local static_sprite = require("tech.static_sprite")
 local interactive = require("tech.interactive")
-local turn_order = require("tech.turn_order")
+local combat = require("tech.combat")
 
 
 local actions = {}
@@ -171,7 +171,7 @@ actions.finish_turn = {
   codename = "finish_turn",
   get_availability = function() return true end,
   _run = function(_, entity)
-    return turn_order.TURN_END_SIGNAL
+    return combat.TURN_END_SIGNAL
     -- TODO maybe discard that and use a direct call to State.move_order?
   end,
 }

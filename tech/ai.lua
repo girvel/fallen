@@ -7,7 +7,7 @@ ai.async = function(fun, works_outside_of_combat)
   return function(self, event)
     if
       not works_outside_of_combat
-      and not -Query(State.move_order):contains(self)
+      and not Tablex.contains(-Query(State.move_order).list or {}, self)
     then return end
 
     local dt = unpack(event)

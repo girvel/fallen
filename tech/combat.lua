@@ -1,14 +1,14 @@
 local module_mt = {}
-local module = setmetatable({}, module_mt)
+local combat = setmetatable({}, module_mt)
 
-module.TURN_END_SIGNAL = 666
-module.WORLD_TURN = {codename = "WORLD_TURN"}
+combat.TURN_END_SIGNAL = 666
+combat.WORLD_TURN = {codename = "WORLD_TURN"}
 
 module_mt.__call = function(_, list)
   return {
     list = Fun.iter(list)
       :filter(function(e) return State:exists(e) end)
-      :chain({module.WORLD_TURN})
+      :chain({combat.WORLD_TURN})
       :totable(),
     current_i = 1,
     remove = function(self, item)
@@ -30,14 +30,11 @@ module_mt.__call = function(_, list)
         self.current_i = 1
       end
     end,
-    contains = function(self, entity)  -- TODO replace with Tablex.contains
-      return Fun.iter(self.list):any(function(e) return e == entity end)
-    end,
     iter_entities_only = function(self)
       return Fun.iter(self.list)
-        :filter(function(e) return e ~= module.WORLD_TURN end)
+        :filter(function(e) return e ~= combat.WORLD_TURN end)
     end,
   }
 end
 
-return module
+return combat

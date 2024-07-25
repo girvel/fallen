@@ -1,4 +1,4 @@
-local turn_order = require("tech.turn_order")
+local combat = require("tech.combat")
 
 
 return Tiny.processingSystem({
@@ -32,10 +32,10 @@ return Tiny.processingSystem({
       return
     end
 
-    local is_world_turn = State.move_order:get_current() == turn_order.WORLD_TURN
+    local is_world_turn = State.move_order:get_current() == combat.WORLD_TURN
 
     if is_world_turn then
-      if State.move_order:contains(entity) then return end
+      if Tablex.contains(State.move_order.list, entity) then return end
     elseif State.move_order:get_current() ~= entity then return end
 
     if is_world_turn then
@@ -52,7 +52,7 @@ return Tiny.processingSystem({
     end
 
     if
-      entity.ai.run(entity, event) == turn_order.TURN_END_SIGNAL and not is_world_turn
+      entity.ai.run(entity, event) == combat.TURN_END_SIGNAL and not is_world_turn
       or was_timeout_reached
     then
       Common.reset_period(self, State.move_order:get_current())
@@ -65,7 +65,7 @@ return Tiny.processingSystem({
   end,
 
   postProcess = function()
-    if -Query(State.move_order):get_current() == turn_order.WORLD_TURN
+    if -Query(State.move_order):get_current() == combat.WORLD_TURN
     then
       State.move_order:move_to_next()
     end
