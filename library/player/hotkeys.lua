@@ -30,48 +30,48 @@ return function()
   end
 
   define_hotkey(hotkeys, {"fight"}, {"space"}, {
-    name = "",
+    name = "закончить ход",
     action = actions.finish_turn,
   })
 
   define_hotkey(hotkeys, {"free", "fight"}, {"1"}, {
-    name = "",
+    name = "атака основной рукой",
     action = actions.hand_attack,
   })
 
   define_hotkey(hotkeys, {"free", "fight"}, {"3"}, {
-    name = "",
+    name = "второе дыхание",
     action = actions.second_wind
   })
 
   define_hotkey(hotkeys, {"fight"}, {"4"}, {
-    name = "",
+    name = "всплеск действий",
     action = actions.action_surge
   })
 
   define_hotkey(hotkeys, {"free", "fight"}, {"e"}, {
-    name = "",
+    name = "взаимодействие",
     action = actions.interact
   })
 
   define_hotkey(hotkeys, {"fight"}, {"z"}, {
-    name = "",
+    name = "рывок",
     action = actions.dash
   })
 
   -- reading --
   define_hotkey(hotkeys, {"reading"}, {"escape"}, {
-    name = "",
+    name = "выйти из кодекса",
     pre_action = function() State.gui.wiki:exit() end
   })
 
   define_hotkey(hotkeys, {"reading"}, {"left"}, {
-    name = "",
+    name = "назад",
     pre_action = function() State.gui.wiki:move_in_history(-1) end
   })
 
   define_hotkey(hotkeys, {"reading"}, {"right"}, {
-    name = "",
+    name = "вперёд",
     pre_action = function() State.gui.wiki:move_in_history(1) end
   })
 
@@ -83,7 +83,7 @@ return function()
 
   -- dialogue options --
   define_hotkey(hotkeys, {"dialogue_options"}, {"w", "up"}, {
-    name = "",
+    name = "опция выше",
     pre_action = function()
       State.gui.dialogue.selected_option_i = math.max(
         1, (State.gui.dialogue.selected_option_i) - 1
@@ -93,7 +93,7 @@ return function()
   })
 
   define_hotkey(hotkeys, {"dialogue_options"}, {"s", "down"}, {
-    name = "",
+    name = "опция ниже",
     pre_action = function()
       State.gui.dialogue.selected_option_i = math.min(
         #State.gui.dialogue.options, (State.gui.dialogue.selected_option_i) + 1
@@ -103,7 +103,7 @@ return function()
   })
 
   define_hotkey(hotkeys, {"dialogue_options"}, {"e", "return"}, {
-    name = "",
+    name = "выбрать опцию",
     pre_action = function()
       State.gui.dialogue:options_select()
     end,
@@ -111,7 +111,7 @@ return function()
 
   Fun.range(1, 9):each(function(i)
     define_hotkey(hotkeys, {"dialogue_options"}, {tostring(i)}, {
-      name = "",
+      name = "выбрать опцию #" .. i,
       pre_action = function()
         if i <= #State.gui.dialogue.options then
           State.gui.dialogue.selected_option_i = i
@@ -123,7 +123,7 @@ return function()
 
   -- death --
   define_hotkey(hotkeys, {"death"}, {"return", "e"}, {
-    name = "",
+    name = "начать заново",
     pre_action = function()
       love.reload_flag = true
     end,
