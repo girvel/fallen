@@ -102,18 +102,18 @@ return function()
 
       result = result
         .. "\n\nДействия:"
-        .. Fun.iter(State.player.available_actions)
-          :map(function(a) return "\n  [%s] - %s" % {-Query(a).hotkey or "no", Common.get_name(a)} end)
+        .. Fun.iter(State.player.hotkeys[State:get_mode()])
+          :map(function(key, data) return "\n  [%s] - %s" % {key, Common.get_name(data)} end)
           :reduce(Fun.op.concat, "")
 
-      local potential_interaction = interactive.get_for(State.player)
-      if potential_interaction and (State:get_mode() == "free" or State:get_mode() == "fight") then
-        result = result .. "\n\n  [E] - взаимодействовать с " .. Common.get_name(potential_interaction)
-      end
+      -- local potential_interaction = interactive.get_for(State.player)
+      -- if potential_interaction and (State:get_mode() == "free" or State:get_mode() == "fight") then
+      --   result = result .. "\n\n  [E] - взаимодействовать с " .. Common.get_name(potential_interaction)
+      -- end
 
       if State.move_order then
         result = result
-          .. "\n\n  [Space] - закончить ход\n\nОчередь ходов:\n"
+          .. "\n\nОчередь ходов:\n"
           .. table.concat(
             Fun.iter(State.move_order.list)
               :enumerate()

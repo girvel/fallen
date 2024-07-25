@@ -5,7 +5,7 @@ local weapons = require("library.weapons")
 
 
 local module_mt = {}
-local module = setmetatable({}, module_mt)
+local player = setmetatable({}, module_mt)
 
 module_mt.__call = function()
   local result = humanoid({
@@ -29,8 +29,9 @@ module_mt.__call = function()
 
     hotkeys = require("library.player.hotkeys")(),
     ai = {run = function(self)
-      local result = -Query(self.hotkeys[State:get_mode()])[self.last_pressed_key](self)
-      self.last_pressed_key = nil
+      if not self.next_action then return end
+      local result = self.next_action:run(self)
+      self.next_action = nil
       return result
     end},
 
@@ -52,4 +53,4 @@ module_mt.__call = function()
   return result
 end
 
-return module
+return player

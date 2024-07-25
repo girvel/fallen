@@ -55,24 +55,8 @@ local get_melee_damage_roll = function(entity)
     + entity.inventory.main_hand.bonus
 end
 
-local direction_translations = {
-  up = "вверх",
-  left = "влево",
-  down = "вниз",
-  right = "вправо",
-}
-
-local directional_hotkeys = {
-  up = "w",
-  left = "a",
-  down = "s",
-  right = "d",
-}
-
 actions.move = Fun.iter(Vector.direction_names):map(function(direction_name)
   return direction_name, {
-    name = "двигаться " .. direction_translations[direction_name],
-    hotkey = directional_hotkeys[direction_name],
     run = function(_, entity)
       entity:rotate(direction_name)
 

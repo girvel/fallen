@@ -10,7 +10,7 @@ module_mt.__call = function(_, subject)
       return query(self._query_subject ~= nil and self._query_subject[index] or nil)
     end,
     __call = function(self, head, ...)
-      if head._query_subject then
+      if head and head._query_subject then
         head = head._query_subject
       end
       return query(self._query_subject ~= nil and self._query_subject(head, ...) or nil)
