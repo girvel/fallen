@@ -59,7 +59,7 @@ engineer_ai_mt.__call = function(_, works_outside_of_combat)
       if direction:abs() == 1 then
         Log.debug("Attempt at attacking the player")
         self:rotate(Vector.name_from_direction(direction))
-        while actions.hand_attack:run(self) do
+        while self:act(actions.hand_attack) do
           while not self.animation.current:startsWith("idle") do
             coroutine.yield()
           end

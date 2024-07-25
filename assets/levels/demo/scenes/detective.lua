@@ -45,7 +45,7 @@ return function()
         end
 
         rails.entities[2]:rotate("down")
-        actions.interact:run(rails.entities[2])
+        rails.entities[2]:act(actions.interact)
       end,
     },
     {

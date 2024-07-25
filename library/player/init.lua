@@ -30,7 +30,7 @@ module_mt.__call = function()
     hotkeys = require("library.player.hotkeys")(),
     ai = {run = function(self)
       if not self.next_action then return end
-      local result = self.next_action:run(self)
+      local result = self:act(self.next_action)
       self.next_action = nil
       return result
     end},

@@ -9,14 +9,12 @@ fighter.second_wind = Tablex.extend(
   {
     codename = "second_wind",
     size = Vector.one * 0.67,
-    on_click = function(self, entity) return self:run(entity) end,
-    run = function(self, entity)
-      if entity.turn_resources.bonus_actions <= 0
-        or entity.turn_resources.second_wind <= 0
-      then
-        return
-      end
-
+    on_click = function(self, entity) return entity:act(self) end,
+    get_availability = function(self, entity)
+      return entity.turn_resources.bonus_actions > 0
+        and entity.turn_resources.second_wind > 0
+    end,
+    _run = function(self, entity)
       entity.turn_resources.bonus_actions = entity.turn_resources.bonus_actions - 1
       entity.turn_resources.second_wind = entity.turn_resources.second_wind - 1
 
@@ -27,10 +25,10 @@ fighter.second_wind = Tablex.extend(
 
 fighter.action_surge = {
   codename = "action_surge",
-  run = function(entity)
-    if entity.turn_resources.action_surge <= 0 then
-      return
-    end
+  get_availability = function(self, entity)
+    return entity.turn_resources.action_surge > 0
+  end,
+  _run = function(entity)
     entity.turn_resources.action_surge = entity.turn_resources.action_surge - 1
     entity.turn_resources.actions = entity.turn_resources.actions + 1
   end,

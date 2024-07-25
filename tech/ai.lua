@@ -28,7 +28,7 @@ end
 
 ai.api.move = function(entity, direction)
   entity:rotate(Vector.name_from_direction(direction:normalized()))
-  return actions.move:run(entity)
+  return entity:act(actions.move)
 end
 
 ai.api.travel = function(entity, destination)
@@ -40,7 +40,7 @@ ai.api.travel = function(entity, destination)
   for _, position in ipairs(path) do
     if entity.turn_resources.movement <= 0 then
       if entity.turn_resources.actions > 0 then
-        actions.dash:run(entity)
+        entity:act(actions.dash)
       else
         break
       end

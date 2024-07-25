@@ -82,18 +82,15 @@ actions.hand_attack = Tablex.extend(
   {
     codename = "hand_attack",
     scale = Vector({2, 2}),
-    on_click = function(self, entity) return self:run(entity) end,
+    on_click = function(self, entity) return entity:act(self) end,
     size = Vector.one * 0.67,
-    run = function(self, entity)
+
+    get_availability = function(self, entity)
       local target = State.grids.solids:safe_get(entity.position + Vector[entity.direction])
-
-      if entity.turn_resources.actions <= 0
-        or not target
-        or not target.hp
-      then
-        return false
-      end
-
+      return entity.turn_resources.actions > 0 and -Query(target).hp
+    end,
+    _run = function(self, entity)
+      local target = State.grids.solids:safe_get(entity.position + Vector[entity.direction])
       entity.turn_resources.actions = entity.turn_resources.actions - 1
       base_attack(entity, target)
       return true
@@ -103,11 +100,12 @@ actions.hand_attack = Tablex.extend(
 
 actions.move = {
   codename = "move",
-  run = function(_, entity)
+  get_availability = function(self, entity)
+    return entity.turn_resources.movement > 0
+  end,
+  _run = function(_, entity)
     local old_position = entity.position
-    if entity.turn_resources.movement <= 0
-      or not level.move(State.grids[entity.layer], entity, entity.position + Vector[entity.direction])
-    then
+    if not level.move(State.grids[entity.layer], entity, entity.position + Vector[entity.direction]) then
       return false
     end
 
@@ -143,11 +141,10 @@ actions.move = {
 
 actions.dash = {
   codename = "dash",
-  run = function(_, entity)
-    if entity.turn_resources.actions <= 0 then
-      return
-    end
-
+  get_availability = function(self, entity)
+    return entity.turn_resources.actions > 0
+  end,
+  _run = function(_, entity)
     entity.turn_resources.actions = entity.turn_resources.actions - 1
     entity.turn_resources.movement = entity.turn_resources.movement + entity:get_turn_resources().movement
   end,
@@ -155,8 +152,10 @@ actions.dash = {
 
 actions.interact = {
   codename = "interact",
-  run = function(_, entity)
-    if entity.turn_resources.bonus_actions <= 0 then return end
+  get_availability = function(self, entity)
+    return entity.turn_resources.bonus_actions > 0
+  end,
+  _run = function(_, entity)
     local entity_to_interact = interactive.get_for(entity)
     if not entity_to_interact then return end
     if entity_to_interact.position ~= entity.position and not entity_to_interact.hp then
@@ -169,7 +168,8 @@ actions.interact = {
 
 actions.finish_turn = {
   codename = "finish_turn",
-  run = function(_, entity)
+  get_availability = function() return true end,
+  _run = function(_, entity)
     return turn_order.TURN_END_SIGNAL
     -- TODO maybe discard that and use a direct call to State.move_order?
   end,

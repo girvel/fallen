@@ -61,12 +61,16 @@ module_mt.__call = function(_, animation_pack, object)
         item:animate()
       end)
     end,
+
+    act = function(self, action)
+      if not action:get_availability(self) then return false end
+      return action:_run(self)
+    end,
   }, object)
 
   result.hp = result.hp or result:get_max_hp()
   result.turn_resources = result.turn_resources or result:get_turn_resources()
   result.potential_actions = result:get_actions()
-  Log.trace(Common.get_name(result), result:get_actions())
   result:animate("idle")
 
   result.saving_throws = Fun.iter(result.abilities)
