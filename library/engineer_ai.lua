@@ -49,44 +49,11 @@ engineer_ai_mt.__call = function(_, works_outside_of_combat)
       end
 
       if mode_type == engineer_ai.modes.run_away_to then
-        local destination = self.ai.mode:unpack()
-        local path = State.grids.solids:find_path(self.position, destination)
-
-        for _, position in ipairs(path) do
-          if self.turn_resources.movement <= 0 then
-            if self.turn_resources.actions > 0 then
-              actions.dash:run(self)
-            else
-              break
-            end
-          end
-
-          if not ai.api.move(self, position - self.position) then return end
-          coroutine.yield()
-        end
+        ai.api.travel(self, self.ai.mode:unpack())
         return
       end
 
-      if (State.player.position - self.position):abs() > 1 then
-        Log.debug("Attempt at building path towards player")
-        local path = State.grids.solids:find_path(self.position, State.player.position)
-        Log.debug("Path is built")
-        table.remove(path)
-
-        for _, position in ipairs(path) do
-          if self.turn_resources.movement <= 0 then
-            if self.turn_resources.actions > 0 then
-              actions.dash:run(self)
-            else
-              break
-            end
-          end
-
-          local direction = (position - self.position)
-          if not ai.api.move(self, position - self.position) then return end
-          coroutine.yield()
-        end
-      end
+      ai.api.travel(self, State.player.position)
 
       local direction = State.player.position - self.position
       if direction:abs() == 1 then
