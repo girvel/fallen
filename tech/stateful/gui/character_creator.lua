@@ -2,6 +2,7 @@ local wrapping = require("tech.stateful.gui.wrapping")
 local mech = require("mech")
 local utf8 = require("utf8")
 local player = require("library.player")  -- TODO move to tech
+local races = require("mech.races")
 
 
 local ability_translations = {  -- TODO translation module
@@ -51,6 +52,11 @@ return function()
       max_index = 1,
       movement_functions = {},
       race = "human",
+      bonuses = {},
+
+      _get_indicator = function(self, i)
+        return i == self.current_index and ">" or " "
+      end,
     },
 
     refresh = function(self)
@@ -81,6 +87,12 @@ return function()
 
     forms = {
       race = function(params)
+        local text = "  # Раса\n\n"
+          .. "%s < %s >\n\n" % {
+            params:_get_indicator(params.max_index + 1),
+            race_translations[params.race]
+          }
+
         params.movement_functions[params.max_index + 1] = function(dx)
           params.race = available_races[
             (Tablex.index_of(available_races, params.race) + dx - 1) % #available_races + 1
@@ -89,11 +101,37 @@ return function()
 
         params.max_index = params.max_index + 1
 
-        return "  # Раса\n\n"
-          .. "%s < %s >\n\n\n" % {
-            params.current_index == params.max_index and ">" or " ",
-            race_translations[params.race]
-          }
+        params.bonuses = Fun.iter(params.bonuses)
+          :take_n(math.min(#params.bonuses, #races[params.race].bonuses))
+          :totable()
+
+        params.bonuses = Fun.iter(params.bonuses)
+          :chain(Fun.iter(mech.abilities_list)
+            :filter(function(a) return Fun.iter(params.bonuses):all(function(b) return a ~= b end) end)
+            :take_n(#races[params.race].bonuses - #params.bonuses)
+          )
+          :totable()
+
+        if #params.bonuses == 6 then
+          text = text .. "  Бонус +1 ко всем способностям\n"
+        else
+          Fun.iter(races[params.race].bonuses):enumerate():each(function(i, size)
+            local j = i + params.max_index
+            text = text .. ("%s Бонус +%s: %s\n" % {
+              params:_get_indicator(j),
+              size,
+              params.bonuses[i],
+              42,
+            })
+
+            params.movement_functions[j] = function(dx)
+
+            end
+          end)
+          params.max_index = params.max_index + #races[params.race].bonuses
+        end
+
+        return text .. "\n\n"
       end,
 
       abilities = function(params)
@@ -110,7 +148,7 @@ return function()
         Fun.iter(mech.abilities_list):enumerate():each(function(i, a)
           i = i + params.max_index
           text = text .. "\n%s %s  %s %s %s  %s  =  %s  %s" % {
-            i == params.current_index and ">" or " ",
+            params:_get_indicator(i),
             ability_translations[a]:ljust(utf8.len(headers[1]), " "),
             params.abilities[a] > 8 and "<" or " ",
             tostring(params.abilities[a]):rjust(2, "0"),

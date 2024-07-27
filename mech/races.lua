@@ -24,4 +24,25 @@ module.dwarf = {
   movement_speed = 5,
 }
 
+module.human = {
+  codename = "human",
+  skin_color = Common.hex_color("8ed3dc"),
+  movement_speed = 6,
+  bonuses = {1, 1, 1, 1, 1, 1},
+}
+
+module.variant_human_1 = {
+  codename = "variant_human_1",
+  skin_color = Common.hex_color("8ed3dc"),
+  movement_speed = 6,
+  bonuses = {1, 1},
+}
+
+module.variant_human_2 = {
+  codename = "variant_human_2",
+  skin_color = Common.hex_color("8ed3dc"),
+  movement_speed = 6,
+  bonuses = {2},
+}
+
 return module
