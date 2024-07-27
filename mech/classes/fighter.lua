@@ -1,4 +1,6 @@
 local static_sprite = require("tech.static_sprite")
+local class = require("mech.class")
+local perk = class.perk
 
 
 local module_mt = {}
@@ -35,29 +37,14 @@ fighter.action_surge = {
 }
 
 module_mt.__call = function(_)
-  return {
+  return Tablex.extend(class.mixin(), {
     hp_die = 10,
-    save_proficiencies = Common.set({"strength", "constitution", "dexterity"}),
-    _action_table = {
-      {fighter.second_wind},
-      {fighter.action_surge},
+    save_proficiencies = Common.set({"strength", "constitution"}),
+    progression_table = {
+      {perk.action(fighter.second_wind), perk.resource("short", "second_wind", 1)},
+      {perk.action(fighter.action_surge), perk.resource("short", "action_surge", 1)},
     },
-    get_actions = function(self, level)
-      return Fun.iter(self._action_table)
-        :take_n(level)
-        :reduce(Tablex.concat, {})
-    end,
-    _resource_table = {
-      {short = {second_wind = 1}},
-      {short = {action_surge = 1}},
-    },
-    get_resources = function(self, level, rest_type)
-      return Fun.iter(self._resource_table)
-        :take_n(level)
-        :map(function(t) return t[rest_type] end)
-        :reduce(Tablex.extend, {})
-    end,
-  }
+  })
 end
 
 return fighter
