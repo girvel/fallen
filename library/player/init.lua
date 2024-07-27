@@ -7,16 +7,13 @@ local weapons = require("library.weapons")
 local module_mt = {}
 local player = setmetatable({}, module_mt)
 
-module_mt.__call = function(_, abilities)
+module_mt.__call = function(_, abilities, race, build)
   local result = humanoid({
     player_flag = true,
     name = "протагонист",
     class = fighter(),
-    race = {
-      codename = "player_character",
-      movement_speed = 6,
-      skin_color = Common.hex_color("8ed3dc"),
-    },
+    race = race,
+    build = build,
     level = 2,
     direction = "right",
     faction = "dreamers",

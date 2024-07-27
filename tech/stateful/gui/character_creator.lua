@@ -3,6 +3,8 @@ local mech = require("mech")
 local utf8 = require("utf8")
 local player = require("library.player")  -- TODO move to tech
 local races = require("mech.races")
+local fighter = require("mech.classes.fighter")
+local class = require("mech.class")
 
 
 local ability_translations = {  -- TODO translation module
@@ -12,6 +14,13 @@ local ability_translations = {  -- TODO translation module
   intelligence = "интеллект",
   wisdom = "мудрость",
   charisma = "харизма",
+}
+
+local build_translations = {
+  [fighter.fighting_style] = {
+    two_handed_style = "бой двуручным оружием",
+    duelist = "дуэлянт",
+  }
 }
 
 local cost = {
@@ -55,6 +64,8 @@ return function()
       race = "human",
       bonuses = {},
 
+      build_options = {},
+
       _get_indicator = function(self, i)
         return i == self.current_index and ">" or " "
       end,
@@ -78,6 +89,21 @@ return function()
       text = text
         .. self.forms.race(params)
         .. self.forms.abilities(params)
+
+      for _, choice in ipairs(Fun.iter(fighter.progression_table)
+        :take_n(2)  -- TODO level-dependent
+        :map(function(perks)
+          return Fun.iter(perks)
+            :filter(function(perk) return perk.enum_variant == class.perk.choice end)
+            :totable()
+        end)
+        :reduce(Tablex.concat, {}))
+      do
+        if not params.build_options[choice] then
+          params.build_options[choice] = 1
+        end
+        text = text .. self.forms[choice](params)
+      end
 
       self.text_entities = State:add_multiple(wrapping.generate_page(
         text,
@@ -194,6 +220,19 @@ return function()
         params.max_index = params.max_index + 6
         return text .. "\n\n\n"
       end,
+
+      [fighter.fighting_style] = function(params)
+        local chosen_style = fighter.fighting_style.options[
+          params.build_options[fighter.fighting_style]
+        ]
+        local text = "%s < %s >\n\n" % {
+          params:_get_indicator(params.max_index + 1),
+          build_translations[fighter.fighting_style][chosen_style.codename],
+        }
+
+        params.max_index = params.max_index + 1
+        return text
+      end,
     },
 
     move_cursor = function(self, direction_name)
@@ -214,7 +253,7 @@ return function()
       local params = self.parameters
       if params.points > 0 then return end  -- TODO notification
       State.player = State:add(Tablex.extend(
-        player(params.abilities_final),
+        player(params.abilities_final, races[params.race], params.build_options),
         {position = self.player_anchor}
       ))
       Log.info("Created player")

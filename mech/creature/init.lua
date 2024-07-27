@@ -96,7 +96,7 @@ module_mt.__call = function(_, animation_pack, object)
   result.hp = result.hp or result:get_max_hp()
 
   if result.class then
-    result.effects = result.class:get_effects(result.level)
+    result.effects = result.class:get_effects(result.level, result.build)
   end
 
   result.resources = result.resources

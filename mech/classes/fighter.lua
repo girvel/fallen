@@ -36,33 +36,47 @@ fighter.action_surge = {
   end,
 }
 
-fighter.two_handed_style = function()
-  return {
+fighter.fighting_style = perk.choice({
+  {
+    codename = "two_handed_style",
     modify_damage_roll = function(entity, roll)
       if not -Query(entity.inventory).main_hand.tags.two_handed then
         return roll
       end
       return roll:extended({reroll = {1, 2}})
     end,
-  }
-end
+  },
+
+  {
+    codename = "duelist",
+    modify_attack_roll = function(entity, roll)
+      local weapon = entity.inventory.main_hand
+      if not weapon or weapon.tags.two_handed then
+        return roll
+      end
+      return roll + entity.proficiency_bonus
+    end,
+  },
+})
+
+fighter.progression_table = {
+  [1] = {
+    perk.action(fighter.second_wind),
+    perk.resource("short", "second_wind", 1),
+    fighter.fighting_style,
+  },
+  [2] = {
+    perk.action(fighter.action_surge),
+    perk.resource("short", "action_surge", 1),
+  },
+}
 
 module_mt.__call = function(_)
   return Tablex.extend(class.mixin(), {
     hp_die = 10,
     save_proficiencies = Common.set({"strength", "constitution"}),
 
-    progression_table = {
-      [1] = {
-        perk.action(fighter.second_wind),
-        perk.resource("short", "second_wind", 1),
-        perk.effect(fighter.two_handed_style),
-      },
-      [2] = {
-        perk.action(fighter.action_surge),
-        perk.resource("short", "action_surge", 1),
-      },
-    },
+    progression_table = fighter.progression_table,
   })
 end
 

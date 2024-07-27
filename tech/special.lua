@@ -10,6 +10,7 @@ local damage_font = love.graphics.newFont("assets/fonts/joystix.monospace-regula
 module.floating_damage = function(number, scene_position)
   number = tostring(number)
   return {
+    boring_flag = true,
     codename = "floating_damage",
     position = scene_position * State.CELL_DISPLAY_SIZE * State.SCALING_FACTOR
       + Vector({random.d(12) - 6, random.d(12) - 6}),
