@@ -10,10 +10,15 @@ module.abilities = function(str, dex, con, int, wis, cha)
     dexterity = dex,
     constitution = con,
     intelligence = int,
-    wisdon = wis,
+    wisdom = wis,
     charisma = cha,
   }
 end
+
+module.abilities_list = {
+  "strength", "dexterity", "constitution",
+  "intelligence", "wisdom", "charisma",
+}
 
 module.are_hostile = function(first, second)
   return (first.faction or second.faction) and first.faction ~= second.faction

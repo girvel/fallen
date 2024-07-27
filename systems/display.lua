@@ -85,7 +85,7 @@ return Tiny.sortedProcessingSystem({
       dialogue_background = Vector.zero,
       dialogue_text = get_dialogue_offset(),
       wiki = get_full_screen_text_offset(),
-      character_creation = get_full_screen_text_offset(),
+      character_creator = get_full_screen_text_offset(),
     }) do
       State.gui.views[key].offset = value
     end
@@ -94,7 +94,7 @@ return Tiny.sortedProcessingSystem({
   process = function(self, entity)
     local mode = State:get_mode()
     if
-      mode == "character_creation" and entity.view ~= "character_creation"
+      mode == "character_creator" and entity.view ~= "character_creator"
       or mode == "reading" and entity.view ~= "wiki"
       or mode == "death"
     then return end
@@ -163,7 +163,7 @@ return Tiny.sortedProcessingSystem({
 
   postProcess = function(self)
     local mode = State:get_mode()
-    if Tablex.contains({"reading", "character_creation"}, mode) then return end
+    if Tablex.contains({"reading", "character_creator"}, mode) then return end
     if mode == "death" then return self:_display_death_message() end
     self:_display_text_info()
   end,

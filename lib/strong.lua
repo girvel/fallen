@@ -3,6 +3,9 @@
 -- strong 1.0.4 - Michael Ebens
 -- Licensed under the zlib/libpng license. See LICENSE.txt.
 
+local utf8 = require("utf8")
+
+
 -- PRIVATE FUNCTIONS --
 
 local function swapChar(c)
@@ -29,6 +32,7 @@ local string = mt.__index
 
 -- OPERATORS --
 
+function mt.__mul(a, b) return a:rep(b) end
 function mt.__div(a, b) return a:split(b, true) end
 function mt.__mod(a, b)
    if type(b) == "table" then
@@ -142,15 +146,15 @@ function string:lines(sep, all)
 end
 
 function string:ljust(int, padstr)
-  local len = #self
-  
+  local len = utf8.len(self)
+
   if int > len then
     local num = padstr and math.floor((int - len) / #padstr) or int - len
     self = self .. (padstr or " ") * num
     len = #self
     if len < int then self = self .. padstr:sub(1, int - len) end
   end
-  
+
   return self
 end
 

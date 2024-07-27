@@ -1,4 +1,3 @@
-local wrapping = require("tech.stateful.gui.wrapping")
 local view = require("utils.view")
 
 
@@ -17,13 +16,13 @@ return function()
       dialogue_background = view(Vector.zero, 1, 1),
       dialogue_text = view(Vector.zero, 1, 1),
       wiki = view(Vector.zero, 1, 1),
-      character_creation = view(Vector.zero, 1, 1),
+      character_creator = view(Vector.zero, 1, 1),
     },
 
     views_order = {
       "scene", "scene_fx",
       "sidebar_background", "actions", "sidebar", "sidebar_text",
-      "dialogue_background", "dialogue_text", "wiki", "character_creation",
+      "dialogue_background", "dialogue_text", "wiki", "character_creator",
     },
   }
 
@@ -32,6 +31,7 @@ return function()
   result.wiki = require("tech.stateful.gui.wiki")()
   result.sidebar = require("tech.stateful.gui.sidebar")()
   result.dialogue = require("tech.stateful.gui.dialogue")()
+  result.character_creator = require("tech.stateful.gui.character_creator")()
 
   return result
 end

@@ -10,7 +10,7 @@ setmetatable(module, module_mt)
 
 module_mt.__call = function(_, systems, debug_mode)
   local modes = {
-    "character_creation", "death", "reading", "dialogue_options", "dialogue", "free", "combat",
+    "character_creator", "death", "reading", "dialogue_options", "dialogue", "free", "combat",
   }
 
 	return {
@@ -118,13 +118,16 @@ module_mt.__call = function(_, systems, debug_mode)
         self.rails:initialize(self)
       end
 
-      self.gui.sidebar:update_action_grid()
       self.gui.sidebar:create_gui_entities()
+
+      if not self.player then
+        self.gui.character_creator:refresh()
+      end
     end,
 
     get_mode = function(self)
       if not self.player then
-        return "character_creation"
+        return "character_creator"
       elseif self.player.hp <= 0 then
         return "death"
       elseif self.gui.wiki.text_entities then
