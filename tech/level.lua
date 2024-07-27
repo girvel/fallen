@@ -68,23 +68,27 @@ module.load_entities = function(text_representation, arguments, palette)
   end
 
   local result = {}
+  local player_anchor = {}
 
   for y, line in ipairs(level_lines) do
     for _, x, character in Fun.iter(line):enumerate() do
+      local position = Vector({x, y})
       local factory = palette.factories[character]
       if factory then
-        local position = Vector({x, y})
         table.insert(result, Tablex.extend(
           factory(unpack(grid_of_args[position] or {})),
           {position = position}
         ))
+      end
+      if character == "@" then
+        player_anchor = position
       end
     end
   end
 
   throw_tiles_under(level_lines, palette, result)
 
-  return level_size, result
+  return level_size, result, player_anchor
 end
 
 return module

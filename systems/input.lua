@@ -13,9 +13,9 @@ return Tiny.system({
       scancode = "Ctrl+" .. scancode
     end
 
-    local data = -Query(State.player.hotkeys)[State:get_mode()][scancode]
+    local data = -Query(State.hotkeys)[State:get_mode()][scancode]
     if not data then return end
     Query(data).pre_action()
-    State.player.next_action = data.action
+    Query(State.player).next_action = data.action
   end,
 })

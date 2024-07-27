@@ -1,5 +1,4 @@
 local static = require("library.static")
-local player = require("library.player")
 local mobs = require("library.mobs")
 local weapons = require("library.weapons")
 
@@ -48,7 +47,6 @@ return {
     ["2"] = mobs[2],
     ["3"] = mobs[3],
     ["4"] = mobs[4],
-    ["@"] = player,
 
     -- items -- 
     g = weapons.greatsword,

@@ -9,6 +9,11 @@ module_mt.__call = function(_, subject)
       if index == "_query_subject" then return rawget(self, "_query_subject") end
       return query(self._query_subject ~= nil and self._query_subject[index] or nil)
     end,
+    __newindex = function(self, index, value)
+      if index == "_query_subject" then rawset(self, "_query_subject", value) end
+      if self._query_subject == nil then return end
+      self._query_subject[index] = value
+    end,
     __call = function(self, head, ...)
       if head and head._query_subject then
         head = head._query_subject

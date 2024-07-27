@@ -17,12 +17,13 @@ return function()
       dialogue_background = view(Vector.zero, 1, 1),
       dialogue_text = view(Vector.zero, 1, 1),
       wiki = view(Vector.zero, 1, 1),
+      character_creation = view(Vector.zero, 1, 1),
     },
 
     views_order = {
       "scene", "scene_fx",
       "sidebar_background", "actions", "sidebar", "sidebar_text",
-      "dialogue_background", "dialogue_text", "wiki",
+      "dialogue_background", "dialogue_text", "wiki", "character_creation",
     },
   }
 

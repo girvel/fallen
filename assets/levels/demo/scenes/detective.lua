@@ -7,7 +7,9 @@ return function()
     {
       name = "Introduction",
       enabled = true,
-      start_predicate = function(self, rails, dt) return true end,
+      start_predicate = function(self, rails, dt)
+        return State.player.position == rails.positions.intro_activation
+      end,
 
       run = function(self, rails, dt)
         self.enabled = false

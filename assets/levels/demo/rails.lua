@@ -14,6 +14,7 @@ return function()
       self.positions = {
         [2] = Vector({5, 8}),
         exit = Vector({7, 11}),
+        intro_activation = Vector({8, 11}),
       }
 
       self.entities = {

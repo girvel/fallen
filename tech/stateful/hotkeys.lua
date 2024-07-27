@@ -10,8 +10,8 @@ local define_hotkey = function(collection, modes, keys, data)
   end
 end
 
-return function()
-  local hotkeys = Fun.iter(State.MODES):map(function(m) return m, {} end):tomap()
+return function(modes)
+  local hotkeys = Fun.iter(modes):map(function(m) return m, {} end):tomap()
 
   -- normal mode --
   for _, t in ipairs({
@@ -132,7 +132,7 @@ return function()
   })
 
   -- universal --
-  define_hotkey(hotkeys, Tablex.deep_copy(State.MODES), {"Shift+q"}, {
+  define_hotkey(hotkeys, Tablex.deep_copy(modes), {"Shift+q"}, {
     name = "завершить игру",
     pre_action = function()
       if State.debug_mode then love.event.push("quit") end

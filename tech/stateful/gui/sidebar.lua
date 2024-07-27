@@ -43,6 +43,7 @@ return function()
     W = 256,
 
     update_indicators = function(self)
+      if not State.player then return end
       local text = "%s/%s" % {State.player.hp, State.player:get_max_hp()}
       local font = self.hp_text.sprite.font
 

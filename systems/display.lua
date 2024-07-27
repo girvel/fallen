@@ -2,6 +2,7 @@ local level = require("tech.level")
 
 
 local get_scene_offset = function()
+  if not State.player then return Vector.zero end
   local window_w = love.graphics.getWidth()
   local window_h = love.graphics.getHeight()
   local border_w = math.floor(window_w / 3)
@@ -37,6 +38,10 @@ local get_dialogue_offset = function()
   return Vector({math.ceil((window_w - text_w) / 2), window_h - 130})
 end
 
+local get_full_screen_text_offset = function()
+  return ((Vector({love.graphics.getDimensions()}) - State.gui.TEXT_MAX_SIZE) / 2):ceil()
+end
+
 return Tiny.sortedProcessingSystem({
   codename = "display",
   filter = Tiny.requireAll("position", "sprite", "view"),
@@ -69,7 +74,7 @@ return Tiny.sortedProcessingSystem({
     State.gui.sidebar:update_indicators()
   end,
 
-  _update_views = function(self)
+  _update_views = function(self)  -- TODO move to State.gui
     for key, value in pairs({
       scene_fx = get_scene_offset(),
       scene = get_scene_offset(),
@@ -79,14 +84,20 @@ return Tiny.sortedProcessingSystem({
       sidebar_text = Vector({love.graphics.getWidth() - State.gui.sidebar.W, 0}),
       dialogue_background = Vector.zero,
       dialogue_text = get_dialogue_offset(),
-      wiki = ((Vector({love.graphics.getDimensions()}) - State.gui.TEXT_MAX_SIZE) / 2):ceil(),
+      wiki = get_full_screen_text_offset(),
+      character_creation = get_full_screen_text_offset(),
     }) do
       State.gui.views[key].offset = value
     end
   end,
 
   process = function(self, entity)
-    if State.player.hp <= 0 or State:get_mode() == "reading" and entity.view ~= "wiki" then return end
+    local mode = State:get_mode()
+    if
+      mode == "character_creation" and entity.view ~= "character_creation"
+      or mode == "reading" and entity.view ~= "wiki"
+      or mode == "death"
+    then return end
 
     local current_view = State.gui.views[entity.view]
     local offset_position = current_view:apply(entity.position)
@@ -151,8 +162,9 @@ return Tiny.sortedProcessingSystem({
   end,
 
   postProcess = function(self)
-    if State.player.hp <= 0 then return self:_display_death_message() end
-    if State:get_mode() == "reading" then return end
+    local mode = State:get_mode()
+    if Tablex.contains({"reading", "character_creation"}, mode) then return end
+    if mode == "death" then return self:_display_death_message() end
     self:_display_text_info()
   end,
 

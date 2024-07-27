@@ -9,6 +9,10 @@ local module_mt = {}
 setmetatable(module, module_mt)
 
 module_mt.__call = function(_, systems, debug_mode)
+  local modes = {
+    "character_creation", "death", "reading", "dialogue_options", "dialogue", "free", "combat",
+  }
+
 	return {
     -- grids
     -- rails
@@ -21,8 +25,10 @@ module_mt.__call = function(_, systems, debug_mode)
 
     CELL_DISPLAY_SIZE = 16,
     SCALING_FACTOR = 4,
+    MODES = modes,
 
     gui = require("tech.stateful.gui")(),
+    hotkeys = require("tech.stateful.hotkeys")(modes),
 
     entities = {},
     dependencies = {},
@@ -89,19 +95,17 @@ module_mt.__call = function(_, systems, debug_mode)
     end,
 
     load_level = function(self, path, palette)
-      local level_size, new_entities = level.load_entities(
+      local level_size, new_entities, player_anchor = level.load_entities(
         love.filesystem.read(path .. "/grid.txt"),
         love.filesystem.getInfo(path .. "/grid_args.lua") and require(path .. "/grid_args") or {},
         palette
       )
 
+      self.player_anchor = player_anchor
+
       self.grids = Fun.iter(level.GRID_LAYERS)
         :map(function(layer) return layer, Grid(level_size) end)
         :tomap()
-
-      self.collision_map = Fun.range(level_size[2])
-        :map(function() return {} end)
-        :totable()
 
       for _, entity in ipairs(new_entities) do
         local e = self:add(entity)
@@ -118,10 +122,10 @@ module_mt.__call = function(_, systems, debug_mode)
       self.gui.sidebar:create_gui_entities()
     end,
 
-    MODES = {"free", "combat", "dialogue", "dialogue_options", "reading", "death"},
-
     get_mode = function(self)
-      if self.player.hp <= 0 then
+      if not self.player then
+        return "character_creation"
+      elseif self.player.hp <= 0 then
         return "death"
       elseif self.gui.wiki.text_entities then
         return "reading"

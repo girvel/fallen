@@ -28,7 +28,6 @@ module_mt.__call = function()
       self:animate()
     end,
 
-    hotkeys = require("library.player.hotkeys")(),
     ai = {run = function(self)
       if not self.next_action then return end
       local result = self:act(self.next_action)
