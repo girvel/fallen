@@ -27,10 +27,22 @@ module_mt.__call = function(_, animation_pack, object)
     effects = {
       {
         modify_damage_roll = function(entity, roll)
-          
+          if not -Query(entity.inventory).main_hand.tags.two_handed then
+            return roll
+          end
+          return roll:extended({reroll = {1, 2}})
         end,
       },
     },
+
+    get_effect = function(self, name, ...)
+      return unpack(Fun.iter(self.effects)
+        :map(function(effect) return effect[name] end)
+        :filter(Fun.op.truth)
+        :reduce(function(args, modifier)
+          return {modifier(self, unpack(args))}
+        end, {...}))
+    end,
 
     get_armor = function(self)
       return 10 + mech.get_modifier(self.abilities.dexterity)

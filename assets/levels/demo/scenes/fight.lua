@@ -174,6 +174,7 @@ return function()
         rails.scenes.second_rotates_valve.enabled = false
         rails.scenes.player_wins_dreamers.enabled = true
         rails.scenes.player_attacks_half_orc.enabled = false
+        rails.scenes.half_orc_mercy.enabled = false
 
         State.player.faction = "rebellion"
         rails.entities[3].faction = "rebellion"

@@ -30,9 +30,9 @@ module.die = function(sides_n)
   }, {
     __tostring = function(self)
       return "d%s%s%s" % {
-        d.sides_n,
-        d.advantage and ", advantage" or "",
-        #d.reroll > 0 and (", reroll " .. table.concat(d.reroll, ", ")) or ""
+        self.sides_n,
+        self.advantage and ", advantage" or "",
+        #self.reroll > 0 and (", reroll " .. table.concat(self.reroll, ", ")) or ""
       }
     end,
   })
@@ -95,7 +95,7 @@ d_methods.max = function(self)
     :sum() + self.bonus
 end
 
-d_methods.extend = function(self, modification)
+d_methods.extended = function(self, modification)
   return module.roll(
     Fun.iter(self.dice)
       :map(function(x)

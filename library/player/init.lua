@@ -41,7 +41,7 @@ module_mt.__call = function(_, abilities)
   result.resources.second_wind = 1
   result.resources.action_surge = 1
 
-  result.inventory.main_hand = weapons.dagger()
+  result.inventory.main_hand = weapons.greatsword()
 
   return result
 end

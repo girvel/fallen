@@ -50,9 +50,12 @@ local get_melee_damage_roll = function(entity)
     or entity.abilities.strength
   )
 
-  return entity.inventory.main_hand.damage_roll
-    + ability_modifier
-    + entity.inventory.main_hand.bonus
+  return entity:get_effect(
+    "modify_damage_roll",
+    entity.inventory.main_hand.damage_roll
+      + ability_modifier
+      + entity.inventory.main_hand.bonus
+  )
 end
 
 local base_attack = function(entity, target)
