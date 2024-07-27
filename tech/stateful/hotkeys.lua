@@ -103,7 +103,7 @@ return function(modes)
     end,
   })
 
-  define_hotkey(hotkeys, {"dialogue_options"}, {"e", "return"}, {
+  define_hotkey(hotkeys, {"dialogue_options"}, {"e", "enter"}, {
     name = "выбрать опцию",
     pre_action = function()
       State.gui.dialogue:options_select()
@@ -124,7 +124,7 @@ return function(modes)
   end)
 
   -- death --
-  define_hotkey(hotkeys, {"death"}, {"return", "e"}, {
+  define_hotkey(hotkeys, {"death"}, {"enter", "e"}, {
     name = "начать заново",
     pre_action = function()
       love.reload_flag = true
@@ -140,12 +140,19 @@ return function(modes)
   }) do
     local keys, direction_name, direction_translation = unpack(t)
     define_hotkey(hotkeys, {"character_creator"}, keys, {
-      name = "курсор" .. direction_translation,
+      name = direction_translation,
       pre_action = function()
         State.gui.character_creator:move_cursor(direction_name)
       end,
     })
   end
+
+  define_hotkey(hotkeys, {"character_creator"}, {"Ctrl+enter"}, {
+    name = "Создать персонажа",
+    pre_action = function()
+      State.gui.character_creator:submit()
+    end,
+  })
 
   -- universal --
   define_hotkey(hotkeys, Tablex.deep_copy(modes), {"Shift+q"}, {

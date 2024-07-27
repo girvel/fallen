@@ -7,7 +7,7 @@ local weapons = require("library.weapons")
 local module_mt = {}
 local player = setmetatable({}, module_mt)
 
-module_mt.__call = function()
+module_mt.__call = function(_, abilities)
   local result = humanoid({
     player_flag = true,
     name = "протагонист",
@@ -35,14 +35,7 @@ module_mt.__call = function()
       return result
     end},
 
-    abilities = {
-      strength = 16,
-      dexterity = 18,
-      constitution = 14,
-      intelligence = 8,
-      wisdom = 10,
-      charisma = 8,
-    },
+    abilities = abilities,
   })
 
   result.resources.second_wind = 1

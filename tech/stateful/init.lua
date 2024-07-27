@@ -101,7 +101,7 @@ module_mt.__call = function(_, systems, debug_mode)
         palette
       )
 
-      self.player_anchor = player_anchor
+      self.gui.character_creator.player_anchor = player_anchor
 
       self.grids = Fun.iter(level.GRID_LAYERS)
         :map(function(layer) return layer, Grid(level_size) end)

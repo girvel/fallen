@@ -21,7 +21,7 @@ local resource_translations = {
 }
 
 local hotkeys_order = Fun.iter(
-  "w a s d up left down right 1 2 3 4 5 6 7 8 9 0 e return z space k Shift+q" / " "
+  "w a s d up left down right 1 2 3 4 5 6 7 8 9 0 e return z space k Ctrl+enter Shift+q" / " "
 )
   :enumerate()
   :map(function(i, e) return e, i end)
@@ -43,7 +43,14 @@ return function()
     W = 256,
 
     update_indicators = function(self)
-      if not State.player then return end
+      if not State.player then
+        self.hp_bar.sprite.quad = love.graphics.newQuad(
+          0, 0, 0, 0,
+          self.hp_bar.sprite.image:getDimensions()
+        )
+        return
+      end
+
       local text = "%s/%s" % {State.player.hp, State.player:get_max_hp()}
       local font = self.hp_text.sprite.font
 
@@ -107,11 +114,11 @@ return function()
     end,
 
     get_text = function(self)
-      local max = Tablex.extend({},
+      local max = State.player and Tablex.extend({},
         State.player:get_resources("move"),
         State.player:get_resources("short"),
         State.player:get_resources("long")
-      )
+      ) or nil
 
       local result = {}
 
@@ -129,7 +136,7 @@ return function()
         Tablex.concat(result, content)
       end
 
-      local weapon = State.player.inventory.main_hand
+      local weapon = -Query(State.player).inventory.main_hand
       if weapon then
         local roll = weapon.damage_roll:to_string()
         if weapon.bonus > 0 then
@@ -138,22 +145,24 @@ return function()
         append("Оружие: %s (%s)\n\n" % {weapon.name, roll})
       end
 
-      append("Ресурсы:\n" .. table.concat(
-        Fun.iter(State.player.resources)
-          :map(function(k, v)
-            return "  %s: %s%s" % {
-              resource_translations[k] or k,
-              value_translations[v] or tostring(v),
-              max[k] == nil and "" or "/" .. (value_translations[max[k]] or tostring(max[k])),
-            }
-          end)
-          :totable(),
-        "\n"
-      ))
+      if State.player then
+        append("Ресурсы:\n" .. table.concat(
+          Fun.iter(State.player.resources)
+            :map(function(k, v)
+              return "  %s: %s%s" % {
+                resource_translations[k] or k,
+                value_translations[v] or tostring(v),
+                max[k] == nil and "" or "/" .. (value_translations[max[k]] or tostring(max[k])),
+              }
+            end)
+            :totable(),
+          "\n"
+        ))
+      end
 
       append("\n\nДействия:")
 
-      local hotkeys_table = Fun.iter(State.player.hotkeys[State:get_mode()])
+      local hotkeys_table = Fun.iter(State.hotkeys[State:get_mode()])
         :group_by(function(key, data) return data, key end)
         :filter(function(data, keys)
           return not data.hidden

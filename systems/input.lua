@@ -3,6 +3,11 @@ return Tiny.system({
   base_callback = "keypressed",
   update = function(_, event)
     local _, scancode = unpack(event)
+
+    if scancode == "return" then
+      scancode = "enter"
+    end
+
     if love.keyboard.isDown("rshift") or love.keyboard.isDown("lshift") then
       scancode = "Shift+" .. scancode
     end

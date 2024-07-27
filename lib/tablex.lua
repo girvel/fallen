@@ -41,6 +41,14 @@ tablex.join = function(base, extension, ...)
   return tablex.join(base, ...)
 end
 
+tablex.index_of = function(t, item)
+  return Fun.iter(t)
+    :enumerate()
+    :filter(function(i, x) return x == item end)
+    :map(function(i, x) return i end)
+    :nth(1)
+end
+
 --- Checks if the two tables are isomorphic on the first level on recursion
 tablex.shallow_same = function(t1, t2)
   for k, v in pairs(t1) do

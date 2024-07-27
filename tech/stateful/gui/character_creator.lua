@@ -1,6 +1,7 @@
 local wrapping = require("tech.stateful.gui.wrapping")
 local mech = require("mech")
 local utf8 = require("utf8")
+local player = require("library.player")  -- TODO move to tech
 
 
 local ability_translations = {  -- TODO translation module
@@ -23,8 +24,16 @@ local cost = {
   [15] = 9,
 }
 
+local available_races = {"human", "variant_human_1", "variant_human_2"}
+local race_translations = {
+  human = "Человек",
+  variant_human_1 = "Человек (вариант) +1/+1",
+  variant_human_2 = "Человек (вариант) +2",
+}
+
 return function()
   return {
+    player_anchor = nil,
     text_entities = nil,
     font = love.graphics.newFont("assets/fonts/joystix.monospace-regular.otf", 18),
 
@@ -41,6 +50,7 @@ return function()
       current_index = 1,
       max_index = 1,
       movement_functions = {},
+      race = "human",
     },
 
     refresh = function(self)
@@ -49,17 +59,41 @@ return function()
         State:remove_multiple(self.text_entities)
       end
 
+      if State.player then
+        self.text_entities = nil
+        return
+      end
+
       params.movement_functions = {}
-      local text = "  Свободные очки: %s\n\n" % params.points
+      local text = ""
+
+      -- TODO split to functions
+      text = text
+        .. "  # Раса\n\n"
+        .. "%s < %s >\n\n" % {
+          params.current_index == 1 and ">" or " ",
+          race_translations[params.race]
+        }
+
+      params.movement_functions[1] = function(dx)
+        params.race = available_races[
+          (Tablex.index_of(available_races, params.race) + dx - 1) % #available_races + 1
+        ]
+      end
+
+      local index_offset = 1
 
       local headers = {"Способность ", "Значение", "Бонус расы", "   Результат", "Модификатор"}
       local total_header = table.concat(headers, "  ")
 
       text = text
+        .. "  # Способности\n\n"
+        .. "  Свободные очки: %s\n\n" % params.points
         .. "  " .. total_header .. "\n"
         .. "  " .. "-" * (utf8.len(total_header))
 
       Fun.iter(mech.abilities_list):enumerate():each(function(i, a)
+        i = i + index_offset
         text = text .. "\n%s %s  %s %s %s  %s  =  %s  %s" % {
           i == params.current_index and ">" or " ",
           ability_translations[a]:ljust(utf8.len(headers[1]), " "),
@@ -96,7 +130,7 @@ return function()
         "character_creator"
       ))
 
-      params.max_index = 6
+      params.max_index = 7
     end,
 
     move_cursor = function(self, direction_name)
@@ -110,6 +144,17 @@ return function()
       else
         Query(params.movement_functions[params.current_index])(Vector[direction_name][1])
       end
+      self:refresh()
+    end,
+
+    submit = function(self)
+      local params = self.parameters
+      if params.points > 0 then return end  -- TODO notification
+      State.player = State:add(Tablex.extend(
+        player(params.abilities),
+        {position = self.player_anchor}
+      ))
+      Log.info("Created player")
       self:refresh()
     end,
   }
