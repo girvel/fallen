@@ -36,6 +36,8 @@ fighter.action_surge = {
   end,
 }
 
+-- TODO perk.choice.option is of type list<modifier>
+--   but should be of type list<list<perk>>
 fighter.fighting_style = perk.choice({
   {
     codename = "two_handed_style",
