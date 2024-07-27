@@ -3,6 +3,7 @@ local class = {}
 class.perk = Enum({
   action = {"action"},
   resource = {"rest_type", "codename", "amount"},
+  effect = {"effect_factory"},
 })
 
 class.mixin = function()
@@ -18,6 +19,19 @@ class.mixin = function()
         end)
         :reduce(Tablex.concat, {})
     end,
+
+    get_effects = function(self, level)
+      return Fun.iter(self.progression_table)
+        :take_n(level)
+        :map(function(perks)
+          return Fun.iter(perks)
+            :filter(function(perk) return perk.enum_variant == class.perk.effect end)
+            :map(function(perk) return perk.effect_factory() end)
+            :totable()
+        end)
+        :reduce(Tablex.concat, {})
+    end,
+
     get_resources = function(self, level, rest_type)
       return Fun.iter(self.progression_table)
         :take_n(level)

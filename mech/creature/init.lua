@@ -24,16 +24,8 @@ module_mt.__call = function(_, animation_pack, object)
     inventory = {},
     layer = "solids",
     view = "scene",
-    effects = {
-      {
-        modify_damage_roll = function(entity, roll)
-          if not -Query(entity.inventory).main_hand.tags.two_handed then
-            return roll
-          end
-          return roll:extended({reroll = {1, 2}})
-        end,
-      },
-    },
+
+    effects = {},
 
     get_effect = function(self, name, ...)
       return unpack(Fun.iter(self.effects)
@@ -102,6 +94,11 @@ module_mt.__call = function(_, animation_pack, object)
   }, object)
 
   result.hp = result.hp or result:get_max_hp()
+
+  if result.class then
+    result.effects = result.class:get_effects(result.level)
+  end
+
   result.resources = result.resources
     or Tablex.extend({},
       result:get_resources("move"),
