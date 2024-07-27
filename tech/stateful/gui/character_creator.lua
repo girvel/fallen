@@ -144,7 +144,7 @@ return function()
         else
           Fun.iter(races[params.race].bonuses):enumerate():each(function(i, size)
             local j = i + params.max_index
-            text = text .. ("%s Бонус +%s: %s\n" % {
+            text = text .. ("%s Бонус +%s: < %s >\n" % {
               params:_get_indicator(j),
               size,
               ability_translations[params.bonuses[i]],
@@ -152,7 +152,13 @@ return function()
             })
 
             params.movement_functions[j] = function(dx)
-
+              local list = Fun.iter(mech.abilities_list)
+                :filter(function(a)
+                  return not Tablex.contains(params.bonuses, a)
+                  or a == params.bonuses[i]
+                end)
+                :totable()
+              params.bonuses[i] = list[(Tablex.index_of(list, params.bonuses[i]) + dx - 1) % #list + 1]
             end
           end)
           params.max_index = params.max_index + #races[params.race].bonuses

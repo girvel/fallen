@@ -121,6 +121,7 @@ end
 module.dialogue_background = function()
   local window_w, window_h = love.graphics.getDimensions()
   return {
+    boring_flag = true,
     codename = "dialogue_background",
     view = "dialogue_background",
     position = Vector({0, window_h - 140}),
