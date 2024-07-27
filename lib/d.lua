@@ -13,7 +13,7 @@ module.roll = function(dice, bonus)
 end
 
 module.die = function(sides_n)
-  return {
+  return setmetatable({
     sides_n = sides_n,
     advantage = false,
     reroll = {},
@@ -27,7 +27,15 @@ module.die = function(sides_n)
       end
       return result
     end,
-  }
+  }, {
+    __tostring = function(self)
+      return "d%s%s%s" % {
+        d.sides_n,
+        d.advantage and ", advantage" or "",
+        #d.reroll > 0 and (", reroll " .. table.concat(d.reroll, ", ")) or ""
+      }
+    end,
+  })
 end
 
 module_mt.__call = function(_, sides_n)
@@ -71,12 +79,7 @@ d_methods.roll = function(self)
     table.concat(
       Fun.zip(self.dice, rolls)
         :map(function(d, r)
-          return "%s (d%s%s%s)" % {
-            r,
-            d.sides_n,
-            d.advantage and ", advantage" or "",
-            #d.reroll > 0 and (", reroll " .. table.concat(d.reroll, ", ")) or ""
-          }
+          return "%s (%s)" % {r, tostring(d)}
         end)
         :totable(),
       " + "
@@ -106,7 +109,7 @@ end
 d_methods.to_string = function(self)
   return table.concat(
     Fun.iter(self.dice)
-      :map(function(die) return "d" .. die.sides_n end)
+      :map(tostring)
       :totable(),
     " + "
   ) .. (self.bonus > 0 and (" + " .. self.bonus) or "")
