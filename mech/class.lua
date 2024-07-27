@@ -1,11 +1,18 @@
+local perk = require("mech.perk")
+
+
 local class = {}
 
-class.perk = Enum({
-  action = {"action"},
-  resource = {"rest_type", "codename", "amount"},
-  effect = {"modifier"},
-  choice = {"options"},
-})
+class.get_choices = function(progression_table, level)
+  return Fun.iter(progression_table)
+    :take_n(level)
+    :map(function(perks)
+      return Fun.iter(perks)
+        :filter(function(p) return p.enum_variant == perk.choice end)
+        :totable()
+    end)
+    :reduce(Tablex.concat, {})
+end
 
 class.mixin = function()
   return {
@@ -14,8 +21,8 @@ class.mixin = function()
         :take_n(level)
         :map(function(perks)
           return Fun.iter(perks)
-            :filter(function(perk) return perk.enum_variant == class.perk.action end)
-            :map(function(perk) return perk.action end)
+            :filter(function(p) return p.enum_variant == perk.action end)
+            :map(function(p) return p.action end)
             :totable()
         end)
         :reduce(Tablex.concat, {})
@@ -26,12 +33,12 @@ class.mixin = function()
         :take_n(level)
         :map(function(perks)
           return Fun.iter(perks)
-            :map(function(perk)
-              if perk.enum_variant == class.perk.effect then
-                return perk.modifier
+            :map(function(p)
+              if p.enum_variant == perk.effect then
+                return p.modifier
               end
-              if perk.enum_variant == class.perk.choice then
-                return perk.options[build[perk]]
+              if p.enum_variant == perk.choice then
+                return p.options[build[p]]
               end
             end)
             :filter(Fun.op.truth)
@@ -45,11 +52,11 @@ class.mixin = function()
         :take_n(level)
         :map(function(perks)
           return Fun.iter(perks)
-            :filter(function(perk)
-              return perk.enum_variant == class.perk.resource
-                and perk.rest_type == rest_type
+            :filter(function(p)
+              return p.enum_variant == perk.resource
+                and p.rest_type == rest_type
             end)
-            :map(function(perk) return perk.codename, perk.amount end)
+            :map(function(p) return p.codename, p.amount end)
             :tomap()
         end)
         :reduce(Tablex.extend, {})

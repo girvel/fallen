@@ -36,6 +36,7 @@ module.variant_human_1 = {
   skin_color = Common.hex_color("8ed3dc"),
   movement_speed = 6,
   bonuses = {1, 1},
+  feat_flag = true,
 }
 
 module.variant_human_2 = {
@@ -43,6 +44,7 @@ module.variant_human_2 = {
   skin_color = Common.hex_color("8ed3dc"),
   movement_speed = 6,
   bonuses = {2},
+  feat_flag = true,
 }
 
 return module

@@ -57,6 +57,14 @@ d_mt.__add = function(self, other)
   error("Trying to add %s to a dice roll" % type(other))
 end
 
+d_mt.__sub = function(self, other)
+  if type(other) == "number" then
+    return module.roll(Tablex.deep_copy(self.dice), self.bonus - other)
+  end
+
+  error("Trying to subtract %s to a dice roll" % type(other))
+end
+
 d_mt.__mul = function(self, other)
   assert(type(other) == "number")
   return module.roll(

@@ -1,4 +1,5 @@
 local fighter = require("mech.classes.fighter")
+local feats = require("mech.feats")
 
 
 return {
@@ -16,10 +17,15 @@ return {
       two_handed_style = "бой двуручным оружием",
       duelist = "дуэлянт",
     },
+    [feats.perk] = {
+      savage_attacker = "свирепый атакующий",
+      great_weapon_master = "мастер двуручного оружия",
+    },
   },
 
   perks = {
     [fighter.fighting_style] = "стиль боя",
+    [feats.perk] = "черта",
   },
 
   race = {

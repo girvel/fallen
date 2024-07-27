@@ -31,9 +31,13 @@ module_mt.__call = function(_, animation_pack, object)
       return unpack(Fun.iter(self.effects)
         :map(function(effect) return effect[name] end)
         :filter(Fun.op.truth)
-        :reduce(function(args, modifier)
-          return {modifier(self, unpack(args))}
-        end, {...}))
+        :reduce(
+          function(args, modifier)
+            return {modifier(self, unpack(args))}
+          end,
+          self.feat and {self.feat[name](self, ...)} or {...}
+        )
+      )
     end,
 
     get_armor = function(self)

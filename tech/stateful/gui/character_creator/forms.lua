@@ -2,6 +2,11 @@ local mech = require("mech")
 local utf8 = require("utf8")
 local races = require("mech.races")
 local translation = require("tech.translation")
+local perk_form = require("tech.stateful.gui.character_creator.perk_form")
+local fighter = require("mech.classes.fighter")
+local perk = require("mech.perk")
+local feats = require("mech.feats")
+local class = require("mech.class")
 
 
 local cost = {
@@ -19,8 +24,7 @@ local available_races = {"human", "variant_human_1", "variant_human_2"}
 
 return {
   race = function(params)
-    local text = "  # Раса\n\n"
-      .. "%s < %s >\n\n" % {
+    local text = "%s # Раса: < %s >\n\n" % {
         params:_get_indicator(params.max_index + 1),
         translation.race[params.race]
       }
@@ -67,6 +71,10 @@ return {
         end
       end)
       params.max_index = params.max_index + #races[params.race].bonuses
+    end
+
+    if races[params.race].feat_flag then
+      text = text .. "\n" .. perk_form(feats.perk, params)
     end
 
     return text .. "\n\n"
@@ -130,5 +138,12 @@ return {
 
     params.max_index = params.max_index + 6
     return text .. "\n\n\n"
+  end,
+
+  class = function(params)
+    return "  # Класс: воин\n\n"
+      .. Fun.iter(class.get_choices(fighter.progression_table, 2))
+        :map(function(choice) return perk_form(choice, params) end)
+        :reduce(Fun.op.concat, "")
   end,
 }

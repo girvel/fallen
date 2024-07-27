@@ -1,6 +1,6 @@
 local static_sprite = require("tech.static_sprite")
 local class = require("mech.class")
-local perk = class.perk
+local perk = require("mech.perk")
 
 
 local module_mt = {}

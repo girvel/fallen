@@ -1,10 +1,10 @@
 local wrapping = require("tech.stateful.gui.wrapping")
 local player = require("library.player")  -- TODO move to tech
 local races = require("mech.races")
-local fighter = require("mech.classes.fighter")
-local class = require("mech.class")
 local forms = require("tech.stateful.gui.character_creator.forms")
-local perk_form = require("tech.stateful.gui.character_creator.perk_form")
+local class = require("mech.class")
+local fighter = require("mech.classes.fighter")
+local feats = require("mech.feats")
 
 
 return function()
@@ -55,21 +55,7 @@ return function()
       text = text
         .. self.forms.race(params)
         .. self.forms.abilities(params)
-
-      for _, choice in ipairs(Fun.iter(fighter.progression_table)
-        :take_n(2)  -- TODO level-dependent
-        :map(function(perks)
-          return Fun.iter(perks)
-            :filter(function(perk) return perk.enum_variant == class.perk.choice end)
-            :totable()
-        end)
-        :reduce(Tablex.concat, {}))
-      do
-        if not params.build_options[choice] then
-          params.build_options[choice] = 1
-        end
-        text = text .. perk_form(choice, params)
-      end
+        .. self.forms.class(params)
 
       self.text_entities = State:add_multiple(wrapping.generate_page(
         text,
@@ -97,8 +83,22 @@ return function()
     submit = function(self)
       local params = self.parameters
       if params.points > 0 then return end  -- TODO notification
+      local active_choices = class.get_choices(fighter.progression_table, 2)
+
+      local args = {
+        params.abilities_final, races[params.race],
+        Fun.iter(params.build_options)
+          :filter(function(o) return Tablex.contains(active_choices, o) end)
+          :tomap(),
+        races[params.race].feat_flag
+          and feats.perk.options[params.build_options[feats.perk]]
+          or nil,
+      }
+
+      Log.info("Finishing character creation with args:", args)
+
       State.player = State:add(Tablex.extend(
-        player(params.abilities_final, races[params.race], params.build_options),
+        player(unpack(args)),
         {position = self.player_anchor}
       ))
       Log.info("Created player")
