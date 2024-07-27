@@ -18,6 +18,10 @@ return {
     },
   },
 
+  perks = {
+    [fighter.fighting_style] = "стиль боя",
+  },
+
   race = {
     human = "Человек",
     variant_human_1 = "Человек (вариант) +1/+1",

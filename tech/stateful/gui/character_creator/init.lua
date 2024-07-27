@@ -3,6 +3,8 @@ local player = require("library.player")  -- TODO move to tech
 local races = require("mech.races")
 local fighter = require("mech.classes.fighter")
 local class = require("mech.class")
+local forms = require("tech.stateful.gui.character_creator.forms")
+local perk_form = require("tech.stateful.gui.character_creator.perk_form")
 
 
 return function()
@@ -66,7 +68,7 @@ return function()
         if not params.build_options[choice] then
           params.build_options[choice] = 1
         end
-        text = text .. self.forms[choice](params)
+        text = text .. perk_form(choice, params)
       end
 
       self.text_entities = State:add_multiple(wrapping.generate_page(
@@ -76,10 +78,7 @@ return function()
       ))
     end,
 
-    forms = Tablex.extend(
-      require("tech.stateful.gui.forms.general"),
-      require("tech.stateful.gui.forms.fighter")
-    ),
+    forms = forms,
 
     move_cursor = function(self, direction_name)
       assert(Tablex.contains(Vector.direction_names, direction_name))
