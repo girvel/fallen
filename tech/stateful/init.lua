@@ -58,7 +58,9 @@ module_mt.__call = function(_, systems, debug_mode)
     end,
 
     remove = function(self, entity)
-      Log.debug("State:remove(%s)" % Common.get_name(entity))
+      if not entity.boring_flag then
+        Log.debug("State:remove(%s)" % Common.get_name(entity))
+      end
       self.world:remove(entity)
       self.entities[entity] = nil
       if entity.position and entity.layer then

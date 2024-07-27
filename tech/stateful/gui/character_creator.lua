@@ -65,73 +65,84 @@ return function()
       end
 
       params.movement_functions = {}
+      params.max_index = 0
       local text = ""
 
-      -- TODO split to functions
       text = text
-        .. "  # Раса\n\n"
-        .. "%s < %s >\n\n" % {
-          params.current_index == 1 and ">" or " ",
-          race_translations[params.race]
-        }
-
-      params.movement_functions[1] = function(dx)
-        params.race = available_races[
-          (Tablex.index_of(available_races, params.race) + dx - 1) % #available_races + 1
-        ]
-      end
-
-      local index_offset = 1
-
-      local headers = {"Способность ", "Значение", "Бонус расы", "   Результат", "Модификатор"}
-      local total_header = table.concat(headers, "  ")
-
-      text = text
-        .. "  # Способности\n\n"
-        .. "  Свободные очки: %s\n\n" % params.points
-        .. "  " .. total_header .. "\n"
-        .. "  " .. "-" * (utf8.len(total_header))
-
-      Fun.iter(mech.abilities_list):enumerate():each(function(i, a)
-        i = i + index_offset
-        text = text .. "\n%s %s  %s %s %s  %s  =  %s  %s" % {
-          i == params.current_index and ">" or " ",
-          ability_translations[a]:ljust(utf8.len(headers[1]), " "),
-          params.abilities[a] > 8 and "<" or " ",
-          tostring(params.abilities[a]):rjust(2, "0"),
-          string.ljust(
-            params.abilities[a] < 15
-              and params.points >= cost[params.abilities[a] + 1] - cost[params.abilities[a]]
-              and ">" or " ",
-            utf8.len(headers[2]) - 5, " "
-          ),
-          ("0"):ljust(utf8.len(headers[3]), " "),
-          tostring(params.abilities[a]):ljust(utf8.len(headers[4]) - 3, " "),
-          mech.get_modifier(params.abilities[a])
-        }
-
-        params.movement_functions[i] = function(dx)
-          local next_value = params.abilities[a] + dx
-          if dx < 0 and params.abilities[a] <= 8
-            or dx > 0 and (
-              params.abilities[a] >= 15
-              or params.points < cost[next_value] - cost[params.abilities[a]]
-            )
-          then return end
-
-          params.points = params.points + cost[params.abilities[a]] - cost[next_value]
-          params.abilities[a] = next_value
-        end
-      end)
+        .. self.forms.race(params)
+        .. self.forms.abilities(params)
 
       self.text_entities = State:add_multiple(wrapping.generate_page(
         text,
         self.font, math.min(love.graphics.getWidth() - 40, State.gui.TEXT_MAX_SIZE[1]),
         "character_creator"
       ))
-
-      params.max_index = 7
     end,
+
+    forms = {
+      race = function(params)
+        params.movement_functions[params.max_index + 1] = function(dx)
+          params.race = available_races[
+            (Tablex.index_of(available_races, params.race) + dx - 1) % #available_races + 1
+          ]
+        end
+
+        params.max_index = params.max_index + 1
+
+        return "  # Раса\n\n"
+          .. "%s < %s >\n\n\n" % {
+            params.current_index == params.max_index and ">" or " ",
+            race_translations[params.race]
+          }
+      end,
+
+      abilities = function(params)
+        local text = ""
+        local headers = {"Способность ", "Значение", "Бонус расы", "   Результат", "Модификатор"}
+        local total_header = table.concat(headers, "  ")
+
+        text = text
+          .. "  # Способности\n\n"
+          .. "  Свободные очки: %s\n\n" % params.points
+          .. "  " .. total_header .. "\n"
+          .. "  " .. "-" * (utf8.len(total_header))
+
+        Fun.iter(mech.abilities_list):enumerate():each(function(i, a)
+          i = i + params.max_index
+          text = text .. "\n%s %s  %s %s %s  %s  =  %s  %s" % {
+            i == params.current_index and ">" or " ",
+            ability_translations[a]:ljust(utf8.len(headers[1]), " "),
+            params.abilities[a] > 8 and "<" or " ",
+            tostring(params.abilities[a]):rjust(2, "0"),
+            string.ljust(
+              params.abilities[a] < 15
+                and params.points >= cost[params.abilities[a] + 1] - cost[params.abilities[a]]
+                and ">" or " ",
+              utf8.len(headers[2]) - 5, " "
+            ),
+            ("0"):ljust(utf8.len(headers[3]), " "),
+            tostring(params.abilities[a]):ljust(utf8.len(headers[4]) - 3, " "),
+            mech.get_modifier(params.abilities[a])
+          }
+
+          params.movement_functions[i] = function(dx)
+            local next_value = params.abilities[a] + dx
+            if dx < 0 and params.abilities[a] <= 8
+              or dx > 0 and (
+                params.abilities[a] >= 15
+                or params.points < cost[next_value] - cost[params.abilities[a]]
+              )
+            then return end
+
+            params.points = params.points + cost[params.abilities[a]] - cost[next_value]
+            params.abilities[a] = next_value
+          end
+        end)
+
+        params.max_index = params.max_index + 6
+        return text .. "\n\n\n"
+      end,
+    },
 
     move_cursor = function(self, direction_name)
       assert(Tablex.contains(Vector.direction_names, direction_name))

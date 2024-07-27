@@ -43,6 +43,7 @@ end
 module.text = function(text, font, position, decorations)
   decorations = decorations or {}
   return {
+    boring_flag = true,
     codename = "text",
     position = position,
     sprite = {
