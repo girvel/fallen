@@ -40,7 +40,7 @@ return function()
 
     parameters = {
       points = 27,
-      abilities = {
+      abilities_raw = {
         strength = 8,
         dexterity = 8,
         constitution = 8,
@@ -48,6 +48,7 @@ return function()
         wisdom = 8,
         charisma = 8,
       },
+      abilities_final = nil,
       current_index = 1,
       max_index = 1,
       movement_functions = {},
@@ -120,7 +121,7 @@ return function()
             text = text .. ("%s Бонус +%s: %s\n" % {
               params:_get_indicator(j),
               size,
-              params.bonuses[i],
+              ability_translations[params.bonuses[i]],
               42,
             })
 
@@ -145,35 +146,48 @@ return function()
           .. "  " .. total_header .. "\n"
           .. "  " .. "-" * (utf8.len(total_header))
 
+        local bonus_column = Fun.iter(mech.abilities_list)
+          :map(function(a)
+            local bonus_i = Tablex.index_of(params.bonuses, a)
+            return a, (bonus_i and races[params.race].bonuses[bonus_i] or 0)
+          end)
+          :tomap()
+
+        params.abilities_final = Fun.iter(params.abilities_raw)
+          :map(function(a, v) return a, v + bonus_column[a] end)
+          :tomap()
+
         Fun.iter(mech.abilities_list):enumerate():each(function(i, a)
           i = i + params.max_index
           text = text .. "\n%s %s  %s %s %s  %s  =  %s  %s" % {
             params:_get_indicator(i),
             ability_translations[a]:ljust(utf8.len(headers[1]), " "),
-            params.abilities[a] > 8 and "<" or " ",
-            tostring(params.abilities[a]):rjust(2, "0"),
+            params.abilities_raw[a] > 8 and "<" or " ",
+            tostring(params.abilities_raw[a]):rjust(2, "0"),
             string.ljust(
-              params.abilities[a] < 15
-                and params.points >= cost[params.abilities[a] + 1] - cost[params.abilities[a]]
+              params.abilities_raw[a] < 15
+                and params.points >= cost[
+                  params.abilities_raw[a] + 1] - cost[params.abilities_raw[a]
+                ]
                 and ">" or " ",
               utf8.len(headers[2]) - 5, " "
             ),
-            ("0"):ljust(utf8.len(headers[3]), " "),
-            tostring(params.abilities[a]):ljust(utf8.len(headers[4]) - 3, " "),
-            mech.get_modifier(params.abilities[a])
+            ("+" .. bonus_column[a]):ljust(utf8.len(headers[3]), " "),
+            tostring(params.abilities_final[a]):ljust(utf8.len(headers[4]) - 3, " "),
+            mech.get_modifier(params.abilities_final[a])
           }
 
           params.movement_functions[i] = function(dx)
-            local next_value = params.abilities[a] + dx
-            if dx < 0 and params.abilities[a] <= 8
+            local next_value = params.abilities_raw[a] + dx
+            if dx < 0 and params.abilities_raw[a] <= 8
               or dx > 0 and (
-                params.abilities[a] >= 15
-                or params.points < cost[next_value] - cost[params.abilities[a]]
+                params.abilities_raw[a] >= 15
+                or params.points < cost[next_value] - cost[params.abilities_raw[a]]
               )
             then return end
 
-            params.points = params.points + cost[params.abilities[a]] - cost[next_value]
-            params.abilities[a] = next_value
+            params.points = params.points + cost[params.abilities_raw[a]] - cost[next_value]
+            params.abilities_raw[a] = next_value
           end
         end)
 
@@ -200,7 +214,7 @@ return function()
       local params = self.parameters
       if params.points > 0 then return end  -- TODO notification
       State.player = State:add(Tablex.extend(
-        player(params.abilities),
+        player(params.abilities_final),
         {position = self.player_anchor}
       ))
       Log.info("Created player")

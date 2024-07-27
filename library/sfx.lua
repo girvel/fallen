@@ -13,6 +13,7 @@ module.steam = function(direction)
   local result = Tablex.extend(
     animated(steam_pack),
     {
+      boring_flag = true,
       codename = "steam",
       layer = "sfx",
       view = "scene",
