@@ -39,11 +39,11 @@ return function()
     font = love.graphics.newFont("assets/fonts/joystix.monospace-regular.otf", 18),
 
     parameters = {
-      points = 27,
+      points = 0,
       abilities_raw = {
-        strength = 8,
-        dexterity = 8,
-        constitution = 8,
+        strength = 15,
+        dexterity = 15,
+        constitution = 15,
         intelligence = 8,
         wisdom = 8,
         charisma = 8,

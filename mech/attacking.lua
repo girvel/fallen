@@ -6,7 +6,7 @@ local module = {}
 
 --- Attacks with given attack/damage rolls
 module.attack = function(entity, target, attack_roll, damage_roll)
-  local attack = attack_roll:with_advantage(entity.resources.has_advantage):roll()
+  local attack = attack_roll:roll()
   local is_nat = attack == attack_roll:max()
   local ac = (-Query(target):get_armor() or 0)
 

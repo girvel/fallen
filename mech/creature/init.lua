@@ -10,7 +10,7 @@ setmetatable(module, module_mt)
 
 module_mt.__call = function(_, animation_pack, object)
   assert(object.max_hp or object.class)
-  local result = Tablex.extend(animated(animation_pack), {  -- TODO consider moving to mixins and extracting animated
+  local result = Tablex.extend(animated(animation_pack), {
     creature_flag = true,
 
     sprite = {},
@@ -24,6 +24,13 @@ module_mt.__call = function(_, animation_pack, object)
     inventory = {},
     layer = "solids",
     view = "scene",
+    effects = {
+      {
+        modify_damage_roll = function(entity, roll)
+          
+        end,
+      },
+    },
 
     get_armor = function(self)
       return 10 + mech.get_modifier(self.abilities.dexterity)

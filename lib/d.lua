@@ -12,8 +12,26 @@ module.roll = function(dice, bonus)
   }, d_mt)
 end
 
+module.die = function(sides_n)
+  return {
+    sides_n = sides_n,
+    advantage = false,
+    reroll = {},
+    roll = function(self)
+      local result = math.random(self.sides_n)
+      if self.advantage then
+        result = math.max(result, math.random(self.sides_n))
+      end
+      if Tablex.contains(self.reroll, result) then
+        result = math.random(self.sides_n)
+      end
+      return result
+    end,
+  }
+end
+
 module_mt.__call = function(_, sides_n)
-  return module.roll({{sides_n = sides_n, advantage = false}}, 0)
+  return module.roll({module.die(sides_n)}, 0)
 end
 
 d_mt.__add = function(self, other)
@@ -43,23 +61,23 @@ d_mt.__mul = function(self, other)
   )
 end
 
-local roll_die = function(die)
-  if die.advantage then
-    return math.max(math.random(die.sides_n), math.random(die.sides_n))
-  end
-  return math.random(die.sides_n)
-end
-
 d_methods.roll = function(self)
   local rolls = Fun.iter(self.dice)
-    :map(roll_die)
+    :map(function(d) return d:roll() end)
     :totable()
   local result = Fun.iter(rolls):sum() + self.bonus
 
   Log.debug(
     table.concat(
       Fun.zip(self.dice, rolls)
-        :map(function(d, r) return r .. " (d" .. d.sides_n .. (d.advantage and ", Advantage" or "") .. ")" end)
+        :map(function(d, r)
+          return "%s (d%s%s%s)" % {
+            r,
+            d.sides_n,
+            d.advantage and ", advantage" or "",
+            #d.reroll > 0 and (", reroll " .. table.concat(d.reroll, ", ")) or ""
+          }
+        end)
         :totable(),
       " + "
     ) .. " + " .. self.bonus .. " = " .. result
@@ -74,11 +92,11 @@ d_methods.max = function(self)
     :sum() + self.bonus
 end
 
-d_methods.with_advantage = function(self, value)
+d_methods.extend = function(self, modification)
   return module.roll(
     Fun.iter(self.dice)
       :map(function(x)
-        return Tablex.extend(Tablex.deep_copy(x), {advantage = value})
+        return Tablex.extend(Tablex.deep_copy(x), modification)
       end)
       :totable(),
     self.bonus
