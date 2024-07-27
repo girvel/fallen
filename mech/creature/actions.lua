@@ -33,7 +33,7 @@ local get_melee_attack_roll = function(entity)
     roll = roll + mech.get_modifier(entity.abilities.strength)
   end
 
-  return roll
+  return entity:get_effect("modify_attack_roll", roll)
 end
 
 local get_melee_damage_roll = function(entity)

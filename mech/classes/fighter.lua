@@ -49,12 +49,12 @@ fighter.fighting_style = perk.choice({
 
   {
     codename = "duelist",
-    modify_attack_roll = function(entity, roll)
+    modify_damage_roll = function(entity, roll)
       local weapon = entity.inventory.main_hand
       if not weapon or weapon.tags.two_handed then
         return roll
       end
-      return roll + entity.proficiency_bonus
+      return roll + 2
     end,
   },
 })
