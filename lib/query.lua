@@ -15,7 +15,7 @@ module_mt.__call = function(_, subject)
       self._query_subject[index] = value
     end,
     __call = function(self, head, ...)
-      if head and head._query_subject then
+      if (type(head) == "table" or type(head) == "string") and head._query_subject then
         head = head._query_subject
       end
       return query(self._query_subject ~= nil and self._query_subject(head, ...) or nil)

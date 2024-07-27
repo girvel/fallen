@@ -131,6 +131,22 @@ return function(modes)
     end,
   })
 
+  -- character creator --
+  for _, t in ipairs({
+    {{"w", "up"}, "up", "вверх"},
+    {{"a", "left"}, "left", "влево"},
+    {{"s", "down"}, "down", "вниз"},
+    {{"d", "right"}, "right", "вправо"},
+  }) do
+    local keys, direction_name, direction_translation = unpack(t)
+    define_hotkey(hotkeys, {"character_creator"}, keys, {
+      name = "курсор" .. direction_translation,
+      pre_action = function()
+        State.gui.character_creator:move_cursor(direction_name)
+      end,
+    })
+  end
+
   -- universal --
   define_hotkey(hotkeys, Tablex.deep_copy(modes), {"Shift+q"}, {
     name = "завершить игру",
