@@ -97,4 +97,8 @@ common.number_type = function(number)
   return "float"
 end
 
+common.loop = function(v, loop)
+  return (v - 1) % loop + 1
+end
+
 return common

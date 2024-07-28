@@ -86,8 +86,9 @@ return function(modes)
   define_hotkey(hotkeys, {"dialogue_options"}, {"w", "up"}, {
     name = "опция выше",
     pre_action = function()
-      State.gui.dialogue.selected_option_i = math.max(
-        1, (State.gui.dialogue.selected_option_i) - 1
+      State.gui.dialogue.selected_option_i = Common.loop(
+        State.gui.dialogue.selected_option_i - 1,
+        #State.gui.dialogue.options
       )
       State.gui.dialogue:options_refresh()
     end,
@@ -96,8 +97,9 @@ return function(modes)
   define_hotkey(hotkeys, {"dialogue_options"}, {"s", "down"}, {
     name = "опция ниже",
     pre_action = function()
-      State.gui.dialogue.selected_option_i = math.min(
-        #State.gui.dialogue.options, (State.gui.dialogue.selected_option_i) + 1
+      State.gui.dialogue.selected_option_i = Common.loop(
+        State.gui.dialogue.selected_option_i + 1,
+        #State.gui.dialogue.options
       )
       State.gui.dialogue:options_refresh()
     end,

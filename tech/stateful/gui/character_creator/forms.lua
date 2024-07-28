@@ -4,7 +4,6 @@ local races = require("mech.races")
 local translation = require("tech.translation")
 local perk_form = require("tech.stateful.gui.character_creator.perk_form")
 local fighter = require("mech.classes.fighter")
-local perk = require("mech.perk")
 local feats = require("mech.feats")
 local class = require("mech.class")
 

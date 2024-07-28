@@ -14,8 +14,7 @@ return function(perk, params)
   }
 
   params.movement_functions[params.max_index + 1] = function(dx)
-    params.build_options[perk] =
-      (params.build_options[perk] + dx - 1) % #perk.options + 1
+    params.build_options[perk] = Common.loop(params.build_options[perk] + dx, #perk.options)
   end
 
   params.max_index = params.max_index + 1
