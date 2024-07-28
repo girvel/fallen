@@ -33,4 +33,13 @@ return {
     variant_human_1 = "Человек (вариант) +1/+1",
     variant_human_2 = "Человек (вариант) +2",
   },
+
+  resources = {
+    bonus_actions = "бонусные действия",
+    movement = "движение",
+    reactions = "реакции",
+    actions = "действия",
+    second_wind = "второе дыхание",
+    action_surge = "всплеск действий",
+  },
 }

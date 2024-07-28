@@ -15,10 +15,10 @@ local actions = {}
 -- Hotkey is stored in player AI
 -- Picture, description etc. is stored in GUI
 
-local get_melee_attack_roll = function(entity)
+local get_melee_attack_roll = function(entity, slot)
   local roll = D(20) + entity.proficiency_bonus
 
-  local weapon = entity.inventory.main_hand
+  local weapon = entity.inventory[slot]
   if not weapon then
     return roll + mech.get_modifier(entity.abilities.strength)
   end
@@ -36,13 +36,13 @@ local get_melee_attack_roll = function(entity)
   return entity:get_effect("modify_attack_roll", roll)
 end
 
-local get_melee_damage_roll = function(entity)
-  if not entity.inventory.main_hand then
+local get_melee_damage_roll = function(entity, slot)
+  if not entity.inventory[slot] then
     return D.roll({}, mech.get_modifier(entity.abilities.strength))
   end
 
   local ability_modifier = mech.get_modifier(
-    entity.inventory.main_hand.tags.finesse
+    entity.inventory[slot].tags.finesse
     and math.max(
       entity.abilities.strength,
       entity.abilities.dexterity
@@ -50,15 +50,16 @@ local get_melee_damage_roll = function(entity)
     or entity.abilities.strength
   )
 
-  return entity:get_effect(
-    "modify_damage_roll",
-    entity.inventory.main_hand.damage_roll
-      + ability_modifier
-      + entity.inventory.main_hand.bonus
-  )
+  local roll = entity.inventory[slot].damage_roll + entity.inventory[slot].bonus
+
+  if slot == "main_hand" then
+    roll = roll + ability_modifier
+  end
+
+  return entity:get_effect("modify_damage_roll", roll)
 end
 
-local base_attack = function(entity, target)
+local base_attack = function(entity, target, slot)
   State:register_agression(entity, target)
 
   entity:rotate(Vector.name_from_direction((target.position - entity.position):normalized()))
@@ -66,15 +67,15 @@ local base_attack = function(entity, target)
   entity:when_animation_ends(function()
     if not attacking.attack(
       entity, target,
-      get_melee_attack_roll(entity),
-      get_melee_damage_roll(entity)
+      get_melee_attack_roll(entity, slot),
+      get_melee_damage_roll(entity, slot)
     ) then return end
 
     if target and target.sounds and target.sounds.hit then
       random.choice(target.sounds.hit):play()
     end
 
-    if target.hardness and not -Query(entity).inventory.main_hand then
+    if target.hardness and not -Query(entity).inventory[slot] then
       attacking.attack_save(entity, "constitution", target.hardness, D.roll({}, 1))
     end
   end)
@@ -95,11 +96,25 @@ actions.hand_attack = Tablex.extend(
     _run = function(self, entity)
       local target = State.grids.solids:safe_get(entity.position + Vector[entity.direction])
       entity.resources.actions = entity.resources.actions - 1
-      base_attack(entity, target)
+      base_attack(entity, target, "main_hand")
       return true
     end
   }
 )
+
+actions.other_hand_attack = {
+  codename = "other_hand_attack",
+  get_availability = function(self, entity)
+    local target = State.grids.solids:safe_get(entity.position + Vector[entity.direction])
+    return entity.resources.bonus_actions > 0 and -Query(target).hp
+  end,
+  _run = function(self, entity)
+    local target = State.grids.solids:safe_get(entity.position + Vector[entity.direction])
+    entity.resources.bonus_actions = entity.resources.bonus_actions - 1
+    base_attack(entity, target, "other_hand")
+    return true
+  end
+}
 
 actions.move = {
   codename = "move",
@@ -126,7 +141,7 @@ actions.move = {
         end)
       :each(function(e)
         e.resources.reactions = e.resources.reactions - 1
-        base_attack(e, entity)
+        base_attack(e, entity, "main_hand")
       end)
 
     if entity.animate then
@@ -182,6 +197,7 @@ actions.finish_turn = {
 actions.list = {
   actions.move,
   actions.hand_attack,
+  actions.other_hand_attack,
   actions.interact,
   actions.dash,
 }

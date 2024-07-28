@@ -40,6 +40,11 @@ return function(modes)
     action = actions.hand_attack,
   })
 
+  define_hotkey(hotkeys, {"free", "combat"}, {"2"}, {
+    name = "атака второй рукой",
+    action = actions.other_hand_attack,
+  })
+
   define_hotkey(hotkeys, {"free", "combat"}, {"3"}, {
     name = "второе дыхание",
     action = fighter.second_wind,

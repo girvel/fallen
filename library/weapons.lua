@@ -16,7 +16,7 @@ module.rapier = function()
       tags = {
         finesse = true,
       },
-      slot = "main_hand",
+      slot = "hands",
     }
   )
 end
@@ -31,8 +31,9 @@ module.dagger = function()
       bonus = 0,
       tags = {
         finesse = true,
+        light = true,
       },
-      slot = "main_hand",
+      slot = "hands",
     }
   )
 end
@@ -50,7 +51,7 @@ module.greatsword = function()
         two_handed = true,
         heavy = true,
       },
-      slot = "main_hand",
+      slot = "hands",
     }
   )
 end
@@ -64,8 +65,10 @@ module.gas_key = function()
       name = "Газовый ключ",
       damage_roll = D(4),
       bonus = 1,
-      tags = {},
-      slot = "main_hand",
+      tags = {
+        light = true,
+      },
+      slot = "hands",
     }
   )
 end

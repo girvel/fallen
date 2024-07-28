@@ -1,5 +1,6 @@
 local special = require("tech.special")
 local mech = require("mech")
+local translation = require("tech.translation")
 
 
 local order_sound = Common.volumed_sounds("assets/sounds/electricity.wav", 0.08)[1]
@@ -9,15 +10,6 @@ local COLOR = {
   NOTIFICATION = Common.hex_color("ededed"),
   INACTIVE = Common.hex_color("8b7c99"),
   HOSTILE = Common.hex_color("e64e4b"),
-}
-
-local resource_translations = {
-  bonus_actions = "бонусные действия",
-  movement = "движение",
-  reactions = "реакции",
-  actions = "действия",
-  second_wind = "второе дыхание",
-  action_surge = "всплеск действий",
 }
 
 local hotkeys_order = Fun.iter(
@@ -136,13 +128,22 @@ return function()
         Tablex.concat(result, content)
       end
 
-      local weapon = -Query(State.player).inventory.main_hand
-      if weapon then
-        local roll = weapon.damage_roll:to_string()
-        if weapon.bonus > 0 then
-          roll = roll .. "+" .. weapon.bonus
+      local main_weapon = -Query(State.player).inventory.main_hand
+      if main_weapon then
+        local roll = main_weapon.damage_roll:to_string()  -- TODO modify with effects and get_melee_damage_roll
+        if main_weapon.bonus > 0 then
+          roll = roll .. "+" .. main_weapon.bonus
         end
-        append("Оружие: %s (%s)\n\n" % {weapon.name, roll})
+        append("Оружие: %s (%s)\n\n" % {main_weapon.name, roll})
+      end
+
+      local second_weapon = -Query(State.player).inventory.other_hand
+      if second_weapon then
+        local roll = second_weapon.damage_roll:to_string()  -- TODO modify with effects and get_melee_damage_roll
+        if second_weapon.bonus > 0 then
+          roll = roll .. "+" .. second_weapon.bonus
+        end
+        append("Второе оружие: %s (%s)\n\n" % {second_weapon.name, roll})
       end
 
       if State.player then
@@ -150,7 +151,7 @@ return function()
           Fun.iter(State.player.resources)
             :map(function(k, v)
               return "  %s: %s%s" % {
-                resource_translations[k] or k,
+                translation.resources[k] or k,
                 value_translations[v] or tostring(v),
                 max[k] == nil and "" or "/" .. (value_translations[max[k]] or tostring(max[k])),
               }
