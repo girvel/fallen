@@ -26,12 +26,20 @@ module_mt.__call = function(_, abilities, race, build, feat)
       self:animate()
     end,
 
-    ai = {run = function(self)
-      if not self.next_action then return end
-      local result = self:act(self.next_action)
-      self.next_action = nil
-      return result
-    end},
+    ai = {
+      run = function(self)
+        if not self.next_action then return end
+        local result = self:act(self.next_action)
+        self.next_action = nil
+        return result
+      end,
+
+      observe = function(self)
+        if State.combat and self ~= State.combat:get_current() then
+          self.next_action = nil
+        end
+      end,
+    },
 
     abilities = abilities,
   })

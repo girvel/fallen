@@ -28,14 +28,14 @@ module_mt.__call = function(_, animation_pack, object)
     effects = {},
 
     get_effect = function(self, name, ...)
-      return unpack(Fun.iter(self.effects)
+      return unpack(Fun.chain(self.effects, {self.feat})
         :map(function(effect) return effect[name] end)
         :filter(Fun.op.truth)
         :reduce(
           function(args, modifier)
             return {modifier(self, unpack(args))}
           end,
-          self.feat and {self.feat[name](self, ...)} or {...}
+          {...}
         )
       )
     end,
