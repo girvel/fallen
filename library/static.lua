@@ -137,7 +137,7 @@ for _, name in ipairs({
   end
 end
 
-local pipe_atlas = atlas_sprite.atlas("assets/atlases/pipes.png")
+local pipe_atlas = "assets/atlases/pipes.png"
 
 for i, name in ipairs({
   "pipe_horizontal", "pipe_vertical", "pipe_horizontal_braced", "pipe_vertical_braced",
@@ -231,7 +231,7 @@ module.leaking_pipe_left_down = function()
   )
 end
 
-local decorations_atlas = atlas_sprite.atlas("assets/sprites/decorations_atlas.png")
+local decorations_atlas = "assets/sprites/decorations_atlas.png"
 
 Fun.iter({false, "device_panel_broken", "furnace"}):enumerate():each(function(i, name)
   if not name then return end

@@ -1,7 +1,9 @@
 local module_mt = {}
 local module = setmetatable({}, module_mt)
 
-module.atlas = function(path)
+module._atlases_cache = {}
+
+local atlas = function(path)
   local base_image = love.graphics.newImage(path)
   local canvas = love.graphics.newCanvas(base_image:getDimensions())
   love.graphics.setCanvas(canvas)
@@ -10,7 +12,12 @@ module.atlas = function(path)
   return canvas
 end
 
-module_mt.__call = function(self, canvas, index)
+module_mt.__call = function(self, path, index)
+  if not module._atlases_cache[path] then
+    module._atlases_cache[path] = atlas(path)
+  end
+  local canvas = module._atlases_cache[path]
+
   local size = State.CELL_DISPLAY_SIZE
   local w = canvas:getWidth()
   index = (index - 1) * size
