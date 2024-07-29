@@ -36,6 +36,7 @@ module.door = function(disable_interaction)
   return Tablex.extend(
     animated(closed_door_pack),
     disable_interaction and {} or interactive(function(self)
+      self:open()
       self.interact = nil
     end),
     {
