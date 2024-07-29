@@ -52,7 +52,7 @@ module.gas_key = animated.load_pack("assets/sprites/gas_key", {
   },
 })
 
-module.yellow_glove = animated.load_pack("assets/sprites/yellow_glove")
+module.yellow_gloves = animated.load_pack("assets/sprites/yellow_gloves")
 
 module.skeleton = animated.load_pack("assets/sprites/skeleton", humanoid_anchors)
 

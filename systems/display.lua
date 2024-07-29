@@ -70,9 +70,9 @@ return Tiny.sortedProcessingSystem({
     )
   end,
 
-  preProcess = function(self)
+  preProcess = function(self, event)
     self:_update_views()
-    State.gui.sidebar:update_indicators()
+    State.gui.sidebar:update_indicators(event[1])
   end,
 
   _update_views = function(self)  -- TODO move to State.gui

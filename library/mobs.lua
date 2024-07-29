@@ -34,7 +34,7 @@ end
 
 -- [{7, 9}] = {"down", {main_hand = weapons.gas_key()}},
 -- [{5, 8}] = {"down"},
--- [{5, 3}] = {"up", {gloves = weapons.yellow_glove()}},
+-- [{5, 3}] = {"up", {gloves = weapons.yellow_gloves()}},
 -- [{8, 3}] = {"up"},
 
 module[1] = function()
@@ -62,7 +62,7 @@ module[3] = function()
     hp = 34,
     max_hp = 35,
     direction = "up",
-    inventory = {gloves = weapons.yellow_glove()},
+    inventory = {gloves = weapons.yellow_gloves()},
     faction = "dreamers",
 
     abilities = mech.abilities(18, 6, 12, 8, 8, 8),

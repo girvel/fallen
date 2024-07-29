@@ -73,14 +73,14 @@ module.gas_key = function()
   )
 end
 
-module.yellow_glove = function()
+module.yellow_gloves = function()
   return Tablex.extend(
     item.mixin(),
-    animated(animation_packs.yellow_glove),
+    animated(animation_packs.yellow_gloves),
     {
       direction = "right",
       name = "Огнеупорные перчатки",
-      codename = "yellow_glove",
+      codename = "yellow_gloves",
       slot = "gloves",
     }
   )

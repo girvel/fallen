@@ -116,7 +116,7 @@ love.run = function()
 			love.graphics.origin()
 			love.graphics.clear(love.graphics.getBackgroundColor())
 
-			if love.draw then love.draw() end
+			if love.draw then love.draw(dt) end
 
 			love.graphics.present()
 		end

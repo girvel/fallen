@@ -16,7 +16,7 @@ return function()
         rails.entities.leaking_valve.paused = true
         api.center_camera()
 
-        api.notification(rails, "Вычислить и устранить диверсанта", true)
+        api.notification("Вычислить и устранить диверсанта", true)
 
         api.narration("Резкий запах мазута, керосина и ржавчины заставляет непроизвольно зажмуриться.")
         api.narration("Помещение забито трубами и приборами непонятного назначения.")
@@ -241,7 +241,7 @@ return function()
       start_predicate = function(self, rails) return rails.dreamers_talked_to == 4 end,
       run = function(self, rails)
         self.enabled = false
-        api.discover_wiki(rails, {codex = 2, dreamers = 1})
+        api.discover_wiki({codex = 2, dreamers = 1})
       end,
     },
   }

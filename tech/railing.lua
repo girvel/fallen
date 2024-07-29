@@ -46,23 +46,15 @@ railing.api.options = function(options, remove_picked)
   return converted_i
 end
 
-railing.api.notification = function(rails, text, is_order)
-  if rails._notification_task then
-    rails:cancel_scene(rails._notification_task)
-  end
-
-  rails._notification_task = rails:run_task(function()
-    State.gui.sidebar:push_notification(text, is_order)
-    railing.api.wait_seconds(10)
-    State.gui.sidebar:end_notification()
-  end)
+railing.api.notification = function(text, is_order)
+  State.gui.sidebar:push_notification(text, is_order)
 end
 
-railing.api.discover_wiki = function(rails, page_table)
+railing.api.discover_wiki = function(page_table)
   for k, v in pairs(page_table) do
     State.gui.wiki.discovered_pages[k] = v
   end
-  railing.api.notification(rails, "Информация в Кодексе обновлена")  -- TODO mention page name
+  railing.api.notification("Информация в Кодексе обновлена")  -- TODO mention page name
 end
 
 railing.mixin = function()

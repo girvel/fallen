@@ -35,7 +35,12 @@ return function()
     ACTION_GRID_W = 5,
     W = 256,
 
-    update_indicators = function(self)
+    update_indicators = function(self, dt)
+      self:_update_hp_bar()
+      self:_update_notifications(dt)
+    end,
+
+    _update_hp_bar = function(self)
       if not State.player then
         self.hp_bar.sprite.quad = love.graphics.newQuad(
           0, 0, 0, 0,
@@ -62,32 +67,17 @@ return function()
       )
     end,
 
-    update_action_grid = function(self)
-      -- State:remove_multiple(self.action_entities)
+    _update_notifications = function(self, dt)
+      self._notification_lifetime = self._notification_lifetime - dt
+      if self._notification_lifetime > 0 then return end
 
-      -- self.action_entities = Fun.iter(State.player:get_actions())
-      --   :enumerate()
-      --   :map(function(i, action)
-      --     State:add(Tablex.extend({
-      --       position = Vector({
-      --         (i - 1) % self.ACTION_GRID_W,
-      --         math.floor(i / self.ACTION_GRID_W)
-      --       }),
-      --       view = "actions",
-      --     }, action))
-      --   end)
-      --   :totable()
-    end,
+      local text, is_order = unpack(table.remove(self._notification_queue, 1) or {})
+      if not text then
+        self.notification.sprite.text = ""
+        return
+      end
 
-    create_gui_entities = function(self)
-      State:add(special.gui_background())
-      self.hp_bar = State:add(special.hp_bar())
-      self.hp_text = State:add(special.hp_text())
-      self.notification = State:add(special.notification())
-      self.notification_fx = State:add(special.notification_fx())
-    end,
-
-    push_notification = function(self, text, is_order)
+      self._notification_lifetime = 7
       if is_order then
         order_sound:play()
         self.notification_fx:animate("order")
@@ -102,8 +92,19 @@ return function()
       })
     end,
 
-    end_notification = function(self)
-      self.notification.sprite.text = ""
+    create_gui_entities = function(self)
+      State:add(special.gui_background())
+      self.hp_bar = State:add(special.hp_bar())
+      self.hp_text = State:add(special.hp_text())
+      self.notification = State:add(special.notification())
+      self.notification_fx = State:add(special.notification_fx())
+    end,
+
+    _notification_queue = {},
+    _notification_lifetime = 0,
+
+    push_notification = function(self, text, is_order)
+      table.insert(self._notification_queue, {text, is_order})
     end,
 
     get_text = function(self)

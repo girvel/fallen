@@ -150,9 +150,8 @@ return function()
 
       run = function(self, rails, dt)
         self.enabled = false
-        api.notification(rails, "Задача выполнена", true)
-        api.wait_seconds(5)
-        api.notification(rails, "Ожидайте следующее задание", true)
+        api.notification("Задача выполнена", true)
+        api.notification("Ожидайте следующее задание", true)
       end,
     },
 
@@ -190,9 +189,8 @@ return function()
         end)
         rails.entities[3].ai.mode = engineer_ai.modes.run_away_to(rails.positions.exit)
 
-        api.notification(rails, "Это была ошибка", true)
-        api.wait_seconds(5)
-        api.notification(rails, "Устранить агрессивных инженеров", true)
+        api.notification("Это была ошибка", true)
+        api.notification("Устранить агрессивных инженеров", true)
       end,
     },
 
@@ -205,11 +203,9 @@ return function()
 
       run = function(self, rails, dt)
         self.enabled = false
-        api.notification(rails, "Задача выполнена неудовлетворительно", true)
-        api.wait_seconds(11)
-        api.notification(rails, "Ожидайте следующее задание", true)
-        api.wait_seconds(11)
-        api.discover_wiki(rails, {dreamers = 2, codex = 2})
+        api.notification("Задача выполнена неудовлетворительно", true)
+        api.notification("Ожидайте следующее задание", true)
+        api.discover_wiki({dreamers = 2, codex = 2})
       end,
     },
 
