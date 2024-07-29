@@ -41,5 +41,6 @@ return {
     actions = "действия",
     second_wind = "второе дыхание",
     action_surge = "всплеск действий",
+    hit_dice = "перевязать раны",
   },
 }

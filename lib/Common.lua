@@ -41,7 +41,7 @@ end
 common.period = function(period, ...)
   local identifier = {...}
   local start_time = common.get_by_path(common._periods, identifier) or love.timer.getTime()
-  if love.timer.getTime() - start_time > period then
+  if Log.trace(love.timer.getTime() - start_time) > period then
     common.set_by_path(common._periods, identifier, start_time + period)
     return true
   end

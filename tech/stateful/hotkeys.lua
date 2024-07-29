@@ -1,5 +1,6 @@
 local actions = require("mech.creature.actions")
 local fighter = require("mech.classes.fighter")
+local class = require("mech.class")
 
 
 local define_hotkey = function(collection, modes, keys, data)
@@ -63,6 +64,11 @@ return function(modes, debug_mode)
   define_hotkey(hotkeys, {"combat"}, {"z"}, {
     name = "рывок",
     action = actions.dash
+  })
+
+  define_hotkey(hotkeys, {"free"}, {"h"}, {
+    name = "перевязать раны",
+    action = class.hit_dice_action,
   })
 
   -- reading --
