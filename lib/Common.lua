@@ -24,11 +24,8 @@ end
 
 common._periods = {}
 
-common.period = function(...)
-  local args = {...}
-  local period = args[#args - 1]
-  local dt = args[#args]
-  local identifier = fun.iter(args):take_n(#args - 2):totable()
+common.relative_period = function(period, dt, ...)
+  local identifier = {...}
 
   local result = false
   local value = common.get_by_path(common._periods, identifier) or 0

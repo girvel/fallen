@@ -205,14 +205,14 @@ module.leaking_pipe_left_down = function()
 
         if self.overflow_counter >= 60 then
           self.sound_loop:play()
-          if Common.period(self, 1, dt) then
+          if Common.relative_period(1, dt, self, "steam") then
             self:burst_with_steam()
           end
           return
         end
         self.sound_loop:stop()
 
-        if Common.period(self, self.trigger_seconds, dt) then
+        if Common.relative_period(self.trigger_seconds, dt, self, "steam") then
           self.trigger_seconds = 8 + math.random() * 4
           self:burst_with_steam()
         end

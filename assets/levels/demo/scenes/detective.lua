@@ -36,7 +36,7 @@ return function()
     second_rotates_valve = {
       name = "Second rotates the valve",
       enabled = true,
-      start_predicate = function(self, _, dt) return Common.period(self, 30, dt) end,
+      start_predicate = function(self, _, dt) return Common.relative_period(30, dt, self) end,
 
       run = function(self, rails, dt)
         if not State:exists(rails.entities[2])

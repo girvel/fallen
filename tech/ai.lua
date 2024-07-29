@@ -11,7 +11,7 @@ ai.async = function(fun, works_outside_of_combat)
     then return end
 
     local dt = unpack(event)
-    if not Common.period(self, .25, dt) then return end
+    if not Common.relative_period(.25, dt, self) then return end
     if not self._ai_coroutine then
       self._ai_coroutine = coroutine.create(fun)
     end
