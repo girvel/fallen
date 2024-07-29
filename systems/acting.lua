@@ -47,7 +47,7 @@ return Tiny.processingSystem({
 
     local was_timeout_reached = (
       not entity.player_flag
-      and Common.relative_period(20, event[1], self, State.combat:get_current())
+      and Common.period(20, self, State.combat:get_current())
     )
 
     if was_timeout_reached then

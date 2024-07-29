@@ -5,17 +5,18 @@ local ai = {api = {}}
 
 ai.async = function(fun, works_outside_of_combat)
   return function(self, event)
+    -- TODO support WORLD_TURN (which is 1 frame only btw)
     if
       not works_outside_of_combat
       and not Tablex.contains(-Query(State.combat).list or {}, self)
     then return end
 
-    local dt = unpack(event)
-    if not Common.relative_period(.25, dt, self) then return end
+    if not Common.period(.25, self) then return end
     if not self._ai_coroutine then
       self._ai_coroutine = coroutine.create(fun)
     end
 
+    local dt = unpack(event)
     Common.resume_logged(self._ai_coroutine, self, dt)
 
     if coroutine.status(self._ai_coroutine) == "dead" then
