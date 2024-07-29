@@ -162,14 +162,19 @@ return function(modes, debug_mode)
   })
 
   -- universal --
-  if debug_mode then
-    define_hotkey(hotkeys, Tablex.deep_copy(modes), {"Shift+q"}, {
-      name = "завершить игру",
-      pre_action = function()
-        love.event.push("quit")
-      end,
-    })
-  end
+  define_hotkey(hotkeys, Tablex.deep_copy(modes), {"Ctrl+Shift+q", debug_mode and "Shift+q" or nil}, {
+    name = "завершить игру",
+    pre_action = function()
+      love.event.push("quit")
+    end,
+  })
+
+  define_hotkey(hotkeys, Tablex.deep_copy(modes), {"Ctrl+Shift+r"}, {
+    name = "начать заново",
+    pre_action = function()
+      love.reload_flag = true
+    end,
+  })
 
   define_hotkey(hotkeys, {"free", "combat", "dialogue", "dialogue_options"}, {"k"}, {
     name = "открыть кодекс",

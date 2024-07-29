@@ -13,7 +13,8 @@ local COLOR = {
 }
 
 local hotkeys_order = Fun.iter(
-  "w a s d up left down right 1 2 3 4 5 6 7 8 9 0 e return z space k Ctrl+enter Shift+q" / " "
+  ("w a s d up left down right 1 2 3 4 5 6 7 8 9 0 e return z space k "
+  .. "Ctrl+enter Ctrl+Shift+q Ctrl+Shift+r") / " "
 )
   :enumerate()
   :map(function(i, e) return e, i end)
@@ -176,6 +177,8 @@ return function()
         :totable()
 
       table.sort(hotkeys_table, function(a, b)
+        assert(hotkeys_order[a.keys[1]], "Hotkey %s is not ordered" % a.keys[1])
+        assert(hotkeys_order[b.keys[1]], "Hotkey %s is not ordered" % b.keys[1])
         return hotkeys_order[a.keys[1]] < hotkeys_order[b.keys[1]]
       end)
 
