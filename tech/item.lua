@@ -3,7 +3,7 @@ local interactive = require("tech.interactive")
 
 local module = {}
 
-module.SLOTS = {"main_hand", "gloves"}
+module.SLOTS = {"main_hand", "other_hand", "gloves"}
 
 module.drop = function(parent, slot)
   local drop_position = Fun.chain({Vector.zero}, Vector.directions)

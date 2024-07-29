@@ -139,8 +139,9 @@ return Tiny.sortedProcessingSystem({
       if not item_sprite then return end
 
       local anchor_offset
-      if item_sprite.anchor and entity.sprite.anchor then
-        anchor_offset = (entity.sprite.anchor[slot] - item_sprite.anchor) * scale
+      local entity_anchor = -Query(entity.sprite).anchor[slot]
+      if item_sprite.anchor and entity_anchor then
+        anchor_offset = (entity_anchor - item_sprite.anchor) * scale
       else
         anchor_offset = Vector.zero
       end
@@ -148,8 +149,10 @@ return Tiny.sortedProcessingSystem({
       love.graphics.draw(item_sprite.image, wx, wy, 0, scale)
     end
 
-    local is_weapon_in_background = entity.direction == "up"
-    if is_weapon_in_background then display_slot("main_hand") end
+    local is_main_hand_in_background = entity.direction == "up"
+    local is_other_hand_in_background = entity.direction ~= "down"
+    if is_main_hand_in_background then display_slot("main_hand") end
+    if is_other_hand_in_background then display_slot("other_hand") end
 
     local x, y = unpack(offset_position)
     if entity.sprite.quad then
@@ -159,7 +162,8 @@ return Tiny.sortedProcessingSystem({
     end
 
     display_slot("gloves")
-    if not is_weapon_in_background then display_slot("main_hand") end
+    if not is_main_hand_in_background then display_slot("main_hand") end
+    if not is_other_hand_in_background then display_slot("other_hand") end
   end,
 
   postProcess = function(self)

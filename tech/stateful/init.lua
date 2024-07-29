@@ -44,7 +44,7 @@ module_mt.__call = function(_, systems, debug_mode)
       if entity.inventory then
         Fun.iter(item.SLOTS)
           :map(function(slot) return entity.inventory[slot] end)
-          :filter(function(it) return it end)
+          :filter(Fun.op.truth)
           :each(function(it) self:add(it) end)
       end
       return entity

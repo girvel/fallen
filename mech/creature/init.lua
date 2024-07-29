@@ -110,7 +110,7 @@ module_mt.__call = function(_, animation_pack, object)
       result:get_resources("long")
     )
   result.potential_actions = result:get_actions()
-  result:animate("idle")
+  result:rotate(result.direction)
 
   result.saving_throws = Fun.iter(result.abilities)
     :map(function(name, value)
@@ -122,8 +122,6 @@ module_mt.__call = function(_, animation_pack, object)
           or 0)
     end)
     :tomap()
-
-  result:rotate(result.direction)
 
   return result
 end

@@ -48,6 +48,7 @@ module_mt.__call = function(_, abilities, race, build, feat)
   result.resources.action_surge = 1
 
   result.inventory.main_hand = weapons.dagger()
+  result.inventory.other_hand = weapons.gas_key()
 
   return result
 end

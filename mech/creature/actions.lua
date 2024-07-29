@@ -63,7 +63,7 @@ local base_attack = function(entity, target, slot)
   State:register_agression(entity, target)
 
   entity:rotate(Vector.name_from_direction((target.position - entity.position):normalized()))
-  entity:animate("attack")
+  entity:animate(slot .. "_attack")
   entity:when_animation_ends(function()
     if not attacking.attack(
       entity, target,
