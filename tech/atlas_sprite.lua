@@ -1,3 +1,6 @@
+local tech_constants = require("tech.constants")
+
+
 local module_mt = {}
 local module = setmetatable({}, module_mt)
 
@@ -12,13 +15,13 @@ local atlas = function(path)
   return canvas
 end
 
-module_mt.__call = function(self, path, index)
+module_mt.__call = function(self, path, index, anchor)
   if not module._atlases_cache[path] then
     module._atlases_cache[path] = atlas(path)
   end
   local canvas = module._atlases_cache[path]
 
-  local size = State.CELL_DISPLAY_SIZE
+  local size = tech_constants.CELL_DISPLAY_SIZE
   local w = canvas:getWidth()
   index = (index - 1) * size
   local image_data = canvas:newImageData(nil, nil, index % w, math.floor(index / w) * size, size, size)
@@ -28,6 +31,7 @@ module_mt.__call = function(self, path, index)
       image = love.graphics.newImage(image_data),
       image_data = image_data,
       color = Common.get_color(image_data),
+      anchor = anchor,
     }
   }
 end

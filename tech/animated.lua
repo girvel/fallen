@@ -1,3 +1,6 @@
+local atlas_sprite = require("tech.atlas_sprite")
+
+
 local module_mt = {}
 local module = setmetatable({}, module_mt)
 
@@ -80,6 +83,33 @@ module.load_pack = function(folder_path, anchors)
       image_data = image_data,
       color = Common.get_color(love.image.newImageData(folder_path .. "/" .. file_name))
     }, anchor and {anchor = anchor} or {})
+  end
+  return result
+end
+
+module.load_atlas_pack = function(folder_path, anchors)
+  anchors = anchors or {}
+  assert(love.filesystem.getInfo(folder_path), "No folder " .. folder_path)
+
+  local result = {}
+  for _, file_name in ipairs(love.filesystem.getDirectoryItems(folder_path)) do
+    local break_i = file_name:find("%.png$")
+    local frame_number = tonumber(file_name:sub(break_i - 2, break_i - 1))
+    local animation_name
+    if frame_number then
+      animation_name = file_name:sub(0, break_i - 4)
+    else
+      frame_number = 1
+      animation_name = file_name:sub(0, break_i - 1)
+    end
+
+    for i, direction_name in ipairs({"up", "left", "down", "right"}) do
+      local full_name = animation_name .. "_" .. direction_name
+      if not result[full_name] then result[full_name] = {} end
+      result[full_name][frame_number] = atlas_sprite(
+        folder_path .. "/" .. file_name, i, -Query(anchors)[full_name][frame_number]
+      ).sprite
+    end
   end
   return result
 end

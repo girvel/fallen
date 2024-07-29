@@ -23,7 +23,6 @@ module_mt.__call = function(_, systems, debug_mode)
 
     debug_mode = debug_mode,
 
-    CELL_DISPLAY_SIZE = 16,
     SCALING_FACTOR = 4,
     MODES = modes,
 

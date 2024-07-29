@@ -20,7 +20,7 @@ local small_weapon_anchors = {
 }
 
 module.rapier = animated.load_pack("assets/sprites/rapier", small_weapon_anchors)
-module.dagger = animated.load_pack("assets/sprites/dagger", small_weapon_anchors)
+module.dagger = animated.load_atlas_pack("assets/sprites/dagger", small_weapon_anchors)
 
 module.greatsword = animated.load_pack("assets/sprites/greatsword", {
   idle_right = {

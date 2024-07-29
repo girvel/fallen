@@ -1,6 +1,7 @@
 local random = require("utils.random")
 local animated = require("tech.animated")
 local static_sprite = require("tech.static_sprite")
+local tech_constants = require("tech.constants")
 
 
 local module = {}
@@ -12,7 +13,7 @@ module.floating_damage = function(number, scene_position)
   return {
     boring_flag = true,
     codename = "floating_damage",
-    position = scene_position * State.CELL_DISPLAY_SIZE * State.SCALING_FACTOR
+    position = scene_position * tech_constants.CELL_DISPLAY_SIZE * State.SCALING_FACTOR
       + Vector({random.d(12) - 6, random.d(12) - 6}),
     view = "scene_fx",
     drift = Vector({0, -24}),
@@ -30,7 +31,7 @@ module.floating_line = function(text, position)
   return {
     codename = "floating_line",
     position = (position - Vector({0, 0.5}))
-      * State.CELL_DISPLAY_SIZE * State.SCALING_FACTOR
+      * tech_constants.CELL_DISPLAY_SIZE * State.SCALING_FACTOR
       + Vector.left * line_font:getWidth(text) / 2,
     view = "scene_fx",
     sprite = {
