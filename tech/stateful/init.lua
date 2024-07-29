@@ -27,7 +27,7 @@ module_mt.__call = function(_, systems, debug_mode)
     MODES = modes,
 
     gui = require("tech.stateful.gui")(),
-    hotkeys = require("tech.stateful.hotkeys")(modes),
+    hotkeys = require("tech.stateful.hotkeys")(modes, debug_mode),
 
     entities = {},
     dependencies = {},

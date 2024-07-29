@@ -10,7 +10,7 @@ local define_hotkey = function(collection, modes, keys, data)
   end
 end
 
-return function(modes)
+return function(modes, debug_mode)
   local hotkeys = Fun.iter(modes):map(function(m) return m, {} end):tomap()
 
   -- normal mode --
@@ -162,12 +162,14 @@ return function(modes)
   })
 
   -- universal --
-  define_hotkey(hotkeys, Tablex.deep_copy(modes), {"Shift+q"}, {
-    name = "завершить игру",
-    pre_action = function()
-      if State.debug_mode then love.event.push("quit") end
-    end,
-  })
+  if debug_mode then
+    define_hotkey(hotkeys, Tablex.deep_copy(modes), {"Shift+q"}, {
+      name = "завершить игру",
+      pre_action = function()
+        love.event.push("quit")
+      end,
+    })
+  end
 
   define_hotkey(hotkeys, {"free", "combat", "dialogue", "dialogue_options"}, {"k"}, {
     name = "открыть кодекс",
