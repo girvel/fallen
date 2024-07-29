@@ -121,22 +121,22 @@ return {
   },
   other_hand_attack_right = {
     {
-      main_hand = Vector({2, 12}),
+      main_hand = Vector({3, 12}),
       other_hand = Vector({10, 12}),
     },
     {
-      main_hand = Vector({14, 11}),
-      other_hand = Vector({6, 12}),
+      main_hand = Vector({5, 12}),
+      other_hand = Vector({14, 10}),
     },
   },
   other_hand_attack_left = {
     {
-      main_hand = Vector({12, 12}),
-      other_hand = Vector({4, 12}),
+      main_hand = Vector({11, 12}),
+      other_hand = Vector({4, 13}),
     },
     {
-      main_hand = Vector({0, 11}),
-      other_hand = Vector({8, 12}),
+      main_hand = Vector({9, 12}),
+      other_hand = Vector({0, 10}),
     },
   },
   other_hand_attack_down = {
