@@ -28,7 +28,19 @@ local parse_markdown = function(content)
   return result
 end
 
-local visit_default_node = function(node, children)
+local transformers = {
+  head = function() return {} end,
+  h1 = function(node, children)
+    children = Tablex.concat(unpack(children))
+    return Tablex.concat({{content = "# "}}, children, {{content = "\n\n"}})
+  end,
+  p = function(node, children)
+    children = Tablex.concat(unpack(children))
+    return Tablex.concat(children, {{content = "\n\n"}})
+  end,
+}
+
+local transform_default_node = function(node, children)
   if #children == 0 then
     return {{content = node:getcontent()}}
   end
@@ -38,7 +50,10 @@ end
 local visit_html
 visit_html = function(root)
   local nodes = Fun.iter(root.nodes):map(visit_html):totable()
-  return visit_default_node(root, nodes)
+  if #nodes == 0 then
+    nodes = {{{content = root:getcontent()}}}
+  end
+  return (transformers[root.name] or transform_default_node)(root, nodes)
 end
 
 local parse_html = function(content)
