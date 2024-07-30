@@ -1,6 +1,7 @@
 local special = require("tech.special")
 local mech = require("mech")
 local translation = require("tech.translation")
+local interactive = require("tech.interactive")
 
 
 local order_sound = Common.volumed_sounds("assets/sounds/electricity.wav", 0.08)[1]
@@ -211,6 +212,13 @@ return function()
             end)
             :reduce(Tablex.concat, {})
         )
+      end
+
+      if State.player then
+        local interaction = interactive.get_for(State.player)
+        if interaction then
+          append("\n\nСмотрит на " .. Common.get_name(interaction))
+        end
       end
 
       return result
