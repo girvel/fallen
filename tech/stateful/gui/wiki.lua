@@ -2,18 +2,14 @@ local wrapping = require("tech.stateful.gui.wrapping")
 
 
 local load_wiki = function(path)
-  local pattern = "(.*)_(%d%d).md$"
+  local pattern = "^(.*).html$"
   return Fun.iter(love.filesystem.getDirectoryItems(path))
     :filter(function(name) return name:find(pattern) end)
     :map(function(name)
-      local _, _, id, index = name:find(pattern)
-      return id, tonumber(index), love.filesystem.read(path .. "/" .. name)
+      local _, _, codename = name:find(pattern)
+      return codename, love.filesystem.read(path .. "/" .. name)
     end)
-    :reduce(function(acc, id, index, content)
-      if not acc[id] then acc[id] = {} end
-      acc[id][index] = content
-      return acc
-    end, {})
+    :tomap()
 end
 
 return function()
@@ -25,7 +21,7 @@ return function()
     text_entities = nil,
 
     show = function(self, id)
-      assert(self.pages[id], "Wiki page \"" .. id .. "\" does not exist")
+      assert(self.pages[id], "Wiki page \"%s\" does not exist" % id)
 
       self.history = Fun.iter(self.history)
         :take_n(self.current_history_index)
@@ -40,11 +36,9 @@ return function()
       self:_close_page()
       local id = self.history[self.current_history_index]
 
-      local page = self.discovered_pages[id]
-        and self.pages[id][self.discovered_pages[id]]
-        or "~ Нет информации ~"
+      local page = self.pages[id] or "~ Нет информации ~"
 
-      self.text_entities = State:add_multiple(wrapping.generate_page(
+      self.text_entities = State:add_multiple(wrapping.generate_html_page(
         page, State.gui.font, State.gui.TEXT_MAX_SIZE[1], "wiki"
       ))
     end,

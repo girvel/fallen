@@ -1,5 +1,6 @@
 local special = require("tech.special")
 local utf8 = require("utf8")
+local htmlparser = require("lib.htmlparser")
 
 
 -- each token is in format {content: string, link: string?}
@@ -24,6 +25,21 @@ local parse_markdown = function(content)
       content = content:sub(j + 1)
     end
   end
+  return result
+end
+
+local visit_html
+visit_html = function(root, result)
+  Log.trace(root:gettext())
+  for i, e in ipairs(root.nodes) do
+    visit_html(e, result)
+  end
+end
+
+local parse_html = function(content)
+  local result = {}
+  local root = htmlparser.parse(content)
+  visit_html(root, result)
   return result
 end
 
@@ -136,5 +152,9 @@ return {
       ),
       font, view
     )
-  end
+  end,
+  generate_html_page = function(content, font, w, view)
+    parse_html(content)
+    return {}
+  end,
 }
