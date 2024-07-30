@@ -1,15 +1,27 @@
 local texting = require("tech.stateful.gui.texting")
+local html = require("tech.stateful.gui.texting.html")
 
 
 local load_wiki = function(path)
   local pattern = "^(.*).html$"
-  return Fun.iter(love.filesystem.getDirectoryItems(path))
+  local loaded_pages = Fun.iter(love.filesystem.getDirectoryItems(path))
     :filter(function(name) return name:find(pattern) end)
     :map(function(name)
       local _, _, codename = name:find(pattern)
       return codename, love.filesystem.read(path .. "/" .. name)
     end)
     :tomap()
+
+  loaded_pages.codex = loaded_pages.codex % Fun.iter(loaded_pages)
+    :filter(function(page) return page ~= "codex" end)
+    :map(function(page, content)
+      return '<li if="html.is_available(pages.%s, args)">%s</li>\n' % {
+        page, html.get_title(content),
+      }
+    end)
+    :reduce(Fun.op.concat, "")
+
+  return loaded_pages
 end
 
 return function()
@@ -39,7 +51,11 @@ return function()
       local page = self.pages[id] or "~ Нет информации ~"
 
       self.text_entities = State:add_multiple(texting.generate_html_page(
-        page, State.gui.font, State.gui.TEXT_MAX_SIZE[1], "wiki", {codex = self.codex}
+        page, State.gui.font, State.gui.TEXT_MAX_SIZE[1], "wiki", {
+          codex = self.codex,
+          pages = self.pages,
+          html = html,
+        }
       ))
     end,
 

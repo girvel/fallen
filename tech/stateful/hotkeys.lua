@@ -184,7 +184,7 @@ return function(modes, debug_mode)
 
   define_hotkey(hotkeys, {"free", "combat", "dialogue", "dialogue_options"}, {"k"}, {
     name = "открыть кодекс",
-    pre_action = function() State.gui.wiki:show("dreamers") end,  -- TODO RM
+    pre_action = function() State.gui.wiki:show("codex") end,
   })
 
   return hotkeys
