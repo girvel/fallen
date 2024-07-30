@@ -17,6 +17,13 @@ local transformers = {
     children = Tablex.concat(unpack(children))
     return Tablex.concat({{content = "- "}}, children, {{content = "\n"}})
   end,
+  a = function(node, children)
+    children = Tablex.concat(unpack(children))
+    Fun.iter(children):each(function(child)
+      child.link = node.attributes.href
+    end)
+    return children
+  end,
 }
 
 transformers.ul = transformers.p

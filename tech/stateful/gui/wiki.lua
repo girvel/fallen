@@ -15,8 +15,8 @@ local load_wiki = function(path)
   loaded_pages.codex = loaded_pages.codex % Fun.iter(loaded_pages)
     :filter(function(page) return page ~= "codex" end)
     :map(function(page, content)
-      return '<li if="html.is_available(pages.%s, args)">%s</li>\n' % {
-        page, html.get_title(content),
+      return '<li if="html.is_available(pages.%s, args)"><a href="%s">%s</a></li>\n' % {
+        page, page, html.get_title(content),
       }
     end)
     :reduce(Fun.op.concat, "")
