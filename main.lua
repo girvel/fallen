@@ -58,6 +58,11 @@ love.load = function(args)
     State.rails.scenes[scene].enabled = true
   end
 
+  for _, scene in ipairs(args.scenes) do
+    State.rails.scenes[scene].enabled = true
+    State.rails.scenes[scene].start_predicate = function() return true end
+  end
+
   love.audio.stop()
   if not args.disable_ambient then
     local doom = love.audio.newSource("assets/sounds/doom.wav", "static")

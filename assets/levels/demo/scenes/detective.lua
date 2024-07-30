@@ -235,7 +235,7 @@ return function()
       end,
     },
 
-    {
+    talked_to_everybody = {
       name = "Player talked to all dreamers",
       enabled = true,
       start_predicate = function(self, rails) return rails.dreamers_talked_to == 4 end,

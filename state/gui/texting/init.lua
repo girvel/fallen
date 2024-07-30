@@ -31,22 +31,22 @@ end
 
 local LINK_COLOR = Common.hex_color("3f5d92")
 
-local generate_entities = function(token_lines, font, view)
+local generate_entities = function(token_lines, view)
   local result = {}
   for y, line in ipairs(token_lines) do
     for _, token in ipairs(line) do
       table.insert(result, Tablex.extend(
         special.text(
           token.color and {token.color, token.content} or token.content,
-          font,
-          Vector({token.x, font:getHeight() * y})
+          token.font,
+          Vector({token.x, token.y})
         ),
         {
           view = view,
           on_click = token.link and function()
             State.gui.wiki:show(token.link)
           end or nil,
-          size = Vector({font:getWidth(token.content), font:getHeight()}),
+          size = Vector({token.font:getWidth(token.content), token.font:getHeight()}),
           link_flag = token.link or nil,
         }
       ))
@@ -56,16 +56,9 @@ local generate_entities = function(token_lines, font, view)
 end
 
 return {
-  generate_page = function(content, font, w, view)
+  generate_html_page = function(content, styles, w, view, args)
     return generate_entities(
-      wrap(parse_markdown(content), font, w),
-      font, view
-    )
-  end,
-  generate_html_page = function(content, font, w, view, args)
-    return generate_entities(
-      wrap(html.parse(content, args), font, w),
-      font, view
+      wrap(html.parse(content, args, styles), w), view
     )
   end,
 }

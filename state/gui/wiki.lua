@@ -39,11 +39,10 @@ return function()
         font = love.graphics.newFont(font_path, 12),
         color = Common.hex_color("ededed"),
       },
-      header = {
+      h1 = {
         font = love.graphics.newFont(font_path, 24),
-        color = Common.hex_color("ededed"),
       },
-      header_prefix = {
+      h1_prefix = {
         font = love.graphics.newFont(font_path, 24),
         color = Common.hex_color("5d375a"),
       },
@@ -68,7 +67,7 @@ return function()
       local page = self.pages[id] or "~ Нет информации ~"
 
       self.text_entities = State:add_multiple(texting.generate_html_page(
-        page, State.gui.font, State.gui.TEXT_MAX_SIZE[1], "wiki", {
+        page, self.styles, State.gui.TEXT_MAX_SIZE[1], "wiki", {
           codex = self.codex,
           pages = self.pages,
           html = html,

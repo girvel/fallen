@@ -10,7 +10,8 @@ return function()
 
     show = function(self, line)
       self.text_entities = State:add_multiple(texting.generate_html_page(
-        "<pre>%s</pre>" % line, State.gui.font, math.min(love.graphics.getWidth() - 40, State.gui.TEXT_MAX_SIZE[1]),
+        "<pre>%s</pre>" % line, {default = {font = State.gui.font}},
+        math.min(love.graphics.getWidth() - 40, State.gui.TEXT_MAX_SIZE[1]),
         "dialogue_text", {}
       ))
       self.background = State:add(special.dialogue_background())

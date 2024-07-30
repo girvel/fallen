@@ -11,7 +11,12 @@ return function()
   return {
     player_anchor = nil,
     text_entities = nil,
-    font = love.graphics.newFont("assets/fonts/joystix.monospace-regular.otf", 18),
+    style = {
+      default = {
+        font = love.graphics.newFont("assets/fonts/joystix.monospace-regular.otf", 18),
+        color = Common.hex_color("ededed"),
+      }
+    },
 
     parameters = {
       points = 0,
@@ -57,9 +62,9 @@ return function()
         .. self.forms.abilities(params)
         .. self.forms.class(params)
 
-      self.text_entities = State:add_multiple(texting.generate_page(
-        text,
-        self.font, math.min(love.graphics.getWidth() - 40, State.gui.TEXT_MAX_SIZE[1]),
+      self.text_entities = State:add_multiple(texting.generate_html_page(
+        "<pre>%s</pre>" % text, self.style,
+        math.min(love.graphics.getWidth() - 40, State.gui.TEXT_MAX_SIZE[1]),
         "character_creator"
       ))
     end,

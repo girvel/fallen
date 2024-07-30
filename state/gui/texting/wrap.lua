@@ -39,22 +39,32 @@ local _find_break = function(words, font, max_w)
   return #words, w, last_line
 end
 
-local wrap_lines = function(token_lines, font, max_w)
+local wrap_lines = function(token_lines, max_w)
   local result = {}
+  local current_h = 0
+  local max_line_h = 0
   for _, line in ipairs(token_lines) do
     table.insert(result, {})
     local current_w = 0
+    if #line > 0 then
+      max_line_h = 0
+    end
     for _, token in ipairs(line) do
+      max_line_h = math.max(max_line_h, token.font:getHeight())
+
       local current_content = token.content:split(" ")
       while #current_content > 0 do
-        local break_i, w, inserted_line = _find_break(current_content, font, max_w - current_w)
+        local break_i, w, inserted_line = _find_break(current_content, token.font, max_w - current_w)
         if break_i == 0 then
           table.insert(result, {})
           current_w = 0
+          current_h = current_h + max_line_h
+          max_line_h = token.font:getHeight()
         else
           table.insert(result[#result], Tablex.extend({}, token, {
             content = inserted_line,
             x = current_w,
+            y = current_h,
           }))
           current_content = Fun.iter(current_content)
             :drop_n(break_i)
@@ -63,13 +73,11 @@ local wrap_lines = function(token_lines, font, max_w)
         end
       end
     end
+    current_h = current_h + max_line_h
   end
   return result
 end
 
-return function(content, font, w)
-  return wrap_lines(
-    convert_line_breaks(content),
-    font, w
-  )
+return function(content, w)
+  return wrap_lines(convert_line_breaks(content), w)
 end

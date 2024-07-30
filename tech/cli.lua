@@ -17,6 +17,13 @@ return {
       :default({})
 
     parser:option(
+      "-s --scenes",
+      "Scenes to run immediately after the start of the game"
+    )
+      :args("?")
+      :default({})
+
+    parser:option(
       "-l --level",
       "Name of the level to load."
     )

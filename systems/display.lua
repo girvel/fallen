@@ -36,7 +36,7 @@ local get_dialogue_offset = function()
   local window_h = love.graphics.getHeight()
   local text_w = math.min(window_w - 40, State.gui.TEXT_MAX_SIZE[1])
 
-  return Vector({math.ceil((window_w - text_w) / 2), window_h - 130})
+  return Vector({math.ceil((window_w - text_w) / 2), window_h - 115})
 end
 
 local get_full_screen_text_offset = function()
