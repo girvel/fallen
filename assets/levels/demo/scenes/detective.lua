@@ -241,7 +241,7 @@ return function()
       start_predicate = function(self, rails) return rails.dreamers_talked_to == 4 end,
       run = function(self, rails)
         self.enabled = false
-        api.discover_wiki({codex = 2, dreamers = 1})
+        api.discover_wiki({talked_to_dreamers = true})
       end,
     },
   }

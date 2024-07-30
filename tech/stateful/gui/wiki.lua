@@ -15,7 +15,7 @@ end
 return function()
   return {
     pages = load_wiki("assets/wiki"),
-    discovered_pages = {codex = 1},
+    codex = {},
     history = {},
     current_history_index = 0,
     text_entities = nil,
@@ -39,7 +39,7 @@ return function()
       local page = self.pages[id] or "~ Нет информации ~"
 
       self.text_entities = State:add_multiple(wrapping.generate_html_page(
-        page, State.gui.font, State.gui.TEXT_MAX_SIZE[1], "wiki"
+        page, State.gui.font, State.gui.TEXT_MAX_SIZE[1], "wiki", {codex = self.codex}
       ))
     end,
 

@@ -52,7 +52,7 @@ end
 
 railing.api.discover_wiki = function(page_table)
   for k, v in pairs(page_table) do
-    State.gui.wiki.discovered_pages[k] = v
+    State.gui.wiki.codex[k] = v
   end
   railing.api.notification("Информация в Кодексе обновлена")  -- TODO mention page name
 end

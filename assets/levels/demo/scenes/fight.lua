@@ -205,7 +205,7 @@ return function()
         self.enabled = false
         api.notification("Задача выполнена неудовлетворительно", true)
         api.notification("Ожидайте следующее задание", true)
-        api.discover_wiki({dreamers = 2, codex = 2})
+        api.discover_wiki({fought_dreamers = true})
       end,
     },
 

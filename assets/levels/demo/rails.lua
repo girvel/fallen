@@ -12,17 +12,17 @@ return function()
 
     initialize = function(self)
       self.positions = {
-        [2] = Vector({5, 8}),
-        exit = Vector({7, 11}),
-        intro_activation = Vector({8, 11}),
+        [2] = Vector({20, 53}),
+        exit = Vector({22, 56}),
+        intro_activation = Vector({23, 56}),
       }
 
       self.entities = {
-        State.grids.solids[Vector({7, 9})],
+        State.grids.solids[Vector({22, 54})],
         State.grids.solids[self.positions[2]],
-        State.grids.solids[Vector({5, 3})],
-        State.grids.solids[Vector({8, 3})],
-        leaking_valve = State.grids.solids[Vector({7, 10})],
+        State.grids.solids[Vector({20, 48})],
+        State.grids.solids[Vector({23, 48})],
+        leaking_valve = State.grids.solids[Vector({22, 55})],
       }
 
       self.entities.gloves = self.entities[3].inventory.gloves

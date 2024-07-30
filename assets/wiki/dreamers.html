@@ -1,10 +1,13 @@
-<head>Спящие</head>
-<page if="codex.talked_to_dreamers or codex.fighted_dreamers">
+<html if="codex.talked_to_dreamers or codex.fought_dreamers">
+<head>
+    <title>Спящие</title>
+</head>
+<body>
     <h1>Спящие</h1>
-
     <p>
         <span>Спящие — ряд гуманоидов в экипаже корабля, проявляющие упрощённое поведение. Состоят из разных рас и выполняют монотонные работы; могут разговаривать, но делают это отрывисто и сухо; чувствуют боль, но не реагируют на неё. </span>
-        <span if="not codex.fighted_dreamers">Требуется дальнейшее изучение.</span>
-        <span if="codex.fighted_dreamers">Способны инстинктивно различать других Спящих и отвечать на агрессию агрессией.</span>
+        <span if="not codex.fought_dreamers">Требуется дальнейшее изучение.</span>
+        <span if="codex.fought_dreamers">Способны инстинктивно различать других Спящих и отвечать на агрессию агрессией.</span>
     </p>
-</page>
+</body>
+</html>

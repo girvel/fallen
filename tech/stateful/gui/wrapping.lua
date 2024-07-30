@@ -48,16 +48,35 @@ local transform_default_node = function(node, children)
 end
 
 local visit_html
-visit_html = function(root)
-  local nodes = Fun.iter(root.nodes):map(visit_html):totable()
+visit_html = function(root, args)
+  local condition = root.attributes["if"]
+  if condition then
+    local predicate = assert(loadstring(
+      [[
+        return function(args)
+          %s
+          return %s
+        end
+      ]] % {
+        Fun.iter(Log.trace(args))
+          :map(function(name) return "local %s = args.%s\n" % {name, name} end)
+          :reduce(Fun.op.concat, ""),
+        condition,
+      }
+    ))()
+    if not predicate(args) then return end
+  end
+  local nodes = Fun.iter(root.nodes)
+    :map(function(node) return visit_html(node, args) end)
+    :totable()
   if #nodes == 0 then
     nodes = {{{content = root:getcontent()}}}
   end
   return (transformers[root.name] or transform_default_node)(root, nodes)
 end
 
-local parse_html = function(content)
-  return visit_html(htmlparser.parse(content))
+local parse_html = function(content, args)
+  return visit_html(htmlparser.parse(content), args)
 end
 
 local convert_line_breaks = function(token_list)
@@ -170,12 +189,11 @@ return {
       font, view
     )
   end,
-  generate_html_page = function(content, font, w, view)
-    parse_html(content)
+  generate_html_page = function(content, font, w, view, args)
     return generate_entities(
       wrap_lines(
         convert_line_breaks(
-          parse_html(content)
+          parse_html(content, args)
         ),
         font, w
       ),
