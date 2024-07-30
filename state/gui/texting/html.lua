@@ -11,7 +11,7 @@ local transformers = {
     return Tablex.concat(
       {Tablex.extend({content = "# "}, styles.h1_prefix)},
       Fun.iter(children)
-        :map(function(child) return Tablex.extend(styles.h1, child) end)
+        :map(function(child) return Tablex.extend({}, styles.h1 or {}, child) end)
         :totable(),
       {{content = "\n\n"}}
     )
@@ -26,10 +26,10 @@ local transformers = {
   end,
   a = function(node, children, styles)
     children = Tablex.concat(unpack(children))
-    Fun.iter(children):each(function(child)
+    return Fun.iter(children):map(function(child)
       child.link = node.attributes.href
-    end)
-    return children
+      return Tablex.extend({}, styles.a or {}, child)
+    end):totable()
   end,
 }
 

@@ -46,6 +46,9 @@ return function()
         font = love.graphics.newFont(font_path, 24),
         color = Common.hex_color("5d375a"),
       },
+      a = {
+        color = Common.hex_color("3f5d92"),
+      },
     },
 
     show = function(self, id)

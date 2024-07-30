@@ -29,8 +29,6 @@ local parse_markdown = function(content)
   return result
 end
 
-local LINK_COLOR = Common.hex_color("3f5d92")
-
 local generate_entities = function(token_lines, view)
   local result = {}
   for y, line in ipairs(token_lines) do
