@@ -1,6 +1,8 @@
 local combat = require("tech.combat")
 
 
+local your_move_sound = Common.volumed_sounds("assets/sounds/your_move1", 0.5)[1]
+
 return Tiny.processingSystem({
   codename = "acting",
   filter = Tiny.requireAll("ai"),
@@ -62,6 +64,10 @@ return Tiny.processingSystem({
       Tablex.extend(entity.resources, -Query(entity):get_resources("move") or {})
       State.combat:move_to_next()
       Log.info("%s's turn" % Common.get_name(State.combat:get_current()))
+
+      if State.combat:get_current() == State.player then
+        your_move_sound:play()
+      end
     end
   end,
 

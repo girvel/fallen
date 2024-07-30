@@ -41,7 +41,7 @@ end
 common.period = function(period, ...)
   local identifier = {...}
   local start_time = common.get_by_path(common._periods, identifier) or love.timer.getTime()
-  if Log.trace(love.timer.getTime() - start_time) > period then
+  if love.timer.getTime() - start_time > period then
     common.set_by_path(common._periods, identifier, start_time + period)
     return true
   end
@@ -80,6 +80,7 @@ common.volumed_sounds = function(path_beginning, volume)
     :map(function(filename) return directory .. "/" .. filename end)
     :filter(function(path) return path:startsWith(path_beginning) end)
     :map(function(path)
+      Log.trace(path)
       local result = love.audio.newSource(path, "static")
       result:setVolume(volume)
       return result
