@@ -1,7 +1,7 @@
 local special = require("tech.special")
 local utf8 = require("utf8")
-local html = require("tech.stateful.gui.texting.html")
-local wrap = require("tech.stateful.gui.texting.wrap")
+local html = require("state.gui.texting.html")
+local wrap = require("state.gui.texting.wrap")
 
 
 -- each token is in format {content: string, link: string?}

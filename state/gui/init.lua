@@ -28,10 +28,10 @@ return function()
 
   result.font:setLineHeight(1.2)
 
-  result.wiki = require("tech.stateful.gui.wiki")()
-  result.sidebar = require("tech.stateful.gui.sidebar")()
-  result.dialogue = require("tech.stateful.gui.dialogue")()
-  result.character_creator = require("tech.stateful.gui.character_creator")()
+  result.wiki = require("state.gui.wiki")()
+  result.sidebar = require("state.gui.sidebar")()
+  result.dialogue = require("state.gui.dialogue")()
+  result.character_creator = require("state.gui.character_creator")()
 
   return result
 end

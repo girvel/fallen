@@ -1,7 +1,7 @@
-local texting = require("tech.stateful.gui.texting")
+local texting = require("state.gui.texting")
 local player = require("library.player")  -- TODO move to tech
 local races = require("mech.races")
-local forms = require("tech.stateful.gui.character_creator.forms")
+local forms = require("state.gui.character_creator.forms")
 local class = require("mech.class")
 local fighter = require("mech.classes.fighter")
 local feats = require("mech.feats")

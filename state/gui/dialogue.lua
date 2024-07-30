@@ -1,4 +1,4 @@
-local texting = require("tech.stateful.gui.texting")
+local texting = require("state.gui.texting")
 local special = require("tech.special")
 
 

@@ -26,7 +26,7 @@ love.graphics.setDefaultFilter("nearest", "nearest")
 love.keyboard.setKeyRepeat(true)
 
 local palette = require("library.palette")
-local stateful = require("tech.stateful")
+local state = require("state")
 local cli = require("tech.cli")
 
 local systems = require("systems")
@@ -46,7 +46,7 @@ love.load = function(args)
 
   Log.info("Loading the game")
   math.randomseed(os.time())
-  State = stateful(systems, args.debug)
+  State = state(systems, args.debug)
   State.callback_set = Fun.iter(systems)
     :reduce(function(acc, system)
       acc[system.base_callback] = true

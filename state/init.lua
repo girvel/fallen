@@ -26,8 +26,8 @@ module_mt.__call = function(_, systems, debug_mode)
     SCALING_FACTOR = 4,
     MODES = modes,
 
-    gui = require("tech.stateful.gui")(),
-    hotkeys = require("tech.stateful.hotkeys")(modes, debug_mode),
+    gui = require("state.gui")(),
+    hotkeys = require("state.hotkeys")(modes, debug_mode),
 
     entities = {},
     dependencies = {},
