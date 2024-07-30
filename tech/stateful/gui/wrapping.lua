@@ -28,19 +28,21 @@ local parse_markdown = function(content)
   return result
 end
 
-local visit_html
-visit_html = function(root, result)
-  Log.trace(root:gettext())
-  for i, e in ipairs(root.nodes) do
-    visit_html(e, result)
+local visit_default_node = function(node, children)
+  if #children == 0 then
+    return {{content = node:getcontent()}}
   end
+  return Tablex.concat(unpack(children))
+end
+
+local visit_html
+visit_html = function(root)
+  local nodes = Fun.iter(root.nodes):map(visit_html):totable()
+  return visit_default_node(root, nodes)
 end
 
 local parse_html = function(content)
-  local result = {}
-  local root = htmlparser.parse(content)
-  visit_html(root, result)
-  return result
+  return visit_html(htmlparser.parse(content))
 end
 
 local convert_line_breaks = function(token_list)
@@ -155,6 +157,14 @@ return {
   end,
   generate_html_page = function(content, font, w, view)
     parse_html(content)
-    return {}
+    return generate_entities(
+      wrap_lines(
+        convert_line_breaks(
+          parse_html(content)
+        ),
+        font, w
+      ),
+      font, view
+    )
   end,
 }
