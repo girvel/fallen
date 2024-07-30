@@ -18,8 +18,6 @@ module_mt.__call = function(_, systems, debug_mode)
     -- rails
     world = Tiny.world(unpack(systems)),
     grids = nil,
-    transform = 4,
-    camera = {position = Vector.zero},
 
     debug_mode = debug_mode,
 

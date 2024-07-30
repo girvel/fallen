@@ -1,54 +1,10 @@
 local level = require("tech.level")
-local tech_constants = require("tech.constants")
 
-
-local get_scene_offset = function()
-  if not State.player then return Vector.zero end
-  local window_w = love.graphics.getWidth()
-  local window_h = love.graphics.getHeight()
-  local border_w = math.floor(window_w / 3)
-  local border_h = math.floor(window_h / 3)
-  local player_x, player_y = unpack(State.player.position * tech_constants.CELL_DISPLAY_SIZE * State.SCALING_FACTOR)
-  local grid_w, grid_h = unpack(State.grids.solids.size * tech_constants.CELL_DISPLAY_SIZE * State.SCALING_FACTOR)
-
-  local result = -Vector({
-    Mathx.median(
-      0,
-      player_x - window_w + border_w,
-      -State.gui.views.scene_fx.offset[1],
-      player_x - border_w,
-      grid_w - window_w
-    ),
-    Mathx.median(
-      0,
-      player_y - window_h + border_h,
-      -State.gui.views.scene_fx.offset[2],
-      player_y - border_h,
-      grid_h - window_h
-    )
-  })
-
-  return result
-end
-
-local get_dialogue_offset = function()
-  local window_w = love.graphics.getWidth()
-  local window_h = love.graphics.getHeight()
-  local text_w = math.min(window_w - 40, State.gui.TEXT_MAX_SIZE[1])
-
-  return Vector({math.ceil((window_w - text_w) / 2), window_h - 115})
-end
-
-local get_full_screen_text_offset = function()
-  return ((Vector({love.graphics.getDimensions()}) - State.gui.TEXT_MAX_SIZE) / 2):ceil()
-end
 
 return Tiny.sortedProcessingSystem({
   codename = "display",
   filter = Tiny.requireAll("position", "sprite", "view"),
   base_callback = "draw",
-
-  _old_camera_position = Vector.zero,
 
   _unknown_icon = love.graphics.newImage("assets/sprites/icons/unknown.png"),
 
@@ -71,25 +27,8 @@ return Tiny.sortedProcessingSystem({
   end,
 
   preProcess = function(self, event)
-    self:_update_views()
+    State.gui:update_views()
     State.gui.sidebar:update_indicators(event[1])
-  end,
-
-  _update_views = function(self)  -- TODO move to State.gui
-    for key, value in pairs({
-      scene_fx = get_scene_offset(),
-      scene = get_scene_offset(),
-      actions = Vector({love.graphics.getWidth() - State.gui.sidebar.W + 16, 64 + 15}),
-      sidebar_background = Vector({love.graphics.getWidth() - State.gui.sidebar.W, 0}),
-      sidebar = Vector({love.graphics.getWidth() - State.gui.sidebar.W, 0}),
-      sidebar_text = Vector({love.graphics.getWidth() - State.gui.sidebar.W, 0}),
-      dialogue_background = Vector.zero,
-      dialogue_text = get_dialogue_offset(),
-      wiki = get_full_screen_text_offset(),
-      character_creator = get_full_screen_text_offset(),
-    }) do
-      State.gui.views[key].offset = value
-    end
   end,
 
   process = function(self, entity)
