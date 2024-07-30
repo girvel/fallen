@@ -50,8 +50,9 @@ return {
 
     -- items -- 
     g = weapons.greatsword,
+    d = weapons.dagger,
     r = weapons.rapier,
   },
-  transparents = Common.set("Ml@gr>v<^\\/FB}{T+o1234LpP"),
+  transparents = Common.set("Ml@gdr>v<^\\/FB}{T+o1234LpP"),
   throwables = Common.set("_csw"),
 }

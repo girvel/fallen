@@ -17,6 +17,7 @@ module.drop = function(parent, slot)
   item.position = drop_position
   State:refresh(item)
   State.grids[item.layer][item.position] = item
+  return true
 end
 
 module.mixin = function()
@@ -30,14 +31,16 @@ module.mixin = function()
       local slot
       local is_free
       if self.slot == "hands" then
-        if self.tags.two_handed then
+        if self.tags.two_handed or not self.tags.light then
           is_free = (
             (not other.inventory.main_hand or module.drop(other, "main_hand"))
             and (not other.inventory.other_hand or module.drop(other, "other_hand"))
           )
           slot = "main_hand"
-        elseif self.tags.light then
-          if not other.inventory.main_hand then
+        else
+          if not other.inventory.main_hand
+            or (not other.inventory.main_hand.tags.light and module.drop(other, "main_hand"))
+          then
             slot = "main_hand"
             is_free = true
           elseif other.inventory.main_hand.tags.light and not other.inventory.other_hand then
@@ -45,6 +48,7 @@ module.mixin = function()
             is_free = true
           elseif other.inventory.main_hand.tags.light and module.drop(other, "other_hand") then
             other.inventory.other_hand = other.inventory.main_hand
+            other.inventory.main_hand = nil
             slot = "main_hand"
             is_free = true
           else
