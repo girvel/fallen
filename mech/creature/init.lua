@@ -25,6 +25,10 @@ module_mt.__call = function(_, animation_pack, object)
     layer = "solids",
     view = "scene",
 
+    sounds = {
+      hit = Common.volumed_sounds("assets/sounds/hits_body", 0.3),
+    },
+
     effects = {},
 
     get_effect = function(self, name, ...)

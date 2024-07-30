@@ -1,12 +1,17 @@
 local module_mt = {}
 local query = setmetatable({}, module_mt)
 
+local qlength = function(self)
+  return query(self._query_subject ~= nil and #self._query_subject or nil)
+end
+
 module_mt.__call = function(_, subject)
   return setmetatable({
     _query_subject = subject,
   }, {
     __index = function(self, index)
       if index == "_query_subject" then return rawget(self, "_query_subject") end
+      if index == "qlength" then return qlength end
       return query(self._query_subject ~= nil and self._query_subject[index] or nil)
     end,
     __newindex = function(self, index, value)

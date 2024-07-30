@@ -73,7 +73,7 @@ module.scripture = function(kind, path)
 end
 
 local mannequin_sounds = {
-  hit = Common.volumed_sounds("assets/sounds/hits_soft_wood", 0.3),
+  hit = Common.volumed_sounds("assets/sounds/hits_body", 0.3),
 }
 
 module.mannequin = function()

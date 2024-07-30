@@ -58,5 +58,5 @@ return {
     r = weapons.rapier,
   },
   transparents = Common.set("Ml@gdr>v<^\\/FB}{T+o1234LpPtkKba$"),
-  throwables = Common.set("_-"),
+  throwables = Common.set("_,"),
 }

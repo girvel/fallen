@@ -59,10 +59,13 @@ local get_melee_damage_roll = function(entity, slot)
   return entity:get_effect("modify_damage_roll", roll)
 end
 
+local whoosh = Common.volumed_sounds("assets/sounds/whoosh", 0.05)
+
 local base_attack = function(entity, target, slot)
   State:register_agression(entity, target)
 
   entity:rotate(Vector.name_from_direction((target.position - entity.position):normalized()))
+  random.choice(whoosh):play()
   entity:animate(slot .. "_attack")
   entity:when_animation_ends(function()
     if not attacking.attack(
