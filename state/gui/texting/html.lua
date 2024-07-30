@@ -55,6 +55,15 @@ local get_availability = function(root, args)
   return predicate(args)
 end
 
+local postprocess = function(root, content)
+  if root.attributes.color then
+    Fun.iter(content):each(function(token)
+      token.color = Common.hex_color(root.attributes.color)
+    end)
+  end
+  return content
+end
+
 local visit_html
 visit_html = function(root, args)
   if not get_availability(root, args) then return {} end
@@ -64,7 +73,8 @@ visit_html = function(root, args)
   if #nodes == 0 then
     nodes = {{{content = root:getcontent()}}}
   end
-  return (transformers[root.name] or transform_default_node)(root, nodes)
+  local result = (transformers[root.name] or transform_default_node)(root, nodes)
+  return postprocess(root, result)
 end
 
 html.parse = function(content, args)

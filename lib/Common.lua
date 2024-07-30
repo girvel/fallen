@@ -53,9 +53,15 @@ common.reset_period = function(...)
 end
 
 common.hex_color = function(str)
-  return fun.range(3)
+  return fun.range(#str / 2)
     :map(function(i) return tonumber(str:sub(i * 2 - 1, i * 2), 16) / 255 end)
     :totable()
+end
+
+common.color_to_hex = function(color)
+  return Fun.iter(color)
+    :map(function(v) return "%x" % (v * 255) end)
+    :reduce(Fun.op.concat, "")
 end
 
 common.get_color = function(image_data)

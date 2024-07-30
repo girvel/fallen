@@ -6,8 +6,9 @@ railing.api.narration = function(text)
 end
 
 railing.api.line = function(entity, text)
-  -- TODO get color back
-  railing.api.narration(Common.get_name(entity) .. ": " .. text)
+  railing.api.narration([[<span color="%s">%s</span><span>: %s</span>]] % {
+    Common.color_to_hex(entity.sprite.color), Common.get_name(entity), text
+  })
 end
 
 railing.api.wait_seconds = function(s)

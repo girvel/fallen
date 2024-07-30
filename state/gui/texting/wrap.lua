@@ -7,19 +7,17 @@ local convert_line_breaks = function(token_list)
       local i = content:find("\n")
       if not i then break end
       if i > 1 then
-        table.insert(result[#result], {
+        table.insert(result[#result], Tablex.extend({}, token, {
           content = content:sub(1, i - 1),
-          link = token.link,
-        })
+        }))
       end
       table.insert(result, {})
       content = content:sub(i + 1)
     end
     if #content > 0 then
-      table.insert(result[#result], {
+      table.insert(result[#result], Tablex.extend({}, token, {
         content = content,
-        link = token.link,
-      })
+      }))
     end
   end
 
@@ -54,11 +52,10 @@ local wrap_lines = function(token_lines, font, max_w)
           table.insert(result, {})
           current_w = 0
         else
-          table.insert(result[#result], {
+          table.insert(result[#result], Tablex.extend({}, token, {
             content = inserted_line,
             x = current_w,
-            link = token.link,
-          })
+          }))
           current_content = Fun.iter(current_content)
             :drop_n(break_i)
             :totable()

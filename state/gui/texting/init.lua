@@ -37,7 +37,7 @@ local generate_entities = function(token_lines, font, view)
     for _, token in ipairs(line) do
       table.insert(result, Tablex.extend(
         special.text(
-          token.link and {LINK_COLOR, token.content} or token.content,
+          token.color and {token.color, token.content} or token.content,
           font,
           Vector({token.x, font:getHeight() * y})
         ),
