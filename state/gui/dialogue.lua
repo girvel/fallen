@@ -9,9 +9,9 @@ return function()
     options = nil,
 
     show = function(self, line)
-      self.text_entities = State:add_multiple(texting.generate_page(
-        line, State.gui.font, math.min(love.graphics.getWidth() - 40, State.gui.TEXT_MAX_SIZE[1]),
-        "dialogue_text"
+      self.text_entities = State:add_multiple(texting.generate_html_page(
+        "<pre>%s</pre>" % line, State.gui.font, math.min(love.graphics.getWidth() - 40, State.gui.TEXT_MAX_SIZE[1]),
+        "dialogue_text", {}
       ))
       self.background = State:add(special.dialogue_background())
     end,
