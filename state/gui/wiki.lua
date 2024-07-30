@@ -2,6 +2,8 @@ local texting = require("state.gui.texting")
 local html = require("state.gui.texting.html")
 
 
+local font_path = "assets/fonts/joystix.monospace-regular.otf"
+
 local load_wiki = function(path)
   local pattern = "^(.*).html$"
   local loaded_pages = Fun.iter(love.filesystem.getDirectoryItems(path))
@@ -31,6 +33,21 @@ return function()
     history = {},
     current_history_index = 0,
     text_entities = nil,
+
+    styles = {
+      default = {
+        font = love.graphics.newFont(font_path, 12),
+        color = Common.hex_color("ededed"),
+      },
+      header = {
+        font = love.graphics.newFont(font_path, 24),
+        color = Common.hex_color("ededed"),
+      },
+      header_prefix = {
+        font = love.graphics.newFont(font_path, 24),
+        color = Common.hex_color("5d375a"),
+      },
+    },
 
     show = function(self, id)
       assert(self.pages[id], "Wiki page \"%s\" does not exist" % id)
