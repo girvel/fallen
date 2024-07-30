@@ -1,4 +1,4 @@
-local wrapping = require("tech.stateful.gui.wrapping")
+local texting = require("tech.stateful.gui.texting")
 local player = require("library.player")  -- TODO move to tech
 local races = require("mech.races")
 local forms = require("tech.stateful.gui.character_creator.forms")
@@ -57,7 +57,7 @@ return function()
         .. self.forms.abilities(params)
         .. self.forms.class(params)
 
-      self.text_entities = State:add_multiple(wrapping.generate_page(
+      self.text_entities = State:add_multiple(texting.generate_page(
         text,
         self.font, math.min(love.graphics.getWidth() - 40, State.gui.TEXT_MAX_SIZE[1]),
         "character_creator"

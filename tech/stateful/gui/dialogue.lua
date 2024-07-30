@@ -1,4 +1,4 @@
-local wrapping = require("tech.stateful.gui.wrapping")
+local texting = require("tech.stateful.gui.texting")
 local special = require("tech.special")
 
 
@@ -9,7 +9,7 @@ return function()
     options = nil,
 
     show = function(self, line)
-      self.text_entities = State:add_multiple(wrapping.generate_page(
+      self.text_entities = State:add_multiple(texting.generate_page(
         line, State.gui.font, math.min(love.graphics.getWidth() - 40, State.gui.TEXT_MAX_SIZE[1]),
         "dialogue_text"
       ))

@@ -1,4 +1,4 @@
-local wrapping = require("tech.stateful.gui.wrapping")
+local texting = require("tech.stateful.gui.texting")
 
 
 local load_wiki = function(path)
@@ -38,7 +38,7 @@ return function()
 
       local page = self.pages[id] or "~ Нет информации ~"
 
-      self.text_entities = State:add_multiple(wrapping.generate_html_page(
+      self.text_entities = State:add_multiple(texting.generate_html_page(
         page, State.gui.font, State.gui.TEXT_MAX_SIZE[1], "wiki", {codex = self.codex}
       ))
     end,
