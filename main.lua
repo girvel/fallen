@@ -65,12 +65,12 @@ love.load = function(args)
 
   love.audio.stop()
   if not args.disable_ambient then
-    local doom = love.audio.newSource("assets/sounds/doom.wav", "static")
+    local doom = love.audio.newSource("assets/sounds/doom.mp3", "static")
     doom:setVolume(0.15)
     doom:setLooping(true)
     doom:play()
 
-    local engine = love.audio.newSource("assets/sounds/ship_engine.wav", "static")
+    local engine = love.audio.newSource("assets/sounds/ship_engine.mp3", "static")
     engine:setVolume(0.5)
     engine:setLooping(true)
     engine:play()
