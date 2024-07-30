@@ -7,9 +7,7 @@ return {
   factories = {
     -- tiles -- 
     _ = static.planks,
-    ["c"] = static.scripture,
-    s = static.sand,
-    w = static.walkway,
+    [","] = static.walkway,
 
     -- solids --
     ["#"] = static.wall,
@@ -17,8 +15,6 @@ return {
     S = static.smooth_wall,
     W = static.steel_wall,
     V = static.steel_wall_variant,
-
-    [","] = static.bushes,
 
     [">"] = static.pipe_horizontal,
     v = static.pipe_vertical,
@@ -38,6 +34,14 @@ return {
     p = static.device_panel,
     P = static.device_panel_broken,
     f = static.furnace,
+    t = static.table,
+    k = static.locker,
+    K = static.locker_damaged,
+    c = static.cabinet,
+    C = static.cabinet_damaged,
+    b = static.bed,
+    a = static.crate,
+    ["$"] = static.chest,
 
     M = static.mannequin,
     D = static.door,
@@ -53,6 +57,6 @@ return {
     d = weapons.dagger,
     r = weapons.rapier,
   },
-  transparents = Common.set("Ml@gdr>v<^\\/FB}{T+o1234LpP"),
-  throwables = Common.set("_csw"),
+  transparents = Common.set("Ml@gdr>v<^\\/FB}{T+o1234LpPtkKba$"),
+  throwables = Common.set("_-"),
 }
