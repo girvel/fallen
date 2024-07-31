@@ -14,7 +14,8 @@ return function()
         State:set_shader(shaders.black_and_white)
         api.wait_seconds(3)
         State:set_shader(shaders.black_and_white_and_red)
-        -- State:set_shader(nil)
+        api.wait_seconds(10)
+        State:set_shader(nil)
       end,
     },
   }
