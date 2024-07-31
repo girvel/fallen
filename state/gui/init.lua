@@ -94,7 +94,9 @@ get_dialogue_offset = function()
 end
 
 get_full_screen_text_offset = function()
-  return ((Vector({love.graphics.getDimensions()}) - State.gui.TEXT_MAX_SIZE) / 2):ceil()
+  local w, h = love.graphics.getDimensions()
+  local sx, sy = unpack(State.gui.TEXT_MAX_SIZE)
+  return (Vector({math.max(30, w - sx), math.max(30, h - sy)}) / 2):ceil()
 end
 
 return gui
