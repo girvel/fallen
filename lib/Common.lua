@@ -114,4 +114,8 @@ common.loop = function(v, loop)
   return (v - 1) % loop + 1
 end
 
+common.repr = function(t)
+  return getmetatable(t).__repr(t) or tostring(t)
+end
+
 return common

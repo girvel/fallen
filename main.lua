@@ -17,6 +17,8 @@ Vector = require("lib.vector")
 Grid = require("lib.grid")
 D = require("lib.d")
 
+local serpent = require("lib.serpent")
+
 local love_errorhandler = love.errorhandler
 love.errorhandler = function(msg)
   Log.fatal(debug.traceback("Error: " .. tostring(msg), 2):gsub("\n[^\n]+$", ""))
@@ -81,6 +83,21 @@ love.load = function(args)
   end
 
   Log.info("Game is loaded")
+
+  -- test function serialization
+  local f = function(x)
+    Log.trace(x)
+  end
+  loadstring(serpent.dump(f))()("Serialization works!")
+
+  -- test LOVE2D data serialization
+  local image = love.graphics.newImage("assets/sprites/bushes.png")
+  -- Log.trace(loadstring(serpent.dump(image))():getDimensions())
+  -- DOES NOT WORK
+
+  -- test dump size
+  local state_dump = serpent.dump(State)
+  Log.trace("Serialized state is %.2f KB" % (#state_dump / 1024))
 end
 
 love.run = function()

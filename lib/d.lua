@@ -28,7 +28,7 @@ module.die = function(sides_n)
       return result
     end,
   }, {
-    __tostring = function(self)
+    __repr = function(self)
       return "d%s%s%s" % {
         self.sides_n,
         self.advantage and ", advantage" or "",
@@ -87,7 +87,7 @@ d_methods.roll = function(self)
     table.concat(
       Fun.zip(self.dice, rolls)
         :map(function(d, r)
-          return "%s (%s)" % {r, tostring(d)}
+          return "%s (%s)" % {r, Common.repr(d)}
         end)
         :totable(),
       " + "

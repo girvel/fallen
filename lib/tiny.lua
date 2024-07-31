@@ -857,10 +857,7 @@ worldMetaTable = {
         getEntityCount = tiny.getEntityCount,
         getSystemCount = tiny.getSystemCount,
         setSystemIndex = tiny.setSystemIndex
-    },
-    __tostring = function()
-        return "<tiny-ecs_World>"
-    end
+    }
 }
 
 return tiny

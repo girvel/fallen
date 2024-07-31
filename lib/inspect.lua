@@ -274,8 +274,10 @@ function Inspector:putValue(v)
       local t = v
 
       local mt = getmetatable(t)
-      if t == inspect.KEY or t == inspect.METATABLE or mt and mt.__tostring then
+      if t == inspect.KEY or t == inspect.METATABLE then
          puts(buf, tostring(t))
+      elseif mt and mt.__repr then
+         puts(buf, Common.repr(t))
       elseif self.level >= self.depth then
          puts(buf, '{...}')
       else
