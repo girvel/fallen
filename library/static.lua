@@ -226,7 +226,7 @@ module.leaking_pipe_left_down = function()
           sfx.steam("right"),
           {position = self.position}
         ))
-        steam_hissing_sound:clone():play()
+        State.audio:play(self, steam_hissing_sound:clone())
       end,
     }
   )
