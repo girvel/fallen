@@ -66,11 +66,12 @@ love.load = function(args)
   end
 
   love.audio.stop()
+  love.audio.setDistanceModel("linear")
   if not args.disable_ambient then
     local engine = love.audio.newSource("assets/sounds/ship_engine.mp3", "static")
-    engine:setVolume(0.5)
+    engine:setVolume(1)
     engine:setLooping(true)
-    engine:play()
+    State.audio:play({position = Vector({12, 64})}, engine, 10, 50)
   end
 
   -- love.graphics.setShader(love.graphics.newShader([[
