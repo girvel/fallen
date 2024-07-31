@@ -87,7 +87,7 @@ return function()
             break
           end
         end
-        rails.dreamers_talked_to = rails.dreamers_talked_to + 1
+        rails.dreamers_talked_to[1] = true
       end,
     },
     {
@@ -133,7 +133,7 @@ return function()
             break
           end
         end
-        rails.dreamers_talked_to = rails.dreamers_talked_to + 1
+        rails.dreamers_talked_to[2] = true
         rails.entities[2]:rotate(old_direction)
       end,
     },
@@ -174,7 +174,7 @@ return function()
             break
           end
         end
-        rails.dreamers_talked_to = rails.dreamers_talked_to + 1
+        rails.dreamers_talked_to[3] = true
       end,
     },
     {
@@ -231,14 +231,18 @@ return function()
           end
         end
         rails.entities[4]:rotate(old_direction)
-        rails.dreamers_talked_to = rails.dreamers_talked_to + 1
+        rails.dreamers_talked_to[4] = true
       end,
     },
 
     talked_to_everybody = {
       name = "Player talked to all dreamers",
       enabled = true,
-      start_predicate = function(self, rails) return rails.dreamers_talked_to == 4 end,
+      start_predicate = function(self, rails)
+        return Fun.range(4)
+          :filter(function(i) return State:exists(rails.entities[i]) end)
+          :all(function(i) return rails.dreamers_talked_to[i] end)
+      end,
       run = function(self, rails)
         self.enabled = false
         api.discover_wiki({talked_to_dreamers = true})

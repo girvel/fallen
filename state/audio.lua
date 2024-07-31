@@ -13,7 +13,7 @@ return function()
     update = function(self)
       local x, y = unpack(-Query(State.player).position or {-999, -999})
       love.audio.setPosition(x, y, 0)
-      if self.disable_ambient or true then return end
+      if self.disable_ambient then return end
       local current_track = self.current_music
       if -Query(current_track):isPlaying() then return end
       while #self.music > 1 and self.current_music == current_track do

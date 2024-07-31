@@ -65,7 +65,7 @@ local base_attack = function(entity, target, slot)
   State:register_agression(entity, target)
 
   entity:rotate(Vector.name_from_direction((target.position - entity.position):normalized()))
-  random.choice(whoosh):play()
+  State.audio:play(entity, random.choice(whoosh))
   entity:animate(slot .. "_attack")
   entity:when_animation_ends(function()
     if not attacking.attack(
@@ -75,7 +75,7 @@ local base_attack = function(entity, target, slot)
     ) then return end
 
     if target and target.sounds and target.sounds.hit then
-      random.choice(target.sounds.hit):play()
+      State.audio:play(target, random.choice(target.sounds.hit))
     end
 
     if target.hardness and not -Query(entity).inventory[slot] then
@@ -153,7 +153,7 @@ actions.move = {
 
     local tile = State.grids.tiles[entity.position]
     if tile and tile.sounds and tile.sounds.move then
-      random.choice(tile.sounds.move):play()
+      State.audio:play(tile, random.choice(tile.sounds.move))
     end
 
     return true

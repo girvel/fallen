@@ -167,7 +167,7 @@ module.pipe_valve = function(leaking_pipe_position)
     interactive(function(self, other)
       local target = State.grids.solids[leaking_pipe_position]
       self:animate("rotate")
-      random.choice(valve_rotating_sounds):play()
+      State.audio:play(self, random.choice(valve_rotating_sounds))
       self:when_animation_ends(function()
         target.overflow_counter = 0
         target:burst_with_steam()
@@ -205,7 +205,7 @@ module.leaking_pipe_left_down = function()
         self.overflow_counter = self.overflow_counter + dt
 
         if self.overflow_counter >= 60 then
-          self.sound_loop:play()
+          State.audio:play(self, self.sound_loop)
           if Common.relative_period(1, dt, self, "steam") then
             self:burst_with_steam()
           end

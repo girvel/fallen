@@ -30,7 +30,7 @@ return function()
       self.entities[1]:animate("holding")
       self.entities[1].animation.paused = true
 
-      self.dreamers_talked_to = 0
+      self.dreamers_talked_to = {}
       self.old_hp = Fun.range(4)
         :map(function(i) return self.entities[i].hp end)
         :totable()
