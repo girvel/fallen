@@ -34,6 +34,14 @@ module_mt.__call = function(_, systems, debug_mode)
     agression_log = {},
     _next_agression_log = {},
 
+    shader = nil,
+
+    set_shader = function(self, shader)
+      Query(self.shader):deactivate()
+      self.shader = shader
+      love.graphics.setShader(-Query(shader).love_shader)
+    end,
+
     add = function(self, entity)
       self.world:add(entity)
       self.entities[entity] = true

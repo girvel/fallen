@@ -94,6 +94,7 @@ return Tiny.sortedProcessingSystem({
     if is_other_hand_in_background then display_slot("other_hand") end
 
     local x, y = unpack(offset_position)
+    Query(State.shader):preprocess(entity)
     if entity.sprite.quad then
       love.graphics.draw(entity.sprite.image, entity.sprite.quad, x, y, 0, scale)
     else
