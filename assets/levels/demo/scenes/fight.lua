@@ -152,6 +152,7 @@ return function()
         self.enabled = false
         api.notification("Задача выполнена", true)
         api.notification("Ожидайте следующее задание", true)
+        State.gui.wiki.quests_states.detective = 2
       end,
     },
 

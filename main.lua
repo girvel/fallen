@@ -26,6 +26,7 @@ love.graphics.setDefaultFilter("nearest", "nearest")
 love.keyboard.setKeyRepeat(true)
 
 local palette = require("library.palette")
+local quests = require("library.quests")
 local state = require("state")
 local cli = require("tech.cli")
 
@@ -53,6 +54,7 @@ love.load = function(args)
       return acc
     end, {})
   State:load_level("assets/levels/" .. args.level, palette)
+  State.gui.wiki.quests = quests
 
   State.audio.disable_ambient = args.disable_ambient
 

@@ -17,6 +17,7 @@ return function()
         api.center_camera()
 
         api.notification("Вычислить и устранить диверсанта", true)
+        State.gui.wiki.quests_states.detective = 1
 
         api.narration("Резкий запах мазута, керосина и ржавчины заставляет непроизвольно зажмуриться.")
         api.narration("Помещение забито трубами и приборами непонятного назначения.")

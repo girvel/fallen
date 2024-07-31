@@ -187,5 +187,10 @@ return function(modes, debug_mode)
     pre_action = function() State.gui.wiki:show("codex") end,
   })
 
+  define_hotkey(hotkeys, {"free", "combat", "dialogue", "dialogue_options"}, {"j"}, {
+    name = "открыть журнал",
+    pre_action = function() State.gui.wiki:show_journal() end,
+  })
+
   return hotkeys
 end

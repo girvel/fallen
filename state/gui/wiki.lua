@@ -34,6 +34,9 @@ return function()
     current_history_index = 0,
     text_entities = nil,
 
+    quests = {},
+    quests_states = {},
+
     styles = {
       default = {
         font = love.graphics.newFont(font_path, 12),
@@ -44,6 +47,13 @@ return function()
       },
       h1_prefix = {
         font = love.graphics.newFont(font_path, 24),
+        color = Common.hex_color("5d375a"),
+      },
+      h2 = {
+        font = love.graphics.newFont(font_path, 16),
+      },
+      h2_prefix = {
+        font = love.graphics.newFont(font_path, 16),
         color = Common.hex_color("5d375a"),
       },
       a = {
@@ -61,6 +71,38 @@ return function()
 
       self.current_history_index = self.current_history_index + 1
       self:_render_current_page()
+    end,
+
+    show_journal = function(self)
+      self.history = {"journal"}
+      self.current_history_index = 1
+      self.pages.journal = [[
+        <html>
+          <body>
+            <h1>Журнал задач</h1>
+            %s
+          </body>
+        </html>
+      ]] % Fun.iter(self.quests)
+        :filter(function(name) return self.quests_states[name] end)
+        :map(function(name, quest) return [[
+          <ul>
+            <h2><span color="%s">%s</span></h2>
+            %s
+          </ul>
+        ]] % {
+          self.quests_states[name] > #quest.tasks and "8b7c99" or "ededed",
+          quest.header,
+          Fun.iter(quest.tasks)
+            :take_n(self.quests_states[name])
+            :enumerate()
+            :map(function(i, task) return [[
+              <span color="%s"><li>%s</li></span>
+            ]] % {i == self.quests_states[name] and "ededed" or "8b7c99", task} end)
+            :reduce(function(sum, v) return v .. sum end, "")
+        } end)
+        :reduce(Fun.op.concat, "")
+        self:_render_current_page()
     end,
 
     _render_current_page = function(self)
