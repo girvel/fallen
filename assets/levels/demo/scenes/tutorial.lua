@@ -7,7 +7,7 @@ return function()
     {
       name = "Test shaders",
       enabled = true,
-      start_predicate = function(self, rails, dt) return true end,
+      start_predicate = function(self, rails, dt) return false end,
 
       run = function(self, rails, dt)
         self.enabled = false

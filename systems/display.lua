@@ -56,6 +56,7 @@ return Tiny.sortedProcessingSystem({
   end,
 
   _process_text_sprite = function(self, entity, offset_position)
+    if State.shader then return end
     love.graphics.print(entity.sprite.text, entity.sprite.font, unpack(offset_position))
 
     if entity.link_flag then
@@ -108,7 +109,7 @@ return Tiny.sortedProcessingSystem({
 
   postProcess = function(self)
     local mode = State:get_mode()
-    if Tablex.contains({"reading"}, mode) then return end
+    if Tablex.contains({"reading"}, mode) or State.shader then return end
     if mode == "death" then return self:_display_death_message() end
     self:_display_text_info()
   end,
