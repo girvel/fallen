@@ -26,6 +26,7 @@ module_mt.__call = function(_, systems, debug_mode)
 
     gui = require("state.gui")(),
     hotkeys = require("state.hotkeys")(modes, debug_mode),
+    audio = require("state.audio")(),
 
     entities = {},
     dependencies = {},

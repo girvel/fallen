@@ -80,7 +80,6 @@ common.volumed_sounds = function(path_beginning, volume)
     :map(function(filename) return directory .. "/" .. filename end)
     :filter(function(path) return path:startsWith(path_beginning) end)
     :map(function(path)
-      Log.trace(path)
       local result = love.audio.newSource(path, "static")
       result:setVolume(volume)
       return result

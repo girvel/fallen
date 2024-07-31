@@ -54,6 +54,8 @@ love.load = function(args)
     end, {})
   State:load_level("assets/levels/" .. args.level, palette)
 
+  State.audio.disable_ambient = args.disable_ambient
+
   for _, scene in ipairs(args.checkpoints) do
     State.rails.scenes[scene].enabled = true
   end
@@ -65,11 +67,6 @@ love.load = function(args)
 
   love.audio.stop()
   if not args.disable_ambient then
-    local doom = love.audio.newSource("assets/sounds/doom.mp3", "static")
-    doom:setVolume(0.15)
-    doom:setLooping(true)
-    doom:play()
-
     local engine = love.audio.newSource("assets/sounds/ship_engine.mp3", "static")
     engine:setVolume(0.5)
     engine:setLooping(true)

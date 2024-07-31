@@ -12,6 +12,7 @@ return {
   require("systems.timed_death"),
   require("systems.drift"),
   require("systems.railing"),
+  require("systems.ambience"),
 
   -- love.draw systems --
   require("systems.display"),
