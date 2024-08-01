@@ -48,7 +48,7 @@ module.door = function(disable_interaction)
         self:animate("open")
         self:when_animation_ends(function(_)
           self.animation.pack = open_door_pack
-          level.change_layer(State.grids, self, "tiles")
+          level.change_layer(State.grids, self, "above_solids")
           self.is_open = true
         end)
       end,

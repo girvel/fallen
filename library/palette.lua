@@ -57,6 +57,6 @@ return {
     d = weapons.dagger,
     r = weapons.rapier,
   },
-  transparents = Common.set("Ml@gdr>v<^\\/FB}{T+o1234LpPtkKba$"),
+  transparents = Common.set("MDl@gdr>v<^\\/FB}{T+o1234LpPtkKba$"),
   throwables = Common.set("_,"),
 }

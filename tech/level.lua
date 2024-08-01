@@ -1,6 +1,6 @@
 local module = {}
 
-module.GRID_LAYERS = {"tiles", "items", "solids", "sfx"}
+module.GRID_LAYERS = {"tiles", "items", "solids", "above_solids", "sfx"}
 
 module.move = function(grid, entity, position)
   if not grid:can_fit(position) or grid[position] then return false end
