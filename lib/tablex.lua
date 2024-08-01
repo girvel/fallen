@@ -83,7 +83,7 @@ end
 tablex.remove = function(t, item)
   for k, v in pairs(t) do
     if v == item then
-      if math.ceil(k) == k then
+      if type(k) == "number" and math.ceil(k) == k then
         table.remove(t, k)
       else
         t[k] = nil
