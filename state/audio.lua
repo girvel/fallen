@@ -19,7 +19,7 @@ return function()
       while #self.music > 1 and self.current_music == current_track do
         self.current_music = random.choice(self.music)
       end
-      self.current_music:play()
+      self:play_static(self.current_music)
     end,
 
     sound_sizes = {
@@ -41,6 +41,11 @@ return function()
       sound:setPosition(x, y, 0)
       sound:setAttenuationDistances(unpack(limits))
       sound:setRolloff(2)
+      sound:play()
+    end,
+
+    play_static = function(self, sound)
+      if sound:getChannelCount() == 1 then sound:setRelative(true) end
       sound:play()
     end,
   }

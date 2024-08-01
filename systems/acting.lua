@@ -66,7 +66,7 @@ return Tiny.processingSystem({
       Log.info("%s's turn" % Common.get_name(State.combat:get_current()))
 
       if State.combat:get_current() == State.player then
-        your_move_sound:play()
+        State.audio:play_static(your_move_sound)
       end
     end
   end,

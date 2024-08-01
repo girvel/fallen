@@ -4,7 +4,7 @@ local random = require("utils.random")
 
 
 --local skip_sounds = Common.volumed_sounds("assets/sounds/click_modern", 0.5)
-local skip_sounds = Common.volumed_sounds("assets/sounds/click_retro", 0.8)
+local skip_sounds = Common.volumed_sounds("assets/sounds/click_retro", 0.2)
 
 return function()
   return {
@@ -23,7 +23,7 @@ return function()
 
     skip = function(self)
       if not self.text_entities then return end
-      random.choice(skip_sounds):clone():play()
+      State.audio:play_static(random.choice(skip_sounds):clone())
       State:remove_multiple(self.text_entities)
       if self.background then State:remove(self.background) end
       self.text_entities = nil
