@@ -1,30 +1,25 @@
-local static_sprite = require("tech.static_sprite")
 local class = require("mech.class")
 local perk = require("mech.perk")
 local mech = require("mech")
+local fx = require("tech.fx")
 
 
 local module_mt = {}
 local fighter = setmetatable({}, module_mt)
 
-fighter.second_wind = Tablex.extend(
-  static_sprite("assets/sprites/icons/second_wind.png"),
-  {
-    codename = "second_wind",
-    size = Vector.one * 0.67,
-    on_click = function(self, entity) return entity:act(self) end,
-    get_availability = function(self, entity)
-      return entity.resources.bonus_actions > 0
-        and entity.resources.second_wind > 0
-    end,
-    _run = function(self, entity)
-      entity.resources.bonus_actions = entity.resources.bonus_actions - 1
-      entity.resources.second_wind = entity.resources.second_wind - 1
-
-      entity.hp = math.min(entity:get_max_hp(), entity.hp + (D(10) + entity.level):roll())
-    end,
-  }
-)
+fighter.second_wind = {
+  codename = "second_wind",
+  get_availability = function(self, entity)
+    return entity.resources.bonus_actions > 0
+      and entity.resources.second_wind > 0
+  end,
+  _run = function(self, entity)
+    entity.resources.bonus_actions = entity.resources.bonus_actions - 1
+    entity.resources.second_wind = entity.resources.second_wind - 1
+    State:add(fx("assets/sprites/fx/second_wind", "fx_behind", entity.position))
+    entity.hp = math.min(entity:get_max_hp(), entity.hp + (D(10) + entity.level):roll())
+  end,
+}
 
 fighter.action_surge = {
   codename = "action_surge",
@@ -33,6 +28,7 @@ fighter.action_surge = {
   end,
   _run = function(self, entity)
     entity.resources.action_surge = entity.resources.action_surge - 1
+    State:add(fx("assets/sprites/fx/action_surge_proto", "fx_behind", entity.position))
     entity.resources.actions = entity.resources.actions + 1
   end,
 }
