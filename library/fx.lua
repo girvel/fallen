@@ -14,7 +14,7 @@ module.steam = function(direction)
     {
       boring_flag = true,
       codename = "steam",
-      layer = "sfx",
+      layer = "fx",
       view = "scene",
       direction = direction,
 

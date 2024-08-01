@@ -3,7 +3,7 @@ local animated = require("tech.animated")
 local level = require("tech.level")
 local static_sprite = require("tech.static_sprite")
 local atlas_sprite = require("tech.atlas_sprite")
-local sfx = require("library.sfx")
+local library_fx = require("library.fx")
 local random = require("utils.random")
 
 
@@ -224,7 +224,7 @@ module.leaking_pipe_left_down = function()
         if self.paused then return end
 
         State:add(Tablex.extend(
-          sfx.steam("right"),
+          library_fx.steam("right"),
           {position = self.position}
         ))
         State.audio:play(self, steam_hissing_sound:clone())

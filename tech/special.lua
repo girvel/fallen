@@ -59,7 +59,7 @@ end
 local highlight_pack = animated.load_pack("assets/sprites/highlight")
 
 module.highlight = function()
-  return Tablex.extend(animated(highlight_pack), {layer = "sfx", view = "scene"})
+  return Tablex.extend(animated(highlight_pack), {layer = "fx", view = "scene"})
 end
 
 module.hp_bar = function()
