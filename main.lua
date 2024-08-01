@@ -75,7 +75,7 @@ love.load = function(args)
     local engine = love.audio.newSource("assets/sounds/ship_engine.mp3", "static")
     engine:setVolume(1)
     engine:setLooping(true)
-    State.audio:play({position = Vector({12, 64})}, engine, 10, 50)
+    State.audio:play({position = Vector({12, 64})}, engine, "large")
   end
 
   if not args.debug then

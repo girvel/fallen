@@ -22,10 +22,24 @@ return function()
       self.current_music:play()
     end,
 
-    play = function(self, source, sound, min, max)
+    sound_sizes = {
+      small = {
+        5, 10,
+      },
+      medium = {
+        7, 20,
+      },
+      large = {
+        10, 30,
+      },
+    },
+
+    play = function(self, source, sound, size)
+      local limits = self.sound_sizes[size or "small"]
+      assert(limits, "Incorrect sound size %s; sounds can be small, medium or large" % tostring(size))
       local x, y = unpack(source.position)
       sound:setPosition(x, y, 0)
-      sound:setAttenuationDistances(min or 5, max or 20)
+      sound:setAttenuationDistances(unpack(limits))
       sound:play()
     end,
   }

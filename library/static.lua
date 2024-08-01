@@ -167,7 +167,7 @@ module.pipe_valve = function(leaking_pipe_position)
     interactive(function(self, other)
       local target = State.grids.solids[leaking_pipe_position]
       self:animate("rotate")
-      State.audio:play(self, random.choice(valve_rotating_sounds))
+      State.audio:play(self, random.choice(valve_rotating_sounds), "medium")
       self:when_animation_ends(function()
         target.overflow_counter = 0
         target:burst_with_steam()
