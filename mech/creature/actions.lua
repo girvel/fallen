@@ -20,17 +20,9 @@ local get_melee_attack_roll = function(entity, slot)
 
   local weapon = entity.inventory[slot]
   if not weapon then
-    return roll + mech.get_modifier(entity.abilities.strength)
-  end
-
-  roll = roll + weapon.bonus
-  if weapon.tags.finesse then
-    roll = roll + mech.get_modifier(math.max(
-      entity.abilities.strength,
-      entity.abilities.dexterity
-    ))
-  else
     roll = roll + mech.get_modifier(entity.abilities.strength)
+  else
+    roll = roll + weapon.bonus + mech.get_melee_modifier(entity, slot)
   end
 
   return entity:get_effect("modify_attack_roll", roll)
@@ -41,22 +33,13 @@ local get_melee_damage_roll = function(entity, slot)
     return D.roll({}, mech.get_modifier(entity.abilities.strength))
   end
 
-  local ability_modifier = mech.get_modifier(
-    entity.inventory[slot].tags.finesse
-    and math.max(
-      entity.abilities.strength,
-      entity.abilities.dexterity
-    )
-    or entity.abilities.strength
-  )
-
   local roll = entity.inventory[slot].damage_roll + entity.inventory[slot].bonus
 
   if slot == "main_hand" then
-    roll = roll + ability_modifier
+    roll = roll + mech.get_melee_modifier(entity, slot)
   end
 
-  return entity:get_effect("modify_damage_roll", roll)
+  return entity:get_effect("modify_damage_roll", roll, slot)
 end
 
 local whoosh = Common.volumed_sounds("assets/sounds/whoosh", 0.05)

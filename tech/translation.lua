@@ -16,6 +16,7 @@ return {
     [fighter.fighting_style] = {
       two_handed_style = "бой двуручным оружием",
       duelist = "дуэлянт",
+      two_weapon_fighting = "бой двумя оружиями",
     },
     [feats.perk] = {
       savage_attacker = "свирепый атакующий",

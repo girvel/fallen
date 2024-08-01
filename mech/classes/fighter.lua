@@ -1,6 +1,7 @@
 local static_sprite = require("tech.static_sprite")
 local class = require("mech.class")
 local perk = require("mech.perk")
+local mech = require("mech")
 
 
 local module_mt = {}
@@ -57,6 +58,17 @@ fighter.fighting_style = perk.choice({
         return roll
       end
       return roll + 2
+    end,
+  },
+
+  {
+    codename = "two_weapon_fighting",
+    modify_damage_roll = function(entity, roll, slot)
+      local weapon = entity.inventory.other_hand
+      if not weapon or slot ~= "other_hand" then
+        return roll
+      end
+      return roll + mech.get_melee_modifier(entity, slot)
     end,
   },
 })

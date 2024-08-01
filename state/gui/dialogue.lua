@@ -4,7 +4,7 @@ local random = require("utils.random")
 
 
 --local skip_sounds = Common.volumed_sounds("assets/sounds/click_modern", 0.5)
-local skip_sounds = Common.volumed_sounds("assets/sounds/click_retro", 0.4)
+local skip_sounds = Common.volumed_sounds("assets/sounds/click_retro", 0.8)
 
 return function()
   return {

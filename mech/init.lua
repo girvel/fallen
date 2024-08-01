@@ -24,4 +24,11 @@ module.are_hostile = function(first, second)
   return (first.faction or second.faction) and first.faction ~= second.faction
 end
 
+module.get_melee_modifier = function(entity, slot)
+  if -Query(entity).inventory[slot].tags.finesse then
+    return module.get_modifier(math.max(entity.abilities.strength, entity.abilities.dexterity))
+  end
+  return module.get_modifier(entity.abilities.strength)
+end
+
 return module
