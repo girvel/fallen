@@ -1,3 +1,7 @@
+local mech = require("mech")
+local fx = require("tech.fx")
+
+
 local module_mt = {}
 local combat = setmetatable({}, module_mt)
 
@@ -5,6 +9,9 @@ combat.TURN_END_SIGNAL = 666
 combat.WORLD_TURN = {codename = "WORLD_TURN"}
 
 module_mt.__call = function(_, list)
+  Fun.iter(list)
+    :filter(function(e) return mech.are_hostile(e, State.player) end)
+    :each(function(e) State:add(fx("assets/sprites/fx/aggression", "sfx", e.position)) end)
   return {
     list = Fun.iter(list)
       :filter(function(e) return State:exists(e) end)
