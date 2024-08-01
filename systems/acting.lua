@@ -1,8 +1,23 @@
 local combat = require("tech.combat")
 local fx = require("tech.fx")
+local animated = require("tech.animated")
+local item = require("tech.item")
 
 
 local your_move_sound = Common.volumed_sounds("assets/sounds/your_move1", 0.5)[1]
+
+local blood = function()
+  return Tablex.extend(
+    item.mixin(),
+    animated("assets/sprites/hurt", "atlas"),
+    {
+      direction = "right",
+      name = "Кровь",
+      codename = "blood",
+      slot = "hurt",
+    }
+  )
+end
 
 return Tiny.processingSystem({
   codename = "acting",
@@ -31,6 +46,21 @@ return Tiny.processingSystem({
   end,
 
   process = function(self, entity, event)
+    if entity.hp then
+      if entity.hp <= entity:get_max_hp() / 2 then
+        if not entity.inventory.hurt then
+          local hurt = State:add(blood())
+          hurt:animate()
+          entity.inventory.hurt = hurt
+        end
+      else
+        if entity.inventory.hurt then
+          State:remove(entity.inventory.hurt)
+          entity.inventory.hurt = nil
+        end
+      end
+    end
+
     Query(entity.ai).observe(entity, event)
     if not State.combat then
       entity.ai.run(entity, event)

@@ -50,6 +50,8 @@ module_mt.__call = function(_, abilities, race, build, feat)
   result.inventory.main_hand = weapons.dagger()
   result.inventory.other_hand = weapons.gas_key()
 
+  result.hp = 1  -- TODO RM
+
   return result
 end
 

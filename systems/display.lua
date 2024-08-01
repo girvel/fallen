@@ -86,6 +86,7 @@ return Tiny.sortedProcessingSystem({
         anchor_offset = Vector.zero
       end
       local wx, wy = unpack(offset_position + anchor_offset)
+      if not item_sprite.image then Log.trace(entity.inventory[slot].animation) end
       love.graphics.draw(item_sprite.image, wx, wy, 0, scale)
     end
 
@@ -102,6 +103,7 @@ return Tiny.sortedProcessingSystem({
       love.graphics.draw(entity.sprite.image, x, y, 0, scale)
     end
 
+    display_slot("hurt")
     display_slot("gloves")
     if not is_main_hand_in_background then display_slot("main_hand") end
     if not is_other_hand_in_background then display_slot("other_hand") end

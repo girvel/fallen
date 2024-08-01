@@ -1,4 +1,5 @@
 local atlas_sprite = require("tech.atlas_sprite")
+local constants = require("tech.constants")
 
 
 local module_mt = {}
@@ -37,10 +38,12 @@ local animation_methods = {
   end
 }
 
-module_mt.__call = function(self, pack)
+module_mt.__call = function(self, pack, pack_type)
   if type(pack) == "string" then
     if not self._packs_cache[pack] then
-      self._packs_cache[pack] = module.load_pack(pack)
+      self._packs_cache[pack] = pack_type == "atlas"
+        and module.load_atlas_pack(pack)
+        or module.load_pack(pack)
     end
     pack = self._packs_cache[pack]
   end
@@ -55,6 +58,7 @@ module_mt.__call = function(self, pack)
   }, animation_methods)
 
   result:animate("idle")
+  if pack_type == "atlas" then Log.trace(pack) end
   return result
 end
 
