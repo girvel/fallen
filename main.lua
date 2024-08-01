@@ -70,7 +70,7 @@ love.load = function(args)
   end
 
   love.audio.stop()
-  love.audio.setDistanceModel("linear")
+  love.audio.setDistanceModel("exponent")
   if not args.disable_ambient then
     local engine = love.audio.newSource("assets/sounds/ship_engine.mp3", "static")
     engine:setVolume(1)

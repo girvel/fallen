@@ -24,13 +24,13 @@ return function()
 
     sound_sizes = {
       small = {
-        5, 10,
+        1, 10,
       },
       medium = {
         7, 20,
       },
       large = {
-        10, 30,
+        15, 30,
       },
     },
 
@@ -40,6 +40,7 @@ return function()
       local x, y = unpack(source.position)
       sound:setPosition(x, y, 0)
       sound:setAttenuationDistances(unpack(limits))
+      sound:setRolloff(2)
       sound:play()
     end,
   }
