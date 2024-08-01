@@ -109,12 +109,6 @@ return function()
     end,
 
     get_text = function(self)
-      local max = State.player and Tablex.extend({},
-        State.player:get_resources("move"),
-        State.player:get_resources("short"),
-        State.player:get_resources("long")
-      ) or nil
-
       local result = {}
 
       local append = function(content)
@@ -150,6 +144,12 @@ return function()
       end
 
       if State.player then
+        local max = Tablex.extend({},
+          State.player:get_resources("move"),
+          State.player:get_resources("short"),
+          State.player:get_resources("long")
+        )
+
         append("Ресурсы:\n" .. table.concat(
           Fun.iter(State.player.resources)
             :map(function(k, v)
@@ -217,7 +217,7 @@ return function()
       if State.player then
         local interaction = interactive.get_for(State.player)
         if interaction then
-          append("\n\nСмотрит на " .. Common.get_name(interaction))
+          append({{1, 1, 1}, "\n\nСмотрит на " .. Common.get_name(interaction)})
         end
       end
 

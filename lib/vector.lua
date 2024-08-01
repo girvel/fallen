@@ -76,7 +76,7 @@ vector_mt.__gt = function(self, other)
   return other < self
 end
 
-vector_mt.__repr = function(self)
+vector_mt.__tostring = function(self)
   return "{" .. tostring(self[1]) .. "; " .. tostring(self[2]) .. "}"
 end
 
