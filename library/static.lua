@@ -32,13 +32,14 @@ end
 local closed_door_pack = animated.load_pack("assets/sprites/closed_door")
 local open_door_pack = animated.load_pack("assets/sprites/open_door")
 
-module.door = function(disable_interaction)
+module.door = function(args)
+  args = args or {}
   return Tablex.extend(
     animated(closed_door_pack),
-    disable_interaction and {} or interactive(function(self)
+    args.locked and {} or interactive(function(self)
       self:open()
       self.interact = nil
-    end),
+    end, not args.highlighted),
     {
       layer = "solids",
       view = "scene",
