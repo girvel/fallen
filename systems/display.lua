@@ -87,7 +87,6 @@ return Tiny.sortedProcessingSystem({
         anchor_offset = Vector.zero
       end
       local wx, wy = unpack(offset_position + anchor_offset)
-      if not item_sprite.image then Log.trace(entity.inventory[slot].animation) end
       love.graphics.draw(item_sprite.image, wx, wy, 0, scale)
     end
 

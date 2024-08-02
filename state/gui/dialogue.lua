@@ -4,7 +4,7 @@ local random = require("utils.random")
 
 
 --local skip_sounds = Common.volumed_sounds("assets/sounds/click_modern", 0.5)
-local skip_sounds = Common.volumed_sounds("assets/sounds/click_retro", 0.2)
+local skip_sounds = Common.volumed_sounds("assets/sounds/click_retro", 0.05)
 
 return function()
   return {
@@ -35,8 +35,15 @@ return function()
       self:show(Fun.iter(self.options)
         :enumerate()
         :map(function(i, o)
-          return "%s %s. %s\n" % {
-            self.selected_option_i == i and ">" or " ", i, o
+          return '<option on_click="%s" on_hover="%s">%s %s. %s</option>\n' % {
+            "State.gui.dialogue.selected_option_i = %s; State.gui.dialogue:options_select()" % i,
+            [[
+              if State.gui.dialogue.selected_option_i ~= %s then
+                State.gui.dialogue.selected_option_i = %s
+                State.gui.dialogue:options_refresh()
+              end
+            ]] % {i, i},
+            self.selected_option_i == i and "&gt;" or " ", i, o
           }
         end)
         :reduce(Fun.op.concat, "")

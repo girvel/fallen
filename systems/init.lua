@@ -7,6 +7,7 @@ return {
   require("systems.detect_clicks"),
 
   -- love.update systems --
+  require("systems.detect_hover"),
   require("systems.acting"),
   require("systems.animation"),
   require("systems.timed_death"),

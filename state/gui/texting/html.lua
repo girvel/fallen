@@ -31,6 +31,10 @@ local transformers = {
     children = Tablex.concat(unpack(children))
     return Tablex.concat(children, {{content = "\n\n"}})
   end,
+  option = function(node, children, styles)
+    children = Tablex.concat(unpack(children))
+    return Tablex.concat(children, {{content = "\n"}})
+  end,
   li = function(node, children, styles)
     children = Tablex.concat(unpack(children))
     return Tablex.concat({{content = "- "}}, children, {{content = "\n"}})
@@ -73,12 +77,27 @@ local get_availability = function(root, args)
   return predicate(args)
 end
 
+local assign_event = function(event, root, content)
+  if root.attributes[event] then
+    local f, err = loadstring(root.attributes[event])
+    if f then
+      Fun.iter(content):each(function(token) token[event] = f end)
+    else
+      Log.error("Error loading %s attribute\n%s\n%s" % {
+        event, root:gettext(), err
+      })
+    end
+  end
+end
+
 local postprocess = function(root, content, styles)
   if root.attributes.color then
     Fun.iter(content):each(function(token)
       token.color = Common.hex_color(root.attributes.color)
     end)
   end
+  assign_event("on_click", root, content)
+  assign_event("on_hover", root, content)
   return Fun.iter(content):map(function(token)
     return Tablex.extend({}, styles.default, token)
   end):totable()
@@ -91,7 +110,7 @@ visit_html = function(root, args, styles)
     :map(function(node) return visit_html(node, args, styles) end)
     :totable()
   if #nodes == 0 then
-    nodes = {{{content = root:getcontent()}}}
+    nodes = {{{content = root:getcontent():gsub("&gt;", ">"):gsub("&lt;", "<")}}}
   end
   local result = (transformers[root.name] or transform_default_node)(root, nodes, styles)
   return postprocess(root, result, styles)

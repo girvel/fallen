@@ -4,36 +4,17 @@ local html = require("state.gui.texting.html")
 local wrap = require("state.gui.texting.wrap")
 
 
--- each token is in format {content: string, link: string?}
-
-local parse_markdown = function(content)
-  local result = {}
-  while #content > 0 do
-    local i, j, link_text, link = content:find("%[([^%]]*)%]%(([^%)]*)%)")
-    if not i then
-      table.insert(result, {
-        content = content
-      })
-      content = ""
-    else
-      table.insert(result, {
-        content = content:sub(1, i - 1),
-      })
-      table.insert(result, {
-        content = link_text:gsub(" ", utf8.char(tonumber("00A0", 16))),
-        link = link,
-      })
-      content = content:sub(j + 1)
-    end
-  end
-  return result
-end
-
 local generate_entities = function(token_lines, view)
   local result = {}
   for y, line in ipairs(token_lines) do
     for _, token in ipairs(line) do
+      local clean_copy = Tablex.extend({}, token)
+      Fun.iter("x y link font content color" / " "):each(function(k)
+        clean_copy[k] = nil
+      end)
+
       table.insert(result, Tablex.extend(
+        clean_copy,
         special.text(
           token.color and {token.color, token.content} or token.content,
           token.font,
@@ -41,9 +22,9 @@ local generate_entities = function(token_lines, view)
         ),
         {
           view = view,
-          on_click = token.link and function()
+          on_click = token.on_click or token.link and function()
             State.gui.wiki:show(token.link)
-          end or nil,
+          end,
           size = Vector({token.font:getWidth(token.content), token.font:getHeight()}),
           link_flag = token.link or nil,
         }

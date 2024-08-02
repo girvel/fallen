@@ -58,7 +58,6 @@ module_mt.__call = function(self, pack, pack_type)
   }, animation_methods)
 
   result:animate("idle")
-  if pack_type == "atlas" then Log.trace(pack) end
   return result
 end
 

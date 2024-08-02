@@ -13,6 +13,8 @@ return function()
         run = function(self, rails, dt)
           self.enabled = false
           api.discover_wiki({fought_dreamers = true})
+          api.narration("Hello, world!")
+          Log.debug(api.options({"Биба", "Боба"}))
         end,
       },
     },
