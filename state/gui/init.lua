@@ -17,6 +17,7 @@ local gui = function()
       sidebar = view(Vector.zero, 2, 1),
       sidebar_text = view(Vector.zero, 1, 1),
       dialogue_background = view(Vector.zero, 1, 1),
+      dialogue_portrait = view(Vector.zero, 2, 1),
       dialogue_text = view(Vector.zero, 1, 1),
       wiki = view(Vector.zero, 1, 1),
       character_creator = view(Vector.zero, 1, 1),
@@ -25,7 +26,8 @@ local gui = function()
     views_order = {
       "scene", "scene_fx",
       "sidebar_background", "actions", "sidebar", "sidebar_text",
-      "dialogue_background", "dialogue_text", "wiki", "character_creator",
+      "dialogue_background", "dialogue_portrait", "dialogue_text",
+      "wiki", "character_creator",
     },
 
     update_views = function(self)
@@ -37,6 +39,7 @@ local gui = function()
         sidebar = Vector({love.graphics.getWidth() - State.gui.sidebar.W, 0}),
         sidebar_text = Vector({love.graphics.getWidth() - State.gui.sidebar.W, 0}),
         dialogue_background = Vector.zero,
+        dialogue_portrait = get_dialogue_offset() - Vector({360, 190}),
         dialogue_text = get_dialogue_offset(),
         wiki = get_full_screen_text_offset(),
         character_creator = get_full_screen_text_offset(),

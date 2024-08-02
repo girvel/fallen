@@ -8,26 +8,28 @@ local skip_sounds = Common.volumed_sounds("assets/sounds/click_retro", 0.05)
 
 return function()
   return {
-    text_entities = nil,
+    _entities = nil,
     selected_option_i = nil,
     options = nil,
 
-    show = function(self, line)
-      self.text_entities = State:add_multiple(texting.generate_html_page(
-        "<pre>%s</pre>" % line, {default = {font = State.gui.font}},
-        math.min(love.graphics.getWidth() - 40, State.gui.TEXT_MAX_SIZE[1]),
-        "dialogue_text", {}
+    show = function(self, line, source)
+      local portrait = -Query(source).portrait
+      self._entities = State:add_multiple(Tablex.concat(
+        texting.generate_html_page(
+          "<pre>%s</pre>" % line, {default = {font = State.gui.font}},
+          math.min(love.graphics.getWidth() - 40, State.gui.TEXT_MAX_SIZE[1]),
+          "dialogue_text", {}
+        ),
+        {special.dialogue_background()},
+        portrait and {special.portrait(portrait)} or {}
       ))
-      self.background = State:add(special.dialogue_background())
     end,
 
     skip = function(self)
-      if not self.text_entities then return end
+      if not self._entities then return end
       State.audio:play_static(random.choice(skip_sounds):clone())
-      State:remove_multiple(self.text_entities)
-      if self.background then State:remove(self.background) end
-      self.text_entities = nil
-      self.background = nil
+      State:remove_multiple(self._entities)
+      self._entities = nil
     end,
 
     options_refresh = function(self)

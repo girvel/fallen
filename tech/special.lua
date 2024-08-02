@@ -133,4 +133,18 @@ module.dialogue_background = function()
   }
 end
 
+module.portrait = function(image)
+  local window_w, window_h = love.graphics.getDimensions()
+  return {
+    boring_flag = true,
+    codename = "portrait",
+    view = "dialogue_portrait",
+    position = Vector.zero,
+    size = Vector({image:getDimensions()}),
+    sprite = {
+      image = image,
+    },
+  }
+end
+
 return module

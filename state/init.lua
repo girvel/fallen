@@ -142,7 +142,7 @@ module_mt.__call = function(_, systems, debug_mode)
         return "reading"
       elseif self.gui.dialogue.options then
         return "dialogue_options"
-      elseif self.gui.dialogue.text_entities then
+      elseif self.gui.dialogue._entities then
         return "dialogue"
       elseif self.combat then
         return "combat"

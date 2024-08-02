@@ -1,14 +1,14 @@
 local railing = {api = {}}
 
-railing.api.narration = function(text)
-  State.gui.dialogue:show(text)
+railing.api.narration = function(text, source)
+  State.gui.dialogue:show(text, source)
   while State:get_mode() ~= "free" do coroutine.yield() end
 end
 
 railing.api.line = function(entity, text)
   railing.api.narration([[<span color="%s">%s</span><span>: %s</span>]] % {
     Common.color_to_hex(entity.sprite.color), Common.get_name(entity), text
-  })
+  }, entity)
 end
 
 railing.api.wait_seconds = function(s)
