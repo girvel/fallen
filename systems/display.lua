@@ -60,8 +60,9 @@ return Tiny.sortedProcessingSystem({
     love.graphics.print(entity.sprite.text, entity.sprite.font, unpack(offset_position))
 
     if entity.link_flag then
+      local view = State.gui.views[entity.view]
       local start = offset_position + Vector.down * entity.size[2]
-      local finish = offset_position + entity.size  -- TODO here size is outside the view, for mousepressed it is inside
+      local finish = offset_position + view:apply_multiplier(entity.size)
       local mouse_position = Vector({love.mouse.getPosition()})
       if not (mouse_position >= offset_position and mouse_position < finish) then return end
 

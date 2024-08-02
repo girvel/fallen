@@ -60,6 +60,8 @@ end
 
 railing.mixin = function()
   return {
+    active_coroutines = {},
+
     update = function(self, event)
       local dt = event[1]
       self.active_coroutines = Fun.iter(self.active_coroutines)

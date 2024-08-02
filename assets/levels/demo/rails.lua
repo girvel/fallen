@@ -9,8 +9,6 @@ return function()
       require("assets.levels.demo.scenes.tutorial")()
     ),
 
-    active_coroutines = {},
-
     initialize = function(self)
       self.positions = {
         [2] = Vector({20, 53}),
