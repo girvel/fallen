@@ -110,6 +110,9 @@ return Tiny.sortedProcessingSystem({
   end,
 
   postProcess = function(self)
+    if State.gui.show_fps then
+      love.graphics.print("FPS: %.2f" % (1 / love.timer.getAverageDelta()), State.gui.font, 5, 5)
+    end
     local mode = State:get_mode()
     if Tablex.contains({"reading"}, mode) or State.shader then return end
     if mode == "death" then return self:_display_death_message() end

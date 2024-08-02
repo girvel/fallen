@@ -10,6 +10,7 @@ local gui = function()
   local result = {
     TEXT_MAX_SIZE = Vector({1000, 800}),
     font = love.graphics.newFont("assets/fonts/joystix.monospace-regular.otf", 12),
+    show_fps = nil,  -- set from main.lua
 
     views = {
       scene = view(Vector.zero, 4, 16),

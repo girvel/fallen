@@ -45,6 +45,11 @@ return {
       "Run in windowed mode with fixed resolution; format is <width>x<height> or 1080p, 720p, 360p"
     )
 
+    parser:flag(
+      "-F --show-fps",
+      "Display FPS counter"
+    )
+
     local result = parser:parse(args)
 
     if result.resolution then
