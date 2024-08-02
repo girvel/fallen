@@ -50,6 +50,7 @@ return Tiny.processingSystem({
       if entity.hp <= entity:get_max_hp() / 2 then
         if not entity.inventory.hurt then
           local hurt = State:add(blood())
+          State:add_dependency(entity, hurt)
           hurt:animate()
           entity.inventory.hurt = hurt
         end

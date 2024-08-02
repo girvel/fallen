@@ -4,7 +4,7 @@ return {
   require("systems.input"),
 
   -- love.mousepressed systems --
-  require("systems.on_click_calls"),
+  require("systems.detect_clicks"),
 
   -- love.update systems --
   require("systems.acting"),
