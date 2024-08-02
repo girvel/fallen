@@ -40,6 +40,24 @@ return {
       "Disable background sound"
     )
 
-    return parser:parse(args)
+    parser:option(
+      "-r --resolution",
+      "Run in windowed mode with fixed resolution; format is <width>x<height> or 1080p, 720p, 360p"
+    )
+
+    local result = parser:parse(args)
+
+    if result.resolution then
+      local builtin_resolutions = {
+        ["1080p"] = Vector({1920, 1080}),
+        ["720p"] = Vector({1280, 720}),
+        ["360p"] = Vector({640, 360}),
+      }
+
+      result.resolution = builtin_resolutions[result.resolution]
+        or Vector(Fun.iter(result.resolution / "x"):map(tonumber):totable())
+    end
+
+    return result
   end,
 }

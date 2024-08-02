@@ -82,6 +82,10 @@ love.load = function(args)
     love.errorhandler = love_errorhandler
   end
 
+  if args.resolution then
+    love.window.updateMode(args.resolution[1], args.resolution[2], {fullscreen = false})
+  end
+
   Log.info("Game is loaded")
 end
 
