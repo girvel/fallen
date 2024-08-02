@@ -4,6 +4,8 @@ local tech_constants = require("tech.constants")
 
 local get_scene_offset, get_dialogue_offset, get_full_screen_text_offset
 
+local PORTRAIT_SPACE = Vector({360, 190})
+
 local gui = function()
   local result = {
     TEXT_MAX_SIZE = Vector({1000, 800}),
@@ -39,7 +41,7 @@ local gui = function()
         sidebar = Vector({love.graphics.getWidth() - State.gui.sidebar.W, 0}),
         sidebar_text = Vector({love.graphics.getWidth() - State.gui.sidebar.W, 0}),
         dialogue_background = Vector.zero,
-        dialogue_portrait = get_dialogue_offset() - Vector({360, 190}),
+        dialogue_portrait = get_dialogue_offset() - PORTRAIT_SPACE,
         dialogue_text = get_dialogue_offset(),
         wiki = get_full_screen_text_offset(),
         character_creator = get_full_screen_text_offset(),
@@ -91,9 +93,9 @@ end
 get_dialogue_offset = function()
   local window_w = love.graphics.getWidth()
   local window_h = love.graphics.getHeight()
-  local text_w = math.min(window_w - 40, State.gui.TEXT_MAX_SIZE[1])
+  local dialogue_w = math.min(window_w - 15, State.gui.TEXT_MAX_SIZE[1] + PORTRAIT_SPACE[1])
 
-  return Vector({math.ceil((window_w - text_w) / 2), window_h - 115})
+  return Vector({math.ceil((window_w - dialogue_w) / 2 + PORTRAIT_SPACE[1]), window_h - 115})
 end
 
 get_full_screen_text_offset = function()
