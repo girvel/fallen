@@ -20,7 +20,7 @@ return function(variants)
       end
 
       local instance_mt = {__eq = function(self, other)
-        return self.enum_variant == other.enum_variant and Fun.iter(argument_names)
+        return self.enum_variant == other.enum_variant and fun.iter(argument_names)
           :all(function(k) return self[k] == other[k] end)
       end}
 

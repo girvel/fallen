@@ -42,7 +42,7 @@ local grid_methods = {
     return fun.iter(pairs(self._inner_array))
   end,
 
-  find_path = function(self, start, finish)
+  find_path = function(self, start, finish, max_distance)
     if start == finish then return {} end
 
     local distance_to = module(self.size)
@@ -65,7 +65,7 @@ local grid_methods = {
     local current_vertex_i = 1
     local current_vertex = start
     local current_distance = 0
-    while true do  -- TODO for
+    while true do
       for _, direction in ipairs(vector.directions) do
         local neighbour = current_vertex + direction
 
@@ -79,7 +79,7 @@ local grid_methods = {
           not self:safe_get(neighbour, true)
           and not visited_vertices:safe_get(neighbour)
           and self:can_fit(neighbour)
-          and (distance_to[neighbour] or 999999) > current_distance
+          and (distance_to[neighbour] or math.huge) > current_distance
         then
           distance_to[neighbour] = current_distance + 1
           way_back[neighbour] = current_vertex
@@ -91,15 +91,7 @@ local grid_methods = {
       visited_vertices[current_vertex] = true
       table.insert(visited_vertices_list, current_vertex)
 
-      if #vertices_to_visit == 0 then
-        local next_best_finish = fun.iter(visited_vertices_list)
-          :min_by(function(a, b)
-            return (a - finish):abs() < (b - finish):abs() and a or b
-          end)
-        return reconstruct_from(next_best_finish)
-      end
-
-      current_distance = 999999
+      current_distance = math.huge
       for i, vertex in ipairs(vertices_to_visit) do
         local new_distance = distance_to[vertex]
         if new_distance < current_distance then
@@ -107,6 +99,14 @@ local grid_methods = {
           current_vertex_i = i
           current_distance = new_distance
         end
+      end
+
+      if #vertices_to_visit == 0 or current_distance > (max_distance or math.huge) then
+        local next_best_finish = fun.iter(visited_vertices_list)
+          :min_by(function(a, b)
+            return (a - finish):abs() < (b - finish):abs() and a or b
+          end)
+        return reconstruct_from(next_best_finish)
       end
     end
   end,

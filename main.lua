@@ -89,11 +89,14 @@ love.load = function(args)
   Log.info("Game is loaded")
 end
 
+local active_time = 0
+local frames_total = 0
+
 love.run = function()
 	if love.load then love.load(love.arg.parseGameArguments(arg), arg) end
 
 	-- We don't want the first frame's dt to include time taken by love.load.
-	if love.timer then love.timer.step() end
+	love.timer.step()
 
 	local dt = 0
 
@@ -103,6 +106,8 @@ love.run = function()
       love.reload()
       love.reload_flag = nil
     end
+
+    local current_time = love.timer.getTime()
 
 		-- Process events.
 		if love.event then
@@ -118,7 +123,7 @@ love.run = function()
 		end
 
 		-- Update dt, as we'll be passing it to update
-		if love.timer then dt = love.timer.step() end
+		dt = love.timer.step()
 
 		-- Call update and draw
 		if love.update then love.update(dt) end -- will pass 0 if love.timer is disabled
@@ -132,7 +137,9 @@ love.run = function()
 			love.graphics.present()
 		end
 
-		if love.timer then love.timer.sleep(0.001) end
+    active_time = active_time + love.timer.getTime() - current_time
+    frames_total = frames_total + 1
+		love.timer.sleep(0.001)
 	end
 end
 
@@ -153,6 +160,7 @@ end
 
 love.quit = function()
   Log.info("Exited smoothly")
+  Log.info("FPS: %.2f" % (frames_total / active_time))
 end
 
 Log.info("Finished setup")

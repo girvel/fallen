@@ -35,7 +35,7 @@ end
 ai.api.travel = function(entity, destination)
   Log.debug("Moving to " .. tostring(destination))
   if entity.position == destination then return end
-  local path = State.grids.solids:find_path(entity.position, destination)
+  local path = State.grids.solids:find_path(entity.position, destination, 25)
   if #path == 0 then return end
   if State.grids.solids[path[#path]] then table.remove(path) end
 
@@ -48,7 +48,9 @@ ai.api.travel = function(entity, destination)
       end
     end
 
+    Log.trace(position - entity.position)
     if not ai.api.move(entity, position - entity.position) then return end
+    Log.trace(".")
     coroutine.yield()
   end
 end

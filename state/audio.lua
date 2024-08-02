@@ -11,7 +11,7 @@ return function()
     disable_ambient = false,
 
     update = function(self)
-      local x, y = unpack(-Query(State.player).position or {-999, -999})
+      local x, y = unpack(-Query(State.player).position or -Vector.one * math.huge)
       love.audio.setPosition(x, y, 0)
       if self.disable_ambient then return end
       local current_track = self.current_music

@@ -56,5 +56,15 @@ describe("Grid library", function()
         grid:find_path(vector({1, 3}), vector({3, 1}))
       )
     end)
+
+    it("should work with distance limit", function()
+      local grid = grid.from_matrix({
+        {nil, nil, nil, nil, nil},
+      }, vector({5, 1}))
+      local max_distance = 3
+      local path = grid:find_path(vector({1, 1}), vector({5, 1}), max_distance)
+      assert.is_true(#path >= max_distance)
+      assert.is_true(#path < grid.size[1])
+    end)
   end)
 end)
