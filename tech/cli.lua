@@ -46,8 +46,8 @@ return {
     )
 
     parser:flag(
-      "-F --show-fps",
-      "Display FPS counter"
+      "-p --enable-profiler",
+      "Enable profiler; result will be displayed in logs"
     )
 
     local result = parser:parse(args)

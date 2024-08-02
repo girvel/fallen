@@ -1,3 +1,4 @@
+-- global imports --
 Log = require("lib.log")
 Fun = require("lib.fun")
 Tiny = require("lib.tiny")
@@ -17,8 +18,6 @@ Vector = require("lib.vector")
 Grid = require("lib.grid")
 D = require("lib.d")
 
-local serpent = require("lib.serpent")
-
 local love_errorhandler = love.errorhandler
 love.errorhandler = function(msg)
   Log.fatal(debug.traceback("Error: " .. tostring(msg), 2):gsub("\n[^\n]+$", ""))
@@ -27,12 +26,16 @@ end
 love.graphics.setDefaultFilter("nearest", "nearest")
 love.keyboard.setKeyRepeat(true)
 
+
+-- local imports --
 local palette = require("library.palette")
 local quests = require("library.quests")
 local state = require("state")
 local cli = require("tech.cli")
 
 local systems = require("systems")
+
+local serpent = require("lib.serpent")
 
 
 love.load = function(args)
@@ -47,14 +50,11 @@ love.load = function(args)
   args = cli.parse(args)
   Log.info("Command line arguments:", args)
 
-  Log.info("Loading the game")
-  math.randomseed(os.time())
+  local seed = os.time()
+  Log.info("Loading the game; seed", seed)
+  math.randomseed(seed)
+
   State = state(systems, args.debug)
-  State.callback_set = Fun.iter(systems)
-    :reduce(function(acc, system)
-      acc[system.base_callback] = true
-      return acc
-    end, {})
   State:load_level("assets/levels/" .. args.level, palette)
 
   State.gui.wiki.quests = quests
@@ -87,6 +87,11 @@ love.load = function(args)
     love.window.updateMode(args.resolution[1], args.resolution[2], {fullscreen = false})
   end
 
+  if args.enable_profiler then
+    State.profiler = require("lib.profile")
+    State.profiler.setclock(love.timer.getTime)
+  end
+
   Log.info("Game is loaded")
 end
 
@@ -100,6 +105,8 @@ love.run = function()
 	love.timer.step()
 
 	local dt = 0
+
+  Query(State.profiler).start()
 
 	-- Main loop time.
 	return function()
@@ -162,6 +169,10 @@ end
 love.quit = function()
   Log.info("Exited smoothly")
   Log.info("FPS: %.2f" % (frames_total / active_time))
+  if State.profiler then
+    State.profiler.stop()
+    Log.info("===== PROFILE =====\n\n" .. State.profiler.report(100))
+  end
 end
 
 Log.info("Finished setup")
