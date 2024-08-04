@@ -16,7 +16,7 @@ return function()
       local portrait = -Query(source).portrait
       self._entities = State:add_multiple(Tablex.concat(
         texting.generate_html_page(
-          "<pre>%s</pre>" % line, {default = {font = State.gui.font}},
+          "<pre>%s</pre>" % line, State.gui.wiki.styles,  -- TODO move styles?
           math.min(love.graphics.getWidth() - 40, State.gui.TEXT_MAX_SIZE[1]),
           "dialogue_text", {}
         ),

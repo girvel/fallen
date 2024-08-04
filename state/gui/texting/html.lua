@@ -46,6 +46,31 @@ local transformers = {
       return Tablex.extend({}, styles.a or {}, child)
     end):totable()
   end,
+  hate = function(node, children, styles)
+    children = Tablex.concat(unpack(children))
+    return Tablex.concat(
+      Fun.iter(children)
+        :map(function(child)
+          local result = Tablex.extend(child, styles.hate, {
+            on_update = function(self, event)
+              local dt = unpack(event)
+              if self.delay > 0 then
+                self.delay = self.delay - dt
+                return
+              end
+
+              local color = self.sprite.text[1]
+              if color[4] < 1 then
+                color[4] = color[4] + dt / self.appearance_time
+              end
+            end,
+          })
+          result.color[4] = 0
+          return result
+        end)
+        :totable()
+    )
+  end,
 }
 
 transformers.ul = transformers.p

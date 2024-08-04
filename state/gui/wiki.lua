@@ -59,6 +59,11 @@ return function()
       a = {
         color = Common.hex_color("3f5d92"),
       },
+      hate = {
+        color = Common.hex_color("e64e4b"),
+        delay = 2,
+        appearance_time = 2,
+      },
     },
 
     show = function(self, id)

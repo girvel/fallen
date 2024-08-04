@@ -9,7 +9,7 @@ local generate_entities = function(token_lines, view)
   for y, line in ipairs(token_lines) do
     for _, token in ipairs(line) do
       local clean_copy = Tablex.extend({}, token)
-      Fun.iter("x y link font content color" / " "):each(function(k)
+      Fun.iter("x y link font content color on_update" / " "):each(function(k)
         clean_copy[k] = nil
       end)
 
@@ -27,6 +27,7 @@ local generate_entities = function(token_lines, view)
           end,
           size = Vector({token.font:getWidth(token.content), token.font:getHeight()}),
           link_flag = token.link or nil,
+          ai = token.on_update and {observe = token.on_update},
         }
       ))
     end

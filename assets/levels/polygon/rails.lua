@@ -13,7 +13,7 @@ return function()
         run = function(self, rails, dt)
           self.enabled = false
           api.discover_wiki({fought_dreamers = true})
-          api.narration("Hello, world!")
+          api.narration("<span>Hello, </span><hate>world</hate><span>!</span>")
           State.player.portrait = love.graphics.newImage("assets/sprites/portraits/half_orc.png")
           api.line(State.player, "I'm gay")
         end,

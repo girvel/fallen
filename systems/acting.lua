@@ -63,6 +63,8 @@ return Tiny.processingSystem({
     end
 
     Query(entity.ai).observe(entity, event)
+    if not entity.ai.run then return end
+
     if not State.combat then
       entity.ai.run(entity, event)
       Tablex.extend(entity.resources, -Query(entity):get_resources("move") or {})
