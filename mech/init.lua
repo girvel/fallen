@@ -21,7 +21,10 @@ module.abilities_list = {
 }
 
 module.are_hostile = function(first, second)
-  return (first.faction or second.faction) and first.faction ~= second.faction
+  return first.faction and second.faction and (
+    State.factions[first.faction].aggressive_towards[second.faction]
+    or State.factions[second.faction].aggressive_towards[first.faction]
+  )
 end
 
 module.get_melee_modifier = function(entity, slot)

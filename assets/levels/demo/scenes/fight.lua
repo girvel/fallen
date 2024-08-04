@@ -8,15 +8,12 @@ return function()
       name = "Player attacks half-orc",
       enabled = true,
       start_predicate = function(self, rails)
-        return Fun.iter(State.agression_log)
-          :any(function(pair)
-            return Tablex.shallow_same(pair, {State.player, rails.entities[3]})
-          end)
+        return State:check_aggression(State.player, rails.entities[3])
       end,
       run = function(self, rails)
         self.enabled = false
         rails.scenes.half_orc_begs.enabled = true
-        rails.entities[3].faction = "rebellion"
+        api.make_hostile("half_orc", rails.entities)
         rails.entities[3].interact = nil
         rails.entities[3].ai.mode = engineer_ai.modes.normal
         if rails.entities[3]._highlight then
@@ -136,7 +133,7 @@ return function()
             })
 
             if picked_suboption == 1 or picked_suboption == 2 then
-              rails.entities[3].faction = "rebellion"
+              api.make_hostile("half_orc", rails.entities)
               State:start_combat({State.player, rails.entities[3]})
             else
               rails.entities[3].ai.mode = engineer_ai.modes.run_away_to(rails.positions.exit)
@@ -166,23 +163,18 @@ return function()
       enabled = true,
       start_predicate = function(self, rails, dt)
         return Fun.iter({1, 2, 4})
-          :any(function(i)
-            return Fun.iter(State.agression_log)
-              :any(function(pair)
-                return Tablex.shallow_same(pair, {State.player, rails.entities[i]})
-              end)
-          end)
+          :any(function(i) return State:check_aggression(State.player, rails.entities[i]) end)
       end,
 
       run = function(self, rails, dt)
         self.enabled = false
         rails.scenes.second_rotates_valve.enabled = false
         rails.scenes.player_wins_dreamers.enabled = true
-        rails:cancel_scene(rails.scenes.player_attacks_half_orc)
+        rails:stop_scene(rails.scenes.player_attacks_half_orc)
         rails:cancel_scene(rails.scenes.half_orc_mercy)
+        rails.entities[3].will_beg = false
 
-        State.player.faction = "rebellion"
-        rails.entities[3].faction = "rebellion"
+        api.make_hostile("dreamers_detective", rails.entities)
 
         local engineers = Fun.range(1, 4):map(function(i) return rails.entities[i] end):totable()
         State:start_combat(Tablex.concat({State.player}, engineers))

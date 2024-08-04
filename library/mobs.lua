@@ -27,7 +27,7 @@ local dreamer_engineer_mixin = function()
     {
       max_hp = 22,
       abilities = mech.abilities(14, 14, 12, 8, 8, 8),
-      faction = "dreamers",
+      faction = "dreamers_detective",
     }
   )
 end
@@ -63,7 +63,7 @@ module[3] = function()
     max_hp = 35,
     direction = "up",
     inventory = {gloves = weapons.yellow_gloves()},
-    faction = "dreamers",
+    faction = "half_orc",
 
     abilities = mech.abilities(18, 6, 12, 8, 8, 8),
     save_proficiencies = {dexterity = true},

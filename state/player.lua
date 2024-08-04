@@ -17,7 +17,7 @@ module_mt.__call = function(_, abilities, race, build, feat)
     feat = feat,
     level = 2,
     direction = "right",
-    faction = "dreamers",
+    faction = "player",
 
     immortal = true,
     on_death = function(self)

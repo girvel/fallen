@@ -30,6 +30,8 @@ love.keyboard.setKeyRepeat(true)
 -- local imports --
 local palette = require("library.palette")
 local quests = require("library.quests")
+local factions = require("library.factions")
+-- TODO move these to the level configuration
 local state = require("state")
 local cli = require("tech.cli")
 
@@ -59,6 +61,7 @@ love.load = function(args)
   State:load_level("assets/levels/" .. args.level, palette)
 
   State.gui.wiki.quests = quests
+  State.factions = factions()
   State.audio.disable_ambient = args.disable_ambient
   State.gui.show_fps = args.show_fps
 

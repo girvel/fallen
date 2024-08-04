@@ -1,3 +1,6 @@
+local fx = require("tech.fx")
+
+
 local railing = {api = {}}
 
 railing.api.narration = function(text, source)
@@ -58,6 +61,15 @@ railing.api.discover_wiki = function(page_table)
   railing.api.notification("Информация в Кодексе обновлена")  -- TODO mention page name
 end
 
+railing.api.make_hostile = function(faction, entities)
+  Fun.iter(entities)
+    :filter(function(e) return e.faction == faction end)
+    :each(function(e)
+      State:add(fx("assets/sprites/fx/aggression", "fx", e.position))
+    end)
+  State.factions[faction].aggressive_towards.player = true
+end
+
 railing.mixin = function()
   return {
     active_coroutines = {},
@@ -101,11 +113,14 @@ railing.mixin = function()
     end,
 
     cancel_scene = function(self, scene)
+      self:stop_scene(scene)
+      Tablex.remove(self.scenes, scene)
+    end,
+
+    stop_scene = function(self, scene)
       self.active_coroutines = Fun.iter(self.active_coroutines)
         :filter(function(c) return c.base_scene ~= scene end)
         :totable()
-
-      Tablex.remove(self.scenes, scene)
     end,
   }
 end

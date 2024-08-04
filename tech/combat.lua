@@ -1,5 +1,4 @@
 local mech = require("mech")
-local fx = require("tech.fx")
 
 
 local module_mt = {}
@@ -11,7 +10,7 @@ combat.WORLD_TURN = {codename = "WORLD_TURN"}
 module_mt.__call = function(_, list)
   Fun.iter(list)
     :filter(function(e) return mech.are_hostile(e, State.player) end)
-    :each(function(e) State:add(fx("assets/sprites/fx/aggression", "fx", e.position)) end)
+    :each(function(e)  end)
   return {
     list = Fun.iter(list)
       :filter(function(e) return State:exists(e) end)

@@ -31,8 +31,10 @@ module_mt.__call = function(_, systems, debug_mode)
     entities = {},
     dependencies = {},
 
-    agression_log = {},
-    _next_agression_log = {},
+    aggression_log = {},
+    _next_aggression_log = {},
+
+    factions = nil,
 
     shader = nil,
 
@@ -152,22 +154,32 @@ module_mt.__call = function(_, systems, debug_mode)
     end,
 
     start_combat = function(self, list)
+      local current_i = 1
       if State.combat then
         list = Fun.iter(list)
           :filter(function(e) return not Tablex.contains(State.combat.list, e) end)
           :totable()
+          current_i = State.combat.current_i
       end
 
       Fun.iter(list):each(function(e)
         e.current_initiative = (D(20) + mech.get_modifier(e.abilities.dexterity)):roll()
       end)
+
       Tablex.concat(list, -Query(State.combat):iter_entities_only():totable())
       table.sort(list, function(a, b) return a.current_initiative < b.current_initiative end)
+
       self.combat = combat(list)
+      self.combat.current_i = current_i
     end,
 
-    register_agression = function(self, source, target)
-      table.insert(self._next_agression_log, {source, target})
+    register_aggression = function(self, source, target)
+      table.insert(self._next_aggression_log, {source, target})
+    end,
+
+    check_aggression = function(self, source, target)
+      return Fun.iter(self.aggression_log)
+        :any(function(pair) return pair[1] == source and pair[2] == target end)
     end,
 	}
 end

@@ -45,7 +45,7 @@ end
 local whoosh = Common.volumed_sounds("assets/sounds/whoosh", 0.05)
 
 local base_attack = function(entity, target, slot)
-  State:register_agression(entity, target)
+  State:register_aggression(entity, target)
 
   entity:rotate(Vector.name_from_direction((target.position - entity.position):normalized()))
   State.audio:play(entity, random.choice(whoosh))

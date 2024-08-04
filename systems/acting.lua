@@ -25,8 +25,8 @@ return Tiny.processingSystem({
   base_callback = "update",
 
   preProcess = function()
-    State.agression_log = State._next_agression_log
-    State._next_agression_log = {}
+    State.aggression_log = State._next_aggression_log
+    State._next_aggression_log = {}
     if State.combat then
       local combatants = State.combat:iter_entities_only():totable()
 

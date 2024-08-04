@@ -16,7 +16,7 @@ engineer_ai_mt.__call = function(_, works_outside_of_combat)
   return {
     mode = engineer_ai.modes.normal(),
 
-    look_for_agression = false,
+    look_for_aggression = false,
     was_attacked_by = {},
 
     -- TODO optimize
@@ -31,8 +31,8 @@ engineer_ai_mt.__call = function(_, works_outside_of_combat)
       local was_attacked_by = self.ai.was_attacked_by
       self.ai.was_attacked_by = {}
 
-      if self.ai.look_for_agression then
-        self.ai.look_for_agression = false
+      if self.ai.look_for_aggression then
+        self.ai.look_for_aggression = false
         if Fun.iter(was_attacked_by):all(function(e) return e ~= State.player end) then
           self.faction = State.player.faction
           return
@@ -44,7 +44,7 @@ engineer_ai_mt.__call = function(_, works_outside_of_combat)
         Log.debug("Skips turn")
         State:add(special.floating_line("Стой! Остановись, мужик!!!", self.position))
         self.ai.mode = engineer_ai.modes.normal()
-        self.ai.look_for_agression = true
+        self.ai.look_for_aggression = true
         return
       end
 
@@ -68,12 +68,12 @@ engineer_ai_mt.__call = function(_, works_outside_of_combat)
     end, works_outside_of_combat),
 
     observe = function(self, event)
-      Tablex.concat(self.ai.was_attacked_by, Fun.iter(State.agression_log)
+      Tablex.concat(self.ai.was_attacked_by, Fun.iter(State.aggression_log)
         :filter(function(pair) return pair[2] == self end)
         :map(function(pair) return pair[1] end)
         :totable())
 
-      if self.ai.look_for_agression then
+      if self.ai.look_for_aggression then
         self.resources.reactions = 0
       end
     end,
