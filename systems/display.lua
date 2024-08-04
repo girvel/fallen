@@ -3,7 +3,9 @@ local level = require("tech.level")
 
 return Tiny.sortedProcessingSystem({
   codename = "display",
-  filter = Tiny.requireAll("position", "sprite", "view"),
+  -- filter = Tiny.requireAll("position", "sprite", "view"),
+  -- TODO RM?
+  filter = function(self, e) return e.position and e.sprite and e.view and e.view ~= "scene" end,
   base_callback = "draw",
 
   _unknown_icon = love.graphics.newImage("assets/sprites/icons/unknown.png"),
@@ -17,18 +19,38 @@ return Tiny.sortedProcessingSystem({
       )
     end
 
-    if not first.layer or first.layer == second.layer then return end
+    -- if not first.layer or first.layer == second.layer then return end
 
-    local iterator = Fun.iter(level.GRID_LAYERS):enumerate()
-    return (
-      select(1, iterator:filter(function(i, name) return name == first.layer end):nth(1))
-      < select(1, iterator:filter(function(i, name) return name == second.layer end):nth(1))
-    )
+    -- local iterator = Fun.iter(level.GRID_LAYERS):enumerate()
+    -- return (
+    --   select(1, iterator:filter(function(i, name) return name == first.layer end):nth(1))
+    --   < select(1, iterator:filter(function(i, name) return name == second.layer end):nth(1))
+    -- )
+    -- TODO RM
   end,
 
   preProcess = function(self, event)
     State.gui:update_views()
     State.gui.sidebar:update_indicators(event[1])
+
+    if Tablex.contains({"character_creator", "reading", "death"}, State:get_mode()) then return end
+
+    local view = State.gui.views.scene
+    local start = view:inverse_multipler(-view.offset):map(math.floor)
+    local finish = start + view:inverse_multipler(Vector({love.graphics.getDimensions()})):map(math.ceil)
+
+    start = Vector.use(Mathx.median, Vector.one, start, State.grids.solids.size)
+    finish = Vector.use(Mathx.median, Vector.one, finish, State.grids.solids.size)
+
+    for _, layer in ipairs(level.GRID_LAYERS) do
+      local grid = State.grids[layer]
+      for x = start[1], finish[1] do
+        for y = start[2], finish[2] do
+          local e = grid._inner_array[grid:_get_inner_index(x, y)]
+          if e then self:process(e) end
+        end
+      end
+    end
   end,
 
   process = function(self, entity)

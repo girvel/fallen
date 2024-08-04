@@ -1,3 +1,4 @@
+unpack = unpack or table.unpack
 local fun = require("lib.fun")
 
 
@@ -29,11 +30,17 @@ module.extended_directions = {
   module.up, module.left, module.down, module.right,
   module({1, 1}), module({1, -1}), module({-1, -1}), module({-1, 1})
 }
+
 module.name_from_direction = function(v)
   if v == module.up then return "up" end
   if v == module.down then return "down" end
   if v == module.left then return "left" end
   if v == module.right then return "right" end
+end
+
+module.use = function(f, ...)
+  local zip = fun.zip(...)
+  return module({f(zip:nth(1)), f(zip:nth(2))})
 end
 
 vector_mt.__eq = function(self, other)
@@ -82,6 +89,10 @@ end
 
 vector_methods.ceil = function(self)
   return module({math.ceil(self[1]), math.ceil(self[2])})
+end
+
+vector_methods.map = function(self, f)
+  return module({f(self[1]), f(self[2])})
 end
 
 vector_methods.abs = function(self)

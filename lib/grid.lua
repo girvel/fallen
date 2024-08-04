@@ -38,7 +38,7 @@ local grid_methods = {
     return self[v]
   end,
 
-  iter_table = function(self)
+  iter = function(self)
     return fun.iter(pairs(self._inner_array))
   end,
 

@@ -153,16 +153,13 @@ visit_html = function(root, args, styles, preserve_whitespace)
     Tablex.concat(nodes, {{content = prepare(content)}})
   end
 
-  Log.trace(nodes)
   local result = (transformers[root.name] or transform_default_node)(root, nodes, styles)
-  Log.trace(preserve_whitespace, root.name, root:gettext())
-  Log.trace(result)
-  return Log.trace(postprocess(root, result, styles))
+  return postprocess(root, result, styles)
 end
 
 html.parse = function(content, args, styles)
   assert(styles and styles.default)
-  return Log.trace(visit_html(htmlparser.parse(content), args, styles))
+  return visit_html(htmlparser.parse(content), args, styles)
 end
 
 html.is_available = function(content, args)
