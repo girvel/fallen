@@ -8,6 +8,7 @@ return {
     -- tiles -- 
     _ = static.planks,
     [","] = static.walkway,
+    ["-"] = static.steel_floor,
 
     -- solids --
     ["#"] = static.wall,
@@ -77,5 +78,5 @@ return {
     end,
   },
   transparents = Common.set("MDl@gdr>v<^\\/FB}{T+o1234LpPtkKba$"),
-  throwables = Common.set("_,"),
+  throwables = Common.set("_,-"),
 }

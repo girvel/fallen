@@ -5,6 +5,7 @@ local mech = require("mech")
 local static_sprite = require("tech.static_sprite")
 local interactive = require("tech.interactive")
 local combat = require("tech.combat")
+local fx = require("tech.fx")
 
 
 local actions = {}

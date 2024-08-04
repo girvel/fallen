@@ -49,6 +49,26 @@ Fun.iter({
   end
 end)
 
+local steel_sounds = {
+}
+
+for i, name in ipairs({
+  "steel_floor",
+}) do
+  if not name then return end
+  module[name] = function()
+    return Tablex.extend(
+      atlas_sprite("assets/sprites/tile_atlas.png", i),
+      {
+        view = "scene",
+        layer = "tiles",
+        codename = name,
+        sounds = steel_sounds,
+      }
+    )
+  end
+end
+
 -- atlas extensions --
 local valve_rotating_sounds = Common.volumed_sounds("assets/sounds/valve_rotate", 0.1)
 local pipe_valve_pack = animated.load_pack("assets/sprites/pipe_valve")
