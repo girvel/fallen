@@ -116,12 +116,15 @@ return function()
 
       local page = self.pages[id] or "~ Нет информации ~"
 
+      local args = {
+        codex = self.codex,
+        pages = self.pages,
+        html = html,
+      }
+
+      html.run_scripts(page, args)
       self.text_entities = State:add_multiple(texting.generate_html_page(
-        page, self.styles, State.gui.TEXT_MAX_SIZE[1], "wiki", {
-          codex = self.codex,
-          pages = self.pages,
-          html = html,
-        }
+        page, self.styles, State.gui.TEXT_MAX_SIZE[1], "wiki", args
       ))
     end,
 

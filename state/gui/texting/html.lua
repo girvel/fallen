@@ -71,6 +71,9 @@ local transformers = {
         :totable()
     )
   end,
+  script = function()
+    return {}
+  end,
 }
 
 transformers.ul = transformers.p
@@ -82,24 +85,26 @@ local transform_default_node = function(node, children, styles)
   return Tablex.concat(unpack(children))
 end
 
-local get_availability = function(root, args)
-  local condition = root.attributes["if"]
-  if not condition then return true end
-
-  local predicate = assert(loadstring(
+local run_script = function(script, args)
+  return assert(loadstring(
     [[
       return function(args)
         %s
-        return %s
+        %s
       end
     ]] % {
       Fun.iter(args)
         :map(function(name) return "local %s = args.%s\n" % {name, name} end)
         :reduce(Fun.op.concat, ""),
-      condition,
+      script,
     }
-  ))()
-  return predicate(args)
+  ))()(args)
+end
+
+local get_availability = function(root, args)
+  local condition = root.attributes["if"]
+  if not condition then return true end
+  return run_script("return " .. condition, args)
 end
 
 local assign_event = function(event, root, content)
@@ -152,6 +157,12 @@ end
 
 html.get_title = function(content)
   return htmlparser.parse(content)("head")[1]("title")[1]:getcontent()
+end
+
+html.run_scripts = function(content, args)
+  for _, script in pairs(htmlparser.parse(content)("script")) do
+    run_script(script:getcontent(), args)
+  end
 end
 
 return html
