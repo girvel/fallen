@@ -9,6 +9,142 @@ local random = require("utils.random")
 
 local module = {}
 
+-- atlases --
+local pipe_atlas = "assets/atlases/pipes.png"
+
+for i, name in ipairs({
+  "pipe_horizontal", "pipe_vertical", "pipe_horizontal_braced", "pipe_vertical_braced",
+  "pipe_left_back", "pipe_forward_left", "pipe_right_forward", "pipe_back_right",
+  "pipe_left_down", "pipe_forward_down", "pipe_right_down", "pipe_back_down",
+  "pipe_T", "pipe_x",
+}) do
+  module[name] = function()
+    return Tablex.extend(
+      atlas_sprite(pipe_atlas, i),
+      {
+        layer = "solids",
+        view = "scene",
+        codename = name,
+      }
+    )
+  end
+end
+
+local decorations_atlas = "assets/sprites/decorations_atlas.png"
+
+Fun.iter({
+  false, "device_panel_broken", "furnace", "table", "locker", "locker_damaged", "cabinet", "cabinet_damaged",
+  "bed", "crate", "crate_open", "chest", "chest_open", "table_left", "table_hor", "table_right",
+}):enumerate():each(function(i, name)
+  if not name then return end
+  module[name] = function()
+    return Tablex.extend(
+      atlas_sprite(decorations_atlas, i),
+      {
+        view = "scene",
+        layer = "solids",
+        codename = name,
+      }
+    )
+  end
+end)
+
+-- atlas extensions --
+local valve_rotating_sounds = Common.volumed_sounds("assets/sounds/valve_rotate", 0.1)
+local pipe_valve_pack = animated.load_pack("assets/sprites/pipe_valve")
+
+module.pipe_valve = function(leaking_pipe_position)
+  return Tablex.extend(
+    animated(pipe_valve_pack),
+    interactive(function(self, other)
+      local target = State.grids.solids[leaking_pipe_position]
+      self:animate("rotate")
+      State.audio:play(self, random.choice(valve_rotating_sounds), "medium")
+      self:when_animation_ends(function()
+        target.overflow_counter = 0
+        target:burst_with_steam()
+      end)
+    end, true),
+    {
+      layer = "solids",
+      view = "scene",
+      name = "Вентиль",
+      codename = "pipe_valve",
+    }
+  )
+end
+
+local steam_hissing_sound = Common.volumed_sounds("assets/sounds/steam_hissing.wav", 0.8)[1]
+
+module.leaking_pipe_left_down = function()
+  local sound = Common.volumed_sounds("assets/sounds/steam_hissing_loop.wav", 1)[1]
+  sound:setLooping(true)
+
+  return Tablex.extend(
+    atlas_sprite(pipe_atlas, 9),
+    {
+      layer = "solids",
+      view = "scene",
+
+      codename = "leaking_pipe_left_down",
+      trigger_seconds = 5,
+      overflow_counter = 0,
+      sound_loop = sound,
+      paused = false,
+
+      ai = {run = function(self, event)
+        local dt = unpack(event)
+        self.overflow_counter = self.overflow_counter + dt
+
+        if self.overflow_counter >= 60 then
+          State.audio:play(self, self.sound_loop)
+          if Common.relative_period(1, dt, self, "steam") then
+            self:burst_with_steam()
+          end
+          return
+        end
+        self.sound_loop:stop()
+
+        if Common.relative_period(self.trigger_seconds, dt, self, "steam") then
+          self.trigger_seconds = 8 + math.random() * 4
+          self:burst_with_steam()
+        end
+      end},
+
+      burst_with_steam = function(self)
+        if self.paused then return end
+
+        State:add(Tablex.extend(
+          library_fx.steam("right"),
+          {position = self.position}
+        ))
+        State.audio:play(self, steam_hissing_sound:clone())
+      end,
+    }
+  )
+end
+
+module.device_panel = function()
+  return Tablex.extend(
+    atlas_sprite(decorations_atlas, 1),
+    {
+      view = "scene",
+      layer = "solids",
+      codename = "device_panel",
+      hp = 1,
+      hardness = 15,
+      sounds = {
+        hit = Common.volumed_sounds("assets/sounds/glass_breaking", 0.5),
+      },
+      on_remove = function(self)
+        State:add(Tablex.extend(module.device_panel_broken(), {position = self.position}))
+      end,
+    }
+  )
+end
+
+-- plain sprites --
+-- TODO refactor?
 local lever_packs = {
   on = animated.load_pack("assets/sprites/lever_on"),
   off = animated.load_pack("assets/sprites/lever_off"),
@@ -137,138 +273,6 @@ for _, name in ipairs({
       }
     )
   end
-end
-
-local pipe_atlas = "assets/atlases/pipes.png"
-
-for i, name in ipairs({
-  "pipe_horizontal", "pipe_vertical", "pipe_horizontal_braced", "pipe_vertical_braced",
-  "pipe_left_back", "pipe_forward_left", "pipe_right_forward", "pipe_back_right",
-  "pipe_left_down", "pipe_forward_down", "pipe_right_down", "pipe_back_down",
-  "pipe_T", "pipe_x",
-}) do
-  module[name] = function()
-    return Tablex.extend(
-      atlas_sprite(pipe_atlas, i),
-      {
-        layer = "solids",
-        view = "scene",
-        codename = name,
-      }
-    )
-  end
-end
-
-local valve_rotating_sounds = Common.volumed_sounds("assets/sounds/valve_rotate", 0.1)
-local pipe_valve_pack = animated.load_pack("assets/sprites/pipe_valve")
-
-module.pipe_valve = function(leaking_pipe_position)
-  return Tablex.extend(
-    animated(pipe_valve_pack),
-    interactive(function(self, other)
-      local target = State.grids.solids[leaking_pipe_position]
-      self:animate("rotate")
-      State.audio:play(self, random.choice(valve_rotating_sounds), "medium")
-      self:when_animation_ends(function()
-        target.overflow_counter = 0
-        target:burst_with_steam()
-      end)
-    end, true),
-    {
-      layer = "solids",
-      view = "scene",
-      name = "Вентиль",
-      codename = "pipe_valve",
-    }
-  )
-end
-
-local steam_hissing_sound = Common.volumed_sounds("assets/sounds/steam_hissing.wav", 0.8)[1]
-
-module.leaking_pipe_left_down = function()
-  local sound = Common.volumed_sounds("assets/sounds/steam_hissing_loop.wav", 1)[1]
-  sound:setLooping(true)
-
-  return Tablex.extend(
-    atlas_sprite(pipe_atlas, 9),
-    {
-      layer = "solids",
-      view = "scene",
-
-      codename = "leaking_pipe_left_down",
-      trigger_seconds = 5,
-      overflow_counter = 0,
-      sound_loop = sound,
-      paused = false,
-
-      ai = {run = function(self, event)
-        local dt = unpack(event)
-        self.overflow_counter = self.overflow_counter + dt
-
-        if self.overflow_counter >= 60 then
-          State.audio:play(self, self.sound_loop)
-          if Common.relative_period(1, dt, self, "steam") then
-            self:burst_with_steam()
-          end
-          return
-        end
-        self.sound_loop:stop()
-
-        if Common.relative_period(self.trigger_seconds, dt, self, "steam") then
-          self.trigger_seconds = 8 + math.random() * 4
-          self:burst_with_steam()
-        end
-      end},
-
-      burst_with_steam = function(self)
-        if self.paused then return end
-
-        State:add(Tablex.extend(
-          library_fx.steam("right"),
-          {position = self.position}
-        ))
-        State.audio:play(self, steam_hissing_sound:clone())
-      end,
-    }
-  )
-end
-
-local decorations_atlas = "assets/sprites/decorations_atlas.png"
-
-Fun.iter({
-  false, "device_panel_broken", "furnace", "table", "locker", "locker_damaged", "cabinet", "cabinet_damaged",
-  "bed", "crate", "crate_open", "chest", "chest_open",
-}):enumerate():each(function(i, name)
-  if not name then return end
-  module[name] = function()
-    return Tablex.extend(
-      atlas_sprite(decorations_atlas, i),
-      {
-        view = "scene",
-        layer = "solids",
-        codename = name,
-      }
-    )
-  end
-end)
-
-module.device_panel = function()
-  return Tablex.extend(
-    atlas_sprite(decorations_atlas, 1),
-    {
-      view = "scene",
-      layer = "solids",
-      codename = "device_panel",
-      hp = 1,
-      hardness = 15,
-      sounds = {
-        hit = Common.volumed_sounds("assets/sounds/glass_breaking", 0.5),
-      },
-      on_remove = function(self)
-        State:add(Tablex.extend(module.device_panel_broken(), {position = self.position}))
-      end,
-    }
-  )
 end
 
 return module

@@ -51,6 +51,16 @@ local throw_tiles_under = function(level_lines, palette, result)
   end
 end
 
+local get_factory = function(grid, position, palette)
+  local character = grid[position]
+  local complex_factory = palette.complex_factories[character]
+  if complex_factory then
+    local f = complex_factory(grid, position)
+    if f then return f end
+  end
+  return palette.factories[character]
+end
+
 module.load_entities = function(text_representation, arguments, palette)
   local level_lines = text_representation:strip():split("\n")
   local level_size = Vector({#level_lines[1], #level_lines})
@@ -67,13 +77,20 @@ module.load_entities = function(text_representation, arguments, palette)
     grid_of_args[k] = v
   end
 
+  local character_grid = Grid(level_size)
+  for y, line in ipairs(level_lines) do
+    for _, x, character in Fun.iter(line):enumerate() do
+      character_grid[Vector({x, y})] = character
+    end
+  end
+
   local result = {}
   local player_anchor = {}
 
   for y, line in ipairs(level_lines) do
     for _, x, character in Fun.iter(line):enumerate() do
       local position = Vector({x, y})
-      local factory = palette.factories[character]
+      local factory = get_factory(character_grid, position, palette)
       if factory then
         table.insert(result, Tablex.extend(
           factory(unpack(grid_of_args[position] or {})),

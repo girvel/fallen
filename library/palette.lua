@@ -57,6 +57,25 @@ return {
     d = weapons.dagger,
     r = weapons.rapier,
   },
+  complex_factories = {
+    t = function(grid, position)
+      local left = grid:safe_get(position + Vector.left)
+      local right = grid:safe_get(position + Vector.right)
+      local up = grid:safe_get(position + Vector.up)
+      local down = grid:safe_get(position + Vector.down)
+
+      if left == "t" then
+        if right == "t" then
+          return static.table_hor
+        end
+        return static.table_right
+      end
+
+      if right == "t" then
+        return static.table_left
+      end
+    end,
+  },
   transparents = Common.set("MDl@gdr>v<^\\/FB}{T+o1234LpPtkKba$"),
   throwables = Common.set("_,"),
 }
