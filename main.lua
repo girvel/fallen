@@ -168,7 +168,7 @@ for callback_name, _ in pairs(
     State.world:refresh()
     State.world:update(function(_, entity)
       return entity.base_callback == callback_name
-    end, {...})
+    end, {...})  -- TODO REF maybe unpack the arguments?
   end
 end
 

@@ -162,7 +162,7 @@ end
 
 html.parse = function(content, args, styles)
   assert(styles and styles.default)
-  return visit_html(htmlparser.parse(content), args, styles)
+  return Log.trace(visit_html(htmlparser.parse(content), args, styles))
 end
 
 html.is_available = function(content, args)

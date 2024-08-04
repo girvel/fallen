@@ -70,7 +70,7 @@ for i, x in ipairs(modes) do
 
     -- Return early if we're below the log level
     if i < levels[log.level] then
-      return
+      return ...
     end
 
     local msg = tostring(...)
