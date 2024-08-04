@@ -8,7 +8,10 @@ module.SLOTS = {"main_hand", "other_hand", "gloves"}
 module.drop = function(parent, slot)
   local drop_position = Fun.chain({Vector.zero}, Vector.directions)
     :map(function(d) return parent.position + d end)
-    :filter(function(v) return not State.grids.items[v] end)
+    :filter(function(v)
+      return (v == parent.position or not State.grids.solids[v])
+        and not State.grids.items[v]
+    end)
     :nth(1)
   if not drop_position then return end
 
