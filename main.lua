@@ -49,6 +49,7 @@ love.load = function(args)
 
   args = cli.parse(args)
   Log.info("Command line arguments:", args)
+  Log.level = args.debug and "trace" or "debug"
 
   local seed = os.time()
   Log.info("Loading the game; seed", seed)
@@ -168,7 +169,7 @@ end
 
 love.quit = function()
   Log.info("Exited smoothly")
-  Log.info("FPS: %.2f" % (frames_total / active_time))
+  Log.info("Max potential FPS: %.2f" % (frames_total / active_time))
   if State.profiler then
     State.profiler.stop()
     Log.info("===== PROFILE =====\n\n" .. State.profiler.report(100))

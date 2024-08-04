@@ -48,9 +48,7 @@ ai.api.travel = function(entity, destination)
       end
     end
 
-    Log.trace(position - entity.position)
     if not ai.api.move(entity, position - entity.position) then return end
-    Log.trace(".")
     coroutine.yield()
   end
 end

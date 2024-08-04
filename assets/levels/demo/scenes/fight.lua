@@ -18,6 +18,7 @@ return function()
         rails.scenes.half_orc_begs.enabled = true
         rails.entities[3].faction = "rebellion"
         rails.entities[3].interact = nil
+        rails.entities[3].ai.mode = engineer_ai.modes.normal
         if rails.entities[3]._highlight then
           State:remove(rails.entities[3]._highlight)
         end
@@ -29,11 +30,12 @@ return function()
       name = "Half-orc begs for his life",
       enabled = false,
       start_predicate = function(self, rails, dt)
-        return rails.entities[3].hp <= rails.old_hp[3] / 2
+        return rails.entities[3].will_beg and rails.entities[3].hp <= rails.old_hp[3] / 2
       end,
 
       run = function(self, rails, dt)
         self.enabled = false
+        rails.entities[3].will_beg = false
         rails.entities[3].ai.mode = engineer_ai.modes.skip_turn()
         rails.scenes.half_orc_mercy.enabled = true
       end,
@@ -48,6 +50,7 @@ return function()
 
       run = function(self, rails, dt)
         self.enabled = false
+        rails.scenes.player_attacks_half_orc.enabled = true
         rails.entities[3].portrait = love.graphics.newImage("assets/sprites/portraits/half_orc.png")
         api.narration("Полуорк несколько секунд тяжело дышит, опираясь о ближайшую стену.")
         rails.entities[3]:rotate(Vector.name_from_direction(
@@ -137,6 +140,7 @@ return function()
               State:start_combat({State.player, rails.entities[3]})
             else
               rails.entities[3].ai.mode = engineer_ai.modes.run_away_to(rails.positions.exit)
+              rails.scenes.player_attacks_half_orc.enabled = true
             end
             break
           end

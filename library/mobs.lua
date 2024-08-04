@@ -69,6 +69,7 @@ module[3] = function()
     save_proficiencies = {dexterity = true},
 
     talking_to = nil,
+    will_beg = true,
 
     get_resources = function()
       return {
