@@ -53,6 +53,7 @@ return Tiny.processingSystem({
           State:add_dependency(entity, hurt)
           hurt:animate()
           entity.inventory.hurt = hurt
+          hurt.direction = entity.direction
         end
       else
         if entity.inventory.hurt then
