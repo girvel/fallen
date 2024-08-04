@@ -85,6 +85,8 @@ love.load = function(args)
 
   if not args.debug then
     love.errorhandler = love_errorhandler
+  else
+    jit.off()
   end
 
   if args.resolution then

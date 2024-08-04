@@ -61,7 +61,7 @@ return function()
       },
       hate = {
         color = Common.hex_color("e64e4b"),
-        delay = 2,
+        delay = 0.2,
         appearance_time = 2,
       },
     },

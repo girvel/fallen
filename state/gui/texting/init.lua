@@ -1,5 +1,4 @@
 local special = require("tech.special")
-local utf8 = require("utf8")
 local html = require("state.gui.texting.html")
 local wrap = require("state.gui.texting.wrap")
 
