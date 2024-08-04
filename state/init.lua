@@ -152,22 +152,18 @@ module_mt.__call = function(_, systems, debug_mode)
     end,
 
     start_combat = function(self, list)
-      local initiative_rolls = Fun.iter(list)
-        :map(function(e)
-          return {
-            entity = e,
-            roll = (D(20) + mech.get_modifier(e.abilities.dexterity)):roll()
-          }
-        end)
-        :totable()
+      if State.combat then
+        list = Fun.iter(list)
+          :filter(function(e) return not Tablex.contains(State.combat.list, e) end)
+          :totable()
+      end
 
-      table.sort(initiative_rolls, function(a, b) return a.roll > b.roll end)
-
-      local pure_order = Fun.iter(initiative_rolls)
-        :map(function(x) return x.entity end)
-        :totable()
-
-      self.combat = combat(pure_order)
+      Fun.iter(list):each(function(e)
+        e.current_initiative = (D(20) + mech.get_modifier(e.abilities.dexterity)):roll()
+      end)
+      Tablex.concat(list, -Query(State.combat):iter_entities_only():totable())
+      table.sort(list, function(a, b) return a.current_initiative < b.current_initiative end)
+      self.combat = combat(list)
     end,
 
     register_agression = function(self, source, target)
