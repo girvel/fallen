@@ -9,7 +9,7 @@ module._packs_cache = {}
 
 local animation_methods = {
   animate = function(self, animation_name)
-    self.animation.paused = false
+    self:animation_set_paused(false)
     animation_name = animation_name or "idle"
     self.animation.current = animation_name .. "_" .. (self.direction or "")
     if not self.animation.pack[self.animation.current] then
@@ -35,7 +35,14 @@ local animation_methods = {
   animation_refresh = function(self)
     if not self.animation.pack[self.animation.current] then return end
     self.sprite = self.animation.pack[self.animation.current][math.floor(self.animation.frame)]
-  end
+  end,
+
+  animation_set_paused = function(self, value)
+    self.animation.paused = value
+    for _, it in pairs(self.inventory or {}) do
+      it.animation.paused = value
+    end
+  end,
 }
 
 module_mt.__call = function(self, pack, pack_type)

@@ -51,10 +51,8 @@ module_mt.__call = function(_, systems, debug_mode)
         self.grids[entity.layer][entity.position] = entity
       end
       if entity.inventory then
-        Fun.iter(item.SLOTS)
-          :map(function(slot) return entity.inventory[slot] end)
-          :filter(Fun.op.truth)
-          :each(function(it) self:add(it) end)
+        Fun.iter(entity.inventory)
+          :each(function(slot, it) self:add(it) end)
       end
       return entity
     end,

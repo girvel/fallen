@@ -51,9 +51,11 @@ return Tiny.processingSystem({
         if not entity.inventory.hurt then
           local hurt = State:add(blood())
           State:add_dependency(entity, hurt)
-          hurt:animate()
-          entity.inventory.hurt = hurt
           hurt.direction = entity.direction
+          hurt:animate(entity.animation.current)
+          hurt.animation.paused = entity.animation.paused
+          -- TODO abstract this away as picking up an item?
+          entity.inventory.hurt = hurt
         end
       else
         if entity.inventory.hurt then

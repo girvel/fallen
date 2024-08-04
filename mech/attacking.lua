@@ -60,11 +60,18 @@ module.damage = function(target, damage, is_critical)
   target.hp = target.hp - damage
   if target.hp <= 0 then
     Query(target):on_death()
-    if not target.immortal then
-      Fun.iter(-Query(target).inventory or {}):each(function(slot) item.drop(target, slot) end)
-      State:remove(target)
-      Log.info(Common.get_name(target) .. " is killed")
+    if target.immortal then return end
+
+    if target.inventory then
+      for _, slot in ipairs(item.DROPPING_SLOTS) do
+        if target.inventory[slot] then
+          item.drop(target, slot)
+        end
+      end
     end
+
+    State:remove(target)
+    Log.info(Common.get_name(target) .. " is killed")
   end
 end
 

@@ -27,7 +27,7 @@ return function()
       self.entities.gloves = self.entities[3].inventory.gloves
 
       self.entities[1]:animate("holding")
-      self.entities[1].animation.paused = true
+      self.entities[1]:animation_set_paused(true)
 
       self.dreamers_talked_to = {}
       self.old_hp = Fun.range(4)
