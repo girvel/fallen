@@ -14,6 +14,12 @@ describe("Serialization library", function()
       end
       assert.is_true(load(dump(f))()())
     end)
+    it("dumps a nil", function()
+      assert.is_nil(load(dump(nil))())
+    end)
+    it("dumps a boolean", function()
+      assert.are_equal(true, load(dump(true)))
+    end)
   end)
 
   describe("complex functionality", function()
@@ -24,6 +30,12 @@ describe("Serialization library", function()
 
     it("dumps a shallow table with strange keys", function()
       local t = {["function"] = 1, ["//"] = 2}
+      assert.are_same(load(dump(t))(), t)
+    end)
+
+    it("dumps a table in a table", function()
+      local t = {a = {a = 1}}
+      print(dump(t))
       assert.are_same(load(dump(t))(), t)
     end)
   end)
