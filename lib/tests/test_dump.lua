@@ -41,5 +41,10 @@ describe("Serialization library", function()
       local t = {a = {a = 1}}
       assert.are_same(load(dump(t))(), t)
     end)
+
+    it("handles metatables", function()
+      local t = setmetatable({a = {a = 1}}, {__call = function(self) return self.a.a end})
+      assert.are_same(1, load(dump(t))()())
+    end)
   end)
 end)

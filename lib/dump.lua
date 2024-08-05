@@ -12,7 +12,12 @@ local build_table = function(x)
     i = i + 1
   end
 
-  result[i] = "return _"
+  local mt = getmetatable(x)
+  if not mt then
+    result[i] = "return _"
+  else
+    result[i] = ("return setmetatable(_, %s)"):format(primitives[type(mt)](mt))
+  end
 
   return table.concat(result, "\n")
 end
