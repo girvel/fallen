@@ -1,5 +1,6 @@
 local level = require("tech.level")
 local tcod = require("lib.tcod")
+local ffi = require("ffi")
 
 
 return Tiny.sortedProcessingSystem({
@@ -67,7 +68,7 @@ return Tiny.sortedProcessingSystem({
     end
 
     local px, py = unpack(State.player.position)
-    tcod.TCOD_map_compute_fov(self._fov_map, px, py, 10, true, require("ffi").C.FOV_PERMISSIVE_8)
+    tcod.TCOD_map_compute_fov(self._fov_map, px, py, 20, true, ffi.C.FOV_PERMISSIVE_8)
 
     for _, layer in ipairs(level.GRID_LAYERS) do
       local grid = State.grids[layer]

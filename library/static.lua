@@ -108,6 +108,7 @@ module.leaking_pipe_left_down = function()
     {
       layer = "solids",
       view = "scene",
+      transparent_flag = true,
 
       codename = "leaking_pipe_left_down",
       trigger_seconds = 5,
@@ -162,6 +163,7 @@ module.device_panel = function()
       on_remove = function(self)
         State:add(Tablex.extend(module.device_panel_broken(), {position = self.position}))
       end,
+      transparent_flag = true,
     }
   )
 end
