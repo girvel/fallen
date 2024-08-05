@@ -30,6 +30,12 @@ primitives = {
   table = function(x)
     return ("(function()\n%s\nend)()"):format(build_table(x))
   end,
+  ["nil"] = function(x)
+    return "nil"
+  end,
+  boolean = function(x)
+    return tostring(x)
+  end,
 }
 
 return function(x)

@@ -5,20 +5,24 @@ describe("Serialization library", function()
     it("dumps a number", function()
       assert.are_equal(1, load(dump(1))())
     end)
+
     it("dumps a string", function()
       assert.are_equal("abc\n", load(dump("abc\n"))())
     end)
+
     it("dumps a function", function()
       local f = function()
         return true
       end
       assert.is_true(load(dump(f))()())
     end)
+
     it("dumps a nil", function()
       assert.is_nil(load(dump(nil))())
     end)
+
     it("dumps a boolean", function()
-      assert.are_equal(true, load(dump(true)))
+      assert.are_equal(true, load(dump(true))())
     end)
   end)
 
@@ -35,7 +39,6 @@ describe("Serialization library", function()
 
     it("dumps a table in a table", function()
       local t = {a = {a = 1}}
-      print(dump(t))
       assert.are_same(load(dump(t))(), t)
     end)
   end)
