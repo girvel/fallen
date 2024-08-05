@@ -1,6 +1,6 @@
 return {
   default = {
-    ROOT = {"."},
+    ROOT = {"lib/tests"},
     pattern = "test_",
     verbose = true,
   },
