@@ -38,6 +38,10 @@ local grid_methods = {
     return self[v]
   end,
 
+  fast_get = function(self, x, y)
+    return self._inner_array[self:_get_inner_index(x, y)]
+  end,
+
   iter = function(self)
     return fun.iter(pairs(self._inner_array))
   end,

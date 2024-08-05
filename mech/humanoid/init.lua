@@ -14,7 +14,7 @@ return function(base_object)
   )
 
   return Tablex.extend(
-    {},
+    {transparent_flag = true},
     creature(pack_by_race(base_object.race), base_object)
   )
 end

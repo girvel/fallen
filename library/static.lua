@@ -25,6 +25,7 @@ for i, name in ipairs({
         layer = "solids",
         view = "scene",
         codename = name,
+        transparent_flag = true,
       }
     )
   end
@@ -44,6 +45,7 @@ Fun.iter({
         view = "scene",
         layer = "solids",
         codename = name,
+        transparent_flag = true,
       }
     )
   end
@@ -90,6 +92,7 @@ module.pipe_valve = function(leaking_pipe_position)
       view = "scene",
       name = "Вентиль",
       codename = "pipe_valve",
+      transparent_flag = true,
     }
   )
 end

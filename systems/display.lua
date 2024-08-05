@@ -1,4 +1,5 @@
 local level = require("tech.level")
+local tcod = require("lib.tcod")
 
 
 return Tiny.sortedProcessingSystem({
@@ -9,6 +10,7 @@ return Tiny.sortedProcessingSystem({
   base_callback = "draw",
 
   _unknown_icon = love.graphics.newImage("assets/sprites/icons/unknown.png"),
+  _fov_map = nil,
 
   compare = function(self, first, second)
     if first.view ~= second.view then
@@ -33,8 +35,13 @@ return Tiny.sortedProcessingSystem({
     State.gui:update_views()
     State.gui.sidebar:update_indicators(event[1])
 
+    self:process_grid(event)
+  end,
+
+  process_grid = function(self, event)
     if Tablex.contains({"character_creator", "reading", "death"}, State:get_mode()) then return end
 
+    -- borders --
     local view = State.gui.views.scene
     local start = view:inverse_multipler(-view.offset):map(math.floor)
     local finish = start + view:inverse_multipler(Vector({love.graphics.getDimensions()})):map(math.ceil)
@@ -42,12 +49,34 @@ return Tiny.sortedProcessingSystem({
     start = Vector.use(Mathx.median, Vector.one, start, State.grids.solids.size)
     finish = Vector.use(Mathx.median, Vector.one, finish, State.grids.solids.size)
 
+    -- mask --
+    local solids = State.grids.solids
+    if not self._fov_map then
+      self._fov_map = tcod.TCOD_map_new(unpack(solids.size))
+    end
+
+    local function bool(x)
+      return not not x
+    end
+
+    for x = start[1], finish[1] do
+      for y = start[2], finish[2] do
+        local e = solids:fast_get(x, y)
+        tcod.TCOD_map_set_properties(self._fov_map, x, y, bool(not e or e.transparent_flag), not e)
+      end
+    end
+
+    local px, py = unpack(State.player.position)
+    tcod.TCOD_map_compute_fov(self._fov_map, px, py, 10, true, require("ffi").C.FOV_PERMISSIVE_8)
+
     for _, layer in ipairs(level.GRID_LAYERS) do
       local grid = State.grids[layer]
       for x = start[1], finish[1] do
         for y = start[2], finish[2] do
-          local e = grid._inner_array[grid:_get_inner_index(x, y)]
-          if e then self:process(e) end
+          if tcod.TCOD_map_is_in_fov(self._fov_map, x, y) then
+            local e = grid:fast_get(x, y)
+            if e then self:process(e) end
+          end
         end
       end
     end
