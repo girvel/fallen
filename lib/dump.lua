@@ -71,6 +71,7 @@ primitives = {
 
 return function(x)
   local xtype = type(x)
+  assert(primitives[xtype], ("dump does not support type %q"):format(xtype))
   if xtype == "table" then
     return build_table(x)
   end
