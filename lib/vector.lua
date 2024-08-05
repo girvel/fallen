@@ -87,6 +87,14 @@ vector_mt.__tostring = function(self)
   return "{" .. tostring(self[1]) .. "; " .. tostring(self[2]) .. "}"
 end
 
+vector_mt.__serialize = function(self)
+  local x, y = unpack(self)
+  return function()
+    local _type = require("lib.vector")
+    return _type({x, y})
+  end
+end
+
 vector_methods.ceil = function(self)
   return module({math.ceil(self[1]), math.ceil(self[2])})
 end
