@@ -46,6 +46,13 @@ describe("Serialization library", function()
       local t = setmetatable({a = {a = 1}}, {__call = function(self) return self.a.a end})
       assert.are_same(1, load(dump(t))()())
     end)
+
+    it("handles function's upvalues", function()
+      local a = 1
+      local b = 2
+      local f = function() return a + b end
+      assert.are_same(3, load(dump(f))()())
+    end)
   end)
 
   describe("special functionality", function()

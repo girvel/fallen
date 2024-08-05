@@ -1,3 +1,7 @@
+local to_expression = function(statement)
+  return ("(function()\n%s\nend)()"):format(statement)
+end
+
 local primitives
 
 local build_table = function(x)
@@ -34,10 +38,24 @@ primitives = {
     return string.format("%q", x)
   end,
   ["function"] = function(x)
-    return ([[load(%q)]]):format(string.dump(x))
+    local expression = ([[load(%q)]]):format(string.dump(x))
+    if not debug.getupvalue(x, 1) then
+      return expression
+    end
+
+    local result = {"local _ = " .. expression}
+    for i = 1, math.huge do
+      local k, v = debug.getupvalue(x, i)
+      if not k then break end
+      result[i + 1] = ("debug.setupvalue(_, %s, %s)"):format(
+        i, primitives[type(v)](v)
+      )
+    end
+    table.insert(result, "return _")
+    return to_expression(table.concat(result, "\n"))
   end,
   table = function(x)
-    return ("(function()\n%s\nend)()"):format(build_table(x))
+    return to_expression(build_table(x))
   end,
   ["nil"] = function(x)
     return "nil"
