@@ -31,13 +31,13 @@ love.keyboard.setKeyRepeat(true)
 local palette = require("library.palette")
 local quests = require("library.quests")
 local factions = require("library.factions")
+
+local experiments = require("experiments_lain")
+
 -- TODO move these to the level configuration
 local state = require("state")
 local cli = require("tech.cli")
-
 local systems = require("systems")
-
-local serpent = require("lib.serpent")
 
 
 love.load = function(args)
@@ -96,6 +96,12 @@ love.load = function(args)
   if args.enable_profiler then
     State.profiler = require("lib.profile")
     State.profiler.setclock(love.timer.getTime)
+  end
+
+  if args.experiment then
+    experiments[args.experiment]()
+    Log.info("Experiment `%s` passed!" % args.experiment)
+    love.event.push("quit")
   end
 
   Log.info("Game is loaded")
@@ -182,20 +188,3 @@ love.quit = function()
 end
 
 Log.info("Finished setup")
-
-local serialization_experiments = function()
-  -- test function serialization
-  local f = function(x)
-    Log.trace(x)
-  end
-  loadstring(serpent.dump(f))()("Serialization works!")
-
-  -- test LOVE2D data serialization
-  local image = love.graphics.newImage("assets/sprites/bushes.png")
-  -- Log.trace(loadstring(serpent.dump(image))():getDimensions())
-  -- DOES NOT WORK
-
-  -- test dump size
-  local state_dump = serpent.dump(State)
-  Log.trace("Serialized state is %.2f KB" % (#state_dump / 1024))
-end

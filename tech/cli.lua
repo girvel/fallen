@@ -50,6 +50,11 @@ return {
       "Enable profiler; result will be displayed in logs"
     )
 
+    parser:option(
+      "-e --experiment",
+      "Run experiment with given name"
+    )
+
     local result = parser:parse(args)
 
     if result.resolution then
