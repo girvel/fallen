@@ -1,6 +1,6 @@
 local experiments = {}
 
-experiments.serialization = function()
+experiments.serialization_old = function()
   local serpent = require("lib.serpent")
 
   -- test function serialization
@@ -17,6 +17,10 @@ experiments.serialization = function()
   -- test dump size
   local state_dump = serpent.dump(State)
   Log.info("Serialized state is %.2f KB" % (#state_dump / 1024))
+end
+
+experiments.serialization = function()
+
 end
 
 return experiments

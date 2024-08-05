@@ -50,9 +50,9 @@ return {
       "Enable profiler; result will be displayed in logs"
     )
 
-    parser:option(
-      "-e --experiment",
-      "Run experiment with given name"
+    parser:flag(
+      "-t --tests",
+      "Run integration tests"
     )
 
     local result = parser:parse(args)

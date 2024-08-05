@@ -98,9 +98,8 @@ love.load = function(args)
     State.profiler.setclock(love.timer.getTime)
   end
 
-  if args.experiment then
-    experiments[args.experiment]()
-    Log.info("Experiment `%s` passed!" % args.experiment)
+  if args.tests then
+    require("tests.test_serialization")
     love.event.push("quit")
   end
 
