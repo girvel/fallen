@@ -1,6 +1,11 @@
 local primitives
 
 local build_table = function(x)
+  local mt = getmetatable(x)
+  if mt and mt.__serialize then
+    return "return " .. mt.__serialize(x)
+  end
+
   local result = {}
   result[1] = "local _ = {}"
 
@@ -12,7 +17,6 @@ local build_table = function(x)
     i = i + 1
   end
 
-  local mt = getmetatable(x)
   if not mt then
     result[i] = "return _"
   else
