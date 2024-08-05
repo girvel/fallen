@@ -8,10 +8,10 @@ local vector = require("lib.vector")
 
 
 local dump = function(x)
-  return serpent.dump(x, {metatostring = false})
+  return serpent.dump(x)
 end
 
-lust.describe("Global serialization process", function()
+lust.describe("Global serialization logic", function()
   describe("package data handling", function()
     it("should not have issues with Theseus's Paradox", function()
       local package_path = "tests.resources.package"
@@ -23,6 +23,14 @@ lust.describe("Global serialization process", function()
   end)
 
   describe("metatable serialization", function()
+    it("should have a solution", function()
+      local example_type = require("tests.resources.example_type")
+      local t = example_type(1, 2)
+      -- Log.trace(dump(t))
+      Log.trace({t, load(dump(t))()()})
+      expect(load(dump(t))()()).to.be(t)
+    end)
+
     it("should work with our types", function()
       local v = vector({1, 2})
       expect(load(dump(v))()).to.be(v)
