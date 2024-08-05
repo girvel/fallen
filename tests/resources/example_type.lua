@@ -3,10 +3,12 @@ local example_type = setmetatable({}, module_mt)
 
 example_type.mt = {
   __serialize = function(self)
-    return ([[(function()
+    local a = self.a
+    local b = self.b
+    return function()
       local _type = require("tests.resources.example_type")
-      return _type(%s, %s)
-    end)()]]):format(self.a, self.b)
+      return _type(a, b)
+    end
   end,
 
   __eq = function(self, other)

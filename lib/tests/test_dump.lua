@@ -60,5 +60,18 @@ describe("Serialization library", function()
       local t = setmetatable({}, {__serialize = function(self) return [[1]] end})
       assert.are_same(1, load(dump(t))())
     end)
+
+    it("handles __serialize returning function", function()
+      local t = setmetatable({a = 1}, {
+        __serialize = function(self)
+          local a = self.a
+          return function()
+            return a
+          end
+        end
+      })
+
+      assert.are_same(1, load(dump(t))())
+    end)
   end)
 end)

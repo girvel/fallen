@@ -7,7 +7,11 @@ local primitives
 local build_table = function(x)
   local mt = getmetatable(x)
   if mt and mt.__serialize then
-    return "return " .. mt.__serialize(x)
+    local serialized = mt.__serialize(x)
+    if type(serialized) == "function" then
+      return ("return %s()"):format(primitives["function"](serialized))
+    end
+    return "return " .. serialized
   end
 
   local result = {}
