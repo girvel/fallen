@@ -5,7 +5,11 @@ local serpent = require("lib.serpent")
 local experiments = {}
 
 experiments.tcod = function()
+  ffi.cdef([[
+    struct TCOD_Map *TCOD_map_new(int width, int height);
+  ]])
   local libtcod = ffi.load("lib/libtcod")
+  libtcod.TCOD_map_new(3, 3)
 end
 
 experiments.serialization = function()
