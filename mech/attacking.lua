@@ -2,10 +2,10 @@ local special = require("tech.special")
 local item = require("tech.item")
 
 
-local module = {}
+local attacking = Static.module("mech.attacking")
 
 --- Attacks with given attack/damage rolls
-module.attack = function(entity, target, attack_roll, damage_roll)
+attacking.attack = function(entity, target, attack_roll, damage_roll)
   local attack = attack_roll:roll()
   local is_nat = attack == attack_roll:max()
   local ac = (-Query(target):get_armor() or 0)
@@ -25,11 +25,11 @@ module.attack = function(entity, target, attack_roll, damage_roll)
     damage_roll = damage_roll + D.roll(damage_roll.dice, 0)
   end
 
-  module.damage(target, damage_roll:roll(), is_critical)
+  attacking.damage(target, damage_roll:roll(), is_critical)
   return true
 end
 
-module.attack_save = function(target, ability, save_dc, damage_roll)
+attacking.attack_save = function(target, ability, save_dc, damage_roll)
   local save = -Query(target).saving_throws[ability]:roll()
   if not save then return false end
 
@@ -42,12 +42,12 @@ module.attack_save = function(target, ability, save_dc, damage_roll)
     return false
   end
 
-  module.damage(target, damage_roll:roll())
+  attacking.damage(target, damage_roll:roll())
   return true
 end
 
 --- Gives fixed damage, handles hp, death and SFX
-module.damage = function(target, damage, is_critical)
+attacking.damage = function(target, damage, is_critical)
   damage = math.max(0, damage)
   Log.info("damage: " .. damage)
 
@@ -75,4 +75,4 @@ module.damage = function(target, damage, is_critical)
   end
 end
 
-return module
+return attacking

@@ -1,8 +1,7 @@
 local sprite = require("tech.sprite")
 
 
-local module_mt = {}
-local module = setmetatable({}, module_mt)
+local module, module_mt = Static.module("tech.animated")
 
 module._packs_cache = {}
 

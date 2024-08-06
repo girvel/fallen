@@ -1,4 +1,4 @@
-local module = {}
+local module = Static.module("mech")
 
 module.get_modifier = function(ability_score)
   return math.floor((ability_score - 10) / 2)

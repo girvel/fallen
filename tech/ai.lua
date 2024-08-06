@@ -1,7 +1,8 @@
 local actions = require("mech.creature.actions")
 
 
-local ai = {api = {}}
+local ai = Static.module("tech.ai")
+ai.api = {}
 
 ai.async = function(fun, works_outside_of_combat)
   return function(self, event)

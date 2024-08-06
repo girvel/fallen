@@ -1,4 +1,4 @@
-local module = {}
+local module = Static.module("tech.level")
 
 module.GRID_LAYERS = {"tiles", "items", "fx_behind", "solids", "above_solids", "fx"}
 

@@ -1,7 +1,6 @@
-local module_mt = {}
-local rogue = setmetatable({}, module_mt)
+local rogue, module_mt = Static.module("mech.classes.rogue")
 
-fighter.sneak_attack = function(entity, target)
+rogue.sneak_attack = function(entity, target)
   if entity.resources.actions <= 0
     or not target
     or not target.hp
@@ -25,7 +24,7 @@ fighter.sneak_attack = function(entity, target)
   end)
 end
 
-fighter.aim = function(entity)
+rogue.aim = function(entity)
   if entity.resources.bonus_actions <= 0
     or entity.resources.movement < constants.DEFAULT_MOVEMENT_SPEED
   then

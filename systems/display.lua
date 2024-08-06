@@ -6,7 +6,7 @@ local ffi = require("ffi")
 local default_font = love.graphics.newFont("assets/fonts/joystix.monospace-regular.otf", 14)
 default_font:setLineHeight(1.2)
 
-return Tiny.sortedProcessingSystem({
+return Static.module("systems.display", Tiny.sortedProcessingSystem({
   codename = "display",
   -- filter = Tiny.requireAll("position", "sprite", "view"),
   -- TODO RM?
@@ -205,4 +205,4 @@ return Tiny.sortedProcessingSystem({
       State.gui.sidebar.W - 15
     )
   end,
-})
+}))

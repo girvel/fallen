@@ -1,8 +1,7 @@
 local mech = require("mech")
 
 
-local module_mt = {}
-local combat = setmetatable({}, module_mt)
+local combat, module_mt = Static.module("tech.combat")
 
 combat.TURN_END_SIGNAL = 666
 combat.WORLD_TURN = {codename = "WORLD_TURN"}

@@ -1,7 +1,7 @@
 local interactive = require("tech.interactive")
 
 
-local module = {}
+local module = Static.module("tech.item")
 
 module.DROPPING_SLOTS = {"main_hand", "other_hand", "gloves"}
 

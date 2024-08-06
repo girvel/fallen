@@ -1,6 +1,6 @@
 local FPS = 6
 
-return Tiny.processingSystem({
+return Static.module("systems.animation", Tiny.processingSystem({
   codename = "animation",
   base_callback = "update",
   filter = Tiny.requireAll("animation"),
@@ -23,4 +23,4 @@ return Tiny.processingSystem({
 
     entity:animation_refresh()
   end,
-})
+}))

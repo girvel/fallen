@@ -7,7 +7,7 @@ local combat = require("tech.combat")
 local sound = require("tech.sound")
 
 
-local actions = {}
+local actions = Static.module("mech.creature.actions")
 
 -- Post-Plot MVP refactor plans:
 -- Action: {cost, _isAvailable(), execute()}

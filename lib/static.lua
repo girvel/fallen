@@ -6,10 +6,15 @@ local static = setmetatable({}, module_mt)
 
 static._module = nil
 
-static.module = function(path)
+static.module = function(path, t)
   assert(type(path) == "string", "Expected module name to be a string")
   static._module = path
-  local result = Static {}
+  local result
+  if type(t) == "function" then
+    result = Static(setmetatable({}, {__call = function(_, ...) return t(...) end}))
+  else
+    result = Static(t or {})
+  end
   return result, getmetatable(result)
 end
 

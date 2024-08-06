@@ -4,6 +4,8 @@ local wrap = require("state.gui.texting.wrap")
 local sprite = require("tech.sprite")
 
 
+local texting = Static.module("state.gui.texting")
+
 local generate_entities = function(token_lines, view)
   local result = {}
   for y, line in ipairs(token_lines) do
@@ -36,10 +38,10 @@ local generate_entities = function(token_lines, view)
   return result
 end
 
-return {
-  generate_html_page = function(content, styles, w, view, args)
-    return generate_entities(
-      wrap(html.parse(content, args, styles), w), view
-    )
-  end,
-}
+texting.generate_html_page = function(content, styles, w, view, args)
+  return generate_entities(
+    wrap(html.parse(content, args, styles), w), view
+  )
+end
+
+return texting

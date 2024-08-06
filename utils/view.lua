@@ -1,4 +1,4 @@
-return function(offset, scale, cell_size)
+return Static.module("utils.view", function(offset, scale, cell_size)
   return {
     offset = offset,
     scale = scale,
@@ -16,4 +16,4 @@ return function(offset, scale, cell_size)
       return v / self.scale / self.cell_size
     end,
   }
-end
+end)

@@ -13,8 +13,8 @@ experiments.serialization_old = function()
   -- DOES NOT WORK
 
   -- test dump size
-  local state_dump = Dump(State)
-  Log.info("Serialized state is %.2f KB" % (#state_dump / 1024))
+  local world_dump = Dump(State.world)
+  Log.info("Serialized state is %.2f KB" % (#world_dump / 1024))
 end
 
 return experiments

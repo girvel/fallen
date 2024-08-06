@@ -1,12 +1,10 @@
-Static.module("tech.special")
-
 local random = require("utils.random")
 local animated = require("tech.animated")
 local sprite = require("tech.sprite")
 local tech_constants = require("tech.constants")
 
 
-local module = Static {}
+local module = Static.module("tech.special")
 
 module.floating_damage = function(number, scene_position)
   number = tostring(number)

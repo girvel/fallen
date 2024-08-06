@@ -1,8 +1,7 @@
-Static.module("tech.sprite")
 local tech_constants = require("tech.constants")
 
 
-local sprite = Static {}
+local sprite = Static.module("tech.sprite")
 
 sprite.image_mt = Static {
   __serialize = function(self)

@@ -20,7 +20,7 @@ local blood = function()
   )
 end
 
-return Tiny.processingSystem({
+return Static.module("systems.acting", Tiny.processingSystem({
   codename = "acting",
   filter = Tiny.requireAll("ai"),
   base_callback = "update",
@@ -121,4 +121,4 @@ return Tiny.processingSystem({
       State:add(fx("assets/sprites/fx/turn_starts", "fx_behind", current.position))
     end
   end,
-})
+}))

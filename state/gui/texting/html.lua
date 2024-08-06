@@ -1,7 +1,7 @@
 local htmlparser = require("lib.htmlparser")
 
 
-local html = {}
+local html = Static.module("state.gui.texting.html")
 
 local transformers = {
   head = function() return {} end,

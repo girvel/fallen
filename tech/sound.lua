@@ -1,6 +1,4 @@
-Static.module("tech.sound")
-local module_mt = Static {}
-local sound = Static(setmetatable({}, module_mt))
+local sound, module_mt = Static.module("tech.sound")
 
 sound.methods = Static {
   clone = function(self)

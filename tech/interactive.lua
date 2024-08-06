@@ -1,8 +1,7 @@
 local special = require("tech.special")
 
 
-local module_mt = {}
-local module = setmetatable({}, module_mt)
+local module, module_mt = Static.module("tech.interactive")
 
 module.get_for = function(entity)
   return Fun.iter(pairs({

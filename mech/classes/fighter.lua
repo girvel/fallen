@@ -4,8 +4,7 @@ local mech = require("mech")
 local fx = require("tech.fx")
 
 
-local module_mt = {}
-local fighter = setmetatable({}, module_mt)
+local fighter, module_mt = Static.module("mech.classes.fighter")
 
 fighter.second_wind = {
   codename = "second_wind",

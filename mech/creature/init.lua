@@ -4,9 +4,7 @@ local mech = require("mech")
 local sound = require("tech.sound")
 
 
-local module = {}
-local module_mt = {}
-setmetatable(module, module_mt)
+local creature, module_mt = Static.module("mech.creature")
 
 module_mt.__call = function(_, animation_pack, object)
   assert(object.max_hp or object.class)
@@ -130,4 +128,4 @@ module_mt.__call = function(_, animation_pack, object)
   return result
 end
 
-return module
+return creature

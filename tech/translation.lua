@@ -2,7 +2,7 @@ local fighter = require("mech.classes.fighter")
 local feats = require("mech.feats")
 
 
-return {
+return Static.module("tech.translation", {
   ability = {
     strength = "сила",
     dexterity = "ловкость",
@@ -44,4 +44,4 @@ return {
     action_surge = "всплеск действий",
     hit_dice = "перевязать раны",
   },
-}
+})

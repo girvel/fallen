@@ -1,6 +1,6 @@
-local shaders = {}
+local shaders = Static.module("tech.shaders")
 
-shaders.black_and_white = {
+shaders.black_and_white = Static {
   love_shader = love.graphics.newShader([[
     vec4 effect(vec4 color, Image tex, vec2 texture_coords, vec2 screen_coords)
     {
@@ -13,7 +13,7 @@ shaders.black_and_white = {
   ]]),
 }
 
-shaders.black_and_white_and_red = {
+shaders.black_and_white_and_red = Static {
   love_shader = love.graphics.newShader([[
     vec4 effect(vec4 color, Image tex, vec2 texture_coords, vec2 screen_coords)
     {

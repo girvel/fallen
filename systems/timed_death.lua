@@ -1,4 +1,4 @@
-return Tiny.processingSystem({
+return Static.module("systems.timed_death", Tiny.processingSystem({
   codename = "timed_death",
   filter = Tiny.requireAll("life_time"),
   base_callback = "update",
@@ -9,4 +9,4 @@ return Tiny.processingSystem({
       State:remove(entity)
     end
   end,
-})
+}))

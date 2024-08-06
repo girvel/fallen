@@ -1,4 +1,4 @@
-return Tiny.system({
+return Static.module("systems.input", Tiny.system({
   codename = "input",
   base_callback = "keypressed",
   update = function(_, event)
@@ -23,4 +23,4 @@ return Tiny.system({
     Query(data).pre_action()
     Query(State.player).next_action = data.action
   end,
-})
+}))

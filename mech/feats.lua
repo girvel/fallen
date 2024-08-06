@@ -1,7 +1,7 @@
 local perk = require("mech.perk")
 
 
-local feats = {}
+local feats = Static.module("mech.feats")
 
 feats.great_weapon_master = {
   codename = "great_weapon_master",

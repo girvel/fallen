@@ -1,4 +1,4 @@
-return {
+return Static.module("systems", {
   -- for keypressed/mousepressed order is not guaranteed
   -- love.keypressed systems --
   require("systems.input"),
@@ -17,4 +17,4 @@ return {
 
   -- love.draw systems --
   require("systems.display"),
-}
+})

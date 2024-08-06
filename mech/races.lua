@@ -1,4 +1,4 @@
-local module = {}
+local module = Static.module("mech.races")
 
 module.half_orc = {
   codename = "half_orc",
