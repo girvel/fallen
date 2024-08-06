@@ -14,6 +14,32 @@ Mathx = require("lib.mathx")
 Common = require("lib.Common")
 
 Dump = require("lib.dump")
+-- TODO extract
+local userdata_calls_cache = {}
+Dump.custom_handlers.userdata = function(x)
+  local cache = userdata_calls_cache[x]
+  if not cache then error("Uncached userdata") end
+  return [[(function()
+    local args = load(%q)()
+    return %s(unpack(args))
+  end)()]] % {cache.args, cache.name}
+end
+
+local parent = love.graphics.newImage
+love.graphics.newImage = function(...) -- TODO autowrapper
+  local result = parent(...)
+  local success, args = pcall(Dump, {...})  -- TODO RM
+  if success then
+    userdata_calls_cache[result] = {
+      name = "love.graphics.newImage",
+      args = args,
+    }
+  else
+    -- Log.warn(args)
+  end
+  return result
+end
+
 Static = require("lib.static")
 Enum = require("lib.enum")
 Vector = require("lib.vector")

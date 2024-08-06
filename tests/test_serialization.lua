@@ -44,12 +44,20 @@ lust.describe("Global serialization logic", function()
     end)
 
     it("should work with used love types", function()
-      for _, x in ipairs({
-        love.graphics.newImage("tests/resources/image.png"),
-        love.audio.newSource("tests/resources/sound.mp3", "static"),
-      }) do
-        expect(load(dump(x))()).to.be(x)
-      end
+      local image = love.graphics.newImage("tests/resources/image.png")
+      local image_copy = load(dump(image))()
+      expect(image_copy:getHeight()).to.be(image:getHeight())
+
+      local sound = love.audio.newSource("tests/resources/sound.mp3", "static")
+      local sound_copy = load(dump(sound))()
+      expect(sound_copy:getDuration()).to.be(sound:getDuration())
+      expect(sound_copy:getVolume()).to.be(sound:getVolume())
+      -- for _, x in ipairs({
+      --   
+      --   
+      -- }) do
+      --   expect(load(dump(x))()).to.be(x)
+      -- end
     end)
   end)
 end)

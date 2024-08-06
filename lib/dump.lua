@@ -1,3 +1,6 @@
+local module_mt = {}
+local dump = setmetatable({}, module_mt)
+
 local to_expression = function(statement)
   return ("(function()\n%s\nend)()"):format(statement)
 end
@@ -79,6 +82,8 @@ local primitives = {
   end,
 }
 
+dump.custom_handlers = {}
+
 handle_primitive = function(x, cache)
   local cache_i = cache[x]
   if cache_i then
@@ -86,12 +91,15 @@ handle_primitive = function(x, cache)
   end
 
   local xtype = type(x)
-  assert(primitives[xtype], ("dump does not support type %q"):format(xtype))
+  assert(
+    dump.custom_handlers[xtype] or primitives[xtype],
+    ("dump does not support type %q"):format(xtype)
+  )
 
-  return primitives[xtype](x, cache)
+  return (dump.custom_handlers[xtype] or primitives[xtype])(x, cache)
 end
 
-return function(x)
+module_mt.__call = function(_, x)
   local cache = {size = 0}
   local result
   if type(x) == "table" then
@@ -102,3 +110,5 @@ return function(x)
 
   return "local cache = {}\n" .. result
 end
+
+return dump
