@@ -7,7 +7,7 @@ local vector = require("lib.vector")
 local dump = require("lib.dump")
 
 
-lust.describe("Global serialization logic", function()
+describe("Global serialization logic", function()
   describe("package data handling", function()
     it("should not have issues with Theseus's Paradox", function()
       local package_path = "tests.resources.package"
@@ -43,11 +43,16 @@ lust.describe("Global serialization logic", function()
       expect(vector.zero + v).to.be(v)
     end)
 
-    it("should work with used love types", function()
-      local image = love.graphics.newImage("tests/resources/image.png")
-      local image_copy = load(dump(image))()
-      expect(image_copy:getHeight()).to.be(image:getHeight())
+    it("should work with images", function()
+      local sprite = require("tech.sprite")
 
+      local original = sprite.image("tests/resources/image.png")
+      local copy = load(dump(original))()
+      expect(copy.image:getHeight()).to.be(original.image:getHeight())
+      expect({copy.data:getPixel(3, 3)}).to.equal({original.data:getPixel(3, 3)})
+    end)
+
+    it("should work with sound sources", function()
       local sound = love.audio.newSource("tests/resources/sound.mp3", "static")
       local sound_copy = load(dump(sound))()
       expect(sound_copy:getDuration()).to.be(sound:getDuration())
