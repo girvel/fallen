@@ -6,4 +6,10 @@ return Const {
       battle_master = Const("fighter.subclasses.battle_master", {}),
     }
   }),
+
+  rogue = Const {
+    subclasses = {
+      theif = Const {},
+    },
+  },
 }

@@ -17,9 +17,16 @@ lust.describe("Global serialization logic", function()
       local imported = require(package_path)
 
       expect(result).to.be(imported)
+
+      -- explicit style
       expect(result.fighter).to.be(imported.fighter)
       expect(result.fighter.subclasses.battle_master)
         .to.be(imported.fighter.subclasses.battle_master)
+
+      -- implicit style
+      expect(result.rogue).to.be(imported.rogue)
+      expect(result.rogue.subclasses.thief)
+        .to.be(imported.rogue.subclasses.thief)
     end)
   end)
 

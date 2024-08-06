@@ -1,4 +1,5 @@
 local common = require("lib.Common")
+local tablex = require("lib.tablex")
 
 
 local module_mt = {}
@@ -11,10 +12,23 @@ const.module = function(path)
   const._module = path
 end
 
+local walk_table
+walk_table = function(t, path, module)
+  for k, v in pairs(t) do
+    if type(v) == "table" then
+      local mt = getmetatable(v)
+      if mt and mt.__module == module then
+        const(v)
+      end
+      walk_table(v, tablex.concat({}, path, {k}), module)
+    end
+  end
+end
+
 module_mt.__call = function(_, a, b)
   local path, value
   if b then
-    path = a / "."
+    path = type(a) == "string" and a / "." or a
     value = b
   else
     path = {}
@@ -29,10 +43,13 @@ module_mt.__call = function(_, a, b)
     setmetatable(value, mt)
   end
 
+  mt.__module = const._module
   local module = const._module
   mt.__serialize = function()
     return function() return Common.get_by_path(require(module), path) end
   end
+
+  walk_table(value, path)
 
   return value
 end
