@@ -2,7 +2,6 @@ local interactive = require("tech.interactive")
 local animated = require("tech.animated")
 local level = require("tech.level")
 local sprite = require("tech.sprite")
-local atlas_sprite = require("tech.atlas_sprite")
 local library_fx = require("library.fx")
 local random = require("utils.random")
 local sound = require("tech.sound")
@@ -21,8 +20,8 @@ for i, name in ipairs({
 }) do
   module[name] = function()
     return Tablex.extend(
-      atlas_sprite(pipe_atlas, i),
       {
+        sprite = sprite.from_atlas(pipe_atlas, i),
         layer = "solids",
         view = "scene",
         codename = name,
@@ -41,8 +40,8 @@ Fun.iter({
   if not name then return end
   module[name] = function()
     return Tablex.extend(
-      atlas_sprite(decorations_atlas, i),
       {
+        sprite = sprite.from_atlas(decorations_atlas, i),
         view = "scene",
         layer = "solids",
         codename = name,
@@ -61,8 +60,8 @@ for i, name in ipairs({
   if not name then return end
   module[name] = function()
     return Tablex.extend(
-      atlas_sprite("assets/sprites/tile_atlas.png", i),
       {
+        sprite = sprite.from_atlas("assets/sprites/tile_atlas.png", i),
         view = "scene",
         layer = "tiles",
         codename = name,
@@ -105,8 +104,8 @@ module.leaking_pipe_left_down = function()
   hissing_sound.source:setLooping(true)
 
   return Tablex.extend(
-    atlas_sprite(pipe_atlas, 9),
     {
+      sprite = sprite.from_atlas(pipe_atlas, 9),
       layer = "solids",
       view = "scene",
       transparent_flag = true,
@@ -151,8 +150,8 @@ end
 
 module.device_panel = function()
   return Tablex.extend(
-    atlas_sprite(decorations_atlas, 1),
     {
+      sprite = sprite.from_atlas(decorations_atlas, 1),
       view = "scene",
       layer = "solids",
       codename = "device_panel",

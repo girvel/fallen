@@ -1,4 +1,3 @@
-local atlas_sprite = require("tech.atlas_sprite")
 local sprite = require("tech.sprite")
 
 
@@ -112,9 +111,9 @@ module.load_atlas_pack = function(folder_path, anchors)
     for i, direction_name in ipairs({"up", "left", "down", "right"}) do
       local full_name = animation_name .. "_" .. direction_name
       if not result[full_name] then result[full_name] = {} end
-      result[full_name][frame_number] = atlas_sprite(
+      result[full_name][frame_number] = sprite.from_atlas(
         folder_path .. "/" .. file_name, i, -Query(anchors)[full_name][frame_number]
-      ).sprite
+      )
     end
   end
   return result

@@ -1,4 +1,7 @@
 Static.module("tech.sprite")
+local tech_constants = require("tech.constants")
+
+
 local sprite = Static {}
 
 sprite.image_mt = Static {
@@ -32,6 +35,31 @@ sprite.image = function(base, anchor)
     color = Common.get_color(base),
     anchor = anchor,
   }, sprite.image_mt)
+end
+
+local _atlases_cache = {}
+
+local atlas = function(path)
+  local base_image = love.graphics.newImage(path)
+  local canvas = love.graphics.newCanvas(base_image:getDimensions())
+  love.graphics.setCanvas(canvas)
+  love.graphics.draw(base_image)
+  love.graphics.setCanvas()
+  return canvas
+end
+
+sprite.from_atlas = function(path, index, anchor)
+  if not _atlases_cache[path] then
+    _atlases_cache[path] = atlas(path)
+  end
+  local canvas = _atlases_cache[path]
+
+  local size = tech_constants.CELL_DISPLAY_SIZE
+  local w = canvas:getWidth()
+  index = (index - 1) * size
+  local image_data = canvas:newImageData(nil, nil, index % w, math.floor(index / w) * size, size, size)
+
+  return sprite.image(image_data, anchor)
 end
 
 local font_cache = {}

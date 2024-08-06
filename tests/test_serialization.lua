@@ -37,13 +37,13 @@ describe("Global serialization logic", function()
       expect(load(dump(t))()).to.be(t)
     end)
 
-    it("should work with our types", function()
+    it("of our types", function()
       local v = vector({1, 2})
       expect(load(dump(v))()).to.be(v)
       expect(vector.zero + v).to.be(v)
     end)
 
-    it("should work with images", function()
+    it("of images", function()
       local sprite = require("tech.sprite")
 
       local original = sprite.image("tests/resources/image.png")
@@ -52,7 +52,7 @@ describe("Global serialization logic", function()
       expect({copy.data:getPixel(3, 3)}).to.equal({original.data:getPixel(3, 3)})
     end)
 
-    it("should work with sound sources", function()
+    it("of sound sources", function()
       local sound = require("tech.sound")
 
       local original = sound("tests/resources/sound.mp3", 0.5)
