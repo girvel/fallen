@@ -1,10 +1,12 @@
+Static.module("tech.special")
+
 local random = require("utils.random")
 local animated = require("tech.animated")
 local sprite = require("tech.sprite")
 local tech_constants = require("tech.constants")
 
 
-local module = {}
+local module = Static {}
 
 local damage_font = love.graphics.newFont("assets/fonts/joystix.monospace-regular.otf", 14)
 

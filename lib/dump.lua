@@ -23,6 +23,7 @@ local build_table = function(x, cache)
 
   local i = 3
   for k, v in pairs(x) do
+    Log.trace(k)
     result[i] = ("_[%s] = %s"):format(
       handle_primitive(k, cache),
       handle_primitive(v, cache)

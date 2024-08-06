@@ -60,5 +60,13 @@ describe("Global serialization logic", function()
       expect(copy.source:getDuration()).to.be(original.source:getDuration())
       expect(copy.source:getVolume()).to.be(original.source:getVolume())
     end)
+
+    it("of fonts", function()
+      local sprite = require("tech.sprite")
+
+      local original = sprite.text("Hello, world!", 3)
+      local copy = load(dump(original))()
+      expect(copy.font:getHeight()).to.be(original.font:getHeight())
+    end)
   end)
 end)
