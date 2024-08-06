@@ -3,13 +3,13 @@ local tablex = require("lib.tablex")
 
 
 local module_mt = {}
-local const = setmetatable({}, module_mt)
+local static = setmetatable({}, module_mt)
 
-const._module = nil
+static._module = nil
 
-const.module = function(path)
+static.module = function(path)
   assert(type(path) == "string", "Expected module name to be a string")
-  const._module = path
+  static._module = path
 end
 
 local walk_table
@@ -18,7 +18,7 @@ walk_table = function(t, path, module)
     if type(v) == "table" then
       local mt = getmetatable(v)
       if mt and mt.__module == module then
-        const(v)
+        static(v)
       end
       walk_table(v, tablex.concat({}, path, {k}), module)
     end
@@ -43,8 +43,8 @@ module_mt.__call = function(_, a, b)
     setmetatable(value, mt)
   end
 
-  mt.__module = const._module
-  local module = const._module
+  mt.__module = static._module
+  local module = static._module
   mt.__serialize = function()
     return function() return Common.get_by_path(require(module), path) end
   end
@@ -54,4 +54,4 @@ module_mt.__call = function(_, a, b)
   return value
 end
 
-return const
+return static

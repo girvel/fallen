@@ -61,7 +61,7 @@ primitives = {
   table = function(x)
     return to_expression(build_table(x))
   end,
-  ["nil"] = function(x)
+  ["nil"] = function()
     return "nil"
   end,
   boolean = function(x)

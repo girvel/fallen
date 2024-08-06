@@ -1,15 +1,15 @@
-Const.module("tests.resources.package")
+Static.module("tests.resources.package")
 
-return Const {
-  fighter = Const("fighter", {
+return Static {
+  fighter = Static("fighter", {
     subclasses = {
-      battle_master = Const("fighter.subclasses.battle_master", {}),
+      battle_master = Static("fighter.subclasses.battle_master", {}),
     }
   }),
 
-  rogue = Const {
+  rogue = Static {
     subclasses = {
-      theif = Const {},
+      theif = Static {},
     },
   },
 }
