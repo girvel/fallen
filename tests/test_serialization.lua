@@ -52,12 +52,6 @@ lust.describe("Global serialization logic", function()
       local sound_copy = load(dump(sound))()
       expect(sound_copy:getDuration()).to.be(sound:getDuration())
       expect(sound_copy:getVolume()).to.be(sound:getVolume())
-      -- for _, x in ipairs({
-      --   
-      --   
-      -- }) do
-      --   expect(load(dump(x))()).to.be(x)
-      -- end
     end)
   end)
 end)
