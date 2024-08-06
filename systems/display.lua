@@ -10,7 +10,6 @@ return Tiny.sortedProcessingSystem({
   filter = function(self, e) return e.position and e.sprite and e.view and e.view ~= "scene" end,
   base_callback = "draw",
 
-  _unknown_icon = love.graphics.newImage("assets/sprites/icons/unknown.png"),
   _fov_map = nil,
 
   compare = function(self, first, second)

@@ -1,4 +1,5 @@
 local railing = require("tech.railing")
+local sprite = require("tech.sprite")
 local api = railing.api
 
 
@@ -16,7 +17,7 @@ return function()
           State.player.hp = 1
           State.player:rotate("left")
           api.narration("Hello, <hate>world</hate>!")
-          State.player.portrait = love.graphics.newImage("assets/sprites/portraits/half_orc.png")
+          State.player.portrait = sprite.image("assets/sprites/portraits/half_orc.png")
           api.line(State.player, "I'm gay")
         end,
       },

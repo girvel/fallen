@@ -11,7 +11,7 @@ sprite.mt = Static {
   end
 }
 
-sprite.image = function(base)
+sprite.image = function(base, anchor)
   if type(base) == "string" then
     base = love.image.newImageData(base)
   end
@@ -20,6 +20,7 @@ sprite.image = function(base)
     image = love.graphics.newImage(base),
     data = base,
     color = Common.get_color(base),
+    anchor = anchor,
   }, sprite.mt)
 end
 

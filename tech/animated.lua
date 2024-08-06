@@ -1,5 +1,5 @@
 local atlas_sprite = require("tech.atlas_sprite")
-local constants = require("tech.constants")
+local sprite = require("tech.sprite")
 
 
 local module_mt = {}
@@ -88,11 +88,7 @@ module.load_pack = function(folder_path, anchors)
 
     local anchor = anchors[animation_name] and anchors[animation_name][frame_number]
     local image_data = love.image.newImageData(folder_path .. "/" .. file_name)
-    result[animation_name][frame_number] = Tablex.extend({  -- TODO unify w/ static_sprite
-      image = love.graphics.newImage(image_data),
-      image_data = image_data,
-      color = Common.get_color(love.image.newImageData(folder_path .. "/" .. file_name))
-    }, anchor and {anchor = anchor} or {})
+    result[animation_name][frame_number] = sprite.image(image_data, anchor)
   end
   return result
 end
@@ -128,19 +124,14 @@ module.colored_pack = function(base_pack, color)
   return Fun.iter(base_pack)
     :map(function(animation_name, animation)
       return animation_name, Fun.iter(animation)
-        :map(function(sprite)
-          local image_data = sprite.image_data
+        :map(function(s)
+          local image_data = s.data
           image_data:mapPixel(function(_, _, r, g, b, a)
             if a == 0 then return 0, 0, 0, 0 end
             if r == 0 and g == 0 and b == 0 then return 0, 0, 0, 1 end
             return unpack(color)
           end)
-          return {
-            image = love.graphics.newImage(image_data),
-            image_data = image_data,
-            color = color,
-            anchor = sprite.anchor,
-          }
+          return sprite.image(image_data, s.anchor)
         end)
         :totable()
     end)

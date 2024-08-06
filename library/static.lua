@@ -1,7 +1,7 @@
 local interactive = require("tech.interactive")
 local animated = require("tech.animated")
 local level = require("tech.level")
-local static_sprite = require("tech.static_sprite")
+local sprite = require("tech.sprite")
 local atlas_sprite = require("tech.atlas_sprite")
 local library_fx = require("library.fx")
 local random = require("utils.random")
@@ -224,8 +224,8 @@ module.scripture = function(kind, path)
     path and interactive(function(self)
       State.gui.wiki:show(self.path)
     end) or {},
-    static_sprite("assets/sprites/scripture_" .. (kind or "straight") .. ".png"),
     {
+      sprite = sprite.image("assets/sprites/scripture_" .. (kind or "straight") .. ".png"),
       layer = "tiles",
       view = "scene",
       name = "древняя надпись",
@@ -240,8 +240,8 @@ local mannequin_sounds = {
 
 module.mannequin = function()
   return Tablex.extend(
-    static_sprite("assets/sprites/mannequin.png"),
     {
+      sprite = sprite.image("assets/sprites/mannequin.png"),
       layer = "solids",
       view = "scene",
       name = "манекен",
@@ -258,8 +258,8 @@ local planks_sounds = {
 
 module.planks = function()
   return Tablex.extend(
-    static_sprite("assets/sprites/planks.png"),
     {
+      sprite = sprite.image("assets/sprites/planks.png"),
       layer = "tiles",
       view = "scene",
       codename = "planks",
@@ -274,8 +274,8 @@ local walkway_sounds = {
 
 module.walkway = function()
   return Tablex.extend(
-    static_sprite("assets/sprites/walkway.png"),
     {
+      sprite = sprite.image("assets/sprites/walkway.png"),
       layer = "tiles",
       view = "scene",
       codename = "walkway",
@@ -289,14 +289,12 @@ for _, name in ipairs({
   "key_point", "steel_wall", "steel_wall_variant",
 }) do
   module[name] = function()
-    return Tablex.extend(
-      static_sprite("assets/sprites/" .. name .. ".png"),
-      {
-        layer = "solids",
-        view = "scene",
-        codename = name,
-      }
-    )
+    return {
+      layer = "solids",
+      view = "scene",
+      codename = name,
+      sprite = sprite.image("assets/sprites/%s.png" % name)
+    }
   end
 end
 

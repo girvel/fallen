@@ -2,10 +2,8 @@ local level = require("tech.level")
 local attacking = require("mech.attacking")
 local random = require("utils.random")
 local mech = require("mech")
-local static_sprite = require("tech.static_sprite")
 local interactive = require("tech.interactive")
 local combat = require("tech.combat")
-local fx = require("tech.fx")
 
 
 local actions = {}
@@ -68,26 +66,19 @@ local base_attack = function(entity, target, slot)
   end)
 end
 
-actions.hand_attack = Tablex.extend(
-  static_sprite("assets/sprites/icons/melee_attack.png"),
-  {
-    codename = "hand_attack",
-    scale = Vector({2, 2}),
-    on_click = function(self, entity) return entity:act(self) end,
-    size = Vector.one * 0.67,
-
-    get_availability = function(self, entity)
-      local target = State.grids.solids:safe_get(entity.position + Vector[entity.direction])
-      return entity.resources.actions > 0 and -Query(target).hp
-    end,
-    _run = function(self, entity)
-      local target = State.grids.solids:safe_get(entity.position + Vector[entity.direction])
-      entity.resources.actions = entity.resources.actions - 1
-      base_attack(entity, target, "main_hand")
-      return true
-    end
-  }
-)
+actions.hand_attack = {
+  codename = "hand_attack",
+  get_availability = function(self, entity)
+    local target = State.grids.solids:safe_get(entity.position + Vector[entity.direction])
+    return entity.resources.actions > 0 and -Query(target).hp
+  end,
+  _run = function(self, entity)
+    local target = State.grids.solids:safe_get(entity.position + Vector[entity.direction])
+    entity.resources.actions = entity.resources.actions - 1
+    base_attack(entity, target, "main_hand")
+    return true
+  end
+}
 
 actions.other_hand_attack = {
   codename = "other_hand_attack",

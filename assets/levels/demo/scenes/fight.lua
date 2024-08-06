@@ -1,5 +1,6 @@
 local api = require("tech.railing").api
 local engineer_ai = require("library.engineer_ai")
+local sprite = require("tech.sprite")
 
 
 return function()
@@ -48,7 +49,7 @@ return function()
       run = function(self, rails, dt)
         self.enabled = false
         rails.scenes.player_attacks_half_orc.enabled = true
-        rails.entities[3].portrait = love.graphics.newImage("assets/sprites/portraits/half_orc.png")
+        rails.entities[3].portrait = sprite.image("assets/sprites/portraits/half_orc.png")
         api.narration("Полуорк несколько секунд тяжело дышит, опираясь о ближайшую стену.")
         rails.entities[3]:rotate(Vector.name_from_direction(
           (State.player.position - rails.entities[3].position):normalized()

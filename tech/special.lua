@@ -1,6 +1,6 @@
 local random = require("utils.random")
 local animated = require("tech.animated")
-local static_sprite = require("tech.static_sprite")
+local sprite = require("tech.sprite")
 local tech_constants = require("tech.constants")
 
 
@@ -109,14 +109,12 @@ module.notification_fx = function()
 end
 
 module.gui_background = function()
-  return Tablex.extend(
-    static_sprite("assets/sprites/hp_background.png"),
-    {
-      codename = "sidebar_background",
-      view = "sidebar_background",
-      position = Vector.zero,
-    }
-  )
+  return {
+    codename = "sidebar_background",
+    view = "sidebar_background",
+    position = Vector.zero,
+    sprite = sprite.image("assets/sprites/hp_background.png"),
+  }
 end
 
 module.dialogue_background = function()
@@ -133,17 +131,14 @@ module.dialogue_background = function()
   }
 end
 
-module.portrait = function(image)
-  local window_w, window_h = love.graphics.getDimensions()
+module.portrait = function(this_sprite)
   return {
     boring_flag = true,
     codename = "portrait",
     view = "dialogue_portrait",
     position = Vector.zero,
-    size = Vector({image:getDimensions()}),
-    sprite = {
-      image = image,
-    },
+    size = Vector({this_sprite.image:getDimensions()}),
+    sprite = this_sprite,
   }
 end
 

@@ -1,4 +1,7 @@
+-- TODO move to tech.sprite
+
 local tech_constants = require("tech.constants")
+local sprite = require("tech.sprite")
 
 
 local module_mt = {}
@@ -27,12 +30,7 @@ module_mt.__call = function(self, path, index, anchor)
   local image_data = canvas:newImageData(nil, nil, index % w, math.floor(index / w) * size, size, size)
 
   return {
-    sprite = {
-      image = love.graphics.newImage(image_data),
-      image_data = image_data,
-      color = Common.get_color(image_data),
-      anchor = anchor,
-    }
+    sprite = sprite.image(image_data, anchor)
   }
 end
 
