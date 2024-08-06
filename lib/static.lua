@@ -1,4 +1,3 @@
-local common = require("lib.Common")
 local tablex = require("lib.tablex")
 
 
@@ -10,6 +9,8 @@ static._module = nil
 static.module = function(path)
   assert(type(path) == "string", "Expected module name to be a string")
   static._module = path
+  local result = Static {}
+  return result, getmetatable(result)
 end
 
 local walk_table
