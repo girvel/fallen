@@ -60,7 +60,6 @@ describe("Serialization library", function()
       local o = {}
       local t = {o = o, t = {}}
       t.t.o = o
-      print(dump(t))
       local result = load(dump(t))()
       assert.are_same(t, result)
       assert.are_equal(result.t.o, result.o)

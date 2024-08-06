@@ -4,7 +4,7 @@ end
 
 local primitives
 
-local build_table = function(x, cache, cache_size)
+local build_table = function(x, cache)
   local cache_i = cache[x]
   if cache_i then
     return ("return cache[%s]"):format(cache_i)
@@ -14,23 +14,23 @@ local build_table = function(x, cache, cache_size)
   if mt and mt.__serialize then
     local serialized = mt.__serialize(x)
     if type(serialized) == "function" then
-      return ("return %s()"):format(primitives["function"](serialized, cache, cache_size))
+      return ("return %s()"):format(primitives["function"](serialized, cache))
     end
     return "return " .. serialized
   end
 
-  cache_size = cache_size + 1
-  cache[x] = cache_size
+  cache.size = cache.size + 1
+  cache[x] = cache.size
 
   local result = {}
   result[1] = "local _ = {}"
-  result[2] = ("cache[%s] = _"):format(cache_size)
+  result[2] = ("cache[%s] = _"):format(cache.size)
 
   local i = 3
   for k, v in pairs(x) do
     result[i] = ("_[%s] = %s"):format(
-      primitives[type(k)](k, cache, cache_size),
-      primitives[type(v)](v, cache, cache_size)
+      primitives[type(k)](k, cache),
+      primitives[type(v)](v, cache)
     )
     i = i + 1
   end
@@ -38,7 +38,7 @@ local build_table = function(x, cache, cache_size)
   if not mt then
     result[i] = "return _"
   else
-    result[i] = ("return setmetatable(_, %s)"):format(primitives[type(mt)](mt, cache, cache_size))
+    result[i] = ("return setmetatable(_, %s)"):format(primitives[type(mt)](mt, cache))
   end
 
   return table.concat(result, "\n")
@@ -51,7 +51,7 @@ primitives = {
   string = function(x)
     return string.format("%q", x)
   end,
-  ["function"] = function(x, cache, cache_size)
+  ["function"] = function(x, cache)
     local expression = ([[load(%q)]]):format(string.dump(x))
     if not debug.getupvalue(x, 1) then
       return expression
@@ -62,7 +62,7 @@ primitives = {
       local k, v = debug.getupvalue(x, i)
       if not k then break end
       result[i + 1] = ("debug.setupvalue(_, %s, %s)"):format(
-        i, primitives[type(v)](v, cache, cache_size)
+        i, primitives[type(v)](v, cache)
       )
     end
     table.insert(result, "return _")
@@ -83,13 +83,12 @@ return function(x)
   local xtype = type(x)
   assert(primitives[xtype], ("dump does not support type %q"):format(xtype))
 
-  local cache = {}
-  local cache_size = 0
+  local cache = {size = 0}
   local result
   if xtype == "table" then
-    result = build_table(x, cache, cache_size)
+    result = build_table(x, cache)
   else
-    result = "return " .. primitives[xtype](x, cache, cache_size)
+    result = "return " .. primitives[xtype](x, cache)
   end
 
   return "local cache = {}\n" .. result
