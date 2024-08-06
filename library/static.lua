@@ -19,15 +19,13 @@ for i, name in ipairs({
   "pipe_T", "pipe_x",
 }) do
   module[name] = function()
-    return Tablex.extend(
-      {
-        sprite = sprite.from_atlas(pipe_atlas, i),
-        layer = "solids",
-        view = "scene",
-        codename = name,
-        transparent_flag = true,
-      }
-    )
+    return {
+      sprite = sprite.from_atlas(pipe_atlas, i),
+      layer = "solids",
+      view = "scene",
+      codename = name,
+      transparent_flag = true,
+    }
   end
 end
 
@@ -39,15 +37,13 @@ Fun.iter({
 }):enumerate():each(function(i, name)
   if not name then return end
   module[name] = function()
-    return Tablex.extend(
-      {
-        sprite = sprite.from_atlas(decorations_atlas, i),
-        view = "scene",
-        layer = "solids",
-        codename = name,
-        transparent_flag = true,
-      }
-    )
+    return {
+      sprite = sprite.from_atlas(decorations_atlas, i),
+      view = "scene",
+      layer = "solids",
+      codename = name,
+      transparent_flag = true,
+    }
   end
 end)
 
@@ -59,15 +55,13 @@ for i, name in ipairs({
 }) do
   if not name then return end
   module[name] = function()
-    return Tablex.extend(
-      {
-        sprite = sprite.from_atlas("assets/sprites/tile_atlas.png", i),
-        view = "scene",
-        layer = "tiles",
-        codename = name,
-        sounds = steel_sounds,
-      }
-    )
+    return {
+      sprite = sprite.from_atlas("assets/sprites/tile_atlas.png", i),
+      view = "scene",
+      layer = "tiles",
+      codename = name,
+      sounds = steel_sounds,
+    }
   end
 end
 
@@ -103,69 +97,65 @@ module.leaking_pipe_left_down = function()
   local hissing_sound = sound.multiple("assets/sounds/steam_hissing_loop.wav", 1)[1]
   hissing_sound.source:setLooping(true)
 
-  return Tablex.extend(
-    {
-      sprite = sprite.from_atlas(pipe_atlas, 9),
-      layer = "solids",
-      view = "scene",
-      transparent_flag = true,
+  return {
+    sprite = sprite.from_atlas(pipe_atlas, 9),
+    layer = "solids",
+    view = "scene",
+    transparent_flag = true,
 
-      codename = "leaking_pipe_left_down",
-      trigger_seconds = 5,
-      overflow_counter = 0,
-      sound_loop = hissing_sound,
-      paused = false,
+    codename = "leaking_pipe_left_down",
+    trigger_seconds = 5,
+    overflow_counter = 0,
+    sound_loop = hissing_sound,
+    paused = false,
 
-      ai = {run = function(self, event)
-        local dt = unpack(event)
-        self.overflow_counter = self.overflow_counter + dt
+    ai = {run = function(self, event)
+      local dt = unpack(event)
+      self.overflow_counter = self.overflow_counter + dt
 
-        if self.overflow_counter >= 60 then
-          State.audio:play(self, self.sound_loop)
-          if Common.relative_period(1, dt, self, "steam") then
-            self:burst_with_steam()
-          end
-          return
-        end
-        self.sound_loop.source:stop()
-
-        if Common.relative_period(self.trigger_seconds, dt, self, "steam") then
-          self.trigger_seconds = 8 + math.random() * 4
+      if self.overflow_counter >= 60 then
+        State.audio:play(self, self.sound_loop)
+        if Common.relative_period(1, dt, self, "steam") then
           self:burst_with_steam()
         end
-      end},
+        return
+      end
+      self.sound_loop.source:stop()
 
-      burst_with_steam = function(self)
-        if self.paused then return end
+      if Common.relative_period(self.trigger_seconds, dt, self, "steam") then
+        self.trigger_seconds = 8 + math.random() * 4
+        self:burst_with_steam()
+      end
+    end},
 
-        State:add(Tablex.extend(
-          library_fx.steam("right"),
-          {position = self.position}
-        ))
-        State.audio:play(self, steam_hissing_sound:clone())
-      end,
-    }
-  )
+    burst_with_steam = function(self)
+      if self.paused then return end
+
+      State:add(Tablex.extend(
+        library_fx.steam("right"),
+        {position = self.position}
+      ))
+      State.audio:play(self, steam_hissing_sound:clone())
+    end,
+  }
 end
 
 module.device_panel = function()
-  return Tablex.extend(
-    {
-      sprite = sprite.from_atlas(decorations_atlas, 1),
-      view = "scene",
-      layer = "solids",
-      codename = "device_panel",
-      hp = 1,
-      hardness = 15,
-      sounds = {
-        hit = sound.multiple("assets/sounds/glass_breaking", 0.5),
-      },
-      on_remove = function(self)
-        State:add(Tablex.extend(module.device_panel_broken(), {position = self.position}))
-      end,
-      transparent_flag = true,
-    }
-  )
+  return {
+    sprite = sprite.from_atlas(decorations_atlas, 1),
+    view = "scene",
+    layer = "solids",
+    codename = "device_panel",
+    hp = 1,
+    hardness = 15,
+    sounds = {
+      hit = sound.multiple("assets/sounds/glass_breaking", 0.5),
+    },
+    on_remove = function(self)
+      State:add(Tablex.extend(module.device_panel_broken(), {position = self.position}))
+    end,
+    transparent_flag = true,
+  }
 end
 
 -- plain sprites --
@@ -239,17 +229,15 @@ local mannequin_sounds = {
 }
 
 module.mannequin = function()
-  return Tablex.extend(
-    {
-      sprite = sprite.image("assets/sprites/mannequin.png"),
-      layer = "solids",
-      view = "scene",
-      name = "манекен",
-      hp = 1000,
-      get_armor = function() return 5 end,
-      sounds = mannequin_sounds,
-    }
-  )
+  return {
+    sprite = sprite.image("assets/sprites/mannequin.png"),
+    layer = "solids",
+    view = "scene",
+    name = "манекен",
+    hp = 1000,
+    get_armor = function() return 5 end,
+    sounds = mannequin_sounds,
+  }
 end
 
 local planks_sounds = {
@@ -257,15 +245,13 @@ local planks_sounds = {
 }
 
 module.planks = function()
-  return Tablex.extend(
-    {
-      sprite = sprite.image("assets/sprites/planks.png"),
-      layer = "tiles",
-      view = "scene",
-      codename = "planks",
-      sounds = planks_sounds,
-    }
-  )
+  return {
+    sprite = sprite.image("assets/sprites/planks.png"),
+    layer = "tiles",
+    view = "scene",
+    codename = "planks",
+    sounds = planks_sounds,
+  }
 end
 
 local walkway_sounds = {
@@ -273,15 +259,13 @@ local walkway_sounds = {
 }
 
 module.walkway = function()
-  return Tablex.extend(
-    {
-      sprite = sprite.image("assets/sprites/walkway.png"),
-      layer = "tiles",
-      view = "scene",
-      codename = "walkway",
-      sounds = walkway_sounds,
-    }
-  )
+  return {
+    sprite = sprite.image("assets/sprites/walkway.png"),
+    layer = "tiles",
+    view = "scene",
+    codename = "walkway",
+    sounds = walkway_sounds,
+  }
 end
 
 for _, name in ipairs({
