@@ -13,6 +13,7 @@ Query = require("lib.query")
 Mathx = require("lib.mathx")
 Common = require("lib.Common")
 
+Dump = require("lib.dump")
 Static = require("lib.static")
 Enum = require("lib.enum")
 Vector = require("lib.vector")
@@ -101,6 +102,7 @@ love.load = function(args)
 
   if args.tests then
     require("tests.test_serialization")
+    require("experiments_lain").serialization_old()
     love.event.push("quit")
   end
 

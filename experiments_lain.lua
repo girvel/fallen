@@ -1,13 +1,11 @@
 local experiments = {}
 
 experiments.serialization_old = function()
-  local serpent = require("lib.serpent")
-
   -- test function serialization
   local f = function(x)
     Log.info(x)
   end
-  loadstring(serpent.dump(f))()("Serialization works!")
+  loadstring(Dump(f))()("Serialization works!")
 
   -- test LOVE2D data serialization
   local image = love.graphics.newImage("assets/sprites/bushes.png")
@@ -15,12 +13,8 @@ experiments.serialization_old = function()
   -- DOES NOT WORK
 
   -- test dump size
-  local state_dump = serpent.dump(State)
+  local state_dump = Dump(State)
   Log.info("Serialized state is %.2f KB" % (#state_dump / 1024))
-end
-
-experiments.serialization = function()
-  
 end
 
 return experiments
