@@ -86,16 +86,15 @@ handle_primitive = function(x, cache)
   end
 
   local xtype = type(x)
+  assert(primitives[xtype], ("dump does not support type %q"):format(xtype))
+
   return primitives[xtype](x, cache)
 end
 
 return function(x)
-  local xtype = type(x)
-  assert(primitives[xtype], ("dump does not support type %q"):format(xtype))
-
   local cache = {size = 0}
   local result
-  if xtype == "table" then
+  if type(x) == "table" then
     result = build_table(x, cache)
   else
     result = "return " .. handle_primitive(x, cache)
