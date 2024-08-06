@@ -5,6 +5,7 @@ local sprite = require("tech.sprite")
 local atlas_sprite = require("tech.atlas_sprite")
 local library_fx = require("library.fx")
 local random = require("utils.random")
+local sound = require("tech.sound")
 
 
 local module = {}
@@ -72,7 +73,7 @@ for i, name in ipairs({
 end
 
 -- atlas extensions --
-local valve_rotating_sounds = Common.volumed_sounds("assets/sounds/valve_rotate", 0.1)
+local valve_rotating_sounds = sound.multiple("assets/sounds/valve_rotate", 0.1)
 local pipe_valve_pack = animated.load_pack("assets/sprites/pipe_valve")
 
 module.pipe_valve = function(leaking_pipe_position)
@@ -97,11 +98,11 @@ module.pipe_valve = function(leaking_pipe_position)
   )
 end
 
-local steam_hissing_sound = Common.volumed_sounds("assets/sounds/steam_hissing.wav", 0.8)[1]
+local steam_hissing_sound = sound.multiple("assets/sounds/steam_hissing.wav", 0.8)[1]
 
 module.leaking_pipe_left_down = function()
-  local sound = Common.volumed_sounds("assets/sounds/steam_hissing_loop.wav", 1)[1]
-  sound:setLooping(true)
+  local hissing_sound = sound.multiple("assets/sounds/steam_hissing_loop.wav", 1)[1]
+  hissing_sound.source:setLooping(true)
 
   return Tablex.extend(
     atlas_sprite(pipe_atlas, 9),
@@ -113,7 +114,7 @@ module.leaking_pipe_left_down = function()
       codename = "leaking_pipe_left_down",
       trigger_seconds = 5,
       overflow_counter = 0,
-      sound_loop = sound,
+      sound_loop = hissing_sound,
       paused = false,
 
       ai = {run = function(self, event)
@@ -127,7 +128,7 @@ module.leaking_pipe_left_down = function()
           end
           return
         end
-        self.sound_loop:stop()
+        self.sound_loop.source:stop()
 
         if Common.relative_period(self.trigger_seconds, dt, self, "steam") then
           self.trigger_seconds = 8 + math.random() * 4
@@ -158,7 +159,7 @@ module.device_panel = function()
       hp = 1,
       hardness = 15,
       sounds = {
-        hit = Common.volumed_sounds("assets/sounds/glass_breaking", 0.5),
+        hit = sound.multiple("assets/sounds/glass_breaking", 0.5),
       },
       on_remove = function(self)
         State:add(Tablex.extend(module.device_panel_broken(), {position = self.position}))
@@ -235,7 +236,7 @@ module.scripture = function(kind, path)
 end
 
 local mannequin_sounds = {
-  hit = Common.volumed_sounds("assets/sounds/hits_body", 0.3),
+  hit = sound.multiple("assets/sounds/hits_body", 0.3),
 }
 
 module.mannequin = function()
@@ -253,7 +254,7 @@ module.mannequin = function()
 end
 
 local planks_sounds = {
-  move = Common.volumed_sounds("assets/sounds/move_planks", 0.1)
+  move = sound.multiple("assets/sounds/move_planks", 0.1)
 }
 
 module.planks = function()
@@ -269,7 +270,7 @@ module.planks = function()
 end
 
 local walkway_sounds = {
-  move = Common.volumed_sounds("assets/sounds/move_walkway", 0.1),
+  move = sound.multiple("assets/sounds/move_walkway", 0.1),
 }
 
 module.walkway = function()

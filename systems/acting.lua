@@ -2,9 +2,10 @@ local combat = require("tech.combat")
 local fx = require("tech.fx")
 local animated = require("tech.animated")
 local item = require("tech.item")
+local sound = require("tech.sound")
 
 
-local your_move_sound = Common.volumed_sounds("assets/sounds/your_move1", 0.5)[1]
+local your_move_sound = sound.multiple("assets/sounds/your_move1", 0.5)[1]
 
 local blood = function()
   return Tablex.extend(

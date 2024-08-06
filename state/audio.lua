@@ -1,11 +1,12 @@
 local random = require("utils.random")
+local sound = require("tech.sound")
 
 
 return function()
   return {
     music = {
-      Common.volumed_sounds("assets/sounds/music/doom.mp3", 0.1)[1],
-      Common.volumed_sounds("assets/sounds/music/drone_ambience.mp3", 0.5)[1],
+      sound.multiple("assets/sounds/music/doom.mp3", 0.1)[1],
+      sound.multiple("assets/sounds/music/drone_ambience.mp3", 0.5)[1],
     },
     current_music = nil,
     disable_ambient = false,
@@ -34,19 +35,19 @@ return function()
       },
     },
 
-    play = function(self, source, sound, size)
+    play = function(self, source, this_sound, size)
       local limits = self.sound_sizes[size or "small"]
       assert(limits, "Incorrect sound size %s; sounds can be small, medium or large" % tostring(size))
       local x, y = unpack(source.position)
-      sound:setPosition(x, y, 0)
-      sound:setAttenuationDistances(unpack(limits))
-      sound:setRolloff(2)
-      sound:play()
+      this_sound.source:setPosition(x, y, 0)
+      this_sound.source:setAttenuationDistances(unpack(limits))
+      this_sound.source:setRolloff(2)
+      this_sound.source:play()
     end,
 
-    play_static = function(self, sound)
-      if sound:getChannelCount() == 1 then sound:setRelative(true) end
-      sound:play()
+    play_static = function(self, this_sound)
+      if this_sound.source:getChannelCount() == 1 then this_sound.source:setRelative(true) end
+      this_sound.source:play()
     end,
   }
 end

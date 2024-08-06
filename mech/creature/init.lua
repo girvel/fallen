@@ -1,7 +1,7 @@
 local animated = require("tech.animated")
-local constants = require("mech.constants")
 local actions = require("mech.creature.actions")
 local mech = require("mech")
+local sound = require("tech.sound")
 
 
 local module = {}
@@ -26,7 +26,7 @@ module_mt.__call = function(_, animation_pack, object)
     view = "scene",
 
     sounds = {
-      hit = Common.volumed_sounds("assets/sounds/hits_body", 0.3),
+      hit = sound.multiple("assets/sounds/hits_body", 0.3),
     },
 
     effects = {},

@@ -1,10 +1,11 @@
 local texting = require("state.gui.texting")
 local special = require("tech.special")
 local random = require("utils.random")
+local sound = require("tech.sound")
 
 
---local skip_sounds = Common.volumed_sounds("assets/sounds/click_modern", 0.5)
-local skip_sounds = Common.volumed_sounds("assets/sounds/click_retro", 0.05)
+--local skip_sounds = sound.multiple("assets/sounds/click_modern", 0.5)
+local skip_sounds = sound.multiple("assets/sounds/click_retro", 0.05)
 
 return function()
   return {

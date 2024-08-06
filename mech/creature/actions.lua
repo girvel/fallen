@@ -4,6 +4,7 @@ local random = require("utils.random")
 local mech = require("mech")
 local interactive = require("tech.interactive")
 local combat = require("tech.combat")
+local sound = require("tech.sound")
 
 
 local actions = {}
@@ -41,7 +42,7 @@ local get_melee_damage_roll = function(entity, slot)
   return entity:get_effect("modify_damage_roll", roll, slot)
 end
 
-local whoosh = Common.volumed_sounds("assets/sounds/whoosh", 0.05)
+local whoosh = sound.multiple("assets/sounds/whoosh", 0.05)
 
 local base_attack = function(entity, target, slot)
   State:register_aggression(entity, target)

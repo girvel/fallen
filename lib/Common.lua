@@ -73,20 +73,6 @@ common.get_color = function(image_data)
   end
 end
 
-common.volumed_sounds = function(path_beginning, volume)
-  volume = volume or 1
-  local _, _, directory = path_beginning:find("^(.*)/[^/]*$")
-  return fun.iter(love.filesystem.getDirectoryItems(directory))
-    :map(function(filename) return directory .. "/" .. filename end)
-    :filter(function(path) return path:startsWith(path_beginning) end)
-    :map(function(path)
-      local result = love.audio.newSource(path, "static")
-      result:setVolume(volume)
-      return result
-    end)
-    :totable()
-end
-
 common.set = function(list)
   return fun.iter(list)
     :map(function(e) return e, true end)

@@ -2,9 +2,10 @@ local special = require("tech.special")
 local mech = require("mech")
 local translation = require("tech.translation")
 local interactive = require("tech.interactive")
+local sound = require("tech.sound")
 
 
-local order_sound = Common.volumed_sounds("assets/sounds/electricity.wav", 0.08)[1]
+local order_sound = sound.multiple("assets/sounds/electricity.wav", 0.08)[1]
 
 local COLOR = {
   ORDER = Common.hex_color("f7e5b2"),
@@ -80,7 +81,7 @@ return function()
 
       self._notification_lifetime = 7
       if is_order then
-        order_sound:play()
+        State.audio:play_static(order_sound)
         self.notification_fx:animate("order")
       else
         self.notification_fx:animate("normal")

@@ -33,8 +33,7 @@ love.keyboard.setKeyRepeat(true)
 local palette = require("library.palette")
 local quests = require("library.quests")
 local factions = require("library.factions")
-
-local experiments = require("experiments_lain")
+local sound = require("tech.sound")
 
 -- TODO move these to the level configuration
 local state = require("state")
@@ -79,9 +78,8 @@ love.load = function(args)
   love.audio.stop()
   love.audio.setDistanceModel("exponent")
   if not args.disable_ambient then
-    local engine = love.audio.newSource("assets/sounds/ship_engine.mp3", "static")
-    engine:setVolume(1)
-    engine:setLooping(true)
+    local engine = sound("assets/sounds/ship_engine.mp3", 1)
+    engine.source:setLooping(true)
     State.audio:play({position = Vector({12, 64})}, engine, "large")
   end
 
