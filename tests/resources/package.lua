@@ -1,3 +1,9 @@
 Const.module("tests.resources.package")
 
-return Const({})
+return Const {
+  fighter = Const("fighter", {
+    subclasses = {
+      battle_master = Const("fighter.subclasses.battle_master", {}),
+    }
+  }),
+}

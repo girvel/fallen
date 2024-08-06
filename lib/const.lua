@@ -1,3 +1,6 @@
+local common = require("lib.Common")
+
+
 local module_mt = {}
 local const = setmetatable({}, module_mt)
 
@@ -8,7 +11,16 @@ const.module = function(path)
   const._module = path
 end
 
-module_mt.__call = function(_, value)
+module_mt.__call = function(_, a, b)
+  local path, value
+  if b then
+    path = a / "."
+    value = b
+  else
+    path = {}
+    value = a
+  end
+
   assert(type(value) == "table", "Only table values are supported")
 
   local mt = getmetatable(value)
@@ -19,7 +31,7 @@ module_mt.__call = function(_, value)
 
   local module = const._module
   mt.__serialize = function()
-    return function() return require(module) end
+    return function() return Common.get_by_path(require(module), path) end
   end
 
   return value

@@ -13,8 +13,13 @@ lust.describe("Global serialization logic", function()
       local package_path = "tests.resources.package"
       local serialized = dump(require(package_path))
       package.loaded[package_path] = nil
+      local result = load(serialized)()
+      local imported = require(package_path)
 
-      expect(load(serialized)()).to.be(require(package_path))
+      expect(result).to.be(imported)
+      expect(result.fighter).to.be(imported.fighter)
+      expect(result.fighter.subclasses.battle_master)
+        .to.be(imported.fighter.subclasses.battle_master)
     end)
   end)
 
