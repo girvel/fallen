@@ -55,6 +55,43 @@ describe("Serialization library", function()
     end)
   end)
 
+  describe("graph handling", function()
+    it("handles multiple references to the same table", function()
+      local o = {}
+      local t = {o = o, t = {}}
+      t.t.o = o
+      local result = load(dump(t))()
+      assert.are_same(t, result)
+      assert.are_equal(result.t.o, result.o)
+    end)
+
+    it("handles circular references", function()
+      local t = {a = {}, b = {}}
+      t.a.b = t.b
+      t.b.a = t.a
+      local result = load(dump(t))()
+      assert.are_same(t, result)
+      assert.are_equal(result.a.b, result.b)
+      assert.are_equal(result.b.a, result.a)
+    end)
+
+    it("handles references to itself", function()
+      local t = {}
+      t.t = t
+      local result = load(dump(t))()
+      assert.are_same(t, result)
+      assert.are_equal(result, result.t)
+    end)
+
+    it("handles tables as keys", function()
+      local t = {}
+      t[t] = t
+      local result = load(dump(t))()
+      assert.are_same(t, result)
+      assert.are_equal(result[result], result)
+    end)
+  end)
+
   describe("special functionality", function()
     it("uses metatable's serialize", function()
       local t = setmetatable({}, {__serialize = function(self) return [[1]] end})
