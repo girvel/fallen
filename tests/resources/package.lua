@@ -1,4 +1,3 @@
-local static = require("tests.resources.static")
+Const.module("tests.resources.package")
 
-local module = static("", {})
-return module
+return Const({})

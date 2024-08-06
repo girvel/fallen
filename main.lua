@@ -13,6 +13,7 @@ Query = require("lib.query")
 Mathx = require("lib.mathx")
 Common = require("lib.Common")
 
+Const = require("lib.const")
 Enum = require("lib.enum")
 Vector = require("lib.vector")
 Grid = require("lib.grid")
