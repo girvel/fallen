@@ -1,8 +1,10 @@
+Static.module("library.animation_packs")
+
 local animated = require("tech.animated")
 local humanoid_anchors = require("mech.humanoid.anchors")
 
 
-local module = {}
+local animation_packs = Static {}
 
 local small_weapon_anchors = {
   idle_right = {
@@ -19,10 +21,10 @@ local small_weapon_anchors = {
   },
 }
 
-module.rapier = animated.load_pack("assets/sprites/rapier", small_weapon_anchors)
-module.dagger = animated.load_atlas_pack("assets/sprites/dagger", small_weapon_anchors)
+animation_packs.rapier = animated.load_pack("assets/sprites/rapier", small_weapon_anchors)
+animation_packs.dagger = animated.load_atlas_pack("assets/sprites/dagger", small_weapon_anchors)
 
-module.greatsword = animated.load_pack("assets/sprites/greatsword", {
+animation_packs.greatsword = animated.load_pack("assets/sprites/greatsword", {
   idle_right = {
     Vector({2, 11}),
   },
@@ -37,7 +39,7 @@ module.greatsword = animated.load_pack("assets/sprites/greatsword", {
   },
 })
 
-module.gas_key = animated.load_pack("assets/sprites/gas_key", {
+animation_packs.gas_key = animated.load_pack("assets/sprites/gas_key", {
   idle_right = {
     Vector({6, 10}),
   },
@@ -52,8 +54,8 @@ module.gas_key = animated.load_pack("assets/sprites/gas_key", {
   },
 })
 
-module.yellow_gloves = animated.load_pack("assets/sprites/yellow_gloves")
+animation_packs.yellow_gloves = animated.load_pack("assets/sprites/yellow_gloves")
 
-module.skeleton = animated.load_pack("assets/sprites/skeleton", humanoid_anchors)
+animation_packs.skeleton = animated.load_pack("assets/sprites/skeleton", humanoid_anchors)
 
-return module
+return animation_packs

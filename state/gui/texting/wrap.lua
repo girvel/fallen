@@ -1,3 +1,6 @@
+local sprite = require("tech.sprite")
+
+
 local convert_line_breaks = function(token_list)
   local result = {{}}
 
@@ -50,16 +53,17 @@ local wrap_lines = function(token_lines, max_w)
       max_line_h = 0
     end
     for _, token in ipairs(line) do
-      max_line_h = math.max(max_line_h, token.font:getHeight())
+      max_line_h = math.max(max_line_h, sprite.get_font(token.font_size):getHeight())
 
       local current_content = token.content:split(" ")
       while #current_content > 0 do
-        local break_i, w, inserted_line = _find_break(current_content, token.font, max_w - current_w)
+        local break_i, w, inserted_line
+          = _find_break(current_content, sprite.get_font(token.font_size), max_w - current_w)
         if break_i == 0 then
           table.insert(result, {})
           current_w = 0
           current_h = current_h + max_line_h
-          max_line_h = token.font:getHeight()
+          max_line_h = sprite.get_font(token.font_size):getHeight()
         else
           table.insert(result[#result], Tablex.extend({}, token, {
             content = inserted_line,

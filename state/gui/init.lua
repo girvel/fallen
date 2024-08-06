@@ -9,7 +9,7 @@ local PORTRAIT_SPACE = Vector({360, 190})
 local gui = function()
   local result = {
     TEXT_MAX_SIZE = Vector({1000, 800}),
-    font = love.graphics.newFont("assets/fonts/joystix.monospace-regular.otf", 12),
+    font_size = 12,
     show_fps = nil,  -- set from main.lua
 
     views = {
@@ -51,8 +51,6 @@ local gui = function()
       end
     end,
   }
-
-  result.font:setLineHeight(1.2)
 
   result.wiki = require("state.gui.wiki")()
   result.sidebar = require("state.gui.sidebar")()

@@ -36,14 +36,17 @@ end
 
 local font_cache = {}
 
-sprite.text = function(text, size)
+sprite.get_font = function(size)
   if not font_cache[size] then
     font_cache[size] = love.graphics.newFont("assets/fonts/joystix.monospace-regular.otf", size)
   end
+  return font_cache[size]
+end
 
+sprite.text = function(text, size)
   return setmetatable({
     text = text,
-    font = font_cache[size],
+    font = sprite.get_font(size),
     _size = size,
   }, sprite.text_mt)
 end

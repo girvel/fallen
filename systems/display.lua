@@ -3,6 +3,9 @@ local tcod = require("lib.tcod")
 local ffi = require("ffi")
 
 
+local default_font = love.graphics.newFont("assets/fonts/joystix.monospace-regular.otf", 14)
+default_font:setLineHeight(1.2)
+
 return Tiny.sortedProcessingSystem({
   codename = "display",
   -- filter = Tiny.requireAll("position", "sprite", "view"),
@@ -162,7 +165,7 @@ return Tiny.sortedProcessingSystem({
 
   postProcess = function(self)
     if State.gui.show_fps then
-      love.graphics.print("FPS: %.2f" % (1 / love.timer.getAverageDelta()), State.gui.font, 5, 5)
+      love.graphics.print("FPS: %.2f" % (1 / love.timer.getAverageDelta()), default_font, 5, 5)
     end
     local mode = State:get_mode()
     if Tablex.contains({"reading"}, mode) or State.shader then return end
@@ -197,7 +200,7 @@ return Tiny.sortedProcessingSystem({
 
   _display_text_info = function(self)
     love.graphics.printf(
-      State.gui.sidebar:get_text(), State.gui.font,
+      State.gui.sidebar:get_text(), default_font,
       love.graphics.getWidth() - State.gui.sidebar.W, 115,
       State.gui.sidebar.W - 15
     )

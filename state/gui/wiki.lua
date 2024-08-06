@@ -2,8 +2,6 @@ local texting = require("state.gui.texting")
 local html = require("state.gui.texting.html")
 
 
-local font_path = "assets/fonts/joystix.monospace-regular.otf"
-
 local load_wiki = function(path)
   local pattern = "^(.*).html$"
   local loaded_pages = Fun.iter(love.filesystem.getDirectoryItems(path))
@@ -39,21 +37,21 @@ return function()
 
     styles = {
       default = {
-        font = love.graphics.newFont(font_path, 12),
+        font_size = 12,
         color = Common.hex_color("ededed"),
       },
       h1 = {
-        font = love.graphics.newFont(font_path, 24),
+        font_size = 24,
       },
       h1_prefix = {
-        font = love.graphics.newFont(font_path, 24),
+        font_size = 24,
         color = Common.hex_color("5d375a"),
       },
       h2 = {
-        font = love.graphics.newFont(font_path, 16),
+        font_size = 16,
       },
       h2_prefix = {
-        font = love.graphics.newFont(font_path, 16),
+        font_size = 16,
         color = Common.hex_color("5d375a"),
       },
       a = {

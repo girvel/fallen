@@ -8,8 +8,6 @@ local tech_constants = require("tech.constants")
 
 local module = Static {}
 
-local damage_font = love.graphics.newFont("assets/fonts/joystix.monospace-regular.otf", 14)
-
 module.floating_damage = function(number, scene_position)
   number = tostring(number)
   return {
@@ -19,10 +17,7 @@ module.floating_damage = function(number, scene_position)
       + Vector({random.d(12) - 6, random.d(12) - 6}),
     view = "scene_fx",
     drift = Vector({0, -24}),
-    sprite = {
-      text = {Common.hex_color("e64e4b"), number},
-      font = damage_font,
-    },
+    sprite = sprite.text({Common.hex_color("e64e4b"), number}, 14),
     life_time = 3,
   }
 end
@@ -36,25 +31,17 @@ module.floating_line = function(text, position)
       * tech_constants.CELL_DISPLAY_SIZE * State.SCALING_FACTOR
       + Vector.left * line_font:getWidth(text) / 2,
     view = "scene_fx",
-    sprite = {
-      text = {Common.hex_color("ededed"), text},
-      font = line_font,
-    },
+    sprite = sprite.text({Common.hex_color("ededed"), text}, 14),
     life_time = 10,
   }
 end
 
-module.text = function(text, font, position, decorations)
-  decorations = decorations or {}
+module.text = function(text, font_size, position)
   return {
     boring_flag = true,
     codename = "text",
     position = position,
-    sprite = {
-      text = text,
-      font = font,
-      is_underlined = decorations.underline or nil
-    },
+    sprite = sprite.text(text, font_size),
   }
 end
 
@@ -80,10 +67,7 @@ module.hp_text = function()
     codename = "hp_text",
     view = "sidebar_text",
     position = Vector.zero,
-    sprite = {
-      text = "",
-      font = love.graphics.newFont("assets/fonts/joystix.monospace-regular.otf", 20),
-    },
+    sprite = sprite.text("", 20),
   }
 end
 
@@ -92,10 +76,7 @@ module.notification = function()
     codename = "notification",
     view = "sidebar_text",
     position = Vector.zero,
-    sprite = {
-      text = {{1, 1, 1}, ""},
-      font = love.graphics.newFont("assets/fonts/joystix.monospace-regular.otf", 18),
-    },
+    sprite = sprite.text({{1, 1, 1}, ""}, 18),
   }
 end
 

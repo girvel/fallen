@@ -13,7 +13,7 @@ return function()
     text_entities = nil,
     style = {
       default = {
-        font = love.graphics.newFont("assets/fonts/joystix.monospace-regular.otf", 18),
+        font_size = 18,
         color = Common.hex_color("ededed"),
       }
     },
