@@ -62,7 +62,6 @@ love.load = function(args)
 
   if args.load_save then
     State = assert(loadstring(love.filesystem.read(args.load_save .. ".lua"))())
-    Log.trace(State.player.animation.pack)
   else
     State = state(systems, args.debug)  -- TODO debug should not be stored in a save
     State:load_level("assets/levels/" .. args.level, palette)

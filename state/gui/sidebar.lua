@@ -5,8 +5,6 @@ local interactive = require("tech.interactive")
 local sound = require("tech.sound")
 
 
-local order_sound = sound.multiple("assets/sounds/electricity.wav", 0.08)[1]
-
 local COLOR = {
   ORDER = Common.hex_color("f7e5b2"),
   NOTIFICATION = Common.hex_color("ededed"),
@@ -36,6 +34,8 @@ return Static.module("state.gui.sidebar", function()
 
     ACTION_GRID_W = 5,
     W = 256,
+
+    order_sound = sound.multiple("assets/sounds/electricity.wav", 0.08)[1],
 
     update_indicators = function(self, dt)
       self:_update_hp_bar()
@@ -81,7 +81,7 @@ return Static.module("state.gui.sidebar", function()
 
       self._notification_lifetime = 7
       if is_order then
-        State.audio:play_static(order_sound)
+        State.audio:play_static(self.order_sound)
         self.notification_fx:animate("order")
       else
         self.notification_fx:animate("normal")
