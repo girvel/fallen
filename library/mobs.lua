@@ -7,7 +7,7 @@ local constants = require("mech.constants")
 local engineer_ai = require("library.engineer_ai")
 
 
-local module = {}
+local module = Static.module("library.mobs")
 
 local engineer_mixin = function(ai_outside_of_combat)
   return Tablex.extend(

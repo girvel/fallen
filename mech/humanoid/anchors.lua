@@ -1,4 +1,4 @@
-return {
+return Static.module("humanoid.anchors", {
   idle_right = {
     {
       main_hand = Vector({3, 12}),
@@ -164,4 +164,4 @@ return {
       main_hand = Vector({3, 15}),
     },
   },
-}
+})

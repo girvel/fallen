@@ -55,7 +55,7 @@ module_mt.__call = function(_, a, b)
     return function() return Common.get_by_path(require(module), path) end
   end
 
-  walk_table(value, path)
+  walk_table(value, path, static._module)
 
   return value
 end

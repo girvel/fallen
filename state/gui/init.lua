@@ -6,7 +6,7 @@ local get_scene_offset, get_dialogue_offset, get_full_screen_text_offset
 
 local PORTRAIT_SPACE = Vector({360, 190})
 
-local gui = function()
+local gui = Static.module("state.gui", function()
   local result = {
     TEXT_MAX_SIZE = Vector({1000, 800}),
     font_size = 12,
@@ -58,7 +58,7 @@ local gui = function()
   result.character_creator = require("state.gui.character_creator")()
 
   return result
-end
+end)
 
 get_scene_offset = function()
   if not State.player then return Vector.zero end

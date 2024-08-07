@@ -3,7 +3,7 @@ local mobs = require("library.mobs")
 local weapons = require("library.weapons")
 
 
-return {
+return Static.module("library.palette", {
   factories = {
     -- tiles -- 
     _ = static.planks,
@@ -79,4 +79,4 @@ return {
   },
   transparents = Common.set("MDl@gdr>v<^\\/FB}{T+o1234LpPtkKba$"),
   throwables = Common.set("_,-"),
-}
+})

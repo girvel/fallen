@@ -7,7 +7,7 @@ local random = require("utils.random")
 local sound = require("tech.sound")
 
 
-local module = {}
+local module = Static.module("library.static")
 
 -- atlases --
 local pipe_atlas = "assets/atlases/pipes.png"

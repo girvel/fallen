@@ -1,7 +1,7 @@
 local translation = require("tech.translation")
 
 
-return function(perk, params)
+return Static.module("state.gui.character_creator.perk_form", function(perk, params)
   if not params.build_options[perk] then
     params.build_options[perk] = 1
   end
@@ -19,4 +19,4 @@ return function(perk, params)
 
   params.max_index = params.max_index + 1
   return text
-end
+end)

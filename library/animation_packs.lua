@@ -1,10 +1,8 @@
-Static.module("library.animation_packs")
-
 local animated = require("tech.animated")
 local humanoid_anchors = require("mech.humanoid.anchors")
 
 
-local animation_packs = Static {}
+local animation_packs = Static.module("library.animation_packs")
 
 local small_weapon_anchors = {
   idle_right = {

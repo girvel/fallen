@@ -2,7 +2,7 @@ local perk = require("mech.perk")
 local mech = require("mech")
 
 
-local class = {}
+local class = Static.module("mech.class")
 
 class.get_choices = function(progression_table, level)
   return Fun.iter(progression_table)

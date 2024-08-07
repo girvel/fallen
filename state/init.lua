@@ -4,9 +4,7 @@ local combat = require("tech.combat")
 local mech = require("mech")
 
 
-local module = {}
-local module_mt = {}
-setmetatable(module, module_mt)
+local module, module_mt = Static.module("state")
 
 module_mt.__call = function(_, systems, debug_mode)
   local modes = {

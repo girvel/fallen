@@ -7,7 +7,7 @@ local sound = require("tech.sound")
 --local skip_sounds = sound.multiple("assets/sounds/click_modern", 0.5)
 local skip_sounds = sound.multiple("assets/sounds/click_retro", 0.05)
 
-return function()
+return Static.module("state.gui.dialogue", function()
   return {
     _entities = nil,
     selected_option_i = nil,
@@ -65,4 +65,4 @@ return function()
       self.options = nil
     end,
   }
-end
+end)

@@ -21,7 +21,7 @@ local cost = {
 
 local available_races = {"human", "variant_human_1", "variant_human_2"}
 
-return {
+return Static.module("state.gui.character_creator.forms", {
   race = function(params)
     local text = "%s # Раса: < %s >\n\n" % {
         params:_get_indicator(params.max_index + 1),
@@ -145,4 +145,4 @@ return {
         :map(function(choice) return perk_form(choice, params) end)
         :reduce(Fun.op.concat, "")
   end,
-}
+})

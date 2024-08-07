@@ -37,7 +37,7 @@ describe("Global serialization logic", function()
       expect(load(dump(t))()).to.be(t)
     end)
 
-    it("of our types", function()
+    it("of vector", function()
       local v = vector({1, 2})
       expect(load(dump(v))()).to.be(v)
       expect(vector.zero + v).to.be(v)

@@ -7,7 +7,7 @@ local fighter = require("mech.classes.fighter")
 local feats = require("mech.feats")
 
 
-return function()
+return Static.module("state.gui.character_creator", function()
   return {
     player_anchor = nil,
     text_entities = nil,
@@ -110,4 +110,4 @@ return function()
       self:refresh()
     end,
   }
-end
+end)

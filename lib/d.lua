@@ -1,15 +1,13 @@
-local module = {}
-local module_mt = {}
-setmetatable(module, module_mt)
+local module, module_mt = Static.module("lib.d")
 
-local d_methods = {}
-local d_mt = {__index = d_methods}
+local d_methods = Static {}
+module.d_mt = Static {__index = d_methods}
 
 module.roll = function(dice, bonus)
   return setmetatable({
     dice = dice,
     bonus = bonus,
-  }, d_mt)
+  }, module.d_mt)
 end
 
 module.die = function(sides_n)
@@ -42,7 +40,7 @@ module_mt.__call = function(_, sides_n)
   return module.roll({module.die(sides_n)}, 0)
 end
 
-d_mt.__add = function(self, other)
+module.d_mt.__add = function(self, other)
   if type(other) == "number" then
     return module.roll(Tablex.deep_copy(self.dice), self.bonus + other)
   end
@@ -57,7 +55,7 @@ d_mt.__add = function(self, other)
   error("Trying to add %s to a dice roll" % type(other))
 end
 
-d_mt.__sub = function(self, other)
+module.d_mt.__sub = function(self, other)
   if type(other) == "number" then
     return module.roll(Tablex.deep_copy(self.dice), self.bonus - other)
   end
@@ -65,7 +63,7 @@ d_mt.__sub = function(self, other)
   error("Trying to subtract %s to a dice roll" % type(other))
 end
 
-d_mt.__mul = function(self, other)
+module.d_mt.__mul = function(self, other)
   assert(type(other) == "number")
   return module.roll(
     Fun.iter(self.dice)

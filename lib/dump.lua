@@ -14,9 +14,9 @@ local build_table = function(x, cache)
     return "return " .. serialized
   end
 
-  if x.name or x.codename then
-    Log.trace("===", Common.get_name(x), "===")
-  end
+  -- if x.name or x.codename then
+  --   Log.trace("===", Common.get_name(x), "===")
+  -- end
 
   cache.size = cache.size + 1
   cache[x] = cache.size
@@ -27,10 +27,15 @@ local build_table = function(x, cache)
 
   local i = 3
   for k, v in pairs(x) do
-    Log.trace(k)
+    -- Log.trace(k)
+    -- TODO RM
+    local ok, dump_v = pcall(handle_primitive, v, cache)
+    if not ok then
+      Log.error(k, "in", x)
+    end
     result[i] = ("_[%s] = %s"):format(
       handle_primitive(k, cache),
-      handle_primitive(v, cache)
+      dump_v
     )
     i = i + 1
   end

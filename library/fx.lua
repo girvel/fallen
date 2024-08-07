@@ -2,7 +2,7 @@ local animated = require("tech.animated")
 local attacking = require("mech.attacking")
 
 
-local module = {}
+local module = Static.module("library.fx")
 
 local steam_pack = animated.load_pack("assets/sprites/steam")
 
