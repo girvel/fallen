@@ -67,7 +67,7 @@ local base_attack = function(entity, target, slot)
   end)
 end
 
-actions.hand_attack = {
+actions.hand_attack = Static {
   codename = "hand_attack",
   get_availability = function(self, entity)
     local target = State.grids.solids:safe_get(entity.position + Vector[entity.direction])
@@ -81,7 +81,7 @@ actions.hand_attack = {
   end
 }
 
-actions.other_hand_attack = {
+actions.other_hand_attack = Static {
   codename = "other_hand_attack",
   get_availability = function(self, entity)
     local target = State.grids.solids:safe_get(entity.position + Vector[entity.direction])
@@ -95,7 +95,7 @@ actions.other_hand_attack = {
   end
 }
 
-actions.move = {
+actions.move = Static {
   codename = "move",
   get_availability = function(self, entity)
     return entity.resources.movement > 0
@@ -136,7 +136,7 @@ actions.move = {
   end,
 }
 
-actions.dash = {
+actions.dash = Static {
   codename = "dash",
   get_availability = function(self, entity)
     return entity.resources.actions > 0
@@ -147,7 +147,7 @@ actions.dash = {
   end,
 }
 
-actions.interact = {
+actions.interact = Static {
   codename = "interact",
   get_availability = function(self, entity)
     return entity.resources.bonus_actions > 0
@@ -164,7 +164,7 @@ actions.interact = {
   end
 }
 
-actions.finish_turn = {
+actions.finish_turn = Static {
   codename = "finish_turn",
   get_availability = function() return true end,
   _run = function(_, entity)
@@ -173,7 +173,7 @@ actions.finish_turn = {
   end,
 }
 
-actions.list = {
+actions.list = Static {
   actions.move,
   actions.hand_attack,
   actions.other_hand_attack,

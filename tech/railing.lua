@@ -2,7 +2,7 @@ local fx = require("tech.fx")
 
 
 local railing = Static.module("tech.railing")
-railing.api = {}
+railing.api = Static {}
 
 railing.api.narration = function(text, source)
   State.gui.dialogue:show(text, source)

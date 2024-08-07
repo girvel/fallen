@@ -4,12 +4,13 @@ end
 
 local handle_primitive
 
+local stack
 local build_table = function(x, cache)
   local mt = getmetatable(x)
   if mt and mt.__serialize then
     local serialized = mt.__serialize(x)
     if type(serialized) == "function" then
-      return ("return %s()"):format(handle_primitive(serialized, cache))
+      return ("return %s()"):format(handle_primitive(serialized, cache, true))
     end
     return "return " .. serialized
   end
@@ -27,12 +28,14 @@ local build_table = function(x, cache)
 
   local i = 3
   for k, v in pairs(x) do
+    table.insert(stack, tostring(k))
     -- Log.trace(k, type(k), x)
     result[i] = ("_[%s] = %s"):format(
       handle_primitive(k, cache),
       handle_primitive(v, cache)
     )
     i = i + 1
+    table.remove(stack)
   end
 
   if not mt then
@@ -44,7 +47,7 @@ local build_table = function(x, cache)
   return table.concat(result, "\n")
 end
 
-local build_function = function(x, cache)
+local build_function = function(x, cache, has_big_data)
   cache.size = cache.size + 1
   cache[x] = cache.size
 
@@ -55,9 +58,11 @@ local build_function = function(x, cache)
   for i = 1, math.huge do
     local k, v = debug.getupvalue(x, i)
     if not k then break end
-    result[i + 2] = ("debug.setupvalue(_, %s, %s)"):format(
-      i, handle_primitive(v, cache)
-    )
+    local upvalue = handle_primitive(v, cache)
+    if not has_big_data and #upvalue > 1024 then
+      Log.warn("Big upvalue", k, "in", table.concat(stack, "."))
+    end
+    result[i + 2] = ("debug.setupvalue(_, %s, %s)"):format(i, upvalue)
   end
   table.insert(result, "return _")
   return table.concat(result, "\n")
@@ -70,11 +75,11 @@ local primitives = {
   string = function(x)
     return string.format("%q", x)
   end,
-  ["function"] = function(x, cache)
-    return to_expression(build_function(x, cache))
+  ["function"] = function(x, cache, has_big_data)
+    return to_expression(build_function(x, cache, has_big_data))
   end,
-  table = function(...)
-    return to_expression(build_table(...))
+  table = function(x, cache)
+    return to_expression(build_table(x, cache))
   end,
   ["nil"] = function()
     return "nil"
@@ -84,7 +89,7 @@ local primitives = {
   end,
 }
 
-handle_primitive = function(x, cache)
+handle_primitive = function(x, cache, has_big_data)
   local xtype = type(x)
   assert(primitives[xtype], ("dump does not support type %q"):format(xtype))
 
@@ -95,10 +100,11 @@ handle_primitive = function(x, cache)
     end
   end
 
-  return primitives[xtype](x, cache)
+  return primitives[xtype](x, cache, has_big_data)
 end
 
 return function(x)
+  stack = {}
   local cache = {size = 0}
   local result
   if type(x) == "table" then
