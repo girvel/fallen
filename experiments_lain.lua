@@ -21,10 +21,9 @@ experiments.serialization_old = function()
   test("world", State.world)
   test("state", State)
 
-  require("last_save")
-  Log.info(loadstring(love.filesystem.read("last_save.lua"))())
-
   Log.info("Compressed serialized state is %.2f KB" % (#love.data.compress("string", "gzip", Dump(State)) / 1024))
+
+  Log.info("Deserialized grid:", load(Dump(Grid(Vector({4, 4}))))())
 end
 
 return experiments

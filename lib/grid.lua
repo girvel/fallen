@@ -1,14 +1,12 @@
-local module = {}
-local module_mt = {}
-setmetatable(module, module_mt)
+local module, module_mt = Static.module("lib.grid")
 
-local grid_mt = {}
+module._grid_mt = Static {}
 
 module_mt.__call = function(_, size)
   return setmetatable({
     size = size,
     _inner_array = {},
-  }, grid_mt)
+  }, module._grid_mt)
 end
 
 module.from_matrix = function(matrix, size)
@@ -21,7 +19,7 @@ module.from_matrix = function(matrix, size)
   return result
 end
 
-local grid_methods = {
+module._grid_methods = {
   can_fit = function(self, v)
     return Vector.zero < v and self.size >= v
   end,
@@ -113,15 +111,15 @@ local grid_methods = {
   end,
 }
 
-grid_mt.__index = function(self, v)
-  local method = grid_methods[v]
+module._grid_mt.__index = function(self, v)
+  local method = module._grid_methods[v]
   if method then return method end
 
   assert(self:can_fit(v))
   return self._inner_array[self:_get_inner_index(unpack(v))]
 end
 
-grid_mt.__newindex = function(self, v, value)
+module._grid_mt.__newindex = function(self, v, value)
   assert(self:can_fit(v), tostring(v) .. " does not fit into grid size " .. tostring(self.size))
   self._inner_array[self:_get_inner_index(unpack(v))] = value
 end
