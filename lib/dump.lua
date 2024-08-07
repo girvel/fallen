@@ -3,13 +3,15 @@ local to_expression = function(statement)
 end
 
 local handle_primitive
-
 local stack, warnings
+local allowed_big_upvalues = {}
+
 local build_table = function(x, cache)
   local mt = getmetatable(x)
   if mt and mt.__serialize then
     local serialized = mt.__serialize(x)
     if type(serialized) == "function" then
+      allowed_big_upvalues[serialized] = true
       return ("return %s()"):format(handle_primitive(serialized, cache, true))
     end
     return "return " .. serialized
@@ -42,7 +44,7 @@ local build_table = function(x, cache)
   return table.concat(result, "\n")
 end
 
-local build_function = function(x, cache, has_big_data)
+local build_function = function(x, cache)
   cache.size = cache.size + 1
   cache[x] = cache.size
 
@@ -54,7 +56,7 @@ local build_function = function(x, cache, has_big_data)
     local k, v = debug.getupvalue(x, i)
     if not k then break end
     local upvalue = handle_primitive(v, cache)
-    if not has_big_data and #upvalue > 1024 then
+    if not allowed_big_upvalues[x] and #upvalue > 1024 then
       table.insert(warnings, ("Big upvalue %s in %s"):format(k, table.concat(stack, ".")))
     end
     result[i + 2] = ("debug.setupvalue(_, %s, %s)"):format(i, upvalue)
@@ -70,8 +72,8 @@ local primitives = {
   string = function(x)
     return string.format("%q", x)
   end,
-  ["function"] = function(x, cache, has_big_data)
-    return to_expression(build_function(x, cache, has_big_data))
+  ["function"] = function(x, cache)
+    return to_expression(build_function(x, cache))
   end,
   table = function(x, cache)
     return to_expression(build_table(x, cache))
@@ -84,7 +86,7 @@ local primitives = {
   end,
 }
 
-handle_primitive = function(x, cache, has_big_data)
+handle_primitive = function(x, cache)
   local xtype = type(x)
   assert(primitives[xtype], ("dump does not support type %q"):format(xtype))
 
@@ -95,11 +97,15 @@ handle_primitive = function(x, cache, has_big_data)
     end
   end
 
-  return primitives[xtype](x, cache, has_big_data)
+  return primitives[xtype](x, cache)
 end
 
 return setmetatable({
   get_warnings = function() return {unpack(warnings)} end,
+  ignore_upvalue_size = setmetatable({}, {__concat = function(self, other)
+    allowed_big_upvalues[other] = true
+    return other
+  end}),
 }, {
   __call = function(_, x)
     stack = {}

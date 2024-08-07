@@ -22,7 +22,7 @@ module_mt.__call = function(_, callback, disable_highlight)
         State:add_dependency(self, self._highlight)
       end
     end,
-    interact = function(self, other)
+    interact = Dump.ignore_upvalue_size .. function(self, other)
       self.was_interacted_with = true
       if self._highlight then
         State:remove(self._highlight)
