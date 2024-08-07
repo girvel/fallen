@@ -1,8 +1,13 @@
-local grid = require("lib.grid")
-local vector = require("lib.vector")
-
-
 describe("Grid library", function()
+  _G.Fun = require("lib.fun")
+  _G.Static = require("lib.static")
+  _G.Vector = require("lib.vector")
+  _G.Tablex = require("lib.tablex")
+  _G.unpack = table.unpack
+  local grid = require("lib.grid")
+  local vector = _G.Vector
+
+
   describe("grid.from_matrix()", function()
     it("should build a grid from matrix", function()
       local base_matrix = {

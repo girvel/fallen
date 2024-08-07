@@ -1,6 +1,9 @@
 local enum = require("lib.enum")
 
 describe("Enum module", function()
+  _G.unpack = table.unpack
+  _G.Fun = require("lib.fun")
+
   local tested_enum = enum({
     first = {},
     second = {"argument"},

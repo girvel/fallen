@@ -1,7 +1,8 @@
-local vector = require("lib.vector")
-
-
 describe("Vector library", function()
+  _G.Fun = require("lib.fun")
+  local vector = require("lib.vector")
+
+
   describe("Vector.use", function()
     it("Uses function separately on xs and ys and builds vector from the result", function()
       assert.equal(
