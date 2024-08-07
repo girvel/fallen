@@ -1,4 +1,4 @@
-local rogue, module_mt = Static.module("mech.classes.rogue")
+local rogue, module_mt, static = Module("mech.classes.rogue")
 
 rogue.sneak_attack = function(entity, target)
   if entity.resources.actions <= 0

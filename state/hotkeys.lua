@@ -11,7 +11,7 @@ local define_hotkey = function(collection, modes, keys, data)
   end
 end
 
-return Static.module("state.hotkeys", function(modes, debug_mode)
+return Module("state.hotkeys", function(modes, debug_mode)
   local hotkeys = Fun.iter(modes):map(function(m) return m, {} end):tomap()
 
   -- normal mode --

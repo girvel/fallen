@@ -1,4 +1,4 @@
-local patch, module_mt = Static.module("lib.tiny_dump_patch")
+local patch, module_mt, static = Module("lib.tiny_dump_patch")
 
 module_mt.__call = function(_)
   Tiny.worldMetaTable.__serialize = function(self)

@@ -1,4 +1,4 @@
-return Static.module("systems.detect_hover", Tiny.processingSystem({
+return Module("systems.detect_hover", Tiny.processingSystem({
   codename = "detect_hover",
   base_callback = "update",
   filter = Tiny.requireAll("on_hover", "position", "size"),

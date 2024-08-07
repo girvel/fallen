@@ -4,7 +4,7 @@ local wrap = require("state.gui.texting.wrap")
 local sprite = require("tech.sprite")
 
 
-local texting = Static.module("state.gui.texting")
+local texting, _, static = Module("state.gui.texting")
 
 local generate_entities = function(token_lines, view)
   local result = {}

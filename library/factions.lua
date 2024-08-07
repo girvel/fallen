@@ -5,7 +5,7 @@ local set_faction = function(t, codename, aggressive_towards)
   }
 end
 
-return Static.module("library.factions", function()
+return Module("library.factions", function()
   local result = {}
   set_faction(result, "player")
   set_faction(result, "half_orc")

@@ -1,4 +1,4 @@
-return Static.module("systems.sound", Tiny.system({
+return Module("systems.sound", Tiny.system({
   codename = "ambience",
   base_callback = "update",
   update = function(self, event)

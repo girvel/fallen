@@ -4,7 +4,7 @@ local mech = require("mech")
 local sound = require("tech.sound")
 
 
-local creature, module_mt = Static.module("mech.creature")
+local creature, module_mt, static = Module("mech.creature")
 
 module_mt.__call = function(_, animation_pack, object)
   assert(object.max_hp or object.class)

@@ -1,7 +1,7 @@
 local special = require("tech.special")
 
 
-local module, module_mt = Static.module("tech.interactive")
+local module, module_mt, static = Module("tech.interactive")
 
 module.get_for = function(entity)
   return Fun.iter(pairs({

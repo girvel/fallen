@@ -24,7 +24,7 @@ local load_wiki = function(path)
   return loaded_pages
 end
 
-return Static.module("state.gui.wiki", function()
+return Module("state.gui.wiki", function()
   return {
     pages = load_wiki("assets/wiki"),
     codex = {},

@@ -82,6 +82,6 @@ local wrap_lines = function(token_lines, max_w)
   return result
 end
 
-return Static.module("state.gui.texting.wrap", function(content, w)
+return Module("state.gui.texting.wrap", function(content, w)
   return wrap_lines(convert_line_breaks(content), w)
 end)

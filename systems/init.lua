@@ -1,4 +1,4 @@
-return Static.module("systems", {
+return Module("systems", {
   -- for keypressed/mousepressed order is not guaranteed
   -- love.keypressed systems --
   require("systems.input"),

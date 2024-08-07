@@ -1,4 +1,4 @@
-return Static.module("systems.railing", Tiny.system({
+return Module("systems.railing", Tiny.system({
   codename = "railing",
   base_callback = "update",
   update = function(_, event)

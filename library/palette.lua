@@ -3,7 +3,7 @@ local mobs = require("library.mobs")
 local weapons = require("library.weapons")
 
 
-return Static.module("library.palette", {
+return Module("library.palette", {
   factories = {
     -- tiles -- 
     _ = static.planks,

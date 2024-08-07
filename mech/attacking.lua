@@ -2,7 +2,7 @@ local special = require("tech.special")
 local item = require("tech.item")
 
 
-local attacking = Static.module("mech.attacking")
+local attacking, _, static = Module("mech.attacking")
 
 --- Attacks with given attack/damage rolls
 attacking.attack = function(entity, target, attack_roll, damage_roll)

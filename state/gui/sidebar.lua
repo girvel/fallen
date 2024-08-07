@@ -25,7 +25,7 @@ local value_translations = {
   [false] = "нет",
 }
 
-return Static.module("state.gui.sidebar", function()
+return Module("state.gui.sidebar", function()
   return {
     action_entities = {},
     hp_bar = nil,

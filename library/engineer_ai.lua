@@ -3,7 +3,7 @@ local actions = require("mech.creature.actions")
 local special = require("tech.special")
 
 
-local engineer_ai, engineer_ai_mt = Static.module("library.engineer_ai")
+local engineer_ai, engineer_ai_mt, static = Module("library.engineer_ai")
 
 engineer_ai.modes = Enum({
   run_away_to = {"destination"},

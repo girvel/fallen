@@ -4,7 +4,7 @@ local animation_packs = require("library.animation_packs")
 local weapons = require("library.weapons")
 
 
-local player, module_mt = Static.module("state.player")
+local player, module_mt, static = Module("state.player")
 
 module_mt.__call = function(_, abilities, race, build, feat)
   local result = humanoid({

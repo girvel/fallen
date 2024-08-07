@@ -1,7 +1,7 @@
-local module, module_mt = Static.module("lib.d")
+local module, module_mt, static = Module("lib.d")
 
-local d_methods = Static {}
-module.d_mt = Static {__index = d_methods}
+local d_methods = static {}
+module.d_mt = static {__index = d_methods}
 
 module.roll = function(dice, bonus)
   return setmetatable({

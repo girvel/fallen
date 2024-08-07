@@ -1,4 +1,4 @@
-return Static.module("systems.input", Tiny.system({
+return Module("systems.input", Tiny.system({
   codename = "input",
   base_callback = "keypressed",
   update = function(_, event)

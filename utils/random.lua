@@ -1,4 +1,4 @@
-local module = Static.module("utils.random")
+local module, _, static = Module("utils.random")
 
 module.chance = function(chance)
 	return math.random() < chance

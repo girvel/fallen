@@ -2,7 +2,7 @@ local view = require("utils.view")
 local tech_constants = require("tech.constants")
 
 
-local gui, module_mt = Static.module("state.gui")
+local gui, module_mt, static = Module("state.gui")
 
 local PORTRAIT_SPACE = Vector({360, 190})
 

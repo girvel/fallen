@@ -2,7 +2,7 @@ local random = require("utils.random")
 local sound = require("tech.sound")
 
 
-return Static.module("state.audio", function()
+return Module("state.audio", function()
   return {
     music = {
       sound.multiple("assets/sounds/music/doom.mp3", 0.1)[1],

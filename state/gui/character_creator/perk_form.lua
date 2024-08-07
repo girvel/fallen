@@ -1,7 +1,7 @@
 local translation = require("tech.translation")
 
 
-return Static.module("state.gui.character_creator.perk_form", function(perk, params)
+return Module("state.gui.character_creator.perk_form", function(perk, params)
   if not params.build_options[perk] then
     params.build_options[perk] = 1
   end

@@ -9,9 +9,9 @@ static.module = function(path, t)
   static._module = path
   local result
   if type(t) == "function" then
-    result = Static(setmetatable({}, {__call = function(_, ...) return t(...) end}))
+    result = static(setmetatable({}, {__call = function(_, ...) return t(...) end}))
   else
-    result = Static(t or {})
+    result = static(t or {})
   end
   local mt = getmetatable(result)
   mt.__newindex = function(self, k, v)

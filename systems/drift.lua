@@ -1,4 +1,4 @@
-return Static.module("systems.drift", Tiny.processingSystem({
+return Module("systems.drift", Tiny.processingSystem({
   codename = "drift",
   filter = Tiny.requireAll("drift"),
   base_callback = "update",

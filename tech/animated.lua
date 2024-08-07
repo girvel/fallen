@@ -1,7 +1,7 @@
 local sprite = require("tech.sprite")
 
 
-local module, module_mt = Static.module("tech.animated")
+local module, module_mt, static = Module("tech.animated")
 
 module._packs_cache = {}
 

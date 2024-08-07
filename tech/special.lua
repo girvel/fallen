@@ -4,7 +4,7 @@ local sprite = require("tech.sprite")
 local tech_constants = require("tech.constants")
 
 
-local module = Static.module("tech.special")
+local module, _, static = Module("tech.special")
 
 module.floating_damage = function(number, scene_position)
   number = tostring(number)

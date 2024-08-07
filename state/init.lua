@@ -3,7 +3,7 @@ local combat = require("tech.combat")
 local mech = require("mech")
 
 
-local module, module_mt = Static.module("state")
+local module, module_mt, static = Module("state")
 
 module_mt.__call = function(_, systems, debug_mode)
   local modes = {

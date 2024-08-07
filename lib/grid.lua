@@ -1,6 +1,6 @@
-local module, module_mt = Static.module("lib.grid")
+local module, module_mt, static = Module("lib.grid")
 
-module._grid_mt = Static {}
+module._grid_mt = static {}
 
 module_mt.__call = function(_, size)
   return setmetatable({

@@ -1,9 +1,9 @@
 local tech_constants = require("tech.constants")
 
 
-local sprite = Static.module("tech.sprite")
+local sprite, _, static = Module("tech.sprite")
 
-sprite.image_mt = Static {
+sprite.image_mt = static {
   __serialize = function(self)
     local data = self.data:getString()
     local w, h = self.data:getDimensions()
@@ -14,7 +14,7 @@ sprite.image_mt = Static {
   end
 }
 
-sprite.text_mt = Static {
+sprite.text_mt = static {
   __serialize = function(self)
     local text = self.text
     local size = self._size

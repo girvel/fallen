@@ -1,4 +1,4 @@
-return Static.module("library.quests", {
+return Module("library.quests", {
   detective = {
     header = "Детектив",
     tasks = {

@@ -20,7 +20,7 @@ local blood = function()
   )
 end
 
-return Static.module("systems.acting", Tiny.processingSystem({
+return Module("systems.acting", Tiny.processingSystem({
   codename = "acting",
   filter = Tiny.requireAll("ai"),
   base_callback = "update",

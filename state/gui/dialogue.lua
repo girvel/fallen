@@ -4,7 +4,7 @@ local random = require("utils.random")
 local sound = require("tech.sound")
 
 
-return Static.module("state.gui.dialogue", function()
+return Module("state.gui.dialogue", function()
   return {
     _entities = nil,
     selected_option_i = nil,

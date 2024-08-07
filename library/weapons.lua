@@ -3,7 +3,7 @@ local animation_packs = require("library.animation_packs")
 local item = require("tech.item")
 
 
-local module = Static.module("library.weapons")
+local module, _, static = Module("library.weapons")
 
 module.rapier = function()
   return Tablex.extend(

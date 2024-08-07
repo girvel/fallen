@@ -1,12 +1,12 @@
-local sound, module_mt = Static.module("tech.sound")
+local sound, module_mt, static = Module("tech.sound")
 
-sound.methods = Static {
+sound.methods = static {
   clone = function(self)
     return sound(self._path, self.source:getVolume())
   end,
 }
 
-sound.mt = Static {
+sound.mt = static {
   __index = sound.methods,
   __serialize = function(self)
     local path = self._path

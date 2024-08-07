@@ -7,7 +7,7 @@ local combat = require("tech.combat")
 local sound = require("tech.sound")
 
 
-local actions = Static.module("mech.creature.actions")
+local actions, _, static = Module("mech.creature.actions")
 
 -- Post-Plot MVP refactor plans:
 -- Action: {cost, _isAvailable(), execute()}
@@ -67,7 +67,7 @@ local base_attack = function(entity, target, slot)
   end)
 end
 
-actions.hand_attack = Static {
+actions.hand_attack = static {
   codename = "hand_attack",
   get_availability = function(self, entity)
     local target = State.grids.solids:safe_get(entity.position + Vector[entity.direction])
@@ -81,7 +81,7 @@ actions.hand_attack = Static {
   end
 }
 
-actions.other_hand_attack = Static {
+actions.other_hand_attack = static {
   codename = "other_hand_attack",
   get_availability = function(self, entity)
     local target = State.grids.solids:safe_get(entity.position + Vector[entity.direction])
@@ -95,7 +95,7 @@ actions.other_hand_attack = Static {
   end
 }
 
-actions.move = Static {
+actions.move = static {
   codename = "move",
   get_availability = function(self, entity)
     return entity.resources.movement > 0
@@ -136,7 +136,7 @@ actions.move = Static {
   end,
 }
 
-actions.dash = Static {
+actions.dash = static {
   codename = "dash",
   get_availability = function(self, entity)
     return entity.resources.actions > 0
@@ -147,7 +147,7 @@ actions.dash = Static {
   end,
 }
 
-actions.interact = Static {
+actions.interact = static {
   codename = "interact",
   get_availability = function(self, entity)
     return entity.resources.bonus_actions > 0
@@ -164,7 +164,7 @@ actions.interact = Static {
   end
 }
 
-actions.finish_turn = Static {
+actions.finish_turn = static {
   codename = "finish_turn",
   get_availability = function() return true end,
   _run = function(_, entity)
@@ -173,7 +173,7 @@ actions.finish_turn = Static {
   end,
 }
 
-actions.list = Static {
+actions.list = static {
   actions.move,
   actions.hand_attack,
   actions.other_hand_attack,
