@@ -1,7 +1,3 @@
-unpack = unpack or table.unpack
-local fun = require("lib.fun")
-
-
 local module = {}
 local module_mt = {}
 setmetatable(module, module_mt)
@@ -11,7 +7,7 @@ local vector_mt = {__index = vector_methods}
 
 module_mt.__call = function(_, base_object)
   assert(
-    #base_object == 2 and fun.iter(pairs(base_object)):length() == 2,
+    #base_object == 2 and Fun.iter(pairs(base_object)):length() == 2,
     "Vector base should be a list of length 2"
   )
   return setmetatable(base_object, vector_mt)
@@ -39,7 +35,7 @@ module.name_from_direction = function(v)
 end
 
 module.use = function(f, ...)
-  local zip = fun.zip(...)
+  local zip = Fun.zip(...)
   return module({f(zip:nth(1)), f(zip:nth(2))})
 end
 

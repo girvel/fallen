@@ -1,6 +1,3 @@
-local fun = require("lib.fun")
-
-
 local common = {}
 
 common.get_by_path = function(t, identifier, i)
@@ -53,7 +50,7 @@ common.reset_period = function(...)
 end
 
 common.hex_color = function(str)
-  return fun.range(#str / 2)
+  return Fun.range(#str / 2)
     :map(function(i) return tonumber(str:sub(i * 2 - 1, i * 2), 16) / 255 end)
     :totable()
 end
@@ -74,7 +71,7 @@ common.get_color = function(image_data)
 end
 
 common.set = function(list)
-  return fun.iter(list)
+  return Fun.iter(list)
     :map(function(e) return e, true end)
     :tomap()
 end

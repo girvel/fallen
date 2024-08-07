@@ -11,7 +11,7 @@ module_mt.__call = function(_, systems, debug_mode)
     "character_creator", "death", "reading", "dialogue_options", "dialogue", "free", "combat",
   }
 
-	return {
+	local result = {
     -- grids
     -- rails
     world = Tiny.world(unpack(systems)),
@@ -178,6 +178,20 @@ module_mt.__call = function(_, systems, debug_mode)
         :any(function(pair) return pair[1] == source and pair[2] == target end)
     end,
 	}
+
+  getmetatable(result.world).__serialize = function(self)
+    local entities = self.entities
+    local systems = self.systems
+    return function()
+      local result = Tiny.world(unpack(systems))
+      for _, e in ipairs(entities) do
+        result:add(e)
+      end
+      return result
+    end
+  end
+
+  return result
 end
 
 return module

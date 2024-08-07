@@ -1,6 +1,3 @@
-local tablex = require("lib.tablex")
-
-
 local module_mt = {}
 local static = setmetatable({}, module_mt)
 
@@ -26,7 +23,7 @@ walk_table = function(t, path, module)
       if mt and mt.__module == module then
         static(v)
       end
-      walk_table(v, tablex.concat({}, path, {k}), module)
+      walk_table(v, Tablex.concat({}, path, {k}), module)
     end
   end
 end

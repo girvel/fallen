@@ -1,6 +1,3 @@
-local fun = require("lib.fun")
-
-
 local tablex = {}
 
 --- Copies all fields into the base
