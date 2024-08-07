@@ -20,7 +20,7 @@ Vector = require("lib.vector")
 Grid = require("lib.grid")
 D = require("lib.d")
 
-require("tiny_dump_patch")()
+require("lib.tiny_dump_patch")()
 
 local love_errorhandler = love.errorhandler
 love.errorhandler = function(msg)

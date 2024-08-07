@@ -2,11 +2,11 @@ local view = require("utils.view")
 local tech_constants = require("tech.constants")
 
 
-local get_scene_offset, get_dialogue_offset, get_full_screen_text_offset
+local gui, module_mt = Static.module("state.gui")
 
 local PORTRAIT_SPACE = Vector({360, 190})
 
-local gui = Static.module("state.gui", function()
+module_mt.__call = function()
   local result = {
     TEXT_MAX_SIZE = Vector({1000, 800}),
     font_size = 12,
@@ -35,17 +35,17 @@ local gui = Static.module("state.gui", function()
 
     update_views = function(self)
       for key, value in pairs({
-        scene_fx = get_scene_offset(),
-        scene = get_scene_offset(),
+        scene_fx = gui._get_scene_offset(),
+        scene = gui._get_scene_offset(),
         actions = Vector({love.graphics.getWidth() - State.gui.sidebar.W + 16, 64 + 15}),
         sidebar_background = Vector({love.graphics.getWidth() - State.gui.sidebar.W, 0}),
         sidebar = Vector({love.graphics.getWidth() - State.gui.sidebar.W, 0}),
         sidebar_text = Vector({love.graphics.getWidth() - State.gui.sidebar.W, 0}),
         dialogue_background = Vector.zero,
-        dialogue_portrait = get_dialogue_offset() - PORTRAIT_SPACE,
-        dialogue_text = get_dialogue_offset(),
-        wiki = get_full_screen_text_offset(),
-        character_creator = get_full_screen_text_offset(),
+        dialogue_portrait = gui._get_dialogue_offset() - PORTRAIT_SPACE,
+        dialogue_text = gui._get_dialogue_offset(),
+        wiki = gui._get_full_screen_text_offset(),
+        character_creator = gui._get_full_screen_text_offset(),
       }) do
         State.gui.views[key].offset = value
       end
@@ -58,9 +58,9 @@ local gui = Static.module("state.gui", function()
   result.character_creator = require("state.gui.character_creator")()
 
   return result
-end)
+end
 
-get_scene_offset = function()
+gui._get_scene_offset = function()
   if not State.player then return Vector.zero end
   local window_w = love.graphics.getWidth()
   local window_h = love.graphics.getHeight()
@@ -89,7 +89,7 @@ get_scene_offset = function()
   return result
 end
 
-get_dialogue_offset = function()
+gui._get_dialogue_offset = function()
   local window_w = love.graphics.getWidth()
   local window_h = love.graphics.getHeight()
   local dialogue_w = math.min(window_w - 15, State.gui.TEXT_MAX_SIZE[1] + PORTRAIT_SPACE[1])
@@ -97,7 +97,7 @@ get_dialogue_offset = function()
   return Vector({math.ceil((window_w - dialogue_w) / 2 + PORTRAIT_SPACE[1]), window_h - 115})
 end
 
-get_full_screen_text_offset = function()
+gui._get_full_screen_text_offset = function()
   local w, h = love.graphics.getDimensions()
   local sx, sy = unpack(State.gui.TEXT_MAX_SIZE)
   return (Vector({math.max(30, w - sx), math.max(30, h - sy)}) / 2):ceil()

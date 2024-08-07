@@ -32,8 +32,8 @@ return function()
         run = function(self, rails, dt)
           rails.last_mannequin_hp = rails.entities.mannequin.hp
           api.notification("Game saved")
-          Fun.iter(Dump.get_warnings()):each(Log.warn)
           love.filesystem.write("last_save.lua", Dump(State))
+          Fun.iter(Dump.get_warnings()):each(Log.warn)
         end,
       },
     },
