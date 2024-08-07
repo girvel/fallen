@@ -1,14 +1,14 @@
-local module = Static.module("tests.resources.package")
+local module, _, static = Module("tests.resources.package")
 
-module.fighter = Static("fighter", {
+module.fighter = static {
   subclasses = {
-    battle_master = Static("fighter.subclasses.battle_master", {}),
+    battle_master = static {},
   }
-})
+}
 
-module.rogue = Static {
+module.rogue = static {
   subclasses = {
-    theif = Static {},
+    theif = static {},
   },
 }
 

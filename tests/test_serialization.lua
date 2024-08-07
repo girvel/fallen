@@ -22,7 +22,7 @@ describe("Global serialization logic", function()
 
     -- test dump size
     local test = function(name, x)
-      local dump = Dump(mobs[1]())
+      local dump = Dump(x)
       Log.info("Serialized %s is %.2f KB" % {name, #dump / 1024})
       Log.info("Deserialized: %s" % {pcall(loadstring(dump))})
     end

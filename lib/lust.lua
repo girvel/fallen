@@ -37,7 +37,7 @@ function lust.it(name, fn)
     end
   end
 
-  local success, err = pcall(fn)
+  local success, err = xpcall(fn, debug.traceback)
   if success then lust.passes = lust.passes + 1
   else lust.errors = lust.errors + 1 end
   local color = success and green or red

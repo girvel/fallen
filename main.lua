@@ -15,6 +15,7 @@ Common = require("lib.Common")
 
 Dump = require("lib.dump")
 Static = require("lib.static")
+Module = require("lib.module")
 Enum = require("lib.enum")
 Vector = require("lib.vector")
 Grid = require("lib.grid")
