@@ -182,6 +182,14 @@ return Static.module("state.hotkeys", function(modes, debug_mode)
     end,
   })
 
+  define_hotkey(hotkeys, Tablex.deep_copy(modes), {"Ctrl+Shift+s"}, {
+    name = "сохранить игру",
+    pre_action = function()
+      love.filesystem.write("last_save.fallen_save", love.data.compress("string", "gzip", Dump(State)))
+      Fun.iter(Dump.get_warnings()):each(Log.warn)
+    end,
+  })
+
   define_hotkey(hotkeys, {"free", "combat", "dialogue", "dialogue_options"}, {"k"}, {
     name = "открыть кодекс",
     pre_action = function() State.gui.wiki:show("codex") end,

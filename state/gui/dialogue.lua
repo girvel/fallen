@@ -26,7 +26,7 @@ return Static.module("state.gui.dialogue", function()
 
     skip = function(self)
       if not self._entities then return end
-      State.audio:play_static(random.choice(self.skip_sounds):clone())
+      State.audio:play_static(random.choice(self._skip_sounds):clone())
       State:remove_multiple(self._entities)
       self._entities = nil
     end,
