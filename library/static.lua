@@ -231,6 +231,7 @@ local mannequin_sounds = {
 module.mannequin = function()
   return {
     sprite = sprite.image("assets/sprites/mannequin.png"),
+    transparent_flag = true,
     layer = "solids",
     view = "scene",
     name = "манекен",
