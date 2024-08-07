@@ -31,7 +31,7 @@ local build_table = function(x, cache)
     -- TODO RM
     local ok, dump_v = pcall(handle_primitive, v, cache)
     if not ok then
-      Log.error(k, "in", x)
+      Log.error(k, dump_v)
     end
     result[i] = ("_[%s] = %s"):format(
       handle_primitive(k, cache),

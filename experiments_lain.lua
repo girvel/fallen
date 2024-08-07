@@ -1,3 +1,7 @@
+local mobs = require("library.mobs")
+local player = require("state.player")
+
+
 local experiments = {}
 
 experiments.serialization_old = function()
@@ -13,8 +17,9 @@ experiments.serialization_old = function()
   -- DOES NOT WORK
 
   -- test dump size
-  local world_dump = Dump(State.world)
-  Log.info("Serialized state is %.2f KB" % (#world_dump / 1024))
+  Log.info("Serialized mob is %.2f KB" % (#Dump(mobs[1]()) / 1024))
+  -- Log.info("Serialized player is %.2f KB" % (#Dump(player()) / 1024))
+  -- Log.info("Serialized entity array is %.2f KB" % (#Dump(State.world.entities) / 1024))
 end
 
 return experiments

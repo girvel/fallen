@@ -1,12 +1,8 @@
-unpack = unpack or table.unpack
-local fun = require("lib.fun")
-
-
 return function(variants)
-  return fun.iter(variants)
+  return Fun.iter(variants)
     :map(function(variant_name, argument_names)
       local unpack_arguments = function(instance)
-        return unpack(fun.iter(argument_names)
+        return unpack(Fun.iter(argument_names)
           :map(function(k) return instance[k] end)
           :totable())
       end
@@ -20,13 +16,13 @@ return function(variants)
       end
 
       local instance_mt = {__eq = function(self, other)
-        return self.enum_variant == other.enum_variant and fun.iter(argument_names)
+        return self.enum_variant == other.enum_variant and Fun.iter(argument_names)
           :all(function(k) return self[k] == other[k] end)
       end}
 
       return variant_name, setmetatable(result_variant, {
         __call = function(_, ...)
-          local result = fun.zip(argument_names, {...}):tomap()
+          local result = Fun.zip(argument_names, {...}):tomap()
           result.enum_variant = result_variant
           result.unpack = unpack_arguments
           return setmetatable(result, instance_mt)
