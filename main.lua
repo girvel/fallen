@@ -104,7 +104,11 @@ love.load = function(args)
 
   if args.tests then
     require("tests.test_serialization")
-    love.is_testing = true
+    if not args.experiments then love.event.push("quit") end
+  end
+
+  if args.experiments then
+    love.is_experimenting = true
   end
 
   Log.info("Game is loaded")
@@ -164,7 +168,7 @@ love.run = function()
     frames_total = frames_total + 1
 		love.timer.sleep(0.001)
 
-    if love.is_testing then
+    if love.is_experimenting then
       require("experiments_lain").serialization_old()
       love.event.push("quit")
     end

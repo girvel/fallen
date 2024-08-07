@@ -3,6 +3,7 @@ local static = setmetatable({}, module_mt)
 
 static._module = nil
 
+local walk_table, process_table
 static.module = function(path, t)
   assert(type(path) == "string", "Expected module name to be a string")
   static._module = path
@@ -12,18 +13,29 @@ static.module = function(path, t)
   else
     result = Static(t or {})
   end
+  local mt = getmetatable(result)
+  mt.__newindex = function(self, k, v)
+    if type(v) == "table" then
+      process_table(v, {k}, path)
+    end
+    rawset(self, k, v)
+  end
   return result, getmetatable(result)
 end
 
-local walk_table
+process_table = function(v, path, module)
+  local mt = getmetatable(v)
+  if mt and mt.__module == module then
+    static(path, v)
+  end
+end
+
 walk_table = function(t, path, module)
   for k, v in pairs(t) do
     if type(v) == "table" then
-      local mt = getmetatable(v)
-      if mt and mt.__module == module then
-        static(v)
-      end
-      walk_table(v, Tablex.concat({}, path, {k}), module)
+      local new_path = Tablex.concat({}, path, {k})
+      process_table(v, new_path, module)
+      walk_table(v, new_path, module)
     end
   end
 end

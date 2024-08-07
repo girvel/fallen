@@ -55,6 +55,11 @@ return {
       "Run integration tests"
     )
 
+    parser:flag(
+      "-e --experiments",
+      "Run experiments"
+    )
+
     parser:option(
       "-S --load-save",
       "Load save with the given name from default saves folder"

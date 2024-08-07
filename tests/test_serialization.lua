@@ -10,8 +10,8 @@ end
 
 describe("Global serialization logic", function()
   describe("package data handling", function()
+    local package_path = "tests.resources.package"
     it("should not have issues with Theseus's Paradox", function()
-      local package_path = "tests.resources.package"
       local serialized = Dump(require(package_path))
       package.loaded[package_path] = nil
       local result = load(serialized)()
@@ -28,6 +28,12 @@ describe("Global serialization logic", function()
       expect(result.rogue).to.be(imported.rogue)
       expect(result.rogue.subclasses.thief)
         .to.be(imported.rogue.subclasses.thief)
+    end)
+
+    it("should handle static data recursively", function()
+      local rogue = require(package_path).rogue
+      local rogue_copy = clone(rogue)
+      expect(rogue).to.be(rogue_copy)
     end)
   end)
 
@@ -71,11 +77,16 @@ describe("Global serialization logic", function()
     end)
   end)
 
-  describe("known bugs", function()
+  describe("known bug fixes", function()
     it("cache collision when 'size' field is encountered", function()
       local t = {size = 1}
       local copy = clone(t)
       expect(copy).to.equal(t)
+    end)
+
+    it("sets grid metatable as grid module", function()
+      local copy = clone(Grid(Vector({3, 3})))
+      expect(getmetatable(copy)).to.be(Grid._grid_mt)
     end)
   end)
 end)

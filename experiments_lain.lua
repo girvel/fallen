@@ -24,8 +24,11 @@ experiments.serialization_old = function()
   Log.info("Compressed serialized state is %.2f KB" % (#love.data.compress("string", "gzip", Dump(State)) / 1024))
 
   local dump = Dump(Grid(Vector({4, 4})))
-  Log.info("Deserialized grid:", loadstring(dump)())
+  local grid = loadstring(dump)()
+  Log.info("Deserialized grid:", grid)
   Log.trace(dump)
+  Log.trace(Dump(getmetatable(grid)))
+  Log.trace(Common.get_by_path(require("lib.grid"), {}))
 end
 
 return experiments
