@@ -417,7 +417,7 @@ end
 -- @section World
 
 -- Forward declaration
-local worldMetaTable
+-- local worldMetaTable
 
 --- Creates a new World.
 -- Can optionally add default Systems and Entities. Returns the new World along
@@ -443,7 +443,7 @@ function tiny.world(...)
         -- List of Systems
         systems = {}
 
-    }, worldMetaTable)
+    }, tiny.worldMetaTable)
 
     tiny_add(ret, ...)
     tiny_manageSystems(ret)
@@ -842,7 +842,7 @@ function tiny.setSystemIndex(world, system, index)
 end
 
 -- Construct world metatable.
-worldMetaTable = {
+tiny.worldMetaTable = {
     __index = {
         add = tiny.add,
         addEntity = tiny.addEntity,

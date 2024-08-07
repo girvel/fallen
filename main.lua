@@ -20,6 +20,8 @@ Vector = require("lib.vector")
 Grid = require("lib.grid")
 D = require("lib.d")
 
+require("tiny_dump_patch")()
+
 local love_errorhandler = love.errorhandler
 love.errorhandler = function(msg)
   Log.fatal(debug.traceback("Error: " .. tostring(msg), 2):gsub("\n[^\n]+$", ""))
@@ -59,7 +61,7 @@ love.load = function(args)
   math.randomseed(seed)
 
   if args.load_save then
-    State = assert(loadstring(love.filesystem.read("last_save.lua"))())
+    State = assert(loadstring(love.filesystem.read(args.load_save .. ".lua"))())
   else
     State = state(systems, args.debug)  -- TODO debug should not be stored in a save
     State:load_level("assets/levels/" .. args.level, palette)
