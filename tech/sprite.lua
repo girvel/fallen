@@ -7,8 +7,9 @@ sprite.image_mt = Static {
   __serialize = function(self)
     local data = self.data:getString()
     local w, h = self.data:getDimensions()
+    local anchor = self.anchor
     return function()
-      return sprite.image(love.image.newImageData(w, h, "rgba8", data))
+      return sprite.image(love.image.newImageData(w, h, "rgba8", data), anchor)
     end
   end
 }
