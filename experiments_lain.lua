@@ -18,7 +18,7 @@ experiments.serialization_old = function()
 
   -- test dump size
   Log.info("Serialized mob is %.2f KB" % (#Dump(mobs[1]()) / 1024))
-  Log.info("Serialized systems are %.2f KB" % (#Dump(State.world) / 1024))
+  Log.info("Serialized world is %.2f KB" % (#Dump(State.world) / 1024))
 end
 
 return experiments
