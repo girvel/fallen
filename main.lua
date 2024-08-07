@@ -58,11 +58,15 @@ love.load = function(args)
   Log.info("Loading the game; seed", seed)
   math.randomseed(seed)
 
-  State = state(systems, args.debug)
-  State:load_level("assets/levels/" .. args.level, palette)
+  if args.load_save then
+    State = assert(loadstring(love.filesystem.read("last_save.lua"))())
+  else
+    State = state(systems, args.debug)  -- TODO debug should not be stored in a save
+    State:load_level("assets/levels/" .. args.level, palette)
 
-  State.gui.wiki.quests = quests
-  State.factions = factions()
+    State.gui.wiki.quests = quests
+    State.factions = factions()
+  end
   State.audio.disable_ambient = args.disable_ambient
   State.gui.show_fps = args.show_fps
 

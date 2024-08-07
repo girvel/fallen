@@ -3,7 +3,7 @@ local tcod = require("lib.tcod")
 local ffi = require("ffi")
 
 
-local default_font = love.graphics.newFont("assets/fonts/joystix.monospace-regular.otf", 14)
+local default_font = love.graphics.newFont("assets/fonts/joystix.monospace-regular.otf", 12)
 default_font:setLineHeight(1.2)
 
 return Static.module("systems.display", Tiny.sortedProcessingSystem({

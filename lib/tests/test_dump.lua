@@ -74,6 +74,16 @@ describe("Serialization library", function()
       assert.are_equal(result.t.f, result.f)
     end)
 
+    it("handles multiple references to the same function with upvalues", function()
+      local upvalue = 0
+      local f = function() return upvalue end
+      local t = {f = f, t = {}}
+      t.t.f = f
+      local result = load(dump(t))()
+      -- assert.are_same(t, result)
+      assert.are_equal(result.t.f, result.f)
+    end)
+
     it("handles circular references", function()
       local t = {a = {}, b = {}}
       t.a.b = t.b

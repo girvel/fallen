@@ -8,7 +8,7 @@ return function()
     scenes = {
       {
         name = "Testing",
-        enabled = true,
+        enabled = false,
         start_predicate = function(self, rails, dt) return true end,
 
         run = function(self, rails, dt)
@@ -21,9 +21,26 @@ return function()
           api.line(State.player, "I'm gay")
         end,
       },
+
+      {
+        name = "Mannequin is hit",
+        enabled = true,
+        start_predicate = function(self, rails, dt) return rails.entities.mannequin.hp < rails.last_mannequin_hp end,
+
+        run = function(self, rails, dt)
+          rails.last_mannequin_hp = rails.entities.mannequin.hp
+          api.notification("Game saved")
+          love.filesystem.write("last_save.lua", Dump(State))
+        end,
+      },
     },
 
     initialize = function(self)
+      self.entities = {
+        mannequin = State.grids.solids[Vector({9, 7})],
+      }
+
+      self.last_mannequin_hp = self.entities.mannequin.hp
     end,
   })
 end

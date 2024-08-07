@@ -55,6 +55,11 @@ return {
       "Run integration tests"
     )
 
+    parser:option(
+      "-S --load-save",
+      "Load save with the given name from default saves folder"
+    )
+
     local result = parser:parse(args)
 
     if result.resolution then

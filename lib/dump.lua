@@ -28,14 +28,9 @@ local build_table = function(x, cache)
   local i = 3
   for k, v in pairs(x) do
     -- Log.trace(k)
-    -- TODO RM
-    local ok, dump_v = pcall(handle_primitive, v, cache)
-    if not ok then
-      Log.error(k, dump_v)
-    end
     result[i] = ("_[%s] = %s"):format(
       handle_primitive(k, cache),
-      dump_v
+      handle_primitive(v, cache)
     )
     i = i + 1
   end
@@ -60,7 +55,7 @@ local build_function = function(x, cache)
   for i = 1, math.huge do
     local k, v = debug.getupvalue(x, i)
     if not k then break end
-    result[i + 1] = ("debug.setupvalue(_, %s, %s)"):format(
+    result[i + 2] = ("debug.setupvalue(_, %s, %s)"):format(
       i, handle_primitive(v, cache)
     )
   end
