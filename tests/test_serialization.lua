@@ -31,7 +31,11 @@ describe("Global serialization logic", function()
     test("world", State.world)
     test("state", State)
 
-    Log.info("Compressed serialized state is %.2f KB" % (#love.data.compress("string", "gzip", Dump(State)) / 1024))
+    Log.info(
+      "Compressed serialized state is %.2f KB" % (
+        #love.data.compress("string", "gzip", Dump(State)) / 1024
+      )
+    )
   end)
 
   describe("package data handling", function()

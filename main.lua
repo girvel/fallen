@@ -61,7 +61,9 @@ love.load = function(args)
   math.randomseed(seed)
 
   if args.load_save then
-    State = assert(loadstring(love.filesystem.read(args.load_save .. ".lua"))())
+    State = assert(loadstring(love.data.decompress(
+      "string", "gzip", love.filesystem.read(args.load_save .. ".fallen_save")
+    ))())
   else
     State = state(systems, args.debug)  -- TODO debug should not be stored in a save
     State:load_level("assets/levels/" .. args.level, palette)
