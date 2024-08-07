@@ -27,7 +27,7 @@ local build_table = function(x, cache)
 
   local i = 3
   for k, v in pairs(x) do
-    -- Log.trace(k)
+    -- Log.trace(k, type(k))
     result[i] = ("_[%s] = %s"):format(
       handle_primitive(k, cache),
       handle_primitive(v, cache)
@@ -85,13 +85,15 @@ local primitives = {
 }
 
 handle_primitive = function(x, cache)
-  local cache_i = cache[x]
-  if cache_i then
-    return ("cache[%s]"):format(cache_i)
-  end
-
   local xtype = type(x)
   assert(primitives[xtype], ("dump does not support type %q"):format(xtype))
+
+  if xtype == "table" or xtype == "function" then
+    local cache_i = cache[x]
+    if cache_i then
+      return ("cache[%s]"):format(cache_i)
+    end
+  end
 
   return primitives[xtype](x, cache)
 end
