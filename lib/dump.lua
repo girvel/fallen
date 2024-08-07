@@ -4,7 +4,7 @@ end
 
 local handle_primitive
 
-local stack
+local stack, warnings
 local build_table = function(x, cache)
   local mt = getmetatable(x)
   if mt and mt.__serialize then
@@ -14,10 +14,6 @@ local build_table = function(x, cache)
     end
     return "return " .. serialized
   end
-
-  -- if x.name or x.codename then
-  --   Log.trace("===", Common.get_name(x), "===")
-  -- end
 
   cache.size = cache.size + 1
   cache[x] = cache.size
@@ -29,7 +25,6 @@ local build_table = function(x, cache)
   local i = 3
   for k, v in pairs(x) do
     table.insert(stack, tostring(k))
-    -- Log.trace(k, type(k), x)
     result[i] = ("_[%s] = %s"):format(
       handle_primitive(k, cache),
       handle_primitive(v, cache)
@@ -60,7 +55,7 @@ local build_function = function(x, cache, has_big_data)
     if not k then break end
     local upvalue = handle_primitive(v, cache)
     if not has_big_data and #upvalue > 1024 then
-      Log.warn("Big upvalue", k, "in", table.concat(stack, "."))
+      table.insert(warnings, ("Big upvalue %s in %s"):format(k, table.concat(stack, ".")))
     end
     result[i + 2] = ("debug.setupvalue(_, %s, %s)"):format(i, upvalue)
   end
@@ -103,15 +98,20 @@ handle_primitive = function(x, cache, has_big_data)
   return primitives[xtype](x, cache, has_big_data)
 end
 
-return function(x)
-  stack = {}
-  local cache = {size = 0}
-  local result
-  if type(x) == "table" then
-    result = build_table(x, cache)
-  else
-    result = "return " .. handle_primitive(x, cache)
-  end
+return setmetatable({
+  get_warnings = function() return {unpack(warnings)} end,
+}, {
+  __call = function(_, x)
+    stack = {}
+    warnings = {}
+    local cache = {size = 0}
+    local result
+    if type(x) == "table" then
+      result = build_table(x, cache)
+    else
+      result = "return " .. handle_primitive(x, cache)
+    end
 
-  return "local cache = {}\n" .. result
-end
+    return "local cache = {}\n" .. result
+  end
+})

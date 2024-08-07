@@ -25,11 +25,14 @@ return function()
       {
         name = "Mannequin is hit",
         enabled = true,
-        start_predicate = function(self, rails, dt) return rails.entities.mannequin.hp < rails.last_mannequin_hp end,
+        start_predicate = function(self, rails, dt)
+          return rails.entities.mannequin.hp < rails.last_mannequin_hp
+        end,
 
         run = function(self, rails, dt)
           rails.last_mannequin_hp = rails.entities.mannequin.hp
           api.notification("Game saved")
+          Fun.iter(Dump.get_warnings()):each(Log.warn)
           love.filesystem.write("last_save.lua", Dump(State))
         end,
       },
