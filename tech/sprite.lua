@@ -8,8 +8,9 @@ sprite.image_mt = static {
     local data = self.data:getString()
     local w, h = self.data:getDimensions()
     local anchor = self.anchor
+    local paint_color = self._paint_color
     return function()
-      return sprite.image(love.image.newImageData(w, h, "rgba8", data), anchor)
+      return sprite.image(love.image.newImageData(w, h, "rgba8", data), anchor, paint_color)
     end
   end
 }
@@ -24,9 +25,17 @@ sprite.text_mt = static {
   end
 }
 
-sprite.image = function(base, anchor)
+sprite.image = function(base, anchor, paint_color)
   if type(base) == "string" then
     base = love.image.newImageData(base)
+  end
+
+  if paint_color then
+    base:mapPixel(function(_, _, r, g, b, a)
+      if a == 0 then return 0, 0, 0, 0 end
+      if r == 0 and g == 0 and b == 0 then return 0, 0, 0, 1 end
+      return unpack(paint_color)
+    end)
   end
 
   return setmetatable({
@@ -34,6 +43,7 @@ sprite.image = function(base, anchor)
     data = base,
     color = Common.get_color(base),
     anchor = anchor,
+    _paint_color = paint_color,
   }, sprite.image_mt)
 end
 

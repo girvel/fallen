@@ -123,13 +123,7 @@ module.colored_pack = function(base_pack, color)
     :map(function(animation_name, animation)
       return animation_name, Fun.iter(animation)
         :map(function(s)
-          local image_data = s.data
-          image_data:mapPixel(function(_, _, r, g, b, a)
-            if a == 0 then return 0, 0, 0, 0 end
-            if r == 0 and g == 0 and b == 0 then return 0, 0, 0, 1 end
-            return unpack(color)
-          end)
-          return sprite.image(image_data, s.anchor)
+          return sprite.image(s.data, s.anchor, color)
         end)
         :totable()
     end)
