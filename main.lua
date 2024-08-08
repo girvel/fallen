@@ -36,6 +36,7 @@ local palette = require("library.palette")
 local quests = require("library.quests")
 local factions = require("library.factions")
 local sound = require("tech.sound")
+local game_save = require("state.game_save")
 
 -- TODO move these to the level configuration
 local state = require("state")
@@ -61,9 +62,7 @@ love.load = function(args)
   math.randomseed(seed)
 
   if args.load_save then
-    State = assert(loadstring(love.data.decompress(
-      "string", "gzip", love.filesystem.read(args.load_save .. ".fallen_save")
-    ))())
+    game_save.read()
   else
     State = state(systems, args.debug)  -- TODO debug should not be stored in a save
     State:load_level("assets/levels/" .. args.level, palette)

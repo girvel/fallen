@@ -60,7 +60,7 @@ return {
       "Run experiments"
     )
 
-    parser:option(
+    parser:flag(
       "-S --load-save",
       "Load save with the given name from default saves folder"
     )

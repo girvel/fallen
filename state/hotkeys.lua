@@ -1,6 +1,7 @@
 local actions = require("mech.creature.actions")
 local fighter = require("mech.classes.fighter")
 local class = require("mech.class")
+local game_save = require("state.game_save")
 
 
 local define_hotkey = function(collection, modes, keys, data)
@@ -185,8 +186,7 @@ return Module("state.hotkeys", function(modes, debug_mode)
   define_hotkey(hotkeys, Tablex.deep_copy(modes), {"Ctrl+Shift+s"}, {
     name = "сохранить игру",
     pre_action = function()
-      love.filesystem.write("last_save.fallen_save", love.data.compress("string", "gzip", Dump(State)))
-      Fun.iter(Dump.get_warnings()):each(Log.warn)
+      game_save.write()
     end,
   })
 
