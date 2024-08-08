@@ -72,7 +72,7 @@ local pipe_valve_pack = animated.load_pack("assets/sprites/pipe_valve")
 module.pipe_valve = function(leaking_pipe_position)
   return Tablex.extend(
     animated(pipe_valve_pack),
-    interactive(function(self, other)
+    interactive(Dump.ignore_upvalue_size .. function(self, other)
       local target = State.grids.solids[leaking_pipe_position]
       self:animate("rotate")
       State.audio:play(self, random.choice(valve_rotating_sounds), "medium")
@@ -128,7 +128,7 @@ module.leaking_pipe_left_down = function()
       end
     end},
 
-    burst_with_steam = function(self)
+    burst_with_steam = Dump.ignore_upvalue_size .. function(self)
       if self.paused then return end
 
       State:add(Tablex.extend(
@@ -196,7 +196,7 @@ module.door = function(args)
       view = "scene",
       name = "дверь",
       is_open = false,
-      open = function(self)
+      open = Dump.ignore_upvalue_size .. function(self)
         self:animate("open")
         self:when_animation_ends(function(_)
           self.animation.pack = open_door_pack

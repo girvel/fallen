@@ -5,7 +5,7 @@ local ai, _, static = Module("tech.ai")
 ai.api = {}
 
 ai.async = function(fun, works_outside_of_combat)
-  return function(self, event)
+  return Dump.ignore_upvalue_size .. function(self, event)
     -- TODO support WORLD_TURN (which is 1 frame only btw)
     if
       not works_outside_of_combat

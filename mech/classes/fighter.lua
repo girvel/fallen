@@ -6,7 +6,7 @@ local fx = require("tech.fx")
 
 local fighter, module_mt, static = Module("mech.classes.fighter")
 
-fighter.second_wind = {
+fighter.second_wind = static {
   codename = "second_wind",
   get_availability = function(self, entity)
     return entity.resources.bonus_actions > 0
@@ -20,7 +20,7 @@ fighter.second_wind = {
   end,
 }
 
-fighter.action_surge = {
+fighter.action_surge = static {
   codename = "action_surge",
   get_availability = function(self, entity)
     return entity.resources.action_surge > 0
@@ -34,7 +34,7 @@ fighter.action_surge = {
 
 -- TODO perk.choice.option is of type list<modifier>
 --   but should be of type list<list<perk>>
-fighter.fighting_style = perk.choice({
+fighter.fighting_style = static(perk.choice({
   {
     codename = "two_handed_style",
     modify_damage_roll = function(entity, roll)
@@ -66,9 +66,9 @@ fighter.fighting_style = perk.choice({
       return roll + mech.get_melee_modifier(entity, slot)
     end,
   },
-})
+}))
 
-fighter.progression_table = {
+fighter.progression_table = static {
   [1] = {
     perk.action(fighter.second_wind),
     perk.resource("short", "second_wind", 1),

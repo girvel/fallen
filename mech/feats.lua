@@ -3,7 +3,7 @@ local perk = require("mech.perk")
 
 local feats, _, static = Module("mech.feats")
 
-feats.great_weapon_master = {
+feats.great_weapon_master = static {
   codename = "great_weapon_master",
   modify_attack_roll = function(entity, roll)
     local weapon = entity.inventory.main_hand
@@ -17,7 +17,7 @@ feats.great_weapon_master = {
   end,
 }
 
-feats.savage_attacker = {
+feats.savage_attacker = static {
   codename = "savage_attacker",
   modify_damage_roll = function(entity, roll)
     local weapon = entity.inventory.main_hand
@@ -26,9 +26,9 @@ feats.savage_attacker = {
   end,
 }
 
-feats.perk = perk.choice({
+feats.perk = static(perk.choice({
   feats.great_weapon_master,
   feats.savage_attacker,
-})
+}))
 
 return feats
