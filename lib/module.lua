@@ -1,3 +1,11 @@
+local metatable = function(t)
+  local mt = getmetatable(t)
+  if mt then return mt end
+  mt = {}
+  setmetatable(t, mt)
+  return mt
+end
+
 local _process_table, _walk_table, _make_table_static
 
 _process_table = function(t, module_path, key_path)
@@ -7,26 +15,23 @@ _process_table = function(t, module_path, key_path)
   end
 end
 
-_walk_table = function(t, module_path, key_path)
+_walk_table = function(t, module_path, key_path, depth)
+  if depth > 10 then return end
   for k, v in pairs(t) do
     if type(v) == "table" then
       local new_key_path = Tablex.concat({}, key_path, {k})
       _process_table(v, module_path, new_key_path)
-      _walk_table(v, module_path, new_key_path)
+      _walk_table(v, module_path, new_key_path, depth + 1)
     end
   end
 end
 
 _make_table_static = function(t, module_path, key_path)
-  local mt = getmetatable(t)
-  if not mt then
-    mt = {}
-    setmetatable(t, mt)
-  end
+  local mt = metatable(t)
 
-  mt.__module = module_path
+  local key_path_copy = {unpack(key_path)}
   mt.__serialize = function(_)
-    return function() return Common.get_by_path(require(module_path), key_path) end
+    return function() return Common.get_by_path(require(module_path), key_path_copy) end
   end
 end
 
@@ -36,11 +41,11 @@ local get_static_keyword = function(module_path)
     assert(ttype == "table" or ttype == "function", "Only tables or functions can be static")
 
     if ttype == "function" then
-      t = setmetatable({}, {__call = function(_, ...) return t(...) end})
+      local inner = t
+      t = setmetatable({}, {__call = function(_, ...) return inner(...) end})
     end
 
-    _make_table_static(t, module_path, {})
-    _walk_table(t, module_path, {})
+    metatable(t).__module = module_path
     return t
   end
 end
@@ -55,10 +60,14 @@ return function(module_path, module_value)
   )
 
   local static = get_static_keyword(module_path)
-  local mt = getmetatable(static(module_value))
+  module_value = static(module_value)
+  _make_table_static(module_value, module_path, {})
+  _walk_table(module_value, module_path, {}, 0)
+  local mt = getmetatable(module_value)
   mt.__newindex = function(self, k, v)
     if type(v) == "table" then
       _process_table(v, module_path, {k})
+      _walk_table(v, module_path, {k}, 1)
     end
     rawset(self, k, v)
   end

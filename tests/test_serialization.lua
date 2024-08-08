@@ -11,33 +11,6 @@ end
 Log.info("\n\n========== TESTS ==========\n")
 
 describe("Global serialization logic", function()
-  it("(experiments)", function()
-    local mobs = require("library.mobs")
-
-    -- test function serialization
-    local f = function(x)
-      Log.info(x)
-    end
-    loadstring(Dump(f))()("Serialization works!")
-
-    -- test dump size
-    local test = function(name, x)
-      local dump = Dump(x)
-      Log.info("Serialized %s is %.2f KB" % {name, #dump / 1024})
-      Log.info("Deserialized: %s" % {pcall(loadstring(dump))})
-    end
-
-    test("mob", mobs[1]())
-    test("world", State.world)
-    test("state", State)
-
-    Log.info(
-      "Compressed serialized state is %.2f KB" % (
-        #love.data.compress("string", "gzip", Dump(State)) / 1024
-      )
-    )
-  end)
-
   describe("package data handling", function()
     local package_path = "tests.resources.package"
     it("should not have issues with Theseus's Paradox", function()
@@ -117,5 +90,38 @@ describe("Global serialization logic", function()
       local copy = clone(Grid(Vector({3, 3})))
       expect(getmetatable(copy)).to.be(Grid._grid_mt)
     end)
+
+    it("works with move", function()
+      local actions = require("mech.creature.actions")
+      Log.trace(Dump(actions.move))
+      expect(clone(actions.move)).to.be(actions.move)
+    end)
+  end)
+
+  it("(experiments)", function()
+    local mobs = require("library.mobs")
+
+    -- test function serialization
+    local f = function(x)
+      Log.info(x)
+    end
+    loadstring(Dump(f))()("Serialization works!")
+
+    -- test dump size
+    local test = function(name, x)
+      local dump = Dump(x)
+      Log.info("Serialized %s is %.2f KB" % {name, #dump / 1024})
+      Log.info("Deserialized: %s" % {pcall(loadstring(dump))})
+    end
+
+    test("mob", mobs[1]())
+    test("world", State.world)
+    test("state", State)
+
+    Log.info(
+      "Compressed serialized state is %.2f KB" % (
+        #love.data.compress("string", "gzip", Dump(State)) / 1024
+      )
+    )
   end)
 end)
