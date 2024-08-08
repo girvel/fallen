@@ -1,4 +1,6 @@
-return Module("systems.timed_death", Tiny.processingSystem({
+local timed_death, _, static = Module("systems.timed_death")
+
+timed_death.system = static(Tiny.processingSystem({
   codename = "timed_death",
   filter = Tiny.requireAll("life_time"),
   base_callback = "update",
@@ -10,3 +12,5 @@ return Module("systems.timed_death", Tiny.processingSystem({
     end
   end,
 }))
+
+return timed_death

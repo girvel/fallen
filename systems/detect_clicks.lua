@@ -1,4 +1,6 @@
-return Module("systems.detect_clicks", Tiny.processingSystem({
+local detect_clicks, _, static = Module("systems.detect_clicks")
+
+detect_clicks.system = static(Tiny.processingSystem({
   codename = "detect_clicks",
   base_callback = "mousepressed",
   filter = Tiny.requireAll("on_click", "position", "size"),
@@ -14,3 +16,5 @@ return Module("systems.detect_clicks", Tiny.processingSystem({
     entity:on_click(State.player)
   end,
 }))
+
+return detect_clicks

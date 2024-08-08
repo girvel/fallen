@@ -66,6 +66,7 @@ love.load = function(args)
     ))())
   else
     State = state(systems, args.debug)  -- TODO debug should not be stored in a save
+    Log.trace(Dump(State.world))
     State:load_level("assets/levels/" .. args.level, palette)
 
     State.gui.wiki.quests = quests
@@ -111,6 +112,7 @@ love.load = function(args)
   end
 
   Log.info("Game is loaded")
+  Log.trace(State.world.systems)
 end
 
 local active_time = 0

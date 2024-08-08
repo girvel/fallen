@@ -1,4 +1,6 @@
-return Module("systems.drift", Tiny.processingSystem({
+local drift, _, static = Module("systems.drift")
+
+drift.system = static(Tiny.processingSystem({
   codename = "drift",
   filter = Tiny.requireAll("drift"),
   base_callback = "update",
@@ -6,3 +8,5 @@ return Module("systems.drift", Tiny.processingSystem({
     entity.position = entity.position + entity.drift * event[1]
   end,
 }))
+
+return drift

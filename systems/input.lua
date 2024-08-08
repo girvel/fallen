@@ -1,4 +1,6 @@
-return Module("systems.input", Tiny.system({
+local input, _, static = Module("systems.input")
+
+input.system = static(Tiny.system({
   codename = "input",
   base_callback = "keypressed",
   update = function(_, event)
@@ -24,3 +26,5 @@ return Module("systems.input", Tiny.system({
     Query(State.player).next_action = data.action
   end,
 }))
+
+return input
