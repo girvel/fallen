@@ -34,6 +34,7 @@ local decorations_atlas = "assets/sprites/decorations_atlas.png"
 Fun.iter({
   false, "device_panel_broken", "furnace", "table", "locker", "locker_damaged", "cabinet", "cabinet_damaged",
   "bed", "crate", "crate_open", "chest", "chest_open", "table_left", "table_hor", "table_right",
+  "chamber_pot", "bucket",
 }):enumerate():each(function(i, name)
   if not name then return end
   module[name] = function()

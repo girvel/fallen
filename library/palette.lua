@@ -43,6 +43,8 @@ return Module("library.palette", {
     b = static.bed,
     a = static.crate,
     ["$"] = static.chest,
+    h = static.chamber_pot,
+    u = static.bucket,
 
     M = static.mannequin,
     D = static.door,
@@ -77,6 +79,6 @@ return Module("library.palette", {
       end
     end,
   },
-  transparents = Common.set("MDl@gdr>v<^\\/FB}{T+o1234LpPtkKba$"),
+  transparents = Common.set("MDl@gdr>v<^\\/FB}{T+o1234LpPtkKba$hu"),
   throwables = Common.set("_,-"),
 })
