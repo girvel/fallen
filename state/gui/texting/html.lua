@@ -26,9 +26,6 @@ local transformers = {
   p = function(node, children, styles)
     return Tablex.concat(children, {{content = "\n\n"}})
   end,
-  option = function(node, children, styles)
-    return Tablex.concat(children, {{content = "\n"}})
-  end,
   li = function(node, children, styles)
     return Tablex.concat({{content = "- "}}, children, {{content = "\n"}})
   end,
