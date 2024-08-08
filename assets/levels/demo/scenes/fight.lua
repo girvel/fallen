@@ -1,6 +1,7 @@
 local api = require("tech.railing").api
 local engineer_ai = require("library.engineer_ai")
 local sprite = require("tech.sprite")
+local mech = require("mech")
 
 
 return function()
@@ -43,7 +44,7 @@ return function()
       name = "Half-orc talks after player spares him",
       enabled = false,
       start_predicate = function(self, rails, dt)
-        return rails.entities[3].faction == State.player.faction
+        return not mech.are_hostile(State.player, rails.entities[3])
       end,
 
       run = function(self, rails, dt)
@@ -135,6 +136,7 @@ return function()
 
             if picked_suboption == 1 or picked_suboption == 2 then
               api.make_hostile("half_orc", rails.entities)
+              Log.trace(State.player, rails.entities[3])
               State:start_combat({State.player, rails.entities[3]})
             else
               rails.entities[3].ai.mode = engineer_ai.modes.run_away_to(rails.positions.exit)

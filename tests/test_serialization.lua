@@ -93,7 +93,6 @@ describe("Global serialization logic", function()
 
     it("works with move", function()
       local actions = require("mech.creature.actions")
-      Log.trace(Dump(actions.move))
       expect(clone(actions.move)).to.be(actions.move)
     end)
   end)

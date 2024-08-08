@@ -1,4 +1,5 @@
 local fx = require("tech.fx")
+local mech = require("mech")
 
 
 local railing, _, static = Module("tech.railing")
@@ -68,7 +69,7 @@ railing.api.make_hostile = function(faction, entities)
     :each(function(e)
       State:add(fx("assets/sprites/fx/aggression", "fx", e.position))
     end)
-  State.factions[faction].aggressive_towards.player = true
+  mech.make_hostile(faction)
 end
 
 railing.mixin = function()

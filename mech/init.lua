@@ -34,4 +34,13 @@ module.get_melee_modifier = function(entity, slot)
   return module.get_modifier(entity.abilities.strength)
 end
 
+-- TODO module hostility
+module.make_hostile = function(faction)
+  State.factions[faction].aggressive_towards.player = true
+end
+
+module.make_friendly = function(faction)
+  State.factions[faction].aggressive_towards.player = false
+end
+
 return module

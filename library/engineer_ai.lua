@@ -1,6 +1,7 @@
 local ai = require("tech.ai")
 local actions = require("mech.creature.actions")
 local special = require("tech.special")
+local mech = require("mech")
 
 
 local engineer_ai, engineer_ai_mt, static = Module("library.engineer_ai")
@@ -33,14 +34,13 @@ engineer_ai_mt.__call = function(_, works_outside_of_combat)
       if self.ai.look_for_aggression then
         self.ai.look_for_aggression = false
         if Fun.iter(was_attacked_by):all(function(e) return e ~= State.player end) then
-          self.faction = State.player.faction
+          mech.make_friendly(self.faction)
           return
         end
       end
 
       local mode_type = self.ai.mode.enum_variant
       if mode_type == engineer_ai.modes.skip_turn then
-        Log.debug("Skips turn")
         State:add(special.floating_line("Стой! Остановись, мужик!!!", self.position))
         self.ai.mode = engineer_ai.modes.normal()
         self.ai.look_for_aggression = true

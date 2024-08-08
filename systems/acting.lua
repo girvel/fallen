@@ -3,6 +3,7 @@ local fx = require("tech.fx")
 local animated = require("tech.animated")
 local item = require("tech.item")
 local sound = require("tech.sound")
+local mech = require("mech")
 
 
 local your_move_sound = sound.multiple("assets/sounds/your_move1", 0.5)[1]
@@ -33,7 +34,9 @@ acting.system = static(Tiny.processingSystem({
     if State.combat then
       local combatants = State.combat:iter_entities_only():totable()
 
-      if Fun.iter(combatants):all(function(e) return e.faction == combatants[1].faction end) then
+      if Fun.iter(combatants):all(function(a)
+        return Fun.iter(combatants):all(function(b) return not mech.are_hostile(a, b) end)
+      end) then
         Log.info(
           "Fight ends as only %s are left standing"
            % table.concat(Fun.iter(combatants)
