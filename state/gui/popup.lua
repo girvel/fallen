@@ -13,7 +13,7 @@ return Module("state.gui.popup", function()
 
       -- TODO styles should probably be hierarchical, common in gui and specialized in wiki, creator, dialogue etc.
       local entities = State:add_multiple(texting.generate(
-        content, State.gui.wiki.styles, W, "scene_popup_content", {}
+        "<span>%s</span>" % content, State.gui.wiki.styles, W, "scene_popup_content", {}
       ))
 
       -- TODO more elegant way to handle this, probably instead of texting.generate returning 
