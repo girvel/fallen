@@ -9,7 +9,7 @@ return function()
     scenes = {
       {
         name = "Testing",
-        enabled = false,
+        enabled = true,
         start_predicate = function(self, rails, dt) return true end,
 
         run = function(self, rails, dt)
@@ -18,6 +18,7 @@ return function()
           State.player.hp = 1
           State.player:rotate("left")
           api.narration("Hello, <hate>world</hate>!")
+          State.gui.popup:show(State.player.position, "above", "<pre>Oh hi Mark</pre>", 10)
           State.player.portrait = sprite.image("assets/sprites/portraits/half_orc.png")
           api.line(State.player, "I'm gay")
         end,

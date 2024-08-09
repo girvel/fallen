@@ -12,6 +12,8 @@ module_mt.__call = function()
     font_size = 12,
     show_fps = nil,  -- set from main.lua
 
+    -- TODO unify views, views order and updating views?
+    -- Vector.zero and duplicating the order suggest that
     views = {
       scene = view(Vector.zero, 4, 16),
       scene_fx = view(Vector.zero, 1, 1),
@@ -24,6 +26,8 @@ module_mt.__call = function()
       dialogue_text = view(Vector.zero, 1, 1),
       wiki = view(Vector.zero, 1, 1),
       character_creator = view(Vector.zero, 1, 1),
+      scene_popup_background = view(Vector.zero, 1, 1),
+      scene_popup_content = view(Vector.zero, 1, 1),
     },
 
     views_order = {
@@ -31,6 +35,7 @@ module_mt.__call = function()
       "sidebar_background", "actions", "sidebar", "sidebar_text",
       "dialogue_background", "dialogue_portrait", "dialogue_text",
       "wiki", "character_creator",
+      "scene_popup_background", "scene_popup_content",
     },
 
     update_views = function(self)
@@ -46,16 +51,20 @@ module_mt.__call = function()
         dialogue_text = gui._get_dialogue_offset(),
         wiki = gui._get_full_screen_text_offset(),
         character_creator = gui._get_full_screen_text_offset(),
+        scene_popup_background = gui._get_scene_offset(),
+        scene_popup_content = gui._get_scene_offset(),
       }) do
         State.gui.views[key].offset = value
       end
     end,
   }
 
+  -- TODO maybe move this?
   result.wiki = require("state.gui.wiki")()
   result.sidebar = require("state.gui.sidebar")()
   result.dialogue = require("state.gui.dialogue")()
   result.character_creator = require("state.gui.character_creator")()
+  result.popup = require("state.gui.popup")()
 
   return result
 end

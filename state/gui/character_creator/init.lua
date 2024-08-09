@@ -62,7 +62,7 @@ return Module("state.gui.character_creator", function()
         .. self.forms.abilities(params)
         .. self.forms.class(params)
 
-      self.text_entities = State:add_multiple(texting.generate_html_page(
+      self.text_entities = State:add_multiple(texting.generate(
         "<pre>%s</pre>" % text, self.style,
         math.min(love.graphics.getWidth() - 40, State.gui.TEXT_MAX_SIZE[1]),
         "character_creator"

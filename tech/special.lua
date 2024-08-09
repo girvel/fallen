@@ -98,6 +98,7 @@ module.gui_background = function()
   }
 end
 
+-- TODO replace w/ rect
 module.dialogue_background = function()
   local window_w, window_h = love.graphics.getDimensions()
   return {
@@ -108,6 +109,19 @@ module.dialogue_background = function()
     size = Vector({window_w, 140}),
     sprite = {
       rect_color = Common.hex_color("31222c"),
+    },
+  }
+end
+
+module.rect = function(position, view, size, color)
+  return {
+    boring_flag = true,
+    codename = "rect",
+    view = view,
+    position = position,
+    size = size,
+    sprite = {
+      rect_color = color,
     },
   }
 end

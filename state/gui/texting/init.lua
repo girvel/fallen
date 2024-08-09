@@ -38,7 +38,7 @@ local generate_entities = function(token_lines, view)
   return result
 end
 
-texting.generate_html_page = function(content, styles, w, view, args)
+texting.generate = function(content, styles, w, view, args)
   return generate_entities(
     wrap(html.parse(content, args, styles), w), view
   )

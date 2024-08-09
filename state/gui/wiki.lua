@@ -121,7 +121,7 @@ return Module("state.gui.wiki", function()
       }
 
       html.run_scripts(page, args)
-      self.text_entities = State:add_multiple(texting.generate_html_page(
+      self.text_entities = State:add_multiple(texting.generate(
         page, self.styles, State.gui.TEXT_MAX_SIZE[1], "wiki", args
       ))
     end,
