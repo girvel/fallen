@@ -27,4 +27,12 @@ ffi.cdef([[
   bool TCOD_map_is_in_fov(struct TCOD_Map *map, int x, int y);
 ]])
 
-return ffi.load("lib/libtcod")
+for _, path in ipairs({
+  "lib/libtcod",
+  love.filesystem.getSourceBaseDirectory() .. "\\lib\\libtcod",
+}) do
+  local ok, result = pcall(ffi.load, path)
+  if ok then return result end
+end
+
+Log.error("Unable to locate libtcod library")
