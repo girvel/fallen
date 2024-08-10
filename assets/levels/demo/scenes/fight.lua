@@ -1,7 +1,7 @@
 local api = require("tech.railing").api
 local engineer_ai = require("library.engineer_ai")
 local sprite = require("tech.sprite")
-local mech = require("mech")
+local hostility = require("mech.hostility")
 
 
 return function()
@@ -44,7 +44,7 @@ return function()
       name = "Half-orc talks after player spares him",
       enabled = false,
       start_predicate = function(self, rails, dt)
-        return not mech.are_hostile(State.player, rails.entities[3])
+        return not hostility.are_hostile(State.player, rails.entities[3])
       end,
 
       run = function(self, rails, dt)

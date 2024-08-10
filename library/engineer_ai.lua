@@ -1,7 +1,6 @@
 local ai = require("tech.ai")
 local actions = require("mech.creature.actions")
-local special = require("tech.special")
-local mech = require("mech")
+local hostility = require("mech.hostility")
 
 
 local engineer_ai, engineer_ai_mt, static = Module("library.engineer_ai")
@@ -34,7 +33,7 @@ engineer_ai_mt.__call = function(_, works_outside_of_combat)
       if self.ai.look_for_aggression then
         self.ai.look_for_aggression = false
         if Fun.iter(was_attacked_by):all(function(e) return e ~= State.player end) then
-          mech.make_friendly(self.faction)
+          hostility.make_friendly(self.faction)
           return
         end
       end

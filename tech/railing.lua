@@ -1,5 +1,5 @@
 local fx = require("tech.fx")
-local mech = require("mech")
+local hostility = require("mech.hostility")
 
 
 local railing, _, static = Module("tech.railing")
@@ -69,7 +69,7 @@ railing.api.make_hostile = function(faction, entities)
     :each(function(e)
       State:add(fx("assets/sprites/fx/aggression", "fx", e.position))
     end)
-  mech.make_hostile(faction)
+  hostility.make_hostile(faction)
 end
 
 railing.mixin = function()

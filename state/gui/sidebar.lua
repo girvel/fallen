@@ -1,5 +1,5 @@
 local special = require("tech.special")
-local mech = require("mech")
+local hostility = require("mech.hostility")
 local translation = require("tech.translation")
 local interactive = require("tech.interactive")
 local sound = require("tech.sound")
@@ -204,7 +204,7 @@ return Module("state.gui.sidebar", function()
           State.combat:iter_entities_only()
             :map(function(e)
               return {
-                mech.are_hostile(State.player, e) and COLOR.HOSTILE or {1, 1, 1},
+                hostility.are_hostile(State.player, e) and COLOR.HOSTILE or {1, 1, 1},
                 "\n%s %s" % {
                   State.combat:get_current() == e and "x" or "-",
                   Common.get_name(e),

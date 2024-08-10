@@ -2,6 +2,7 @@ local level = require("tech.level")
 local attacking = require("mech.attacking")
 local random = require("utils.random")
 local mech = require("mech")
+local hostility = require("mech.hostility")
 local interactive = require("tech.interactive")
 local combat = require("tech.combat")
 local sound = require("tech.sound")
@@ -114,7 +115,7 @@ actions.move = static {
         return e
           and e ~= entity
           and e.abilities
-          and mech.are_hostile(entity, e)
+          and hostility.are_hostile(entity, e)
           and e.resources
           and e.resources.reactions > 0
         end)

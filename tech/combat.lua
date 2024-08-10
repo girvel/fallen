@@ -1,4 +1,4 @@
-local mech = require("mech")
+local hostility = require("mech.hostility")
 
 
 local combat, module_mt, static = Module("tech.combat")
@@ -8,7 +8,7 @@ combat.WORLD_TURN = {codename = "WORLD_TURN"}
 
 module_mt.__call = function(_, list)
   Fun.iter(list)
-    :filter(function(e) return mech.are_hostile(e, State.player) end)
+    :filter(function(e) return hostility.are_hostile(e, State.player) end)
     :each(function(e)  end)
   return {
     list = Fun.iter(list)

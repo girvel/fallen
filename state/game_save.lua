@@ -8,7 +8,7 @@ end
 game_save.read = function()
   State = assert(loadstring(love.data.decompress(
     "string", "gzip", love.filesystem.read("last_save.fallen_save")
-  ))())
+  ), "last_save")())
 end
 
 return game_save

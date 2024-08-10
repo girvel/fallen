@@ -85,7 +85,7 @@ end
 common.resume_logged = function(coroutine_, ...)
   local success, message = coroutine.resume(coroutine_, ...)
   if not success then
-    Log.error("Coroutine error: " .. message .. "\n" .. debug.traceback(coroutine_))
+    Log.error("Coroutine error: %s\n%s" % {message, debug.traceback(coroutine_)})
   end
 end
 
