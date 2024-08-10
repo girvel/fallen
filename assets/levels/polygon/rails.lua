@@ -15,8 +15,6 @@ return function()
         run = function(self, rails, dt)
           self.enabled = false
           api.discover_wiki({fought_dreamers = true})
-          State.player.hp = 1
-          State.player:rotate("left")
           api.narration("Hello, <hate>world</hate>!")
           State.gui.popup:show(State.player.position, "above", "Oh hi Mark", 10)
           State.player.portrait = sprite.image("assets/sprites/portraits/half_orc.png")
@@ -33,8 +31,9 @@ return function()
 
         run = function(self, rails, dt)
           rails.last_mannequin_hp = rails.entities.mannequin.hp
-          api.notification("Game saved")
-          game_save.write()
+          api.ability_check_message("strength", 12, "Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.", "You suck more.")
+          -- api.notification("Game saved")
+          -- game_save.write()
         end,
       },
     },

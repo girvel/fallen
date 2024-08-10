@@ -1,5 +1,8 @@
 local fx = require("tech.fx")
 local hostility = require("mech.hostility")
+local mech = require("mech")
+local utf8 = require("utf8")
+local translation = require("tech.translation")
 
 
 local railing, _, static = Module("tech.railing")
@@ -70,14 +73,19 @@ railing.api.make_hostile = function(faction, entities)
       State:add(fx("assets/sprites/fx/aggression", "fx", e.position))
     end)
   hostility.make_hostile(faction)
+end
 
-  -- for _, e in pairs(engineers) do
-  --   e.interact = nil
-  --   if e._highlight then
-  --     State:remove(e._highlight)
-  --     e._highlight = nil
-  --   end
-  -- end
+railing.api.ability_check_message = function(ability, dc, content_success, content_failure)
+  local success = (D(20) + mech.get_modifier(State.player.abilities[ability])):roll() >= dc
+  local content = '<span color="%s">[%s]</span> %s' % {
+    success and "60b37e" or "e64e4b",
+    translation.ability[ability]:upper(),
+    success and content_success or content_failure,
+  }
+
+  State.gui.popup:show(
+    State.player.position, "above", content, utf8.len(content) / 10
+  )
 end
 
 railing.mixin = function()
