@@ -2,7 +2,6 @@ local animated = require("tech.animated")
 
 
 return function(pack, layer, position)
-  Log.trace("FX", pack)
   local result = Tablex.extend(
     animated(pack),
     {

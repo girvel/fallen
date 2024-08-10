@@ -136,7 +136,6 @@ return function()
 
             if picked_suboption == 1 or picked_suboption == 2 then
               api.make_hostile("half_orc", rails.entities)
-              Log.trace(State.player, rails.entities[3])
               State:start_combat({State.player, rails.entities[3]})
             else
               rails.entities[3].ai.mode = engineer_ai.modes.run_away_to(rails.positions.exit)
@@ -181,13 +180,15 @@ return function()
 
         local engineers = Fun.range(1, 4):map(function(i) return rails.entities[i] end):totable()
         State:start_combat(Tablex.concat({State.player}, engineers))
-        Fun.iter(engineers):each(function(e)
+
+        for _, e in pairs(engineers) do
           e.interact = nil
           if e._highlight then
             State:remove(e._highlight)
             e._highlight = nil
           end
-        end)
+        end
+
         rails.entities[3].ai.mode = engineer_ai.modes.run_away_to(rails.positions.exit)
 
         api.notification("Это была ошибка", true)

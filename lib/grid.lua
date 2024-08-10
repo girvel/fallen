@@ -2,10 +2,12 @@ local module, module_mt, static = Module("lib.grid")
 
 module._grid_mt = static {}
 
-module_mt.__call = function(_, size)
+module_mt.__call = function(_, size, factory)
   return setmetatable({
     size = size,
-    _inner_array = {},
+    _inner_array = factory
+      and Fun.range(1, size[1] * size[2]):map(factory):totable()
+      or {},
   }, module._grid_mt)
 end
 

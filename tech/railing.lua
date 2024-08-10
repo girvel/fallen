@@ -70,6 +70,14 @@ railing.api.make_hostile = function(faction, entities)
       State:add(fx("assets/sprites/fx/aggression", "fx", e.position))
     end)
   hostility.make_hostile(faction)
+
+  -- for _, e in pairs(engineers) do
+  --   e.interact = nil
+  --   if e._highlight then
+  --     State:remove(e._highlight)
+  --     e._highlight = nil
+  --   end
+  -- end
 end
 
 railing.mixin = function()

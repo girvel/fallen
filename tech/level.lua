@@ -1,8 +1,9 @@
-local module, _, static = Module("tech.level")
+local level, _, static = Module("tech.level")
 
-module.GRID_LAYERS = {"tiles", "items", "fx_behind", "solids", "above_solids", "fx"}
+level.GRID_LAYERS = {"tiles", "items", "fx_behind", "solids", "above_solids", "fx"}
+level.GRID_COMPLEX_LAYERS = {fx_behind = true, fx = true}
 
-module.move = function(grid, entity, position)
+level.move = function(grid, entity, position)
   if not grid:can_fit(position) or grid[position] then return false end
   grid[entity.position] = nil
   grid[position] = entity
@@ -10,12 +11,36 @@ module.move = function(grid, entity, position)
   return true
 end
 
-module.change_layer = function(grids, entity, new_layer)
+level.change_layer = function(grids, entity, new_layer)
   if grids[new_layer][entity.position] then return false end
   grids[entity.layer][entity.position] = nil
   grids[new_layer][entity.position] = entity
   entity.layer = new_layer
   return true
+end
+
+level.put = function(grids, entity)
+  local grid = grids[entity.layer]
+
+  if level.GRID_COMPLEX_LAYERS[entity.layer] then
+    table.insert(grid[entity.position], entity)
+    return
+  end
+
+  if grid[entity.position] then
+    Log.warn("Grid collision at %s[%s]: %s replaces %s" % {
+      entity.layer, entity.position, Common.get_name(entity), Common.get_name(grid[entity.position])
+    })
+  end
+  grid[entity.position] = entity
+end
+
+level.remove = function(grids, entity)
+  local grid = grids[entity.layer]
+  if level.GRID_COMPLEX_LAYERS[entity.layer] then
+    return Tablex.remove(grid[entity.position], entity)
+  end
+  grid[entity.position] = nil
 end
 
 local throw_tiles_under = function(level_lines, palette, result)
@@ -61,7 +86,7 @@ local get_factory = function(grid, position, palette)
   return palette.factories[character]
 end
 
-module.load_entities = function(text_representation, arguments, palette)
+level.load_entities = function(text_representation, arguments, palette)
   local level_lines = text_representation:strip():split("\n")
   local level_size = Vector({#level_lines[1], #level_lines})
 
@@ -108,4 +133,4 @@ module.load_entities = function(text_representation, arguments, palette)
   return level_size, result, player_anchor
 end
 
-return module
+return level

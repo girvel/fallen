@@ -45,7 +45,7 @@ module_mt.__call = function(_, systems, debug_mode)
       self.world:add(entity)
       self.entities[entity] = true
       if entity.position and entity.layer then
-        self.grids[entity.layer][entity.position] = entity
+        level.put(self.grids, entity)
       end
       if entity.inventory then
         Fun.iter(entity.inventory)
@@ -67,7 +67,7 @@ module_mt.__call = function(_, systems, debug_mode)
       self.world:remove(entity)
       self.entities[entity] = nil
       if entity.position and entity.layer then
-        self.grids[entity.layer][entity.position] = nil
+        level.remove(self.grids, entity)
       end
       if self.combat then
         self.combat:remove(entity)
@@ -109,7 +109,14 @@ module_mt.__call = function(_, systems, debug_mode)
       self.gui.character_creator.player_anchor = player_anchor
 
       self.grids = Fun.iter(level.GRID_LAYERS)
-        :map(function(layer) return layer, Grid(level_size) end)
+        :map(function(layer)
+          return layer, Grid(
+            level_size,
+            level.GRID_COMPLEX_LAYERS[layer]
+              and function() return {} end
+              or nil
+          )
+        end)
         :tomap()
 
       for _, entity in ipairs(new_entities) do

@@ -45,6 +45,7 @@ end
 
 local highlight_pack = animated.load_pack("assets/sprites/highlight")
 
+-- TODO figure out highlight behaviour structure
 module.highlight = function()
   return Tablex.extend(animated(highlight_pack), {layer = "fx", view = "scene"})
 end

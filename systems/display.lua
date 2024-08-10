@@ -79,8 +79,14 @@ display.system = static(Tiny.sortedProcessingSystem({
       for x = start[1], finish[1] do
         for y = start[2], finish[2] do
           if tcod.TCOD_map_is_in_fov(self._fov_map, x, y) then
-            local e = grid:fast_get(x, y)
-            if e then self:process(e) end
+            local cell = grid:fast_get(x, y)
+            if level.GRID_COMPLEX_LAYERS[layer] then
+              for _, e in ipairs(cell) do
+                if e then self:process(e) end
+              end
+            else
+              if cell then self:process(cell) end
+            end
           end
         end
       end
