@@ -14,6 +14,7 @@ Mathx = require("lib.mathx")
 Common = require("lib.Common")
 
 Dump = require("lib.dump")
+Dump.require_path = "lib.dump"
 Module = require("lib.module")
 Enum = require("lib.enum")
 Vector = require("lib.vector")

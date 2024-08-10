@@ -24,21 +24,19 @@ local build_table = function(x, cache)
   result[1] = "local _ = {}"
   result[2] = ("cache[%s] = _"):format(cache.size)
 
-  local i = 3
   for k, v in pairs(x) do
     table.insert(stack, tostring(k))
-    result[i] = ("_[%s] = %s"):format(
+    table.insert(result, ("_[%s] = %s"):format(
       handle_primitive(k, cache),
       handle_primitive(v, cache)
-    )
-    i = i + 1
+    ))
     table.remove(stack)
   end
 
   if not mt then
-    result[i] = "return _"
+    table.insert(result, "return _")
   else
-    result[i] = ("return setmetatable(_, %s)"):format(handle_primitive(mt, cache))
+    table.insert(result, ("return setmetatable(_, %s)"):format(handle_primitive(mt, cache)))
   end
 
   return table.concat(result, "\n")
@@ -52,6 +50,10 @@ local build_function = function(x, cache)
   result[1] = "local _ = " .. ([[load(%q)]]):format(string.dump(x))
   result[2] = ("cache[%s] = _"):format(cache.size)
 
+  if allowed_big_upvalues[x] then
+    result[3] = "dump.ignore_upvalue_size(_)"
+  end
+
   for i = 1, math.huge do
     local k, v = debug.getupvalue(x, i)
     if not k then break end
@@ -59,7 +61,7 @@ local build_function = function(x, cache)
     if not allowed_big_upvalues[x] and #upvalue > 1024 then
       table.insert(warnings, ("Big upvalue %s in %s"):format(k, table.concat(stack, ".")))
     end
-    result[i + 2] = ("debug.setupvalue(_, %s, %s)"):format(i, upvalue)
+    table.insert(result, ("debug.setupvalue(_, %s, %s)"):format(i, upvalue))
   end
   table.insert(result, "return _")
   return table.concat(result, "\n")
@@ -102,12 +104,23 @@ end
 
 return setmetatable({
   get_warnings = function() return {unpack(warnings)} end,
-  ignore_upvalue_size = setmetatable({}, {__concat = function(self, other)
-    allowed_big_upvalues[other] = true
-    return other
-  end}),
+  ignore_upvalue_size = setmetatable({}, {
+    __concat = function(self, other)
+      return self(other)
+    end,
+    __call = function(self, other)
+      allowed_big_upvalues[other] = true
+      return other
+    end,
+  }),
+  require_path = nil,
 }, {
-  __call = function(_, x)
+  __call = function(self, x)
+    assert(
+      self.require_path,
+      "Put the lua path to dump libary into dump.require_path before calling dump itself"
+    )
+
     stack = {}
     warnings = {}
     local cache = {size = 0}
@@ -118,6 +131,6 @@ return setmetatable({
       result = "return " .. handle_primitive(x, cache)
     end
 
-    return "local cache = {}\n" .. result
+    return ("local cache = {}\nlocal dump = require(\"%s\")\n"):format(self.require_path) .. result
   end
 })
