@@ -51,6 +51,7 @@ module_mt.__call = function(_, systems, debug_mode)
         Fun.iter(entity.inventory)
           :each(function(slot, it) self:add(it) end)
       end
+      Query(entity):on_add()
       return entity
     end,
 

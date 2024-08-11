@@ -1,9 +1,12 @@
 local animated = require("tech.animated")
 local animation_packs = require("library.animation_packs")
 local item = require("tech.item")
+local interactive = require("tech.interactive")
+local railing = require("tech.railing")
+local sprite = require("tech.sprite")
 
 
-local module, _, static = Module("library.weapons")
+local module, _, static = Module("library.items")
 
 module.rapier = function()
   return Tablex.extend(
@@ -82,6 +85,22 @@ module.yellow_gloves = function()
       name = "Огнеупорные перчатки",
       codename = "yellow_gloves",
       slot = "gloves",
+    }
+  )
+end
+
+module.note = function(page_table)
+  return Tablex.extend(
+    interactive(function(self)
+      railing.api.discover_wiki(page_table)
+      State:remove(self)
+    end),
+    {
+      sprite = sprite.image("assets/sprites/note.png"),
+      codename = "note",
+      layer = "above_solids",
+      view = "scene",
+      name = "записка",
     }
   )
 end

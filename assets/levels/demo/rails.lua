@@ -1,4 +1,5 @@
 local railing = require("tech.railing")
+local items = require("library.items")
 
 
 return function()
@@ -33,6 +34,9 @@ return function()
       self.old_hp = Fun.range(4)
         :map(function(i) return self.entities[i].hp end)
         :totable()
+
+      State:add(Tablex.extend(items.note({colleague_note = true}), {position = Vector({19, 78})}))
+      Log.trace(State.player.position)
     end,
   })
 end

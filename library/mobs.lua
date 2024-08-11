@@ -1,6 +1,6 @@
 local humanoid = require("mech.humanoid")
 local interactive = require("tech.interactive")
-local weapons = require("library.weapons")
+local items = require("library.items")
 local mech = require("mech")
 local races = require("mech.races")
 local constants = require("mech.constants")
@@ -33,9 +33,9 @@ local dreamer_engineer_mixin = function()
   )
 end
 
--- [{7, 9}] = {"down", {main_hand = weapons.gas_key()}},
+-- [{7, 9}] = {"down", {main_hand = items.gas_key()}},
 -- [{5, 8}] = {"down"},
--- [{5, 3}] = {"up", {gloves = weapons.yellow_gloves()}},
+-- [{5, 3}] = {"up", {gloves = items.yellow_gloves()}},
 -- [{8, 3}] = {"up"},
 
 module[1] = function()
@@ -43,7 +43,7 @@ module[1] = function()
     name = "инженер-полуэльф",
     race = races.half_elf,
     direction = "down",
-    inventory = {main_hand = weapons.gas_key()},
+    inventory = {main_hand = items.gas_key()},
   }, dreamer_engineer_mixin()))
 end
 
@@ -63,7 +63,7 @@ module[3] = function()
     hp = 34,
     max_hp = 35,
     direction = "up",
-    inventory = {gloves = weapons.yellow_gloves()},
+    inventory = {gloves = items.yellow_gloves()},
     faction = "half_orc",
 
     abilities = mech.abilities(18, 6, 12, 8, 8, 8),

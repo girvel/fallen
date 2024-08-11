@@ -1,6 +1,6 @@
 local live = require("library.live")
 local mobs = require("library.mobs")
-local weapons = require("library.weapons")
+local items = require("library.items")
 local decorations = require("library.decorations")
 local walls = require("library.walls")
 local pipes = require("library.pipes")
@@ -63,9 +63,9 @@ return Module("library.palette", {
     ["4"] = mobs[4],
 
     -- items -- 
-    g = weapons.greatsword,
-    d = weapons.dagger,
-    r = weapons.rapier,
+    g = items.greatsword,
+    d = items.dagger,
+    r = items.rapier,
   },
   complex_factories = {
     ["W"] = function(grid, position)

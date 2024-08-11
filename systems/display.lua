@@ -168,6 +168,7 @@ display.system = static(Tiny.sortedProcessingSystem({
     if entity.sprite.quad then
       love.graphics.draw(entity.sprite.image, entity.sprite.quad, x, y, 0, scale)
     else
+      if entity.codename == "note" then Log.trace(x, y) end
       love.graphics.draw(entity.sprite.image, x, y, 0, scale)
     end
 
