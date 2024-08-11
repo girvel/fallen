@@ -7,11 +7,17 @@ factoring.from_atlas = function(atlas, mixin, names)
   local result = {}
   for i, name in ipairs(names) do
     if name then
+      local current_mixin
+      if type(mixin) == "function" then
+        current_mixin = mixin(name)
+      else
+        current_mixin = mixin
+      end
       result[name] = function()
         return Tablex.extend({
           sprite = sprite.from_atlas(atlas, i),
           codename = name,
-        }, mixin)
+        }, current_mixin)
       end
     end
   end

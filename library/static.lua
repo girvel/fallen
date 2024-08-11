@@ -2,109 +2,12 @@ local interactive = require("tech.interactive")
 local animated = require("tech.animated")
 local level = require("tech.level")
 local sprite = require("tech.sprite")
-local library_fx = require("library.fx")
-local random = require("utils.random")
 local sound = require("tech.sound")
 
 
 local module, _, static = Module("library.static")
 
--- atlases --
-local steel_sounds = {
-}
-
-for i, name in ipairs({
-  "steel_floor",
-}) do
-  if not name then return end
-  module[name] = function()
-    return {
-      sprite = sprite.from_atlas("assets/sprites/tile_atlas.png", i),
-      view = "scene",
-      layer = "tiles",
-      codename = name,
-      sounds = steel_sounds,
-    }
-  end
-end
-
--- atlas extensions --
-local valve_rotating_sounds = sound.multiple("assets/sounds/valve_rotate", 0.1)
-local pipe_valve_pack = animated.load_pack("assets/sprites/pipe_valve")
-
-module.pipe_valve = function(leaking_pipe_position)
-  return Tablex.extend(
-    animated(pipe_valve_pack),
-    interactive(Dump.ignore_upvalue_size .. function(self, other)
-      local target = State.grids.solids[leaking_pipe_position]
-      self:animate("rotate")
-      State.audio:play(self, random.choice(valve_rotating_sounds), "medium")
-      self:when_animation_ends(function()
-        target.overflow_counter = 0
-        target:burst_with_steam()
-      end)
-    end, true),
-    {
-      layer = "solids",
-      view = "scene",
-      name = "Вентиль",
-      codename = "pipe_valve",
-      transparent_flag = true,
-    }
-  )
-end
-
-local steam_hissing_sound = sound.multiple("assets/sounds/steam_hissing.wav", 0.8)[1]
-
-module.leaking_pipe_left_down = function()
-  local hissing_sound = sound.multiple("assets/sounds/steam_hissing_loop.wav", 1)[1]
-  hissing_sound.source:setLooping(true)
-
-  return {
-    sprite = sprite.from_atlas(pipe_atlas, 9),
-    layer = "solids",
-    view = "scene",
-    transparent_flag = true,
-
-    codename = "leaking_pipe_left_down",
-    trigger_seconds = 5,
-    overflow_counter = 0,
-    sound_loop = hissing_sound,
-    paused = false,
-
-    ai = {run = function(self, event)
-      local dt = unpack(event)
-      self.overflow_counter = self.overflow_counter + dt
-
-      if self.overflow_counter >= 60 then
-        State.audio:play(self, self.sound_loop)
-        if Common.relative_period(1, dt, self, "steam") then
-          self:burst_with_steam()
-        end
-        return
-      end
-      self.sound_loop.source:stop()
-
-      if Common.relative_period(self.trigger_seconds, dt, self, "steam") then
-        self.trigger_seconds = 8 + math.random() * 4
-        self:burst_with_steam()
-      end
-    end},
-
-    burst_with_steam = Dump.ignore_upvalue_size .. function(self)
-      if self.paused then return end
-
-      State:add(Tablex.extend(
-        library_fx.steam("right"),
-        {position = self.position}
-      ))
-      State.audio:play(self, steam_hissing_sound:clone())
-    end,
-  }
-end
-
 -- plain sprites --
--- TODO refactor?
 local lever_packs = {
   on = animated.load_pack("assets/sprites/lever_on"),
   off = animated.load_pack("assets/sprites/lever_off"),
@@ -153,22 +56,6 @@ module.door = function(args)
   )
 end
 
-module.scripture = function(kind, path)
-  assert(kind)
-  return Tablex.extend(
-    path and interactive(function(self)
-      State.gui.wiki:show(self.path)
-    end) or {},
-    {
-      sprite = sprite.image("assets/sprites/scripture_" .. (kind or "straight") .. ".png"),
-      layer = "tiles",
-      view = "scene",
-      name = "древняя надпись",
-      path = path
-    }
-  )
-end
-
 local mannequin_sounds = {
   hit = sound.multiple("assets/sounds/hits_body", 0.3),
 }
@@ -183,34 +70,6 @@ module.mannequin = function()
     hp = 1000,
     get_armor = function() return 5 end,
     sounds = mannequin_sounds,
-  }
-end
-
-local planks_sounds = {
-  move = sound.multiple("assets/sounds/move_planks", 0.1)
-}
-
-module.planks = function()
-  return {
-    sprite = sprite.image("assets/sprites/planks.png"),
-    layer = "tiles",
-    view = "scene",
-    codename = "planks",
-    sounds = planks_sounds,
-  }
-end
-
-local walkway_sounds = {
-  move = sound.multiple("assets/sounds/move_walkway", 0.1),
-}
-
-module.walkway = function()
-  return {
-    sprite = sprite.image("assets/sprites/walkway.png"),
-    layer = "tiles",
-    view = "scene",
-    codename = "walkway",
-    sounds = walkway_sounds,
   }
 end
 

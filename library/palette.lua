@@ -4,6 +4,7 @@ local weapons = require("library.weapons")
 local decorations = require("library.decorations")
 local walls = require("library.walls")
 local pipes = require("library.pipes")
+local tiles = require("library.tiles")
 
 
 local pipes_characters = Common.set(">v<^\\/FB}{T+oLp")
@@ -11,9 +12,9 @@ local pipes_characters = Common.set(">v<^\\/FB}{T+oLp")
 return Module("library.palette", {
   factories = {
     -- tiles -- 
-    _ = static.planks,
-    [","] = static.walkway,
-    ["-"] = static.steel_floor,
+    _ = tiles.planks,
+    [","] = tiles.walkway,
+    ["-"] = tiles.steel_floor,
 
     -- solids --
     M = walls.steel_with_mirror,
@@ -101,9 +102,9 @@ return Module("library.palette", {
 
     ["."] = function(grid, position)
       if math.random() <= 0.3 then
-        return static.walkway
+        return tiles.walkway
       end
-      return static.planks
+      return tiles.planks
     end,
 
     p = function(grid, position)
