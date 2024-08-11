@@ -29,6 +29,7 @@ love.errorhandler = function(msg)
 end
 
 love.graphics.setDefaultFilter("nearest", "nearest")
+love.mouse.setCursor(love.mouse.newCursor("assets/sprites/cursor.png"))
 love.keyboard.setKeyRepeat(true)
 
 
