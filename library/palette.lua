@@ -66,6 +66,12 @@ return Module("library.palette", {
   },
   complex_factories = {
     ["W"] = function(grid, position)
+      if math.random() <= 0.5
+        and Fun.iter(Vector.directions)
+          :any(function(d) return grid:safe_get(position + d) == "~" end)
+      then
+        return walls.steel_vined
+      end
       if math.random() <= 0.3 then
         return walls.steel_variant
       end

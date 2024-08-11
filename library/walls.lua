@@ -7,7 +7,7 @@ Tablex.extend(walls, factoring.from_atlas("assets/sprites/atlases/walls.png", {
   layer = "solids",
   view = "scene",
 }, {
-  "steel", "steel_variant", "steel_with_mirror"
+  "steel", "steel_variant", "steel_with_mirror", "steel_vined",
 }))
 
 return walls
