@@ -4,29 +4,23 @@ local animated = require("tech.animated")
 local library_fx = require("library.fx")
 local interactive = require("tech.interactive")
 local random = require("utils.random")
+local factoring = require("tech.factoring")
 
 
 local pipes, pipes_mt, static = Module("library.pipes")
 
 local atlas = "assets/sprites/atlases/pipes.png"
-
-for i, name in ipairs({
+Tablex.extend(pipes, factoring.from_atlas(atlas, {
+  layer = "solids",
+  view = "scene",
+  transparent_flag = true,
+}, {
   "horizontal", "vertical", "horizontal_braced", "vertical_braced",
   "left_back", "forward_left", "right_forward", "back_right",
   "left_down", "forward_down", "right_down", "back_down",
   "T_up", "T_left", "T_down", "T_right",
   "x",
-}) do
-  pipes[name] = function()
-    return {
-      sprite = sprite.from_atlas(atlas, i),
-      layer = "solids",
-      view = "scene",
-      codename = name,
-      transparent_flag = true,
-    }
-  end
-end
+}))
 
 local valve_rotating_sounds = sound.multiple("assets/sounds/valve_rotate", 0.1)
 local pipe_valve_pack = animated.load_pack("assets/sprites/pipe_valve")
