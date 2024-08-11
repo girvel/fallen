@@ -1,9 +1,23 @@
 local api = require("tech.railing").api
 local actions = require("mech.creature.actions")
+local random = require("utils.random")
+local level = require("tech.level")
 
 
 return function()
   return {
+    checkpoint_3 = {
+      name = "Checkpoint (3)",
+      enabled = false,
+      start_predicate = function(self, rails, dt)
+        return true
+      end,
+
+      run = function(self, rails, dt)
+        self.enabled = false
+        level.move(State.grids.solids, State.player, Vector({20, 56}))
+      end,
+    },
     {
       name = "Player enters the detective room",
       enabled = true,
@@ -59,6 +73,27 @@ return function()
 
         rails.entities[2]:rotate("down")
         rails.entities[2]:act(actions.interact)
+      end,
+    },
+    {
+      name = "Lead engineer shouts",
+      enabled = true,
+      start_predicate = function(self, rails, dt)
+        return Common.relative_period(40, dt, self)
+      end,
+
+      run = function(self, rails, dt)
+        self.enabled = false
+        State.gui.popup:show(
+          rails.entities[1].position, "above",
+          random.choice({
+            "УКС " .. math.random(15, 27) / 10,
+            "ДО " .. math.random(40, 80),
+            "МПА " .. math.random(26, 52) / 10,
+            "ТМ " .. math.random(197, 310),
+            "К 3, СПК",
+          })
+        )
       end,
     },
     {

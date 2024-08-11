@@ -85,7 +85,7 @@ railing.api.ability_check_message = function(ability, dc, content_success, conte
   }
 
   State.gui.popup:show(
-    State.player.position, "above", content, utf8.len(content) / 10
+    State.player.position, "above", content
   )
 end
 

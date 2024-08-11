@@ -1,6 +1,7 @@
 local texting = require("state.gui.texting")
 local special = require("tech.special")
 local sprite = require("tech.sprite")
+local utf8 = require("utf8")
 
 
 local W = 300
@@ -10,6 +11,7 @@ return Module("state.gui.popup", function()
   return {
     show = function(self, position, relation, content, life_time)
       assert(relation == "above" or relation == "below")
+      life_time = life_time or utf8.len(content) / 10 + 5
 
       -- TODO styles should probably be hierarchical, common in gui and specialized in wiki, creator, dialogue etc.
       local entities = State:add_multiple(texting.generate(

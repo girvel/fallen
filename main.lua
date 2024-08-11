@@ -79,7 +79,6 @@ love.load = function(args)
   for _, scene in ipairs(args.scenes) do
     scene = State.rails.scenes[scene]
     scene.enabled = not scene.enabled
-    Log.trace(scene)
   end
 
   love.audio.stop()
