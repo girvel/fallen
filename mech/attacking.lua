@@ -8,12 +8,18 @@ local attacking, _, static = Module("mech.attacking")
 attacking.attack = function(entity, target, attack_roll, damage_roll)
   local attack = attack_roll:roll()
   local is_nat = attack == attack_roll:max()
+  local is_nat_miss = attack == attack_roll:min()
   local ac = (-Query(target):get_armor() or 0)
 
   Log.info(
     Common.get_name(entity) .. " attacks " .. Common.get_name(target) .. "; attack roll: " ..
     attack .. ", armor: " .. ac
   )
+
+  if is_nat_miss then
+    State:add(special.floating_damage("!", target.position))
+    return false
+  end
 
   if attack < ac and not is_nat then
     State:add(special.floating_damage("-", target.position))

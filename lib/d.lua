@@ -101,6 +101,10 @@ d_methods.max = function(self)
     :sum() + self.bonus
 end
 
+d_methods.min = function(self)
+  return #self.dice + self.bonus
+end
+
 d_methods.extended = function(self, modification)
   return module.roll(
     Fun.iter(self.dice)
