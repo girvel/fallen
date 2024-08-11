@@ -2,6 +2,7 @@ local static = require("library.static")
 local mobs = require("library.mobs")
 local weapons = require("library.weapons")
 local decorations = require("library.decorations")
+local walls = require("library.walls")
 
 
 return Module("library.palette", {
@@ -12,12 +13,7 @@ return Module("library.palette", {
     ["-"] = static.steel_floor,
 
     -- solids --
-    ["#"] = static.wall,
-    ["%"] = static.crooked_wall,
-    S = static.smooth_wall,
-    W = static.steel_wall,
-    V = static.steel_wall_variant,
-    M = static.steel_wall_mirror,
+    M = walls.steel_with_mirror,
 
     [">"] = static.pipe_horizontal,
     v = static.pipe_vertical,
@@ -65,6 +61,12 @@ return Module("library.palette", {
     r = weapons.rapier,
   },
   complex_factories = {
+    ["W"] = function(grid, position)
+      if math.random() <= 0.3 then
+        return walls.steel_variant
+      end
+      return walls.steel
+    end,
     t = function(grid, position)
       local left = grid:safe_get(position + Vector.left)
       local right = grid:safe_get(position + Vector.right)
@@ -96,7 +98,7 @@ return Module("library.palette", {
         return static.walkway
       end
       return static.planks
-    end
+    end,
   },
   transparents = Common.set("Dl@gdr>v<^\\/FB}{T+o01234LpPtkKba$husQ"),
   throwables = Common.set("_,-."),

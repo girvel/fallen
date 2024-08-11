@@ -233,18 +233,4 @@ module.walkway = function()
   }
 end
 
-for _, name in ipairs({
-  "wall", "bushes", "smooth_wall", "crooked_wall", "sand", "wall_with_vines",
-  "key_point", "steel_wall", "steel_wall_variant", "steel_wall_mirror",
-}) do
-  module[name] = function()
-    return {
-      layer = "solids",
-      view = "scene",
-      codename = name,
-      sprite = sprite.image("assets/sprites/%s.png" % name)
-    }
-  end
-end
-
 return module

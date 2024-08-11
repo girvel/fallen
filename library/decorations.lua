@@ -4,7 +4,7 @@ local sound = require("tech.sound")
 
 local decorations, module_mt, static = Module("library.decorations")
 
-local decorations_atlas = "assets/sprites/decorations_atlas.png"
+local decorations_atlas = "assets/sprites/atlases/decorations.png"
 
 Fun.iter({
   false, "device_panel_broken", "furnace", "table", "locker", "locker_damaged", "cabinet", "cabinet_damaged",
