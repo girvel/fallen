@@ -63,12 +63,12 @@ return Module("library.palette", {
     ["4"] = mobs[4],
 
     -- items -- 
-    g = items.greatsword,
+    ["|"] = items.pole,
     d = items.dagger,
-    r = items.rapier,
+    m = items.machete,
   },
   complex_factories = {
-    ["W"] = function(grid, position)
+    W = function(grid, position)
       if math.random() <= 0.5
         and Fun.iter(Vector.directions)
           :any(function(d) return grid:safe_get(position + d) == "~" end)
@@ -137,6 +137,6 @@ return Module("library.palette", {
       })[i + 1]
     end
   },
-  transparents = Common.set("Dl@gdr>v<^\\/FB}{T+o01234LpPtkKba$husQ"),
+  transparents = Common.set("Dl@gr>v<^\\/FB}{T+o01234LpPtkKba$husQ|dm"),
   throwables = Common.set("_,-."),
 })
