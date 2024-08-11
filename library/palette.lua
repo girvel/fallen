@@ -1,4 +1,4 @@
-local static = require("library.static")
+local live = require("library.live")
 local mobs = require("library.mobs")
 local weapons = require("library.weapons")
 local decorations = require("library.decorations")
@@ -49,9 +49,9 @@ return Module("library.palette", {
     s = decorations.sink,
     b = decorations.bed,
 
-    Q = static.mannequin,
-    D = static.door,
-    l = static.lever,
+    Q = live.mannequin,
+    D = live.door,
+    l = live.lever,
 
     ["0"] = mobs.dreamer,
     ["1"] = mobs[1],

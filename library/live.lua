@@ -5,7 +5,7 @@ local sprite = require("tech.sprite")
 local sound = require("tech.sound")
 
 
-local module, _, static = Module("library.static")
+local live, _, static = Module("library.live")
 
 -- plain sprites --
 local lever_packs = {
@@ -13,7 +13,7 @@ local lever_packs = {
   off = animated.load_pack("assets/sprites/lever_off"),
 }
 
-module.lever = function()
+live.lever = function()
   return Tablex.extend(
     animated(lever_packs.off),
     interactive(function(self)
@@ -31,7 +31,7 @@ end
 local closed_door_pack = animated.load_pack("assets/sprites/closed_door")
 local open_door_pack = animated.load_pack("assets/sprites/open_door")
 
-module.door = function(args)
+live.door = function(args)
   args = args or {}
   return Tablex.extend(
     animated(closed_door_pack),
@@ -60,7 +60,7 @@ local mannequin_sounds = {
   hit = sound.multiple("assets/sounds/hits_body", 0.3),
 }
 
-module.mannequin = function()
+live.mannequin = function()
   return {
     sprite = sprite.image("assets/sprites/mannequin.png"),
     transparent_flag = true,
@@ -73,4 +73,4 @@ module.mannequin = function()
   }
 end
 
-return module
+return live
