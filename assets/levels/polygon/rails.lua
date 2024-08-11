@@ -4,6 +4,8 @@ local api = railing.api
 local game_save = require("state.game_save")
 
 
+local lorem = "Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book."
+
 return function()
   return Tablex.extend(railing.mixin(), {
     scenes = {
@@ -31,7 +33,7 @@ return function()
 
         run = function(self, rails, dt)
           rails.last_mannequin_hp = rails.entities.mannequin.hp
-          api.ability_check_message("strength", 12, "Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.", "You suck more.")
+          api.ability_check_message("strength", 12, lorem, "You suck more.")
           -- api.notification("Game saved")
           -- game_save.write()
         end,

@@ -16,6 +16,7 @@ return Module("library.palette", {
     S = static.smooth_wall,
     W = static.steel_wall,
     V = static.steel_wall_variant,
+    M = static.steel_wall_mirror,
 
     [">"] = static.pipe_horizontal,
     v = static.pipe_vertical,
@@ -40,16 +41,17 @@ return Module("library.palette", {
     K = static.locker_damaged,
     c = static.cabinet,
     C = static.cabinet_damaged,
-    b = static.bed,
     a = static.crate,
     ["$"] = static.chest,
     h = static.chamber_pot,
     u = static.bucket,
+    s = static.sink,
 
-    M = static.mannequin,
+    Q = static.mannequin,
     D = static.door,
     l = static.lever,
 
+    ["0"] = mobs.dreamer,
     ["1"] = mobs[1],
     ["2"] = mobs[2],
     ["3"] = mobs[3],
@@ -78,7 +80,24 @@ return Module("library.palette", {
         return static.table_left
       end
     end,
+    b = function (grid, position)
+      if grid:safe_get(position + Vector.up) == "b" then
+        return static.lower_bed
+      end
+
+      if grid:safe_get(position + Vector.down) == "b" then
+        return static.upper_bed
+      end
+
+      return static.bed
+    end,
+    ["."] = function(grid, position)
+      if math.random() <= 0.3 then
+        return static.walkway
+      end
+      return static.planks
+    end
   },
-  transparents = Common.set("MDl@gdr>v<^\\/FB}{T+o1234LpPtkKba$hu"),
-  throwables = Common.set("_,-"),
+  transparents = Common.set("Dl@gdr>v<^\\/FB}{T+o01234LpPtkKba$husQ"),
+  throwables = Common.set("_,-."),
 })

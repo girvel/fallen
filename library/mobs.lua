@@ -5,6 +5,7 @@ local mech = require("mech")
 local races = require("mech.races")
 local constants = require("mech.constants")
 local engineer_ai = require("library.engineer_ai")
+local random = require("utils.random")
 
 
 local module, _, static = Module("library.mobs")
@@ -89,6 +90,20 @@ module[4] = function()
     direction = "up",
     inventory = {},
   }, dreamer_engineer_mixin()))
+end
+
+local dreamer_races = {races.dwarf, races.human, races.half_elf, races.half_orc, races.halfling}
+
+module.dreamer = function()
+  return humanoid({
+    name = "матрос",
+    race = random.choice(dreamer_races),
+    direction = "up",
+    inventory = {},
+    max_hp = 15,
+    abilities = mech.abilities(10, 10, 10, 10, 10, 10),
+    faction = "dreamers_detective",
+  })
 end
 
 -- local bat_pack = animated.load_pack("assets/sprites/bat")

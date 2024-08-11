@@ -33,8 +33,8 @@ local decorations_atlas = "assets/sprites/decorations_atlas.png"
 
 Fun.iter({
   false, "device_panel_broken", "furnace", "table", "locker", "locker_damaged", "cabinet", "cabinet_damaged",
-  "bed", "crate", "crate_open", "chest", "chest_open", "table_left", "table_hor", "table_right",
-  "chamber_pot", "bucket",
+  "upper_bed", "crate", "crate_open", "chest", "chest_open", "table_left", "table_hor", "table_right",
+  "lower_bed", "chamber_pot", "bucket", false, "bed", "sink",
 }):enumerate():each(function(i, name)
   if not name then return end
   module[name] = function()
@@ -272,7 +272,7 @@ end
 
 for _, name in ipairs({
   "wall", "bushes", "smooth_wall", "crooked_wall", "sand", "wall_with_vines",
-  "key_point", "steel_wall", "steel_wall_variant",
+  "key_point", "steel_wall", "steel_wall_variant", "steel_wall_mirror",
 }) do
   module[name] = function()
     return {

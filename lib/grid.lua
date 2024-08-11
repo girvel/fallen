@@ -114,7 +114,6 @@ module._grid_methods = {
 }
 
 module._grid_mt.__index = function(self, v)
-  -- Log.trace(self, v, module._grid_methods)
   local method = module._grid_methods[v]
   if method then return method end
 
