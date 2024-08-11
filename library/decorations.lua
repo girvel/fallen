@@ -11,27 +11,20 @@ Tablex.extend(decorations, factoring.from_atlas(decorations_atlas, {
   layer = "solids",
   transparent_flag = true,
 }, {
-  false, "device_panel_broken", "furnace", "table", "locker", "locker_damaged", "cabinet", "cabinet_damaged",
+  "device_panel", "device_panel_broken", "furnace", "table", "locker", "locker_damaged", "cabinet", "cabinet_damaged",
   "upper_bed", "crate", "crate_open", "chest", "chest_open", "table_left", "table_hor", "table_right",
   "lower_bed", "chamber_pot", "bucket", false, "bed", "sink",
 }))
 
-decorations.device_panel = function()
-  return {
-    sprite = sprite.from_atlas(decorations_atlas, 1),
-    view = "scene",
-    layer = "solids",
-    codename = "device_panel",
-    hp = 1,
-    hardness = 15,
-    sounds = {
-      hit = sound.multiple("assets/sounds/glass_breaking", 0.5),
-    },
-    on_remove = function(self)
-      State:add(Tablex.extend(decorations.device_panel_broken(), {position = self.position}))
-    end,
-    transparent_flag = true,
-  }
-end
+factoring.extend(decorations, "device_panel", {
+  hp = 1,
+  hardness = 15,
+  sounds = {
+    hit = sound.multiple("assets/sounds/glass_breaking", 0.5),
+  },
+  on_remove = function(self)
+    State:add(Tablex.extend(decorations.device_panel_broken(), {position = self.position}))
+  end,
+})
 
 return decorations

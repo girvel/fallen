@@ -18,4 +18,11 @@ factoring.from_atlas = function(atlas, mixin, names)
   return result
 end
 
+factoring.extend = function(t, k, mixin)
+  local wrapped = t[k]
+  t[k] = function(...)
+    return Tablex.extend(wrapped(...), mixin)
+  end
+end
+
 return factoring
