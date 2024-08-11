@@ -156,7 +156,7 @@ return function()
         self.enabled = false
         api.notification("Задача выполнена", true)
         api.notification("Ожидайте следующее задание", true)
-        State.gui.wiki.quests_states.detective = 2
+        State.gui.wiki.quests_states.detective = 3
       end,
     },
 
@@ -208,6 +208,7 @@ return function()
         api.notification("Задача выполнена неудовлетворительно", true)
         api.notification("Ожидайте следующее задание", true)
         api.discover_wiki({fought_dreamers = true})
+        State.gui.wiki.quests_states.detective = 3
       end,
     },
 
@@ -223,6 +224,24 @@ return function()
         self.enabled = false
         api.wait_seconds(0.5)
         State:remove(rails.entities[3])
+      end,
+    },
+
+    {
+      name = "Player leaves detective zone",
+      enabled = true,
+      start_predicate = function(self, rails, dt)
+        return State.gui.wiki.quests_states.detective
+          and State.gui.wiki.quests_states.detective <= 3
+          and (State.player.position - rails.positions.exit):abs() > 20
+      end,
+
+      run = function(self, rails, dt)
+        self.enabled = false
+        State:remove(rails.entities[3])
+        api.notification("Задача выполнена неудовлетворительно", true)
+        api.notification("Ожидайте следующее задание", true)
+        State.gui.wiki.quests_states.detective = 3
       end,
     },
   }

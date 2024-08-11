@@ -40,7 +40,7 @@ engineer_ai_mt.__call = function(_, works_outside_of_combat)
 
       local mode_type = self.ai.mode.enum_variant
       if mode_type == engineer_ai.modes.skip_turn then
-        State.gui.popup:show(self.position, "above", "Стой! Остановись, мужик!!!", 10)
+        State.gui.popup:show(self.position, "above", "Стой! Остановись, мужик!!! Не бей меня!")
         self.ai.mode = engineer_ai.modes.normal()
         self.ai.look_for_aggression = true
         return
