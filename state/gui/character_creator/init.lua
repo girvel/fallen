@@ -5,6 +5,7 @@ local forms = require("state.gui.character_creator.forms")
 local class = require("mech.class")
 local fighter = require("mech.classes.fighter")
 local feats = require("mech.feats")
+local mech = require("mech")
 
 
 return Module("state.gui.character_creator", function()
@@ -33,6 +34,7 @@ return Module("state.gui.character_creator", function()
       max_index = 1,
       movement_functions = {},
       race = "human",
+      class = fighter(),
       bonuses = {},
 
       build_options = {},
@@ -48,13 +50,13 @@ return Module("state.gui.character_creator", function()
         State:remove_multiple(self.text_entities)
       end
 
-      if State.player then
-        self.text_entities = nil
-        return
-      end
-
       params.movement_functions = {}
       params.max_index = 0
+      params.level = Fun.iter(mech.experience_for_level)
+        :enumerate()
+        :filter(function(level, exp) return exp <= State.player.experience end)
+        :map(function(level, exp) return level end)
+        :max() or 0
       local text = ""
 
       text = text
@@ -90,24 +92,24 @@ return Module("state.gui.character_creator", function()
       if params.points > 0 then return end  -- TODO notification
       local active_choices = class.get_choices(fighter.progression_table, 2)
 
-      local args = {
-        params.abilities_final, races[params.race],
-        Fun.iter(params.build_options)
+      local changes = {
+        abilities = params.abilities_final,
+        race = races[params.race],
+        build = Fun.iter(params.build_options)
           :filter(function(o) return Tablex.contains(active_choices, o) end)
           :tomap(),
-        races[params.race].feat_flag
+        feat = races[params.race].feat_flag
           and feats.perk.options[params.build_options[feats.perk]]
           or nil,
+        level = params.level,
+        class = params.class,
       }
 
-      Log.info("Finishing character creation with args:", args)
+      Log.info("Finishing character creation with args:", changes)
 
-      State.player = State:add(Tablex.extend(
-        player(unpack(args)),
-        {position = self.player_anchor}
-      ))
-      Log.info("Created player")
-      self:refresh()
+      State.player:level_up(changes)
+      State:remove_multiple(self.text_entities)
+      self.text_entities = nil
     end,
   }
 end)

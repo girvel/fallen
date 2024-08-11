@@ -3,7 +3,6 @@ local utf8 = require("utf8")
 local races = require("mech.races")
 local translation = require("tech.translation")
 local perk_form = require("state.gui.character_creator.perk_form")
-local fighter = require("mech.classes.fighter")
 local feats = require("mech.feats")
 local class = require("mech.class")
 
@@ -140,8 +139,8 @@ return Module("state.gui.character_creator.forms", {
   end,
 
   class = function(params)
-    return "  # Класс: воин\n\n"
-      .. Fun.iter(class.get_choices(fighter.progression_table, 2))
+    return "  # Класс: %s\n\n" % translation[params.class]
+      .. Fun.iter(class.get_choices(params.class.progression_table, params.level))
         :map(function(choice) return perk_form(choice, params) end)
         :reduce(Fun.op.concat, "")
   end,

@@ -80,6 +80,7 @@ fighter.progression_table = static {
   },
 }
 
+-- TODO maybe not a factory?
 module_mt.__call = function(_)
   return Tablex.extend(class.mixin(), {
     hp_die = 10,

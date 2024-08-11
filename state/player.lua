@@ -1,23 +1,21 @@
-local fighter = require("mech.classes.fighter")
 local humanoid = require("mech.humanoid")
 local animation_packs = require("library.animation_packs")
-local weapons = require("library.weapons")
+local races = require("mech.races")
 
 
 local player, module_mt, static = Module("state.player")
 
-module_mt.__call = function(_, abilities, race, build, feat)
-  local result = humanoid({
+module_mt.__call = function(_)
+  return humanoid({
     player_flag = true,
     name = "протагонист",
-    class = fighter(),
-    race = race,
-    build = build,
-    feat = feat,
-    level = 2,
+    level = 0,
+    experience = -1,
+    max_hp = 1,
     direction = "right",
     faction = "player",
     fov_radius = 20,
+    race = races.human,
 
     immortal = true,
     on_death = function(self)
@@ -40,17 +38,7 @@ module_mt.__call = function(_, abilities, race, build, feat)
         end
       end,
     },
-
-    abilities = abilities,
   })
-
-  result.resources.second_wind = 1
-  result.resources.action_surge = 1
-
-  result.inventory.main_hand = weapons.dagger()
-  result.inventory.other_hand = weapons.gas_key()
-
-  return result
 end
 
 return player

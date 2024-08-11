@@ -131,14 +131,10 @@ module_mt.__call = function(_, systems, debug_mode)
       end
 
       self.gui.sidebar:create_gui_entities()
-
-      if not self.player then
-        self.gui.character_creator:refresh()
-      end
     end,
 
     get_mode = function(self)
-      if not self.player then
+      if self.player.experience > mech.experience_for_level[self.player.level] then
         return "character_creator"
       elseif self.player.hp <= 0 then
         return "death"

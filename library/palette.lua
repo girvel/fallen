@@ -5,12 +5,15 @@ local decorations = require("library.decorations")
 local walls = require("library.walls")
 local pipes = require("library.pipes")
 local tiles = require("library.tiles")
+local player = require("state.player")
 
 
 local pipes_characters = Common.set(">v<^\\/FB}{T+oLp")
 
 return Module("library.palette", {
   factories = {
+    ["@"] = player,
+
     -- tiles -- 
     _ = tiles.planks,
     [","] = tiles.walkway,

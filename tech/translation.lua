@@ -44,4 +44,8 @@ return Module("tech.translation", {
     action_surge = "всплеск действий",
     hit_dice = "перевязать раны",
   },
+
+  class = {
+    [fighter] = "воин",
+  }
 })

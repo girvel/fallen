@@ -27,4 +27,9 @@ module.get_melee_modifier = function(entity, slot)
   return module.get_modifier(entity.abilities.strength)
 end
 
+module.experience_for_level = {
+  [0] = -1,
+  0, 300, 900, 2700, 6500,
+}
+
 return module

@@ -5,7 +5,7 @@ local actions = require("mech.creature.actions")
 return function()
   return {
     {
-      name = "Introduction",
+      name = "Player enters the detective room",
       enabled = true,
       start_predicate = function(self, rails, dt)
         return State.player.position == rails.positions.intro_activation
