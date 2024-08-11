@@ -16,7 +16,8 @@ Tablex.extend(tiles, factoring.from_atlas("assets/sprites/atlases/tiles.png",
     sounds = {move = move_sounds[name]},
   } end,
   {
-    "steel_floor", "walkway", "planks",
+    "steel_floor", "walkway", "planks", "toilet",
+    "steel_floor_dirty",
   }
 ))
 

@@ -9,8 +9,11 @@ local player = require("state.player")
 
 
 local pipes_characters = Common.set(">v<^\\/FB}{T+oLp")
+local walls_set = Common.set("WM")
 
 return Module("library.palette", {
+  transparents = Common.set("D@gr>v<^\\/FB}{T+o01234LpPtkKba$HuUOSsQhbs|dmRA"),
+  throwables = Common.set("_,-.l'"),
   factories = {
     ["@"] = player,
 
@@ -18,6 +21,8 @@ return Module("library.palette", {
     _ = tiles.planks,
     [","] = tiles.walkway,
     ["-"] = tiles.steel_floor,
+    l = tiles.toilet,
+    ["'"] = tiles.steel_floor_dirty,
 
     -- solids --
     M = walls.steel_with_mirror,
@@ -47,14 +52,19 @@ return Module("library.palette", {
     C = decorations.cabinet_damaged,
     a = decorations.crate,
     ["$"] = decorations.chest,
-    h = decorations.chamber_pot,
+    H = decorations.chamber_pot,
     u = decorations.bucket,
-    s = decorations.sink,
+    U = decorations.cauldron,
+    O = decorations.oven,
+    S = decorations.kitchen_sink,
+    h = decorations.stool,
+    A = decorations.sofa,
     b = decorations.bed,
+    s = decorations.sink,
+    w = decorations.steel_wall_window,
 
     Q = live.mannequin,
-    D = live.door,
-    l = live.lever,
+    R = live.lever,
 
     ["0"] = mobs.dreamer,
     ["1"] = mobs[1],
@@ -81,6 +91,13 @@ return Module("library.palette", {
       return walls.steel
     end,
 
+    V = function(grid, position)
+      if math.random() <= .4 then
+        return walls.steel_dirty
+      end
+      return walls.steel
+    end,
+
     t = function(grid, position)
       local left = grid:safe_get(position + Vector.left)
       local right = grid:safe_get(position + Vector.right)
@@ -96,6 +113,17 @@ return Module("library.palette", {
 
       if right == "t" then
         return decorations.table_left
+      end
+
+      if up == "t" then
+        if down == "t" then
+          return decorations.table_ver
+        end
+        return decorations.table_down
+      end
+
+      if down == "t" then
+        return decorations.table_up
       end
     end,
 
@@ -135,8 +163,59 @@ return Module("library.palette", {
         horizontal, pipes.right_forward, horizontal, pipes.T_down,
         pipes.back_right, pipes.T_left, pipes.T_up, pipes.x
       })[i + 1]
+    end,
+
+    r = function(grid, position)
+      local n = Fun.iter(Vector.direction_names)
+        :map(function(name) return name, grid:safe_get(position + Vector[name]) end)
+        :tomap()
+
+      if n.left == "r" then
+        if n.down == "r" then
+          return decorations.countertop_left_down
+        end
+      end
+
+      if n.right == "r" then
+        if n.down == "r" then
+          return decorations.countertop_right_down
+        end
+      end
+
+      if n.up == "r" then
+        if walls_set[n.left] then
+          if n.down == "r" then
+            return decorations.countertop_left
+          end
+          return decorations.countertop_left_corner_down
+        end
+        if n.down == "r" then
+          return decorations.countertop_right
+        end
+        return decorations.countertop_right_corner_down
+      end
+
+      if n.down == "r" then
+        if walls_set[n.left] then
+          return decorations.countertop_left_corner_up
+        end
+        return decorations.countertop_right_corner_up
+      end
+
+      return decorations.countertop
+    end,
+
+    D = function(grid, position)
+      if grid:safe_get(position + Vector.right) == "D" then
+        if grid:safe_get(position + Vector.left) == "D" then
+          return walls.megadoor_middle
+        end
+        return walls.megadoor_left
+      end
+      if grid:safe_get(position + Vector.left) == "D" then
+        return walls.megadoor_right
+      end
+      return live.door
     end
   },
-  transparents = Common.set("Dl@gr>v<^\\/FB}{T+o01234LpPtkKba$husQ|dm"),
-  throwables = Common.set("_,-."),
 })
