@@ -6,6 +6,8 @@ local walls = require("library.walls")
 local pipes = require("library.pipes")
 
 
+local pipes_characters = Common.set(">v<^\\/FB}{T+oLp")
+
 return Module("library.palette", {
   factories = {
     -- tiles -- 
@@ -26,13 +28,13 @@ return Module("library.palette", {
     B = pipes.back_right,
     ["}"] = pipes.left_down,
     ["{"] = pipes.right_down,
-    T = pipes.T,
+    T = pipes.T_up,
     ["+"] = pipes.x,
     o = pipes.valve,
     L = pipes.leaking_left_down,
 
-    p = decorations.device_panel,
-    P = decorations.device_panel_broken,
+    n = decorations.device_panel,
+    N = decorations.device_panel_broken,
     f = decorations.furnace,
     t = decorations.table,
     k = decorations.locker,
@@ -68,6 +70,7 @@ return Module("library.palette", {
       end
       return walls.steel
     end,
+
     t = function(grid, position)
       local left = grid:safe_get(position + Vector.left)
       local right = grid:safe_get(position + Vector.right)
@@ -85,6 +88,7 @@ return Module("library.palette", {
         return decorations.table_left
       end
     end,
+
     b = function (grid, position)
       if grid:safe_get(position + Vector.up) == "b" then
         return decorations.lower_bed
@@ -94,12 +98,34 @@ return Module("library.palette", {
         return decorations.upper_bed
       end
     end,
+
     ["."] = function(grid, position)
       if math.random() <= 0.3 then
         return static.walkway
       end
       return static.planks
     end,
+
+    p = function(grid, position)
+      local vertical = math.random() < 0.3 and pipes.vertical_braced or pipes.vertical
+      local horizontal = math.random() < 0.3 and pipes.horizontal_braced or pipes.horizontal
+
+      local i = Fun.iter(Vector.direction_names)
+        :enumerate()
+        :map(function(i, name)
+          return pipes_characters[grid:safe_get(position + Vector[name])]
+            and 2 ^ (i - 1)
+            or 0
+        end)
+        :sum()
+
+      return ({
+        nil, vertical, horizontal, pipes.forward_left,
+        vertical, vertical, pipes.left_back, pipes.T_right,
+        horizontal, pipes.right_forward, horizontal, pipes.T_down,
+        pipes.back_right, pipes.T_left, pipes.T_up, pipes.x
+      })[i + 1]
+    end
   },
   transparents = Common.set("Dl@gdr>v<^\\/FB}{T+o01234LpPtkKba$husQ"),
   throwables = Common.set("_,-."),

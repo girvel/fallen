@@ -8,13 +8,14 @@ local random = require("utils.random")
 
 local pipes, pipes_mt, static = Module("library.pipes")
 
-local atlas = "assets/atlases/pipes.png"
+local atlas = "assets/sprites/atlases/pipes.png"
 
 for i, name in ipairs({
   "horizontal", "vertical", "horizontal_braced", "vertical_braced",
   "left_back", "forward_left", "right_forward", "back_right",
   "left_down", "forward_down", "right_down", "back_down",
-  "T", "x",
+  "T_up", "T_left", "T_down", "T_right",
+  "x",
 }) do
   pipes[name] = function()
     return {
