@@ -86,7 +86,7 @@ actions.other_hand_attack = static {
   codename = "other_hand_attack",
   get_availability = function(self, entity)
     local target = State.grids.solids:safe_get(entity.position + Vector[entity.direction])
-    return entity.resources.bonus_actions > 0 and -Query(target).hp
+    return entity.resources.bonus_actions > 0 and -Query(target).hp and entity.inventory.other_hand
   end,
   _run = function(self, entity)
     local target = State.grids.solids:safe_get(entity.position + Vector[entity.direction])
