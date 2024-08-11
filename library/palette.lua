@@ -1,6 +1,7 @@
 local static = require("library.static")
 local mobs = require("library.mobs")
 local weapons = require("library.weapons")
+local decorations = require("library.decorations")
 
 
 return Module("library.palette", {
@@ -33,19 +34,20 @@ return Module("library.palette", {
     o = static.pipe_valve,
     L = static.leaking_pipe_left_down,
 
-    p = static.device_panel,
-    P = static.device_panel_broken,
-    f = static.furnace,
-    t = static.table,
-    k = static.locker,
-    K = static.locker_damaged,
-    c = static.cabinet,
-    C = static.cabinet_damaged,
-    a = static.crate,
-    ["$"] = static.chest,
-    h = static.chamber_pot,
-    u = static.bucket,
-    s = static.sink,
+    p = decorations.device_panel,
+    P = decorations.device_panel_broken,
+    f = decorations.furnace,
+    t = decorations.table,
+    k = decorations.locker,
+    K = decorations.locker_damaged,
+    c = decorations.cabinet,
+    C = decorations.cabinet_damaged,
+    a = decorations.crate,
+    ["$"] = decorations.chest,
+    h = decorations.chamber_pot,
+    u = decorations.bucket,
+    s = decorations.sink,
+    b = decorations.bed,
 
     Q = static.mannequin,
     D = static.door,
@@ -71,25 +73,23 @@ return Module("library.palette", {
 
       if left == "t" then
         if right == "t" then
-          return static.table_hor
+          return decorations.table_hor
         end
-        return static.table_right
+        return decorations.table_right
       end
 
       if right == "t" then
-        return static.table_left
+        return decorations.table_left
       end
     end,
     b = function (grid, position)
       if grid:safe_get(position + Vector.up) == "b" then
-        return static.lower_bed
+        return decorations.lower_bed
       end
 
       if grid:safe_get(position + Vector.down) == "b" then
-        return static.upper_bed
+        return decorations.upper_bed
       end
-
-      return static.bed
     end,
     ["."] = function(grid, position)
       if math.random() <= 0.3 then
