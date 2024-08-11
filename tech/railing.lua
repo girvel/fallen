@@ -20,6 +20,7 @@ railing.api.line = function(entity, text)
 end
 
 railing.api.wait_seconds = function(s)
+  if State.fast_scenes then return end
   local t = love.timer.getTime()
   while love.timer.getTime() - t < s do coroutine.yield() end
 end

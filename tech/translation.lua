@@ -46,6 +46,6 @@ return Module("tech.translation", {
   },
 
   class = {
-    [fighter] = "воин",
+    fighter = "воин",
   }
 })

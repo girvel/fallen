@@ -139,7 +139,7 @@ return Module("state.gui.character_creator.forms", {
   end,
 
   class = function(params)
-    return "  # Класс: %s\n\n" % translation.class[params.class]
+    return "  # Класс: %s\n\n" % translation.class[params.class.codename]
       .. Fun.iter(class.get_choices(params.class.progression_table, params.level))
         :map(function(choice) return perk_form(choice, params) end)
         :reduce(Fun.op.concat, "")

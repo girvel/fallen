@@ -83,6 +83,7 @@ fighter.progression_table = static {
 -- TODO maybe not a factory?
 module_mt.__call = function(_)
   return Tablex.extend(class.mixin(), {
+    codename = "fighter",
     hp_die = 10,
     save_proficiencies = Common.set({"str", "con"}),
 

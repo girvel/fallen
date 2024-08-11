@@ -65,6 +65,11 @@ return {
       "Load save with the given name from default saves folder"
     )
 
+    parser:flag(
+      "-f --fast-scenes",
+      "Skip all api.wait_seconds"
+    )
+
     local result = parser:parse(args)
 
     if result.resolution then
