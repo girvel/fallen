@@ -8,13 +8,13 @@ local sprite = require("tech.sprite")
 
 local module, _, static = Module("library.items")
 
-module.rapier = function()
+module.machete = function()
   return Tablex.extend(
     item.mixin(),
-    animated(animation_packs.rapier),
+    animated(animation_packs.shortsword),
     {
-      name = "рапира",
-      damage_roll = D(8),
+      name = "мачете",
+      damage_roll = D(6),
       bonus = 0,
       tags = {
         finesse = true,
@@ -29,7 +29,7 @@ module.dagger = function()
     item.mixin(),
     animated(animation_packs.dagger),
     {
-      name = "кинжал",
+      name = "кортик",
       damage_roll = D(4),
       bonus = 0,
       tags = {
@@ -38,6 +38,13 @@ module.dagger = function()
       },
       slot = "hands",
     }
+  )
+end
+
+module.pole = function()
+  return Tablex.extend(
+    item.mixin()
+
   )
 end
 

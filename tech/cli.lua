@@ -10,17 +10,10 @@ return {
       :description("Launch the Unalive")
 
     parser:option(
-      "-c --checkpoints",
-      "Scenes to enable before the start of the game"
-    )
-      :args("?")
-      :default({})
-
-    parser:option(
       "-s --scenes",
       "Scenes to run immediately after the start of the game"
     )
-      :args("?")
+      :args("+")
       :default({})
 
     parser:option(

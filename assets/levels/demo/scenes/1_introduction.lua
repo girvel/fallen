@@ -5,7 +5,7 @@ local mech = require("mech")
 
 return function()
   return {
-    {
+    intro = {
       name = "Introduction",
       enabled = true,
       start_predicate = function(self, rails, dt) return true end,

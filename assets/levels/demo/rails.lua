@@ -5,7 +5,8 @@ local items = require("library.items")
 return function()
   return Tablex.extend(railing.mixin(), {
     scenes = Tablex.join(
-      require("assets.levels.demo.scenes.1_tutorial")(),
+      require("assets.levels.demo.scenes.1_introduction")(),
+      require("assets.levels.demo.scenes.2_tutorial")(),
       require("assets.levels.demo.scenes.3_detective")(),
       require("assets.levels.demo.scenes.3_fight")()
     ),
