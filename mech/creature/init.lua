@@ -29,7 +29,7 @@ creature._methods = static {
   end,
 
   get_armor = function(self)
-    return 10 + mech.get_modifier(self.abilities.dexterity)
+    return 10 + mech.get_modifier(self.abilities.dex)
   end,
 
   get_resources = function(self, rest_type)
@@ -57,7 +57,7 @@ creature._methods = static {
 
   get_max_hp = function(self)
     if not self.class then return self.max_hp end
-    local con_bonus = mech.get_modifier(self.abilities.constitution)
+    local con_bonus = mech.get_modifier(self.abilities.con)
     return self.class.hp_die + con_bonus
       + (self.level - 1) * (self.class.hp_die / 2 + 1 + con_bonus)
   end,
@@ -92,7 +92,6 @@ creature._methods = static {
 
     if self.class then
       self.effects = self.class:get_effects(self.level, self.build)
-      Log.trace(self.effects)
     end
     for k, v in pairs(get_all_resources(self)) do
       self.resources[k] = (self.resources[k] or 0) + v - (old_resources[k] or 0)

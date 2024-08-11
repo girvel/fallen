@@ -161,7 +161,7 @@ module_mt.__call = function(_, systems, debug_mode)
       end
 
       Fun.iter(list):each(function(e)
-        e.current_initiative = (D(20) + mech.get_modifier(e.abilities.dexterity)):roll()
+        e.current_initiative = (D(20) + mech.get_modifier(e.abilities.dex)):roll()
       end)
 
       Tablex.concat(list, -Query(State.combat):iter_entities_only():totable())

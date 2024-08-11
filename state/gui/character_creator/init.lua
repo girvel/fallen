@@ -22,12 +22,12 @@ return Module("state.gui.character_creator", function()
     parameters = {
       points = 0,
       abilities_raw = {
-        strength = 15,
-        dexterity = 15,
-        constitution = 15,
-        intelligence = 8,
-        wisdom = 8,
-        charisma = 8,
+        str = 15,
+        dex = 15,
+        con = 15,
+        int = 8,
+        wis = 8,
+        cha = 8,
       },
       abilities_final = nil,
       current_index = 1,

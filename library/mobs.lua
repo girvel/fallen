@@ -67,7 +67,7 @@ module[3] = function()
     faction = "half_orc",
 
     abilities = mech.abilities(18, 6, 12, 8, 8, 8),
-    save_proficiencies = {dexterity = true},
+    save_proficiencies = {dex = true},
 
     talking_to = nil,
     will_beg = true,

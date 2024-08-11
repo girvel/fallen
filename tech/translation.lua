@@ -4,12 +4,12 @@ local feats = require("mech.feats")
 
 return Module("tech.translation", {
   ability = {
-    strength = "сила",
-    dexterity = "ловкость",
-    constitution = "телосложение",
-    intelligence = "интеллект",
-    wisdom = "мудрость",
-    charisma = "харизма",
+    str = "сила",
+    dex = "ловкость",
+    con = "телосложение",
+    int = "интеллект",
+    wis = "мудрость",
+    cha = "харизма",
   },
 
   build = {

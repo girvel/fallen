@@ -24,7 +24,7 @@ class.hit_dice_action = {
     entity.resources.hit_dice = entity.resources.hit_dice - 1
     entity.hp = math.min(
       entity:get_max_hp(),
-      entity.hp + (D(entity.class.hp_die) + mech.get_modifier(entity.abilities.constitution)):roll()
+      entity.hp + (D(entity.class.hp_die) + mech.get_modifier(entity.abilities.con)):roll()
     )
   end,
 }

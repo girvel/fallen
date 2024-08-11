@@ -63,5 +63,26 @@ return function()
         State.gui.character_creator:refresh()
       end,
     },
+
+    {
+      name = "Player created the character",
+      enabled = true,
+      start_predicate = function(self, rails, dt) return State.player.class end,
+
+      run = function(self, rails, dt)
+        self.enabled = false
+        local comments = {
+          {
+            
+          },
+          {
+
+          },
+          {
+
+          },
+        }
+      end,
+    },
   }
 end

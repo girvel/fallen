@@ -6,25 +6,25 @@ end
 
 module.abilities = function(str, dex, con, int, wis, cha)
   return {
-    strength = str,
-    dexterity = dex,
-    constitution = con,
-    intelligence = int,
-    wisdom = wis,
-    charisma = cha,
+    str = str,
+    dex = dex,
+    con = con,
+    int = int,
+    wis = wis,
+    cha = cha,
   }
 end
 
 module.abilities_list = {
-  "strength", "dexterity", "constitution",
-  "intelligence", "wisdom", "charisma",
+  "str", "dex", "con",
+  "int", "wis", "cha",
 }
 
 module.get_melee_modifier = function(entity, slot)
   if -Query(entity).inventory[slot].tags.finesse then
-    return module.get_modifier(math.max(entity.abilities.strength, entity.abilities.dexterity))
+    return module.get_modifier(math.max(entity.abilities.str, entity.abilities.dex))
   end
-  return module.get_modifier(entity.abilities.strength)
+  return module.get_modifier(entity.abilities.str)
 end
 
 module.experience_for_level = {

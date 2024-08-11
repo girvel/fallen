@@ -84,7 +84,7 @@ fighter.progression_table = static {
 module_mt.__call = function(_)
   return Tablex.extend(class.mixin(), {
     hp_die = 10,
-    save_proficiencies = Common.set({"strength", "constitution"}),
+    save_proficiencies = Common.set({"str", "con"}),
 
     progression_table = fighter.progression_table,
   })

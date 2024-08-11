@@ -21,7 +21,7 @@ local get_melee_attack_roll = function(entity, slot)
 
   local weapon = entity.inventory[slot]
   if not weapon then
-    roll = roll + mech.get_modifier(entity.abilities.strength)
+    roll = roll + mech.get_modifier(entity.abilities.str)
   else
     roll = roll + weapon.bonus + mech.get_melee_modifier(entity, slot)
   end
@@ -31,7 +31,7 @@ end
 
 local get_melee_damage_roll = function(entity, slot)
   if not entity.inventory[slot] then
-    return D.roll({}, mech.get_modifier(entity.abilities.strength))
+    return D.roll({}, mech.get_modifier(entity.abilities.str))
   end
 
   local roll = entity.inventory[slot].damage_roll + entity.inventory[slot].bonus
@@ -63,7 +63,7 @@ local base_attack = function(entity, target, slot)
     end
 
     if target.hardness and not -Query(entity).inventory[slot] then
-      attacking.attack_save(entity, "constitution", target.hardness, D.roll({}, 1))
+      attacking.attack_save(entity, "con", target.hardness, D.roll({}, 1))
     end
   end)
 end
