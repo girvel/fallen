@@ -15,7 +15,7 @@ return function()
       self.positions = {
         [2] = Vector({20, 53}),
         exit = Vector({22, 56}),
-        intro_activation = Vector({23, 56}),
+        detective_notification_activation = Vector({23, 56}),
         player_room_exit = Vector({15, 75}),
       }
 

@@ -8,16 +8,13 @@ return function()
       name = "Player enters the detective room",
       enabled = true,
       start_predicate = function(self, rails, dt)
-        return State.player.position == rails.positions.intro_activation
+        return State.player.position == rails.positions.exit
       end,
 
       run = function(self, rails, dt)
         self.enabled = false
         rails.entities.leaking_valve.paused = true
         api.center_camera()
-
-        api.notification("Вычислить и устранить диверсанта", true)
-        State.gui.wiki.quests_states.detective = 1
 
         api.narration("Резкий запах мазута, керосина и ржавчины заставляет непроизвольно зажмуриться.")
         api.narration("Помещение забито трубами и приборами непонятного назначения.")
@@ -32,6 +29,19 @@ return function()
         rails.entities.leaking_valve.paused = false
         rails.entities.leaking_valve:burst_with_steam()
         api.narration("Мощный поток горячего пара от ближайшей трубы прерывает ваши мысли")
+      end,
+    },
+    {
+      name = "Player gets notification after entering detective room",
+      enabled = true,
+      start_predicate = function(self, rails, dt)
+        return State.player.position == rails.positions.detective_notification_activation
+      end,
+
+      run = function(self, rails, dt)
+        self.enabled = false
+        api.notification("вычисли и устрани диверсанта", true)
+        State.gui.wiki.quests_states.detective = 2
       end,
     },
     second_rotates_valve = {
