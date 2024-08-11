@@ -190,12 +190,12 @@ return Module("state.hotkeys", function(modes, debug_mode)
     end,
   })
 
-  define_hotkey(hotkeys, {"free", "combat", "dialogue", "dialogue_options"}, {"k"}, {
+  define_hotkey(hotkeys, {"free", "combat", "dialogue", "dialogue_options", "reading"}, {"k"}, {
     name = "открыть кодекс",
     pre_action = function() State.gui.wiki:show("codex") end,
   })
 
-  define_hotkey(hotkeys, {"free", "combat", "dialogue", "dialogue_options"}, {"j"}, {
+  define_hotkey(hotkeys, {"free", "combat", "dialogue", "dialogue_options", "reading"}, {"j"}, {
     name = "открыть журнал",
     pre_action = function() State.gui.wiki:show_journal() end,
   })

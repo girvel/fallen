@@ -70,7 +70,7 @@ local transform_default_node = function(node, children, styles)
   return children
 end
 
-local run_script = function(script, args)
+local run_script = function(script, args, script_name)
   return assert(loadstring(
     [[
       return function(args)

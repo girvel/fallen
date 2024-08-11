@@ -109,6 +109,29 @@ return function()
         api.line(State.player, comments[1][sorted_abilities[6][1]])
         api.line(State.player, comments[2][sorted_abilities[5][1]])
         api.line(State.player, comments[3][sorted_abilities[1][1]])
+
+        -- (picking the name goes here)
+
+        api.notification("Пройдись и приготовься выходить", true)
+        api.narration("В голове вновь раздается странный звон.")
+        State.player:rotate("down")
+        api.narration("Ты оборачиваешься, но там только письменный стол с запиской.")
+        api.line(State.player, "Стоит осмотреться")
+      end,
+    },
+
+    {
+      name = "Player leaves the room before reading the note",
+      enabled = true,
+      start_predicate = function(self, rails, dt)
+        return State.player.position == rails.positions.player_room_exit
+          and State:exists(rails.entities.note)
+      end,
+
+      run = function(self, rails, dt)
+        self.enabled = false
+        api.line(State.player, "Возможно, следует вернуться к той записке на столе")
+        api.line(State.player, "Кто-то оставил её для меня")
       end,
     },
   }

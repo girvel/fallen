@@ -15,6 +15,7 @@ return function()
         [2] = Vector({20, 53}),
         exit = Vector({22, 56}),
         intro_activation = Vector({23, 56}),
+        player_room_exit = Vector({15, 75}),
       }
 
       self.entities = {
@@ -23,6 +24,10 @@ return function()
         State.grids.solids[Vector({20, 48})],
         State.grids.solids[Vector({23, 48})],
         leaking_valve = State.grids.solids[Vector({22, 55})],
+        note = State:add(Tablex.extend(
+          items.note({colleague_note = true}),
+          {position = Vector({19, 78})}
+        )),
       }
 
       self.entities.gloves = self.entities[3].inventory.gloves
@@ -34,9 +39,6 @@ return function()
       self.old_hp = Fun.range(4)
         :map(function(i) return self.entities[i].hp end)
         :totable()
-
-      State:add(Tablex.extend(items.note({colleague_note = true}), {position = Vector({19, 78})}))
-      Log.trace(State.player.position)
     end,
   })
 end

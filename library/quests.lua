@@ -1,4 +1,10 @@
 return Module("library.quests", {
+  warmup = {
+    header = "Разминка",
+    tasks = {
+      "Мне следует выйти из помещения",
+    },
+  },
   detective = {
     header = "Детектив",
     tasks = {
