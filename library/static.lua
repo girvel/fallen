@@ -10,25 +10,6 @@ local sound = require("tech.sound")
 local module, _, static = Module("library.static")
 
 -- atlases --
-local pipe_atlas = "assets/atlases/pipes.png"
-
-for i, name in ipairs({
-  "pipe_horizontal", "pipe_vertical", "pipe_horizontal_braced", "pipe_vertical_braced",
-  "pipe_left_back", "pipe_forward_left", "pipe_right_forward", "pipe_back_right",
-  "pipe_left_down", "pipe_forward_down", "pipe_right_down", "pipe_back_down",
-  "pipe_T", "pipe_x",
-}) do
-  module[name] = function()
-    return {
-      sprite = sprite.from_atlas(pipe_atlas, i),
-      layer = "solids",
-      view = "scene",
-      codename = name,
-      transparent_flag = true,
-    }
-  end
-end
-
 local steel_sounds = {
 }
 

@@ -3,6 +3,7 @@ local mobs = require("library.mobs")
 local weapons = require("library.weapons")
 local decorations = require("library.decorations")
 local walls = require("library.walls")
+local pipes = require("library.pipes")
 
 
 return Module("library.palette", {
@@ -15,20 +16,20 @@ return Module("library.palette", {
     -- solids --
     M = walls.steel_with_mirror,
 
-    [">"] = static.pipe_horizontal,
-    v = static.pipe_vertical,
-    ["<"] = static.pipe_horizontal_braced,
-    ["^"] = static.pipe_vertical_braced,
-    ["\\"] = static.pipe_left_back,
-    ["/"] = static.pipe_forward_left,
-    F = static.pipe_right_forward,
-    B = static.pipe_back_right,
-    ["}"] = static.pipe_left_down,
-    ["{"] = static.pipe_right_down,
-    T = static.pipe_T,
-    ["+"] = static.pipe_x,
-    o = static.pipe_valve,
-    L = static.leaking_pipe_left_down,
+    [">"] = pipes.horizontal,
+    v = pipes.vertical,
+    ["<"] = pipes.horizontal_braced,
+    ["^"] = pipes.vertical_braced,
+    ["\\"] = pipes.left_back,
+    ["/"] = pipes.forward_left,
+    F = pipes.right_forward,
+    B = pipes.back_right,
+    ["}"] = pipes.left_down,
+    ["{"] = pipes.right_down,
+    T = pipes.T,
+    ["+"] = pipes.x,
+    o = pipes.valve,
+    L = pipes.leaking_left_down,
 
     p = decorations.device_panel,
     P = decorations.device_panel_broken,
