@@ -29,32 +29,35 @@ live.lever = function()
   )
 end
 
-local closed_door_pack = animated.load_pack("assets/sprites/closed_door")
-local open_door_pack = animated.load_pack("assets/sprites/open_door")
+for _, prefix in ipairs({"", "black_"}) do
+  local closed_door_pack = animated.load_pack("assets/sprites/%sdoor/closed" % prefix)
+  local open_door_pack = animated.load_pack("assets/sprites/%sdoor/open" % prefix)
 
-live.door = function(args)
-  args = args or {}
-  return Tablex.extend(
-    animated(closed_door_pack),
-    args.locked and {} or interactive(function(self)
-      self:open()
-      self.interact = nil
-    end, not args.highlighted),
-    {
-      layer = "solids",
-      view = "scene",
-      name = "дверь",
-      is_open = false,
-      open = Dump.ignore_upvalue_size .. function(self)
-        self:animate("open")
-        self:when_animation_ends(function(_)
-          self.animation.pack = open_door_pack
-          level.change_layer(State.grids, self, "above_solids")
-          self.is_open = true
-        end)
-      end,
-    }
-  )
+  live[prefix .. "door"] = function(args)
+    args = args or {}
+    return Tablex.extend(
+      animated(closed_door_pack),
+      args.locked and {} or interactive(function(self)
+        self:open()
+        self.interact = nil
+      end, not args.highlighted),
+      {
+        codename = prefix .. "door",
+        layer = "solids",
+        view = "scene",
+        name = "дверь",
+        is_open = false,
+        open = Dump.ignore_upvalue_size .. function(self)
+          self:animate("open")
+          self:when_animation_ends(function(_)
+            self.animation.pack = open_door_pack
+            level.change_layer(State.grids, self, "above_solids")
+            self.is_open = true
+          end)
+        end,
+      }
+    )
+  end
 end
 
 local mannequin_sounds = {

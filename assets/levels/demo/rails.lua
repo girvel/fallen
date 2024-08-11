@@ -1,5 +1,6 @@
 local railing = require("tech.railing")
 local items = require("library.items")
+local live = require("library.live")
 
 
 return function()
@@ -28,6 +29,10 @@ return function()
         note = State:add(Tablex.extend(
           items.note({colleague_note = true}),
           {position = Vector({19, 78})}
+        )),
+        detective_door = State:add(Tablex.extend(
+          live.black_door({locked = true}),
+          {position = Vector({21, 56})}
         )),
       }
 
