@@ -71,8 +71,13 @@ display.system = static(Tiny.sortedProcessingSystem({
       end
     end
 
+    if State.player.fov_radius == 0 then
+      self:process(State.player)
+      return
+    end
+
     local px, py = unpack(State.player.position)
-    tcod.TCOD_map_compute_fov(self._fov_map, px, py, 20, true, ffi.C.FOV_PERMISSIVE_8)
+    tcod.TCOD_map_compute_fov(self._fov_map, px, py, State.player.fov_radius, true, tcod.FOV_PERMISSIVE_8)
 
     for _, layer in ipairs(level.GRID_LAYERS) do
       local grid = State.grids[layer]
@@ -96,7 +101,8 @@ display.system = static(Tiny.sortedProcessingSystem({
   process = function(self, entity)
     local mode = State:get_mode()
     if
-      mode == "character_creator" and entity.view ~= "character_creator"
+      State.gui.disable_ui and not Tablex.contains({"scene", "dialogue_text"}, entity.view)
+      or mode == "character_creator" and entity.view ~= "character_creator"
       or mode == "reading" and entity.view ~= "wiki"
       or mode == "death"
     then return end
@@ -176,7 +182,7 @@ display.system = static(Tiny.sortedProcessingSystem({
       love.graphics.print("FPS: %.2f" % (1 / love.timer.getAverageDelta()), default_font, 5, 5)
     end
     local mode = State:get_mode()
-    if Tablex.contains({"reading"}, mode) or State.shader then return end
+    if Tablex.contains({"reading"}, mode) or State.shader or State.gui.disable_ui then return end
     if mode == "death" then return self:_display_death_message() end
     self:_display_text_info()
   end,

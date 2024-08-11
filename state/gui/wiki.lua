@@ -59,8 +59,8 @@ return Module("state.gui.wiki", function()
       },
       hate = {
         color = Common.hex_color("e64e4b"),
-        delay = 0.2,
-        appearance_time = 2,
+        delay = 0.1,
+        appearance_time = .4,
       },
     },
 

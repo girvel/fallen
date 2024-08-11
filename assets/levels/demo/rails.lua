@@ -4,9 +4,9 @@ local railing = require("tech.railing")
 return function()
   return Tablex.extend(railing.mixin(), {
     scenes = Tablex.join(
-      require("assets.levels.demo.scenes.detective")(),
-      require("assets.levels.demo.scenes.fight")(),
-      require("assets.levels.demo.scenes.tutorial")()
+      require("assets.levels.demo.scenes.1_tutorial")(),
+      require("assets.levels.demo.scenes.3_detective")(),
+      require("assets.levels.demo.scenes.3_fight")()
     ),
 
     initialize = function(self)

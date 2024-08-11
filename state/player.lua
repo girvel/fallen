@@ -17,6 +17,7 @@ module_mt.__call = function(_, abilities, race, build, feat)
     level = 2,
     direction = "right",
     faction = "player",
+    fov_radius = 20,
 
     immortal = true,
     on_death = function(self)
