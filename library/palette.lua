@@ -10,6 +10,7 @@ local player = require("state.player")
 
 local pipes_characters = Common.set(">v<^\\/FB}{T+oLp")
 local walls_set = Common.set("WM")
+local countertop_set = Common.set("rU")
 
 return Module("library.palette", {
   transparents = Common.set("D@gr>v<^\\/FB}{T+o01234LpPtkKba$HuUOSsQhbs|dmRA"),
@@ -80,6 +81,9 @@ return Module("library.palette", {
   },
   complex_factories = {
     W = function(grid, position)
+      if grid:safe_get(position + Vector.down) == "U" then
+        return walls.steel_behind_cauldron
+      end
       if math.random() <= 0.5
         and Fun.iter(Vector.directions)
           :any(function(d) return grid:safe_get(position + d) == "~" end)
@@ -171,32 +175,32 @@ return Module("library.palette", {
         :map(function(name) return name, grid:safe_get(position + Vector[name]) end)
         :tomap()
 
-      if n.left == "r" then
-        if n.down == "r" then
+      if countertop_set[n.left] then
+        if countertop_set[n.down] then
           return decorations.countertop_left_down
         end
       end
 
-      if n.right == "r" then
-        if n.down == "r" then
+      if countertop_set[n.right] then
+        if countertop_set[n.down] then
           return decorations.countertop_right_down
         end
       end
 
-      if n.up == "r" then
+      if countertop_set[n.up] then
         if walls_set[n.left] then
-          if n.down == "r" then
+          if countertop_set[n.down] then
             return decorations.countertop_left
           end
           return decorations.countertop_left_corner_down
         end
-        if n.down == "r" then
+        if countertop_set[n.down] then
           return decorations.countertop_right
         end
         return decorations.countertop_right_corner_down
       end
 
-      if n.down == "r" then
+      if countertop_set[n.down] then
         if walls_set[n.left] then
           return decorations.countertop_left_corner_up
         end
