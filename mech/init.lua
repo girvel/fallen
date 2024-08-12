@@ -1,6 +1,9 @@
 local module, _, static = Module("mech")
 
 module.get_modifier = function(ability_score)
+  if not ability_score then
+    error("ability_score is nil", 2)
+  end
   return math.floor((ability_score - 10) / 2)
 end
 
@@ -33,6 +36,24 @@ module.experience_for_level = {
 }
 
 module.skills = {
+  "sleight_of_hand",
+  "stealth",
+  "arcana",
+  "history",
+  "investigation",
+  "nature",
+  "religion",
+  "animal_handling",
+  "insight",
+  "medicine",
+  "perception",
+  "deception",
+  "intimidation",
+  "performance",
+  "persuasion",
+}
+
+module.skill_bases = {
   sleight_of_hand = "dex",
   stealth = "dex",
   arcana = "int",

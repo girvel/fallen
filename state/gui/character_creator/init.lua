@@ -32,7 +32,6 @@ return Module("state.gui.character_creator", function()
 
     parameters = {
       points = 0,
-      free_skills = 4,
       abilities_raw = {
         str = 15,
         dex = 15,
@@ -42,6 +41,8 @@ return Module("state.gui.character_creator", function()
         cha = 8,
       },
       abilities_final = nil,
+      free_skills = 4,
+      skills = {},
       current_index = 1,
       max_index = 1,
       movement_functions = {},
@@ -73,9 +74,10 @@ return Module("state.gui.character_creator", function()
           :map(function(level, exp) return level end)
           :max() or 0
         text = text
+          .. self.forms.class(params)
           .. self.forms.race(params)
           .. self.forms.abilities(params)
-          .. self.forms.class(params)
+          .. self.forms.skills(params)
       end
 
       self.text_entities = State:add_multiple(texting.generate(
@@ -130,6 +132,7 @@ return Module("state.gui.character_creator", function()
           or nil,
         level = params.level,
         class = params.class,
+        skills = params.skills,
       }
 
       Log.info("Finishing character creation with args:", changes)

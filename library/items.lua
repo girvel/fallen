@@ -46,7 +46,7 @@ module.pole = function()
     item.mixin(),
     animated(animation_packs.pole),
     {
-      name = "",
+      name = "шест",
       damage_roll = D(6),
       bonus = 0,
       tags = {

@@ -110,7 +110,7 @@ creature._methods = static {
       end)
       :tomap()
 
-    self.skill_throws = Fun.iter(mech.skills)
+    self.skill_throws = Fun.iter(mech.skill_bases)
       :map(function(skill, ability)
         return skill, D(20)
           + mech.get_modifier(self.abilities[ability])

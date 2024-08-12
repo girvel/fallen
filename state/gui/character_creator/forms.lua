@@ -28,14 +28,26 @@ end
 
 local build_table = function(headers, matrix)
   local total_header = table.concat(headers, "  ")
+  local header_sizes = Fun.range(#headers)
+    :map(function(x)
+      return math.max(len(headers[x]), Fun.range(#matrix)
+        :map(function(y) return len(matrix[y][x]) end)
+        :max())
+    end)
+    :totable()
+
+  total_header = Fun.iter(headers)
+    :enumerate()
+    :map(function(x, h) return tostring(h) .. " " * (header_sizes[x] - len(h)) .. "  " end)
+    :reduce(Fun.op.concat, "")
 
   local text = total_header .. "\n"
-    .. "   " .. "-" * (len(total_header) - 3)
+    .. "   " .. "-" * (Fun.iter(header_sizes):sum() + 2 * #header_sizes - 3)
 
   for y, row in ipairs(matrix) do
     text = text .. "\n"
     for x, value in ipairs(row) do
-      text = text .. tostring(value) .. " " * (len(headers[x]) - len(value) + 2)
+      text = text .. tostring(value) .. " " * (header_sizes[x] - len(value) + 2)
     end
   end
 
@@ -117,7 +129,7 @@ return Module("state.gui.character_creator.forms", {
 
     text = text
       .. build_table(
-        {" ", "Способность ", "Значение", "Бонус расы", "   Результат", "Модификатор"},
+        {" ", "Способность ", "Значение", "Бонус расы", "Результат", "Модификатор"},
         Fun.iter(mech.abilities_list)
           :enumerate()
           :map(function(i, a)
@@ -161,62 +173,48 @@ return Module("state.gui.character_creator.forms", {
   end,
 
   skills = function(params)
-    local text = ""
-    local headers = {"Навык", "Владение", "Бонус", "   Модификатор"}
-    local total_header = table.concat(headers, "  ")
+    local text = "   <h2>Навыки</h2>"
+      .. "   Свободные навыки: %s\n\n" % params.points
+
+    local bonus_column = Fun.iter(mech.skill_bases)
+      :map(function(s, a) return s, mech.get_modifier(params.abilities_final[a]) end)
+      :tomap()
+
+    local result_column = Fun.iter(bonus_column)
+      :map(function(s, m) return s, (params.skills[s] and 2 or 0) + m end)
+      :tomap()
 
     text = text
-      .. "   <h2>Навыки</h2>"
-      .. "   Доступно: %s\n\n" % params.free_skills
-      .. "  " .. total_header .. "\n"
-      .. "  " .. "-" * (utf8.len(total_header))
+      .. build_table(
+        {" ", "Навык ", "Владение", "Бонус", "Результат"},
+        Fun.iter(mech.skills)
+          :enumerate()
+          :map(function(i, s)
+            return {
+              params:_get_indicator(i + params.max_index),
+              translation.skill[s],
+              params.skills[s] and "x" or " ",
+              "%+i" % bonus_column[s],
+              "= %+i" % result_column[s],
+            }
+          end)
+          :totable()
+      )
 
-    local bonus_column = Fun.iter(mech.abilities_list)
-      :map(function(a)
-        local bonus_i = Tablex.index_of(params.bonuses, a)
-        return a, (bonus_i and races[params.race].bonuses[bonus_i] or 0)
-      end)
-      :tomap()
-
-    params.abilities_final = Fun.iter(params.abilities_raw)
-      :map(function(a, v) return a, v + bonus_column[a] end)
-      :tomap()
-
-    Fun.iter(mech.abilities_list):enumerate():each(function(i, a)
-      i = i + params.max_index
-      text = text .. "\n%s %s  %s %s %s  %s  =  %s  %+i" % {
-        params:_get_indicator(i),
-        translation.ability[a]:ljust(utf8.len(headers[1]), " "),
-        params.abilities_raw[a] > 8 and "&lt;" or " ",
-        tostring(params.abilities_raw[a]):rjust(2, "0"),
-        string.ljust(
-          params.abilities_raw[a] < 15
-            and params.points >= cost[
-              params.abilities_raw[a] + 1] - cost[params.abilities_raw[a]
-            ]
-            and ">" or " ",
-          utf8.len(headers[2]) - 5, " "
-        ),
-        ("+" .. bonus_column[a]):ljust(utf8.len(headers[3]), " "),
-        tostring(params.abilities_final[a]):ljust(utf8.len(headers[4]) - 3, " "),
-        mech.get_modifier(params.abilities_final[a])
-      }
-
-      params.movement_functions[i] = function(dx)
-        local next_value = params.abilities_raw[a] + dx
-        if dx < 0 and params.abilities_raw[a] <= 8
-          or dx > 0 and (
-            params.abilities_raw[a] >= 15
-            or params.points < cost[next_value] - cost[params.abilities_raw[a]]
-          )
-        then return end
-
-        params.points = params.points + cost[params.abilities_raw[a]] - cost[next_value]
-        params.abilities_raw[a] = next_value
+    for i, s in ipairs(mech.skills) do
+      params.movement_functions[i + params.max_index] = function(dx)
+        if params.skills[s] then
+          params.skills[s] = nil
+          params.free_skills = params.free_skills + 1
+          return
+        end
+        if params.free_skills <= 0 then return end
+        params.free_skills = params.free_skills - 1
+        params.skills[s] = true
       end
-    end)
+    end
 
-    params.max_index = params.max_index + 6
+    params.max_index = params.max_index + #mech.skills
     return text .. "\n\n\n"
   end,
 
