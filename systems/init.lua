@@ -7,6 +7,7 @@ return Module("systems", {
   require("systems.detect_clicks").system,
 
   -- love.update systems --
+  require("systems.change_cursor").system,
   require("systems.detect_hover").system,
   require("systems.acting").system,
   require("systems.animation").system,
