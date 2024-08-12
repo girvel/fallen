@@ -27,7 +27,7 @@ local dreamer_engineer_mixin = function()
     engineer_mixin(),
     {
       max_hp = 22,
-      abilities = mech.abilities(14, 14, 12, 8, 8, 8),
+      abilities = mech.abilities(16, 14, 12, 8, 8, 8),
       faction = "dreamers_detective",
     }
   )
