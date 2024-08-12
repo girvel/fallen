@@ -2,6 +2,7 @@ local class = require("mech.class")
 local perk = require("mech.perk")
 local mech = require("mech")
 local fx = require("tech.fx")
+local healing = require("mech.healing")
 
 
 local fighter, module_mt, static = Module("mech.classes.fighter")
@@ -17,7 +18,7 @@ fighter.second_wind = static {
     entity.resources.bonus_actions = entity.resources.bonus_actions - 1
     entity.resources.second_wind = entity.resources.second_wind - 1
     State:add(fx("assets/sprites/fx/second_wind", "fx_behind", entity.position))
-    entity.hp = math.min(entity:get_max_hp(), entity.hp + (D(10) + entity.level):roll())
+    healing.heal(entity, (D(10) + entity.level):roll())
   end,
 }
 

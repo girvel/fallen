@@ -16,7 +16,7 @@ return function()
 
         run = function(self, rails, dt)
           self.enabled = false
-          State.gui.text_input.active = true
+          State.player.experience = 5000
         end,
       },
 
@@ -29,7 +29,7 @@ return function()
 
         run = function(self, rails, dt)
           rails.last_mannequin_hp = rails.entities.mannequin.hp
-          api.ability_check_message("str", 12, lorem, "You suck more.")
+          State.player.hp = 1
           -- api.notification("Game saved")
           -- game_save.write()
         end,

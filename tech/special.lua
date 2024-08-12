@@ -1,36 +1,21 @@
 local random = require("utils.random")
 local animated = require("tech.animated")
 local sprite = require("tech.sprite")
-local tech_constants = require("tech.constants")
 
 
 local module, _, static = Module("tech.special")
 
-module.floating_damage = function(number, scene_position)
+module.floating_damage = function(number, scene_position, color)
   number = tostring(number)
   return {
     boring_flag = true,
     codename = "floating_damage",
-    position = scene_position * tech_constants.CELL_DISPLAY_SIZE * State.SCALING_FACTOR
+    position = State.gui.views.scene:apply_multiplier(scene_position)
       + Vector({random.d(12) - 6, random.d(12) - 6}),
     view = "scene_fx",
     drift = Vector({0, -24}),
-    sprite = sprite.text({Common.hex_color("e64e4b"), number}, 14),
+    sprite = sprite.text({color or Common.hex_color("e64e4b"), number}, 14),
     life_time = 3,
-  }
-end
-
-local line_font = love.graphics.newFont("assets/fonts/joystix.monospace-regular.otf", 14)
-
-module.floating_line = function(text, position)
-  return {
-    codename = "floating_line",
-    position = (position - Vector({0, 0.5}))
-      * tech_constants.CELL_DISPLAY_SIZE * State.SCALING_FACTOR
-      + Vector.left * line_font:getWidth(text) / 2,
-    view = "scene_fx",
-    sprite = sprite.text({Common.hex_color("ededed"), text}, 14),
-    life_time = 10,
   }
 end
 

@@ -1,5 +1,6 @@
 local perk = require("mech.perk")
 local mech = require("mech")
+local healing = require("mech.healing")
 
 
 local class, _, static = Module("mech.class")
@@ -23,10 +24,7 @@ class.hit_dice_action = {
   end,
   _run = function(self, entity)
     entity.resources.hit_dice = entity.resources.hit_dice - 1
-    entity.hp = math.min(
-      entity:get_max_hp(),
-      entity.hp + (D(entity.class.hp_die) + mech.get_modifier(entity.abilities.con)):roll()
-    )
+    healing.heal(entity, (D(entity.class.hp_die) + mech.get_modifier(entity.abilities.con)):roll())
   end,
 }
 
