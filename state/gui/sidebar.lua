@@ -110,6 +110,11 @@ return Module("state.gui.sidebar", function()
       table.insert(self._notification_queue, {text, is_order})
     end,
 
+    clear_notifications = function(self)
+      self._notification_queue = {}
+      self._notification_lifetime = 0
+    end,
+
     get_text = function(self)
       local result = {}
 

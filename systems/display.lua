@@ -40,7 +40,6 @@ display.system = static(Tiny.sortedProcessingSystem({
   preProcess = function(self, event)
     State.gui:update_views()
     State.gui.sidebar:update_indicators(event[1])
-
     self:process_grid(event)
   end,
 
@@ -103,7 +102,12 @@ display.system = static(Tiny.sortedProcessingSystem({
     local mode = State:get_mode()
     if
       State.gui.disable_ui and not Tablex.contains({"scene", "dialogue_text"}, entity.view)
-      or mode == "character_creator" and entity.view ~= "character_creator"
+      -- TODO this should be grouped w/ views?
+      or mode == "character_creator"
+        and not Tablex.contains(
+          {"sidebar", "sidebar_text", "sidebar_background", "character_creator"},
+          entity.view
+        )
       or mode == "reading" and entity.view ~= "wiki"
       or mode == "death"
       or mode == "text_input"

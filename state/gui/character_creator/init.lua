@@ -8,6 +8,10 @@ local feats = require("mech.feats")
 local mech = require("mech")
 
 
+local is_change_needed = function()
+  return State.player.experience > mech.experience_for_level[State.player.level + 1]
+end
+
 return Module("state.gui.character_creator", function()
   local result = {
     player_anchor = nil,
@@ -87,10 +91,6 @@ return Module("state.gui.character_creator", function()
         math.min(love.graphics.getWidth() - 40, State.gui.TEXT_MAX_SIZE[1]),
         "character_creator", {params = params}
       ))
-
-      if State.player.experience <= mech.experience_for_level[State.player.level] then
-        params.current_index = -1
-      end
     end,
 
     forms = forms,
@@ -99,11 +99,12 @@ return Module("state.gui.character_creator", function()
       assert(direction_name == "zero" or Tablex.contains(Vector.direction_names, direction_name))
 
       local params = self.parameters
+
       if direction_name == "down" then
         params.current_index = (params.current_index) % params.max_index + 1
       elseif direction_name == "up" then
         params.current_index = (params.current_index - 2) % params.max_index + 1
-      else
+      elseif is_change_needed() then
         Query(params.movement_functions[params.current_index])(Vector[direction_name][1])
         self:refresh()
       end
@@ -111,7 +112,9 @@ return Module("state.gui.character_creator", function()
     end,
 
     close = function(self)
-      if State.player.experience > mech.experience_for_level[State.player.level] then
+      if is_change_needed() then
+        State.gui.sidebar:clear_notifications()
+        State.gui.sidebar:push_notification("Редактирование персонажа не закончено")
         return
       end
       State:remove_multiple(self.text_entities)
@@ -120,8 +123,16 @@ return Module("state.gui.character_creator", function()
 
     submit = function(self)
       local params = self.parameters
-      if params.current_index < 0 then return end
-      if params.points > 0 or params.free_skills > 0 then return end  -- TODO notification
+      if not is_change_needed() then
+        State.gui.sidebar:clear_notifications()
+        State.gui.sidebar:push_notification("Нельзя изменить персонажа")
+        return
+      end
+      if params.points > 0 or params.free_skills > 0 then
+        State.gui.sidebar:clear_notifications()
+        State.gui.sidebar:push_notification("Не все ресурсы распределены")
+        return
+      end  -- TODO notification
       local active_choices = class.get_choices(fighter.progression_table, 2)
 
       local changes = {
@@ -141,8 +152,7 @@ return Module("state.gui.character_creator", function()
       Log.info("Finishing character creation with args:", changes)
 
       State.player:level_up(changes)
-      State:remove_multiple(self.text_entities)
-      self.text_entities = nil
+      self:close()
     end,
   }
 

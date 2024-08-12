@@ -43,7 +43,7 @@ local build_table = function(headers, matrix)
     :reduce(Fun.op.concat, "")
 
   local text = total_header .. "\n"
-    .. "   " .. "-" * (Fun.iter(header_sizes):sum() + 2 * #header_sizes - 3)
+    .. "   " .. "-" * (Fun.iter(header_sizes):sum() + 2 * #header_sizes - 5)
 
   for y, row in ipairs(matrix) do
     text = text .. "\n"
