@@ -21,7 +21,9 @@ local cost = {
 local available_races = {"human", "variant_human_1", "variant_human_2"}
 
 local len = function(str)
-  str = str:gsub("&.t;", "&")
+  str = str
+    :gsub("<[^>]*>", "")
+    :gsub("&.t;", "&")
   Log.trace(str)
   return utf8.len(str)
 end
@@ -65,6 +67,7 @@ return Module("state.gui.character_creator.forms", {
       params.race = available_races[
         (Tablex.index_of(available_races, params.race) + dx - 1) % #available_races + 1
       ]
+      State.gui.character_creator:refresh()
     end
 
     params.max_index = params.max_index + 1
@@ -223,5 +226,6 @@ return Module("state.gui.character_creator.forms", {
       .. Fun.iter(class.get_choices(params.class.progression_table, params.level))
         :map(function(choice) return perk_form(choice, params) end)
         :reduce(Fun.op.concat, "")
+      .. "\n"
   end,
 })

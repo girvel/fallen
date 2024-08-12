@@ -9,7 +9,7 @@ local mech = require("mech")
 
 
 return Module("state.gui.character_creator", function()
-  return {
+  local result = {
     player_anchor = nil,
     text_entities = nil,
     styles = {
@@ -58,9 +58,11 @@ return Module("state.gui.character_creator", function()
       build_options = {},
 
       _get_indicator = function(self, i)
-        return i == self.current_index and "&gt;" or " "
+        return '<span on_update="self.sprite.text = State.gui.character_creator.parameters.current_index == %s and [[&gt;]] or [[ ]]">&gt;</span>' % i
       end,
       scroll = 0,
+
+      forms_last_index = {},
     },
 
     refresh = function(self)
@@ -79,17 +81,16 @@ return Module("state.gui.character_creator", function()
           :filter(function(level, exp) return exp <= State.player.experience end)
           :map(function(level, exp) return level end)
           :max() or 0
-        text = text
-          .. self.forms.class(params)
-          .. self.forms.race(params)
-          .. self.forms.abilities(params)
-          .. self.forms.skills(params)
+
+        text = text .. Fun.iter(self.forms_sequence)
+          :map(function(f) return f(params) end)
+          :reduce(Fun.op.concat, "")
       end
 
       self.text_entities = State:add_multiple(texting.generate(
         "<pre>%s</pre>" % text, Tablex.merge({}, State.gui.wiki.styles, self.styles),
         math.min(love.graphics.getWidth() - 40, State.gui.TEXT_MAX_SIZE[1]),
-        "character_creator"
+        "character_creator", {params = params}
       ))
 
       if State.player.experience <= mech.experience_for_level[State.player.level] then
@@ -109,9 +110,9 @@ return Module("state.gui.character_creator", function()
         params.current_index = (params.current_index - 2) % params.max_index + 1
       else
         Query(params.movement_functions[params.current_index])(Vector[direction_name][1])
+        self:refresh()
       end
       params.scroll = -30 * (params.current_index - 1)
-      self:refresh()
     end,
 
     close = function(self)
@@ -149,4 +150,13 @@ return Module("state.gui.character_creator", function()
       self.text_entities = nil
     end,
   }
+
+  result.forms_sequence = {
+    result.forms.class,
+    result.forms.race,
+    result.forms.abilities,
+    result.forms.skills,
+  }
+
+  return result
 end)

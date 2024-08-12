@@ -94,7 +94,11 @@ end
 
 local assign_event = function(event, root, content)
   if root.attributes[event] then
-    local f, err = loadstring(root.attributes[event])
+    local f, err = loadstring(
+      "return function(self)\n"
+      .. root.attributes[event]:gsub("&gt;", ">"):gsub("&lt;", "<")
+      .. "\nend"
+    )()
     if f then
       Fun.iter(content):each(function(token) token[event] = f end)
     else
@@ -113,6 +117,7 @@ local postprocess = function(root, content, styles)
   end
   assign_event("on_click", root, content)
   assign_event("on_hover", root, content)
+  assign_event("on_update", root, content)
   return Fun.iter(content):map(function(token)
     return Tablex.extend({}, styles.default, token)
   end):totable()
