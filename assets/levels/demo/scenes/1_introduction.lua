@@ -17,6 +17,7 @@ return function()
         State.gui.disable_ui = true
         local old_fov = State.player.fov_radius
         State.player.fov_radius = 0
+        State.player.in_cutscene = true
 
         api.narration('... никогда не забуду тебя ненавидеть\n\n\t\t<span color="8b7c99">[Пробел]</span>')
         api.narration("...")
@@ -61,6 +62,7 @@ return function()
 
         State.player.experience = mech.experience_for_level[2]
         State.gui.character_creator:refresh()
+        State.player.in_cutscene = false
       end,
     },
 
@@ -106,6 +108,7 @@ return function()
           function(t1, t2) return t1[2] < t2[2] end
         )
 
+        State.player.in_cutscene = true
         api.line(State.player, comments[1][sorted_abilities[6][1]])
         api.line(State.player, comments[2][sorted_abilities[5][1]])
         api.line(State.player, comments[3][sorted_abilities[1][1]])
@@ -117,6 +120,7 @@ return function()
         State.player:rotate("down")
         api.narration("Ты оборачиваешься, но там только письменный стол с запиской.")
         api.line(State.player, "Стоит осмотреться")
+        State.player.in_cutscene = false
       end,
     },
 
@@ -130,8 +134,10 @@ return function()
 
       run = function(self, rails, dt)
         self.enabled = false
+        State.player.in_cutscene = true
         api.line(State.player, "Возможно, следует вернуться к той записке на столе")
         api.line(State.player, "Кто-то оставил её для меня")
+        State.player.in_cutscene = false
       end,
     },
   }

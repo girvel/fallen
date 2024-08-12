@@ -24,7 +24,6 @@ local len = function(str)
   str = str
     :gsub("<[^>]*>", "")
     :gsub("&.t;", "&")
-  Log.trace(str)
   return utf8.len(str)
 end
 
@@ -67,7 +66,6 @@ return Module("state.gui.character_creator.forms", {
       params.race = available_races[
         (Tablex.index_of(available_races, params.race) + dx - 1) % #available_races + 1
       ]
-      State.gui.character_creator:refresh()
     end
 
     params.max_index = params.max_index + 1

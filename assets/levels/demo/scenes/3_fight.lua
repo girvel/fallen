@@ -51,6 +51,8 @@ return function()
         self.enabled = false
         rails.scenes.player_attacks_half_orc.enabled = true
         rails.entities[3].portrait = sprite.image("assets/sprites/portraits/half_orc.png")
+
+        State.player.in_cutscene = true
         api.narration("Полуорк несколько секунд тяжело дышит, опираясь о ближайшую стену.")
         rails.entities[3]:rotate(Vector.name_from_direction(
           (State.player.position - rails.entities[3].position):normalized()
@@ -144,6 +146,7 @@ return function()
             break
           end
         end
+        State.player.in_cutscene = false
       end,
     },
 

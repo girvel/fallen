@@ -29,7 +29,7 @@ module_mt.__call = function(_)
         if not self.next_action then return end
         local result = self:act(self.next_action)
         self.next_action = nil
-        return result
+        if not self.in_cutscene then return result end
       end,
 
       observe = function(self)
