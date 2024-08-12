@@ -58,10 +58,25 @@ local throw_tiles_under = function(grid, palette, result)
       local character = grid:fast_get(x, y)
       if palette.transparents[character] then
         local position = Vector({x, y})
-        local tiles_around = Fun.iter(Vector.extended_directions)
-          :map(function(d) return grid:safe_get(position + d) end)
-          :filter(function(c) return palette.throwables[c] end)
-          :totable()
+        local tiles_around = {}
+
+        for r = 1, 5 do
+          local new_tiles = Fun.chain(
+            Fun.range(1 - r, r):map(function(i) return Vector({r, i}) end),
+            Fun.range(1 - r, r):map(function(i) return Vector({-r, i}) end),
+            Fun.range(1 - r, r):map(function(i) return Vector({i, r}) end),
+            Fun.range(1 - r, r):map(function(i) return Vector({i, -r}) end)
+          )
+            :map(function(v) return grid:safe_get(position + v) end)
+            :filter(function(c) return palette.throwables[c] end)
+            :totable()
+          Tablex.concat(tiles_around, new_tiles)
+          if #tiles_around > 1 then break end
+        end
+        -- Fun.iter(Vector.extended_directions)
+        --   :map(function(d) return grid:safe_get(position + d) end)
+        --   :filter(function(c) return palette.throwables[c] end)
+        --   :totable()
 
         if #tiles_around >= 1 then
           local tiles_around_ns = Fun.iter(tiles_around)
@@ -71,7 +86,8 @@ local throw_tiles_under = function(grid, palette, result)
             end, {})
 
           local most_frequent_tile = Fun.iter(tiles_around_ns)
-            :max_by(function(c, n) return n end)
+            :map(function(...) return {...} end)
+            :max_by(function(a, b) return a[2] > b[2] and a or b end)[1]
 
           table.insert(result, Tablex.extend(
             get_factory(grid, position, most_frequent_tile, palette)(),
