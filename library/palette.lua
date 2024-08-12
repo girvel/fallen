@@ -26,6 +26,7 @@ return Module("library.palette", {
 
     -- solids --
     M = walls.steel_with_mirror,
+    E = walls.steel_vented,
 
     [">"] = pipes.horizontal,
     v = pipes.vertical,

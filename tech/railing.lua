@@ -77,10 +77,18 @@ railing.api.make_hostile = function(faction, entities)
 end
 
 railing.api.ability_check_message = function(ability, dc, content_success, content_failure)
-  local success = (D(20) + mech.get_modifier(State.player.abilities[ability])):roll() >= dc
+  local roll = State.player.abilities[ability]
+    and D(20) + mech.get_modifier(State.player.abilities[ability])
+    or State.player.skill_throws[ability]
+
+  if not roll then
+    error("No ability or skill %s" % ability, 2)
+  end
+
+  local success = roll:roll() >= dc
   local content = '<span color="%s">[%s]</span> %s' % {
     success and "60b37e" or "e64e4b",
-    translation.ability[ability]:upper(),
+    (translation.ability[ability] or translation.skill[ability]):upper(),
     success and content_success or content_failure,
   }
 

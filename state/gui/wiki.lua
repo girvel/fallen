@@ -33,7 +33,7 @@ return Module("state.gui.wiki", function()
     text_entities = nil,
 
     quests = {},
-    quests_states = {},
+    quest_states = {},
 
     styles = {
       default = {
@@ -87,21 +87,21 @@ return Module("state.gui.wiki", function()
           </body>
         </html>
       ]] % Fun.iter(self.quests)
-        :filter(function(name) return self.quests_states[name] end)
+        :filter(function(name) return self.quest_states[name] end)
         :map(function(name, quest) return [[
           <ul>
             <h2><span color="%s">%s</span></h2>
             %s
           </ul>
         ]] % {
-          self.quests_states[name] > #quest.tasks and "8b7c99" or "ededed",
+          self.quest_states[name] > #quest.tasks and "8b7c99" or "ededed",
           quest.header,
           Fun.iter(quest.tasks)
-            :take_n(self.quests_states[name])
+            :take_n(self.quest_states[name])
             :enumerate()
             :map(function(i, task) return [[
               <span color="%s"><li>%s</li></span>
-            ]] % {i == self.quests_states[name] and "ededed" or "8b7c99", task} end)
+            ]] % {i == self.quest_states[name] and "ededed" or "8b7c99", task} end)
             :reduce(function(sum, v) return v .. sum end, "")
         } end)
         :reduce(Fun.op.concat, "")

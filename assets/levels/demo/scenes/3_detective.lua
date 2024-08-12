@@ -18,7 +18,7 @@ return function()
       run = function(self, rails, dt)
         self.enabled = false
         level.move(State.grids.solids, State.player, Vector({20, 56}))
-        State.gui.wiki.quests_states.detective = 1
+        State.gui.wiki.quest_states.detective = 1
         rails.entities.detective_door.locked = false
         State.player.experience = mech.experience_for_level[2]
         State.gui.character_creator:refresh()
@@ -64,7 +64,7 @@ return function()
       run = function(self, rails, dt)
         self.enabled = false
         api.notification("вычисли и устрани диверсанта", true)
-        State.gui.wiki.quests_states.detective = 2
+        State.gui.wiki.quest_states.detective = 2
       end,
     },
     second_rotates_valve = {
