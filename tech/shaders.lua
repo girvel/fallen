@@ -32,4 +32,14 @@ shaders.black_and_white_and_red = static {
   end,
 }
 
+shaders.latrine = static {
+  love_shader = love.graphics.newShader([[
+    vec4 effect(vec4 color, Image tex, vec2 texture_coords, vec2 screen_coords)
+    {
+      vec4 v = Texel(tex, texture_coords);
+      return vec4(v.x, (v.y + 1) / 2, v.z, v.w);
+    }
+  ]]),
+}
+
 return shaders

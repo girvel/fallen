@@ -38,6 +38,8 @@ return function()
         detective_notification_activation = Vector({23, 56}),
         player_room_exit = Vector({15, 75}),
         leaky_vent_check = Vector({11, 79}),
+        enter_latrine = Vector({28, 104}),
+        exit_latrine = Vector({28, 103}),
       }
 
       self.entities = {

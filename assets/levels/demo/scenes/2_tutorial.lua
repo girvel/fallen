@@ -1,5 +1,6 @@
 local level = require("tech.level")
 local api = require("tech.railing").api
+local shaders = require("tech.shaders")
 
 
 return function()
@@ -42,6 +43,30 @@ return function()
           "Темные пятна на стенах и потолке могут указывать на проблемы с вентиляцией и серьезные утечки воды.",
           "Тёмные пятна на полу и потолке складываются в гротескные узоры."
         )
+      end,
+    },
+
+    {
+      name = "Enter latrine",
+      enabled = true,
+      start_predicate = function(self, rails, dt)
+        return State.shader and State.player.position == rails.positions.enter_latrine
+      end,
+
+      run = function(self, rails, dt)
+        State:set_shader(shaders.latrine)
+      end,
+    },
+
+    {
+      name = "Exit latrine",
+      enabled = true,
+      start_predicate = function(self, rails, dt)
+        return not State.shader and State.player.position == rails.positions.exit_latrine
+      end,
+
+      run = function(self, rails, dt)
+        State:set_shader()
       end,
     },
   }
