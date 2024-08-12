@@ -37,7 +37,14 @@ for _, prefix in ipairs({"", "black_"}) do
     args = args or {}
     return Tablex.extend(
       animated(closed_door_pack),
-      args.locked and {} or interactive(function(self)
+      interactive(function(self)
+        if self.locked then
+          if not State:exists(self._popup[1]) then
+            self._popup = State.gui.popup:show(self.position, "above", "Закрыто.")
+          end
+          return
+        end
+
         self:open()
         self.interact = nil
       end, not args.highlighted),
@@ -55,6 +62,8 @@ for _, prefix in ipairs({"", "black_"}) do
             self.is_open = true
           end)
         end,
+        locked = args.locked,
+        _popup = {},
       }
     )
   end
