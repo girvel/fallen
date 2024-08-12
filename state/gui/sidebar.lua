@@ -3,6 +3,7 @@ local hostility = require("mech.hostility")
 local translation = require("tech.translation")
 local interactive = require("tech.interactive")
 local sound = require("tech.sound")
+local actions = require("mech.creature.actions")
 
 
 local COLOR = {
@@ -128,20 +129,18 @@ return Module("state.gui.sidebar", function()
 
       local main_weapon = -Query(State.player).inventory.main_hand
       if main_weapon then
-        local roll = main_weapon.damage_roll:to_string()  -- TODO modify with effects and get_melee_damage_roll
-        if main_weapon.bonus > 0 then
-          roll = roll .. "+" .. main_weapon.bonus
-        end
-        append("Оружие: %s (%s)\n\n" % {main_weapon.name, roll})
+        append("Оружие: %s (%s)\n\n" % {
+          main_weapon.name,
+          actions.get_melee_damage_roll(State.player, "main_hand")
+        })
       end
 
       local second_weapon = -Query(State.player).inventory.other_hand
       if second_weapon then
-        local roll = second_weapon.damage_roll:to_string()  -- TODO modify with effects and get_melee_damage_roll
-        if second_weapon.bonus > 0 then
-          roll = roll .. "+" .. second_weapon.bonus
-        end
-        append("Второе оружие: %s (%s)\n\n" % {second_weapon.name, roll})
+        append("Второе оружие: %s (%s)\n\n" % {
+          second_weapon.name,
+          actions.get_melee_damage_roll(State.player, "other_hand")
+        })
       end
 
       if State.player then

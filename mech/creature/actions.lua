@@ -10,13 +10,7 @@ local sound = require("tech.sound")
 
 local actions, _, static = Module("mech.creature.actions")
 
--- Post-Plot MVP refactor plans:
--- Action: {cost, _isAvailable(), execute()}
--- Level-dependency is stored in class
--- Hotkey is stored in player AI
--- Picture, description etc. is stored in GUI
-
-local get_melee_attack_roll = function(entity, slot)
+actions.get_melee_attack_roll = function(entity, slot)
   local roll = D(20) + entity.proficiency_bonus
 
   local weapon = entity.inventory[slot]
@@ -29,12 +23,20 @@ local get_melee_attack_roll = function(entity, slot)
   return entity:get_effect("modify_attack_roll", roll)
 end
 
-local get_melee_damage_roll = function(entity, slot)
-  if not entity.inventory[slot] then
+actions.get_melee_damage_roll = function(entity, slot)
+  local weapon = entity.inventory[slot]
+  if not weapon then
     return D.roll({}, mech.get_modifier(entity.abilities.str))
   end
 
-  local roll = entity.inventory[slot].damage_roll + entity.inventory[slot].bonus
+  local roll
+  if weapon.tags.versatile and not entity.inventory.other_hand then
+    roll = D(weapon.damage_roll.dice[1].sides_n + 2)
+  else
+    roll = weapon.damage_roll
+  end
+
+  roll = roll + weapon.bonus
 
   if slot == "main_hand" then
     roll = roll + mech.get_melee_modifier(entity, slot)
@@ -54,8 +56,8 @@ local base_attack = function(entity, target, slot)
   entity:when_animation_ends(function()
     if not attacking.attack(
       entity, target,
-      get_melee_attack_roll(entity, slot),
-      get_melee_damage_roll(entity, slot)
+      actions.get_melee_attack_roll(entity, slot),
+      actions.get_melee_damage_roll(entity, slot)
     ) then return end
 
     if target and target.sounds and target.sounds.hit then
