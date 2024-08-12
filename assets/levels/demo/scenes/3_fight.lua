@@ -173,6 +173,7 @@ return function()
 
       run = function(self, rails, dt)
         self.enabled = false
+        rails.scenes.first_shouts.enabled = false
         rails.scenes.second_rotates_valve.enabled = false
         rails.scenes.player_wins_dreamers.enabled = true
         rails:stop_scene(rails.scenes.player_attacks_half_orc)

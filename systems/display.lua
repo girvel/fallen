@@ -121,7 +121,7 @@ display.system = static(Tiny.sortedProcessingSystem({
       love.graphics.rectangle("fill", x, y, unpack(current_view:apply_multiplier(entity.size)))
       love.graphics.setColor({1, 1, 1})
     else
-      error("Wrong sprite format of %s:\n%s" % {Common.get_name(entity), Inspect(entity.sprite)})
+      -- error("Wrong sprite format of %s:\n%s" % {Common.get_name(entity), Inspect(entity.sprite)})
     end
   end,
 

@@ -2,6 +2,8 @@ local api = require("tech.railing").api
 local actions = require("mech.creature.actions")
 local random = require("utils.random")
 local level = require("tech.level")
+local mech = require("mech")
+local items = require("library.items")
 
 
 return function()
@@ -17,6 +19,10 @@ return function()
         self.enabled = false
         level.move(State.grids.solids, State.player, Vector({20, 56}))
         State.gui.wiki.quests_states.detective = 1
+        rails.entities.detective_door.locked = false
+        State.player.experience = mech.experience_for_level[2]
+        State.gui.character_creator:refresh()
+        State:add(Tablex.extend(items.pole(), {position = State.player.position + Vector.left}))
       end,
     },
     {
@@ -78,7 +84,7 @@ return function()
         rails.entities[2]:act(actions.interact)
       end,
     },
-    {
+    first_shouts = {
       name = "Lead engineer shouts",
       enabled = true,
       start_predicate = function(self, rails, dt)

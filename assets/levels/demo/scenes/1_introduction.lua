@@ -66,7 +66,7 @@ return function()
       end,
     },
 
-    {
+    character_created = {
       name = "Player created the character",
       enabled = true,
       start_predicate = function(self, rails, dt) return State.player.class end,
