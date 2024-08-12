@@ -174,7 +174,7 @@ return Module("state.gui.character_creator.forms", {
 
   skills = function(params)
     local text = "   <h2>Навыки</h2>"
-      .. "   Свободные навыки: %s\n\n" % params.points
+      .. "   Свободные навыки: %s\n\n" % params.free_skills
 
     local bonus_column = Fun.iter(mech.skill_bases)
       :map(function(s, a) return s, mech.get_modifier(params.abilities_final[a]) end)

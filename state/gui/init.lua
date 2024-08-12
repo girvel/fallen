@@ -113,4 +113,13 @@ gui._get_full_screen_text_offset = function()
   return (Vector({math.max(30, w - sx), math.max(30, h - sy)}) / 2):ceil()
 end
 
+gui._get_creator_text_offset = function()
+  local w, h = love.graphics.getDimensions()
+  local sx, sy = unpack(State.gui.TEXT_MAX_SIZE)
+  return (Vector({
+    math.max(30, w - sx),
+    math.max(30, h - sy) + State.gui.character_creator.parameters.scroll
+  }) / 2):ceil()
+end
+
 return gui
