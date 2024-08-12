@@ -29,7 +29,7 @@ ffi.cdef([[
 
 for _, path in ipairs({
   "lib/libtcod",
-  love.filesystem.getSourceBaseDirectory() .. "\\lib\\libtcod",
+  love.filesystem.getSource() .. "/lib/libtcod",
 }) do
   local ok, result = pcall(ffi.load, path)
   if ok then return result end
