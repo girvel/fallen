@@ -130,7 +130,7 @@ return function()
         self.enabled = false
         State.player.in_cutscene = true
 
-        local name = State.gui.text_input.text:strip():lower()
+        local name = State.gui.text_input.text:strip():better_lower()
         State.gui.text_input.text = ""
 
         local easter_eggs = {
