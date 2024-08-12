@@ -34,6 +34,8 @@ return function()
           live.black_door({locked = true}),
           {position = Vector({21, 56})}
         )),
+        neighbour = State.grids.solids[Vector({20, 77})],
+        upper_bunk = State.grids.solids[Vector({20, 74})],
       }
 
       self.entities.gloves = self.entities[3].inventory.gloves
@@ -45,6 +47,9 @@ return function()
       self.old_hp = Fun.range(4)
         :map(function(i) return self.entities[i].hp end)
         :totable()
+
+      self.entities.neighbour:rotate("up")
+      self.entities.upper_bunk:lie(self.entities.neighbour)
     end,
   })
 end
