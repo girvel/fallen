@@ -50,7 +50,7 @@ return function()
       name = "Enter latrine",
       enabled = true,
       start_predicate = function(self, rails, dt)
-        return State.shader and State.player.position == rails.positions.enter_latrine
+        return not State.shader and State.player.position == rails.positions.enter_latrine
       end,
 
       run = function(self, rails, dt)
@@ -62,7 +62,7 @@ return function()
       name = "Exit latrine",
       enabled = true,
       start_predicate = function(self, rails, dt)
-        return not State.shader and State.player.position == rails.positions.exit_latrine
+        return State.shader and State.player.position == rails.positions.exit_latrine
       end,
 
       run = function(self, rails, dt)
