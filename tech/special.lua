@@ -14,7 +14,7 @@ module.floating_damage = function(number, scene_position, color)
       + Vector({random.d(12) - 6, random.d(12) - 6}),
     view = "scene_fx",
     drift = Vector({0, -24}),
-    sprite = sprite.text({color or Common.hex_color("e64e4b"), number}, 14),
+    sprite = sprite.text({color or Colors.red, number}, 14),
     life_time = 3,
   }
 end
@@ -60,7 +60,7 @@ module.notification = function()
     codename = "notification",
     view = "sidebar_text",
     position = Vector.zero,
-    sprite = sprite.text({{1, 1, 1}, ""}, 18),
+    sprite = sprite.text({Colors.white, ""}, 18),
   }
 end
 

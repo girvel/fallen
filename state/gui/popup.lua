@@ -45,7 +45,7 @@ return Module("state.gui.popup", function()
         position - Vector.one * MARGIN,
         "scene_popup_background",
         size + Vector.one * 2 * MARGIN,
-        Common.hex_color("000000")
+        Colors.black
       )))
 
       for _, e in ipairs(entities) do

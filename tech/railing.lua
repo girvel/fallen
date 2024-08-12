@@ -87,7 +87,7 @@ railing.api.ability_check_message = function(ability, dc, content_success, conte
 
   local success = roll:roll() >= dc
   local content = '<span color="%s">[%s]</span> %s' % {
-    success and "60b37e" or "e64e4b",
+    success and Colors.hex.green or Colors.hex.red,
     (translation.ability[ability] or translation.skill[ability]):upper(),
     success and content_success or content_failure,
   }

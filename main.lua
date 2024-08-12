@@ -20,6 +20,7 @@ Enum = require("lib.enum")
 Vector = require("lib.vector")
 Grid = require("lib.grid")
 D = require("lib.d")
+Colors = require("lib.colors")
 
 require("lib.tiny_dump_patch")()
 

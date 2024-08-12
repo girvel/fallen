@@ -38,27 +38,27 @@ return Module("state.gui.wiki", function()
     styles = {
       default = {
         font_size = 12,
-        color = Common.hex_color("ededed"),
+        color = Colors.white,
       },
       h1 = {
         font_size = 24,
       },
       h1_prefix = {
         font_size = 24,
-        color = Common.hex_color("5d375a"),
+        color = Colors.dark_red,
       },
       h2 = {
         font_size = 16,
       },
       h2_prefix = {
         font_size = 16,
-        color = Common.hex_color("5d375a"),
+        color = Colors.dark_red,
       },
       a = {
         color = Common.hex_color("3f5d92"),
       },
       hate = {
-        color = Common.hex_color("e64e4b"),
+        color = Colors.red,
         delay = 0.1,
         appearance_time = .4,
       },
@@ -94,14 +94,14 @@ return Module("state.gui.wiki", function()
             %s
           </ul>
         ]] % {
-          self.quest_states[name] > #quest.tasks and "8b7c99" or "ededed",
+          self.quest_states[name] > #quest.tasks and "8b7c99" or Colors.hex.white,
           quest.header,
           Fun.iter(quest.tasks)
             :take_n(self.quest_states[name])
             :enumerate()
             :map(function(i, task) return [[
               <span color="%s"><li>%s</li></span>
-            ]] % {i == self.quest_states[name] and "ededed" or "8b7c99", task} end)
+            ]] % {i == self.quest_states[name] and Colors.hex.white or "8b7c99", task} end)
             :reduce(function(sum, v) return v .. sum end, "")
         } end)
         :reduce(Fun.op.concat, "")

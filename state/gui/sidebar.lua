@@ -8,9 +8,9 @@ local actions = require("mech.creature.actions")
 
 local COLOR = {
   ORDER = Common.hex_color("f7e5b2"),
-  NOTIFICATION = Common.hex_color("ededed"),
-  INACTIVE = Common.hex_color("8b7c99"),
-  HOSTILE = Common.hex_color("e64e4b"),
+  NOTIFICATION = Colors.white,
+  INACTIVE = Colors.gray,
+  HOSTILE = Colors.red,
 }
 
 local hotkeys_order = Fun.iter(
@@ -195,7 +195,7 @@ return Module("state.gui.sidebar", function()
             return {
               t.data.action and not t.data.action:get_availability(State.player)
                 and COLOR.INACTIVE
-                or {1, 1, 1},
+                or Colors.white,
               "\n  [%s] - %s" % {table.concat(t.keys, "/"), Common.get_name(t.data)},
             }
           end)
@@ -208,7 +208,7 @@ return Module("state.gui.sidebar", function()
           State.combat:iter_entities_only()
             :map(function(e)
               return {
-                hostility.are_hostile(State.player, e) and COLOR.HOSTILE or {1, 1, 1},
+                hostility.are_hostile(State.player, e) and COLOR.HOSTILE or Colors.white,
                 "\n%s %s" % {
                   State.combat:get_current() == e and "x" or "-",
                   Common.get_name(e),
@@ -222,7 +222,7 @@ return Module("state.gui.sidebar", function()
       if State.player then
         local interaction = interactive.get_for(State.player)
         if interaction then
-          append({{1, 1, 1}, "\n\nСмотрит на " .. Common.get_name(interaction)})
+          append({Colors.white, "\n\nСмотрит на " .. Common.get_name(interaction)})
         end
       end
 
