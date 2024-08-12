@@ -58,8 +58,9 @@ return Module("state.gui.character_creator", function()
       build_options = {},
 
       _get_indicator = function(self, i)
-        return i == self.current_index and ">" or " "
+        return i == self.current_index and "&gt;" or " "
       end,
+      scroll = 0,
     },
 
     refresh = function(self)
@@ -109,6 +110,7 @@ return Module("state.gui.character_creator", function()
       else
         Query(params.movement_functions[params.current_index])(Vector[direction_name][1])
       end
+      params.scroll = -30 * (params.current_index - 1)
       self:refresh()
     end,
 

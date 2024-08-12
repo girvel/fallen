@@ -155,7 +155,9 @@ visit_html = function(root, args, styles, preserve_whitespace)
 end
 
 html.parse = function(content, args, styles)
-  assert(styles and styles.default)
+  if not styles or not styles.default then
+    error("Can not parse HTML without the default style", 2)
+  end
   return visit_html(htmlparser.parse(content), args, styles)
 end
 

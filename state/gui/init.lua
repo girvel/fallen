@@ -51,7 +51,7 @@ module_mt.__call = function()
         dialogue_portrait = gui._get_dialogue_offset() - PORTRAIT_SPACE,
         dialogue_text = gui._get_dialogue_offset(),
         wiki = gui._get_full_screen_text_offset(),
-        character_creator = gui._get_full_screen_text_offset(),
+        character_creator = gui._get_creator_text_offset(),
         scene_popup_background = gui._get_scene_offset(),
         scene_popup_content = gui._get_scene_offset(),
       }) do
