@@ -14,7 +14,7 @@ module_mt.__call = function(_)
     max_hp = 1,
     direction = "right",
     faction = "player",
-    fov_radius = 20,
+    fov_radius = 15,
     race = races.human,
 
     immortal = true,
@@ -27,9 +27,10 @@ module_mt.__call = function(_)
     ai = {
       run = function(self)
         if not self.next_action then return end
+        if self.in_cutscene then return end
         local result = self:act(self.next_action)
         self.next_action = nil
-        if not self.in_cutscene then return result end
+        return result
       end,
 
       observe = function(self)

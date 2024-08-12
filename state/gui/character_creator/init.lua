@@ -112,7 +112,7 @@ return Module("state.gui.character_creator", function()
         Query(params.movement_functions[params.current_index])(Vector[direction_name][1])
         self:refresh()
       end
-      params.scroll = -30 * (params.current_index - 1)
+      params.scroll = -40 * (params.current_index - 1)
     end,
 
     close = function(self)
