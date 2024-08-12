@@ -1,7 +1,26 @@
 local railing = require("tech.railing")
-local items = require("library.items")
+local api = railing.api
 local live = require("library.live")
+local interactive = require("tech.interactive")
+local sprite = require("tech.sprite")
 
+
+local note = function(page_table)
+  return Tablex.extend(
+    interactive(function(self)
+      api.discover_wiki(page_table)
+      api.message("Нажмите [K] чтобы открыть кодекс")
+      State:remove(self)
+    end),
+    {
+      sprite = sprite.image("assets/sprites/note.png"),
+      codename = "note",
+      layer = "above_solids",
+      view = "scene",
+      name = "записка",
+    }
+  )
+end
 
 return function()
   return Tablex.extend(railing.mixin(), {
@@ -28,7 +47,7 @@ return function()
         State.grids.solids[Vector({23, 48})],
         leaking_valve = State.grids.solids[Vector({22, 55})],
         note = State:add(Tablex.extend(
-          items.note({colleague_note = true}),
+          note({colleague_note = true}),
           {position = Vector({19, 78})}
         )),
         detective_door = State:add(Tablex.extend(

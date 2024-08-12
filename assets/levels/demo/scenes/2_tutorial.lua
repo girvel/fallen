@@ -25,7 +25,7 @@ return function()
       run = function(self, rails, dt)
         self.enabled = false
         api.notification("Отправляйся в тренировочную комнату вниз по коридору.", true)
-        State.gui.wiki.quest_states.warmup = 2
+        api.update_quest({warmup = 2})
       end,
     },
 

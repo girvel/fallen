@@ -118,6 +118,7 @@ return Module("state.gui.wiki", function()
         codex = self.codex,
         pages = self.pages,
         html = html,
+        api = require("tech.railing").api,
       }
 
       html.run_scripts(page, args)

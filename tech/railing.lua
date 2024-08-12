@@ -64,7 +64,7 @@ railing.api.discover_wiki = function(page_table)
   for k, v in pairs(page_table) do
     State.gui.wiki.codex[k] = v
   end
-  railing.api.notification("Информация в Кодексе обновлена")  -- TODO mention page name
+  railing.api.notification("Кодекс обновлён")  -- TODO mention page name
 end
 
 railing.api.make_hostile = function(faction, entities)
@@ -92,9 +92,32 @@ railing.api.ability_check_message = function(ability, dc, content_success, conte
     success and content_success or content_failure,
   }
 
-  State.gui.popup:show(
-    State.player.position, "above", content
-  )
+  railing.api.message(content)
+end
+
+railing.api.message = function(content)
+  State.gui.popup:show(State.player.position, "above", content)
+end
+
+local quest_stage = function(k, v)
+  if v <= 0 then return "<NOT DISCOVERED>" end
+  local tasks = State.gui.wiki.quests[k].tasks
+  if v > #tasks then return "<FINISHED>" end
+  return tasks[v]
+end
+
+railing.api.update_quest = function(changes)
+  local states = State.gui.wiki.quest_states
+  for k, v in pairs(changes) do
+    if (states[k] or 0) > v then
+      error("Attempt to degrade quest %s from stage %s (%s) to stage %s (%s)" % {
+        k, states[k], quest_stage(k, states[k]), v, quest_stage(k, v),
+      }, 2)
+    end
+    Log.info("Quest %s: %s -> %s" % {k, states[k], v})
+    states[k] = v
+  end
+  railing.api.notification("Журнал обновлён")
 end
 
 railing.mixin = function()

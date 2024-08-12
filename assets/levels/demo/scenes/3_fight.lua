@@ -159,7 +159,7 @@ return function()
         self.enabled = false
         api.notification("Задача выполнена", true)
         api.notification("Ожидайте следующее задание", true)
-        State.gui.wiki.quest_states.detective = 3
+        api.update_quest({detective = 3})
       end,
     },
 
@@ -212,7 +212,7 @@ return function()
         api.notification("Задача выполнена неудовлетворительно", true)
         api.notification("Ожидайте следующее задание", true)
         api.discover_wiki({fought_dreamers = true})
-        State.gui.wiki.quest_states.detective = 3
+        api.update_quest({detective = 3})
       end,
     },
 
@@ -244,6 +244,7 @@ return function()
         State:remove(rails.entities[3])
         api.notification("Задача выполнена неудовлетворительно", true)
         api.notification("Ожидайте следующее задание", true)
+        api.update_quest({detective = 3})
         State.gui.wiki.quest_states.detective = 3
       end,
     },

@@ -106,20 +106,4 @@ module.yellow_gloves = function()
   )
 end
 
-module.note = function(page_table)
-  return Tablex.extend(
-    interactive(function(self)
-      railing.api.discover_wiki(page_table)
-      State:remove(self)
-    end),
-    {
-      sprite = sprite.image("assets/sprites/note.png"),
-      codename = "note",
-      layer = "above_solids",
-      view = "scene",
-      name = "записка",
-    }
-  )
-end
-
 return module
