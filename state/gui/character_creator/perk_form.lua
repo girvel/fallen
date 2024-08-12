@@ -7,7 +7,7 @@ return Module("state.gui.character_creator.perk_form", function(perk, params)
   end
   local chosen_option = perk.options[params.build_options[perk]]
 
-  local text = "%s %s: < %s >\n\n" % {
+  local text = "%s %s: &lt; %s &gt;\n\n" % {
     params:_get_indicator(params.max_index + 1),
     translation.perks[perk],
     translation.build[perk][chosen_option.codename],

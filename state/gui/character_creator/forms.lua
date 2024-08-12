@@ -22,7 +22,7 @@ local available_races = {"human", "variant_human_1", "variant_human_2"}
 
 return Module("state.gui.character_creator.forms", {
   race = function(params)
-    local text = "%s # Раса: < %s >\n\n" % {
+    local text = "%s <h2>Раса: &lt; %s &gt;</h2>" % {
         params:_get_indicator(params.max_index + 1),
         translation.race[params.race]
       }
@@ -51,7 +51,7 @@ return Module("state.gui.character_creator.forms", {
     else
       Fun.iter(races[params.race].bonuses):enumerate():each(function(i, size)
         local j = i + params.max_index
-        text = text .. ("%s Бонус +%s: < %s >\n" % {
+        text = text .. ("%s Бонус +%s: &lt; %s &gt;\n" % {
           params:_get_indicator(j),
           size,
           translation.ability[params.bonuses[i]],
@@ -84,7 +84,7 @@ return Module("state.gui.character_creator.forms", {
     local total_header = table.concat(headers, "  ")
 
     text = text
-      .. "  # Способности\n\n"
+      .. "  <h2>Способности</h2>"
       .. "  Свободные очки: %s\n\n" % params.points
       .. "  " .. total_header .. "\n"
       .. "  " .. "-" * (utf8.len(total_header))
@@ -102,10 +102,10 @@ return Module("state.gui.character_creator.forms", {
 
     Fun.iter(mech.abilities_list):enumerate():each(function(i, a)
       i = i + params.max_index
-      text = text .. "\n%s %s  %s %s %s  %s  =  %s  %s" % {
+      text = text .. "\n%s %s  %s %s %s  %s  =  %s  %+i" % {
         params:_get_indicator(i),
         translation.ability[a]:ljust(utf8.len(headers[1]), " "),
-        params.abilities_raw[a] > 8 and "<" or " ",
+        params.abilities_raw[a] > 8 and "&lt;" or " ",
         tostring(params.abilities_raw[a]):rjust(2, "0"),
         string.ljust(
           params.abilities_raw[a] < 15
@@ -139,7 +139,7 @@ return Module("state.gui.character_creator.forms", {
   end,
 
   class = function(params)
-    return "  # Класс: %s\n\n" % translation.class[params.class.codename]
+    return "  <h2>Класс: %s</h2>" % translation.class[params.class.codename]
       .. Fun.iter(class.get_choices(params.class.progression_table, params.level))
         :map(function(choice) return perk_form(choice, params) end)
         :reduce(Fun.op.concat, "")

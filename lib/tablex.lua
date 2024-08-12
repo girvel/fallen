@@ -38,6 +38,18 @@ tablex.join = function(base, extension, ...)
   return tablex.join(base, ...)
 end
 
+tablex.merge = function(base, extension, ...)
+  if extension == nil then return base end
+  for k, v in pairs(extension) do
+    if base[k] and type(base[k]) == "table" and type(v) == "table" then
+      tablex.merge(base[k], v)
+    else
+      base[k] = v
+    end
+  end
+  return tablex.merge(base, ...)
+end
+
 tablex.index_of = function(t, item)
   return Fun.iter(t)
     :enumerate()

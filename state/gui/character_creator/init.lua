@@ -12,11 +12,22 @@ return Module("state.gui.character_creator", function()
   return {
     player_anchor = nil,
     text_entities = nil,
-    style = {
+    styles = {
       default = {
         font_size = 18,
-        color = Common.hex_color("ededed"),
-      }
+      },
+      h1 = {
+        font_size = 30,
+      },
+      h1_prefix = {
+        font_size = 30,
+      },
+      h2 = {
+        font_size = 24,
+      },
+      h2_prefix = {
+        font_size = 24,
+      },
     },
 
     parameters = {
@@ -57,7 +68,7 @@ return Module("state.gui.character_creator", function()
         :filter(function(level, exp) return exp <= State.player.experience end)
         :map(function(level, exp) return level end)
         :max() or 0
-      local text = ""
+      local text = "  <h1>Редактор персонажа</h1>"
 
       text = text
         .. self.forms.race(params)
@@ -65,7 +76,7 @@ return Module("state.gui.character_creator", function()
         .. self.forms.class(params)
 
       self.text_entities = State:add_multiple(texting.generate(
-        "<pre>%s</pre>" % text, self.style,
+        "<pre>%s</pre>" % text, Tablex.merge({}, State.gui.wiki.styles, self.styles),
         math.min(love.graphics.getWidth() - 40, State.gui.TEXT_MAX_SIZE[1]),
         "character_creator"
       ))
