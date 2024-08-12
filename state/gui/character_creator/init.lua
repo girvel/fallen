@@ -32,6 +32,7 @@ return Module("state.gui.character_creator", function()
 
     parameters = {
       points = 0,
+      free_skills = 4,
       abilities_raw = {
         str = 15,
         dex = 15,
@@ -63,7 +64,7 @@ return Module("state.gui.character_creator", function()
 
       params.movement_functions = {}
       params.max_index = 0
-      local text = "  <h1>Редактор персонажа</h1>"
+      local text = "   <h1>Редактор персонажа</h1>"
 
       if State.player.experience >= 0 then
         params.level = Fun.iter(mech.experience_for_level)
@@ -115,7 +116,7 @@ return Module("state.gui.character_creator", function()
     submit = function(self)
       local params = self.parameters
       if params.current_index < 0 then return end
-      if params.points > 0 then return end  -- TODO notification
+      if params.points > 0 or params.free_skills > 0 then return end  -- TODO notification
       local active_choices = class.get_choices(fighter.progression_table, 2)
 
       local changes = {

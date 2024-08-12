@@ -20,9 +20,31 @@ local cost = {
 
 local available_races = {"human", "variant_human_1", "variant_human_2"}
 
+local len = function(str)
+  str = str:gsub("&.t;", "&")
+  Log.trace(str)
+  return utf8.len(str)
+end
+
+local build_table = function(headers, matrix)
+  local total_header = table.concat(headers, "  ")
+
+  local text = total_header .. "\n"
+    .. "   " .. "-" * (len(total_header) - 3)
+
+  for y, row in ipairs(matrix) do
+    text = text .. "\n"
+    for x, value in ipairs(row) do
+      text = text .. tostring(value) .. " " * (len(headers[x]) - len(value) + 2)
+    end
+  end
+
+  return text
+end
+
 return Module("state.gui.character_creator.forms", {
   race = function(params)
-    local text = "%s <h2>Раса: &lt; %s &gt;</h2>" % {
+    local text = "%s  <h2>Раса: &lt; %s &gt;</h2>" % {
         params:_get_indicator(params.max_index + 1),
         translation.race[params.race]
       }
@@ -47,11 +69,11 @@ return Module("state.gui.character_creator.forms", {
       :totable()
 
     if #params.bonuses == 6 then
-      text = text .. "  Бонус +1 ко всем способностям\n"
+      text = text .. "   Бонус +1 ко всем способностям\n"
     else
       Fun.iter(races[params.race].bonuses):enumerate():each(function(i, size)
         local j = i + params.max_index
-        text = text .. ("%s Бонус +%s: &lt; %s &gt;\n" % {
+        text = text .. ("%s  Бонус +%s: &lt; %s &gt;\n" % {
           params:_get_indicator(j),
           size,
           translation.ability[params.bonuses[i]],
@@ -79,13 +101,73 @@ return Module("state.gui.character_creator.forms", {
   end,
 
   abilities = function(params)
+    local text = "   <h2>Способности</h2>"
+      .. "   Свободные очки: %s\n\n" % params.points
+
+    local bonus_column = Fun.iter(mech.abilities_list)
+      :map(function(a)
+        local bonus_i = Tablex.index_of(params.bonuses, a)
+        return a, (bonus_i and races[params.race].bonuses[bonus_i] or 0)
+      end)
+      :tomap()
+
+    params.abilities_final = Fun.iter(params.abilities_raw)
+      :map(function(a, v) return a, v + bonus_column[a] end)
+      :tomap()
+
+    text = text
+      .. build_table(
+        {" ", "Способность ", "Значение", "Бонус расы", "   Результат", "Модификатор"},
+        Fun.iter(mech.abilities_list)
+          :enumerate()
+          :map(function(i, a)
+            return {
+              params:_get_indicator(i + params.max_index),
+              translation.ability[a],
+              "%s %s %s" % {
+                params.abilities_raw[a] > 8 and "&lt;" or " ",
+                tostring(params.abilities_raw[a]):rjust(2, "0"),
+                params.abilities_raw[a] < 15
+                  and params.points >= cost[
+                    params.abilities_raw[a] + 1] - cost[params.abilities_raw[a]
+                  ]
+                  and "&gt;" or " ",
+              },
+              "%+i" % bonus_column[a],
+              "= " .. params.abilities_final[a],
+              "%+i" % mech.get_modifier(params.abilities_final[a])
+            }
+          end)
+          :totable()
+      )
+
+    for i, a in ipairs(mech.abilities_list) do
+      params.movement_functions[i + params.max_index] = function(dx)
+        local next_value = params.abilities_raw[a] + dx
+        if dx < 0 and params.abilities_raw[a] <= 8
+          or dx > 0 and (
+            params.abilities_raw[a] >= 15
+            or params.points < cost[next_value] - cost[params.abilities_raw[a]]
+          )
+        then return end
+
+        params.points = params.points + cost[params.abilities_raw[a]] - cost[next_value]
+        params.abilities_raw[a] = next_value
+      end
+    end
+
+    params.max_index = params.max_index + 6
+    return text .. "\n\n\n"
+  end,
+
+  skills = function(params)
     local text = ""
-    local headers = {"Способность ", "Значение", "Бонус расы", "   Результат", "Модификатор"}
+    local headers = {"Навык", "Владение", "Бонус", "   Модификатор"}
     local total_header = table.concat(headers, "  ")
 
     text = text
-      .. "  <h2>Способности</h2>"
-      .. "  Свободные очки: %s\n\n" % params.points
+      .. "   <h2>Навыки</h2>"
+      .. "   Доступно: %s\n\n" % params.free_skills
       .. "  " .. total_header .. "\n"
       .. "  " .. "-" * (utf8.len(total_header))
 
@@ -139,7 +221,7 @@ return Module("state.gui.character_creator.forms", {
   end,
 
   class = function(params)
-    return "  <h2>Класс: %s</h2>" % translation.class[params.class.codename]
+    return "   <h2>Класс: %s</h2>" % translation.class[params.class.codename]
       .. Fun.iter(class.get_choices(params.class.progression_table, params.level))
         :map(function(choice) return perk_form(choice, params) end)
         :reduce(Fun.op.concat, "")

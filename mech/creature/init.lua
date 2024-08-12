@@ -109,6 +109,14 @@ creature._methods = static {
             or 0)
       end)
       :tomap()
+
+    self.skill_throws = Fun.iter(mech.skills)
+      :map(function(skill, ability)
+        return skill, D(20)
+          + mech.get_modifier(self.abilities[ability])
+          + (-Query(self.skills)[skill] and 2 or 0)
+      end)
+      :tomap()
   end
 }
 

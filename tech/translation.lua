@@ -12,6 +12,24 @@ return Module("tech.translation", {
     cha = "харизма",
   },
 
+  skill = {
+    sleight_of_hand = "ловкость рук",
+    stealth = "скрытность",
+    arcana = "магия",
+    history = "история",
+    investigation = "расследование",
+    nature = "природа",
+    religion = "религия",
+    animal_handling = "уход за животными",
+    insight = "анализ",
+    medicine = "медицина",
+    perception = "внимание",
+    deception = "обман",
+    intimidation = "запугивание",
+    performance = "выступление",
+    persuasion = "убеждение",
+  },
+
   build = {
     [fighter.fighting_style] = {
       two_handed_style = "бой двуручным оружием",

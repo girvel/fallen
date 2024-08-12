@@ -32,4 +32,22 @@ module.experience_for_level = {
   0, 300, 900, 2700, 6500,
 }
 
+module.skills = {
+  sleight_of_hand = "dex",
+  stealth = "dex",
+  arcana = "int",
+  history = "int",
+  investigation = "int",
+  nature = "int",
+  religion = "int",
+  animal_handling = "wis",
+  insight = "wis",
+  medicine = "wis",
+  perception = "wis",
+  deception = "cha",
+  intimidation = "cha",
+  performance = "cha",
+  persuasion = "cha",
+}
+
 return module
