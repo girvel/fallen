@@ -1,6 +1,7 @@
 local shaders = require("tech.shaders")
 local api = require("tech.railing").api
 local mech = require("mech")
+local random = require("utils.random")
 
 
 return function()
@@ -48,6 +49,7 @@ return function()
         State:set_shader(shaders.black_and_white_and_red)
         api.wait_seconds(0.5)
         State:set_shader()
+        rails.scenes.snoring.enabled = true
 
         api.narration("Руки инстинктивно отскакивают от потока ледяной воды")
         api.narration("Перед тобой мутное зеркало и видавший лучшую жизнь умывальник")
@@ -173,6 +175,27 @@ return function()
         api.line(State.player, "Возможно, следует вернуться к той записке на столе")
         api.line(State.player, "Кто-то оставил её для меня")
         State.player.in_cutscene = false
+      end,
+    },
+
+    snoring = {
+      name = "Snoring",
+      enabled = false,
+      start_predicate = function(self, rails, dt)
+        return Common.relative_period(45, dt, self)
+      end,
+
+      run = function(self, rails, dt)
+        State.gui.popup:show(rails.entities.upper_bunk.position, "above", random.choice({
+          "Хрр...",
+          "Фрыхрр...",
+          "Хрумффф....",
+          "Фырр...",
+          "Ссс...",
+          "Мгмф...",
+          "Рмгфф...",
+          "Ыгмфм...",
+        }))
       end,
     },
   }
