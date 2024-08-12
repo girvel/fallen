@@ -1,6 +1,7 @@
 local level = require("tech.level")
 local tcod = require("lib.tcod")
 local ffi = require("ffi")
+local sprite = require("tech.sprite")
 
 
 local default_font = love.graphics.newFont("assets/fonts/joystix.monospace-regular.otf", 12)
@@ -105,6 +106,7 @@ display.system = static(Tiny.sortedProcessingSystem({
       or mode == "character_creator" and entity.view ~= "character_creator"
       or mode == "reading" and entity.view ~= "wiki"
       or mode == "death"
+      or mode == "text_input"
     then return end
 
     local current_view = State.gui.views[entity.view]
@@ -182,6 +184,7 @@ display.system = static(Tiny.sortedProcessingSystem({
       love.graphics.print("FPS: %.2f" % (1 / love.timer.getAverageDelta()), default_font, 5, 5)
     end
     local mode = State:get_mode()
+    if mode == "text_input" then return State.gui.text_input:display() end
     if Tablex.contains({"reading"}, mode) or State.shader or State.gui.disable_ui then return end
     if mode == "death" then return self:_display_death_message() end
     self:_display_text_info()

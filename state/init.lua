@@ -7,7 +7,7 @@ local module, module_mt, static = Module("state")
 
 module_mt.__call = function(_, systems, debug_mode)
   local modes = {
-    "character_creator", "death", "reading", "dialogue_options", "dialogue", "free", "combat",
+    "character_creator", "death", "reading", "dialogue_options", "dialogue", "free", "combat", "text_input",
   }
 
 	return {
@@ -135,7 +135,9 @@ module_mt.__call = function(_, systems, debug_mode)
     end,
 
     get_mode = function(self)
-      if self.gui.character_creator.text_entities then
+      if self.gui.text_input.active then
+        return "text_input"
+      elseif self.gui.character_creator.text_entities then
         return "character_creator"
       elseif self.player.hp <= 0 then
         return "death"

@@ -15,6 +15,7 @@ return Module("systems", {
   require("systems.drift").system,
   require("systems.railing").system,
   require("systems.sound").system,
+  require("systems.writing_text").system,
 
   -- love.draw systems --
   require("systems.display").system,

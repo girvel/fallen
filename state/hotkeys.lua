@@ -2,6 +2,7 @@ local actions = require("mech.creature.actions")
 local fighter = require("mech.classes.fighter")
 local class = require("mech.class")
 local game_save = require("state.game_save")
+local utf8 = require("utf8")
 
 
 local define_hotkey = function(collection, modes, keys, data)
@@ -174,6 +175,23 @@ return Module("state.hotkeys", function(modes, debug_mode)
     pre_action = function()
       State.gui.character_creator:close()
     end,
+  })
+
+  -- text input --
+  define_hotkey(hotkeys, {"text_input"}, {"backspace"}, {
+    hidden = true,
+    pre_action = function()
+      local input = State.gui.text_input
+      if #input.text == 0 then return end
+      input.text = input.text:sub(1, utf8.offset(input.text, utf8.len(input.text)) - 1)
+    end
+  })
+
+  define_hotkey(hotkeys, {"text_input"}, {"enter"}, {
+    hidden = true,
+    pre_action = function()
+      State.gui.text_input.active = false
+    end
   })
 
   -- universal --

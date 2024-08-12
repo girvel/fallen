@@ -13,7 +13,6 @@ change_cursor.system = static(Tiny.processingSystem({
   _detected = false,
 
   preProcess = function(self)
-    Log.trace(1)
     self._detected = false
   end,
 

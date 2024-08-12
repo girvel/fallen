@@ -16,11 +16,7 @@ return function()
 
         run = function(self, rails, dt)
           self.enabled = false
-          api.discover_wiki({fought_dreamers = true})
-          api.narration("Hello, <hate>world</hate>!")
-          State.gui.popup:show(State.player.position, "above", "Oh hi Mark", 10)
-          State.player.portrait = sprite.image("assets/sprites/portraits/half_orc.png")
-          api.line(State.player, "I'm gay")
+          State.gui.text_input.active = true
         end,
       },
 
