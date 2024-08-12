@@ -152,10 +152,12 @@ return Module("state.hotkeys", function(modes, debug_mode)
     {{"a", "left"}, "left", "влево"},
     {{"s", "down"}, "down", "вниз"},
     {{"d", "right"}, "right", "вправо"},
+    {{"e", "enter"}, "zero"},
   }) do
     local keys, direction_name, direction_translation = unpack(t)
     define_hotkey(hotkeys, {"character_creator"}, keys, {
       name = direction_translation,
+      hidden = not not direction_translation,
       pre_action = function()
         State.gui.character_creator:move_cursor(direction_name)
       end,

@@ -92,6 +92,24 @@ love.load = function(args)
     love.errorhandler = love_errorhandler
   else
     jit.off()
+    Tablex.extend(State.gui.character_creator.parameters, {
+      skills = {
+        sleight_of_hand = true,
+        stealth = true,
+        arcana = true,
+        nature = true,
+      },
+      abilities_raw = {
+        str = 15,
+        dex = 15,
+        con = 15,
+        int = 8,
+        wis = 8,
+        cha = 8,
+      },
+      points = 0,
+      free_skills = 0,
+    })
   end
 
   if args.resolution then

@@ -31,23 +31,18 @@ return Module("state.gui.character_creator", function()
     },
 
     parameters = {
-      points = 0,
+      points = 27,
       abilities_raw = {
-        str = 15,
-        dex = 15,
-        con = 15,
+        str = 8,
+        dex = 8,
+        con = 8,
         int = 8,
         wis = 8,
         cha = 8,
       },
       abilities_final = nil,
-      free_skills = 0,
-      skills = {
-        sleight_of_hand = true,
-        stealth = true,
-        arcana = true,
-        nature = true,
-      },
+      free_skills = 4,
+      skills = {},
       current_index = 1,
       max_index = 1,
       movement_functions = {},
@@ -101,7 +96,7 @@ return Module("state.gui.character_creator", function()
     forms = forms,
 
     move_cursor = function(self, direction_name)
-      assert(Tablex.contains(Vector.direction_names, direction_name))
+      assert(direction_name == "zero" or Tablex.contains(Vector.direction_names, direction_name))
 
       local params = self.parameters
       if direction_name == "down" then
