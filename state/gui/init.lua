@@ -30,7 +30,6 @@ module_mt.__call = function()
       character_creator = view(Vector.zero, 1, 1),
       scene_popup_background = view(Vector.zero, 1, 1),
       scene_popup_content = view(Vector.zero, 1, 1),
-      text_input = view(Vector.zero, 1, 1),
     },
 
     views_order = {
@@ -39,7 +38,6 @@ module_mt.__call = function()
       "dialogue_background", "dialogue_portrait", "dialogue_text",
       "wiki", "character_creator",
       "scene_popup_background", "scene_popup_content",
-      "text_input"
     },
 
     update_views = function(self)
@@ -57,8 +55,6 @@ module_mt.__call = function()
         character_creator = gui._get_creator_text_offset(),
         scene_popup_background = gui._get_scene_offset(),
         scene_popup_content = gui._get_scene_offset(),
-        text_input = Vector({love.graphics.getDimensions()}) / 2
-          + Vector.left * sprite.get_font(State.gui.text_input.font_size):getWidth(State.gui.text_input.text) / 2
       }) do
         State.gui.views[key].offset = value
       end

@@ -112,8 +112,43 @@ return function()
         api.line(State.player, comments[1][sorted_abilities[6][1]])
         api.line(State.player, comments[2][sorted_abilities[5][1]])
         api.line(State.player, comments[3][sorted_abilities[1][1]])
+        api.line(State.player, "Как меня зовут?")
+        State.player.in_cutscene = false
+        rails.scenes.after_naming.enabled = true
+        State.gui.text_input.active = true
+      end,
+    },
 
-        -- (picking the name goes here)
+    after_naming = {
+      name = "After player chose his name",
+      enabled = false,
+      start_predicate = function(self, rails, dt)
+        return not State.gui.text_input.active
+      end,
+
+      run = function(self, rails, dt)
+        self.enabled = false
+        State.player.in_cutscene = true
+
+        local name = State.gui.text_input.text:strip():lower()
+        State.gui.text_input.text = ""
+
+        local easter_eggs = {
+          ["алгенус"] = "Точно нет, это имя совершенно ко мне не относится; не хочу иметь с этим именем что-то общее.",
+          ["сон мари"] = "Мне кажется, от этого имени может возникнуть путаница; еще примут меня за того, кем я не являюсь",
+          ["ева"] = "Имя не принято выбирать; но, думаю, в этом случае нужно придумать что-то другое, совсем не подходит.",
+          ["рронт"] = "Я даже не могу это выговорить; нет, лучше другое.",
+          ["марркис"] = "Я что, похож на кота? Нет, другое.",
+        }
+
+        if easter_eggs[name] then
+          api.line(State.player, easter_eggs[name])
+          self.enabled = true
+          State.gui.text_input.active = true
+          return
+        end
+
+        api.line(State.player, "Хм, не очень подходит; впрочем, имя не выбирают")
 
         api.notification("Пройдись и приготовься выходить", true)
         api.narration("В голове вновь раздается странный звон.")
