@@ -9,7 +9,8 @@ local fighter, module_mt, static = Module("mech.classes.fighter")
 fighter.second_wind = static {
   codename = "second_wind",
   get_availability = function(self, entity)
-    return entity.resources.bonus_actions > 0
+    return entity.hp < entity:get_max_hp()
+      and entity.resources.bonus_actions > 0
       and entity.resources.second_wind > 0
   end,
   _run = function(self, entity)

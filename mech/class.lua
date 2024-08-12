@@ -18,7 +18,8 @@ end
 class.hit_dice_action = {
   codename = "hit_dice_action",
   get_availability = function(self, entity)
-    return entity.resources.hit_dice > 0
+    return entity.hp < entity:get_max_hp()
+      and entity.resources.hit_dice > 0
   end,
   _run = function(self, entity)
     entity.resources.hit_dice = entity.resources.hit_dice - 1
