@@ -42,7 +42,7 @@ tablex.merge = function(base, extension, ...)
   if extension == nil then return base end
   for k, v in pairs(extension) do
     if base[k] and type(base[k]) == "table" and type(v) == "table" then
-      tablex.merge(base[k], v)
+      base[k] = tablex.merge({}, base[k], v)
     else
       base[k] = v
     end

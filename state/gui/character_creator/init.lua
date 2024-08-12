@@ -63,23 +63,29 @@ return Module("state.gui.character_creator", function()
 
       params.movement_functions = {}
       params.max_index = 0
-      params.level = Fun.iter(mech.experience_for_level)
-        :enumerate()
-        :filter(function(level, exp) return exp <= State.player.experience end)
-        :map(function(level, exp) return level end)
-        :max() or 0
       local text = "  <h1>Редактор персонажа</h1>"
 
-      text = text
-        .. self.forms.race(params)
-        .. self.forms.abilities(params)
-        .. self.forms.class(params)
+      if State.player.experience >= 0 then
+        params.level = Fun.iter(mech.experience_for_level)
+          :enumerate()
+          :filter(function(level, exp) return exp <= State.player.experience end)
+          :map(function(level, exp) return level end)
+          :max() or 0
+        text = text
+          .. self.forms.race(params)
+          .. self.forms.abilities(params)
+          .. self.forms.class(params)
+      end
 
       self.text_entities = State:add_multiple(texting.generate(
         "<pre>%s</pre>" % text, Tablex.merge({}, State.gui.wiki.styles, self.styles),
         math.min(love.graphics.getWidth() - 40, State.gui.TEXT_MAX_SIZE[1]),
         "character_creator"
       ))
+
+      if State.player.experience <= mech.experience_for_level[State.player.level] then
+        params.current_index = -1
+      end
     end,
 
     forms = forms,
@@ -98,8 +104,17 @@ return Module("state.gui.character_creator", function()
       self:refresh()
     end,
 
+    close = function(self)
+      if State.player.experience > mech.experience_for_level[State.player.level] then
+        return
+      end
+      State:remove_multiple(self.text_entities)
+      self.text_entities = nil
+    end,
+
     submit = function(self)
       local params = self.parameters
+      if params.current_index < 0 then return end
       if params.points > 0 then return end  -- TODO notification
       local active_choices = class.get_choices(fighter.progression_table, 2)
 

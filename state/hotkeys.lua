@@ -168,6 +168,14 @@ return Module("state.hotkeys", function(modes, debug_mode)
     end,
   })
 
+  define_hotkey(hotkeys, {"character_creator"}, {"escape"}, {
+    hidden = true,
+    name = "Закрыть редактор",
+    pre_action = function()
+      State.gui.character_creator:close()
+    end,
+  })
+
   -- universal --
   define_hotkey(hotkeys, Tablex.deep_copy(modes), {"Ctrl+Shift+q", debug_mode and "Shift+q" or nil}, {
     name = "завершить игру",
@@ -198,6 +206,11 @@ return Module("state.hotkeys", function(modes, debug_mode)
   define_hotkey(hotkeys, {"free", "combat", "dialogue", "dialogue_options", "reading"}, {"j"}, {
     name = "открыть журнал",
     pre_action = function() State.gui.wiki:show_journal() end,
+  })
+
+  define_hotkey(hotkeys, {"free", "combat", "dialogue", "dialogue_options", "reading"}, {"n"}, {
+    name = "открыть редактор персонажа",
+    pre_action = function() State.gui.character_creator:refresh() end,
   })
 
   return hotkeys

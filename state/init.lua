@@ -135,7 +135,7 @@ module_mt.__call = function(_, systems, debug_mode)
     end,
 
     get_mode = function(self)
-      if self.player.experience > mech.experience_for_level[self.player.level] then
+      if self.gui.character_creator.text_entities then
         return "character_creator"
       elseif self.player.hp <= 0 then
         return "death"
