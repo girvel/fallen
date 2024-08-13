@@ -1,3 +1,5 @@
+local sound = require("tech.sound")
+local fx = require("tech.fx")
 local special = require("tech.special")
 local abilities = require("mech.abilities")
 local attacking = require("mech.attacking")
@@ -325,6 +327,21 @@ return function()
           api.narration("Такую подозрительную.")
           api.narration("И такую манящую.")
         end
+      end,
+    },
+
+    {
+      name = "14. Disappearing dude",
+      enabled = true,
+      start_predicate = function(self, rails, dt)
+        return rails.entities.dining_room_door_1.is_open
+          or rails.entities.dining_room_door_2.is_open
+      end,
+
+      run = function(self, rails, dt)
+        self.enabled = false
+        State:add(fx("assets/sprites/fx/disappearing_dude", "fx", Vector({23, 97})))
+        State.audio:play_static(sound.multiple("assets/sounds/creepy", .1)[1])
       end,
     },
   }

@@ -19,7 +19,9 @@ animation.system = static(Tiny.processingSystem({
       end
     end
 
-    if not this_animation.pack[this_animation.current] or math.floor(this_animation.frame) > #this_animation.pack[this_animation.current] then
+    if not this_animation.pack[this_animation.current]
+      or math.floor(this_animation.frame) > #this_animation.pack[this_animation.current]
+    then
       entity:animate("idle")
     end
 

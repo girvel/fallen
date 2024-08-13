@@ -91,6 +91,8 @@ return function()
         )),
         neighbour = State.grids.solids[Vector({20, 77})],
         upper_bunk = State.grids.solids[Vector({20, 74})],
+        dining_room_door_1 = State.grids.solids[Vector({24, 100})],
+        dining_room_door_2 = State.grids.solids[Vector({26, 97})],
       }
 
       self.been_to_latrine = false
