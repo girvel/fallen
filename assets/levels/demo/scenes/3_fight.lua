@@ -176,8 +176,8 @@ return function()
         rails.scenes.first_shouts.enabled = false
         rails.scenes.second_rotates_valve.enabled = false
         rails.scenes.player_wins_dreamers.enabled = true
-        rails:stop_scene(rails.scenes.player_attacks_half_orc)
-        rails:cancel_scene(rails.scenes.half_orc_mercy)
+        rails:stop_scene("player_attacks_half_orc")
+        rails:remove_scene("half_orc_mercy")
         rails.entities[3].will_beg = false
 
         api.make_hostile("dreamers_detective", rails.entities)

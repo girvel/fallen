@@ -170,15 +170,23 @@ railing.mixin = function()
       return result
     end,
 
-    cancel_scene = function(self, scene)
-      self:stop_scene(scene)
-      Tablex.remove(self.scenes, scene)
+    remove_scene = function(self, k)
+      self:stop_scene(k)
+      self.scenes[k] = nil
+      Log.info("Removed scene " .. k)
     end,
 
-    stop_scene = function(self, scene)
+    stop_scene = function(self, k)
       self.active_coroutines = Fun.iter(self.active_coroutines)
-        :filter(function(c) return c.base_scene ~= scene end)
+        :filter(function(c) return c.base_scene ~= self.scenes[k] end)
         :totable()
+      Log.info("Stopped scene " .. k)
+    end,
+
+    is_running = function(self, scene)
+      if type(scene) == "string" then scene = self.scenes[scene] end
+      return Fun.iter(self.active_coroutines)
+        :any(function(c) return c.base_scene == scene end)
     end,
   }
 end

@@ -89,6 +89,9 @@ return function()
         upper_bunk = State.grids.solids[Vector({20, 74})],
       }
 
+      self.been_to_latrine = false
+      self.tolerates_latrine = nil
+
       self.entities.gloves = self.entities[3].inventory.gloves
 
       self.entities[1]:animate("holding")

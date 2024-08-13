@@ -1,3 +1,4 @@
+local attacking = require("mech.attacking")
 local items = require("library.items")
 local item = require("tech.item")
 local pipes = require("library.pipes")
@@ -149,25 +150,90 @@ return function()
     },
 
     {
-      name = "Enter latrine",
+      name = "10. Latrine - warning",
       enabled = true,
       start_predicate = function(self, rails, dt)
-        return not State.shader and State.player.position == rails.positions.enter_latrine
+        return State.player.position == rails.positions.exit_latrine
       end,
 
       run = function(self, rails, dt)
-        State:set_shader(shaders.latrine)
+        self.enabled = false
+        api.narration("Неописуемая вонь бьёт по твоим ноздрям.")
+        api.narration("Как будто фекальный дьявол начал великую тошнотворную войну, а это его омерзительный оплот.")
+        api.narration("Ты можешь считать себя очень стойким, но из этого боя лучше отступить.")
       end,
     },
 
     {
-      name = "Exit latrine",
+      name = "10. Latrine - first time inside",
       enabled = true,
       start_predicate = function(self, rails, dt)
-        return State.shader and State.player.position == rails.positions.exit_latrine
+        return State.player.position == rails.positions.enter_latrine
       end,
 
       run = function(self, rails, dt)
+        self.enabled = false
+        rails.tolerates_latrine = State.player.saving_throws.con:roll() >= 14
+        if rails.tolerates_latrine then
+          api.narration("Ты победил.")
+          api.narration("Из глаз идут слёзы, в голове жужжание сотен несуществующих мух.")
+          api.narration("И нос никогда тебя не простит.")
+          api.narration("Но ты прошел это испытание; можешь собой гордиться.")
+        else
+          api.narration("Это было ошибкой.")
+        end
+        rails.scenes.enter_latrine.enabled = true
+        rails.scenes.exit_latrine.enabled = true
+      end,
+    },
+
+    enter_latrine = {
+      name = "Enter latrine",
+      enabled = false,
+      start_predicate = function(self, rails, dt)
+        return not State.shader
+          and not rails.tolerates_latrine
+          and State.player.position == rails.positions.enter_latrine
+      end,
+
+      run = function(self, rails, dt)
+        State:set_shader(shaders.latrine)
+        rails:stop_scene("exit_latrine")
+      end,
+    },
+
+    exit_latrine = {
+      name = "Exit latrine",
+      enabled = false,
+      start_predicate = function(self, rails, dt)
+        return not rails:is_running("exit_latrine")
+          and not rails.tolerates_latrine
+          and State.player.position == rails.positions.exit_latrine
+      end,
+
+      run = function(self, rails, dt)
+        if not rails.been_to_latrine then
+          State.player.in_cutscene = true
+          State:set_shader()
+          self.enabled = false
+
+          api.narration("Ты не можешь контролировать свой желудок…")
+          api.narration("И выпускаешь его содержимое наружу.")
+        end
+
+        attacking.damage(State.player, 1)
+
+        if not rails.been_to_latrine then
+          api.narration("В слезах и желчи, ты выбегаешь из фекального ада и клянешься никогда туда не возвращаться.")
+          api.narration("Но ужасное состояние никуда не уходит.")
+
+          rails.been_to_latrine = true
+          State.player.in_cutscene = false
+          State:set_shader(shaders.latrine)
+          self.enabled = true
+        end
+
+        api.wait_seconds(10)
         State:set_shader()
       end,
     },
