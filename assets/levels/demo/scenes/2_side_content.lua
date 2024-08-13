@@ -173,7 +173,7 @@ return function()
 
       run = function(self, rails, dt)
         self.enabled = false
-        rails.tolerates_latrine = State.player.saving_throws.con:roll() >= 14
+        rails.tolerates_latrine = State.player.saving_throws.con:roll() >= -14
         if rails.tolerates_latrine then
           api.narration("Ты победил.")
           api.narration("Из глаз идут слёзы, в голове жужжание сотен несуществующих мух.")
@@ -235,6 +235,24 @@ return function()
 
         api.wait_seconds(10)
         State:set_shader()
+      end,
+    },
+
+    {
+      name = "11. Dirty magazine",
+      enabled = true,
+      start_predicate = function(self, rails, dt)
+        return State.player.position == rails.positions.dirty_magazine
+      end,
+
+      run = function(self, rails, dt)
+        self.enabled = false
+        api.narration("На обложке цветной газеты красуется очень реалистичное изображение накачанных мужчин.")
+        api.narration("Их физическая форма впечатляет, но они зачем-то оделись в нелепые тесные костюмы.")
+        api.ability_check_message("religion", 8,
+          "Закрепленное белое нечто за спинами мужчин очень уж напоминает крылья. А эти подвязки… Да эти атлеты без сомнений изображают ангелов! Мда уж, безвкусица.",
+          "Интересно, через какие тренировки прошли эти атлеты? Такое упорство внушает уважение!"
+        )
       end,
     },
   }

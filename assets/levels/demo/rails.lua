@@ -66,6 +66,7 @@ return function()
         empty_dorm_message = {22, 68},
         sign_message = {27, 91},
         mouse_check = {28, 85},
+        dirty_magazine = {24, 105},
       }
 
       self.positions = Fun.pairs(self.positions)
@@ -114,7 +115,7 @@ return function()
         pipes.colored(),
         {position = Vector({27, 95})}
       ))
-      State:add(things.magazine(), {position = Vector({24, 105})})
+      State:add(things.magazine(), {position = self.positions.dirty_magazine})
     end,
   })
 end
