@@ -48,11 +48,11 @@ display.system = static(Tiny.sortedProcessingSystem({
 
     -- borders --
     local view = State.gui.views.scene
-    local start = view:inverse_multipler(-view.offset):map(math.floor)
-    local finish = start + view:inverse_multipler(Vector({love.graphics.getDimensions()})):map(math.ceil)
+    local _start = view:inverse_multipler(-view.offset):map(math.floor)
+    local _finish = _start + view:inverse_multipler(Vector({love.graphics.getDimensions()})):map(math.ceil)
 
-    start = Vector.use(Mathx.median, Vector.one, start, State.grids.solids.size)
-    finish = Vector.use(Mathx.median, Vector.one, finish, State.grids.solids.size)
+    local start = Vector.use(Mathx.median, Vector.one, _start, State.grids.solids.size)
+    local finish = Vector.use(Mathx.median, Vector.one, _finish, State.grids.solids.size)
 
     -- mask --
     local solids = State.grids.solids
@@ -66,7 +66,7 @@ display.system = static(Tiny.sortedProcessingSystem({
 
     for x = start[1], finish[1] do
       for y = start[2], finish[2] do
-        local e = solids:fast_get(x, y)
+        local e = solids:safe_get(Vector({x, y}))
         tcod.TCOD_map_set_properties(self._fov_map, x, y, bool(not e or e.transparent_flag), not e)
       end
     end
@@ -79,6 +79,20 @@ display.system = static(Tiny.sortedProcessingSystem({
     local px, py = unpack(State.player.position)
     tcod.TCOD_map_compute_fov(self._fov_map, px, py, State.player.fov_radius, true, tcod.FOV_PERMISSIVE_8)
 
+    for x = _start[1], _finish[1] do
+      for y = _start[2], _finish[2] do
+        local p = Vector({x, y})
+        if tcod.TCOD_map_is_in_fov(self._fov_map, x, y)
+          and not State.grids.tiles:safe_get(p) then
+            self:_process_image_sprite(
+              State.background_dummy,
+              State.gui.views.scene:apply(p),
+              State.gui.views.scene.scale
+            )
+        end
+      end
+    end
+
     for _, layer in ipairs(level.GRID_LAYERS) do
       local grid = State.grids[layer]
       for x = start[1], finish[1] do
@@ -90,7 +104,9 @@ display.system = static(Tiny.sortedProcessingSystem({
                 if e then self:process(e) end
               end
             else
-              if cell then self:process(cell) end
+              if cell then
+                self:process(cell)
+              end
             end
           end
         end

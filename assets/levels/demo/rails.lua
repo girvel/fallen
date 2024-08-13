@@ -1,3 +1,4 @@
+local level = require("tech.level")
 local railing = require("tech.railing")
 local api = railing.api
 local live = require("library.live")
@@ -28,7 +29,20 @@ return function()
       require("assets.levels.demo.scenes.1_introduction")(),
       require("assets.levels.demo.scenes.2_tutorial")(),
       require("assets.levels.demo.scenes.3_detective")(),
-      require("assets.levels.demo.scenes.3_fight")()
+      require("assets.levels.demo.scenes.3_fight")(), {
+        checkpoint_0 = {
+          name = "Checkpoint -- captain's deck",
+          enabled = false,
+          start_predicate = function(self, rails, dt)
+            return true
+          end,
+
+          run = function(self, rails, dt)
+            self.enabled = false
+            level.move(State.grids.solids, State.player, Vector({28, 9}))
+          end,
+        },
+      }
     ),
 
     initialize = function(self)

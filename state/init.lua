@@ -1,6 +1,7 @@
 local level = require("tech.level")
 local combat = require("tech.combat")
 local mech = require("mech")
+local sprite = require("tech.sprite")
 
 
 local module, module_mt, static = Module("state")
@@ -132,6 +133,9 @@ module_mt.__call = function(_, systems, debug_mode)
       end
 
       self.gui.sidebar:create_gui_entities()
+      self.background_dummy = State:add({
+        sprite = sprite.image("assets/sprites/water_sketch_02.png"),
+      })
     end,
 
     get_mode = function(self)
