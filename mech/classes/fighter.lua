@@ -1,6 +1,6 @@
 local class = require("mech.class")
 local perk = require("mech.perk")
-local ability = require("mech.ability")
+local abilities = require("mech.abilities")
 local fx = require("tech.fx")
 local healing = require("mech.healing")
 
@@ -9,7 +9,7 @@ local fighter, module_mt, static = Module("mech.classes.fighter")
 
 fighter.second_wind = static {
   codename = "second_wind",
-  get_availability = function(self, entity)
+  get_availabilities = function(self, entity)
     return entity.hp < entity:get_max_hp()
       and entity.resources.bonus_actions > 0
       and entity.resources.second_wind > 0
@@ -24,7 +24,7 @@ fighter.second_wind = static {
 
 fighter.action_surge = static {
   codename = "action_surge",
-  get_availability = function(self, entity)
+  get_availabilities = function(self, entity)
     return entity.resources.action_surge > 0
   end,
   _run = function(self, entity)
@@ -65,7 +65,7 @@ fighter.fighting_style = static(perk.choice({
       if not weapon or slot ~= "other_hand" then
         return roll
       end
-      return roll + ability.get_melee_modifier(entity, slot)
+      return roll + abilities.get_melee_modifier(entity, slot)
     end,
   },
 }))

@@ -1,6 +1,6 @@
 local level = require("state.level")
 local combat = require("tech.combat")
-local ability = require("mech.ability")
+local abilities = require("mech.abilities")
 local sprite = require("tech.sprite")
 
 
@@ -169,7 +169,7 @@ module_mt.__call = function(_, systems, debug_mode)
       end
 
       Fun.iter(list):each(function(e)
-        e.current_initiative = (D(20) + ability.get_modifier(e.abilities.dex)):roll()
+        e.current_initiative = (D(20) + abilities.get_modifier(e.abilities.dex)):roll()
       end)
 
       Tablex.concat(list, -Query(State.combat):iter_entities_only():totable())

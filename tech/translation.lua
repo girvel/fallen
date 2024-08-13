@@ -3,7 +3,7 @@ local feats = require("mech.feats")
 
 
 return Module("tech.translation", {
-  ability = {
+  abilities = {
     str = "сила",
     dex = "ловкость",
     con = "телосложение",

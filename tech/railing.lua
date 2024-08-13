@@ -1,8 +1,6 @@
-local random = require("utils.random")
-local sound = require("tech.sound")
 local fx = require("tech.fx")
 local hostility = require("mech.hostility")
-local ability = require("mech.ability")
+local abilities = require("mech.abilities")
 local utf8 = require("utf8")
 local translation = require("tech.translation")
 
@@ -78,29 +76,27 @@ railing.api.make_hostile = function(faction, entities)
   hostility.make_hostile(faction)
 end
 
-local ability_check_sound = sound.multiple("assets/sounds/coin_toss", 1)
+railing.api.abilities_check = function(ability, dc)
+  local success = abilities.check(State.player, ability, dc)
 
-railing.api.ability_check = function(ability, dc)
-  State.audio:play_static(random.choice(ability_check_sound))
-  local roll = State.player.abilities[ability]
-    and D(20) + ability.get_modifier(State.player.abilities[ability])
-    or State.player.skill_throws[ability]
+  railing.api.message('<span color="%s">[%s]</span>' % {
+    success and Colors.hex.green or Colors.hex.red,
+    (translation.abilities[ability] or translation.skill[ability]):upper(),
+  })
 
-  if not roll then
-    error("No ability or skill %s" % ability, 2)
-  end
-
-  return roll:roll() >= dc
+  return success
 end
 
-railing.api.ability_check_message = function(ability, dc, content_success, content_failure)
-  local success = railing.api.ability_check(ability, dc)
+railing.api.abilities_check_message = function(ability, dc, content_success, content_failure)
+  local success = abilities.check(State.player, ability, dc)
 
   railing.api.message('<span color="%s">[%s]</span> %s' % {
     success and Colors.hex.green or Colors.hex.red,
-    (translation.ability[ability] or translation.skill[ability]):upper(),
+    (translation.abilities[ability] or translation.skill[ability]):upper(),
     success and content_success or content_failure,
   })
+
+  return success
 end
 
 railing.api.message = function(content)

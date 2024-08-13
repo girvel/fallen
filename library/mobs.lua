@@ -1,7 +1,7 @@
 local humanoid = require("mech.humanoid")
 local interactive = require("tech.interactive")
 local items = require("library.items")
-local ability = require("mech.ability")
+local abilities = require("mech.abilities")
 local races = require("mech.races")
 local constants = require("mech.constants")
 local engineer_ai = require("library.engineer_ai")
@@ -24,7 +24,7 @@ local dreamer_engineer_mixin = function()
     engineer_mixin(),
     {
       max_hp = 22,
-      abilities = ability(16, 14, 12, 8, 8, 8),
+      abilities = abilities(16, 14, 12, 8, 8, 8),
       faction = "dreamers_detective",
     }
   )
@@ -63,7 +63,7 @@ module[3] = function()
     inventory = {gloves = items.yellow_gloves()},
     faction = "half_orc",
 
-    abilities = ability(18, 6, 12, 8, 8, 8),
+    abilities = abilities(18, 6, 12, 8, 8, 8),
     save_proficiencies = {dex = true},
 
     interacted_by = nil,
@@ -98,7 +98,7 @@ module.dreamer = function()
     direction = "up",
     inventory = {},
     max_hp = 15,
-    abilities = ability(10, 10, 10, 10, 10, 10),
+    abilities = abilities(10, 10, 10, 10, 10, 10),
     faction = "dreamers_detective",
   })
 end

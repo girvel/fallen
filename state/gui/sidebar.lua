@@ -193,7 +193,7 @@ return Module("state.gui.sidebar", function()
         Fun.iter(hotkeys_table)
           :map(function(t)
             return {
-              t.data.action and not t.data.action:get_availability(State.player)
+              t.data.action and not t.data.action:get_availabilities(State.player)
                 and COLOR.INACTIVE
                 or Colors.white,
               "\n  [%s] - %s" % {table.concat(t.keys, "/"), Common.get_name(t.data)},

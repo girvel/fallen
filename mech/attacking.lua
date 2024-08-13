@@ -35,12 +35,12 @@ attacking.attack = function(entity, target, attack_roll, damage_roll)
   return true
 end
 
-attacking.attack_save = function(target, ability, save_dc, damage_roll)
-  local save = -Query(target).saving_throws[ability]:roll()
+attacking.attack_save = function(target, abilities, save_dc, damage_roll)
+  local save = -Query(target).saving_throws[abilities]:roll()
   if not save then return false end
 
   Log.info("%s rolls %s save %s against %s" % {
-    Common.get_name(target), ability, save, save_dc
+    Common.get_name(target), abilities, save, save_dc
   })
 
   if save >= save_dc then

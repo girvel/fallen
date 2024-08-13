@@ -1,5 +1,5 @@
 local special = require("tech.special")
-local ability = require("mech.ability")
+local abilities = require("mech.abilities")
 local attacking = require("mech.attacking")
 local items = require("library.items")
 local item = require("tech.item")
@@ -19,7 +19,7 @@ return function()
 
       run = function(self, rails, dt)
         self.enabled = false
-        api.ability_check_message("investigation", 10,
+        api.abilities_check_message("investigation", 10,
           "Темные пятна на стенах и потолке могут указывать на проблемы с вентиляцией и серьезные утечки воды.",
           "Тёмные пятна на полу и потолке складываются в гротескные узоры."
         )
@@ -62,7 +62,7 @@ return function()
       run = function(self, rails, dt)
         self.enabled = false
         State.player:rotate("up")
-        api.ability_check_message("investigation", 10,
+        api.abilities_check_message("investigation", 10,
           "Когда ты прищуриваешься, хаотичный узор из царапин на столе начинает напоминать тропический остров с пальмами, солнцем и счастливой семьей.",
           "Какой-то психопат порядочно поиздевался над столом."
         )
@@ -114,7 +114,7 @@ return function()
             "*уйти*",
           }) == 1
         then
-          if api.ability_check("sleight_of_hand", 12) then
+          if api.abilities_check("sleight_of_hand", 12) then
             api.narration("Ты аккуратно заводишь пальцы за звенящий участок трубы и достаешь застрявший острый предмет.")
             item.drop(State.player, "main_hand")
             item.give(State.player, State:add(items.knife()))
@@ -144,7 +144,7 @@ return function()
         self.enabled = false
         State.player:rotate("up")
         api.narration("Здесь повесилась мышь. Забавно.")
-        api.ability_check_message("nature", 14,
+        api.abilities_check_message("nature", 14,
           "Животные ощущают наш мир лучше, чем люди. Мышь, должно быть, предчувствовала что-то ужасное. Может мне тоже начать бояться?",
           "У меня нет объяснений этому явлению"
         )
@@ -251,7 +251,7 @@ return function()
         self.enabled = false
         api.narration("На обложке цветной газеты красуется очень реалистичное изображение накачанных мужчин.")
         api.narration("Их физическая форма впечатляет, но они зачем-то оделись в нелепые тесные костюмы.")
-        api.ability_check_message("religion", 8,
+        api.abilities_check_message("religion", 8,
           "Закрепленное белое нечто за спинами мужчин очень уж напоминает крылья. А эти подвязки… Да эти атлеты без сомнений изображают ангелов! Мда уж, безвкусица.",
           "Интересно, через какие тренировки прошли эти атлеты? Такое упорство внушает уважение!"
         )
@@ -269,7 +269,7 @@ return function()
         self.enabled = false
         api.narration("Десятки вскрытых металлических банок грудой навалены в мусорное ведро.")
         api.narration("Внутренняя поверхность каждой полностью вычищена, крысам ничего не достанется.")
-        api.ability_check_message("history", 10,
+        api.abilities_check_message("history", 10,
           "Взгляд останавливается на выбитых в металле знаках: “Упаковано в 221 году З.Э. город Сент-Целест”. Эта банка встречала Мировую Войну.",
           "Взгляд останавливается на этикетке с изображением пышногрудой воительницы. Как оно связано с содержанием консервы?"
         )
@@ -294,13 +294,13 @@ return function()
         api.line(rails.entities.cook, "Ещё не готово, подходи к обеду")
 
         -- TODO display this!
-        if api.ability_check("cha", 14) then
+        if api.abilities_check("cha", 14) then
           api.narration("Твоё нутро издаёт громкий голодный звук.")
           api.narration("После этого старик берёт с полки металлическую кружку и зачерпывает в неё рагу.")
           api.line(rails.entities.cook, "Держи, грешно оставлять голодную душу")
 
           -- TODO as temporary effect
-          local d = math.max(1, ability.get_modifier(State.player.abilities.con))
+          local d = math.max(1, abilities.get_modifier(State.player.abilities.con))
           State.player.hp = State.player.hp + d
           State:add(special.floating_damage("+" .. d, State.player.position, Colors.green))
 

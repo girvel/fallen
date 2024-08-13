@@ -1,7 +1,7 @@
 local level = require("state.level")
 local attacking = require("mech.attacking")
 local random = require("utils.random")
-local ability = require("mech.ability")
+local abilities = require("mech.abilities")
 local hostility = require("mech.hostility")
 local interactive = require("tech.interactive")
 local combat = require("tech.combat")
@@ -15,9 +15,9 @@ actions.get_melee_attack_roll = function(entity, slot)
 
   local weapon = entity.inventory[slot]
   if not weapon then
-    roll = roll + ability.get_modifier(entity.abilities.str)
+    roll = roll + abilities.get_modifier(entity.abilities.str)
   else
-    roll = roll + weapon.bonus + ability.get_melee_modifier(entity, slot)
+    roll = roll + weapon.bonus + abilities.get_melee_modifier(entity, slot)
   end
 
   return entity:get_effect("modify_attack_roll", roll)
@@ -26,7 +26,7 @@ end
 actions.get_melee_damage_roll = function(entity, slot)
   local weapon = entity.inventory[slot]
   if not weapon then
-    return D.roll({}, ability.get_modifier(entity.abilities.str))
+    return D.roll({}, abilities.get_modifier(entity.abilities.str))
   end
 
   local roll
@@ -39,7 +39,7 @@ actions.get_melee_damage_roll = function(entity, slot)
   roll = roll + weapon.bonus
 
   if slot == "main_hand" then
-    roll = roll + ability.get_melee_modifier(entity, slot)
+    roll = roll + abilities.get_melee_modifier(entity, slot)
   end
 
   return entity:get_effect("modify_damage_roll", roll, slot)
@@ -72,7 +72,7 @@ end
 
 actions.hand_attack = static {
   codename = "hand_attack",
-  get_availability = function(self, entity)
+  get_availabilities = function(self, entity)
     local target = State.grids.solids:safe_get(entity.position + Vector[entity.direction])
     return entity.resources.actions > 0 and -Query(target).hp
   end,
@@ -86,7 +86,7 @@ actions.hand_attack = static {
 
 actions.other_hand_attack = static {
   codename = "other_hand_attack",
-  get_availability = function(self, entity)
+  get_availabilities = function(self, entity)
     local target = State.grids.solids:safe_get(entity.position + Vector[entity.direction])
     return entity.resources.bonus_actions > 0 and -Query(target).hp and entity.inventory.other_hand
   end,
@@ -100,7 +100,7 @@ actions.other_hand_attack = static {
 
 actions.move = static {
   codename = "move",
-  get_availability = function(self, entity)
+  get_availabilities = function(self, entity)
     return entity.resources.movement > 0
   end,
   _run = function(_, entity)
@@ -141,7 +141,7 @@ actions.move = static {
 
 actions.dash = static {
   codename = "dash",
-  get_availability = function(self, entity)
+  get_availabilities = function(self, entity)
     return entity.resources.actions > 0
   end,
   _run = function(_, entity)
@@ -152,7 +152,7 @@ actions.dash = static {
 
 actions.interact = static {
   codename = "interact",
-  get_availability = function(self, entity)
+  get_availabilities = function(self, entity)
     return entity.resources.bonus_actions > 0
       and interactive.get_for(entity)
   end,
@@ -169,7 +169,7 @@ actions.interact = static {
 
 actions.finish_turn = static {
   codename = "finish_turn",
-  get_availability = function() return true end,
+  get_availabilities = function() return true end,
   _run = function(_, entity)
     return combat.TURN_END_SIGNAL
     -- TODO maybe discard that and use a direct call to State.combat?
