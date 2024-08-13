@@ -1,3 +1,4 @@
+local things = require("library.things")
 local pipes = require("library.pipes")
 local decorations = require("library.decorations")
 local walls = require("library.walls")
@@ -105,14 +106,15 @@ return function()
       self.entities.neighbour:rotate("up")
       self.entities.upper_bunk:lie(self.entities.neighbour)
 
-      State:add(Tablex.extend(walls.steel_with_map(), {position = Vector({10, 90})}))
-      State:add(Tablex.extend(decorations.scratched_table(), {position = Vector({45, 91})}))
-      State:add(Tablex.extend(decorations.empty_bed(), {position = Vector({23, 67})}))
-      State:add(Tablex.extend(walls.steel_with_sign(), {position = Vector({27, 90})}))
+      State:add(walls.steel_with_map(), {position = Vector({10, 90})})
+      State:add(decorations.scratched_table(), {position = Vector({45, 91})})
+      State:add(decorations.empty_bed(), {position = Vector({23, 67})})
+      State:add(walls.steel_with_sign(), {position = Vector({27, 90})})
       self.entities.colored_pipe = State:add(Tablex.extend(
         pipes.colored(),
         {position = Vector({27, 95})}
       ))
+      State:add(things.magazine(), {position = Vector({24, 105})})
     end,
   })
 end

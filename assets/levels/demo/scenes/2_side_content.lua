@@ -206,7 +206,7 @@ return function()
       name = "Exit latrine",
       enabled = false,
       start_predicate = function(self, rails, dt)
-        return not rails:is_running("exit_latrine")
+        return not rails:is_running(self)
           and not rails.tolerates_latrine
           and State.player.position == rails.positions.exit_latrine
       end,

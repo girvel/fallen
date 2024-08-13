@@ -169,7 +169,7 @@ end
 --             if State.grids.solids:safe_get(v) == nil then break end
 --           end
 -- 
---           local bat = State:add(Tablex.extend(module.bat(), {position = v}))
+--           local bat = State:add(module.bat(), {position = v})
 --           bat:animate("appear")
 --           table.insert(bats, bat)
 --         end

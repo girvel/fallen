@@ -7,7 +7,7 @@ local level = require("state.level")
 local decorations, module_mt, static = Module("library.decorations")
 
 local decorations_atlas = "assets/sprites/atlases/decorations.png"
-Tablex.extend(decorations, factoring.from_atlas(decorations_atlas, {
+factoring.from_atlas(decorations, decorations_atlas, {
   view = "scene",
   layer = "solids",
   transparent_flag = true,
@@ -18,7 +18,7 @@ Tablex.extend(decorations, factoring.from_atlas(decorations_atlas, {
   "table_up", false, "stool", "sofa", "countertop_left", "bed", "sink", "countertop_right",
   "table_ver", "steel_wall_window", "steel_wall_transparent", "scratched_table", "countertop_left_corner_down", "countertop", "empty_bed", "countertop_right_corner_down",
   "table_down", false, false, false, "countertop_left_corner_up", false, false, "countertop_right_corner_up",
-}))
+})
 
 factoring.extend(decorations, "device_panel", {
   hp = 1,
@@ -27,7 +27,7 @@ factoring.extend(decorations, "device_panel", {
     hit = sound.multiple("assets/sounds/glass_breaking", 0.5),
   },
   on_remove = function(self)
-    State:add(Tablex.extend(decorations.device_panel_broken(), {position = self.position}))
+    State:add(decorations.device_panel_broken(), {position = self.position})
   end,
 })
 

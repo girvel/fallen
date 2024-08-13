@@ -42,7 +42,8 @@ module_mt.__call = function(_, systems, debug_mode)
       love.graphics.setShader(-Query(shader).love_shader)
     end,
 
-    add = function(self, entity)
+    add = function(self, entity, ...)
+      Tablex.extend(entity, ...)
       self.world:add(entity)
       self.entities[entity] = true
       if entity.position and entity.layer then

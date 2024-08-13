@@ -3,8 +3,7 @@ local sprite = require("tech.sprite")
 
 local factoring, module_mt, static = Module("tech.factoring")
 
-factoring.from_atlas = function(atlas, mixin, names)
-  local result = {}
+factoring.from_atlas = function(t, atlas, mixin, names)
   for i, name in ipairs(names) do
     if name then
       local current_mixin
@@ -13,7 +12,7 @@ factoring.from_atlas = function(atlas, mixin, names)
       else
         current_mixin = mixin
       end
-      result[name] = function()
+      t[name] = function()
         return Tablex.extend({
           sprite = sprite.from_atlas(atlas, i),
           codename = name,
@@ -21,7 +20,6 @@ factoring.from_atlas = function(atlas, mixin, names)
       end
     end
   end
-  return result
 end
 
 factoring.extend = function(t, k, ...)

@@ -8,9 +8,9 @@ local factoring = require("tech.factoring")
 
 
 local pipes, pipes_mt, static = Module("library.pipes")
-
 local atlas = "assets/sprites/atlases/pipes.png"
-Tablex.extend(pipes, factoring.from_atlas(atlas, {
+
+factoring.from_atlas(pipes, atlas, {
   layer = "solids",
   view = "scene",
   transparent_flag = true,
@@ -20,7 +20,7 @@ Tablex.extend(pipes, factoring.from_atlas(atlas, {
   "left_down", "forward_down", "right_down", "back_down",
   "T_up", "T_left", "T_down", "T_right",
   "x", "colored",
-}))
+})
 
 local valve_rotating_sounds = sound.multiple("assets/sounds/valve_rotate", 0.1)
 local pipe_valve_pack = animated.load_pack("assets/sprites/pipe_valve")

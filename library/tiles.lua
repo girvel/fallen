@@ -9,16 +9,15 @@ local move_sounds = {
   walkway = sound.multiple("assets/sounds/move_walkway", 0.1),
 }
 
-Tablex.extend(tiles, factoring.from_atlas("assets/sprites/atlases/tiles.png",
+factoring.from_atlas(tiles, "assets/sprites/atlases/tiles.png",
   function(name) return {
     view = "scene",
     layer = "tiles",
     sounds = {move = move_sounds[name]},
   } end,
   {
-    "steel_floor", "walkway", "planks", "toilet",
-    "steel_floor_dirty",
+    "steel_floor", "walkway", "planks", "steel_floor_dirty",
   }
-))
+)
 
 return tiles

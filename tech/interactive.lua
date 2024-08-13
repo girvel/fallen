@@ -19,7 +19,7 @@ module_mt.__call = function(_, callback, disable_highlight)
     was_interacted_with = false,
     on_add = function(self)
       if not disable_highlight then
-        self._highlight = State:add(Tablex.extend(special.highlight(), {position = self.position}))
+        self._highlight = State:add(special.highlight(), {position = self.position})
         State:add_dependency(self, self._highlight)
       end
     end,

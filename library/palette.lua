@@ -1,3 +1,4 @@
+local things = require("library.things")
 local live = require("library.live")
 local mobs = require("library.mobs")
 local items = require("library.items")
@@ -13,8 +14,8 @@ local walls_set = Common.set("WM")
 local countertop_set = Common.set("rU")
 
 return Module("library.palette", {
-  transparents = Common.set("D@gr>v<^\\/FB}{T+o01234LpPtkKba$HuUOSsQhbs|dmRA"),
-  throwables = Common.set("_,-.l'"),
+  transparents = Common.set("D@gr>v<^\\/FB}{T+o01234LpPtkKba$HuUOSsQhbs|dmRAl"),
+  throwables = Common.set("_,-.'"),
   factories = {
     ["@"] = player,
 
@@ -22,8 +23,10 @@ return Module("library.palette", {
     _ = tiles.planks,
     [","] = tiles.walkway,
     ["-"] = tiles.steel_floor,
-    l = tiles.toilet,
     ["'"] = tiles.steel_floor_dirty,
+
+    -- things --
+    l = things.toilet,
 
     -- solids --
     M = walls.steel_with_mirror,
