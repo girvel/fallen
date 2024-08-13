@@ -99,4 +99,8 @@ common.loop = function(v, loop)
   return (v - 1) % loop + 1
 end
 
+common.last = function(t)
+  return t[#t]
+end
+
 return common

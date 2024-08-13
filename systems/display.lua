@@ -7,6 +7,8 @@ local sprite = require("tech.sprite")
 local default_font = love.graphics.newFont("assets/fonts/joystix.monospace-regular.otf", 12)
 default_font:setLineHeight(1.2)
 
+local hint_font = love.graphics.newFont("assets/fonts/joystix.monospace-regular.otf", 20)
+
 local display, _, static = Module("systems.display")
 
 display.system = static(Tiny.sortedProcessingSystem({
@@ -207,8 +209,9 @@ display.system = static(Tiny.sortedProcessingSystem({
     end
     local mode = State:get_mode()
     if mode == "text_input" then return State.gui.text_input:display() end
-    if Tablex.contains({"reading"}, mode) or State.shader or State.gui.disable_ui then return end
     if mode == "death" then return self:_display_death_message() end
+    self:_display_hint()
+    if Tablex.contains({"reading"}, mode) or State.shader or State.gui.disable_ui then return end
     self:_display_text_info()
   end,
 
@@ -243,6 +246,17 @@ display.system = static(Tiny.sortedProcessingSystem({
       love.graphics.getWidth() - State.gui.sidebar.W, 115,
       State.gui.sidebar.W - 15
     )
+  end,
+
+  _display_hint = function(self)
+    local content = State.gui.sidebar:get_hint()
+    local x = (love.graphics.getWidth() - hint_font:getWidth(content)) / 2
+    local y = love.graphics.getHeight() - hint_font:getHeight() - 50
+
+    love.graphics.setColor(Colors.black)
+    love.graphics.rectangle("fill", x, y, hint_font:getWidth(content), hint_font:getHeight())
+    love.graphics.setColor(Colors.absolute_white)
+    love.graphics.print({Colors.gray, content}, hint_font, x, y)
   end,
 }))
 

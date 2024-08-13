@@ -115,6 +115,18 @@ return Module("state.gui.sidebar", function()
       self._notification_lifetime = 0
     end,
 
+    hint_override = nil,
+
+    get_hint = function(self)
+      if self.hint_override then return self.hint_override end
+      if not Tablex.contains({"free", "fight"}, State:get_mode()) then return "" end
+      local interaction = interactive.get_for(State.player)
+      if interaction then
+        return "[E] для взаимодействия с " .. Common.get_name(interaction)
+      end
+      return ""
+    end,
+
     get_text = function(self)
       local result = {}
 
@@ -217,13 +229,6 @@ return Module("state.gui.sidebar", function()
             end)
             :reduce(Tablex.concat, {})
         )
-      end
-
-      if State.player then
-        local interaction = interactive.get_for(State.player)
-        if interaction then
-          append({Colors.white, "\n\nСмотрит на " .. Common.get_name(interaction)})
-        end
       end
 
       return result

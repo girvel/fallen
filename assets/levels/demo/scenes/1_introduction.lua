@@ -20,7 +20,9 @@ return function()
         State.player.fov_radius = 0
         State.player.in_cutscene = true
 
-        api.narration('... никогда не забуду тебя ненавидеть\n\n\t\t<span color="8b7c99">[Пробел]</span>')
+        State.gui.sidebar.hint_override = "[пробел]"
+        api.narration('... никогда не забуду тебя ненавидеть')
+        State.gui.sidebar.hint_override = nil
         api.narration("...")
         api.narration("... не забуду тебя ненавидеть")
         api.narration("... не на ви деть")
@@ -175,6 +177,24 @@ return function()
         api.line(State.player, "Возможно, следует вернуться к той записке на столе")
         api.line(State.player, "Кто-то оставил её для меня")
         State.player.in_cutscene = false
+      end,
+    },
+
+    {
+      name = "Player reads the note",
+      enabled = true,
+      start_predicate = function(self, rails, dt)
+        return rails.entities.note.interacted_by == State.player
+      end,
+
+      run = function(self, rails, dt)
+        self.enabled = false
+        api.discover_wiki({colleague_note = true})
+        State.gui.sidebar.hint_override = "Нажмите [K] чтобы открыть кодекс"
+        while Common.last(State.gui.wiki.history) ~= "codex" and not Common.period(10, self) do
+          coroutine.yield()
+        end
+        State.gui.sidebar.hint_override = nil
       end,
     },
 

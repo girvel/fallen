@@ -11,11 +11,10 @@ local interactive = require("tech.interactive")
 local sprite = require("tech.sprite")
 
 
-local note = function(page_table)
+local note = function()
   return Tablex.extend(
-    interactive(function(self)
-      api.discover_wiki(page_table)
-      api.message("Нажмите [K] чтобы открыть кодекс")
+    interactive(function(self, other)
+      self.interacted_by = other
       State:remove(self)
     end),
     {
@@ -82,7 +81,7 @@ return function()
         State.grids.solids[Vector({23, 48})],
         leaking_valve = State.grids.solids[Vector({22, 55})],
         note = State:add(Tablex.extend(
-          note({colleague_note = true}),
+          note(),
           {position = Vector({19, 78})}
         )),
         detective_door = State:add(Tablex.extend(

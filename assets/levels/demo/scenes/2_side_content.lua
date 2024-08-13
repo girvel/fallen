@@ -296,6 +296,8 @@ return function()
 
       run = function(self, rails, dt)
         self.enabled = false
+        rails.entities.cook.interact = nil
+
         api.narration("С недюжим усердием широкоплечий старик перемешивает рагу в гигантской кастрюле.")
         api.narration("Запах тысячи специй мгновенно забивает рецепторы.")
         api.narration("Сладкое, острое, соленое, доброе, цветное - в этом вареве есть всё.")
