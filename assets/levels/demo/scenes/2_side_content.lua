@@ -208,7 +208,8 @@ return function()
       name = "Exit latrine",
       enabled = false,
       start_predicate = function(self, rails, dt)
-        return not rails:is_running(self)
+        return not rails:is_running("exit_latrine")
+          and State.shader
           and not rails.tolerates_latrine
           and State.player.position == rails.positions.exit_latrine
       end,
@@ -217,7 +218,6 @@ return function()
         if not rails.been_to_latrine then
           State.player.in_cutscene = true
           State:set_shader()
-          self.enabled = false
 
           api.narration("Ты не можешь контролировать свой желудок…")
           api.narration("И выпускаешь его содержимое наружу.")
@@ -232,7 +232,6 @@ return function()
           rails.been_to_latrine = true
           State.player.in_cutscene = false
           State:set_shader(shaders.latrine)
-          self.enabled = true
         end
 
         api.wait_seconds(10)
