@@ -34,7 +34,7 @@ pipes.valve = function(leaking_pipe_position)
       State.audio:play(self, random.choice(valve_rotating_sounds), "medium")
       self:when_animation_ends(function()
         target.overflow_counter = 0
-        target:burst_with_steam()
+        pipes.burst_with_steam(target)
       end)
     end, true),
     {
@@ -94,8 +94,13 @@ pipes.burst_with_steam = Dump.ignore_upvalue_size .. function(pipe)
   State.audio:play(pipe, steam_hissing_sound:clone())
 end
 
-factoring.extend(pipes, "horizontal_colored", interactive(function(self)
-  self.interacted_with = true
-end))
+factoring.extend(pipes, "colored",
+  interactive(function(self)
+    self.interacted_with = true
+  end, true),
+  {
+    name = "Необычная труба",
+  }
+)
 
 return pipes

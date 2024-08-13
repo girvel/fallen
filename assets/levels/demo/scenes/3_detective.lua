@@ -1,3 +1,4 @@
+local pipes = require("library.pipes")
 local api = require("tech.railing").api
 local actions = require("mech.creature.actions")
 local random = require("utils.random")
@@ -49,7 +50,7 @@ return function()
         api.line(State.player, "(Надеюсь, они видели или слышали что-то необычное)")
 
         rails.entities.leaking_valve.paused = false
-        rails.entities.leaking_valve:burst_with_steam()
+        pipes.burst_with_steam(rails.entities.leaking_valve)
         api.narration("Мощный поток горячего пара от ближайшей трубы прерывает твои мысли")
         State.player.in_cutscene = false
       end,

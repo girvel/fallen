@@ -16,6 +16,7 @@ module.drop = function(parent, slot)
   if not drop_position then return end
 
   local item = parent.inventory[slot]
+  if not item then return true end
   parent.inventory[slot] = nil
   item.position = drop_position
   State:refresh(item)

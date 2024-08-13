@@ -107,23 +107,23 @@ return function()
         api.narration("Эта труба звучит как-то по-иному.")
 
         if api.options({
-            "*Обследовать подозрительную трубу*",
+            "[Ловкость рук] *Обследовать подозрительную трубу*",
             "*уйти*",
-          }) == 2
+          }) == 1
         then
           if api.ability_check("sleight_of_hand", 12) then
             api.narration("Ты аккуратно заводишь пальцы за звенящий участок трубы и достаешь застрявший острый предмет.")
             item.drop(State.player, "main_hand")
-            State.player.main_hand = items.dagger()  -- TODO knife
+            item.give(State.player, State:add(items.knife()))
             api.narration("Это пыльный наточенный нож, кто-то из прошлого спрятал его здесь.")
             api.narration("Зачем?")
           else
-            api.narration("")
+            api.narration("Ты несколько раз постукиваешь по трубе, пытаясь понять природу искаженного звука.")
             pipes.burst_with_steam(rails.entities.colored_pipe)
-            api.narration("")
-            api.narration("")
+            api.narration("Вдруг резкий поток пара бьёт тебя прямо в лицо.")
+            api.narration("Да, не стоит лишний раз совать пальцы куда попало.")
           end
-          self.enabled = false
+          rails.entities.colored_pipe.interact = nil
         end
 
         State.player.in_cutscene = false

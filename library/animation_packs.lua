@@ -36,6 +36,7 @@ local big_weapon_anchors = {
 
 animation_packs.rapier = animated.load_pack("assets/sprites/rapier", small_weapon_anchors)
 animation_packs.dagger = animated.load_atlas_pack("assets/sprites/dagger", small_weapon_anchors)
+animation_packs.knife = animated.load_atlas_pack("assets/sprites/knife", small_weapon_anchors)
 animation_packs.machete = animated.load_atlas_pack("assets/sprites/machete", small_weapon_anchors)
 animation_packs.greatsword = animated.load_pack("assets/sprites/greatsword", big_weapon_anchors)
 animation_packs.pole = animated.load_atlas_pack("assets/sprites/pole", big_weapon_anchors)

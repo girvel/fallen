@@ -64,7 +64,7 @@ return Module("state.gui.sidebar", function()
       local hp_bar = self.hp_bar
       hp_bar.sprite.quad = love.graphics.newQuad(
         0, 0,
-        hp_bar.sprite.image:getWidth() * State.player.hp / State.player:get_max_hp(),
+        hp_bar.sprite.image:getWidth() * math.min(1, State.player.hp / State.player:get_max_hp()),
         hp_bar.sprite.image:getHeight(),
         hp_bar.sprite.image:getDimensions()
       )

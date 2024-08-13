@@ -8,6 +8,23 @@ local sprite = require("tech.sprite")
 
 local module, _, static = Module("library.items")
 
+module.knife = function()
+  return Tablex.extend(
+    item.mixin(),
+    animated(animation_packs.knife),
+    {
+      name = "кухонный нож",
+      damage_roll = D(2),
+      bonus = 1,
+      tags = {
+        finesse = true,
+        light = true,
+      },
+      slot = "hands",
+    }
+  )
+end
+
 module.dagger = function()
   return Tablex.extend(
     item.mixin(),
@@ -21,7 +38,6 @@ module.dagger = function()
         light = true,
       },
       slot = "hands",
-      debug_flag = true,
     }
   )
 end
