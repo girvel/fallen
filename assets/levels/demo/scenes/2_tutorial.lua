@@ -1,4 +1,4 @@
-local level = require("tech.level")
+local level = require("state.level")
 local api = require("tech.railing").api
 local shaders = require("tech.shaders")
 
@@ -12,7 +12,7 @@ return function()
 
       run = function(self, rails, dt)
         self.enabled = false
-        level.move(State.grids.solids, State.player, Vector({32, 97}))
+        level.move(State.player, Vector({32, 97}))
       end,
     },
 

@@ -1,6 +1,6 @@
 local interactive = require("tech.interactive")
 local animated = require("tech.animated")
-local level = require("tech.level")
+local level = require("state.level")
 local sprite = require("tech.sprite")
 local sound = require("tech.sound")
 local railing = require("tech.railing")
@@ -58,7 +58,7 @@ for _, prefix in ipairs({"", "black_"}) do
           self:animate("open")
           self:when_animation_ends(function(_)
             self.animation.pack = open_door_pack
-            level.change_layer(State.grids, self, "above_solids")
+            level.change_layer(self, "above_solids")
             self.is_open = true
           end)
         end,

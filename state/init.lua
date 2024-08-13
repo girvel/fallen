@@ -1,4 +1,4 @@
-local level = require("tech.level")
+local level = require("state.level")
 local combat = require("tech.combat")
 local mech = require("mech")
 local sprite = require("tech.sprite")
@@ -46,7 +46,7 @@ module_mt.__call = function(_, systems, debug_mode)
       self.world:add(entity)
       self.entities[entity] = true
       if entity.position and entity.layer then
-        level.put(self.grids, entity)
+        level.put(entity)
       end
       if entity.inventory then
         Fun.iter(entity.inventory)
@@ -69,7 +69,7 @@ module_mt.__call = function(_, systems, debug_mode)
       self.world:remove(entity)
       self.entities[entity] = nil
       if entity.position and entity.layer then
-        level.remove(self.grids, entity)
+        level.remove(entity)
       end
       if self.combat then
         self.combat:remove(entity)

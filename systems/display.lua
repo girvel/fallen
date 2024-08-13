@@ -1,4 +1,4 @@
-local level = require("tech.level")
+local level = require("state.level")
 local tcod = require("lib.tcod")
 local ffi = require("ffi")
 local sprite = require("tech.sprite")

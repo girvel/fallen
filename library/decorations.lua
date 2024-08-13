@@ -1,7 +1,7 @@
 local sprite = require("tech.sprite")
 local sound = require("tech.sound")
 local factoring = require("tech.factoring")
-local level = require("tech.level")
+local level = require("state.level")
 
 
 local decorations, module_mt, static = Module("library.decorations")
@@ -34,8 +34,8 @@ factoring.extend(decorations, "device_panel", {
 for _, name in ipairs({"bed", "upper_bed"}) do
   factoring.extend(decorations, name, {
     lie = function(self, other)
-      level.change_layer(State.grids, other, "above_solids")
-      level.move(State.grids[other.layer], other, self.position)
+      level.change_layer(other, "above_solids")
+      level.move(other, self.position)
       other:animate("lying")
       other:animation_set_paused(true)
     end

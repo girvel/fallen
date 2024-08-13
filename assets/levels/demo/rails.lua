@@ -1,4 +1,5 @@
-local level = require("tech.level")
+local walls = require("library.walls")
+local level = require("state.level")
 local railing = require("tech.railing")
 local api = railing.api
 local live = require("library.live")
@@ -41,7 +42,7 @@ return function()
 
           run = function(self, rails, dt)
             self.enabled = false
-            level.move(State.grids.solids, State.player, Vector({28, 9}))
+            level.move(State.player, Vector({28, 9}))
           end,
         },
       }
@@ -57,9 +58,10 @@ return function()
         enter_latrine = {28, 104},
         exit_latrine = {28, 103},
         beds_check = {11, 73},
+        world_map_message = {11, 91},
       }
 
-      self.positions = Fun.iter(self.positions)
+      self.positions = Fun.pairs(self.positions)
         :map(function(k, v) return k, Vector(v) end)
         :tomap()
 
@@ -93,6 +95,8 @@ return function()
 
       self.entities.neighbour:rotate("up")
       self.entities.upper_bunk:lie(self.entities.neighbour)
+
+      State:add(Tablex.extend(walls.steel_with_map(), {position = Vector({10, 90})}))
     end,
   })
 end

@@ -1,9 +1,10 @@
-local level, _, static = Module("tech.level")
+local level, _, static = Module("state.level")
 
 level.GRID_LAYERS = {"tiles", "items", "fx_behind", "solids", "above_solids", "fx"}
 level.GRID_COMPLEX_LAYERS = {fx_behind = true, fx = true}
 
-level.move = function(grid, entity, position)
+level.move = function(entity, position)
+  local grid = State.grids[entity.layer]
   if not grid:can_fit(position) or grid[position] then return false end
   grid[entity.position] = nil
   grid[position] = entity
@@ -11,7 +12,8 @@ level.move = function(grid, entity, position)
   return true
 end
 
-level.change_layer = function(grids, entity, new_layer)
+level.change_layer = function(entity, new_layer)
+  local grids = State.grids
   if grids[new_layer][entity.position] then return false end
   grids[entity.layer][entity.position] = nil
   grids[new_layer][entity.position] = entity
@@ -19,8 +21,8 @@ level.change_layer = function(grids, entity, new_layer)
   return true
 end
 
-level.put = function(grids, entity)
-  local grid = grids[entity.layer]
+level.put = function(entity)
+  local grid = State.grids[entity.layer]
 
   if level.GRID_COMPLEX_LAYERS[entity.layer] then
     table.insert(grid[entity.position], entity)
@@ -35,8 +37,8 @@ level.put = function(grids, entity)
   grid[entity.position] = entity
 end
 
-level.remove = function(grids, entity)
-  local grid = grids[entity.layer]
+level.remove = function(entity)
+  local grid = State.grids[entity.layer]
   if level.GRID_COMPLEX_LAYERS[entity.layer] then
     return Tablex.remove(grid[entity.position], entity)
   end

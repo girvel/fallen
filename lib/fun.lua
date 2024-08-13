@@ -99,7 +99,9 @@ local map_gen = function(tab, key)
 end
 
 local rawiter = function(obj, param, state)
-    assert(obj ~= nil, "invalid iterator")
+    if obj == nil then
+      error("Can not iterate over nil", 2)
+    end
     if type(obj) == "table" then
         local mt = getmetatable(obj);
         if mt ~= nil then
@@ -130,10 +132,22 @@ local rawiter = function(obj, param, state)
           obj, type(obj)))
 end
 
+local rawpairs = function(obj, param, state)
+    if obj == nil then
+      error("Can not iterate over nil", 2)
+    end
+    return map_gen, obj, nil
+end
+
 local iter = function(obj, param, state)
     return wrap(rawiter(obj, param, state))
 end
 exports.iter = iter
+
+local pairs_ = function(obj, param, state)
+    return wrap(rawpairs(obj, param, state))
+end
+exports.pairs = pairs_
 
 local method0 = function(fun)
     return function(self)

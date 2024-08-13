@@ -1,7 +1,7 @@
 local api = require("tech.railing").api
 local actions = require("mech.creature.actions")
 local random = require("utils.random")
-local level = require("tech.level")
+local level = require("state.level")
 local mech = require("mech")
 local items = require("library.items")
 
@@ -17,7 +17,7 @@ return function()
 
       run = function(self, rails, dt)
         self.enabled = false
-        level.move(State.grids.solids, State.player, Vector({20, 56}))
+        level.move(State.player, Vector({20, 56}))
         api.update_quest({detective = 1})
         rails.entities.detective_door.locked = false
         State.player.experience = mech.experience_for_level[2]

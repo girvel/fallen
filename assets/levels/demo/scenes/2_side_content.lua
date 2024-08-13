@@ -34,6 +34,19 @@ return function()
     },
 
     {
+      name = "4. World map",
+      enabled = true,
+      start_predicate = function(self, rails, dt)
+        return State.player.position == rails.positions.world_map_message
+      end,
+
+      run = function(self, rails, dt)
+        self.enabled = false
+        api.message("На стене висит старая мировая карта. Тяжело различить хоть какой-то текст или даже очертания границ.")
+      end,
+    },
+
+    {
       name = "Enter latrine",
       enabled = true,
       start_predicate = function(self, rails, dt)

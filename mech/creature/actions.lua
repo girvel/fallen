@@ -1,4 +1,4 @@
-local level = require("tech.level")
+local level = require("state.level")
 local attacking = require("mech.attacking")
 local random = require("utils.random")
 local mech = require("mech")
@@ -105,7 +105,7 @@ actions.move = static {
   end,
   _run = function(_, entity)
     local old_position = entity.position
-    if not level.move(State.grids[entity.layer], entity, entity.position + Vector[entity.direction]) then
+    if not level.move(entity, entity.position + Vector[entity.direction]) then
       return false
     end
 
