@@ -1,3 +1,5 @@
+local special = require("tech.special")
+local mech = require("mech")
 local attacking = require("mech.attacking")
 local items = require("library.items")
 local item = require("tech.item")
@@ -173,7 +175,7 @@ return function()
 
       run = function(self, rails, dt)
         self.enabled = false
-        rails.tolerates_latrine = State.player.saving_throws.con:roll() >= -14
+        rails.tolerates_latrine = State.player.saving_throws.con:roll() >= 14
         if rails.tolerates_latrine then
           api.narration("Ты победил.")
           api.narration("Из глаз идут слёзы, в голове жужжание сотен несуществующих мух.")
@@ -253,6 +255,67 @@ return function()
           "Закрепленное белое нечто за спинами мужчин очень уж напоминает крылья. А эти подвязки… Да эти атлеты без сомнений изображают ангелов! Мда уж, безвкусица.",
           "Интересно, через какие тренировки прошли эти атлеты? Такое упорство внушает уважение!"
         )
+      end,
+    },
+
+    {
+      name = "12. The kitchen",
+      enabled = true,
+      start_predicate = function(self, rails, dt)
+        return State.player.position == rails.positions.kitchen_check
+      end,
+
+      run = function(self, rails, dt)
+        self.enabled = false
+        api.narration("Десятки вскрытых металлических банок грудой навалены в мусорное ведро.")
+        api.narration("Внутренняя поверхность каждой полностью вычищена, крысам ничего не достанется.")
+        api.ability_check_message("history", 10,
+          "Взгляд останавливается на выбитых в металле знаках: “Упаковано в 221 году З.Э. город Сент-Целест”. Эта банка встречала Мировую Войну.",
+          "Взгляд останавливается на этикетке с изображением пышногрудой воительницы. Как оно связано с содержанием консервы?"
+        )
+      end,
+    },
+
+    {
+      name = "13. Strange soup",
+      enabled = true,
+      start_predicate = function(self, rails, dt)
+        return rails.entities.cook.interacted_by == State.player
+      end,
+
+      run = function(self, rails, dt)
+        self.enabled = false
+        api.narration("С недюжим усердием широкоплечий старик перемешивает рагу в гигантской кастрюле.")
+        api.narration("Запах тысячи специй мгновенно забивает рецепторы.")
+        api.narration("Сладкое, острое, соленое, доброе, цветное - в этом вареве есть всё.")
+
+        rails.entities.cook:rotate("right")
+        api.narration("Старик оборачивается, замечая твой взгляд.")
+        api.line(rails.entities.cook, "Ещё не готово, подходи к обеду")
+
+        -- TODO display this!
+        if api.ability_check("cha", 14) then
+          api.narration("Твоё нутро издаёт громкий голодный звук.")
+          api.narration("После этого старик берёт с полки металлическую кружку и зачерпывает в неё рагу.")
+          api.line(rails.entities.cook, "Держи, грешно оставлять голодную душу")
+
+          -- TODO as temporary effect
+          local d = math.max(1, mech.get_modifier(State.player.abilities.con))
+          State.player.hp = State.player.hp + d
+          State:add(special.floating_damage("+" .. d, State.player.position, Colors.green))
+
+          rails.entities.cook:rotate("up")
+          api.narration("Аккуратный глоток.")
+          api.narration("На вкус оно так же невероятно, как и на запах.")
+          api.narration("Ещё глоток.")
+          api.narration("Ты удивленно моргаешь, смотря на пустую кружку.")
+          api.narration("Всё приятное так быстро кончается.")
+        else
+          rails.entities.cook:rotate("up")
+          api.narration("Старик отворачивается и продолжает перемешивать кулинарную амальгаму.")
+          api.narration("Такую подозрительную.")
+          api.narration("И такую манящую.")
+        end
       end,
     },
   }

@@ -50,9 +50,7 @@ module.machete = function()
       name = "мачете",
       damage_roll = D(6),
       bonus = 0,
-      tags = {
-        finesse = true,
-      },
+      tags = {},
       slot = "hands",
     }
   )

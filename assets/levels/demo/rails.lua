@@ -1,3 +1,4 @@
+local mobs = require("library.mobs")
 local things = require("library.things")
 local pipes = require("library.pipes")
 local decorations = require("library.decorations")
@@ -67,6 +68,7 @@ return function()
         sign_message = {27, 91},
         mouse_check = {28, 85},
         dirty_magazine = {24, 105},
+        kitchen_check = {23, 102},
       }
 
       self.positions = Fun.pairs(self.positions)
@@ -116,6 +118,9 @@ return function()
         {position = Vector({27, 95})}
       ))
       State:add(things.magazine(), {position = self.positions.dirty_magazine})
+      self.entities.cook = State:add(
+        mobs.dreamer(), interactive.detector(true), {position = Vector({19, 102})}
+      )
     end,
   })
 end
