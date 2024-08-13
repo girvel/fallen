@@ -1,3 +1,6 @@
+local items = require("library.items")
+local item = require("tech.item")
+local pipes = require("library.pipes")
 local shaders = require("tech.shaders")
 local api = require("tech.railing").api
 
@@ -87,6 +90,43 @@ return function()
         self.enabled = false
         State.player:rotate("up")
         api.message("Старый выцветший указатель. Налево - столовая, направо - кают-компания.")
+      end,
+    },
+
+    {
+      name = "8. A pipe",
+      enabled = true,
+      start_predicate = function(self, rails, dt)
+        return rails.entities.colored_pipe.interacted_with
+      end,
+
+      run = function(self, rails, dt)
+        rails.entities.colored_pipe.interacted_with = nil
+        State.player.in_cutscene = true
+
+        api.narration("Эта труба звучит как-то по-иному.")
+
+        if api.options({
+            "*Обследовать подозрительную трубу*",
+            "*уйти*",
+          }) == 2
+        then
+          if api.ability_check("sleight_of_hand", 12) then
+            api.narration("Ты аккуратно заводишь пальцы за звенящий участок трубы и достаешь застрявший острый предмет.")
+            item.drop(State.player, "main_hand")
+            State.player.main_hand = items.dagger()  -- TODO knife
+            api.narration("Это пыльный наточенный нож, кто-то из прошлого спрятал его здесь.")
+            api.narration("Зачем?")
+          else
+            api.narration("")
+            pipes.burst_with_steam(rails.entities.colored_pipe)
+            api.narration("")
+            api.narration("")
+          end
+          self.enabled = false
+        end
+
+        State.player.in_cutscene = false
       end,
     },
 

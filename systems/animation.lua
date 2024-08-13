@@ -7,6 +7,7 @@ animation.system = static(Tiny.processingSystem({
   base_callback = "update",
   filter = Tiny.requireAll("animation"),
   process = function(_, entity, event)
+    if entity.debug_flag then Log.trace(1) end
     local dt = unpack(event)
     local this_animation = entity.animation
     if this_animation.paused then return end

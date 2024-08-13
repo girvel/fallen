@@ -1,3 +1,5 @@
+local item = require("tech.item")
+local items = require("library.items")
 local railing = require("tech.railing")
 local sprite = require("tech.sprite")
 local api = railing.api
@@ -16,7 +18,7 @@ return function()
 
         run = function(self, rails, dt)
           self.enabled = false
-          State.player.experience = 5000
+          item.give(State.player, State:add(items.dagger()))
         end,
       },
 

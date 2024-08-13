@@ -21,6 +21,7 @@ module.dagger = function()
         light = true,
       },
       slot = "hands",
+      debug_flag = true,
     }
   )
 end

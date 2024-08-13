@@ -19,7 +19,7 @@ Tablex.extend(pipes, factoring.from_atlas(atlas, {
   "left_back", "forward_left", "right_forward", "back_right",
   "left_down", "forward_down", "right_down", "back_down",
   "T_up", "T_left", "T_down", "T_right",
-  "x",
+  "x", "colored",
 }))
 
 local valve_rotating_sounds = sound.multiple("assets/sounds/valve_rotate", 0.1)
@@ -47,8 +47,6 @@ pipes.valve = function(leaking_pipe_position)
   )
 end
 
-local steam_hissing_sound = sound.multiple("assets/sounds/steam_hissing.wav", 0.8)[1]
-
 pipes.leaking_left_down = function()
   local hissing_sound = sound.multiple("assets/sounds/steam_hissing_loop.wav", 1)[1]
   hissing_sound.source:setLooping(true)
@@ -72,7 +70,7 @@ pipes.leaking_left_down = function()
       if self.overflow_counter >= 60 then
         State.audio:play(self, self.sound_loop)
         if Common.relative_period(1, dt, self, "steam") then
-          self:burst_with_steam()
+          pipes.burst_with_steam(self)
         end
         return
       end
@@ -80,20 +78,24 @@ pipes.leaking_left_down = function()
 
       if Common.relative_period(self.trigger_seconds, dt, self, "steam") then
         self.trigger_seconds = 8 + math.random() * 4
-        self:burst_with_steam()
+        pipes.burst_with_steam(self)
       end
     end},
-
-    burst_with_steam = Dump.ignore_upvalue_size .. function(self)
-      if self.paused then return end
-
-      State:add(Tablex.extend(
-        library_fx.steam("right"),
-        {position = self.position}
-      ))
-      State.audio:play(self, steam_hissing_sound:clone())
-    end,
   }
 end
+
+local steam_hissing_sound = sound.multiple("assets/sounds/steam_hissing.wav", 0.8)[1]
+
+pipes.burst_with_steam = Dump.ignore_upvalue_size .. function(pipe)
+  State:add(Tablex.extend(
+    library_fx.steam("right"),
+    {position = pipe.position}
+  ))
+  State.audio:play(pipe, steam_hissing_sound:clone())
+end
+
+factoring.extend(pipes, "horizontal_colored", interactive(function(self)
+  self.interacted_with = true
+end))
 
 return pipes

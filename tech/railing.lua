@@ -80,7 +80,8 @@ end
 
 local ability_check_sound = sound.multiple("assets/sounds/coin_toss", 1)
 
-railing.api.ability_check_message = function(ability, dc, content_success, content_failure)
+railing.api.ability_check = function(ability, dc)
+  State.audio:play_static(random.choice(ability_check_sound))
   local roll = State.player.abilities[ability]
     and D(20) + mech.get_modifier(State.player.abilities[ability])
     or State.player.skill_throws[ability]
@@ -89,15 +90,17 @@ railing.api.ability_check_message = function(ability, dc, content_success, conte
     error("No ability or skill %s" % ability, 2)
   end
 
-  local success = roll:roll() >= dc
-  local content = '<span color="%s">[%s]</span> %s' % {
+  return roll:roll() >= dc
+end
+
+railing.api.ability_check_message = function(ability, dc, content_success, content_failure)
+  local success = railing.api.ability_check(ability, dc)
+
+  railing.api.message('<span color="%s">[%s]</span> %s' % {
     success and Colors.hex.green or Colors.hex.red,
     (translation.ability[ability] or translation.skill[ability]):upper(),
     success and content_success or content_failure,
-  }
-
-  railing.api.message(content)
-  State.audio:play_static(random.choice(ability_check_sound))
+  })
 end
 
 railing.api.message = function(content)

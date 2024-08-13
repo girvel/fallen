@@ -1,3 +1,4 @@
+local pipes = require("library.pipes")
 local decorations = require("library.decorations")
 local walls = require("library.walls")
 local level = require("state.level")
@@ -104,6 +105,10 @@ return function()
       State:add(Tablex.extend(decorations.scratched_table(), {position = Vector({45, 91})}))
       State:add(Tablex.extend(decorations.empty_bed(), {position = Vector({23, 67})}))
       State:add(Tablex.extend(walls.steel_with_sign(), {position = Vector({27, 90})}))
+      self.entities.colored_pipe = State:add(Tablex.extend(
+        pipes.colored(),
+        {position = Vector({27, 95})}
+      ))
     end,
   })
 end
