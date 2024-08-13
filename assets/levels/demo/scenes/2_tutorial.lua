@@ -29,45 +29,5 @@ return function()
         api.update_quest({warmup = 2})
       end,
     },
-
-    {
-      name = "Leaky ventilation",
-      enabled = true,
-      start_predicate = function(self, rails, dt)
-        return State.player.position == rails.positions.leaky_vent_check
-      end,
-
-      run = function(self, rails, dt)
-        self.enabled = false
-        api.ability_check_message("investigation", 10,
-          "Темные пятна на стенах и потолке могут указывать на проблемы с вентиляцией и серьезные утечки воды.",
-          "Тёмные пятна на полу и потолке складываются в гротескные узоры."
-        )
-      end,
-    },
-
-    {
-      name = "Enter latrine",
-      enabled = true,
-      start_predicate = function(self, rails, dt)
-        return not State.shader and State.player.position == rails.positions.enter_latrine
-      end,
-
-      run = function(self, rails, dt)
-        State:set_shader(shaders.latrine)
-      end,
-    },
-
-    {
-      name = "Exit latrine",
-      enabled = true,
-      start_predicate = function(self, rails, dt)
-        return State.shader and State.player.position == rails.positions.exit_latrine
-      end,
-
-      run = function(self, rails, dt)
-        State:set_shader()
-      end,
-    },
   }
 end

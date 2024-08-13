@@ -1,3 +1,5 @@
+local random = require("utils.random")
+local sound = require("tech.sound")
 local fx = require("tech.fx")
 local hostility = require("mech.hostility")
 local mech = require("mech")
@@ -76,6 +78,8 @@ railing.api.make_hostile = function(faction, entities)
   hostility.make_hostile(faction)
 end
 
+local ability_check_sound = sound.multiple("assets/sounds/coin_toss", 1)
+
 railing.api.ability_check_message = function(ability, dc, content_success, content_failure)
   local roll = State.player.abilities[ability]
     and D(20) + mech.get_modifier(State.player.abilities[ability])
@@ -93,10 +97,11 @@ railing.api.ability_check_message = function(ability, dc, content_success, conte
   }
 
   railing.api.message(content)
+  State.audio:play_static(random.choice(ability_check_sound))
 end
 
 railing.api.message = function(content)
-  State.gui.popup:show(State.player.position, "above", content)
+  State.gui.popup:show(State.player.position + Vector.up, "above", content)
 end
 
 local quest_stage = function(k, v)

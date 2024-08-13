@@ -28,8 +28,10 @@ return function()
     scenes = Tablex.join(
       require("assets.levels.demo.scenes.1_introduction")(),
       require("assets.levels.demo.scenes.2_tutorial")(),
+      require("assets.levels.demo.scenes.2_side_content")(),
       require("assets.levels.demo.scenes.3_detective")(),
-      require("assets.levels.demo.scenes.3_fight")(), {
+      require("assets.levels.demo.scenes.3_fight")(),
+      {
         checkpoint_0 = {
           name = "Checkpoint -- captain's deck",
           enabled = false,
@@ -47,14 +49,19 @@ return function()
 
     initialize = function(self)
       self.positions = {
-        [2] = Vector({20, 53}),
-        exit = Vector({22, 56}),
-        detective_notification_activation = Vector({23, 56}),
-        player_room_exit = Vector({15, 75}),
-        leaky_vent_check = Vector({11, 79}),
-        enter_latrine = Vector({28, 104}),
-        exit_latrine = Vector({28, 103}),
+        [2] = {20, 53},
+        exit = {22, 56},
+        detective_notification_activation = {23, 56},
+        player_room_exit = {15, 75},
+        leaky_vent_check = {11, 79},
+        enter_latrine = {28, 104},
+        exit_latrine = {28, 103},
+        beds_check = {11, 73},
       }
+
+      self.positions = Fun.iter(self.positions)
+        :map(function(k, v) return k, Vector(v) end)
+        :tomap()
 
       self.entities = {
         State.grids.solids[Vector({22, 54})],
