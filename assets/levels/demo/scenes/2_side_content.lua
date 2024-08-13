@@ -177,15 +177,17 @@ return function()
         self.enabled = false
         rails.tolerates_latrine = api.saving_throw("con", 14)
         if rails.tolerates_latrine then
+          rails.scenes.enter_latrine.enabled = true
+          rails.scenes.exit_latrine.enabled = true
           api.narration("Ты победил.")
           api.narration("Из глаз идут слёзы, в голове жужжание сотен несуществующих мух.")
           api.narration("И нос никогда тебя не простит.")
           api.narration("Но ты прошел это испытание; можешь собой гордиться.")
         else
           api.narration("Это было ошибкой.")
+          rails.scenes.enter_latrine.enabled = true
+          rails.scenes.exit_latrine.enabled = true
         end
-        rails.scenes.enter_latrine.enabled = true
-        rails.scenes.exit_latrine.enabled = true
       end,
     },
 
@@ -193,14 +195,18 @@ return function()
       name = "Enter latrine",
       enabled = false,
       start_predicate = function(self, rails, dt)
-        return not State.shader
-          and not rails.tolerates_latrine
+        return not (State.shader or State.player.fov_radius == 1)
           and State.player.position == rails.positions.enter_latrine
       end,
 
       run = function(self, rails, dt)
-        State:set_shader(shaders.latrine)
-        rails:stop_scene("exit_latrine")
+        if rails.tolerates_latrine then
+          rails.last_player_fov = State.player.fov_radius
+          State.player.fov_radius = 1
+        else
+          State:set_shader(shaders.latrine)
+          rails:stop_scene("exit_latrine")
+        end
       end,
     },
 
@@ -209,12 +215,16 @@ return function()
       enabled = false,
       start_predicate = function(self, rails, dt)
         return not rails:is_running("exit_latrine")
-          and State.shader
-          and not rails.tolerates_latrine
+          and (State.shader or State.player.fov_radius == 1)
           and State.player.position == rails.positions.exit_latrine
       end,
 
       run = function(self, rails, dt)
+        if rails.tolerates_latrine then
+          State.player.fov_radius = rails.last_player_fov
+          return
+        end
+
         if not rails.been_to_latrine then
           State.player.in_cutscene = true
           State:set_shader()
@@ -243,7 +253,7 @@ return function()
       name = "11. Dirty magazine",
       enabled = true,
       start_predicate = function(self, rails, dt)
-        return State.player.position == rails.positions.dirty_magazine
+        return rails.tolerates_latrine and State.player.position == rails.positions.dirty_magazine
       end,
 
       run = function(self, rails, dt)

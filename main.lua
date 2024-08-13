@@ -67,6 +67,7 @@ love.load = function(args)
     game_save.read()
   else
     State = state(systems, args.debug)  -- TODO debug should not be stored in a save
+    State:set_shader()
     State:load_level("assets/levels/" .. args.level, palette)
 
     State.gui.wiki.quests = quests
