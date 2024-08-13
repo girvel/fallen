@@ -1,3 +1,4 @@
+local abilities = require("mech.abilities")
 local special = require("tech.special")
 local item = require("tech.item")
 
@@ -35,15 +36,11 @@ attacking.attack = function(entity, target, attack_roll, damage_roll)
   return true
 end
 
-attacking.attack_save = function(target, abilities, save_dc, damage_roll)
-  local save = -Query(target).saving_throws[abilities]:roll()
-  if not save then return false end
+attacking.attack_save = function(target, ability, save_dc, damage_roll)
+  if not -Query(target).saving_throws[ability] then return false end
+  local success = abilities.saving_throw(target, ability, save_dc)
 
-  Log.info("%s rolls %s save %s against %s" % {
-    Common.get_name(target), abilities, save, save_dc
-  })
-
-  if save >= save_dc then
+  if success then
     State:add(special.floating_damage("-", target.position))
     return false
   end

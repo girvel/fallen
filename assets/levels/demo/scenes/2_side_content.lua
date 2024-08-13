@@ -175,7 +175,7 @@ return function()
 
       run = function(self, rails, dt)
         self.enabled = false
-        rails.tolerates_latrine = State.player.saving_throws.con:roll() >= 14
+        rails.tolerates_latrine = api.saving_throw("con", 14)
         if rails.tolerates_latrine then
           api.narration("Ты победил.")
           api.narration("Из глаз идут слёзы, в голове жужжание сотен несуществующих мух.")

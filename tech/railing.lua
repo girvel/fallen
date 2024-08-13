@@ -87,6 +87,17 @@ railing.api.abilities_check = function(ability, dc)
   return success
 end
 
+railing.api.saving_throw = function(ability, dc)
+  local success = abilities.saving_throw(State.player, ability, dc)
+
+  railing.api.message('<span color="%s">[%s]</span>' % {
+    success and Colors.hex.green or Colors.hex.red,
+    (translation.abilities[ability]):upper(),
+  })
+
+  return success
+end
+
 railing.api.abilities_check_message = function(ability, dc, content_success, content_failure)
   local success = abilities.check(State.player, ability, dc)
 

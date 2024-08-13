@@ -73,7 +73,7 @@ end
 local abilities_check_sound = sound.multiple("assets/sounds/coin_toss", 1)
 
 abilities.check = function(entity, skill_or_abilities, dc)
-  State.audio:play(entity, random.choice(abilities_check_sound), "small")
+  State.audio:play(entity, random.choice(abilities_check_sound):clone(), "small")
   local roll = entity.abilities[skill_or_abilities]
     and D(20) + abilities.get_modifier(entity.abilities[skill_or_abilities])
     or entity.skill_throws[skill_or_abilities]
@@ -82,7 +82,21 @@ abilities.check = function(entity, skill_or_abilities, dc)
     error("No abilities or skill %s" % skill_or_abilities, 2)
   end
 
-  return roll:roll() >= dc
+  local result = roll:roll()
+  Log.info("%s rolls check %s: %s against %s" % {
+    Common.get_name(entity), skill_or_abilities, result, dc
+  })
+
+  return result >= dc
+end
+
+abilities.saving_throw = function(entity, ability, dc)
+  State.audio:play(entity, random.choice(abilities_check_sound):clone(), "small")
+  local save = entity.saving_throws[ability]:roll()
+  Log.info("%s rolls %s save %s against %s" % {
+    Common.get_name(entity), ability, save, dc
+  })
+  return save >= dc
 end
 
 return abilities
