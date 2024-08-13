@@ -47,6 +47,36 @@ return function()
     },
 
     {
+      name = "5. Scratched table",
+      enabled = true,
+      start_predicate = function(self, rails, dt)
+        return State.player.position == rails.positions.scratched_table_message
+      end,
+
+      run = function(self, rails, dt)
+        self.enabled = false
+        State.player:rotate("up")
+        api.ability_check_message("investigation", 10,
+          "Когда ты прищуриваешься, хаотичный узор из царапин на столе начинает напоминать тропический остров с пальмами, солнцем и счастливой семьей.",
+          "Какой-то психопат порядочно поиздевался над столом."
+        )
+      end,
+    },
+
+    {
+      name = "6. Empty dorm",
+      enabled = true,
+      start_predicate = function(self, rails, dt)
+        return State.player.position == rails.positions.empty_dorm_message
+      end,
+
+      run = function(self, rails, dt)
+        self.enabled = false
+        api.message("Толстый слой пыли, отсутствие матраса и постельного белья. В этой комнате никто не живёт, очень давно.")
+      end,
+    },
+
+    {
       name = "Enter latrine",
       enabled = true,
       start_predicate = function(self, rails, dt)

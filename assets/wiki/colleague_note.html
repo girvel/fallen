@@ -2,7 +2,9 @@
 <head>
     <title>Приложение А. Записка коллеги</title>
     <script>
-        api.update_quest({warmup = 1})
+        if not State.gui.wiki.quest_states.warmup then
+            api.update_quest({warmup = 1})
+        end
     </script>
 </head>
 <body>

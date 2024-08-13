@@ -1,3 +1,4 @@
+local decorations = require("library.decorations")
 local walls = require("library.walls")
 local level = require("state.level")
 local railing = require("tech.railing")
@@ -59,6 +60,8 @@ return function()
         exit_latrine = {28, 103},
         beds_check = {11, 73},
         world_map_message = {11, 91},
+        scratched_table_message = {45, 92},
+        empty_dorm_message = {22, 68},
       }
 
       self.positions = Fun.pairs(self.positions)
@@ -97,6 +100,8 @@ return function()
       self.entities.upper_bunk:lie(self.entities.neighbour)
 
       State:add(Tablex.extend(walls.steel_with_map(), {position = Vector({10, 90})}))
+      State:add(Tablex.extend(decorations.scratched_table(), {position = Vector({45, 91})}))
+      State:add(Tablex.extend(decorations.empty_bed(), {position = Vector({23, 67})}))
     end,
   })
 end

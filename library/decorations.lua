@@ -16,7 +16,7 @@ Tablex.extend(decorations, factoring.from_atlas(decorations_atlas, {
   "upper_bed", "crate", "crate_open", "chest", "chest_open", "table_left", "table_hor", "table_right",
   "lower_bed", "chamber_pot", "bucket", "cauldron", "countertop_right_down", "oven", "kitchen_sink", "countertop_left_down",
   "table_up", false, "stool", "sofa", "countertop_left", "bed", "sink", "countertop_right",
-  "table_ver", "steel_wall_window", "steel_wall_transparent", false, "countertop_left_corner_down", "countertop", false, "countertop_right_corner_down",
+  "table_ver", "steel_wall_window", "steel_wall_transparent", "scratched_table", "countertop_left_corner_down", "countertop", "empty_bed", "countertop_right_corner_down",
   "table_down", false, false, false, "countertop_left_corner_up", false, false, "countertop_right_corner_up",
 }))
 
