@@ -110,11 +110,11 @@ return function()
       name = "Talking to the first",
       enabled = true,
       start_predicate = function(self, rails, dt)
-        return rails.entities[1].talking_to == State.player
+        return rails.entities[1].interacted_by == State.player
       end,
 
       run = function(self, rails, dt)
-        rails.entities[1].talking_to = nil
+        rails.entities[1].interacted_by = nil
 
         State.player.in_cutscene = true
         api.narration("Когда ты подходишь ближе, измазанный сажей полуэльф всё так же не оборачивается.")
@@ -152,11 +152,11 @@ return function()
       name = "Talking to the second",
       enabled = true,
       start_predicate = function(self, rails, dt)
-        return rails.entities[2].talking_to == State.player
+        return rails.entities[2].interacted_by == State.player
       end,
 
       run = function(self, rails, dt)
-        rails.entities[2].talking_to = nil
+        rails.entities[2].interacted_by = nil
         local old_direction = rails.entities[2].direction
         rails.entities[2]:rotate(Vector.name_from_direction(
           State.player.position - rails.entities[2].position
@@ -201,11 +201,11 @@ return function()
       name = "Talking to the third",
       enabled = true,
       start_predicate = function(self, rails, dt)
-        return rails.entities[3].talking_to == State.player
+        return rails.entities[3].interacted_by == State.player
       end,
 
       run = function(self, rails, dt)
-        rails.entities[3].talking_to = nil
+        rails.entities[3].interacted_by = nil
 
         State.player.in_cutscene = true
         api.narration("Сутулый полуорк в ярко-жёлтых огнеупорных перчатках работает с незнакомым тебе устройством.")
@@ -243,11 +243,11 @@ return function()
       name = "Talking to the fourth",
       enabled = true,
       start_predicate = function(self, rails, dt)
-        return rails.entities[4].talking_to == State.player
+        return rails.entities[4].interacted_by == State.player
       end,
 
       run = function(self, rails, dt)
-        rails.entities[4].talking_to = nil
+        rails.entities[4].interacted_by = nil
         local old_direction = rails.entities[4].direction
         rails.entities[4]:rotate(Vector.name_from_direction(
           State.player.position - rails.entities[4].position

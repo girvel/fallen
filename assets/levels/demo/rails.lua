@@ -64,6 +64,7 @@ return function()
         scratched_table_message = {45, 92},
         empty_dorm_message = {22, 68},
         sign_message = {27, 91},
+        mouse_check = {28, 85},
       }
 
       self.positions = Fun.pairs(self.positions)

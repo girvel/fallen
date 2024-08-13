@@ -97,11 +97,11 @@ return function()
       name = "8. A pipe",
       enabled = true,
       start_predicate = function(self, rails, dt)
-        return rails.entities.colored_pipe.interacted_with
+        return rails.entities.colored_pipe.interacted_by == State.player
       end,
 
       run = function(self, rails, dt)
-        rails.entities.colored_pipe.interacted_with = nil
+        rails.entities.colored_pipe.interacted_by = nil
         State.player.in_cutscene = true
 
         api.narration("Эта труба звучит как-то по-иному.")
@@ -127,6 +127,24 @@ return function()
         end
 
         State.player.in_cutscene = false
+      end,
+    },
+
+    {
+      name = "9. The mouse",
+      enabled = true,
+      start_predicate = function(self, rails, dt)
+        return State.player.position == rails.positions.mouse_check
+      end,
+
+      run = function(self, rails, dt)
+        self.enabled = false
+        State.player:rotate("up")
+        api.narration("Здесь повесилась мышь. Забавно.")
+        api.ability_check_message("nature", 14,
+          "Животные ощущают наш мир лучше, чем люди. Мышь, должно быть, предчувствовала что-то ужасное. Может мне тоже начать бояться?",
+          "У меня нет объяснений этому явлению"
+        )
       end,
     },
 

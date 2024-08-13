@@ -12,11 +12,8 @@ local module, _, static = Module("library.mobs")
 
 local engineer_mixin = function(ai_outside_of_combat)
   return Tablex.extend(
-    interactive(function(self, other)
-      self.talking_to = other
-    end),
+    interactive.detector(),
     {
-      talking_to = nil,
       ai = engineer_ai(ai_outside_of_combat),
     }
   )
@@ -69,7 +66,7 @@ module[3] = function()
     abilities = mech.abilities(18, 6, 12, 8, 8, 8),
     save_proficiencies = {dex = true},
 
-    talking_to = nil,
+    interacted_by = nil,
     will_beg = true,
 
     get_resources = function()

@@ -95,9 +95,7 @@ pipes.burst_with_steam = Dump.ignore_upvalue_size .. function(pipe)
 end
 
 factoring.extend(pipes, "colored",
-  interactive(function(self)
-    self.interacted_with = true
-  end, true),
+  interactive.detector(true),
   {
     name = "Необычная труба",
   }

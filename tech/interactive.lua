@@ -34,4 +34,8 @@ module_mt.__call = function(_, callback, disable_highlight)
   }
 end
 
+module.detector = function(disable_highlight)
+  return module(function(self, other) self.interacted_by = other end, disable_highlight)
+end
+
 return module
