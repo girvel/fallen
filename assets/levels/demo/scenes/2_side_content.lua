@@ -77,6 +77,20 @@ return function()
     },
 
     {
+      name = "7. Sign",
+      enabled = true,
+      start_predicate = function(self, rails, dt)
+        return State.player.position == rails.positions.sign_message
+      end,
+
+      run = function(self, rails, dt)
+        self.enabled = false
+        State.player:rotate("up")
+        api.message("Старый выцветший указатель. Налево - столовая, направо - кают-компания.")
+      end,
+    },
+
+    {
       name = "Enter latrine",
       enabled = true,
       start_predicate = function(self, rails, dt)

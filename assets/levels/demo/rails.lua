@@ -62,6 +62,7 @@ return function()
         world_map_message = {11, 91},
         scratched_table_message = {45, 92},
         empty_dorm_message = {22, 68},
+        sign_message = {27, 91},
       }
 
       self.positions = Fun.pairs(self.positions)
@@ -102,6 +103,7 @@ return function()
       State:add(Tablex.extend(walls.steel_with_map(), {position = Vector({10, 90})}))
       State:add(Tablex.extend(decorations.scratched_table(), {position = Vector({45, 91})}))
       State:add(Tablex.extend(decorations.empty_bed(), {position = Vector({23, 67})}))
+      State:add(Tablex.extend(walls.steel_with_sign(), {position = Vector({27, 90})}))
     end,
   })
 end
