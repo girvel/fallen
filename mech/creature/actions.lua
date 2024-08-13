@@ -1,7 +1,7 @@
 local level = require("state.level")
 local attacking = require("mech.attacking")
 local random = require("utils.random")
-local mech = require("mech")
+local ability = require("mech.ability")
 local hostility = require("mech.hostility")
 local interactive = require("tech.interactive")
 local combat = require("tech.combat")
@@ -15,9 +15,9 @@ actions.get_melee_attack_roll = function(entity, slot)
 
   local weapon = entity.inventory[slot]
   if not weapon then
-    roll = roll + mech.get_modifier(entity.abilities.str)
+    roll = roll + ability.get_modifier(entity.abilities.str)
   else
-    roll = roll + weapon.bonus + mech.get_melee_modifier(entity, slot)
+    roll = roll + weapon.bonus + ability.get_melee_modifier(entity, slot)
   end
 
   return entity:get_effect("modify_attack_roll", roll)
@@ -26,7 +26,7 @@ end
 actions.get_melee_damage_roll = function(entity, slot)
   local weapon = entity.inventory[slot]
   if not weapon then
-    return D.roll({}, mech.get_modifier(entity.abilities.str))
+    return D.roll({}, ability.get_modifier(entity.abilities.str))
   end
 
   local roll
@@ -39,7 +39,7 @@ actions.get_melee_damage_roll = function(entity, slot)
   roll = roll + weapon.bonus
 
   if slot == "main_hand" then
-    roll = roll + mech.get_melee_modifier(entity, slot)
+    roll = roll + ability.get_melee_modifier(entity, slot)
   end
 
   return entity:get_effect("modify_damage_roll", roll, slot)

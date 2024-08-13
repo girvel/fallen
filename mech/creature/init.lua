@@ -1,6 +1,6 @@
 local animated = require("tech.animated")
 local actions = require("mech.creature.actions")
-local mech = require("mech")
+local ability = require("mech.ability")
 local sound = require("tech.sound")
 
 
@@ -29,7 +29,7 @@ creature._methods = static {
   end,
 
   get_armor = function(self)
-    return 10 + mech.get_modifier(self.abilities.dex)
+    return 10 + ability.get_modifier(self.abilities.dex)
   end,
 
   get_resources = function(self, rest_type)
@@ -57,7 +57,7 @@ creature._methods = static {
 
   get_max_hp = function(self)
     if not self.class then return self.max_hp end
-    local con_bonus = mech.get_modifier(self.abilities.con)
+    local con_bonus = ability.get_modifier(self.abilities.con)
     return self.class.hp_die + con_bonus
       + (self.level - 1) * (self.class.hp_die / 2 + 1 + con_bonus)
   end,
@@ -102,7 +102,7 @@ creature._methods = static {
     self.saving_throws = Fun.iter(self.abilities)
       :map(function(name, value)
         return name, D(20)
-          + mech.get_modifier(value)
+          + ability.get_modifier(value)
           + ((-Query(self).class.save_proficiencies[name]
             or -Query(self).save_proficiencies[name])
             and 2
@@ -110,10 +110,10 @@ creature._methods = static {
       end)
       :tomap()
 
-    self.skill_throws = Fun.iter(mech.skill_bases)
-      :map(function(skill, ability)
+    self.skill_throws = Fun.iter(ability.skill_bases)
+      :map(function(skill, a)
         return skill, D(20)
-          + mech.get_modifier(self.abilities[ability])
+          + ability.get_modifier(self.abilities[a])
           + (-Query(self.skills)[skill] and 2 or 0)
       end)
       :tomap()
@@ -126,7 +126,7 @@ module_mt.__call = function(_, animation_pack, object)
     creature_flag = true,
 
     sprite = {},
-    abilities = mech.abilities(10, 10, 10, 10, 10, 10),
+    abilities = ability(10, 10, 10, 10, 10, 10),
     direction = "right",
     proficiency_bonus = 2,
     inventory = {},

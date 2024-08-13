@@ -1,4 +1,4 @@
-local mech = require("mech")
+local ability = require("mech.ability")
 local utf8 = require("utf8")
 local races = require("mech.races")
 local translation = require("tech.translation")
@@ -75,7 +75,7 @@ return Module("state.gui.character_creator.forms", {
       :totable()
 
     params.bonuses = Fun.iter(params.bonuses)
-      :chain(Fun.iter(mech.abilities_list)
+      :chain(Fun.iter(ability.list)
         :filter(function(a) return Fun.iter(params.bonuses):all(function(b) return a ~= b end) end)
         :take_n(#races[params.race].bonuses - #params.bonuses)
       )
@@ -94,7 +94,7 @@ return Module("state.gui.character_creator.forms", {
         })
 
         params.movement_functions[j] = function(dx)
-          local list = Fun.iter(mech.abilities_list)
+          local list = Fun.iter(ability.list)
             :filter(function(a)
               return not Tablex.contains(params.bonuses, a)
               or a == params.bonuses[i]
@@ -117,7 +117,7 @@ return Module("state.gui.character_creator.forms", {
     local text = "   <h2>Способности</h2>"
       .. "   Свободные очки: %s\n\n" % params.points
 
-    local bonus_column = Fun.iter(mech.abilities_list)
+    local bonus_column = Fun.iter(ability.list)
       :map(function(a)
         local bonus_i = Tablex.index_of(params.bonuses, a)
         return a, (bonus_i and races[params.race].bonuses[bonus_i] or 0)
@@ -131,7 +131,7 @@ return Module("state.gui.character_creator.forms", {
     text = text
       .. build_table(
         {" ", "Способность ", "Значение", "Бонус расы", "Результат", "Модификатор"},
-        Fun.iter(mech.abilities_list)
+        Fun.iter(ability.list)
           :enumerate()
           :map(function(i, a)
             return {
@@ -148,13 +148,13 @@ return Module("state.gui.character_creator.forms", {
               },
               "%+i" % bonus_column[a],
               "= " .. params.abilities_final[a],
-              "%+i" % mech.get_modifier(params.abilities_final[a])
+              "%+i" % ability.get_modifier(params.abilities_final[a])
             }
           end)
           :totable()
       )
 
-    for i, a in ipairs(mech.abilities_list) do
+    for i, a in ipairs(ability.list) do
       params.movement_functions[i + params.max_index] = function(dx)
         local next_value = params.abilities_raw[a] + dx
         if dx < 0 and params.abilities_raw[a] <= 8
@@ -177,8 +177,8 @@ return Module("state.gui.character_creator.forms", {
     local text = "   <h2>Навыки</h2>"
       .. "   Свободные навыки: %s\n\n" % params.free_skills
 
-    local bonus_column = Fun.iter(mech.skill_bases)
-      :map(function(s, a) return s, mech.get_modifier(params.abilities_final[a]) end)
+    local bonus_column = Fun.iter(ability.skill_bases)
+      :map(function(s, a) return s, ability.get_modifier(params.abilities_final[a]) end)
       :tomap()
 
     local result_column = Fun.iter(bonus_column)
@@ -188,7 +188,7 @@ return Module("state.gui.character_creator.forms", {
     text = text
       .. build_table(
         {" ", "Навык ", "Владение", "Бонус", "Результат"},
-        Fun.iter(mech.skills)
+        Fun.iter(ability.skills)
           :enumerate()
           :map(function(i, s)
             return {
@@ -202,7 +202,7 @@ return Module("state.gui.character_creator.forms", {
           :totable()
       )
 
-    for i, s in ipairs(mech.skills) do
+    for i, s in ipairs(ability.skills) do
       params.movement_functions[i + params.max_index] = function(dx)
         if params.skills[s] then
           params.skills[s] = nil
@@ -215,7 +215,7 @@ return Module("state.gui.character_creator.forms", {
       end
     end
 
-    params.max_index = params.max_index + #mech.skills
+    params.max_index = params.max_index + #ability.skills
     return text .. "\n\n\n"
   end,
 

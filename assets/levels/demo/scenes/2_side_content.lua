@@ -1,5 +1,5 @@
 local special = require("tech.special")
-local mech = require("mech")
+local ability = require("mech.ability")
 local attacking = require("mech.attacking")
 local items = require("library.items")
 local item = require("tech.item")
@@ -300,7 +300,7 @@ return function()
           api.line(rails.entities.cook, "Держи, грешно оставлять голодную душу")
 
           -- TODO as temporary effect
-          local d = math.max(1, mech.get_modifier(State.player.abilities.con))
+          local d = math.max(1, ability.get_modifier(State.player.abilities.con))
           State.player.hp = State.player.hp + d
           State:add(special.floating_damage("+" .. d, State.player.position, Colors.green))
 

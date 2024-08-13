@@ -1,5 +1,4 @@
 local texting = require("state.gui.texting")
-local player = require("state.player")
 local races = require("mech.races")
 local forms = require("state.gui.character_creator.forms")
 local class = require("mech.class")

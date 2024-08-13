@@ -1,6 +1,6 @@
 local class = require("mech.class")
 local perk = require("mech.perk")
-local mech = require("mech")
+local ability = require("mech.ability")
 local fx = require("tech.fx")
 local healing = require("mech.healing")
 
@@ -65,7 +65,7 @@ fighter.fighting_style = static(perk.choice({
       if not weapon or slot ~= "other_hand" then
         return roll
       end
-      return roll + mech.get_melee_modifier(entity, slot)
+      return roll + ability.get_melee_modifier(entity, slot)
     end,
   },
 }))

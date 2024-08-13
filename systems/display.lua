@@ -44,7 +44,7 @@ display.system = static(Tiny.sortedProcessingSystem({
   end,
 
   process_grid = function(self, event)
-    if Tablex.contains({"character_creator", "reading", "death"}, State:get_mode()) then return end
+    if Tablex.contains({"character_creator", "reading", "death", "text_input"}, State:get_mode()) then return end
 
     -- borders --
     local view = State.gui.views.scene

@@ -2,7 +2,7 @@ local random = require("utils.random")
 local sound = require("tech.sound")
 local fx = require("tech.fx")
 local hostility = require("mech.hostility")
-local mech = require("mech")
+local ability = require("mech.ability")
 local utf8 = require("utf8")
 local translation = require("tech.translation")
 
@@ -83,7 +83,7 @@ local ability_check_sound = sound.multiple("assets/sounds/coin_toss", 1)
 railing.api.ability_check = function(ability, dc)
   State.audio:play_static(random.choice(ability_check_sound))
   local roll = State.player.abilities[ability]
-    and D(20) + mech.get_modifier(State.player.abilities[ability])
+    and D(20) + ability.get_modifier(State.player.abilities[ability])
     or State.player.skill_throws[ability]
 
   if not roll then
