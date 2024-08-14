@@ -87,6 +87,8 @@ return function()
         dining_room_door_1 = {24, 100},
         dining_room_door_2 = {26, 97},
         mannequin = {37, 95},
+        bird_food = {33, 102},
+        bird_cage = {32, 102},
       }
 
       self.entities = Fun.pairs(self.entities)

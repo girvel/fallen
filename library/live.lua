@@ -46,7 +46,6 @@ for _, prefix in ipairs({"", "black_"}) do
         end
 
         self:open()
-        self.interact = nil
       end, not args.highlighted),
       {
         codename = prefix .. "door",
@@ -60,7 +59,16 @@ for _, prefix in ipairs({"", "black_"}) do
             self.animation.pack = open_door_pack
             level.change_layer(self, "above_solids")
             self.is_open = true
+            self._interact = self.interact
+            self.interact = nil
           end)
+        end,
+        close = function(self)
+          self.animation.pack = closed_door_pack
+          level.change_layer(self, "solids")
+          self.is_open = false
+          self.interact = self._interact
+          self._interact = nil
         end,
         locked = args.locked,
         _popup = {},

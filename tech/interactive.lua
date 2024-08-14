@@ -35,7 +35,10 @@ module_mt.__call = function(_, callback, disable_highlight)
 end
 
 module.detector = function(disable_highlight)
-  return module(function(self, other) self.interacted_by = other end, disable_highlight)
+  return module(function(self, other)
+    self.interacted_by = other
+    Log.debug("%s interacts with %s" % {Common.get_name(other), Common.get_name(self)})
+  end, disable_highlight)
 end
 
 return module

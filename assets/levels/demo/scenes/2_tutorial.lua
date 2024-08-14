@@ -1,3 +1,4 @@
+local interactive = require("tech.interactive")
 local mobs = require("library.mobs")
 local level = require("state.level")
 local api = require("tech.railing").api
@@ -159,6 +160,68 @@ return function()
         api.wait_while(function() return State.combat end)
         api.notification("Покорми птицу в клетке", true)
         api.update_quest({warmup = 6})
+
+        Tablex.extend(rails.entities.bird_food, interactive.detector(), {name = "ящик"})
+        Tablex.extend(rails.entities.bird_cage, interactive.detector(), {name = "клетка"})
+      end,
+    },
+
+    {
+      name = "Look in the crate",
+      enabled = true,
+      start_predicate = function(self, rails, dt)
+        return rails.entities.bird_food.interacted_by == State.player
+      end,
+
+      run = function(self, rails, dt)
+        rails.entities.bird_food.interacted_by = nil
+
+        api.narration("В ящике лежит небольшое ведёрко.")
+        api.narration("Внутри — приятно пахнущие зёрна.")
+
+        if api.options({
+          "*Взять горсть*",
+          "*Закрыть ящик*",
+        }) == 1 then
+          rails.entities.bird_food.interact = nil
+          rails.has_bird_food = true
+        end
+      end,
+    },
+
+    {
+      name = "Look in the cage",
+      enabled = true,
+      start_predicate = function(self, rails, dt)
+        return rails.entities.bird_cage.interacted_by == State.player
+      end,
+
+      run = function(self, rails, dt)
+        rails.entities.bird_cage.interacted_by = nil
+
+        api.narration("Это птичья клетка")
+        api.narration("Без птицы")
+        api.narration("Хотя здесь есть много помёта")
+        api.narration("И немного перьев")
+
+        local options = {
+          "*уйти*",
+        }
+
+        if rails.has_bird_food then
+          table.insert(options, 1, "*положить корм в клетку*")
+        end
+
+        if api.options(options) ~= #options then
+          rails.entities.bird_cage.interact = nil
+          rails.has_bird_food = false
+
+          api.update_quest({warmup = 7, detective = 1})
+          rails.entities.detective_door.locked = false
+          api.notification("Разминка окончена")
+          api.wait_seconds(5)
+          api.notification("Направляйся к комнате с черной дверью.", true)
+        end
       end,
     },
   }

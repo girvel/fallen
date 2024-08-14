@@ -65,6 +65,7 @@ return Module("library.palette", {
     s = decorations.sink,
     w = decorations.steel_wall_window,
     q = decorations.steel_wall_transparent,
+    g = decorations.cage,
 
     Q = live.mannequin,
     R = live.lever,
