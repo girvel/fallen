@@ -54,6 +54,7 @@ for _, prefix in ipairs({"", "black_"}) do
         name = "дверь",
         is_open = false,
         open = Dump.ignore_upvalue_size .. function(self)
+          if self.is_open then return end
           self:animate("open")
           self:when_animation_ends(function(_)
             self.animation.pack = open_door_pack
@@ -64,6 +65,7 @@ for _, prefix in ipairs({"", "black_"}) do
           end)
         end,
         close = function(self)
+          if not self.is_open then return end
           self.animation.pack = closed_door_pack
           level.change_layer(self, "solids")
           self.is_open = false

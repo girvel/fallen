@@ -67,7 +67,8 @@ attacking.damage = function(target, damage, is_critical)
 
     if target.inventory then
       for _, slot in ipairs(item.DROPPING_SLOTS) do
-        if target.inventory[slot] then
+        local this_item = target.inventory[slot]
+        if this_item and not this_item.disable_drop_flag then
           item.drop(target, slot)
         end
       end

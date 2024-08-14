@@ -15,7 +15,9 @@ return function()
       run = function(self, rails, dt)
         self.enabled = false
         level.move(State.player, Vector({28, 97}))
-        State.player.hp = 20
+        State.player.experience = require("mech").experience_for_level[2]
+        State.gui.character_creator:refresh()
+        State.gui.character_creator:submit()
       end,
     },
 
@@ -185,6 +187,7 @@ return function()
         }) == 1 then
           rails.entities.bird_food.interact = nil
           rails.has_bird_food = true
+          self.enabled = false
         end
       end,
     },
@@ -213,15 +216,99 @@ return function()
         end
 
         if api.options(options) ~= #options then
+          self.enabled = false
           rails.entities.bird_cage.interact = nil
           rails.has_bird_food = false
 
           api.update_quest({warmup = 7, detective = 1})
           rails.entities.detective_door.locked = false
+
+          rails.entities.dining_room_door_1:close()
+          rails.entities.dining_room_door_2:close()
+          rails.scenes.sees_possessed.enabled = false
+          rails.scenes.sees_possessed_again.enabled = true
+          rails.scenes.kills_possessed.enabled = true
+          rails.entities.possessed = State:add(mobs.possessed(), {position = Vector({17, 97})})
+
           api.notification("Разминка окончена")
           api.wait_seconds(5)
           api.notification("Направляйся к комнате с черной дверью.", true)
         end
+      end,
+    },
+
+    sees_possessed_again = {
+      name = "Player sees possessed again",
+      enabled = false,
+      start_predicate = function(self, rails, dt)
+        return (State.player.position - rails.entities.possessed.position):abs() < 5
+      end,
+
+      run = function(self, rails, dt)
+        self.enabled = false
+
+        api.narration("На стуле бледный мужчина с диким взглядом зубами — нет — пастью разрывает иволгу.")
+        api.narration("Его одежда разорвана; всё вокруг покрыто кровью и перьями прекрасной птицы.")
+        api.narration("Внезапно демон в человеческом обличье замечает тебя.")
+
+        State:start_combat({State.player, rails.entities.possessed})
+      end,
+    },
+
+    kills_possessed = {
+      name = "Player kills possessed",
+      enabled = false,
+      start_predicate = function(self, rails, dt)
+        return rails.entities.possessed.hp <= 0
+      end,
+
+      run = function(self, rails, dt)
+        self.enabled = false
+
+        api.narration("Он мертв")
+        api.narration("Демон это заслужил")
+        api.narration("Прекрасная птица мертва")
+        api.narration("Она этой участи не заслужила")
+
+        local options = {
+          "*Осмотреть труп*",
+          "*Взять остатки птицы*",
+          "*Уйти*"
+        }
+
+        while true do
+          local o = api.options(options, true)
+
+          if o == 1 then
+            if api.ability_check("medicine", 12) then
+              api.narration("Без сомнений, это был простой человек; он не выглядит больным или истощенным.")
+              api.narration("И… Убивал он не из-за голода.")
+            else
+              api.narration("Люди способны на всякое; но мертвое существо неизвестной природы, несомненно, лишь приняло облик человека.")
+            end
+          elseif o == 2 then
+            rails.scenes.return_bird_remains.enabled = true
+            Tablex.extend(rails.entities.bird_cage, interactive.detector(true))
+          else
+            break
+          end
+        end
+      end,
+    },
+
+    return_bird_remains = {
+      name = "Returning bird remains",
+      enabled = false,
+      start_predicate = function(self, rails, dt)
+        return rails.entities.bird_cage.interacted_by == State.player
+      end,
+
+      run = function(self, rails, dt)
+        self.enabled = false
+        rails.entities.bird_cage.interacted_by = nil
+        rails.entities.bird_cage.interact = nil
+        api.narration("Останки птицы очень печально смотрятся в клетке.")
+        api.narration("Может, однажды она переродится?")
       end,
     },
   }

@@ -332,7 +332,7 @@ return function()
       end,
     },
 
-    {
+    sees_possessed = {
       name = "14. Disappearing dude",
       enabled = true,
       start_predicate = function(self, rails, dt)

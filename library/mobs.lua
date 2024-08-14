@@ -111,8 +111,28 @@ module.phantom_knight = function()
     direction = "right",
     max_hp = 12,
     abilities = abilities(0, 14, 0, 0, 0, 0),
-    faction = "phantom",
+    faction = "monster",
     initiative_bonus = -30,
+  })
+end
+
+module.possessed = function()
+  return humanoid({
+    ai = engineer_ai(),
+    name = "Потрясённый",
+    race = random.choice(dreamer_races),
+    direction = "left",
+    max_hp = 18,
+    abilities = abilities(14, 13, 12, 9, 11, 10),
+    faction = "monster",
+    inventory = {main_hand = {
+      damage_roll = D(8),
+      bonus = 0,
+      tags = {},
+      slot = "hands",
+      disable_drop_flag = true,
+    }},
+    initiative_bonus = 10,
   })
 end
 

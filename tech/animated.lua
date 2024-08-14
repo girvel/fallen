@@ -21,7 +21,7 @@ local animation_methods = {
 
     if self.inventory then
       Fun.iter(self.inventory):each(function(slot, it)
-        it:animate(animation_name)
+        Query(it):animate(animation_name)
       end)
     end
   end,
@@ -38,7 +38,7 @@ local animation_methods = {
   animation_set_paused = function(self, value)
     self.animation.paused = value
     for _, it in pairs(self.inventory or {}) do
-      it.animation.paused = value
+      Query(it.animation).paused = value
     end
   end,
 }

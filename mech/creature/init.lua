@@ -75,7 +75,7 @@ creature._methods = static {
 
     Fun.iter(self.inventory or {}):each(function(slot, item)
       item.direction = direction_name
-      item:animate()
+      Query(item):animate()
     end)
   end,
 
