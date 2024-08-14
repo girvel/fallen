@@ -1,7 +1,7 @@
+local game_save = require("state.game_save")
 local actions = require("mech.creature.actions")
 local fighter = require("mech.classes.fighter")
 local class = require("mech.class")
-local game_save = require("state.game_save")
 local utf8 = require("utf8")
 
 
@@ -15,6 +15,14 @@ end
 
 return Module("state.hotkeys", function(modes, debug_mode)
   local hotkeys = Fun.iter(modes):map(function(m) return m, {} end):tomap()
+
+  setmetatable(hotkeys, {
+    __serialize = function(self)
+      return function()
+        return require("state.hotkeys")(modes, debug_mode)
+      end
+    end
+  })
 
   -- normal mode --
   for _, t in ipairs({
@@ -139,7 +147,14 @@ return Module("state.hotkeys", function(modes, debug_mode)
   end)
 
   -- death --
-  define_hotkey(hotkeys, {"death"}, {"enter", "e"}, {
+  define_hotkey(hotkeys, {"death"}, {"r"}, {
+    name = "начать заново",
+    pre_action = function()
+      game_save.load()
+    end,
+  })
+
+  define_hotkey(hotkeys, {"death"}, {"r"}, {
     name = "начать заново",
     pre_action = function()
       love.reload_flag = true
@@ -208,13 +223,6 @@ return Module("state.hotkeys", function(modes, debug_mode)
     name = "начать заново",
     pre_action = function()
       love.reload_flag = true
-    end,
-  })
-
-  define_hotkey(hotkeys, Tablex.deep_copy(modes), {"Ctrl+Shift+s"}, {
-    name = "сохранить игру",
-    pre_action = function()
-      game_save.write()
     end,
   })
 

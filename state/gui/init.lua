@@ -66,7 +66,6 @@ module_mt.__call = function()
   result.sidebar = require("state.gui.sidebar")()
   result.dialogue = require("state.gui.dialogue")()
   result.character_creator = require("state.gui.character_creator")()
-  result.popup = require("state.gui.popup")()
   result.text_input = require("state.gui.text_input")()
 
   return result

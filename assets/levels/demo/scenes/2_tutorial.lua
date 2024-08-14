@@ -233,6 +233,8 @@ return function()
           api.notification("Разминка окончена")
           api.wait_seconds(5)
           api.notification("Направляйся к комнате с черной дверью.", true)
+
+          api.wait_seconds(10)
         end
       end,
     },
@@ -290,6 +292,7 @@ return function()
             rails.scenes.return_bird_remains.enabled = true
             Tablex.extend(rails.entities.bird_cage, interactive.detector(true))
           else
+            api.autosave()
             break
           end
         end

@@ -1,3 +1,4 @@
+local popup = require("state.gui.popup")
 local shaders = require("tech.shaders")
 local api = require("tech.railing").api
 local mech = require("mech")
@@ -160,6 +161,8 @@ return function()
         api.narration("Ты оборачиваешься, но там только письменный стол с запиской.")
         api.line(State.player, "Стоит осмотреться")
         State.player.in_cutscene = false
+
+        api.autosave()
       end,
     },
 
@@ -205,7 +208,7 @@ return function()
       end,
 
       run = function(self, rails, dt)
-        State.gui.popup:show(rails.entities.upper_bunk.position, "above", random.choice({
+        popup.show(rails.entities.upper_bunk.position, "above", random.choice({
           "Хрр...",
           "Фрыхрр...",
           "Хрумффф....",

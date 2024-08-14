@@ -29,7 +29,7 @@ local note = function(codex_update)
 end
 
 return function()
-  return Tablex.extend(railing.mixin(), {
+  return railing({
     scenes = Tablex.join(
       require("assets.levels.demo.scenes.1_introduction")(),
       require("assets.levels.demo.scenes.2_tutorial")(),

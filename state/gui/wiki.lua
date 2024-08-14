@@ -8,9 +8,27 @@ local load_wiki = function(path)
     :filter(function(name) return name:find(pattern) end)
     :map(function(name)
       local _, _, codename = name:find(pattern)
-      return codename, love.filesystem.read(path .. "/" .. name)
+      return {codename, love.filesystem.read(path .. "/" .. name)}
     end)
-    :tomap()
+    :totable()
+
+  table.sort(loaded_pages, function(a, b)
+    local title_a = html.get_title(a[2])
+    local title_b = html.get_title(b[2])
+
+    local appendix = "Приложение"
+    if title_a:startsWith(appendix) then
+      if not title_b:startsWith(appendix) then
+        return false
+      end
+    elseif title_b:startsWith(appendix) then
+      return true
+    end
+
+    return title_a < title_b
+  end)
+
+  loaded_pages = Fun.iter(loaded_pages):map(unpack):tomap()
 
   loaded_pages.codex = loaded_pages.codex % Fun.iter(loaded_pages)
     :filter(function(page) return page ~= "codex" end)

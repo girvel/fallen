@@ -14,7 +14,9 @@ local build_table = function(x, cache)
       allowed_big_upvalues[serialized] = true
       return ("return %s()"):format(handle_primitive(serialized, cache, true))
     end
-    return "return " .. serialized
+    if type(serialized) == "string" then
+      return "return " .. serialized
+    end
   end
 
   cache.size = cache.size + 1
@@ -47,7 +49,14 @@ local build_function = function(x, cache)
   cache[x] = cache.size
 
   local result = {}
-  result[1] = "local _ = " .. ([[load(%q)]]):format(string.dump(x))
+
+  local ok, res = pcall(string.dump, x)
+
+  if not ok then
+    error("Unable to dump function " .. table.concat(stack, "."))
+  end
+
+  result[1] = "local _ = " .. ([[load(%q)]]):format(res)
   result[2] = ("cache[%s] = _"):format(cache.size)
 
   if allowed_big_upvalues[x] then
@@ -57,7 +66,11 @@ local build_function = function(x, cache)
   for i = 1, math.huge do
     local k, v = debug.getupvalue(x, i)
     if not k then break end
+
+    table.insert(stack, ("<upvalue %s>"):format(k))
     local upvalue = handle_primitive(v, cache)
+    table.remove(stack)
+
     if not allowed_big_upvalues[x] and #upvalue > 1024 then
       table.insert(warnings, ("Big upvalue %s in %s"):format(k, table.concat(stack, ".")))
     end
@@ -90,7 +103,7 @@ local primitives = {
 
 handle_primitive = function(x, cache)
   local xtype = type(x)
-  assert(primitives[xtype], ("dump does not support type %q"):format(xtype))
+  assert(primitives[xtype], ("dump does not support type %q of %s"):format(xtype, table.concat(stack, ".")))
 
   if xtype == "table" or xtype == "function" then
     local cache_i = cache[x]

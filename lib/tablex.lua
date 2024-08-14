@@ -69,6 +69,14 @@ tablex.shallow_same = function(t1, t2)
   return true
 end
 
+tablex.shallow_copy = function(t)
+  local result = setmetatable({}, getmetatable(t))
+  for k, v in pairs(t) do
+    result[k] = v
+  end
+  return result
+end
+
 tablex.deep_copy = function(o, seen)
   seen = seen or {}
   if o == nil then return nil end

@@ -1,3 +1,4 @@
+local popup = require("state.gui.popup")
 local pipes = require("library.pipes")
 local api = require("tech.railing").api
 local actions = require("mech.creature.actions")
@@ -53,6 +54,7 @@ return function()
         pipes.burst_with_steam(rails.entities.leaking_valve)
         api.narration("Мощный поток горячего пара от ближайшей трубы прерывает твои мысли")
         State.player.in_cutscene = false
+        api.autosave()
       end,
     },
     {
@@ -94,7 +96,7 @@ return function()
 
       run = function(self, rails, dt)
         self.enabled = false
-        State.gui.popup:show(
+        popup.show(
           rails.entities[1].position, "above",
           random.choice({
             "УКС " .. math.random(15, 27) / 10,

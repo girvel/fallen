@@ -1,3 +1,5 @@
+local popup = require("state.gui.popup")
+local game_save = require("state.game_save")
 local fx = require("tech.fx")
 local hostility = require("mech.hostility")
 local abilities = require("mech.abilities")
@@ -5,7 +7,7 @@ local utf8 = require("utf8")
 local translation = require("tech.translation")
 
 
-local railing, _, static = Module("tech.railing")
+local railing, module_mt, static = Module("tech.railing")
 railing.api = static {}
 
 railing.api.narration = function(text, source)
@@ -120,7 +122,13 @@ railing.api.ability_check_message = function(ability, dc, content_success, conte
 end
 
 railing.api.message = function(content)
-  return State.gui.popup:show(State.player.position + Vector.up, "above", content)
+  return popup.show(State.player.position + Vector.up, "above", content)
+end
+
+railing.api.autosave = function()
+  Log.info("Autosave")
+  game_save.write()
+  railing.api.notification("Игра сохранена")
 end
 
 local quest_stage = function(k, v)
@@ -144,8 +152,8 @@ railing.api.update_quest = function(changes)
   railing.api.notification("Журнал обновлён")
 end
 
-railing.mixin = function()
-  return {
+module_mt.__call = function(_, ...)
+  return Tablex.extend(setmetatable({
     active_coroutines = {},
 
     update = function(self, event)
@@ -204,7 +212,16 @@ railing.mixin = function()
       return Fun.iter(self.active_coroutines)
         :any(function(c) return c.base_scene == scene end)
     end,
-  }
+  }, {
+    __serialize = function(self)
+      if #self.active_coroutines == 0 then return end
+      self = Tablex.shallow_copy(self)
+      self.active_coroutines = {}
+      return function()
+        return self
+      end
+    end
+  }), ...)
 end
 
 return railing
