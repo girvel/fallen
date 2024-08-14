@@ -68,6 +68,7 @@ return function()
         mouse_check = {28, 85},
         dirty_magazine = {24, 105},
         kitchen_check = {23, 102},
+        officer_room_enter = {31, 97},
       }
 
       self.positions = Fun.pairs(self.positions)
@@ -75,24 +76,30 @@ return function()
         :tomap()
 
       self.entities = {
-        State.grids.solids[Vector({22, 54})],
-        State.grids.solids[self.positions[2]],
-        State.grids.solids[Vector({20, 48})],
-        State.grids.solids[Vector({23, 48})],
-        leaking_valve = State.grids.solids[Vector({22, 55})],
-        note = State:add(Tablex.extend(
-          note(),
-          {position = Vector({19, 78})}
-        )),
-        detective_door = State:add(Tablex.extend(
-          live.black_door({locked = true}),
-          {position = Vector({21, 56})}
-        )),
-        neighbour = State.grids.solids[Vector({20, 77})],
-        upper_bunk = State.grids.solids[Vector({20, 74})],
-        dining_room_door_1 = State.grids.solids[Vector({24, 100})],
-        dining_room_door_2 = State.grids.solids[Vector({26, 97})],
+        {22, 54},
+        self.positions[2],
+        {20, 48},
+        {23, 48},
+        leaking_valve = {22, 55},
+        neighbour = {20, 77},
+        upper_bunk = {20, 74},
+        dining_room_door_1 = {24, 100},
+        dining_room_door_2 = {26, 97},
+        mannequin = {37, 95},
       }
+
+      self.entities = Fun.pairs(self.entities)
+        :map(function(k, v) return k, State.grids.solids[Vector(v)] end)
+        :tomap()
+
+      self.entities.note = State:add(Tablex.extend(
+        note(),
+        {position = Vector({19, 78})}
+      ))
+      self.entities.detective_door = State:add(Tablex.extend(
+        live.black_door({locked = true}),
+        {position = Vector({21, 56})}
+      ))
 
       self.been_to_latrine = false
       self.tolerates_latrine = nil

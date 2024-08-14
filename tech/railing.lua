@@ -25,6 +25,12 @@ railing.api.wait_seconds = function(s)
   while love.timer.getTime() - t < s do coroutine.yield() end
 end
 
+railing.api.wait_while = function(f)
+  while f() do
+    coroutine.yield()
+  end
+end
+
 railing.api.center_camera = function()
   Fun.iter({"scene", "scene_fx"}):each(function(view)
     State.gui.views[view].offset = (
@@ -57,6 +63,9 @@ railing.api.options = function(options, remove_picked)
 end
 
 railing.api.notification = function(text, is_order)
+  if is_order then
+    State.gui.sidebar:clear_notifications()
+  end
   State.gui.sidebar:push_notification(text, is_order)
 end
 
