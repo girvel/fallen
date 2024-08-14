@@ -12,7 +12,7 @@ local build_table = function(x, cache)
     local serialized = mt.__serialize(x)
     if type(serialized) == "function" then
       allowed_big_upvalues[serialized] = true
-      return ("return %s()"):format(handle_primitive(serialized, cache, true))
+      return ("return %s()"):format(handle_primitive(serialized, cache))
     end
     if type(serialized) == "string" then
       return "return " .. serialized

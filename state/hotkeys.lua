@@ -147,10 +147,10 @@ return Module("state.hotkeys", function(modes, debug_mode)
   end)
 
   -- death --
-  define_hotkey(hotkeys, {"death"}, {"r"}, {
-    name = "начать заново",
+  define_hotkey(hotkeys, {"death"}, {"enter", "e"}, {
+    name = "начать с последнего сохранения",
     pre_action = function()
-      game_save.load()
+      game_save.read()
     end,
   })
 

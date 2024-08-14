@@ -47,6 +47,7 @@ return function()
           run = function(self, rails, dt)
             self.enabled = false
             level.move(State.player, Vector({28, 9}))
+            api.autosave()
           end,
         },
       }
