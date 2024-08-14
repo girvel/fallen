@@ -14,15 +14,12 @@ local walls_set = Common.set("WM")
 local countertop_set = Common.set("rU")
 
 return Module("library.palette", {
-  transparents = Common.set("D@gr>v<^\\/FB}{T+o01234LpPtkKba$HuUOSsQhbs|dmRAl"),
-  throwables = Common.set("_,-.'"),
+  transparents = Common.set([[D@gr>v<^\/FB}{T+o01234LpPtkKba$HuUOSsQhbs|dmRAl]]),
+  throwables = Common.set([[-.']]),
   factories = {
     ["@"] = player,
 
     -- tiles -- 
-    _ = tiles.planks,
-    [","] = tiles.walkway,
-    ["-"] = tiles.steel_floor,
     ["'"] = tiles.steel_floor_dirty,
 
     -- things --
@@ -151,6 +148,20 @@ return Module("library.palette", {
         return tiles.walkway
       end
       return tiles.planks
+    end,
+
+    ["-"] = function(grid, position)
+      if math.random() <= 0.1 then
+        return tiles.steel_damaged
+      end
+      return tiles.steel_floor
+    end,
+
+    ["_"] = function(grid, position)
+      if math.random() <= 0.1 then
+        return tiles.steel_barred_damaged
+      end
+      return tiles.steel_barred
     end,
 
     p = function(grid, position)
