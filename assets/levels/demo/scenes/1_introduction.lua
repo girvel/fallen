@@ -163,7 +163,7 @@ return function()
       end,
     },
 
-    {
+    warning_leaving_player_room = {
       name = "Player leaves the room before reading the note",
       enabled = true,
       start_predicate = function(self, rails, dt)

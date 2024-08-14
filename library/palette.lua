@@ -1,3 +1,4 @@
+local engine = require("library.engine")
 local things = require("library.things")
 local live = require("library.live")
 local mobs = require("library.mobs")
@@ -14,7 +15,7 @@ local walls_set = Common.set("WM")
 local countertop_set = Common.set("rU")
 
 return Module("library.palette", {
-  transparents = Common.set([[D@gr>v<^\/FB}{T+o01234LpPtkKba$HuUOSsQhbs|dmRAl]]),
+  transparents = Common.set([[D@gr>v<^\/FB}{T+o01234LpPtkKba$HuUOSsQhbs|dmRAl]] .. engine.char),
   throwables = Common.set([[-.']]),
   factories = {
     ["@"] = player,
@@ -82,6 +83,8 @@ return Module("library.palette", {
     m = items.machete,
   },
   complex_factories = {
+    [engine.char] = engine.complex_factory,
+
     W = function(grid, position)
       if grid:safe_get(position + Vector.down) == "U" then
         return walls.steel_behind_cauldron
