@@ -11,10 +11,11 @@ local interactive = require("tech.interactive")
 local sprite = require("tech.sprite")
 
 
-local note = function()
+local note = function(codex_update)
   return Tablex.extend(
     interactive(function(self, other)
       self.interacted_by = other
+      api.discover_wiki(codex_update)
       State:remove(self)
     end),
     {
@@ -93,7 +94,7 @@ return function()
         :tomap()
 
       self.entities.note = State:add(Tablex.extend(
-        note(),
+        note({colleague_note = true}),
         {position = Vector({19, 78})}
       ))
       self.entities.detective_door = State:add(Tablex.extend(
@@ -128,6 +129,13 @@ return function()
       State:add(things.magazine(), {position = self.positions.dirty_magazine})
       self.entities.cook = State:add(
         mobs.dreamer(), interactive.detector(true), {position = Vector({19, 102})}
+      )
+
+      State:add(note({fighting_guide = true}), {position = Vector({32, 96})})
+      self.entities.mirage_block = State:add(
+        decorations.mirage_block(),
+        interactive.detector(true),
+        {position = Vector({37, 101})}
       )
     end,
   })

@@ -85,7 +85,7 @@ railing.api.make_hostile = function(faction, entities)
   hostility.make_hostile(faction)
 end
 
-railing.api.abilities_check = function(ability, dc)
+railing.api.ability_check = function(ability, dc)
   local success = abilities.check(State.player, ability, dc)
 
   railing.api.message('<span color="%s">[%s]</span>' % {
@@ -107,7 +107,7 @@ railing.api.saving_throw = function(ability, dc)
   return success
 end
 
-railing.api.abilities_check_message = function(ability, dc, content_success, content_failure)
+railing.api.ability_check_message = function(ability, dc, content_success, content_failure)
   local success = abilities.check(State.player, ability, dc)
 
   railing.api.message('<span color="%s">[%s]</span> %s' % {
@@ -120,7 +120,7 @@ railing.api.abilities_check_message = function(ability, dc, content_success, con
 end
 
 railing.api.message = function(content)
-  State.gui.popup:show(State.player.position + Vector.up, "above", content)
+  return State.gui.popup:show(State.player.position + Vector.up, "above", content)
 end
 
 local quest_stage = function(k, v)

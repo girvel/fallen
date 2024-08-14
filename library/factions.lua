@@ -10,5 +10,6 @@ return Module("library.factions", function()
   set_faction(result, "player")
   set_faction(result, "half_orc")
   set_faction(result, "dreamers_detective")
+  set_faction(result, "phantom", {player = true})
   return result
 end)

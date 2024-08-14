@@ -47,4 +47,10 @@ module.variant_human_2 = {
   feat_flag = true,
 }
 
+module.phantom = {
+  codename = "phantom",
+  skin_color = Common.hex_color("c9c7ec"),
+  movement_speed = 6,
+}
+
 return module

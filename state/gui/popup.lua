@@ -11,7 +11,7 @@ return Module("state.gui.popup", function()
   return {
     show = function(self, position, relation, content, life_time)
       assert(relation == "above" or relation == "below")
-      life_time = life_time or utf8.len(content) / 10 + 5
+      life_time = life_time or utf8.len(content) / 10 + 2
 
       -- TODO styles should probably be hierarchical, common in gui and specialized in wiki, creator, dialogue etc.
       local entities = State:add_multiple(texting.generate(

@@ -103,4 +103,17 @@ module.dreamer = function()
   })
 end
 
+module.phantom_knight = function()
+  return humanoid({
+    ai = engineer_ai(),
+    name = "Фантом",
+    race = races.phantom,
+    direction = "right",
+    max_hp = 12,
+    abilities = abilities(0, 14, 0, 0, 0, 0),
+    faction = "phantom",
+    initiative_bonus = -30,
+  })
+end
+
 return module

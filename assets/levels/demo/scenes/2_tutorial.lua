@@ -1,3 +1,4 @@
+local mobs = require("library.mobs")
 local level = require("state.level")
 local api = require("tech.railing").api
 local shaders = require("tech.shaders")
@@ -69,7 +70,7 @@ return function()
           "Отлично, продолжай",
           "Настоящий бой будет тяжелее."
         }) do
-          while true do
+          while State:exists(rails.entities.mannequin) do
             if rails.entities.mannequin.hp < old_hp then
               old_hp = rails.entities.mannequin.hp
               api.notification(remark, true)
@@ -88,6 +89,76 @@ return function()
         api.notification("Методичка на столе", true)
         api.notification("Запусти блок миража, чтобы перейти к демонстрации", true)
         api.update_quest({warmup = 5})
+      end,
+    },
+
+    {
+      name = "Phantom fight",
+      enabled = true,
+      start_predicate = function(self, rails, dt)
+        return rails.entities.mirage_block.interacted_by == State.player
+      end,
+
+      run = function(self, rails, dt)
+        self.enabled = false
+        rails.entities.mirage_block.interact = nil
+        rails.scenes.warmup.enabled = false
+
+        api.narration("Это небольшой, размером с тумбочку, черно-желтый куб; на его верхней грани размещено стекло.")
+        api.narration("В нижней части стекла расположены три кнопки: два треугольника, смотрящие в разные стороны, и круг.")
+        api.narration("За стеклом лежит пергамент с схемой человеческого организма; рисунок ёмко подписан:")
+        api.line(State.player, "”Самое страшное животное - Человек”")
+
+        local options = {
+          "Нажать на один из треугольников",
+          "Нажать на круг",
+        }
+
+        local e
+        while true do
+          if api.options(options, true) == 1 then
+            api.narration("После нажатия, пергамент исчезает в глубине блока, а потом снова всплывает с противоположной стороны")
+          else
+            api.narration("Блок громко жужжит, после чего выпускает из левой грани множество потоков световых лучей.")
+            api.narration("В конце комнаты свет формирует призрачную фигуру рыцаря.")
+
+            e = State:add(mobs.phantom_knight(), {position = Vector({31, 97})})
+            if api.ability_check("arcana", 10) then
+              api.narration("Это обыкновенная иллюзия, она не может причинять вряд.")
+              api.narration("Должно быть, машина создает фантом на основе схемы.")
+            else
+              api.narration("Машина призвала воителя из былых времён.")
+              api.narration("Ты должен показать ему, на что способен.")
+            end
+            break
+          end
+        end
+
+        State:start_combat({State.player, e})
+        api.notification("Твой ход.", true)
+
+        local popup = {}
+        while State.combat do
+          if State.combat:get_current() ~= State.player then break end
+          if State.player.resources.movement == 0 then
+            popup = api.message("Больше двигаться ты не сможешь, время передать ход")
+            break
+          end
+          coroutine.yield()
+        end
+
+        if State.combat then
+          api.wait_while(function() return State.combat:get_current() == State.player end)
+          api.wait_while(function() return State.combat:get_current() ~= State.player end)
+          State:remove_multiple(popup)
+          api.message("Это всего лишь иллюзия.")
+          api.wait_seconds(2)
+          api.notification("Добей иллюзию", true)
+        end
+
+        api.wait_while(function() return State.combat end)
+        api.notification("Покорми птицу в клетке", true)
+        api.update_quest({warmup = 6})
       end,
     },
   }

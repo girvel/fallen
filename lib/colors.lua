@@ -11,6 +11,7 @@ colors.hex = static {
   red = "e64e4b",
   dark_red = "5d375a",
   gray = "8b7c99",
+  dark_brown = "31222c",
 }
 
 for k, v in pairs(colors.hex) do

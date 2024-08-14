@@ -189,7 +189,6 @@ return function()
 
       run = function(self, rails, dt)
         self.enabled = false
-        api.discover_wiki({colleague_note = true})
         State.gui.sidebar.hint_override = "Нажмите [K] чтобы открыть кодекс"
         while Common.last(State.gui.wiki.history) ~= "codex" and not Common.period(10, self) do
           coroutine.yield()

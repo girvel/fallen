@@ -169,11 +169,11 @@ module_mt.__call = function(_, systems, debug_mode)
       end
 
       Fun.iter(list):each(function(e)
-        e.current_initiative = (D(20) + abilities.get_modifier(e.abilities.dex)):roll()
+        e.current_initiative = abilities.initiative_roll(e):roll()
       end)
 
       Tablex.concat(list, -Query(State.combat):iter_entities_only():totable())
-      table.sort(list, function(a, b) return a.current_initiative < b.current_initiative end)
+      table.sort(list, function(a, b) return a.current_initiative > b.current_initiative end)
 
       self.combat = combat(list)
       self.combat.current_i = current_i
