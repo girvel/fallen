@@ -65,9 +65,6 @@ railing.api.options = function(options, remove_picked)
 end
 
 railing.api.notification = function(text, is_order)
-  if is_order then
-    State.gui.sidebar:clear_notifications()
-  end
   State.gui.sidebar:push_notification(text, is_order)
 end
 

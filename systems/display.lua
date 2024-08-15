@@ -7,7 +7,7 @@ local sprite = require("tech.sprite")
 local default_font = love.graphics.newFont("assets/fonts/joystix.monospace-regular.otf", 12)
 default_font:setLineHeight(1.2)
 
-local hint_font = love.graphics.newFont("assets/fonts/joystix.monospace-regular.otf", 20)
+local hint_font = love.graphics.newFont("assets/fonts/joystix.monospace-regular.otf", 16)
 
 local display, _, static = Module("systems.display")
 

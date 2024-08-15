@@ -58,7 +58,7 @@ end
 module.notification = function()
   return {
     codename = "notification",
-    view = "sidebar_text",
+    view = "notification",
     position = Vector.zero,
     sprite = sprite.text({Colors.white, ""}, 18),
   }
@@ -69,8 +69,9 @@ module.notification_fx = function()
     animated("assets/sprites/notification_fx"),
     {
       codename = "notification_fx",
-      view = "sidebar",
-      position = Vector({-117, 4})
+      view = "notification",
+      --position = Vector({-117, 4})
+      position = Vector.zero,
     }
   )
 end

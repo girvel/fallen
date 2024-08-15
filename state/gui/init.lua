@@ -23,6 +23,7 @@ module_mt.__call = function()
       actions = view(Vector.zero, 2, 24),
       sidebar = view(Vector.zero, 2, 1),
       sidebar_text = view(Vector.zero, 1, 1),
+      notification = view(Vector.zero, 1, 1),
       dialogue_background = view(Vector.zero, 1, 1),
       dialogue_portrait = view(Vector.zero, 2, 1),
       dialogue_text = view(Vector.zero, 1, 1),
@@ -35,6 +36,7 @@ module_mt.__call = function()
     views_order = {
       "scene", "scene_fx",
       "sidebar_background", "actions", "sidebar", "sidebar_text",
+      "notification",
       "dialogue_background", "dialogue_portrait", "dialogue_text",
       "wiki", "character_creator",
       "scene_popup_background", "scene_popup_content",
@@ -48,6 +50,7 @@ module_mt.__call = function()
         sidebar_background = Vector({love.graphics.getWidth() - State.gui.sidebar.W, 0}),
         sidebar = Vector({love.graphics.getWidth() - State.gui.sidebar.W, 0}),
         sidebar_text = Vector({love.graphics.getWidth() - State.gui.sidebar.W, 0}),
+        notification = gui._get_dialogue_offset() + Vector.up * 70,
         dialogue_background = Vector.zero,
         dialogue_portrait = gui._get_dialogue_offset() - PORTRAIT_SPACE,
         dialogue_text = gui._get_dialogue_offset(),

@@ -89,7 +89,6 @@ return function()
           end
         end
 
-        api.notification("Методичка на столе", true)
         api.notification("Запусти блок миража, чтобы перейти к демонстрации", true)
         api.update_quest({warmup = 5})
       end,
@@ -235,8 +234,6 @@ return function()
           rails.scenes.kills_possessed.enabled = true
           rails.entities.possessed = State:add(mobs.possessed(), {position = Vector({17, 97})})
 
-          api.notification("Разминка окончена")
-          api.wait_seconds(5)
           api.notification("Направляйся к комнате с черной дверью.", true)
 
           api.wait_seconds(10)

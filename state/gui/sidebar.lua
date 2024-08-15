@@ -83,16 +83,16 @@ return Module("state.gui.sidebar", function()
       self._notification_lifetime = 7
       if is_order then
         State.audio:play_static(self.order_sound)
-        self.notification_fx:animate("order")
+        -- self.notification_fx:animate("order")
       else
-        self.notification_fx:animate("normal")
+        -- self.notification_fx:animate("normal")
       end
 
       self.notification.sprite.text = {is_order and COLOR.ORDER or COLOR.NOTIFICATION, text}
-      self.notification.position = Vector({
-        -15 - self.notification.sprite.font:getWidth(text),
-        16 * State.gui.views.sidebar.scale - self.notification.sprite.font:getHeight() / 2
-      })
+      -- self.notification.position = Vector({
+      --   -15 - self.notification.sprite.font:getWidth(text),
+      --   16 * State.gui.views.sidebar.scale - self.notification.sprite.font:getHeight() / 2
+      -- })
     end,
 
     create_gui_entities = function(self)
@@ -100,7 +100,7 @@ return Module("state.gui.sidebar", function()
       self.hp_bar = State:add(special.hp_bar())
       self.hp_text = State:add(special.hp_text())
       self.notification = State:add(special.notification())
-      self.notification_fx = State:add(special.notification_fx())
+      -- self.notification_fx = State:add(special.notification_fx())
     end,
 
     _notification_queue = {},

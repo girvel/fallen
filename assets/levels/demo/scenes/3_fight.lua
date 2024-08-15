@@ -158,7 +158,6 @@ return function()
       run = function(self, rails, dt)
         self.enabled = false
         api.notification("Задача выполнена", true)
-        api.notification("Ожидайте следующее задание", true)
         api.update_quest({detective = 3})
       end,
     },
@@ -196,7 +195,6 @@ return function()
         rails.entities[3].ai.mode = engineer_ai.modes.run_away_to(rails.positions.exit)
 
         api.notification("Это была ошибка", true)
-        api.notification("Устранить агрессивных инженеров", true)
       end,
     },
 
@@ -210,7 +208,6 @@ return function()
       run = function(self, rails, dt)
         self.enabled = false
         api.notification("Задача выполнена неудовлетворительно", true)
-        api.notification("Ожидайте следующее задание", true)
         api.discover_wiki({fought_dreamers = true})
         api.update_quest({detective = 3})
       end,
@@ -243,7 +240,6 @@ return function()
         self.enabled = false
         State:remove(rails.entities[3])
         api.notification("Задача выполнена неудовлетворительно", true)
-        api.notification("Ожидайте следующее задание", true)
         api.update_quest({detective = 3})
         State.gui.wiki.quest_states.detective = 3
       end,

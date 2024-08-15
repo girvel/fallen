@@ -34,7 +34,7 @@ return function()
         api.narration("Эти слова повторял <hate>Я</hate>?")
         api.narration("Или они были для <hate>Меня</hate>?")
 
-        api.notification("приведи себя в порядок", true)
+        api.notification("Приведи себя в порядок", true)
         api.wait_seconds(3)
 
         api.narration("А кем были те “Я” и “Меня”?")
