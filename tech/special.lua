@@ -6,6 +6,7 @@ local sprite = require("tech.sprite")
 local module, _, static = Module("tech.special")
 
 module.floating_damage = function(number, scene_position, color)
+  Log.debug("damage")
   number = tostring(number)
   return {
     boring_flag = true,
