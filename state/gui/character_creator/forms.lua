@@ -115,7 +115,7 @@ forms.race = static(function(params)
 end)
 
 forms.abilities = static(function(params)
-  local text = "   <h2>Способности</h2>"
+  local text = "   <h2>Характеристики</h2>"
     .. "   Свободные очки: %s\n\n" % params.points
 
   local bonus_column = Fun.iter(abilities.list)
