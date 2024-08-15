@@ -1,5 +1,4 @@
 local abilities = require("mech.abilities")
-local utf8 = require("utf8")
 local races = require("mech.races")
 local translation = require("tech.translation")
 local perk_form = require("state.gui.character_creator.perk_form")
@@ -21,41 +20,6 @@ local cost = {
 }
 
 local available_races = {"human", "variant_human_1", "variant_human_2"}
-
-local len = function(str)
-  str = str
-    :gsub("<[^>]*>", "")
-    :gsub("&.t;", "&")
-  return utf8.len(str)
-end
-
-local build_table = function(headers, matrix)
-  local total_header = table.concat(headers, "  ")
-  local header_sizes = Fun.range(#headers)
-    :map(function(x)
-      return math.max(len(headers[x]), Fun.range(#matrix)
-        :map(function(y) return len(matrix[y][x]) end)
-        :max())
-    end)
-    :totable()
-
-  total_header = Fun.iter(headers)
-    :enumerate()
-    :map(function(x, h) return tostring(h) .. " " * (header_sizes[x] - len(h)) .. "  " end)
-    :reduce(Fun.op.concat, "")
-
-  local text = total_header .. "\n"
-    .. "   " .. "-" * (Fun.iter(header_sizes):sum() + 2 * #header_sizes - 5)
-
-  for y, row in ipairs(matrix) do
-    text = text .. "\n"
-    for x, value in ipairs(row) do
-      text = text .. tostring(value) .. " " * (header_sizes[x] - len(value) + 2)
-    end
-  end
-
-  return text
-end
 
 forms.race = static(function(params)
   local text = "%s  <h2>Раса: &lt; %s &gt;</h2>" % {
@@ -130,7 +94,7 @@ forms.abilities = static(function(params)
     :tomap()
 
   text = text
-    .. build_table(
+    .. Common.build_table(
       {" ", "Способность ", "Значение", "Бонус расы", "Результат", "Модификатор"},
       Fun.iter(abilities.list)
         :enumerate()
@@ -152,7 +116,8 @@ forms.abilities = static(function(params)
             "%+i" % abilities.get_modifier(params.abilities_final[a])
           }
         end)
-        :totable()
+        :totable(),
+      true
     )
 
   for i, a in ipairs(abilities.list) do
@@ -187,7 +152,7 @@ forms.skills = static(function(params)
     :tomap()
 
   text = text
-    .. build_table(
+    .. Common.build_table(
       {" ", "Навык ", "Владение", "Бонус", "Результат"},
       Fun.iter(abilities.skills)
         :enumerate()
@@ -200,7 +165,8 @@ forms.skills = static(function(params)
             "= %+i" % result_column[s],
           }
         end)
-        :totable()
+        :totable(),
+      true
     )
 
   for i, s in ipairs(abilities.skills) do

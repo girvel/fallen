@@ -15,7 +15,7 @@ local COLOR = {
 
 local hotkeys_order = Fun.iter(
   ("w a s d up left down right 1 2 3 4 5 6 7 8 9 0 e h return z space k j n "
-  .. "Ctrl+enter Ctrl+Shift+q Ctrl+Shift+r Ctrl+Shift+s") / " "
+  .. "Ctrl+enter Shift+q Shift+r") / " "
 )
   :enumerate()
   :map(function(i, e) return e, i end)
@@ -34,9 +34,10 @@ return Module("state.gui.sidebar", function()
     notification = nil,
 
     ACTION_GRID_W = 5,
-    W = 256,
+    W = 320,
 
     order_sound = sound.multiple("assets/sounds/electricity.wav", 0.08)[1],
+    notification_sound = sound.multiple("assets/sounds/notification.mp3", 0.01)[1],
 
     update_indicators = function(self, dt)
       self:_update_hp_bar()
@@ -85,6 +86,7 @@ return Module("state.gui.sidebar", function()
         State.audio:play_static(self.order_sound)
         -- self.notification_fx:animate("order")
       else
+        State.audio:play_static(self.notification_sound)
         -- self.notification_fx:animate("normal")
       end
 
@@ -167,52 +169,50 @@ return Module("state.gui.sidebar", function()
           State.player:get_resources("long")
         )
 
-        append("Ресурсы:\n" .. table.concat(
+        append(Common.build_table(
+          {"Ресурсы", ""},
           Fun.iter(State.player.resources)
             :map(function(k, v)
-              return "  %s: %s%s" % {
+              return {
                 translation.resources[k] or k,
-                value_translations[v] or tostring(v),
-                max[k] == nil and "" or "/" .. (value_translations[max[k]] or tostring(max[k])),
+                (value_translations[v] or tostring(v))
+                  .. (max[k] == nil
+                    and ""
+                    or "/" .. (value_translations[max[k]] or tostring(max[k])))
               }
             end)
-            :totable(),
-          "\n"
+            :totable()
         ))
       end
 
-      append("\n\nДействия:")
-
       local hotkeys_table = Fun.iter(State.hotkeys[State:get_mode()])
-        :group_by(function(key, data) return data, key end)
-        :filter(function(data, keys)
-          return not data.hidden
-            and (not data.action or Tablex.contains(State.player.potential_actions, data.action))
-        end)
-        :map(function(data, keys)
-          table.sort(keys)
-          return {data = data, keys = keys}
-        end)
+        :filter(function(key, data) return not data.hidden end)
+        :map(function(key, data) return {key = key, data = data} end)
         :totable()
 
       table.sort(hotkeys_table, function(a, b)
-        assert(hotkeys_order[a.keys[1]], "Hotkey %s is not ordered" % a.keys[1])
-        assert(hotkeys_order[b.keys[1]], "Hotkey %s is not ordered" % b.keys[1])
-        return hotkeys_order[a.keys[1]] < hotkeys_order[b.keys[1]]
+        assert(hotkeys_order[a.key], "Hotkey %s is not ordered" % a.key)
+        assert(hotkeys_order[b.key], "Hotkey %s is not ordered" % b.key)
+        return hotkeys_order[a.key] < hotkeys_order[b.key]
       end)
 
-      append(
+      append("\n\nУправление\n")
+      local render_table = Common.build_table(
+        {"", ""},
         Fun.iter(hotkeys_table)
-          :map(function(t)
-            return {
-              t.data.action and not t.data.action:get_availabilities(State.player)
-                and COLOR.INACTIVE
-                or Colors.white,
-              "\n  [%s] - %s" % {table.concat(t.keys, "/"), Common.get_name(t.data)},
-            }
-          end)
-          :reduce(Tablex.concat, {})
-      )
+          :map(function(t) return {t.key, Common.get_name(t.data)} end)
+          :totable()
+      ) / "\n"
+      append(render_table[2])
+
+      for i, t in ipairs(hotkeys_table) do
+        append({
+          t.data.action and not t.data.action:get_availabilities(State.player)
+            and COLOR.INACTIVE
+            or Colors.white,
+          "\n" .. render_table[i + 2]
+        })
+      end
 
       if State.combat then
         append("\n\nОчередь ходов:")

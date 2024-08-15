@@ -1,3 +1,6 @@
+local utf8 = require("utf8")
+
+
 local common = {}
 
 common.get_by_path = function(t, identifier, i)
@@ -105,6 +108,49 @@ end
 
 common.last = function(t)
   return t[#t]
+end
+
+local len = function(str)
+  str = str
+    :gsub("<[^>]*>", "")
+    :gsub("&.t;", "&")
+  return utf8.len(str)
+end
+
+common.build_table = function(headers, matrix, needs_shift)
+  local new_headers = headers or Fun.range(#matrix[1]):map(function() return "" end):totable()
+
+  local header_sizes = Fun.range(#new_headers)
+    :map(function(x)
+      return math.max(
+        len(new_headers[x]),
+        #matrix == 0 and 0 or Fun.range(#matrix)
+          :map(function(y) return len(matrix[y][x]) end)
+          :max())
+    end)
+    :totable()
+
+  local total_header = Fun.iter(new_headers)
+    :enumerate()
+    :map(function(x, h) return tostring(h) .. " " * (header_sizes[x] - len(h)) .. "  " end)
+    :reduce(Fun.op.concat, "")
+
+  local text = ""
+
+  if headers then
+    text = total_header .. "\n"
+      .. (needs_shift and "   " or "")
+      .. "-" * (Fun.iter(header_sizes):sum() + 2 * #header_sizes - (needs_shift and 5 or 2))
+  end
+
+  for y, row in ipairs(matrix) do
+    text = text .. "\n"
+    for x, value in ipairs(row) do
+      text = text .. tostring(value) .. " " * (header_sizes[x] - len(value) + 2)
+    end
+  end
+
+  return text
 end
 
 return common

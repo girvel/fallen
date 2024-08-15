@@ -46,6 +46,7 @@ return Module("state.audio", function()
     end,
 
     play_static = function(self, this_sound)
+      this_sound.source:stop()
       if this_sound.source:getChannelCount() == 1 then this_sound.source:setRelative(true) end
       this_sound.source:play()
     end,

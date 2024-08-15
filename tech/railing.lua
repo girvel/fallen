@@ -64,7 +64,10 @@ railing.api.options = function(options, remove_picked)
   return converted_i
 end
 
-railing.api.notification = function(text, is_order)
+railing.api.notification = function(text, is_order, is_overwriting)
+  if is_overwriting then
+    State.gui.sidebar:clear_notifications()
+  end
   State.gui.sidebar:push_notification(text, is_order)
 end
 
@@ -125,7 +128,6 @@ end
 railing.api.autosave = function()
   Log.info("Autosave")
   game_save.write()
-  railing.api.notification("Игра сохранена")
 end
 
 local quest_stage = function(k, v)
@@ -146,7 +148,6 @@ railing.api.update_quest = function(changes)
     Log.info("Quest %s: %s -> %s" % {k, states[k], v})
     states[k] = v
   end
-  railing.api.notification("Журнал обновлён")
 end
 
 module_mt.__call = function(_, ...)

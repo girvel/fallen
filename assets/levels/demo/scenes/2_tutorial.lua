@@ -76,20 +76,20 @@ return function()
           while State:exists(rails.entities.mannequin) do
             if rails.entities.mannequin.hp < old_hp then
               old_hp = rails.entities.mannequin.hp
-              api.notification(remark, true)
+              api.notification(remark, true, true)
               break
             end
             if not miss_remarked
               and State:check_aggression(State.player, rails.entities.mannequin)
             then
-              api.notification("Целься лучше, в настоящем бою они будут ещё и двигаться", true)
+              api.notification("Целься лучше, в настоящем бою они будут ещё и двигаться", true, true)
               miss_remarked = true
             end
             coroutine.yield()
           end
         end
 
-        api.notification("Запусти блок миража, чтобы перейти к демонстрации", true)
+        api.notification("Запусти блок миража, чтобы перейти к демонстрации", true, true)
         api.update_quest({warmup = 5})
       end,
     },
@@ -286,7 +286,7 @@ return function()
           if o == 1 then
             if api.ability_check("medicine", 12) then
               api.narration("Без сомнений, это был простой человек; он не выглядит больным или истощенным.")
-              api.narration("И… Убивал он не из-за голода.")
+              api.narration("И... Убивал он не из-за голода.")
             else
               api.narration("Люди способны на всякое; но мертвое существо неизвестной природы, несомненно, лишь приняло облик человека.")
             end

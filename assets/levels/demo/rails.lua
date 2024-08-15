@@ -71,6 +71,7 @@ return function()
         dirty_magazine = {24, 105},
         kitchen_check = {23, 102},
         officer_room_enter = {31, 97},
+        detective_exit_warning = {20, 56},
       }
 
       self.positions = Fun.pairs(self.positions)

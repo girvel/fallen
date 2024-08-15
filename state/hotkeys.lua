@@ -33,6 +33,7 @@ return Module("state.hotkeys", function(modes, debug_mode)
   }) do
     local keys, direction_name, direction_translation = unpack(t)
     define_hotkey(hotkeys, {"free", "combat"}, keys, {
+      hidden = true,
       name = "двигаться " .. direction_translation,
       pre_action = function()
         State.player:rotate(direction_name)
@@ -47,12 +48,12 @@ return Module("state.hotkeys", function(modes, debug_mode)
   })
 
   define_hotkey(hotkeys, {"free", "combat"}, {"1"}, {
-    name = "атака основной рукой",
+    name = "атака правой",
     action = actions.hand_attack,
   })
 
   define_hotkey(hotkeys, {"free", "combat"}, {"2"}, {
-    name = "атака второй рукой",
+    name = "атака левой",
     action = actions.other_hand_attack,
   })
 
@@ -172,7 +173,7 @@ return Module("state.hotkeys", function(modes, debug_mode)
     local keys, direction_name, direction_translation = unpack(t)
     define_hotkey(hotkeys, {"character_creator"}, keys, {
       name = direction_translation,
-      hidden = not direction_translation,
+      hidden = true,
       pre_action = function()
         State.gui.character_creator:move_cursor(direction_name)
       end,
@@ -180,7 +181,7 @@ return Module("state.hotkeys", function(modes, debug_mode)
   end
 
   define_hotkey(hotkeys, {"character_creator"}, {"Ctrl+enter"}, {
-    name = "Создать персонажа",
+    name = "Создать",
     pre_action = function()
       State.gui.character_creator:submit()
     end,
@@ -212,14 +213,14 @@ return Module("state.hotkeys", function(modes, debug_mode)
   })
 
   -- universal --
-  define_hotkey(hotkeys, Tablex.deep_copy(modes), {"Ctrl+Shift+q", debug_mode and "Shift+q" or nil}, {
+  define_hotkey(hotkeys, Tablex.deep_copy(modes), {"Shift+q"}, {
     name = "завершить игру",
     pre_action = function()
       love.event.push("quit")
     end,
   })
 
-  define_hotkey(hotkeys, Tablex.deep_copy(modes), {"Ctrl+Shift+r"}, {
+  define_hotkey(hotkeys, Tablex.deep_copy(modes), {"Shift+r"}, {
     name = "начать заново",
     pre_action = function()
       love.reload_flag = true
@@ -227,17 +228,17 @@ return Module("state.hotkeys", function(modes, debug_mode)
   })
 
   define_hotkey(hotkeys, {"free", "combat", "dialogue", "dialogue_options", "reading"}, {"k"}, {
-    name = "открыть кодекс",
+    name = "кодекс",
     pre_action = function() State.gui.wiki:show("codex") end,
   })
 
   define_hotkey(hotkeys, {"free", "combat", "dialogue", "dialogue_options", "reading"}, {"j"}, {
-    name = "открыть журнал",
+    name = "журнал",
     pre_action = function() State.gui.wiki:show_journal() end,
   })
 
   define_hotkey(hotkeys, {"free", "combat", "dialogue", "dialogue_options", "reading"}, {"n"}, {
-    name = "открыть редактор персонажа",
+    name = "редактор персонажа",
     pre_action = function() State.gui.character_creator:refresh() end,
   })
 

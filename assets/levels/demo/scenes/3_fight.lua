@@ -75,7 +75,7 @@ return function()
 
           if picked_option == 1 then
             api.line(rails.entities[3], "Я..?")
-            api.line(rails.entities[3], "Меня зовут Рронт. С двумя Р…")
+            api.line(rails.entities[3], "Меня зовут Рронт. С двумя Р...")
             api.line(rails.entities[3], "Фамилия - Бобински")
             api.line(rails.entities[3], "Получается Рронт Бобински, да")
 
@@ -85,10 +85,10 @@ return function()
             })
 
             if picked_suboption == 1 then
-              api.line(rails.entities[3], "Я… Я не знаю")
+              api.line(rails.entities[3], "Я... Я не знаю")
               api.line(rails.entities[3], "Помню мы с друзьями, ну, культурно отдыхали")
               api.line(rails.entities[3], "С алкоголем")
-              api.line(rails.entities[3], "А потом я здесь, а вокруг эти… как зомби себя ведут")
+              api.line(rails.entities[3], "А потом я здесь, а вокруг эти... как зомби себя ведут")
               api.line(rails.entities[3], "И правильно Рронт, две р")
             else
               api.line(rails.entities[3], "Не надо кричать!")
@@ -118,7 +118,7 @@ return function()
               api.line(rails.entities[3], "И вредить я никому не хотел, только выбраться")
             end
           elseif picked_option == 3 then
-            api.line(rails.entities[3], "Не знаю…")
+            api.line(rails.entities[3], "Не знаю...")
             api.line(rails.entities[3], "О, я попробую найти выход, буду искать и точно найду.")
             api.line(rails.entities[3], "Верно.")
           elseif picked_option == 4 then
@@ -242,6 +242,21 @@ return function()
         api.notification("Задача выполнена неудовлетворительно", true)
         api.update_quest({detective = 3})
         State.gui.wiki.quest_states.detective = 3
+      end,
+    },
+
+    {
+      name = "Player tries to leave detective zone",
+      enabled = true,
+      start_predicate = function(self, rails, dt)
+        return State.gui.wiki.quest_states.detective == 2
+          and State.player.position == rails.positions.detective_exit_warning
+      end,
+
+      run = function(self, rails, dt)
+        self.enabled = false
+        State.gui.sidebar:clear_notifications()
+        api.notification("Не стоит покидать комнату, диверсант может сбежать", false, true)
       end,
     },
   }
