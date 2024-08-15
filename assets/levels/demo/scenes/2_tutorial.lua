@@ -103,9 +103,8 @@ return function()
       end,
 
       run = function(self, rails, dt)
-        self.enabled = false
-        rails.entities.mirage_block.interact = nil
         rails.scenes.warmup.enabled = false
+        rails.entities.mirage_block.interacted_by = nil
 
         api.narration("Это небольшой, размером с тумбочку, черно-желтый куб; на его верхней грани размещено стекло.")
         api.narration("В нижней части стекла расположены три кнопки: два треугольника, смотрящие в разные стороны, и круг.")
@@ -115,13 +114,17 @@ return function()
         local options = {
           "Нажать на один из треугольников",
           "Нажать на круг",
+          "*Уйти*",
         }
 
         local e
         while true do
-          if api.options(options, true) == 1 then
+          local o = api.options(options)
+          if o == 1 then
             api.narration("После нажатия, пергамент исчезает в глубине блока, а потом снова всплывает с противоположной стороны")
-          else
+          elseif o == 2 then
+            self.enabled = false
+            rails.entities.mirage_block.interact = nil
             api.narration("Блок громко жужжит, после чего выпускает из левой грани множество потоков световых лучей.")
             api.narration("В конце комнаты свет формирует призрачную фигуру рыцаря.")
 
@@ -134,6 +137,8 @@ return function()
               api.narration("Ты должен показать ему, на что способен.")
             end
             break
+          else
+            return
           end
         end
 
