@@ -15,7 +15,7 @@ local COLOR = {
 
 local hotkeys_order = Fun.iter(
   ("w a s d up left down right 1 2 3 4 5 6 7 8 9 0 e h return z space k j n "
-  .. "Ctrl+enter Shift+q Shift+r") / " "
+  .. "Ctrl+enter Shift+q Shift+r enter") / " "
 )
   :enumerate()
   :map(function(i, e) return e, i end)
@@ -191,9 +191,9 @@ return Module("state.gui.sidebar", function()
         :totable()
 
       table.sort(hotkeys_table, function(a, b)
-        assert(hotkeys_order[a.key], "Hotkey %s is not ordered" % a.key)
-        assert(hotkeys_order[b.key], "Hotkey %s is not ordered" % b.key)
-        return hotkeys_order[a.key] < hotkeys_order[b.key]
+        if not hotkeys_order[a.key] then Log.warn("Hotkey %s is not ordered" % a.key) end
+        if not hotkeys_order[b.key] then Log.warn("Hotkey %s is not ordered" % b.key) end
+        return (hotkeys_order[a.key] or 0) < (hotkeys_order[b.key] or 0)
       end)
 
       append("\n\nУправление\n")
