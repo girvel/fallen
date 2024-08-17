@@ -45,24 +45,18 @@ return Module("state.gui.sidebar", function()
     end,
 
     _update_hp_bar = function(self)
-      if not State.player then
-        self.hp_bar.sprite.quad = love.graphics.newQuad(
-          0, 0, 0, 0,
-          self.hp_bar.sprite.image:getDimensions()
-        )
-        return
-      end
-
       local text = "%s/%s" % {State.player.hp, State.player:get_max_hp()}
       local font = self.hp_text.sprite.font
 
+      local hp_bar = self.hp_bar
+      local hp_bar_view = State.gui.views[hp_bar.view]
       self.hp_text.sprite.text = text
-      self.hp_text.position = Vector({
-        (self.W - font:getWidth(text)) / 2,
-        32 - font:getHeight() / 2
+      self.hp_text.position = hp_bar_view:apply_multiplier(hp_bar.position) + Vector({
+        (hp_bar_view:apply_multiplier(hp_bar.sprite.image:getWidth())
+          - font:getWidth(text)) / 2,
+        2
       })
 
-      local hp_bar = self.hp_bar
       hp_bar.sprite.quad = love.graphics.newQuad(
         0, 0,
         hp_bar.sprite.image:getWidth() * math.min(1, State.player.hp / State.player:get_max_hp()),
