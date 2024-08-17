@@ -69,7 +69,7 @@ return function()
         sign_message = {27, 91},
         mouse_check = {28, 85},
         dirty_magazine = {24, 105},
-        kitchen_check = {23, 102},
+        kitchen_bucket = {22, 101},
         officer_room_enter = {31, 97},
         detective_exit_warning = {20, 56},
       }

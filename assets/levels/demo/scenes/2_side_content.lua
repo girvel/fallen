@@ -273,7 +273,7 @@ return function()
       name = "12. The kitchen",
       enabled = true,
       start_predicate = function(self, rails, dt)
-        return State.player.position == rails.positions.kitchen_check
+        return (State.player.position - rails.positions.kitchen_bucket):abs() == 1
       end,
 
       run = function(self, rails, dt)
