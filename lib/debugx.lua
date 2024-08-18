@@ -4,11 +4,26 @@ local utf8 = require("utf8")
 local module_mt = {}
 local debugx = setmetatable({}, module_mt)
 
-local history = "Hello, world!"
+
+local history = ""
+local current_command = ""
 local command_history = {}
 
-local stack = function()
-  history = history .. "\n" .. debug.traceback()
+local status = function()
+  local result = "STACK:\n"
+
+  for i = 2, math.huge do
+    local info = debug.getinfo(i)
+    if not info then break end
+    result = result .. "  %s. %s%s%s\n" % {
+      i,
+      info.short_src,
+      info.currentline > 0 and ":" .. info.currentline or "",
+      info.name and "/%s(...)" % info.name or "",
+    }
+  end
+
+  history = history .. result
 end
 
 local run = function(command)
@@ -16,8 +31,9 @@ local run = function(command)
     "return function(stack) return %s end" % command,
     "shell #" .. #command_history
   ))
+
   if ok then
-    result = table.concat(Fun.iter({pcall(result, stack)})
+    result = table.concat(Fun.iter({pcall(result)})
       :drop_n(1)
       :map(function(x) return Inspect(x) end)
       :totable(), ", ")
@@ -27,7 +43,6 @@ local run = function(command)
 end
 
 local font = love.graphics.newFont("assets/fonts/clacon2.ttf", 24)
-local current_command = ""
 
 local keypressed = function(scancode)
   if scancode == "backspace" then
@@ -55,6 +70,10 @@ local keypressed = function(scancode)
 end
 
 debugx.shell = function()
+  if #history == 0 then
+    status()
+  end
+
   love.event.pump()
   for name, a,b,c,d,e,f in love.event.poll() do
     if name == "quit" then return 0 end
