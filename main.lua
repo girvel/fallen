@@ -27,6 +27,7 @@ require("lib.tiny_dump_patch")()
 
 local love_errorhandler = love.errorhandler
 love.errorhandler = function(msg)
+  if msg == Debugx.SIGNAL then return Debugx.shell end
   Log.fatal(debug.traceback("Error: " .. tostring(msg), 2):gsub("\n[^\n]+$", ""))
 end
 
@@ -146,8 +147,6 @@ love.run = function()
 
 	-- Main loop time.
 	return function()
-    if love.shell then return Debugx.shell() end
-
     if love.reload_flag then
       love.reload()
       love.reload_flag = nil

@@ -13,7 +13,7 @@ return function()
 
         run = function(self, rails, dt)
           self.enabled = false
-          love.shell = true
+          Debugx.error()
         end,
       },
     },

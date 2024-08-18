@@ -8,18 +8,17 @@ local debugx = setmetatable({}, module_mt)
 local history = ""
 local current_command = ""
 local command_history = {}
+local _stack
 
 local status = function()
   local result = "STACK:\n"
 
-  for i = 2, math.huge do
-    local info = debug.getinfo(i)
-    if not info then break end
+  for i, data in ipairs(_stack) do
     result = result .. "  %s. %s%s%s\n" % {
       i,
-      info.short_src,
-      info.currentline > 0 and ":" .. info.currentline or "",
-      info.name and "/%s(...)" % info.name or "",
+      data.info.short_src,
+      data.info.currentline > 0 and ":" .. data.info.currentline or "",
+      data.info.name and " :: %s(...)" % data.info.name or "",
     }
   end
 
@@ -93,5 +92,25 @@ debugx.shell = function()
   )
   love.graphics.present()
 end
+
+debugx.error = function(message, level)
+  _stack = {}
+  _stack.error_message = message
+  love.shell = true
+  debugx.extend_error(1)
+end
+
+debugx.extend_error = function(level)
+  for i = 2 + (level or 0), math.huge do
+    local info = debug.getinfo(i)
+    if not info then break end
+    table.insert(_stack, {
+      info = info,
+    })
+  end
+  error(debugx.SIGNAL)
+end
+
+debugx.SIGNAL = {}
 
 return debugx
