@@ -33,7 +33,16 @@ for _, path in ipairs({
   love.filesystem.getSourceBaseDirectory() .. "/libtcod",
 }) do
   local ok, result = pcall(ffi.load, path)
+  Log.info("Loading libtcod @ %s: %s, %s" % {path, ok, result})
   if ok then return result end
 end
 
 Log.error("Unable to locate libtcod library")
+return {
+  TCOD_map_new = function() end,
+  TCOD_map_set_properties = function() end,
+  TCOD_map_compute_fov = function() end,
+  TCOD_map_is_transparent = function() return true end,
+  TCOD_map_is_walkable = function() return true end,
+  TCOD_map_is_in_fov = function() return true end,
+}
