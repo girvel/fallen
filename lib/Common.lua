@@ -157,4 +157,10 @@ common.build_table = function(headers, matrix, needs_shift)
   return text
 end
 
+common.indent = function(str)
+  return table.concat(Fun.iter(str / "\n")
+    :map(function(line) return "  " .. line end)
+    :totable(), "\n")
+end
+
 return common

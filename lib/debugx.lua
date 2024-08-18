@@ -9,6 +9,7 @@ local history = ""
 local current_command = ""
 local command_history = {}
 local _stack
+local offset = 0
 
 local status = function()
   local result = "STACK:\n"
@@ -17,8 +18,18 @@ local status = function()
     result = result .. "  %s. %s%s%s\n" % {
       i,
       data.info.short_src,
-      data.info.currentline > 0 and ":" .. data.info.currentline or "",
-      data.info.name and " :: %s(...)" % data.info.name or "",
+      data.info.currentline < 0 and "" or ":" .. data.info.currentline,
+      not data.info.name and "" or " :: %s(...)" % {
+        data.info.name,
+      },
+    }
+  end
+
+  result = result .. "\nLOCALS:\n"
+
+  for i, data in ipairs(_stack[1].locals) do
+    result = result .. "  %s = %s\n" % {
+      data.name, Common.indent(Inspect(data.value, {depth = 3})):sub(3),
     }
   end
 
@@ -27,12 +38,21 @@ end
 
 local run = function(command)
   local ok, result = pcall(loadstring(
-    "return function(stack) return %s end" % command,
+    "return function(%s) return %s end" % {
+      table.concat(Fun.iter(_stack[1].locals)
+        :map(function(pair) return pair.name end)
+        :totable(), ", "),
+      command,
+    },
     "shell #" .. #command_history
   ))
 
   if ok then
-    result = table.concat(Fun.iter({pcall(result)})
+    result = table.concat(Fun.iter({pcall(result, unpack(
+      Fun.iter(_stack[1].locals)
+        :map(function(pair) return pair.value end)
+        :totable()
+    ))})
       :drop_n(1)
       :map(function(x) return Inspect(x) end)
       :totable(), ", ")
@@ -66,6 +86,14 @@ local keypressed = function(scancode)
   if scancode == "d" and (love.keyboard.isDown("rctrl") or love.keyboard.isDown("lctrl")) then
     return 0
   end
+
+  if scancode == "pageup" then
+    offset = offset + love.graphics.getHeight() / font:getHeight()
+  end
+
+  if scancode == "pagedown" then
+    offset = offset - love.graphics.getHeight() / font:getHeight()
+  end
 end
 
 debugx.shell = function()
@@ -83,12 +111,15 @@ debugx.shell = function()
       local result = keypressed(b)
       if result then return result end
     end
+    if name == "wheelmoved" then
+      offset = offset + b
+    end
   end
 
   love.graphics.clear()
   love.graphics.printf(
     history .. "\n\n> " .. current_command,
-    font, (love.graphics.getWidth() - 800) / 2, 0, 800
+    font, (love.graphics.getWidth() - 1000) / 2, offset * font:getHeight(), 1000
   )
   love.graphics.present()
 end
@@ -104,8 +135,17 @@ debugx.extend_error = function(level)
   for i = 2 + (level or 0), math.huge do
     local info = debug.getinfo(i)
     if not info then break end
+
+    local locals = {}
+    for j = 1, math.huge do
+      local k, v = debug.getlocal(i, j)
+      if not k then break end
+      table.insert(locals, {name = k, value = v})
+    end
+
     table.insert(_stack, {
       info = info,
+      locals = locals,
     })
   end
   error(debugx.SIGNAL)
