@@ -13,8 +13,6 @@ local display, _, static = Module("systems.display")
 
 display.system = static(Tiny.sortedProcessingSystem({
   codename = "display",
-  -- filter = Tiny.requireAll("position", "sprite", "view"),
-  -- TODO RM?
   filter = function(self, e) return e.position and e.sprite and e.view and e.view ~= "scene" end,
   base_callback = "draw",
 
@@ -28,15 +26,6 @@ display.system = static(Tiny.sortedProcessingSystem({
         < select(1, iterator:filter(function(i, name) return name == second.view end):nth(1))
       )
     end
-
-    -- if not first.layer or first.layer == second.layer then return end
-
-    -- local iterator = Fun.iter(level.GRID_LAYERS):enumerate()
-    -- return (
-    --   select(1, iterator:filter(function(i, name) return name == first.layer end):nth(1))
-    --   < select(1, iterator:filter(function(i, name) return name == second.layer end):nth(1))
-    -- )
-    -- TODO RM
   end,
 
   preProcess = function(self, event)
