@@ -12,6 +12,7 @@ Tablex = require("lib.tablex")
 Query = require("lib.query")
 Mathx = require("lib.mathx")
 Common = require("lib.Common")
+Debugx = require("lib.debugx")
 
 Dump = require("lib.dump")
 Dump.require_path = "lib.dump"
@@ -145,6 +146,8 @@ love.run = function()
 
 	-- Main loop time.
 	return function()
+    if love.shell then return Debugx.shell() end
+
     if love.reload_flag then
       love.reload()
       love.reload_flag = nil
