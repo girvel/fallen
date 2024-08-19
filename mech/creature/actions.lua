@@ -72,7 +72,7 @@ end
 
 actions.hand_attack = static {
   codename = "hand_attack",
-  get_availabilities = function(self, entity)
+  get_availability = function(self, entity)
     local target = State.grids.solids:safe_get(entity.position + Vector[entity.direction])
     return entity.resources.actions > 0 and -Query(target).hp
   end,
@@ -86,7 +86,7 @@ actions.hand_attack = static {
 
 actions.other_hand_attack = static {
   codename = "other_hand_attack",
-  get_availabilities = function(self, entity)
+  get_availability = function(self, entity)
     local target = State.grids.solids:safe_get(entity.position + Vector[entity.direction])
     return entity.resources.bonus_actions > 0 and -Query(target).hp and entity.inventory.other_hand
   end,
@@ -100,7 +100,7 @@ actions.other_hand_attack = static {
 
 actions.move = static {
   codename = "move",
-  get_availabilities = function(self, entity)
+  get_availability = function(self, entity)
     return entity.resources.movement > 0
   end,
   _run = function(_, entity)
@@ -128,8 +128,7 @@ actions.move = static {
 
     if entity.animate then
       entity.movement_flag = true
-      entity:animate("move")
-      entity:when_animation_ends(function()  -- TODO! promise
+      entity:animate("move"):next(function()
         entity.movement_flag = nil
         level.move(entity, new_position)
       end)
@@ -148,7 +147,7 @@ actions.move = static {
 
 actions.dash = static {
   codename = "dash",
-  get_availabilities = function(self, entity)
+  get_availability = function(self, entity)
     return entity.resources.actions > 0
   end,
   _run = function(_, entity)
@@ -159,7 +158,7 @@ actions.dash = static {
 
 actions.interact = static {
   codename = "interact",
-  get_availabilities = function(self, entity)
+  get_availability = function(self, entity)
     return entity.resources.bonus_actions > 0
       and interactive.get_for(entity)
   end,
@@ -176,7 +175,7 @@ actions.interact = static {
 
 actions.finish_turn = static {
   codename = "finish_turn",
-  get_availabilities = function() return true end,
+  get_availability = function() return true end,
   _run = function(_, entity)
     return combat.TURN_END_SIGNAL
     -- TODO maybe discard that and use a direct call to State.combat?

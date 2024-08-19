@@ -8,11 +8,16 @@ module._packs_cache = {}
 
 local animation_methods = {
   animate = function(self, animation_name)
+    if self._on_animation_end then
+      self._on_animation_end:resolve(self)
+      self._on_animation_end = nil
+    end
+
     self:animation_set_paused(false)
     animation_name = animation_name or "idle"
     self.animation.current = animation_name .. "_" .. (self.direction or "")
     if not self.animation.pack[self.animation.current] then
-      self.animation.current = animation_name
+      self.animation.current = animation_name  -- TODO! REF animation itself
     end
     if not self.animation.pack[self.animation.current] and animation_name ~= "idle" then
       return self:animate()
@@ -25,10 +30,12 @@ local animation_methods = {
         Query(it):animate(animation_name)
       end)
     end
+
+    self._on_animation_end = Deferred.new()
+    return self._on_animation_end
   end,
 
   when_animation_ends = function(self, callback)
-    self._on_animation_end = callback
   end,
 
   animation_refresh = function(self)
@@ -137,7 +144,7 @@ module.get_render_position = function(entity)
   end
   return entity.position + Vector[entity.direction]
     * (entity.animation.frame - 1)
-    / (#entity.animation.pack[entity.animation.current] - 1)
+    / (#entity.animation.pack[entity.animation.current])
 end
 
 return module

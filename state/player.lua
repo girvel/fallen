@@ -16,6 +16,7 @@ module_mt.__call = function(_)
     faction = "player",
     fov_radius = 15,
     race = races.human,
+    debug_flag = true,
 
     immortal = true,
     on_death = function(self)

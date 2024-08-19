@@ -12,12 +12,8 @@ animation.system = static(Tiny.processingSystem({
     if this_animation.paused then return end
     this_animation.frame = this_animation.frame + dt * FPS
 
-    if math.floor(this_animation.frame) == -Query(this_animation.pack[this_animation.current]):qlength() then
-      if entity._on_animation_end then
-        entity:_on_animation_end()
-        entity._on_animation_end = nil
-      end
-    end
+    -- if math.floor(this_animation.frame) == -Query(this_animation.pack[this_animation.current]):qlength() then
+    -- end
 
     if not this_animation.pack[this_animation.current]
       or math.floor(this_animation.frame) > #this_animation.pack[this_animation.current]

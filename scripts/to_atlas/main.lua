@@ -10,7 +10,6 @@ local direction_order = {
 
 love.load = love.load or function(args)
   log.info("started", args)
-  io.read()
   local canvases = {}
   for _, file_name in ipairs(love.filesystem.getDirectoryItems(args[1])) do
     log.info("loading", file_name)

@@ -201,7 +201,7 @@ return Module("state.gui.sidebar", function()
 
       for i, t in ipairs(hotkeys_table) do
         append({
-          t.data.action and not t.data.action:get_availabilities(State.player)
+          t.data.action and not t.data.action:get_availability(State.player)
             and COLOR.INACTIVE
             or Colors.white,
           "\n" .. render_table[i + 2]

@@ -86,7 +86,7 @@ local run_script = function(script, args, script_name)
   ))()(args)
 end
 
-local get_availabilities = function(root, args)
+local get_availability = function(root, args)
   local condition = root.attributes["if"]
   if not condition then return true end
   return run_script("return " .. condition, args)
@@ -126,7 +126,7 @@ end
 local visit_html
 visit_html = function(root, args, styles, preserve_whitespace)
   preserve_whitespace = preserve_whitespace or root.name == "pre"
-  if not get_availabilities(root, args) then return {} end
+  if not get_availability(root, args) then return {} end
   if root.root == root then
     return visit_html(root.nodes[1], args, styles, preserve_whitespace)
   end
@@ -167,7 +167,7 @@ html.parse = function(content, args, styles)
 end
 
 html.is_available = function(content, args)
-  return get_availabilities(htmlparser.parse(content)("html")[1], args)
+  return get_availability(htmlparser.parse(content)("html")[1], args)
 end
 
 html.get_title = function(content)

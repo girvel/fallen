@@ -5,6 +5,7 @@ Tiny = require("lib.tiny")
 Inspect = require("lib.inspect")
 Memoize = require("lib.memoize")
 require("lib.strong")
+Deferred = require("lib.deferred")
 
 Log.info("Starting basic LOVE setup")
 

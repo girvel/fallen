@@ -70,17 +70,15 @@ creature._methods = static {
   end,
 
   rotate = function(self, direction_name)
-    self.direction = direction_name
-    self:animate()
-
-    Fun.iter(self.inventory or {}):each(function(slot, item)
+    Fun.iter(self.inventory or {}):chain({self = self}):each(function(slot, item)
+      if item.direction == direction_name then return end
       item.direction = direction_name
       Query(item):animate()
     end)
   end,
 
   act = function(self, action)
-    if not action:get_availabilities(self) then return false end
+    if not action:get_availability(self) then return false end
     return action:_run(self)
   end,
 
