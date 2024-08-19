@@ -262,7 +262,8 @@ function Inspector:getId(v)
    return tostring(id)
 end
 
-function Inspector:putValue(v)
+function Inspector:putValue(v, keys_limit)
+   keys_limit = keys_limit or math.huge
    local buf = self.buf
    local tv = type(v)
    if tv == 'string' then
@@ -288,6 +289,10 @@ function Inspector:putValue(v)
 
          for i = 1, seqLen + keysLen do
             if i > 1 then puts(buf, ',') end
+            if i > keys_limit then
+              puts(buf, "<size> = " .. seqLen + keysLen)
+              break
+            end
             if i <= seqLen then
                puts(buf, ' ')
                self:putValue(t[i])
@@ -358,7 +363,7 @@ function inspect.inspect(root, options)
       indent = indent,
    }, Inspector_mt)
 
-   inspector:putValue(root)
+   inspector:putValue(root, options.keys_limit)
 
    return table.concat(inspector.buf)
 end

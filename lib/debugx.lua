@@ -8,14 +8,16 @@ local debugx = setmetatable({}, module_mt)
 local history = ""
 local current_command = ""
 local command_history = {}
+local stack_index = 1
 local _stack
-local offset = 0
+local render_offset = 0
 
 local status = function()
-  local result = "STACK:\n"
+  local result = "\nSTACK:\n"
 
   for i, data in ipairs(_stack) do
-    result = result .. "  %s. %s%s%s\n" % {
+    result = result .. "%s %s. %s%s%s\n" % {
+      i == stack_index and ">" or " ",
       i,
       data.info.short_src,
       data.info.currentline < 0 and "" or ":" .. data.info.currentline,
@@ -27,29 +29,43 @@ local status = function()
 
   result = result .. "\nLOCALS:\n"
 
-  for i, data in ipairs(_stack[1].locals) do
+  for i, data in ipairs(_stack[stack_index].locals) do
     result = result .. "  %s = %s\n" % {
-      data.name, Common.indent(Inspect(data.value, {depth = 3})):sub(3),
+      data.name, Common.indent(Inspect(data.value, {depth = 1, keys_limit = 5})):sub(3),
     }
   end
 
   history = history .. result
 end
 
+local cd = function(i)
+  if _stack[i] then stack_index = i end
+  status()
+end
+
+local clear = function()
+  history = ""
+end
+
 local run = function(command)
-  local ok, result = pcall(loadstring(
-    "return function(%s) return %s end" % {
-      table.concat(Fun.iter(_stack[1].locals)
-        :map(function(pair) return pair.name end)
-        :totable(), ", "),
-      command,
-    },
-    "shell #" .. #command_history
-  ))
+  local ok, result
+  for _, form in ipairs({"return ", ""}) do
+    ok, result = pcall(loadstring(
+      "return function(cd, clear%s) %s%s end" % {
+        Fun.iter(_stack[stack_index].locals)
+          :map(function(pair) return ", " .. pair.name end)
+          :reduce(Fun.op.concat, ""),
+        form,
+        command,
+      },
+      "shell #" .. #command_history
+    ))
+    if ok then break end
+  end
 
   if ok then
-    result = table.concat(Fun.iter({pcall(result, unpack(
-      Fun.iter(_stack[1].locals)
+    result = table.concat(Fun.iter({pcall(result, cd, clear, unpack(
+      Fun.iter(_stack[stack_index].locals)
         :map(function(pair) return pair.value end)
         :totable()
     ))})
@@ -58,7 +74,9 @@ local run = function(command)
       :totable(), ", ")
   end
 
-  history = history .. "\n" .. result
+  if #result > 0 then
+    history = history .. "\n" .. result
+  end
 end
 
 local font = love.graphics.newFont("assets/fonts/clacon2.ttf", 24)
@@ -80,7 +98,7 @@ local keypressed = function(scancode)
   if scancode == "up" then
     current_command = Fun.iter(command_history)
       :filter(function(c) return c:startsWith(current_command) end)
-      :nth(1) or current_command
+      :reduce(Fun.op.land, current_command)
   end
 
   if scancode == "d" and (love.keyboard.isDown("rctrl") or love.keyboard.isDown("lctrl")) then
@@ -88,11 +106,11 @@ local keypressed = function(scancode)
   end
 
   if scancode == "pageup" then
-    offset = offset + love.graphics.getHeight() / font:getHeight()
+    render_offset = render_offset + love.graphics.getHeight() / font:getHeight()
   end
 
   if scancode == "pagedown" then
-    offset = offset - love.graphics.getHeight() / font:getHeight()
+    render_offset = render_offset - love.graphics.getHeight() / font:getHeight()
   end
 end
 
@@ -112,14 +130,14 @@ debugx.shell = function()
       if result then return result end
     end
     if name == "wheelmoved" then
-      offset = offset + b
+      render_offset = render_offset + b * 3
     end
   end
 
   love.graphics.clear()
   love.graphics.printf(
     history .. "\n\n> " .. current_command,
-    font, (love.graphics.getWidth() - 1000) / 2, offset * font:getHeight(), 1000
+    font, (love.graphics.getWidth() - 1000) / 2, render_offset * font:getHeight(), 1000
   )
   love.graphics.present()
 end
