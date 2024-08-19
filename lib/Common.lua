@@ -94,8 +94,7 @@ common.resume_logged = function(coroutine_, ...)
   if not success then
     if State.shell_enabled then
       Log.info("Debugx error in coroutine")
-      Log.trace(debug.getinfo(coroutine_, 1))
-      Debugx.extend_error({thread = coroutine_})
+      Debugx.extend_error()
       error(message)
     end
     Log.error("Coroutine error: %s\n%s" % {message, debug.traceback(coroutine_)})

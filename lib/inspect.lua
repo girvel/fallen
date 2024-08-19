@@ -290,6 +290,7 @@ function Inspector:putValue(v, keys_limit)
          for i = 1, seqLen + keysLen do
             if i > 1 then puts(buf, ',') end
             if i > keys_limit then
+              tabify(self)
               puts(buf, "<size> = " .. seqLen + keysLen)
               break
             end
