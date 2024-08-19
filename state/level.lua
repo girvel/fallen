@@ -5,11 +5,18 @@ level.GRID_COMPLEX_LAYERS = {fx_behind = true, fx = true}
 
 level.move = function(entity, position)
   local grid = State.grids[entity.layer]
-  if not grid:can_fit(position) or grid[position] then return false end
+  if grid[position] then
+    Log.warn("level.move: replacing %s with %s" % {Common.get_name(grid[position]), Common.get_name(entity)})
+  end
   grid[entity.position] = nil
   grid[position] = entity
   entity.position = position
   return true
+end
+
+level.can_move = function(entity, position)
+  local grid = State.grids[entity.layer]
+  return grid:can_fit(position) and not grid[position]
 end
 
 level.change_layer = function(entity, new_layer)

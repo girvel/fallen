@@ -1,6 +1,7 @@
 local sprite = require("tech.sprite")
 
 
+-- TODO REF review animation module & system
 local module, module_mt, static = Module("tech.animated")
 
 module._packs_cache = {}
@@ -128,6 +129,15 @@ module.colored_pack = function(base_pack, color)
         :totable()
     end)
     :tomap()
+end
+
+module.get_render_position = function(entity)
+  if not entity.movement_flag then
+    return entity.position
+  end
+  return entity.position + Vector[entity.direction]
+    * (entity.animation.frame - 1)
+    / (#entity.animation.pack[entity.animation.current] - 1)
 end
 
 return module

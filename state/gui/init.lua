@@ -1,3 +1,4 @@
+local animated = require("tech.animated")
 local view = require("utils.view")
 local tech_constants = require("tech.constants")
 local sprite = require("tech.sprite")
@@ -80,8 +81,10 @@ gui._get_scene_offset = function()
   local window_h = love.graphics.getHeight()
   local border_w = math.floor(window_w / 2)
   local border_h = math.floor(window_h / 2)
-  local player_x, player_y = unpack(State.player.position * tech_constants.CELL_DISPLAY_SIZE * State.SCALING_FACTOR)
-  local grid_w, grid_h = unpack(State.grids.solids.size * tech_constants.CELL_DISPLAY_SIZE * State.SCALING_FACTOR)
+  local player_x, player_y = unpack(
+    animated.get_render_position(State.player)
+    * tech_constants.CELL_DISPLAY_SIZE * State.SCALING_FACTOR
+  )
 
   local result = -Vector({
     Mathx.median(

@@ -84,7 +84,7 @@ return function()
       self.tolerates_latrine = nil
     end,
 
-    initialize_entities = function(self)
+    initialize_entities = Dump.ignore_upvalue_size .. function(self)
       local result = Fun.pairs({
         {22, 54},
         self.positions[2],

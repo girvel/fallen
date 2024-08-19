@@ -13,7 +13,7 @@ local _stack = {}
 local render_offset = 0
 
 local status = function()
-  local result = "\nERROR:%s\n\nSTACK:\n" % Inspect(_stack.error_message)
+  local result = "\nERROR: %s\n\nSTACK:\n" % Inspect(_stack.error_message)
 
   for i, data in ipairs(_stack) do
     result = result .. "%s %s. %s%s%s\n" % {

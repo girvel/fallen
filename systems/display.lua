@@ -1,3 +1,4 @@
+local animated = require("tech.animated")
 local level = require("state.level")
 local tcod = require("lib.tcod")
 local ffi = require("ffi")
@@ -123,7 +124,7 @@ display.system = static(Tiny.sortedProcessingSystem({
     then return end
 
     local current_view = State.gui.views[entity.view]
-    local offset_position = current_view:apply(entity.position)
+    local offset_position = current_view:apply(animated.get_render_position(entity))
     if entity.sprite.text then
       self:_process_text_sprite(entity, offset_position)
     elseif entity.sprite.image then

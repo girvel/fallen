@@ -104,15 +104,15 @@ actions.move = static {
     return entity.resources.movement > 0
   end,
   _run = function(_, entity)
-    local old_position = entity.position
-    if not level.move(entity, entity.position + Vector[entity.direction]) then
+    local new_position = entity.position + Vector[entity.direction]
+    if entity.movement_flag or not level.can_move(entity, new_position) then
       return false
     end
 
     entity.resources.movement = entity.resources.movement - 1
 
     Fun.iter(Vector.directions)
-      :map(function(d) return State.grids.solids:safe_get(old_position + d) end)
+      :map(function(d) return State.grids.solids:safe_get(entity.position + d) end)
       :filter(function(e)
         return e
           and e ~= entity
@@ -129,9 +129,12 @@ actions.move = static {
     if entity.animate then
       entity.movement_flag = true
       entity:animate("move")
-      entity:when_animation_ends(function()
+      entity:when_animation_ends(function()  -- TODO! promise
         entity.movement_flag = nil
+        level.move(entity, new_position)
       end)
+    else
+      level.move(entity, new_position)
     end
 
     local tile = State.grids.tiles[entity.position]
