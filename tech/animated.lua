@@ -35,9 +35,6 @@ local animation_methods = {
     return self._on_animation_end
   end,
 
-  when_animation_ends = function(self, callback)
-  end,
-
   animation_refresh = function(self)
     if not self.animation.pack[self.animation.current] then return end
     self.sprite = self.animation.pack[self.animation.current][math.floor(self.animation.frame)]
@@ -142,7 +139,7 @@ module.get_render_position = function(entity)
   if not entity.movement_flag then
     return entity.position
   end
-  return entity.position + Vector[entity.direction]
+  return entity.position - Vector[entity.direction]
     * (entity.animation.frame - 1)
     / (#entity.animation.pack[entity.animation.current])
 end

@@ -104,7 +104,7 @@ actions.move = static {
   end,
   _run = function(_, entity)
     local new_position = entity.position + Vector[entity.direction]
-    if entity.movement_flag or not level.can_move(entity, new_position) then
+    if entity.movement_flag or not level.move(entity, new_position) then
       return false
     end
 
@@ -129,10 +129,7 @@ actions.move = static {
       entity.movement_flag = true
       entity:animate("move"):next(function()
         entity.movement_flag = nil
-        level.move(entity, new_position)
       end)
-    else
-      level.move(entity, new_position)
     end
 
     local tile = State.grids.tiles[entity.position]
