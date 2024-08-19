@@ -13,7 +13,7 @@ local _stack = {}
 local render_offset = 0
 
 local status = function()
-  local result = "\nSTACK:\n"
+  local result = "\nERROR:%s\n\nSTACK:\n" % Inspect(_stack.error_message)
 
   for i, data in ipairs(_stack) do
     result = result .. "%s %s. %s%s%s\n" % {
@@ -89,10 +89,15 @@ local keypressed = function(scancode)
   end
 
   if scancode == "return" then
+    local new_history_i = #history
     history = history .. "\n\n> " .. current_command
     run(current_command)
     table.insert(command_history, current_command)
     current_command = ""
+    render_offset = render_offset - Fun.iter(history:sub(new_history_i))
+      :filter(function(c) return c == "\n" end)
+      :map(function() return 1 end)
+      :sum()
   end
 
   if scancode == "up" then
@@ -142,8 +147,9 @@ debugx.shell = function()
   love.graphics.present()
 end
 
-debugx.handle_error = function()
-  debugx.extend_error({level = 3})
+debugx.handle_error = function(msg)
+  debugx.extend_error({level = 2})
+  _stack.error_message = msg
   return debugx.shell
 end
 

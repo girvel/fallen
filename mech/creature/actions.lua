@@ -127,7 +127,11 @@ actions.move = static {
       end)
 
     if entity.animate then
+      entity.movement_flag = true
       entity:animate("move")
+      entity:when_animation_ends(function()
+        entity.movement_flag = nil
+      end)
     end
 
     local tile = State.grids.tiles[entity.position]

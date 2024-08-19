@@ -102,48 +102,50 @@ return function()
         :map(function(k, v) return k, State.grids.solids[Vector(v)] end)
         :tomap()
 
-      self.entities.note = State:add(Tablex.extend(
+      result.note = State:add(Tablex.extend(
         note({colleague_note = true}),
         {position = Vector({19, 78})}
       ))
 
-      self.entities.detective_door = State:add(Tablex.extend(
+      result.detective_door = State:add(Tablex.extend(
         live.black_door({locked = true}),
         {position = Vector({21, 56})}
       ))
 
-      self.entities.gloves = self.entities[3].inventory.gloves
+      result.gloves = result[3].inventory.gloves
 
-      self.entities[1]:animate("holding")
-      self.entities[1]:animation_set_paused(true)
+      result[1]:animate("holding")
+      result[1]:animation_set_paused(true)
 
       self.dreamers_talked_to = {}
       self.old_hp = Fun.range(4)
-        :map(function(i) return self.entities[i].hp end)
+        :map(function(i) return result[i].hp end)
         :totable()
 
-      self.entities.neighbour:rotate("up")
-      self.entities.upper_bunk:lie(self.entities.neighbour)
+      result.neighbour:rotate("up")
+      result.upper_bunk:lie(result.neighbour)
 
       State:add(walls.steel_with_map(), {position = Vector({10, 90})})
       State:add(decorations.scratched_table(), {position = Vector({45, 91})})
       State:add(decorations.empty_bed(), {position = Vector({23, 67})})
       State:add(walls.steel_with_sign(), {position = Vector({27, 90})})
-      self.entities.colored_pipe = State:add(Tablex.extend(
+      result.colored_pipe = State:add(Tablex.extend(
         pipes.colored(),
         {position = Vector({27, 95})}
       ))
       State:add(things.magazine(), {position = self.positions.dirty_magazine})
-      self.entities.cook = State:add(
+      result.cook = State:add(
         mobs.dreamer(), interactive.detector(true), {position = Vector({19, 102})}
       )
 
       State:add(note({fighting_guide = true}), {position = Vector({32, 96})})
-      self.entities.mirage_block = State:add(
+      result.mirage_block = State:add(
         decorations.mirage_block(),
         interactive.detector(true),
         {position = Vector({37, 101})}
       )
+
+      return result
     end
   })
 end

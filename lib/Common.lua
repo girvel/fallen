@@ -92,7 +92,7 @@ end
 common.resume_logged = function(coroutine_, ...)
   local success, message = coroutine.resume(coroutine_, ...)
   if not success then
-    if State.shell_enabled then
+    if love.shell_enabled then
       Log.info("Debugx error in coroutine")
       Debugx.extend_error()
       error(message)
