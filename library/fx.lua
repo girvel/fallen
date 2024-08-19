@@ -29,8 +29,7 @@ module.steam = function(direction)
     }
   )
 
-  result:animate()
-  result:when_animation_ends(function(self)
+  result:animate():next(function(self)
     State:remove(self)
   end)
 

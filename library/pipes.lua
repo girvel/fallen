@@ -30,9 +30,8 @@ pipes.valve = function(leaking_pipe_position)
     animated(pipe_valve_pack),
     interactive(Dump.ignore_upvalue_size .. function(self, other)
       local target = State.grids.solids[leaking_pipe_position]
-      self:animate("rotate")
       State.audio:play(self, random.choice(valve_rotating_sounds), "medium")
-      self:when_animation_ends(function()
+      self:animate("rotate"):next(function()
         target.overflow_counter = 0
         pipes.burst_with_steam(target)
       end)

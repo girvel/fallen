@@ -13,7 +13,7 @@ return function(pack, layer, position)
     }
   )
 
-  result:when_animation_ends(function()
+  result:animate():next(function()
     State:remove(result)
   end)
   return result

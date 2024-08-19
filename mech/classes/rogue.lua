@@ -13,8 +13,7 @@ rogue.sneak_attack = function(entity, target)
 
   entity.resources.actions = entity.resources.actions - 1
 
-  entity:animate("attack")
-  entity:when_animation_ends(function()
+  entity:animate("attack"):next(function()
     attacking.attack(
       entity, target,
       get_melee_attack_roll(entity),

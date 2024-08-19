@@ -21,8 +21,7 @@ live.lever = function()
     interactive(function(self)
       self.is_on = self.animation.pack ~= lever_packs.on
       local next_state = self.is_on and "on" or "off"
-      self:animate("turn_" .. next_state)
-      self:when_animation_ends(function(self)
+      self:animate("turn_" .. next_state):next(function(self)
         self.animation.pack = lever_packs[next_state]
       end)
     end),
@@ -56,8 +55,7 @@ for _, prefix in ipairs({"", "black_"}) do
         is_open = false,
         open = Dump.ignore_upvalue_size .. function(self)
           if self.is_open then return end
-          self:animate("open")
-          self:when_animation_ends(function(_)
+          self:animate("open"):next(function(_)
             self.animation.pack = open_door_pack
             level.change_layer(self, "above_solids")
             self.is_open = true

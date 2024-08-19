@@ -52,8 +52,7 @@ local base_attack = function(entity, target, slot)
 
   entity:rotate(Vector.name_from_direction((target.position - entity.position):normalized()))
   State.audio:play(entity, random.choice(whoosh))
-  entity:animate(slot .. "_attack")
-  entity:when_animation_ends(function()
+  entity:animate(slot .. "_attack"):next(function()
     if not attacking.attack(
       entity, target,
       actions.get_melee_attack_roll(entity, slot),
