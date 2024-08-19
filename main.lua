@@ -27,7 +27,9 @@ require("lib.tiny_dump_patch")()
 
 local love_errorhandler = love.errorhandler
 love.errorhandler = function(msg)
-  if msg == Debugx.SIGNAL then return Debugx.shell end
+  if State.shell_enabled then
+    return Debugx.handle_error()
+  end
   Log.fatal(debug.traceback("Error: " .. tostring(msg), 2):gsub("\n[^\n]+$", ""))
 end
 
@@ -78,6 +80,7 @@ love.load = function(args)
   State.audio.disable_ambient = args.disable_ambient
   State.gui.show_fps = args.show_fps
   State.fast_scenes = args.fast_scenes
+  State.shell_enabled = args.debug_shell
 
   for _, scene in ipairs(args.scenes) do
     scene = State.rails.scenes[scene]

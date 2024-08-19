@@ -163,7 +163,9 @@ module_mt.__call = function(_, ...)
             Log.info("Scene `" .. s.name .. "` starts")
             return {
               coroutine = coroutine.create(function()
-                s:run(self, dt)
+                --s:run(self, dt)
+                local ok, result = xpcall(s.run, function(msg) Debugx.extend_error(); return msg end, s, self, dt)
+                if not ok then error(result) end
                 Log.info("Scene `" .. s.name .. "` ends")
               end),
               base_scene = s,

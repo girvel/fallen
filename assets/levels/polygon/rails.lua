@@ -13,7 +13,7 @@ return function()
 
         run = function(self, rails, dt)
           self.enabled = false
-          Debugx.error()
+          a.b.c.d = 3
         end,
       },
     },

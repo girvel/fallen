@@ -9,7 +9,7 @@ local history = ""
 local current_command = ""
 local command_history = {}
 local stack_index = 1
-local _stack
+local _stack = {}
 local render_offset = 0
 
 local status = function()
@@ -17,7 +17,7 @@ local status = function()
 
   for i, data in ipairs(_stack) do
     result = result .. "%s %s. %s%s%s\n" % {
-      i == stack_index and ">" or " ",
+      i == stack_index and "-" or " ",
       i,
       data.info.short_src,
       data.info.currentline < 0 and "" or ":" .. data.info.currentline,
@@ -142,16 +142,20 @@ debugx.shell = function()
   love.graphics.present()
 end
 
-debugx.error = function(message, level)
-  _stack = {}
-  _stack.error_message = message
-  love.shell = true
-  debugx.extend_error(1)
+debugx.handle_error = function()
+  debugx.extend_error({level = 3})
+  return debugx.shell
 end
 
-debugx.extend_error = function(level)
-  for i = 2 + (level or 0), math.huge do
-    local info = debug.getinfo(i)
+debugx.extend_error = function(args)
+  args = args or {}
+  for i = 2 + (args.level or 0), math.huge do
+    local info
+    if args.thread then
+      info = debug.getinfo(args.thread, i)
+    else
+      info = debug.getinfo(i)
+    end
     if not info then break end
 
     local locals = {}
@@ -166,7 +170,6 @@ debugx.extend_error = function(level)
       locals = locals,
     })
   end
-  error(debugx.SIGNAL)
 end
 
 debugx.SIGNAL = {}

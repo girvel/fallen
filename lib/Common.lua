@@ -92,9 +92,11 @@ end
 common.resume_logged = function(coroutine_, ...)
   local success, message = coroutine.resume(coroutine_, ...)
   if not success then
-    if message == Debugx.SIGNAL then
+    if State.shell_enabled then
       Log.info("Debugx error in coroutine")
-      Debugx.extend_error()
+      Log.trace(debug.getinfo(coroutine_, 1))
+      Debugx.extend_error({thread = coroutine_})
+      error(message)
     end
     Log.error("Coroutine error: %s\n%s" % {message, debug.traceback(coroutine_)})
   end
