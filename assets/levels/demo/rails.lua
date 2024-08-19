@@ -78,7 +78,14 @@ return function()
         :map(function(k, v) return k, Vector(v) end)
         :tomap()
 
-      self.entities = {
+      self.entities = self:initialize_entities()
+
+      self.been_to_latrine = false
+      self.tolerates_latrine = nil
+    end,
+
+    initialize_entities = function(self)
+      local result = Fun.pairs({
         {22, 54},
         self.positions[2],
         {20, 48},
@@ -91,9 +98,7 @@ return function()
         mannequin = {37, 95},
         bird_food = {33, 102},
         bird_cage = {32, 102},
-      }
-
-      self.entities = Fun.pairs(self.entities)
+      })
         :map(function(k, v) return k, State.grids.solids[Vector(v)] end)
         :tomap()
 
@@ -101,13 +106,11 @@ return function()
         note({colleague_note = true}),
         {position = Vector({19, 78})}
       ))
+
       self.entities.detective_door = State:add(Tablex.extend(
         live.black_door({locked = true}),
         {position = Vector({21, 56})}
       ))
-
-      self.been_to_latrine = false
-      self.tolerates_latrine = nil
 
       self.entities.gloves = self.entities[3].inventory.gloves
 
@@ -141,6 +144,6 @@ return function()
         interactive.detector(true),
         {position = Vector({37, 101})}
       )
-    end,
+    end
   })
 end
