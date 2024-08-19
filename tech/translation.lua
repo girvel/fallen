@@ -21,7 +21,7 @@ return Module("tech.translation", {
     nature = "природа",
     religion = "религия",
     animal_handling = "уход за животными",
-    insight = "анализ",
+    insight = "проницательность",
     medicine = "медицина",
     perception = "внимание",
     deception = "обман",
