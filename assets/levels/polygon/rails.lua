@@ -1,4 +1,5 @@
 local railing = require("tech.railing")
+local api = railing.api
 
 
 local lorem = "Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book."
@@ -13,7 +14,7 @@ return function()
 
         run = function(self, rails, dt)
           self.enabled = false
-          a.b.c.d = 3
+          api.narration("HI")
         end,
       },
     },

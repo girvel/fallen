@@ -26,30 +26,28 @@ module_mt.__call = function(_)
     end,
 
     action_factories = {},
+    _last_actions = {},
     ai = {
       run = function(self)
-        if self.in_cutscene then return end
+        local mutex_factories, other_factories = Fun.iter(self.action_factories)
+          :span(function(f) return f.mutex_group end)
 
-        local actions = Fun.iter(self.action_factories)
-          :reduce(
-            function(acc, f)
-              if f.mutex_group then
-                if acc.encountered_groups[f.mutex_group] then return acc end
-                acc.encountered_groups[f.mutex_group] = true
-              end
-              Query(f).pre_action()
-              table.insert(acc.actions, f.action)
-              return acc
-            end,
-            {actions = {}, encountered_groups = {}}
-          ).actions
-
-        local result = Fun.iter(actions)
-          :map(function(a) return self:act(a) end)
-          :any(Fun.op.truth)
+        mutex_factories
+          :group_by(function(f) return f.mutex_group, f end)
+          :map(function(group, fs)
+            local result = Fun.iter(fs)
+              :filter(function(f) return self._last_actions[group] == f.action end)
+              :nth(1) or fs[1]
+            self._last_actions[group] = result.action
+            return result
+          end)
+          :chain(other_factories)
+          :each(function(f)
+            Query(f).pre_action()
+            if not self.in_cutscene and f.action then self:act(f.action) end
+          end)
 
         self.action_factories = {}
-        return result
       end,
 
       observe = function(self)
