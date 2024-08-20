@@ -36,8 +36,7 @@ input.system = static(Tiny.system({
 
     local scancodes = {scancode}
     if #modifier > 0 then table.insert(scancodes, modifier .. scancode) end
-    Log.trace(scancodes)
-    Tablex.extend(State.player.action_factories, Fun.iter(scancodes)
+    Tablex.concat(State.player.action_factories, Fun.iter(scancodes)
       :map(function(s) return -Query(State.hotkeys)[State:get_mode()][s] end)
       :filter(Fun.op.truth)
       :totable()

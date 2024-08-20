@@ -24,6 +24,7 @@ return function()
         rails.entities.detective_door.locked = false
         State.player.experience = mech.experience_for_level[2]
         State.gui.character_creator:refresh()
+        State.gui.character_creator:submit()
         State:add(items.pole(), {position = State.player.position + Vector.left})
       end,
     },
