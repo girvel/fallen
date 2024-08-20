@@ -14,7 +14,7 @@ local COLOR = {
 }
 
 local hotkeys_order = Fun.iter(
-  ("w a s d up left down right 1 2 3 4 5 6 7 8 9 0 e h return z space k j n "
+  ("w a s d up left down right 1 2 3 4 5 6 7 8 9 0 e h return shift space k j n "
   .. "Ctrl+enter Shift+q Shift+r enter") / " "
 )
   :enumerate()

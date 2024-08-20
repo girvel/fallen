@@ -71,7 +71,7 @@ local build_function = function(x, cache)
     local upvalue = handle_primitive(v, cache)
     table.remove(stack)
 
-    if not allowed_big_upvalues[x] and #upvalue > 1024 then
+    if not allowed_big_upvalues[x] and #upvalue > 2048 then
       table.insert(warnings, ("Big upvalue %s in %s"):format(k, table.concat(stack, ".")))
     end
     table.insert(result, ("debug.setupvalue(_, %s, %s)"):format(i, upvalue))

@@ -8,7 +8,7 @@ local hostility = require("mech.hostility")
 
 local your_move_sound = sound.multiple("assets/sounds/your_move1", 0.5)[1]
 
-local blood = function()
+local blood_factory = function()
   return Tablex.extend(
     item.mixin(),
     animated("assets/sprites/hurt", "atlas"),
@@ -55,13 +55,13 @@ acting.system = static(Tiny.processingSystem({
     if entity.hp then
       if entity.hp <= entity:get_max_hp() / 2 then
         if not entity.inventory.hurt then
-          local hurt = State:add(blood())
-          State:add_dependency(entity, hurt)
-          hurt.direction = entity.direction
-          hurt:animate(entity.animation.current)
-          hurt.animation.paused = entity.animation.paused
+          local blood = State:add(blood_factory())
+          State:add_dependency(entity, blood)
+          blood.direction = entity.direction
+          blood:animate(entity.animation.current)
+          blood.animation.paused = entity.animation.paused
           -- TODO abstract this away as picking up an item?
-          entity.inventory.hurt = hurt
+          entity.inventory.hurt = blood
         end
       else
         if entity.inventory.hurt then
@@ -74,9 +74,12 @@ acting.system = static(Tiny.processingSystem({
     Query(entity.ai).observe(entity, event)
     if not entity.ai.run then return end
 
+    -- TODO! REF
     if not State.combat then
       entity.ai.run(entity, event)
-      Tablex.extend(entity.resources, -Query(entity):get_resources("move") or {})
+      if -Query(entity.animation).current:startsWith("idle") then
+        Tablex.extend(entity.resources, -Query(entity):get_resources("move"))
+      end
       return
     end
 

@@ -72,7 +72,7 @@ return Module("state.hotkeys", function(modes, debug_mode)
     action = actions.interact
   })
 
-  define_hotkey(hotkeys, {"combat"}, {"z"}, {
+  define_hotkey(hotkeys, {"free", "combat"}, {"shift"}, {
     name = "рывок",
     action = actions.dash
   })
