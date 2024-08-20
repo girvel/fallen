@@ -25,14 +25,30 @@ module_mt.__call = function(_)
       self:animate()
     end,
 
-    next_actions = {},
+    action_factories = {},
     ai = {
       run = function(self)
         if self.in_cutscene then return end
-        local result = Fun.iter(self.next_actions)
+
+        local actions = Fun.iter(self.action_factories)
+          :reduce(
+            function(acc, f)
+              if f.mutex_group then
+                if acc.encountered_groups[f.mutex_group] then return acc end
+                acc.encountered_groups[f.mutex_group] = true
+              end
+              Query(f).pre_action()
+              table.insert(acc.actions, f.action)
+              return acc
+            end,
+            {actions = {}, encountered_groups = {}}
+          ).actions
+
+        local result = Fun.iter(actions)
           :map(function(a) return self:act(a) end)
           :any(Fun.op.truth)
-        self.next_actions = {}
+
+        self.action_factories = {}
         return result
       end,
 

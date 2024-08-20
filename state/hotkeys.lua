@@ -25,6 +25,7 @@ return Module("state.hotkeys", function(modes, debug_mode)
   })
 
   -- normal mode --
+  local movement_group = {}
   for _, t in ipairs({
     {{"w"}, "up", "вверх"},
     {{"a"}, "left", "влево"},
@@ -34,6 +35,7 @@ return Module("state.hotkeys", function(modes, debug_mode)
     local keys, direction_name, direction_translation = unpack(t)
     define_hotkey(hotkeys, {"free", "combat"}, keys, {
       hidden = true,
+      mutex_group = movement_group,
       name = "двигаться " .. direction_translation,
       pre_action = function()
         State.player:rotate(direction_name)
