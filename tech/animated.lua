@@ -140,8 +140,7 @@ module.get_render_position = function(entity)
     return entity.position
   end
   return entity.position - Vector[entity.direction]
-    * (entity.animation.frame - 1)
-    / (#entity.animation.pack[entity.animation.current])
+    * (1 - (entity.animation.frame - 1) / (#entity.animation.pack[entity.animation.current]))
 end
 
 return module
