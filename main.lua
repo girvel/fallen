@@ -35,7 +35,6 @@ love.errorhandler = function(msg)
 end
 
 love.graphics.setDefaultFilter("nearest", "nearest")
-love.keyboard.setKeyRepeat(true)
 
 
 -- local imports --
@@ -140,8 +139,8 @@ local active_time = 0
 local frames_total = 0
 
 -- TODO REF /kernel/
-love._key_repetition_delays = {}
-love._pressed_keys = {}
+local key_repetition_delays = {}
+local pressed_keys = {}
 love.key_repetition_delay = .3
 
 love.run = function()
@@ -172,20 +171,24 @@ love.run = function()
 						return a or 0
 					end
         elseif name == "keypressed" then
-          love._pressed_keys[b] = true
+          key_repetition_delays[b] = love.key_repetition_delay
+          love.custom_keypressed(b)
         elseif name == "keyreleased" then
-          love._pressed_keys[b] = nil
+          key_repetition_delays[b] = nil
 				end
 				love.handlers[name](a,b,c,d,e,f)
 			end
 		end
 
-    for k, v in pairs(love._pressed_keys) do
-      love.custom_keypressed(k)
-    end
-
 		-- Update dt, as we'll be passing it to update
 		dt = love.timer.step()
+
+    for k, v in pairs(key_repetition_delays) do
+      key_repetition_delays[k] = math.max(0, v - dt)
+      if key_repetition_delays[k] == 0 then
+        love.custom_keypressed(k)
+      end
+    end
 
 		-- Call update and draw
 		if love.update then love.update(dt) end -- will pass 0 if love.timer is disabled
