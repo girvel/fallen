@@ -25,12 +25,14 @@ module_mt.__call = function(_)
       self:animate()
     end,
 
+    next_actions = {},
     ai = {
       run = function(self)
-        if not self.next_action then return end
         if self.in_cutscene then return end
-        local result = self:act(self.next_action)
-        self.next_action = nil
+        local result = Fun.iter(self.next_actions)
+          :map(function(a) return self:act(a) end)
+          :any(Fun.op.truth)
+        self.next_actions = {}
         return result
       end,
 

@@ -139,6 +139,11 @@ end
 local active_time = 0
 local frames_total = 0
 
+-- TODO REF /kernel/
+love._key_repetition_delays = {}
+love._pressed_keys = {}
+love.key_repetition_delay = .3
+
 love.run = function()
 	if love.load then love.load(love.arg.parseGameArguments(arg), arg) end
 
@@ -166,10 +171,18 @@ love.run = function()
 					if not love.quit or not love.quit() then
 						return a or 0
 					end
+        elseif name == "keypressed" then
+          love._pressed_keys[b] = true
+        elseif name == "keyreleased" then
+          love._pressed_keys[b] = nil
 				end
 				love.handlers[name](a,b,c,d,e,f)
 			end
 		end
+
+    for k, v in pairs(love._pressed_keys) do
+      love.custom_keypressed(k)
+    end
 
 		-- Update dt, as we'll be passing it to update
 		dt = love.timer.step()

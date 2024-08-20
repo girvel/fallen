@@ -29,6 +29,7 @@ acting.system = static(Tiny.processingSystem({
   base_callback = "update",
 
   preProcess = function()
+    Log.trace(1)
     State.aggression_log = State._next_aggression_log
     State._next_aggression_log = {}
     if State.combat then

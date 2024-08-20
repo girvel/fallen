@@ -2,9 +2,9 @@ local input, _, static = Module("systems.input")
 
 input.system = static(Tiny.system({
   codename = "input",
-  base_callback = "keypressed",
+  base_callback = "custom_keypressed",
   update = function(_, event)
-    local _, scancode = unpack(event)
+    local scancode = unpack(event)
 
     if scancode == "return" then
       scancode = "enter"
@@ -16,28 +16,35 @@ input.system = static(Tiny.system({
       scancode = "alt"
     end
 
+    local modifier = ""
     if scancode ~= "shift"
       and (love.keyboard.isDown("rshift") or love.keyboard.isDown("lshift"))
     then
-      scancode = "Shift+" .. scancode
+      modifier = "Shift+" .. modifier
     end
 
     if scancode ~= "alt"
       and (love.keyboard.isDown("ralt") or love.keyboard.isDown("lalt"))
     then
-      scancode = "Alt+" .. scancode
+      modifier = "Alt+" .. modifier
     end
     if scancode ~= "ctrl"
       and (love.keyboard.isDown("rctrl") or love.keyboard.isDown("lctrl"))
     then
-      scancode = "Ctrl+" .. scancode
+      modifier = "Ctrl+" .. modifier
     end
 
-    Log.trace(scancode)
-    local data = -Query(State.hotkeys)[State:get_mode()][scancode]
-    if not data then return end
-    Query(data).pre_action()
-    Query(State.player).next_action = data.action
+    local scancodes = {scancode}
+    if #modifier > 0 then table.insert(scancodes, modifier .. scancode) end
+
+    State.player.next_actions = Fun.iter(scancodes)
+      :map(function(s)
+        local data = -Query(State.hotkeys)[State:get_mode()][Log.trace(s)]
+        Query(data).pre_action()
+        return Query(data).action
+      end)
+      :filter(Fun.op.truth)
+      :totable()
   end,
 }))
 
