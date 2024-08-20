@@ -54,8 +54,9 @@ module_mt.__call = function(_)
 
       observe = function(self)
         if State.combat and self ~= State.combat:get_current() then
-          self.next_action = nil
+          self.action_factories = {}
         end
+        self.animation_rate = love.keyboard.isDown("lshift", "rshift") and 2 or 1
       end,
     },
   })

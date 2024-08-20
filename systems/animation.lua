@@ -10,10 +10,9 @@ animation.system = static(Tiny.processingSystem({
     local dt = unpack(event)
     local this_animation = entity.animation
     if this_animation.paused then return end
-    this_animation.frame = this_animation.frame + dt * FPS
 
-    -- if math.floor(this_animation.frame) == -Query(this_animation.pack[this_animation.current]):qlength() then
-    -- end
+    local rate = FPS * (entity.animation_rate or 1)
+    this_animation.frame = this_animation.frame + dt * rate
 
     if not this_animation.pack[this_animation.current]
       or math.floor(this_animation.frame) > #this_animation.pack[this_animation.current]
