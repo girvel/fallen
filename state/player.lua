@@ -30,6 +30,7 @@ module_mt.__call = function(_)
     _last_actions = {},
     ai = {
       run = function(self)
+        Log.trace(Common.get_name(self._last_actions[next(self._last_actions)]))
         local mutex_factories, other_factories = Fun.iter(self.action_factories)
           :span(function(f) return f.mutex_group end)
 
@@ -37,9 +38,9 @@ module_mt.__call = function(_)
           :group_by(function(f) return f.mutex_group, f end)
           :map(function(group, fs)
             local result = Fun.iter(fs)
-              :filter(function(f) return self._last_actions[group] == f.action end)
+              :filter(function(f) return self._last_actions[group] == f end)
               :nth(1) or fs[1]
-            self._last_actions[group] = result.action
+            self._last_actions[group] = result
             return result
           end)
           :chain(other_factories)
