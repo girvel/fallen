@@ -34,14 +34,14 @@ local big_weapon_anchors = {
   },
 }
 
-animation_packs.rapier = animated.load_pack("assets/sprites/rapier", small_weapon_anchors)
-animation_packs.dagger = animated.load_atlas_pack("assets/sprites/dagger", small_weapon_anchors)
-animation_packs.knife = animated.load_atlas_pack("assets/sprites/knife", small_weapon_anchors)
-animation_packs.machete = animated.load_atlas_pack("assets/sprites/machete", small_weapon_anchors)
-animation_packs.greatsword = animated.load_pack("assets/sprites/greatsword", big_weapon_anchors)
-animation_packs.pole = animated.load_atlas_pack("assets/sprites/pole", big_weapon_anchors)
+animation_packs.rapier = animated.load_pack("assets/sprites/animations/rapier", small_weapon_anchors)
+animation_packs.dagger = animated.load_atlas_pack("assets/sprites/animations/dagger", small_weapon_anchors)
+animation_packs.knife = animated.load_atlas_pack("assets/sprites/animations/knife", small_weapon_anchors)
+animation_packs.machete = animated.load_atlas_pack("assets/sprites/animations/machete", small_weapon_anchors)
+animation_packs.greatsword = animated.load_pack("assets/sprites/animations/greatsword", big_weapon_anchors)
+animation_packs.pole = animated.load_atlas_pack("assets/sprites/animations/pole", big_weapon_anchors)
 
-animation_packs.gas_key = animated.load_pack("assets/sprites/gas_key", {
+animation_packs.gas_key = animated.load_pack("assets/sprites/animations/gas_key", {
   idle_right = {
     Vector({6, 10}),
   },
@@ -56,7 +56,7 @@ animation_packs.gas_key = animated.load_pack("assets/sprites/gas_key", {
   },
 })
 
-animation_packs.yellow_gloves = animated.load_pack("assets/sprites/yellow_gloves")
-animation_packs.skeleton = animated.load_pack("assets/sprites/skeleton", humanoid_anchors)
+animation_packs.yellow_gloves = animated.load_pack("assets/sprites/animations/yellow_gloves")
+animation_packs.skeleton = animated.load_pack("assets/sprites/animations/skeleton", humanoid_anchors)
 
 return animation_packs

@@ -3,5 +3,5 @@ local anchors = require("mech.humanoid.anchors")
 
 
 return Module("mech.humanoid.pack",
-  animated.load_atlas_pack("assets/sprites/humanoid", anchors)
+  animated.load_atlas_pack("assets/sprites/animations/humanoid", anchors)
 )

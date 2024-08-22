@@ -11,8 +11,8 @@ local live, _, static = Module("library.live")
 
 -- plain sprites --
 local lever_packs = {
-  on = animated.load_pack("assets/sprites/lever_on"),
-  off = animated.load_pack("assets/sprites/lever_off"),
+  on = animated.load_pack("assets/sprites/animations/lever_on"),
+  off = animated.load_pack("assets/sprites/animations/lever_off"),
 }
 
 live.lever = function()
@@ -30,8 +30,8 @@ live.lever = function()
 end
 
 for _, prefix in ipairs({"", "black_"}) do
-  local closed_door_pack = animated.load_pack("assets/sprites/%sdoor/closed" % prefix)
-  local open_door_pack = animated.load_pack("assets/sprites/%sdoor/open" % prefix)
+  local closed_door_pack = animated.load_pack("assets/sprites/animations/%sdoor/closed" % prefix)
+  local open_door_pack = animated.load_pack("assets/sprites/animations/%sdoor/open" % prefix)
 
   live[prefix .. "door"] = function(args)
     args = args or {}

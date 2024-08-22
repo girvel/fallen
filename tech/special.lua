@@ -29,11 +29,9 @@ module.text = function(text, font_size, position)
   }
 end
 
-local highlight_pack = animated.load_pack("assets/sprites/highlight")
-
 -- TODO figure out highlight behaviour structure
 module.highlight = function()
-  return Tablex.extend(animated(highlight_pack), {layer = "fx", view = "scene"})
+  return Tablex.extend(animated("assets/sprites/animations/highlight"), {layer = "fx", view = "scene"})
 end
 
 module.hp_bar = function()

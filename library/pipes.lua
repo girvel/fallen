@@ -23,7 +23,7 @@ factoring.from_atlas(pipes, atlas, {
 })
 
 local valve_rotating_sounds = sound.multiple("assets/sounds/valve_rotate", 0.1)
-local pipe_valve_pack = animated.load_pack("assets/sprites/pipe_valve")
+local pipe_valve_pack = animated.load_pack("assets/sprites/animations/pipe_valve")
 
 pipes.valve = function(leaking_pipe_position)
   return Tablex.extend(
