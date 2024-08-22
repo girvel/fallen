@@ -29,7 +29,6 @@ acting.system = static(Tiny.processingSystem({
   base_callback = "update",
 
   preProcess = function()
-    Log.trace("----------")
     State.aggression_log = State._next_aggression_log
     State._next_aggression_log = {}
     if State.combat then
@@ -53,37 +52,53 @@ acting.system = static(Tiny.processingSystem({
   end,
 
   process = function(self, entity, event)
-    if entity.hp then
-      if entity.hp <= entity:get_max_hp() / 2 then
-        if not entity.inventory.hurt then
-          local blood = State:add(blood_factory())
-          State:add_dependency(entity, blood)
-          blood.direction = entity.direction
-          blood:animate(entity.animation.current)
-          blood.animation.paused = entity.animation.paused
-          -- TODO abstract this away as picking up an item?
-          entity.inventory.hurt = blood
-        end
-      else
-        if entity.inventory.hurt then
-          State:remove(entity.inventory.hurt)
-          entity.inventory.hurt = nil
-        end
-      end
-    end
+    self:_refresh_blood(entity)
 
     Query(entity.ai).observe(entity, event)
     if not entity.ai.run then return end
 
     -- TODO! REF
     if not State.combat then
-      entity.ai.run(entity, event)
-      if -Query(entity.animation).current:startsWith("idle") then
-        Tablex.extend(entity.resources, -Query(entity):get_resources("move"))
-      end
-      return
+      return self:_process_outside_combat(entity, event)
+    else
+      return self:_process_inside_combat(entity, event)
     end
+  end,
 
+  postProcess = function(self)
+    if -Query(State.combat):get_current() == combat.WORLD_TURN then
+      self:_pass_turn()
+    end
+  end,
+
+  _refresh_blood = function(self, entity)
+    if not entity.hp then return end
+    if entity.hp <= entity:get_max_hp() / 2 then
+      if not entity.inventory.hurt then
+        local blood = State:add(blood_factory())
+        State:add_dependency(entity, blood)
+        blood.direction = entity.direction
+        blood:animate(entity.animation.current)
+        blood.animation.paused = entity.animation.paused
+        -- TODO abstract this away as picking up an item?
+        entity.inventory.hurt = blood
+      end
+    else
+      if entity.inventory.hurt then
+        State:remove(entity.inventory.hurt)
+        entity.inventory.hurt = nil
+      end
+    end
+  end,
+
+  _process_outside_combat = function(self, entity, event)
+    entity.ai.run(entity, event)
+    if -Query(entity.animation).current:startsWith("idle") then
+      Tablex.extend(entity.resources, -Query(entity):get_resources("move"))
+    end
+  end,
+
+  _process_inside_combat = function(self, entity, event)
     local is_world_turn = State.combat:get_current() == combat.WORLD_TURN
 
     if is_world_turn then
@@ -107,12 +122,6 @@ acting.system = static(Tiny.processingSystem({
       entity.ai.run(entity, event) == combat.TURN_END_SIGNAL and not is_world_turn
       or was_timeout_reached
     then
-      self:_pass_turn()
-    end
-  end,
-
-  postProcess = function(self)
-    if -Query(State.combat):get_current() == combat.WORLD_TURN then
       self:_pass_turn()
     end
   end,
