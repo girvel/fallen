@@ -1,5 +1,5 @@
 local api = require("tech.railing").api
-local engineer_ai = require("library.engineer_ai")
+local general_ai = require("library.general_ai")
 local sprite = require("tech.sprite")
 local hostility = require("mech.hostility")
 
@@ -17,7 +17,7 @@ return function()
         rails.scenes.half_orc_begs.enabled = true
         api.make_hostile("half_orc", rails.entities)
         rails.entities[3].interact = nil
-        rails.entities[3].ai.mode = engineer_ai.modes.normal
+        rails.entities[3].ai.mode = general_ai.modes.normal
         if rails.entities[3]._highlight then
           State:remove(rails.entities[3]._highlight)
         end
@@ -35,7 +35,7 @@ return function()
       run = function(self, rails, dt)
         self.enabled = false
         rails.entities[3].will_beg = false
-        rails.entities[3].ai.mode = engineer_ai.modes.skip_turn()
+        rails.entities[3].ai.mode = general_ai.modes.skip_turn()
         rails.scenes.half_orc_mercy.enabled = true
       end,
     },
@@ -140,7 +140,7 @@ return function()
               api.make_hostile("half_orc", rails.entities)
               State:start_combat({State.player, rails.entities[3]})
             else
-              rails.entities[3].ai.mode = engineer_ai.modes.run_away_to(rails.positions.exit)
+              rails.entities[3].ai.mode = general_ai.modes.run_away_to(rails.positions.exit)
               rails.scenes.player_attacks_half_orc.enabled = true
             end
             break
@@ -192,7 +192,7 @@ return function()
           end
         end
 
-        rails.entities[3].ai.mode = engineer_ai.modes.run_away_to(rails.positions.exit)
+        rails.entities[3].ai.mode = general_ai.modes.run_away_to(rails.positions.exit)
 
         api.notification("Это была ошибка", true)
       end,
@@ -217,7 +217,7 @@ return function()
       name = "Half-orc runs away",
       enabled = true,
       start_predicate = function(self, rails, dt)
-        return rails.entities[3].ai.mode == engineer_ai.modes.run_away_to(rails.positions.exit)
+        return rails.entities[3].ai.mode == general_ai.modes.run_away_to(rails.positions.exit)
           and rails.entities[3].position == rails.positions.exit
       end,
 

@@ -1,3 +1,4 @@
+local combat = require("tech.combat")
 local humanoid = require("mech.humanoid")
 local animation_packs = require("library.animation_packs")
 local races = require("mech.races")
@@ -32,7 +33,7 @@ module_mt.__call = function(_)
         local mutex_factories, other_factories = Fun.iter(self.action_factories)
           :span(function(f) return f.mutex_group end)
 
-        mutex_factories
+        local result = mutex_factories
           :group_by(function(f) return f.mutex_group, f end)
           :map(function(group, fs)
             local result = Fun.iter(fs)
@@ -42,12 +43,15 @@ module_mt.__call = function(_)
             return result
           end)
           :chain(other_factories)
-          :each(function(f)
+          :map(function(f)
             Query(f).pre_action()
-            if not self.in_cutscene and f.action then self:act(f.action) end
+            if not self.in_cutscene and f.action then return self:act(f.action) end
           end)
+          :filter(function(v) return v == combat.TURN_END_SIGNAL end)
+          :nth(1)
 
         self.action_factories = {}
+        return result
       end,
 
       observe = function(self)

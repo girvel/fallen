@@ -4,17 +4,17 @@ local actions = require("mech.creature.actions")
 local hostility = require("mech.hostility")
 
 
-local engineer_ai, engineer_ai_mt, static = Module("library.engineer_ai")
+local general_ai, general_ai_mt, static = Module("library.general_ai")
 
-engineer_ai.modes = Enum({
+general_ai.modes = Enum({
   run_away_to = {"destination"},
   skip_turn = {},
   normal = {},
 })
 
-engineer_ai_mt.__call = function(_, works_outside_of_combat)
+general_ai_mt.__call = function(_, works_outside_of_combat)
   return {
-    mode = engineer_ai.modes.normal(),
+    mode = general_ai.modes.normal(),
 
     look_for_aggression = false,
     was_attacked_by = {},
@@ -23,7 +23,7 @@ engineer_ai_mt.__call = function(_, works_outside_of_combat)
     run = ai.async(function(self, dt)
       if
         not State.combat
-        and self.ai.mode.enum_variant ~= engineer_ai.modes.run_away_to
+        and self.ai.mode.enum_variant ~= general_ai.modes.run_away_to
       then return end
 
       Log.debug("--- %s ---" % Common.get_name(self))
@@ -40,14 +40,14 @@ engineer_ai_mt.__call = function(_, works_outside_of_combat)
       end
 
       local mode_type = self.ai.mode.enum_variant
-      if mode_type == engineer_ai.modes.skip_turn then
+      if mode_type == general_ai.modes.skip_turn then
         popup.show(self.position, "above", "Стой! Остановись, мужик!!! Не бей меня!")
-        self.ai.mode = engineer_ai.modes.normal()
+        self.ai.mode = general_ai.modes.normal()
         self.ai.look_for_aggression = true
         return
       end
 
-      if mode_type == engineer_ai.modes.run_away_to then
+      if mode_type == general_ai.modes.run_away_to then
         ai.api.travel(self, self.ai.mode:unpack())
         return
       end
@@ -79,4 +79,4 @@ engineer_ai_mt.__call = function(_, works_outside_of_combat)
   }
 end
 
-return engineer_ai
+return general_ai

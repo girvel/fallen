@@ -4,7 +4,7 @@ local items = require("library.items")
 local abilities = require("mech.abilities")
 local races = require("mech.races")
 local constants = require("mech.constants")
-local engineer_ai = require("library.engineer_ai")
+local general_ai = require("library.general_ai")
 local random = require("utils.random")
 
 
@@ -14,7 +14,7 @@ local engineer_mixin = function(ai_outside_of_combat)
   return Tablex.extend(
     interactive.detector(),
     {
-      ai = engineer_ai(ai_outside_of_combat),
+      ai = general_ai(ai_outside_of_combat),
     }
   )
 end
@@ -105,7 +105,7 @@ end
 
 module.phantom_knight = function()
   return humanoid({
-    ai = engineer_ai(),
+    ai = general_ai(),
     name = "Фантом",
     race = races.phantom,
     direction = "right",
@@ -118,7 +118,7 @@ end
 
 module.possessed = function()
   return humanoid({
-    ai = engineer_ai(),
+    ai = general_ai(),
     name = "Потрясённый",
     race = random.choice(dreamer_races),
     direction = "left",
