@@ -14,6 +14,7 @@ module_mt.__call = function()
     font_size = 12,
     show_fps = nil,  -- set from main.lua
     disable_ui = false,
+    pressed_scancodes = {},
 
     -- TODO unify views, views order and updating views?
     -- Vector.zero and duplicating the order suggest that

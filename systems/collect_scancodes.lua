@@ -1,7 +1,7 @@
-local input, _, static = Module("systems.input")
+local input, _, static = Module("systems.collect_scancodes")
 
 input.system = static(Tiny.system({
-  codename = "input",
+  codename = "collect_scancodes",
   base_callback = "custom_keypressed",
   update = function(_, event)
     local scancode = unpack(event)
@@ -34,13 +34,8 @@ input.system = static(Tiny.system({
       modifier = "Ctrl+" .. modifier
     end
 
-    local scancodes = {scancode}
-    if #modifier > 0 then table.insert(scancodes, modifier .. scancode) end
-    Tablex.concat(State.player.action_factories, Fun.iter(scancodes)
-      :map(function(s) return -Query(State.hotkeys)[State:get_mode()][s] end)
-      :filter(Fun.op.truth)
-      :totable()
-    )
+    table.insert(State.gui.pressed_scancodes, scancode)
+    if #modifier > 0 then table.insert(State.gui.pressed_scancodes, modifier .. scancode) end
   end,
 }))
 

@@ -8,7 +8,8 @@ local module, module_mt, static = Module("state")
 
 module_mt.__call = function(_, systems, debug_mode)
   local modes = {
-    "character_creator", "death", "reading", "dialogue_options", "dialogue", "free", "combat", "text_input",
+    "character_creator", "death", "reading", "dialogue_options", "dialogue", "free", "combat",
+    "text_input",
   }
 
 	return {

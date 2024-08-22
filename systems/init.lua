@@ -1,12 +1,11 @@
 return Module("systems", {
-  -- for keypressed/mousepressed order is not guaranteed
-  -- love.keypressed systems --
-  require("systems.input").system,
-
-  -- love.mousepressed systems --
-  require("systems.detect_clicks").system,
+  -- event systems --
+  -- (in random order)
+  require("systems.collect_scancodes").system,  -- keypressed
+  require("systems.detect_clicks").system,  -- mousepressed
 
   -- love.update systems --
+  require("systems.process_scancodes").system,
   require("systems.change_cursor").system,
   require("systems.detect_hover").system,
   require("systems.acting").system,
