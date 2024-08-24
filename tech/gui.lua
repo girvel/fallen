@@ -1,3 +1,4 @@
+local sounds = require("tech.sounds")
 local shaders = require("tech.shaders")
 local animated = require("tech.animated")
 local sprite = require("tech.sprite")
@@ -136,15 +137,15 @@ gui.action_icon = function(hotkey_data, index, frame)
     boring_flag = true,
 
     is_active = function(self)
-      if hotkey_data.codename == "action_surge" then
-        Log.trace(State.player:can_act(), hotkey_data.action)
-      end
       return (State.player:can_act() or not hotkey_data.action)
         and -Query(hotkey_data.action):get_availability(State.player)
     end,
 
     on_hover = function(self)
       if not self:is_active() then return end
+      if frame.sprite ~= frame.sprites.active then
+        State.audio:play_static(Random.choice(sounds.click))
+      end
       frame.sprite = frame.sprites.active
     end,
 

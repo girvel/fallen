@@ -1,3 +1,4 @@
+local sounds = require("tech.sounds")
 local texting = require("state.gui.texting")
 local gui = require("tech.gui")
 local sound = require("tech.sound")
@@ -8,7 +9,6 @@ return Module("state.gui.dialogue", function()
     _entities = nil,
     selected_option_i = nil,
     options = nil,
-    _skip_sounds = sound.multiple("assets/sounds/click_retro", 0.05),
 
     show = function(self, line, source)
       local portrait = -Query(source).portrait
@@ -25,7 +25,7 @@ return Module("state.gui.dialogue", function()
 
     skip = function(self)
       if not self._entities then return end
-      State.audio:play_static(Random.choice(self._skip_sounds):clone())
+      State.audio:play_static(Random.choice(sounds.click):clone())
       State:remove_multiple(self._entities)
       self._entities = nil
     end,
