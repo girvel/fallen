@@ -84,7 +84,7 @@ module.mixin = function()
     end),
     {
       layer = "items",
-      view = "scene",
+      view = State.gui.views.scene,
       direction = "right",
     }
   )

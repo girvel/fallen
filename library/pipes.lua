@@ -12,7 +12,7 @@ local atlas = "assets/sprites/atlases/pipes.png"
 
 factoring.from_atlas(pipes, atlas, {
   layer = "solids",
-  view = "scene",
+  view = State.gui.views.scene,
   transparent_flag = true,
 }, {
   "horizontal", "vertical", "horizontal_braced", "vertical_braced",
@@ -38,7 +38,7 @@ pipes.valve = function(leaking_pipe_position)
     end, true),
     {
       layer = "solids",
-      view = "scene",
+      view = State.gui.views.scene,
       name = "Вентиль",
       codename = "valve",
       transparent_flag = true,
@@ -53,7 +53,7 @@ pipes.leaking_left_down = function()
   return {
     sprite = sprite.from_atlas(atlas, 9),
     layer = "solids",
-    view = "scene",
+    view = State.gui.views.scene,
     transparent_flag = true,
 
     codename = "leaking_left_down",

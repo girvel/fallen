@@ -15,7 +15,7 @@ module.steam = function(direction)
       boring_flag = true,
       codename = "steam",
       layer = "fx",
-      view = "scene",
+      view = State.gui.views.scene,
       direction = direction,
 
       harmed_entities = {},

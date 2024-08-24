@@ -8,7 +8,7 @@ local decorations, module_mt, static = Module("library.decorations")
 
 local decorations_atlas = "assets/sprites/atlases/decorations.png"
 factoring.from_atlas(decorations, decorations_atlas, {
-  view = "scene",
+  view = State.gui.views.scene,
   layer = "solids",
   transparent_flag = true,
 }, {

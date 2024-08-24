@@ -17,7 +17,7 @@ change_cursor.system = static(Tiny.processingSystem({
   end,
 
   process = function(self, entity)
-    local relative_mouse_position = State.gui.views[entity.view]:inverse(Vector({love.mouse.getPosition()}))
+    local relative_mouse_position = entity.view:inverse(Vector({love.mouse.getPosition()}))
     if not (
       relative_mouse_position > entity.position
       and relative_mouse_position < entity.position + entity.size

@@ -50,7 +50,7 @@ for _, prefix in ipairs({"", "black_"}) do
       {
         codename = prefix .. "door",
         layer = "solids",
-        view = "scene",
+        view = State.gui.views.scene,
         name = "дверь",
         is_open = false,
         open = Dump.ignore_upvalue_size .. function(self)
@@ -87,7 +87,7 @@ live.mannequin = function()
     sprite = sprite.image("assets/sprites/mannequin.png"),
     transparent_flag = true,
     layer = "solids",
-    view = "scene",
+    view = State.gui.views.scene,
     name = "манекен",
     hp = 1000,
     get_armor = function() return 5 end,

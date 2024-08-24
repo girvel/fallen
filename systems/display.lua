@@ -120,7 +120,7 @@ display.system = static(Tiny.sortedProcessingSystem({
       or mode == "text_input"
     then return end
 
-    local current_view = State.gui.views[entity.view]
+    local current_view = entity.view
     local offset_position = current_view:apply(animated.get_render_position(entity))
     if entity.sprite.text then
       self:_process_text_sprite(entity, offset_position)
@@ -141,7 +141,7 @@ display.system = static(Tiny.sortedProcessingSystem({
     love.graphics.print(entity.sprite.text, entity.sprite.font, unpack(offset_position))
 
     if entity.link_flag then
-      local view = State.gui.views[entity.view]
+      local view = entity.view
       local start = offset_position + Vector.down * entity.size[2]
       local finish = offset_position + view:apply_multiplier(entity.size)
       local mouse_position = Vector({love.mouse.getPosition()})

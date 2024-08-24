@@ -11,7 +11,7 @@ local move_sounds = {
 
 factoring.from_atlas(tiles, "assets/sprites/atlases/tiles.png",
   function(name) return {
-    view = "scene",
+    view = State.gui.views.scene,
     layer = "tiles",
     sounds = {move = move_sounds[name]},
   } end,

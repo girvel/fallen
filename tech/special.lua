@@ -13,7 +13,7 @@ module.floating_damage = function(number, scene_position, color)
     codename = "floating_damage",
     position = State.gui.views.scene:apply_multiplier(scene_position)
       + Vector({random.d(12) - 6, random.d(12) - 6}),
-    view = "scene_fx",
+    view = State.gui.views.scene_fx,
     drift = Vector({0, -24}),
     sprite = sprite.text({color or Colors.red, number}, 14),
     life_time = 3,
@@ -31,7 +31,7 @@ end
 
 -- TODO figure out highlight behaviour structure
 module.highlight = function()
-  return Tablex.extend(animated("assets/sprites/animations/highlight"), {layer = "fx", view = "scene"})
+  return Tablex.extend(animated("assets/sprites/animations/highlight"), {layer = "fx", view = State.gui.views.scene})
 end
 
 module.hp_bar = function()
@@ -39,7 +39,7 @@ module.hp_bar = function()
     animated("assets/sprites/hp_bar"),
     {
       codename = "hp_bar",
-      view = "sidebar",
+      view = State.gui.views.sidebar,
       position = Vector({9, 9}),
     }
   )
@@ -48,7 +48,7 @@ end
 module.hp_text = function()
   return {
     codename = "hp_text",
-    view = "sidebar_text",
+    view = State.gui.views.sidebar_text,
     position = Vector.zero,
     sprite = sprite.text("", 20),
   }
@@ -57,7 +57,7 @@ end
 module.notification = function()
   return {
     codename = "notification",
-    view = "notification",
+    view = State.gui.views.notification,
     position = Vector.zero,
     sprite = sprite.text({Colors.white, ""}, 18),
   }
@@ -68,7 +68,7 @@ module.notification_fx = function()
     animated("assets/sprites/notification_fx"),
     {
       codename = "notification_fx",
-      view = "notification",
+      view = State.gui.views.notification,
       --position = Vector({-117, 4})
       position = Vector.zero,
     }
@@ -78,7 +78,7 @@ end
 module.gui_background = function()
   return {
     codename = "sidebar_background",
-    view = "sidebar_background",
+    view = State.gui.views.sidebar_background,
     position = Vector.zero,
     sprite = sprite.image("assets/sprites/hp_background.png"),
   }
@@ -90,7 +90,7 @@ module.dialogue_background = function()
   return {
     boring_flag = true,
     codename = "dialogue_background",
-    view = "dialogue_background",
+    view = State.gui.views.dialogue_background,
     position = Vector({0, window_h - 140}),
     size = Vector({window_w, 140}),
     sprite = {
@@ -116,7 +116,7 @@ module.portrait = function(this_sprite)
   return {
     boring_flag = true,
     codename = "portrait",
-    view = "dialogue_portrait",
+    view = State.gui.views.dialogue_portrait,
     position = Vector.zero,
     size = Vector({this_sprite.image:getDimensions()}),
     sprite = this_sprite,
@@ -127,7 +127,7 @@ module.action_icon = function(codename, index)
   index = index - 1
   return {
     sprite = sprite.image("assets/sprites/icons/%s.png" % codename),
-    view = "actions",
+    view = State.gui.views.actions,
     position = Vector({index % 5, math.floor(index / 5)}) * 24,
 
     codename = "action_icon",
@@ -139,11 +139,10 @@ module.action_hotkey = function(key, index)
   index = index - 1
   local font_size = 18
   local font = sprite.get_font(font_size)
-  local view_name = "action_keys"
-  local view = State.gui.views[view_name]
+  local view = State.gui.views.action_keys
   return {
     sprite = sprite.text(key, font_size),
-    view = view_name,
+    view = view,
     position = Vector({index % 5, math.floor(index / 5)}) * 24 + Vector({
       16 - view:inverse_multiplier(font:getWidth(key)) / 2,
       16 - view:inverse_multiplier(font:getHeight()) / 2,

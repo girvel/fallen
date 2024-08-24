@@ -129,7 +129,7 @@ module_mt.__call = function(_, animation_pack, object)
     proficiency_bonus = 2,
     inventory = {},
     layer = "solids",
-    view = "scene",
+    view = State.gui.views.scene,
 
     sounds = {
       hit = sound.multiple("assets/sounds/hits_body", 0.3),

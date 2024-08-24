@@ -39,7 +39,7 @@ engine.complex_factory = function(grid, position)
 
   return function()
     return Tablex.extend({
-      view = "scene",
+      view = State.gui.views.scene,
       sprite = sprite.from_atlas(atlas, (relative_position[2] - 1) * W + relative_position[1]),
       codename = "engine part " .. tostring(relative_position),
     }, mixin)

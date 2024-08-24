@@ -96,7 +96,7 @@ local throw_tiles_under = function(grid, palette, result)
 
           table.insert(result, Tablex.extend(
             get_factory(grid, position, most_frequent_tile, palette)(),
-            {position = position, layer = "tiles", view = "scene"}
+            {position = position, layer = "tiles", view = State.gui.views.scene}
           ))
         end
       end

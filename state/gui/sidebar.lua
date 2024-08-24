@@ -49,7 +49,7 @@ return Module("state.gui.sidebar", function()
       local font = self.hp_text.sprite.font
 
       local hp_bar = self.hp_bar
-      local hp_bar_view = State.gui.views[hp_bar.view]
+      local hp_bar_view = hp_bar.view
       self.hp_text.sprite.text = text
       self.hp_text.position = hp_bar_view:apply_multiplier(hp_bar.position) + Vector({
         (hp_bar_view:apply_multiplier(hp_bar.sprite.image:getWidth())

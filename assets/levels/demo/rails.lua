@@ -22,7 +22,7 @@ local note = function(codex_update)
       sprite = sprite.image("assets/sprites/note.png"),
       codename = "note",
       layer = "above_solids",
-      view = "scene",
+      view = State.gui.views.scene,
       name = "записка",
     }
   )

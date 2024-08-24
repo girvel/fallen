@@ -9,7 +9,7 @@ return function(pack, layer, position)
       codename = "fx",
       layer = layer,
       position = position,
-      view = "scene",
+      view = State.gui.views.scene,
     }
   )
 
