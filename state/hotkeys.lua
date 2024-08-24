@@ -57,6 +57,7 @@ return Module("state.hotkeys", function(modes, debug_mode)
 
   define_hotkey(hotkeys, {"free", "combat"}, {"2"}, {
     name = "атака левой",
+    codename = "other_hand_attack",
     action = actions.other_hand_attack,
   })
 
