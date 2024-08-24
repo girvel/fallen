@@ -1,6 +1,6 @@
 describe("Grid library", function()
   _G.Fun = require("lib.fun")
-  _G.static = require("lib.static")
+  _G.Module = require("lib.module")
   _G.Vector = require("lib.vector")
   _G.Tablex = require("lib.tablex")
   _G.unpack = table.unpack

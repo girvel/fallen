@@ -1,4 +1,5 @@
 local dump = require("lib.dump")
+dump.require_path = "lib.dump"
 
 describe("Serialization library", function()
   describe("basic functionality", function()
