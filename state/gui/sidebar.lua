@@ -97,6 +97,14 @@ return Module("state.gui.sidebar", function()
       self.hp_text = State:add(special.hp_text())
       self.notification = State:add(special.notification())
       -- self.notification_fx = State:add(special.notification_fx())
+      State:add_multiple(Fun.iter(State.hotkeys[State:get_mode()])
+        :filter(function(key, data) return data.codename and not data.hidden end)
+        :enumerate()
+        :map(function(i, key, data) return {
+          special.action_icon(Log.trace(data.codename), i)
+        } end)
+        :reduce(Tablex.concat, {})
+      )
     end,
 
     _notification_queue = {},

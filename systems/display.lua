@@ -1,8 +1,6 @@
 local animated = require("tech.animated")
 local level = require("state.level")
 local tcod = require("lib.tcod")
-local ffi = require("ffi")
-local sprite = require("tech.sprite")
 
 
 local default_font = love.graphics.newFont("assets/fonts/joystix.monospace-regular.otf", 12)
@@ -22,10 +20,9 @@ display.system = static(Tiny.sortedProcessingSystem({
   compare = function(self, first, second)
     if first.view ~= second.view then
       local iterator = Fun.iter(State.gui.views_order):enumerate()
-      return (
-        select(1, iterator:filter(function(i, name) return name == first.view end):nth(1))
-        < select(1, iterator:filter(function(i, name) return name == second.view end):nth(1))
-      )
+      local _, first_i = iterator:filter(function(i, name) return name == first.view end):nth(1)
+      local _, second_i = iterator:filter(function(i, name) return name == second.view end):nth(1)
+      return first_i < second_i
     end
   end,
 

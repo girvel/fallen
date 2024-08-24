@@ -123,4 +123,16 @@ module.portrait = function(this_sprite)
   }
 end
 
+module.action_icon = function(codename, index)
+  index = index - 1
+  return {
+    sprite = sprite.image("assets/sprites/icons/%s.png" % codename),
+    view = "actions",
+    position = Vector({index % 5, math.floor(index / 5)}) * 24,
+
+    codename = "action_icon",
+    boring_flag = true,
+  }
+end
+
 return module

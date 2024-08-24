@@ -30,7 +30,6 @@ module_mt.__call = function(_)
     _last_actions = {},
     ai = {
       run = function(self)
-        Log.trace(Common.get_name(self._last_actions[next(self._last_actions)]))
         local mutex_factories, other_factories = Fun.iter(self.action_factories)
           :span(function(f) return f.mutex_group end)
 

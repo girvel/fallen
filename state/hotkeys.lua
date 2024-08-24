@@ -51,6 +51,7 @@ return Module("state.hotkeys", function(modes, debug_mode)
 
   define_hotkey(hotkeys, {"free", "combat"}, {"1"}, {
     name = "атака правой",
+    codename = "hand_attack",
     action = actions.hand_attack,
   })
 
@@ -61,11 +62,13 @@ return Module("state.hotkeys", function(modes, debug_mode)
 
   define_hotkey(hotkeys, {"free", "combat"}, {"3"}, {
     name = "второе дыхание",
+    codename = "second_wind",
     action = fighter.second_wind,
   })
 
   define_hotkey(hotkeys, {"combat"}, {"4"}, {
     name = "всплеск действий",
+    codename = "action_surge",
     action = fighter.action_surge,
   })
 

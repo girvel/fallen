@@ -140,8 +140,9 @@ local frames_total = 0
 
 -- TODO REF /kernel/
 local key_repetition_delays = {}
-local pressed_keys = {}
+local key_repetition_id = {}
 love.key_repetition_delay = .3
+love.key_repetition_rate = 20
 
 love.run = function()
 	if love.load then love.load(love.arg.parseGameArguments(arg), arg) end
@@ -186,7 +187,9 @@ love.run = function()
     for k, v in pairs(key_repetition_delays) do
       key_repetition_delays[k] = math.max(0, v - dt)
       if key_repetition_delays[k] == 0 then
-        love.custom_keypressed(k)
+        while Common.period(1 / love.key_repetition_rate, key_repetition_id, k) do
+          love.custom_keypressed(k)
+        end
       end
     end
 
