@@ -125,10 +125,10 @@ end
 
 local ACTION_CELL_SIZE = 18
 
-gui.action_icon = function(codename, index, frame)
+gui.action_icon = function(hotkey_data, index, frame)
   index = index - 1
   return {
-    sprite = sprite.image("assets/sprites/icons/%s.png" % codename),
+    sprite = sprite.image("assets/sprites/icons/%s.png" % hotkey_data.codename),
     view = "actions",
     position = Vector({index % 5, math.floor(index / 5)}) * ACTION_CELL_SIZE,
     size = Vector.one * 16,
@@ -143,6 +143,10 @@ gui.action_icon = function(codename, index, frame)
     on_hover_end = function(self)
       frame.sprite = frame.sprites.inactive
     end,
+
+    on_click = function(self)
+      table.insert(State.player.action_factories, hotkey_data)
+    end
   }
 end
 

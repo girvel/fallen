@@ -102,7 +102,7 @@ return Module("state.gui.sidebar", function()
         :map(function(i, key, data)
           local frame = gui.action_frame(i)
           return {
-            gui.action_icon(data.codename, i, frame),
+            gui.action_icon(data, i, frame),
             frame,
             gui.action_hotkey(key, i),
           }
