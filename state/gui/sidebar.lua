@@ -101,7 +101,8 @@ return Module("state.gui.sidebar", function()
         :filter(function(key, data) return data.codename and not data.hidden end)
         :enumerate()
         :map(function(i, key, data) return {
-          special.action_icon(Log.trace(data.codename), i)
+          special.action_icon(Log.trace(data.codename), i),
+          special.action_hotkey(key, i),
         } end)
         :reduce(Tablex.concat, {})
       )

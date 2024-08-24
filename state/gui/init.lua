@@ -23,6 +23,7 @@ module_mt.__call = function()
       scene_fx = view(Vector.zero, 1, 1),
       sidebar_background = view(Vector.zero, 2, 1),
       actions = view(Vector.zero, 2, 1),
+      action_keys = view(Vector.zero, 2, 1),
       sidebar = view(Vector.zero, 2, 1),
       sidebar_text = view(Vector.zero, 1, 1),
       notification = view(Vector.zero, 1, 1),
@@ -37,7 +38,7 @@ module_mt.__call = function()
 
     views_order = {
       "scene", "scene_fx",
-      "sidebar_background", "actions", "sidebar", "sidebar_text",
+      "sidebar_background", "actions", "action_keys", "sidebar", "sidebar_text",
       "notification",
       "dialogue_background", "dialogue_portrait", "dialogue_text",
       "wiki", "character_creator",
@@ -48,7 +49,8 @@ module_mt.__call = function()
       for key, value in pairs({
         scene_fx = gui._get_scene_offset(),
         scene = gui._get_scene_offset(),
-        actions = Vector({love.graphics.getWidth() - State.gui.sidebar.W + 16, 64 + 15}),
+        actions = gui._get_actions_offset(),
+        action_keys = gui._get_actions_offset(),
         sidebar_background = Vector({love.graphics.getWidth() - State.gui.sidebar.W, 0}),
         sidebar = Vector({love.graphics.getWidth() - State.gui.sidebar.W, 0}),
         sidebar_text = Vector({love.graphics.getWidth() - State.gui.sidebar.W, 0}),
@@ -124,6 +126,10 @@ gui._get_creator_text_offset = function()
     math.max(30, w - sx),
     math.max(30, h - sy) + State.gui.character_creator.parameters.scroll
   }) / 2):ceil()
+end
+
+gui._get_actions_offset = function()
+  return Vector({love.graphics.getWidth() - State.gui.sidebar.W + 16, 64 + 15})
 end
 
 return gui

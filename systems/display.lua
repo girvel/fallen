@@ -20,8 +20,8 @@ display.system = static(Tiny.sortedProcessingSystem({
   compare = function(self, first, second)
     if first.view ~= second.view then
       local iterator = Fun.iter(State.gui.views_order):enumerate()
-      local _, first_i = iterator:filter(function(i, name) return name == first.view end):nth(1)
-      local _, second_i = iterator:filter(function(i, name) return name == second.view end):nth(1)
+      local first_i = iterator:filter(function(i, name) return name == first.view end):nth(1)
+      local second_i = iterator:filter(function(i, name) return name == second.view end):nth(1)
       return first_i < second_i
     end
   end,
@@ -37,8 +37,8 @@ display.system = static(Tiny.sortedProcessingSystem({
 
     -- borders --
     local view = State.gui.views.scene
-    local _start = view:inverse_multipler(-view.offset):map(math.floor)
-    local _finish = _start + view:inverse_multipler(Vector({love.graphics.getDimensions()})):map(math.ceil)
+    local _start = view:inverse_multiplier(-view.offset):map(math.floor)
+    local _finish = _start + view:inverse_multiplier(Vector({love.graphics.getDimensions()})):map(math.ceil)
 
     local start = Vector.use(Mathx.median, Vector.one, _start, State.grids.solids.size)
     local finish = Vector.use(Mathx.median, Vector.one, _finish, State.grids.solids.size)

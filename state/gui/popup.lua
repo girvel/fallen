@@ -35,7 +35,7 @@ popup.show = function(position, relation, content, life_time)
   position = position
     + Vector.left * math.floor(size[1] / 2)
     + Vector.right * math.floor(State.gui.views.scene:apply_multiplier(1) / 2)
-  -- TODO maybe :get_multipler()?
+  -- TODO maybe :get_multiplier()?
 
   for _, e in ipairs(entities) do
     e.position = e.position + position

@@ -135,4 +135,23 @@ module.action_icon = function(codename, index)
   }
 end
 
+module.action_hotkey = function(key, index)
+  index = index - 1
+  local font_size = 18
+  local font = sprite.get_font(font_size)
+  local view_name = "action_keys"
+  local view = State.gui.views[view_name]
+  return {
+    sprite = sprite.text(key, font_size),
+    view = view_name,
+    position = Vector({index % 5, math.floor(index / 5)}) * 24 + Vector({
+      16 - view:inverse_multiplier(font:getWidth(key)) / 2,
+      16 - view:inverse_multiplier(font:getHeight()) / 2,
+    }),
+
+    codename = "action_hotkey",
+    boring_flag = true,
+  }
+end
+
 return module
