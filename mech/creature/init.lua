@@ -40,19 +40,18 @@ creature._methods = static {
 
     local base
     if rest_type == "move" then
-      base = {
-        movement = self.race.movement_speed,
-        actions = 1,
-        bonus_actions = 1,
-        reactions = 1,
-      }
+      base = OrderedMap {}
+      base.actions = 1
+      base.bonus_actions = 1
+      base.movement = self.race.movement_speed
+      base.reactions = 1
     elseif rest_type == "short" then
-      base = {}
+      base = OrderedMap {}
     else
-      base = {}
+      base = OrderedMap {}
     end
 
-    return Table.extend(OrderedMap(base), -Query(self.class):get_resources(self.level, rest_type) or {})
+    return Table.extend(base, -Query(self.class):get_resources(self.level, rest_type) or {})
   end,
 
   get_max_hp = function(self)
@@ -91,8 +90,7 @@ creature._methods = static {
     if self.class then
       self.effects = self.class:get_effects(self.level, self.build)
     end
-    for k, v in pairs(get_all_resources(self)) do
-      Log.trace(self.resources[k], k, self.resources)
+    for k, v in Pairs(get_all_resources(self)) do
       self.resources[k] = (self.resources[k] or 0) + v - (old_resources[k] or 0)
     end
     self.hp = self.hp + self:get_max_hp() - old_max_hp

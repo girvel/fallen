@@ -6,11 +6,9 @@ love.errorhandler = function(msg)
   Log.fatal(debug.traceback("Error: " .. tostring(msg), 2):gsub("\n[^\n]+$", ""))
 end
 
-local native_pairs = pairs
-pairs = function(t)
-  local mt = getmetatable(t)
-  if mt and mt.__pairs then return mt.__pairs(t) end
-  return native_pairs(t)
+Pairs = function(t)
+  if OrderedMap.is(t) then return OrderedMap.pairs(t) end
+  return pairs(t)
 end
 
 -- global imports --

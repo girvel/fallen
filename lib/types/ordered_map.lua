@@ -1,6 +1,7 @@
 local ordered_map, module_mt, static = Module("lib.types.ordered_map")
 
 local BASE_KEY = "_ordered_map__base"
+ordered_map.is = function(self) return rawget(self, BASE_KEY) end
 
 ordered_map.pairs = function(self)
   return setmetatable({index = 0}, {__call = function(iter, t, k)

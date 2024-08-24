@@ -108,7 +108,7 @@ return Module("state.gui.sidebar", function()
 
     refresh_action_grid = function(self)
       State:remove_multiple(self.action_entities)
-      self.action_entities = State:add_multiple(Fun.iter(State.hotkeys[State:get_mode()])
+      self.action_entities = State:add_multiple(OrderedMap.iter(State.hotkeys[State:get_mode()])
         :filter(function(key, data) return data.codename and not data.hidden end)
         :enumerate()
         :map(function(i, key, data)
@@ -191,7 +191,7 @@ return Module("state.gui.sidebar", function()
 
         local table_render = Common.build_table(
           {"Ресурсы", ""},
-          Fun.iter(State.player.resources)
+          OrderedMap.iter(State.player.resources)
             :map(function(k, v)
               return {
                 translation.resources[k] or k,
@@ -207,7 +207,7 @@ return Module("state.gui.sidebar", function()
         append(table_render)
       end
 
-      local hotkeys_table = Fun.iter(State.hotkeys[State:get_mode()])
+      local hotkeys_table = OrderedMap.iter(State.hotkeys[State:get_mode()])
         :filter(function(key, data) return not data.hidden end)
         :map(function(key, data) return {key = key, data = data} end)
         :totable()

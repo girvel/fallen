@@ -5,7 +5,7 @@ local tablex = {}
 -- from left to right.
 tablex.extend = function(base, extension, ...)
   if extension == nil then return base end
-  for k, v in pairs(extension) do
+  for k, v in Pairs(extension) do
     base[k] = v
   end
   return tablex.extend(base, ...)
