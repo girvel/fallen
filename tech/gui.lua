@@ -152,6 +152,10 @@ gui.action_icon = function(hotkey_data, index, frame)
       table.insert(State.player.action_factories, hotkey_data)
     end,
 
+    changes_cursor = function(self)
+      return self:is_active()
+    end,
+
     ai = {
       observe = function(self)
         self.shader = not self:is_active()

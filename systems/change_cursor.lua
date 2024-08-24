@@ -21,6 +21,7 @@ change_cursor.system = static(Tiny.processingSystem({
     if not (
       relative_mouse_position > entity.position
       and relative_mouse_position < entity.position + entity.size
+      and (not entity.changes_cursor or entity:changes_cursor())
     ) then
       return
     end
