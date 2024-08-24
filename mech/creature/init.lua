@@ -79,7 +79,7 @@ creature._methods = static {
 
   act = function(self, action)
     if not action:get_availability(self) then return false end
-    return action:_run(self)
+    return action:run(self)
   end,
 
   level_up = function(self, changes)

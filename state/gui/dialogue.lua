@@ -1,7 +1,6 @@
 local sounds = require("tech.sounds")
 local texting = require("state.gui.texting")
 local gui = require("tech.gui")
-local sound = require("tech.sound")
 
 
 return Module("state.gui.dialogue", function()

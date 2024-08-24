@@ -22,7 +22,7 @@ class.hit_dice_action = {
     return entity.hp < entity:get_max_hp()
       and entity.resources.hit_dice > 0
   end,
-  _run = function(self, entity)
+  run = function(self, entity)
     entity.resources.hit_dice = entity.resources.hit_dice - 1
     healing.heal(entity, (D(entity.class.hp_die) + abilities.get_modifier(entity.abilities.con)):roll())
   end,

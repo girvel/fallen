@@ -1,3 +1,4 @@
+local action = require("tech.action")
 local level = require("state.level")
 local attacking = require("mech.attacking")
 local abilities = require("mech.abilities")
@@ -74,7 +75,7 @@ actions.hand_attack = static {
     local target = State.grids.solids:safe_get(entity.position + Vector[entity.direction])
     return entity.resources.actions > 0 and -Query(target).hp
   end,
-  _run = function(self, entity)
+  run = function(self, entity)
     local target = State.grids.solids:safe_get(entity.position + Vector[entity.direction])
     entity.resources.actions = entity.resources.actions - 1
     base_attack(entity, target, "main_hand")
@@ -88,7 +89,7 @@ actions.other_hand_attack = static {
     local target = State.grids.solids:safe_get(entity.position + Vector[entity.direction])
     return entity.resources.bonus_actions > 0 and -Query(target).hp and entity.inventory.other_hand
   end,
-  _run = function(self, entity)
+  run = function(self, entity)
     local target = State.grids.solids:safe_get(entity.position + Vector[entity.direction])
     entity.resources.bonus_actions = entity.resources.bonus_actions - 1
     base_attack(entity, target, "other_hand")
@@ -101,7 +102,7 @@ actions.move = static {
   get_availability = function(self, entity)
     return entity.resources.movement > 0
   end,
-  _run = function(_, entity)
+  run = function(_, entity)
     local new_position = entity.position + Vector[entity.direction]
     if entity.movement_flag or not level.move(entity, new_position) then
       return false
@@ -145,17 +146,19 @@ actions.dash = static {
   get_availability = function(self, entity)
     return entity.resources.actions > 0
   end,
-  _run = function(_, entity)
+  run = function(_, entity)
     entity.resources.actions = entity.resources.actions - 1
     entity.resources.movement = entity.resources.movement + entity:get_resources("move").movement
   end,
 }
 
-actions.interact = static {
+actions.interact = static(action({
   codename = "interact",
-  get_availability = function(self, entity)
-    return entity.resources.bonus_actions > 0
-      and interactive.get_for(entity)
+  cost = {
+    bonus_actions = 1,
+  },
+  _get_availability = function(self, entity)
+    return interactive.get_for(entity)
   end,
   _run = function(_, entity)
     local entity_to_interact = interactive.get_for(entity)
@@ -166,12 +169,12 @@ actions.interact = static {
     entity.resources.bonus_actions = entity.resources.bonus_actions - 1
     entity_to_interact:interact(entity)
   end
-}
+}))
 
 actions.finish_turn = static {
   codename = "finish_turn",
   get_availability = function() return true end,
-  _run = function(_, entity)
+  run = function(_, entity)
     return combat.TURN_END_SIGNAL
     -- TODO maybe discard that and use a direct call to State.combat?
   end,

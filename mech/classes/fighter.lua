@@ -14,7 +14,7 @@ fighter.second_wind = static {
       and entity.resources.bonus_actions > 0
       and entity.resources.second_wind > 0
   end,
-  _run = function(self, entity)
+  run = function(self, entity)
     entity.resources.bonus_actions = entity.resources.bonus_actions - 1
     entity.resources.second_wind = entity.resources.second_wind - 1
     State:add(fx("assets/sprites/fx/second_wind", "fx_behind", entity.position))
@@ -27,7 +27,7 @@ fighter.action_surge = static {
   get_availability = function(self, entity)
     return entity.resources.action_surge > 0
   end,
-  _run = function(self, entity)
+  run = function(self, entity)
     entity.resources.action_surge = entity.resources.action_surge - 1
     State:add(fx("assets/sprites/fx/action_surge_proto", "fx_behind", entity.position))
     entity.resources.actions = entity.resources.actions + 1
