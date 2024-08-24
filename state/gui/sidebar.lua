@@ -51,9 +51,8 @@ return Module("state.gui.sidebar", function()
       local hp_bar = self.hp_bar
       local hp_bar_view = State.gui.views[hp_bar.view]
       self.hp_text.sprite.text = text
-      self.hp_text.position = hp_bar_view:apply_multiplier(hp_bar.position) + Vector({
-        (hp_bar_view:apply_multiplier(hp_bar.sprite.image:getWidth())
-          - font:getWidth(text)) / 2,
+      self.hp_text.position = hp_bar.position * hp_bar_view:get_multiplier() + Vector({
+        (hp_bar.sprite.image:getWidth() - font:getWidth(text)) * hp_bar_view:get_multiplier() / 2,
         2
       })
 

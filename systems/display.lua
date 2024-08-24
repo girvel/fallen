@@ -37,8 +37,8 @@ display.system = static(Tiny.sortedProcessingSystem({
 
     -- borders --
     local view = State.gui.views.scene
-    local _start = view:inverse_multiplier(-view.offset):map(math.floor)
-    local _finish = _start + view:inverse_multiplier(Vector({love.graphics.getDimensions()})):map(math.ceil)
+    local _start = -(view.offset / view:get_multiplier()):map(math.floor)
+    local _finish = _start + (Vector({love.graphics.getDimensions()}) / view:get_multiplier()):map(math.ceil)
 
     local start = Vector.use(Mathx.median, Vector.one, _start, State.grids.solids.size)
     local finish = Vector.use(Mathx.median, Vector.one, _finish, State.grids.solids.size)
@@ -129,7 +129,7 @@ display.system = static(Tiny.sortedProcessingSystem({
     elseif entity.sprite.rect_color then
       local x, y = unpack(offset_position)
       love.graphics.setColor(entity.sprite.rect_color)
-      love.graphics.rectangle("fill", x, y, unpack(current_view:apply_multiplier(entity.size)))
+      love.graphics.rectangle("fill", x, y, unpack(entity.size * current_view:get_multiplier()))
       love.graphics.setColor(Colors.absolute_white)
     else
       -- error("Wrong sprite format of %s:\n%s" % {Common.get_name(entity), Inspect(entity.sprite)})
@@ -143,7 +143,7 @@ display.system = static(Tiny.sortedProcessingSystem({
     if entity.link_flag then
       local view = State.gui.views[entity.view]
       local start = offset_position + Vector.down * entity.size[2]
-      local finish = offset_position + view:apply_multiplier(entity.size)
+      local finish = offset_position + entity.size * view:get_multiplier()
       local mouse_position = Vector({love.mouse.getPosition()})
       if not (mouse_position >= offset_position and mouse_position < finish) then return end
 

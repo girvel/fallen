@@ -11,7 +11,7 @@ module.floating_damage = function(number, scene_position, color)
   return {
     boring_flag = true,
     codename = "floating_damage",
-    position = State.gui.views.scene:apply_multiplier(scene_position)
+    position = scene_position * State.gui.views.scene:get_multiplier()
       + Vector({random.d(12) - 6, random.d(12) - 6}),
     view = "scene_fx",
     drift = Vector({0, -24}),
@@ -145,8 +145,8 @@ module.action_hotkey = function(key, index)
     sprite = sprite.text(key, font_size),
     view = view_name,
     position = Vector({index % 5, math.floor(index / 5)}) * 24 + Vector({
-      16 - view:inverse_multiplier(font:getWidth(key)) / 2,
-      16 - view:inverse_multiplier(font:getHeight()) / 2,
+      16 - font:getWidth(key) / view:get_multiplier() / 2,
+      16 - font:getHeight() / view:get_multiplier() / 2,
     }),
 
     codename = "action_hotkey",

@@ -36,7 +36,7 @@ end
 railing.api.center_camera = function()
   Fun.iter({"scene", "scene_fx"}):each(function(view)
     State.gui.views[view].offset = (
-      - State.gui.views.scene:apply_multiplier(State.player.position)
+      - State.player.position * State.gui.views.scene:get_multiplier()
       + Vector({love.graphics.getDimensions()}) / 2
     )
   end)

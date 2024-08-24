@@ -9,11 +9,8 @@ return Module("utils.view", function(offset, scale, cell_size)
     inverse = function(self, v)
       return (v - self.offset) / self.scale / self.cell_size
     end,
-    apply_multiplier = function(self, v)
-      return v * self.scale * self.cell_size
-    end,
-    inverse_multiplier = function(self, v)
-      return v / self.scale / self.cell_size
+    get_multiplier = function(self)
+      return self.scale * self.cell_size
     end,
   }
 end)

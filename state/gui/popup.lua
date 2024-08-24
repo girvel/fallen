@@ -28,14 +28,13 @@ popup.show = function(position, relation, content, life_time)
     last.position[2] - entities[1].position[2] + sprite.get_font(last.font_size):getHeight()
   })
 
-  position = State.gui.views.scene:apply_multiplier(position)  -- TODO rename scene_popup_* -> popup_*
+  position = position * State.gui.views.scene:get_multiplier()  -- TODO rename scene_popup_* -> popup_*
   if relation == "above" then
     position = position + Vector.up * size[2]
   end
   position = position
     + Vector.left * math.floor(size[1] / 2)
-    + Vector.right * math.floor(State.gui.views.scene:apply_multiplier(1) / 2)
-  -- TODO maybe :get_multiplier()?
+    + Vector.right * math.floor(State.gui.views.scene:get_multiplier() * 1 / 2)
 
   for _, e in ipairs(entities) do
     e.position = e.position + position
