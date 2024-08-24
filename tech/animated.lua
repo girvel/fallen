@@ -31,7 +31,7 @@ local animation_methods = {
       end)
     end
 
-    self._on_animation_end = Deferred.new()
+    self._on_animation_end = Promise()
     return self._on_animation_end
   end,
 

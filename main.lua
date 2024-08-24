@@ -13,7 +13,6 @@ Tiny = require("lib.tiny")
 Inspect = require("lib.inspect")
 Memoize = require("lib.memoize")
 require("lib.strong")
-Deferred = require("lib.deferred")
 
 Log.info("Starting basic LOVE setup")
 
@@ -27,12 +26,14 @@ Random = require("lib.extensions.random")
 Dump = require("lib.dump")
 Dump.require_path = "lib.dump"
 Module = require("lib.types.module")
+
 Enum = require("lib.types.enum")
 Vector = require("lib.types.vector")
 Grid = require("lib.types.grid")
 D = require("lib.types.d")
 Colors = require("lib.colors")
 SortedMap = require("lib.types.sorted_map")
+Promise = require("lib.types.promise")
 
 require("lib.tiny_dump_patch")()
 

@@ -135,7 +135,12 @@ gui.action_icon = function(hotkey_data, index, frame)
     codename = "action_icon",
     boring_flag = true,
 
+    is_active = function(self)
+      return -Query(hotkey_data.action):get_availability(State.player)
+    end,
+
     on_hover = function(self)
+      if not self:is_active() then return end
       frame.sprite = frame.sprites.active
     end,
 
@@ -149,7 +154,7 @@ gui.action_icon = function(hotkey_data, index, frame)
 
     ai = {
       observe = function(self)
-        self.shader = not -Query(hotkey_data.action):get_availability(State.player)
+        self.shader = not self:is_active()
           and shaders.grayscale
           or nil
       end,
