@@ -181,7 +181,7 @@ end
 debugx.SIGNAL = {}
 
 debugx.call = function(f, ...)
-  local results = {xpcall(f, function(msg) Debugx.extend_error(); return msg end, ...)}
+  local results = {xpcall(f, function(msg) Debug.extend_error(); return msg end, ...)}
   if results[1] then
     return unpack(results, 2)
   end

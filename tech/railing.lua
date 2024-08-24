@@ -151,7 +151,7 @@ railing.api.update_quest = function(changes)
 end
 
 module_mt.__call = function(_, ...)
-  return Tablex.extend(setmetatable({
+  return Table.extend(setmetatable({
     active_coroutines = {},
 
     update = function(self, event)
@@ -164,7 +164,7 @@ module_mt.__call = function(_, ...)
             return {
               coroutine = coroutine.create(function()
                 --s:run(self, dt)
-                Debugx.call(s.run, s, self, dt)
+                Debug.call(s.run, s, self, dt)
                 Log.info("Scene `" .. s.name .. "` ends")
               end),
               base_scene = s,
@@ -186,7 +186,7 @@ module_mt.__call = function(_, ...)
         run = function(self_scene, rails, dt)
           self_scene.enabled = false
           task(self_scene, rails, dt)
-          Tablex.remove(self.scenes, self_scene)
+          Table.remove(self.scenes, self_scene)
         end,
       }
       table.insert(self.scenes, result)
@@ -214,7 +214,7 @@ module_mt.__call = function(_, ...)
   }, {
     __serialize = function(self)
       if #self.active_coroutines == 0 then return end
-      self = Tablex.shallow_copy(self)
+      self = Table.shallow_copy(self)
       self.active_coroutines = {}
       return function()
         return self

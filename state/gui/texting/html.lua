@@ -6,40 +6,40 @@ local html, _, static = Module("state.gui.texting.html")
 local transformers = {
   head = function() return {} end,
   h1 = function(node, children, styles)
-    return Tablex.concat(
-      {Tablex.extend({content = "# "}, styles.h1_prefix)},
+    return Table.concat(
+      {Table.extend({content = "# "}, styles.h1_prefix)},
       Fun.iter(children)
-        :map(function(child) return Tablex.extend(child, styles.h1) end)
+        :map(function(child) return Table.extend(child, styles.h1) end)
         :totable(),
       {{content = "\n\n"}}
     )
   end,
   h2 = function(node, children, styles)
-    return Tablex.concat(
-      {Tablex.extend({content = "# "}, styles.h2_prefix)},
+    return Table.concat(
+      {Table.extend({content = "# "}, styles.h2_prefix)},
       Fun.iter(children)
-        :map(function(child) return Tablex.extend(child, styles.h2) end)
+        :map(function(child) return Table.extend(child, styles.h2) end)
         :totable(),
       {{content = "\n\n"}}
     )
   end,
   p = function(node, children, styles)
-    return Tablex.concat(children, {{content = "\n\n"}})
+    return Table.concat(children, {{content = "\n\n"}})
   end,
   li = function(node, children, styles)
-    return Tablex.concat({{content = "- "}}, children, {{content = "\n"}})
+    return Table.concat({{content = "- "}}, children, {{content = "\n"}})
   end,
   a = function(node, children, styles)
     return Fun.iter(children):map(function(child)
       child.link = node.attributes.href
-      return Tablex.extend({}, styles.a or {}, child)
+      return Table.extend({}, styles.a or {}, child)
     end):totable()
   end,
   hate = function(node, children, styles)
-    return Tablex.concat(
+    return Table.concat(
       Fun.iter(children)
         :map(function(child)
-          local result = Tablex.extend(child, styles.hate, {
+          local result = Table.extend(child, styles.hate, {
             on_update = function(self, event)
               local dt = unpack(event)
               if self.delay > 0 then
@@ -119,7 +119,7 @@ local postprocess = function(root, content, styles)
   assign_event("on_hover", root, content)
   assign_event("on_update", root, content)
   return Fun.iter(content):map(function(token)
-    return Tablex.extend({}, styles.default, token)
+    return Table.extend({}, styles.default, token)
   end):totable()
 end
 
@@ -144,7 +144,7 @@ visit_html = function(root, args, styles, preserve_whitespace)
   local i, j
   for _, node in ipairs(root.nodes) do
     i, j = content:find(node:gettext(), 1, true)
-    Tablex.concat(
+    Table.concat(
       nodes,
       {{content = prepare(content:sub(1, i - 1))}},
       visit_html(node, args, styles, preserve_whitespace)
@@ -152,7 +152,7 @@ visit_html = function(root, args, styles, preserve_whitespace)
     content = content:sub(j + 1)
   end
   if #content > 0 then
-    Tablex.concat(nodes, {{content = prepare(content)}})
+    Table.concat(nodes, {{content = prepare(content)}})
   end
 
   local result = (transformers[root.name] or transform_default_node)(root, nodes, styles)

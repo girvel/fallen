@@ -9,7 +9,7 @@ local sprite = require("tech.sprite")
 local module, _, static = Module("library.items")
 
 module.knife = function()
-  return Tablex.extend(
+  return Table.extend(
     item.mixin(),
     animated(animation_packs.knife),
     {
@@ -26,7 +26,7 @@ module.knife = function()
 end
 
 module.dagger = function()
-  return Tablex.extend(
+  return Table.extend(
     item.mixin(),
     animated(animation_packs.dagger),
     {
@@ -43,7 +43,7 @@ module.dagger = function()
 end
 
 module.machete = function()
-  return Tablex.extend(
+  return Table.extend(
     item.mixin(),
     animated(animation_packs.machete),
     {
@@ -57,7 +57,7 @@ module.machete = function()
 end
 
 module.pole = function()
-  return Tablex.extend(
+  return Table.extend(
     item.mixin(),
     animated(animation_packs.pole),
     {
@@ -74,7 +74,7 @@ module.pole = function()
 end
 
 module.greatsword = function()
-  return Tablex.extend(
+  return Table.extend(
     item.mixin(),
     animated(animation_packs.greatsword),
     {
@@ -92,7 +92,7 @@ module.greatsword = function()
 end
 
 module.gas_key = function()
-  return Tablex.extend(
+  return Table.extend(
     item.mixin(),
     animated(animation_packs.gas_key),
     {
@@ -109,7 +109,7 @@ module.gas_key = function()
 end
 
 module.yellow_gloves = function()
-  return Tablex.extend(
+  return Table.extend(
     item.mixin(),
     animated(animation_packs.yellow_gloves),
     {

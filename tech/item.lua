@@ -68,7 +68,7 @@ module.give = function(entity, this_item)
 end
 
 module.mixin = function()
-  return Tablex.extend(
+  return Table.extend(
     interactive(function(self, other)
       local old_position = self.position
       State.grids[self.layer][self.position] = nil

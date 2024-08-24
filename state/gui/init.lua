@@ -92,12 +92,12 @@ gui._get_scene_offset = function()
   )
 
   local result = -Vector({
-    Mathx.median(
+    Math.median(
       player_x - window_w + border_w,
       -State.gui.views.scene_fx.offset[1],
       player_x - border_w
     ),
-    Mathx.median(
+    Math.median(
       player_y - window_h + border_h,
       -State.gui.views.scene_fx.offset[2],
       player_y - border_h

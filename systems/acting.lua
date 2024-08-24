@@ -9,7 +9,7 @@ local hostility = require("mech.hostility")
 local your_move_sound = sound.multiple("assets/sounds/your_move1", 0.5)[1]
 
 local blood_factory = function()
-  return Tablex.extend(
+  return Table.extend(
     item.mixin(),
     animated("assets/sprites/animations/hurt", "atlas"),
     {
@@ -44,7 +44,7 @@ acting.system = static(Tiny.processingSystem({
             :totable(), ", ")
         )
         Fun.iter(combatants):each(function(e)
-          Tablex.extend(e.resources, -Query(e):get_resources("short") or {})
+          Table.extend(e.resources, -Query(e):get_resources("short") or {})
         end)
         State.combat = nil
       end
@@ -94,7 +94,7 @@ acting.system = static(Tiny.processingSystem({
   _process_outside_combat = function(self, entity, event)
     entity.ai.run(entity, event)
     if -Query(entity.animation).current:startsWith("idle") then
-      Tablex.extend(entity.resources, -Query(entity):get_resources("move"))
+      Table.extend(entity.resources, -Query(entity):get_resources("move"))
     end
   end,
 
@@ -102,7 +102,7 @@ acting.system = static(Tiny.processingSystem({
     local is_world_turn = State.combat:get_current() == combat.WORLD_TURN
 
     if is_world_turn then
-      if Tablex.contains(State.combat.list, entity) then return end
+      if Table.contains(State.combat.list, entity) then return end
     elseif State.combat:get_current() ~= entity then return end
 
     if is_world_turn then
@@ -129,7 +129,7 @@ acting.system = static(Tiny.processingSystem({
   _pass_turn = function(self)
     local current = State.combat:get_current()
     Common.reset_period(self, current)
-    Tablex.extend(current.resources, -Query(current):get_resources("move") or {})
+    Table.extend(current.resources, -Query(current):get_resources("move") or {})
     State.combat:move_to_next()
     current = State.combat:get_current()
     Log.info("%s's turn" % Common.get_name(current))

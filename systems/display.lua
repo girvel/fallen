@@ -33,15 +33,15 @@ display.system = static(Tiny.sortedProcessingSystem({
   end,
 
   process_grid = function(self, event)
-    if Tablex.contains({"character_creator", "reading", "death", "text_input"}, State:get_mode()) then return end
+    if Table.contains({"character_creator", "reading", "death", "text_input"}, State:get_mode()) then return end
 
     -- borders --
     local view = State.gui.views.scene
     local _start = -(view.offset / view:get_multiplier()):map(math.floor)
     local _finish = _start + (Vector({love.graphics.getDimensions()}) / view:get_multiplier()):map(math.ceil)
 
-    local start = Vector.use(Mathx.median, Vector.one, _start, State.grids.solids.size)
-    local finish = Vector.use(Mathx.median, Vector.one, _finish, State.grids.solids.size)
+    local start = Vector.use(Math.median, Vector.one, _start, State.grids.solids.size)
+    local finish = Vector.use(Math.median, Vector.one, _finish, State.grids.solids.size)
 
     -- mask --
     local solids = State.grids.solids
@@ -106,13 +106,13 @@ display.system = static(Tiny.sortedProcessingSystem({
   process = function(self, entity)
     local mode = State:get_mode()
     if
-      State.gui.disable_ui and not Tablex.contains({"scene", "dialogue_text"}, entity.view)
+      State.gui.disable_ui and not Table.contains({"scene", "dialogue_text"}, entity.view)
       -- TODO this should be grouped w/ views?
-      or mode == "character_creator" and not Tablex.contains(
+      or mode == "character_creator" and not Table.contains(
         {"sidebar", "sidebar_text", "sidebar_background", "character_creator"},
         entity.view
       )
-      or mode == "reading" and not Tablex.contains(
+      or mode == "reading" and not Table.contains(
         {"sidebar", "sidebar_text", "sidebar_background", "wiki"},
         entity.view
       )
@@ -207,7 +207,7 @@ display.system = static(Tiny.sortedProcessingSystem({
     if mode == "text_input" then return State.gui.text_input:display() end
     if mode == "death" then return self:_display_death_message() end
     self:_display_hint()
-    if Tablex.contains({"reading"}, mode) or State.shader or State.gui.disable_ui then return end
+    if Table.contains({"reading"}, mode) or State.shader or State.gui.disable_ui then return end
     self:_display_text_info()
   end,
 

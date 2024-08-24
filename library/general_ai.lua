@@ -67,7 +67,7 @@ general_ai_mt.__call = function(_, works_outside_of_combat)
     end, works_outside_of_combat),
 
     observe = function(self, event)
-      Tablex.concat(self.ai.was_attacked_by, Fun.iter(State.aggression_log)
+      Table.concat(self.ai.was_attacked_by, Fun.iter(State.aggression_log)
         :filter(function(pair) return pair[2] == self end)
         :map(function(pair) return pair[1] end)
         :totable())

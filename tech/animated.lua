@@ -58,7 +58,7 @@ module_mt.__call = function(self, pack, pack_type)
     pack = self._packs_cache[pack]
   end
 
-  local result = Tablex.extend({
+  local result = Table.extend({
     animation = {
       pack = pack,
       paused = false,

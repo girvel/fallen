@@ -2,7 +2,6 @@ local popup = require("state.gui.popup")
 local pipes = require("library.pipes")
 local api = require("tech.railing").api
 local actions = require("mech.creature.actions")
-local random = require("utils.random")
 local level = require("state.level")
 local mech = require("mech")
 local items = require("library.items")
@@ -99,7 +98,7 @@ return function()
         self.enabled = false
         popup.show(
           rails.entities[1].position, "above",
-          random.choice({
+          Random.choice({
             "УКС " .. math.random(15, 27) / 10,
             "ДО " .. math.random(40, 80),
             "МПА " .. math.random(26, 52) / 10,

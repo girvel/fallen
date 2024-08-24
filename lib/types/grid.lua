@@ -84,7 +84,7 @@ module._grid_methods = {
         end
       end
 
-      Tablex.remove_breaking_at(vertices_to_visit, current_vertex_i)
+      Table.remove_breaking_at(vertices_to_visit, current_vertex_i)
       visited_vertices[current_vertex] = true
       table.insert(visited_vertices_list, current_vertex)
 

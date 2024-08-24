@@ -13,7 +13,7 @@ factoring.from_atlas = function(t, atlas, mixin, names)
         current_mixin = mixin
       end
       t[name] = function()
-        return Tablex.extend({
+        return Table.extend({
           sprite = sprite.from_atlas(atlas, i),
           codename = name,
         }, current_mixin)
@@ -26,7 +26,7 @@ factoring.extend = function(t, k, ...)
   local wrapped = t[k]
   local mixins = {...}
   t[k] = function(...)
-    return Tablex.extend(wrapped(...), unpack(mixins))
+    return Table.extend(wrapped(...), unpack(mixins))
   end
 end
 

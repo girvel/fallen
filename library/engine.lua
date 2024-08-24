@@ -15,8 +15,8 @@ engine.complex_factory = function(grid, position)
   local relative_position = position - anchor + Vector.one
 
   local mixin
-  if Tablex.contains({1, 2, 5, 6, 7, 8}, relative_position[2])
-    or Tablex.contains({3, 4}, relative_position[2]) and Tablex.contains({4, 5}, relative_position[1])
+  if Table.contains({1, 2, 5, 6, 7, 8}, relative_position[2])
+    or Table.contains({3, 4}, relative_position[2]) and Table.contains({4, 5}, relative_position[1])
   then
     mixin = {
       layer = "solids",
@@ -29,16 +29,16 @@ engine.complex_factory = function(grid, position)
 
   if not (
     relative_position[2] == 1
-    or Tablex.contains({5, 6, 7}, relative_position[2])
-      and Tablex.contains({3, 4, 5}, relative_position[1])
+    or Table.contains({5, 6, 7}, relative_position[2])
+      and Table.contains({3, 4, 5}, relative_position[1])
   ) then
-    Tablex.extend(mixin, {
+    Table.extend(mixin, {
       transparent_flag = true,
     })
   end
 
   return function()
-    return Tablex.extend({
+    return Table.extend({
       view = "scene",
       sprite = sprite.from_atlas(atlas, (relative_position[2] - 1) * W + relative_position[1]),
       codename = "engine part " .. tostring(relative_position),

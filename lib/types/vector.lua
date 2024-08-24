@@ -104,8 +104,8 @@ vector_methods.abs = function(self)
 end
 
 vector_methods.normalized = function(self)
-  if self[1] ~= 0 then return module({Mathx.sign(self[1]), 0}) end
-  if self[2] ~= 0 then return module({0, Mathx.sign(self[2])}) end
+  if self[1] ~= 0 then return module({Math.sign(self[1]), 0}) end
+  if self[2] ~= 0 then return module({0, Math.sign(self[2])}) end
   assert(false, "Can not normalize Vector.zero")
 end
 

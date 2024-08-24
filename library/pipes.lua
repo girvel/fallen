@@ -3,7 +3,6 @@ local sound = require("tech.sound")
 local animated = require("tech.animated")
 local library_fx = require("library.fx")
 local interactive = require("tech.interactive")
-local random = require("utils.random")
 local factoring = require("tech.factoring")
 
 
@@ -26,11 +25,11 @@ local valve_rotating_sounds = sound.multiple("assets/sounds/valve_rotate", 0.1)
 local pipe_valve_pack = animated.load_pack("assets/sprites/animations/pipe_valve")
 
 pipes.valve = function(leaking_pipe_position)
-  return Tablex.extend(
+  return Table.extend(
     animated(pipe_valve_pack),
     interactive(Dump.ignore_upvalue_size .. function(self, other)
       local target = State.grids.solids[leaking_pipe_position]
-      State.audio:play(self, random.choice(valve_rotating_sounds), "medium")
+      State.audio:play(self, Random.choice(valve_rotating_sounds), "medium")
       self:animate("rotate"):next(function()
         target.overflow_counter = 0
         pipes.burst_with_steam(target)
@@ -86,7 +85,7 @@ end
 local steam_hissing_sound = sound.multiple("assets/sounds/steam_hissing.wav", 0.8)[1]
 
 pipes.burst_with_steam = Dump.ignore_upvalue_size .. function(pipe)
-  State:add(Tablex.extend(
+  State:add(Table.extend(
     library_fx.steam("right"),
     {position = pipe.position}
   ))

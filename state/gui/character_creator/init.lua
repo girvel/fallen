@@ -86,7 +86,7 @@ return Module("state.gui.character_creator", function()
       end
 
       self.text_entities = State:add_multiple(texting.generate(
-        "<pre>%s</pre>" % text, Tablex.merge({}, State.gui.wiki.styles, self.styles),
+        "<pre>%s</pre>" % text, Table.merge({}, State.gui.wiki.styles, self.styles),
         math.min(love.graphics.getWidth() - 40, State.gui.TEXT_MAX_SIZE[1]),
         "character_creator", {params = params}
       ))
@@ -95,7 +95,7 @@ return Module("state.gui.character_creator", function()
     forms = forms,
 
     move_cursor = function(self, direction_name)
-      assert(direction_name == "zero" or Tablex.contains(Vector.direction_names, direction_name))
+      assert(direction_name == "zero" or Table.contains(Vector.direction_names, direction_name))
 
       local params = self.parameters
 
@@ -138,7 +138,7 @@ return Module("state.gui.character_creator", function()
         abilities = params.abilities_final,
         race = races[params.race],
         build = Fun.iter(params.build_options)
-          :filter(function(o) return Tablex.contains(active_choices, o) end)
+          :filter(function(o) return Table.contains(active_choices, o) end)
           :tomap(),
         feat = races[params.race].feat_flag
           and feats.perk.options[params.build_options[feats.perk]]

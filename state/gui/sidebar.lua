@@ -107,7 +107,7 @@ return Module("state.gui.sidebar", function()
             gui.action_hotkey(key, i),
           }
         end)
-        :reduce(Tablex.concat, {})
+        :reduce(Table.concat, {})
       )
     end,
 
@@ -127,7 +127,7 @@ return Module("state.gui.sidebar", function()
 
     get_hint = function(self)
       if self.hint_override then return self.hint_override end
-      if not Tablex.contains({"free", "fight"}, State:get_mode()) then return "" end
+      if not Table.contains({"free", "fight"}, State:get_mode()) then return "" end
       local interaction = interactive.get_for(State.player)
       if interaction then
         return "[E] для взаимодействия с " .. Common.get_name(interaction)
@@ -149,7 +149,7 @@ return Module("state.gui.sidebar", function()
           result[#result] = result[#result] .. content[1]
           table.remove(content, 1)
         end
-        Tablex.concat(result, content)
+        Table.concat(result, content)
       end
 
       local main_weapon = -Query(State.player).inventory.main_hand
@@ -169,7 +169,7 @@ return Module("state.gui.sidebar", function()
       end
 
       if State.player then
-        local max = Tablex.extend({},
+        local max = Table.extend({},
           State.player:get_resources("move"),
           State.player:get_resources("short"),
           State.player:get_resources("long")
@@ -233,7 +233,7 @@ return Module("state.gui.sidebar", function()
                 },
               }
             end)
-            :reduce(Tablex.concat, {})
+            :reduce(Table.concat, {})
         )
       end
 

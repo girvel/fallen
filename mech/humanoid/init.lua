@@ -13,7 +13,7 @@ return Module("mech.humanoid", function(base_object)
     "No color found for race " .. tostring(-Query(base_object).race.codename)
   )
 
-  return Tablex.extend(
+  return Table.extend(
     {transparent_flag = true},
     creature(pack_by_race(base_object.race), base_object)
   )

@@ -16,7 +16,7 @@ local lever_packs = {
 }
 
 live.lever = function()
-  return Tablex.extend(
+  return Table.extend(
     animated(lever_packs.off),
     interactive(function(self)
       self.is_on = self.animation.pack ~= lever_packs.on
@@ -35,7 +35,7 @@ for _, prefix in ipairs({"", "black_"}) do
 
   live[prefix .. "door"] = function(args)
     args = args or {}
-    return Tablex.extend(
+    return Table.extend(
       animated(closed_door_pack),
       interactive(function(self)
         if self.locked then

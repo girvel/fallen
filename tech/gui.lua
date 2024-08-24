@@ -1,5 +1,4 @@
 local shaders = require("tech.shaders")
-local random = require("utils.random")
 local animated = require("tech.animated")
 local sprite = require("tech.sprite")
 
@@ -32,11 +31,11 @@ end
 
 -- TODO figure out highlight behaviour structure
 gui.highlight = function()
-  return Tablex.extend(animated("assets/sprites/animations/highlight"), {layer = "fx", view = "scene"})
+  return Table.extend(animated("assets/sprites/animations/highlight"), {layer = "fx", view = "scene"})
 end
 
 gui.hp_bar = function()
-  return Tablex.extend(
+  return Table.extend(
     animated("assets/sprites/hp_bar"),
     {
       codename = "hp_bar",
@@ -65,7 +64,7 @@ gui.notification = function()
 end
 
 gui.notification_fx = function()
-  return Tablex.extend(
+  return Table.extend(
     animated("assets/sprites/notification_fx"),
     {
       codename = "notification_fx",

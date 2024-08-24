@@ -182,7 +182,7 @@ return function()
         api.make_hostile("dreamers_detective", rails.entities)
 
         local engineers = Fun.range(1, 4):map(function(i) return rails.entities[i] end):totable()
-        State:start_combat(Tablex.concat({State.player}, engineers))
+        State:start_combat(Table.concat({State.player}, engineers))
 
         for _, e in pairs(engineers) do
           e.interact = nil

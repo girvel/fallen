@@ -13,7 +13,7 @@ class.get_choices = function(progression_table, level)
         :filter(function(p) return p.enum_variant == perk.choice end)
         :totable()
     end)
-    :reduce(Tablex.concat, {})
+    :reduce(Table.concat, {})
 end
 
 class.hit_dice_action = {
@@ -39,7 +39,7 @@ class.mixin = function()
             :map(function(p) return p.action end)
             :totable()
         end)
-        :reduce(Tablex.concat, {class.hit_dice_action})
+        :reduce(Table.concat, {class.hit_dice_action})
     end,
 
     get_effects = function(self, level, build)
@@ -58,7 +58,7 @@ class.mixin = function()
             :filter(Fun.op.truth)
             :totable()
         end)
-        :reduce(Tablex.concat, {})
+        :reduce(Table.concat, {})
     end,
 
     get_resources = function(self, level, rest_type)
@@ -79,7 +79,7 @@ class.mixin = function()
             :map(function(p) return p.codename, p.amount end)
             :tomap()
         end)
-        :reduce(Tablex.extend, base[rest_type])
+        :reduce(Table.extend, base[rest_type])
     end,
   }
 end

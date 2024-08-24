@@ -2,7 +2,6 @@ local popup = require("state.gui.popup")
 local shaders = require("tech.shaders")
 local api = require("tech.railing").api
 local mech = require("mech")
-local random = require("utils.random")
 
 
 return function()
@@ -208,7 +207,7 @@ return function()
       end,
 
       run = function(self, rails, dt)
-        popup.show(rails.entities.upper_bunk.position, "above", random.choice({
+        popup.show(rails.entities.upper_bunk.position, "above", Random.choice({
           "Хрр...",
           "Фрыхрр...",
           "Хрумффф....",

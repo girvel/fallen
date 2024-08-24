@@ -2,7 +2,7 @@ local animated = require("tech.animated")
 
 
 return function(pack, layer, position)
-  local result = Tablex.extend(
+  local result = Table.extend(
     animated(pack),
     {
       boring_flag = true,

@@ -7,7 +7,7 @@ local sound = require("tech.sound")
 local creature, module_mt, static = Module("mech.creature")
 
 local get_all_resources = function(e)
-  return Tablex.extend({},
+  return Table.extend({},
     e:get_resources("move"),
     e:get_resources("short"),
     e:get_resources("long")
@@ -52,7 +52,7 @@ creature._methods = static {
       base = {}
     end
 
-    return Tablex.extend(base, -Query(self.class):get_resources(self.level, rest_type) or {})
+    return Table.extend(base, -Query(self.class):get_resources(self.level, rest_type) or {})
   end,
 
   get_max_hp = function(self)
@@ -63,7 +63,7 @@ creature._methods = static {
   end,
 
   get_actions = function(self)
-    return Tablex.concat(
+    return Table.concat(
       -Query(self.class):get_actions(self.level) or {},
       actions.list
     )
@@ -86,7 +86,7 @@ creature._methods = static {
     local old_resources = get_all_resources(self)
     local old_max_hp = self:get_max_hp()
 
-    Tablex.extend(self, changes)
+    Table.extend(self, changes)
 
     if self.class then
       self.effects = self.class:get_effects(self.level, self.build)
@@ -120,7 +120,7 @@ creature._methods = static {
 
 module_mt.__call = function(_, animation_pack, object)
   assert(object.max_hp or object.class)
-  local result = Tablex.extend(animated(animation_pack), {
+  local result = Table.extend(animated(animation_pack), {
     creature_flag = true,
 
     sprite = {},

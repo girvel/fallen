@@ -1,7 +1,7 @@
 local love_errorhandler = love.errorhandler
 love.errorhandler = function(msg)
   if love.shell_enabled then
-    return Debugx.handle_error(msg)
+    return Debug.handle_error(msg)
   end
   Log.fatal(debug.traceback("Error: " .. tostring(msg), 2):gsub("\n[^\n]+$", ""))
 end
@@ -17,11 +17,12 @@ Deferred = require("lib.deferred")
 
 Log.info("Starting basic LOVE setup")
 
-Tablex = require("lib.tablex")
+Table = require("lib.extensions.table")
 Query = require("lib.types.query")
-Mathx = require("lib.mathx")
+Math = require("lib.extensions.math")
 Common = require("lib.Common")
-Debugx = require("lib.debugx")
+Debug = require("lib.extensions.debug")
+Random = require("lib.extensions.random")
 
 Dump = require("lib.dump")
 Dump.require_path = "lib.dump"
@@ -52,7 +53,7 @@ local systems = require("systems")
 
 
 love.load = function(args)
-  local closure_args = Tablex.deep_copy(args)
+  local closure_args = Table.deep_copy(args)
   love.reload = function()
     State.world:clearEntities()
     State.world:clearSystems()
@@ -100,7 +101,7 @@ love.load = function(args)
     love.errorhandler = love_errorhandler
   else
     jit.off()
-    Tablex.extend(State.gui.character_creator.parameters, {
+    Table.extend(State.gui.character_creator.parameters, {
       skills = {
         sleight_of_hand = true,
         stealth = true,

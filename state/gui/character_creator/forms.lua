@@ -29,7 +29,7 @@ forms.race = static(function(params)
 
   params.movement_functions[params.max_index + 1] = function(dx)
     params.race = available_races[
-      (Tablex.index_of(available_races, params.race) + dx - 1) % #available_races + 1
+      (Table.index_of(available_races, params.race) + dx - 1) % #available_races + 1
     ]
   end
 
@@ -61,11 +61,11 @@ forms.race = static(function(params)
       params.movement_functions[j] = function(dx)
         local list = Fun.iter(abilities.list)
           :filter(function(a)
-            return not Tablex.contains(params.bonuses, a)
+            return not Table.contains(params.bonuses, a)
             or a == params.bonuses[i]
           end)
           :totable()
-        params.bonuses[i] = list[(Tablex.index_of(list, params.bonuses[i]) + dx - 1) % #list + 1]
+        params.bonuses[i] = list[(Table.index_of(list, params.bonuses[i]) + dx - 1) % #list + 1]
       end
     end)
     params.max_index = params.max_index + #races[params.race].bonuses
@@ -84,7 +84,7 @@ forms.abilities = static(function(params)
 
   local bonus_column = Fun.iter(abilities.list)
     :map(function(a)
-      local bonus_i = Tablex.index_of(params.bonuses, a)
+      local bonus_i = Table.index_of(params.bonuses, a)
       return a, (bonus_i and races[params.race].bonuses[bonus_i] or 0)
     end)
     :tomap()

@@ -44,7 +44,7 @@ module_mt.__call = function(_, systems, debug_mode)
     end,
 
     add = function(self, entity, ...)
-      Tablex.extend(entity, ...)
+      Table.extend(entity, ...)
       self.world:add(entity)
       self.entities[entity] = true
       if entity.position and entity.layer then
@@ -164,7 +164,7 @@ module_mt.__call = function(_, systems, debug_mode)
       local current_i = 1
       if State.combat then
         list = Fun.iter(list)
-          :filter(function(e) return not Tablex.contains(State.combat.list, e) end)
+          :filter(function(e) return not Table.contains(State.combat.list, e) end)
           :totable()
           current_i = State.combat.current_i
       end
@@ -173,7 +173,7 @@ module_mt.__call = function(_, systems, debug_mode)
         e.current_initiative = abilities.initiative_roll(e):roll()
       end)
 
-      Tablex.concat(list, -Query(State.combat):iter_entities_only():totable())
+      Table.concat(list, -Query(State.combat):iter_entities_only():totable())
       table.sort(list, function(a, b) return a.current_initiative > b.current_initiative end)
 
       self.combat = combat(list)

@@ -1,6 +1,5 @@
 local level = require("state.level")
 local attacking = require("mech.attacking")
-local random = require("utils.random")
 local abilities = require("mech.abilities")
 local hostility = require("mech.hostility")
 local interactive = require("tech.interactive")
@@ -51,7 +50,7 @@ local base_attack = function(entity, target, slot)
   State:register_aggression(entity, target)
 
   entity:rotate(Vector.name_from_direction((target.position - entity.position):normalized()))
-  State.audio:play(entity, random.choice(whoosh))
+  State.audio:play(entity, Random.choice(whoosh))
   entity:animate(slot .. "_attack"):next(function()
     if not attacking.attack(
       entity, target,
@@ -60,7 +59,7 @@ local base_attack = function(entity, target, slot)
     ) then return end
 
     if target and target.sounds and target.sounds.hit then
-      State.audio:play(target, random.choice(target.sounds.hit))
+      State.audio:play(target, Random.choice(target.sounds.hit))
     end
 
     if target.hardness and not -Query(entity).inventory[slot] then
@@ -134,7 +133,7 @@ actions.move = static {
 
     local tile = State.grids.tiles[entity.position]
     if tile and tile.sounds and tile.sounds.move then
-      State.audio:play(tile, random.choice(tile.sounds.move))
+      State.audio:play(tile, Random.choice(tile.sounds.move))
     end
 
     return true

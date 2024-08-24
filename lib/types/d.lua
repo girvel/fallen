@@ -20,7 +20,7 @@ module.die = function(sides_n)
       if self.advantage then
         result = math.max(result, math.random(self.sides_n))
       end
-      if Tablex.contains(self.reroll, result) then
+      if Table.contains(self.reroll, result) then
         result = math.random(self.sides_n)
       end
       return result
@@ -42,12 +42,12 @@ end
 
 module.d_mt.__add = function(self, other)
   if type(other) == "number" then
-    return module.roll(Tablex.deep_copy(self.dice), self.bonus + other)
+    return module.roll(Table.deep_copy(self.dice), self.bonus + other)
   end
 
   if type(other) == "table" then
     return module.roll(
-      Tablex.concat(Tablex.deep_copy(self.dice), other.dice),
+      Table.concat(Table.deep_copy(self.dice), other.dice),
       self.bonus + other.bonus
     )
   end
@@ -57,7 +57,7 @@ end
 
 module.d_mt.__sub = function(self, other)
   if type(other) == "number" then
-    return module.roll(Tablex.deep_copy(self.dice), self.bonus - other)
+    return module.roll(Table.deep_copy(self.dice), self.bonus - other)
   end
 
   error("Trying to subtract %s to a dice roll" % type(other))
@@ -69,7 +69,7 @@ module.d_mt.__mul = function(self, other)
     Fun.iter(self.dice)
       :cycle()
       :take_n(#self.dice * other)
-      :map(function(d) return Tablex.deep_copy(d) end)
+      :map(function(d) return Table.deep_copy(d) end)
       :totable(),
     self.bonus * other
   )
@@ -118,7 +118,7 @@ d_methods.extended = function(self, modification)
   return module.roll(
     Fun.iter(self.dice)
       :map(function(x)
-        return Tablex.extend(Tablex.deep_copy(x), modification)
+        return Table.extend(Table.deep_copy(x), modification)
       end)
       :totable(),
     self.bonus

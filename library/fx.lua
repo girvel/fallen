@@ -9,7 +9,7 @@ local steam_pack = animated.load_pack("assets/sprites/steam")
 module.steam = function(direction)
   assert(direction)
 
-  local result = Tablex.extend(
+  local result = Table.extend(
     animated(steam_pack),
     {
       boring_flag = true,

@@ -43,7 +43,7 @@ end
 level.remove = function(entity)
   local grid = State.grids[entity.layer]
   if level.GRID_COMPLEX_LAYERS[entity.layer] then
-    return Tablex.remove(grid[entity.position], entity)
+    return Table.remove(grid[entity.position], entity)
   end
   grid[entity.position] = nil
 end
@@ -75,7 +75,7 @@ local throw_tiles_under = function(grid, palette, result)
             :map(function(v) return grid:safe_get(position + v) end)
             :filter(function(c) return palette.throwables[c] end)
             :totable()
-          Tablex.concat(tiles_around, new_tiles)
+          Table.concat(tiles_around, new_tiles)
           if #tiles_around > 1 then break end
         end
         -- Fun.iter(Vector.extended_directions)
@@ -94,7 +94,7 @@ local throw_tiles_under = function(grid, palette, result)
             :map(function(...) return {...} end)
             :max_by(function(a, b) return a[2] > b[2] and a or b end)[1]
 
-          table.insert(result, Tablex.extend(
+          table.insert(result, Table.extend(
             get_factory(grid, position, most_frequent_tile, palette)(),
             {position = position, layer = "tiles", view = "scene"}
           ))
@@ -135,7 +135,7 @@ level.load_entities = function(text_representation, arguments, palette)
       local position = Vector({x, y})
       local factory = get_factory(character_grid, position, character, palette)
       if factory then
-        table.insert(result, Tablex.extend(
+        table.insert(result, Table.extend(
           factory(unpack(grid_of_args[position] or {})),
           {position = position}
         ))

@@ -167,8 +167,8 @@ return function()
         api.notification("Покорми птицу в клетке", true)
         api.update_quest({warmup = 6})
 
-        Tablex.extend(rails.entities.bird_food, interactive.detector(), {name = "ящик"})
-        Tablex.extend(rails.entities.bird_cage, interactive.detector(), {name = "клетка"})
+        Table.extend(rails.entities.bird_food, interactive.detector(), {name = "ящик"})
+        Table.extend(rails.entities.bird_cage, interactive.detector(), {name = "клетка"})
       end,
     },
 
@@ -292,7 +292,7 @@ return function()
             end
           elseif o == 2 then
             rails.scenes.return_bird_remains.enabled = true
-            Tablex.extend(rails.entities.bird_cage, interactive.detector(true))
+            Table.extend(rails.entities.bird_cage, interactive.detector(true))
           else
             api.autosave()
             break

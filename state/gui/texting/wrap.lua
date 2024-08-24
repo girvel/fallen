@@ -10,7 +10,7 @@ local convert_line_breaks = function(token_list)
       local i = content:find("\n")
       if not i then break end
       if i > 1 then
-        table.insert(result[#result], Tablex.extend({}, token, {
+        table.insert(result[#result], Table.extend({}, token, {
           content = content:sub(1, i - 1),
         }))
       end
@@ -18,7 +18,7 @@ local convert_line_breaks = function(token_list)
       content = content:sub(i + 1)
     end
     if #content > 0 then
-      table.insert(result[#result], Tablex.extend({}, token, {
+      table.insert(result[#result], Table.extend({}, token, {
         content = content,
       }))
     end
@@ -65,7 +65,7 @@ local wrap_lines = function(token_lines, max_w)
           current_h = current_h + max_line_h
           max_line_h = sprite.get_font(token.font_size):getHeight()
         else
-          table.insert(result[#result], Tablex.extend({}, token, {
+          table.insert(result[#result], Table.extend({}, token, {
             content = inserted_line,
             x = current_w,
             y = current_h,

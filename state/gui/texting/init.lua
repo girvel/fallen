@@ -10,13 +10,13 @@ local generate_entities = function(token_lines, view)
   local result = {}
   for y, line in ipairs(token_lines) do
     for _, token in ipairs(line) do
-      local clean_copy = Tablex.extend({}, token)
+      local clean_copy = Table.extend({}, token)
       Fun.iter("x y link font content color on_update" / " "):each(function(k)
         clean_copy[k] = nil
       end)
 
       local font = sprite.get_font(token.font_size)
-      table.insert(result, Tablex.extend(
+      table.insert(result, Table.extend(
         clean_copy,
         gui.text(
           token.color and {token.color, token.content} or token.content,

@@ -12,7 +12,7 @@ local sprite = require("tech.sprite")
 
 
 local note = function(codex_update)
-  return Tablex.extend(
+  return Table.extend(
     interactive(function(self, other)
       self.interacted_by = other
       api.discover_wiki(codex_update)
@@ -30,7 +30,7 @@ end
 
 return function()
   return railing({
-    scenes = Tablex.join(
+    scenes = Table.join(
       require("assets.levels.demo.scenes.1_introduction")(),
       require("assets.levels.demo.scenes.2_tutorial")(),
       require("assets.levels.demo.scenes.2_side_content")(),
@@ -102,12 +102,12 @@ return function()
         :map(function(k, v) return k, State.grids.solids[Vector(v)] end)
         :tomap()
 
-      result.note = State:add(Tablex.extend(
+      result.note = State:add(Table.extend(
         note({colleague_note = true}),
         {position = Vector({19, 78})}
       ))
 
-      result.detective_door = State:add(Tablex.extend(
+      result.detective_door = State:add(Table.extend(
         live.black_door({locked = true}),
         {position = Vector({21, 56})}
       ))
@@ -129,7 +129,7 @@ return function()
       State:add(decorations.scratched_table(), {position = Vector({45, 91})})
       State:add(decorations.empty_bed(), {position = Vector({23, 67})})
       State:add(walls.steel_with_sign(), {position = Vector({27, 90})})
-      result.colored_pipe = State:add(Tablex.extend(
+      result.colored_pipe = State:add(Table.extend(
         pipes.colored(),
         {position = Vector({27, 95})}
       ))

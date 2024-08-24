@@ -5,13 +5,12 @@ local abilities = require("mech.abilities")
 local races = require("mech.races")
 local constants = require("mech.constants")
 local general_ai = require("library.general_ai")
-local random = require("utils.random")
 
 
 local module, _, static = Module("library.mobs")
 
 local engineer_mixin = function(ai_outside_of_combat)
-  return Tablex.extend(
+  return Table.extend(
     interactive.detector(),
     {
       ai = general_ai(ai_outside_of_combat),
@@ -20,7 +19,7 @@ local engineer_mixin = function(ai_outside_of_combat)
 end
 
 local dreamer_engineer_mixin = function()
-  return Tablex.extend(
+  return Table.extend(
     engineer_mixin(),
     {
       max_hp = 22,
@@ -36,7 +35,7 @@ end
 -- [{8, 3}] = {"up"},
 
 module[1] = function()
-  return humanoid(Tablex.extend({
+  return humanoid(Table.extend({
     name = "инженер-полуэльф",
     race = races.half_elf,
     direction = "down",
@@ -45,7 +44,7 @@ module[1] = function()
 end
 
 module[2] = function()
-  return humanoid(Tablex.extend({
+  return humanoid(Table.extend({
     name = "инженер-полурослик",
     race = races.halfling,
     direction = "down",
@@ -54,7 +53,7 @@ module[2] = function()
 end
 
 module[3] = function()
-  return humanoid(Tablex.extend({
+  return humanoid(Table.extend({
     name = "инженер-полуорк",
     race = races.half_orc,
     hp = 34,
@@ -81,7 +80,7 @@ module[3] = function()
 end
 
 module[4] = function()
-  return humanoid(Tablex.extend({
+  return humanoid(Table.extend({
     name = "инженер-дворф",
     race = races.dwarf,
     direction = "up",
@@ -94,7 +93,7 @@ local dreamer_races = {races.dwarf, races.human, races.half_elf, races.half_orc,
 module.dreamer = function()
   return humanoid({
     name = "...",
-    race = random.choice(dreamer_races),
+    race = Random.choice(dreamer_races),
     direction = "up",
     inventory = {},
     max_hp = 15,
@@ -120,7 +119,7 @@ module.possessed = function()
   return humanoid({
     ai = general_ai(),
     name = "Потрясённый",
-    race = random.choice(dreamer_races),
+    race = Random.choice(dreamer_races),
     direction = "left",
     max_hp = 18,
     abilities = abilities(14, 13, 12, 9, 11, 10),

@@ -1,4 +1,3 @@
-local random = require("utils.random")
 local sound = require("tech.sound")
 
 
@@ -18,7 +17,7 @@ return Module("state.audio", function()
       local current_track = self.current_music
       if -Query(current_track):isPlaying() then return end
       while #self.music > 1 and self.current_music == current_track do
-        self.current_music = random.choice(self.music)
+        self.current_music = Random.choice(self.music)
       end
       self:play_static(self.current_music)
     end,

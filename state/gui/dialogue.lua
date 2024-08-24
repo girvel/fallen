@@ -1,6 +1,5 @@
 local texting = require("state.gui.texting")
 local gui = require("tech.gui")
-local random = require("utils.random")
 local sound = require("tech.sound")
 
 
@@ -13,7 +12,7 @@ return Module("state.gui.dialogue", function()
 
     show = function(self, line, source)
       local portrait = -Query(source).portrait
-      self._entities = State:add_multiple(Tablex.concat(
+      self._entities = State:add_multiple(Table.concat(
         texting.generate(
           "<pre>%s</pre>" % line, State.gui.wiki.styles,  -- TODO move styles?
           math.min(love.graphics.getWidth() - 40, State.gui.TEXT_MAX_SIZE[1]),
@@ -26,7 +25,7 @@ return Module("state.gui.dialogue", function()
 
     skip = function(self)
       if not self._entities then return end
-      State.audio:play_static(random.choice(self._skip_sounds):clone())
+      State.audio:play_static(Random.choice(self._skip_sounds):clone())
       State:remove_multiple(self._entities)
       self._entities = nil
     end,

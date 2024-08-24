@@ -19,7 +19,7 @@ _walk_table = function(t, module_path, key_path, depth)
   if depth > 10 then return end
   for k, v in pairs(t) do
     if type(v) == "table" then
-      local new_key_path = Tablex.concat({}, key_path, {k})
+      local new_key_path = Table.concat({}, key_path, {k})
       _process_table(v, module_path, new_key_path)
       _walk_table(v, module_path, new_key_path, depth + 1)
     end

@@ -219,14 +219,14 @@ return Module("state.hotkeys", function(modes, debug_mode)
   })
 
   -- universal --
-  define_hotkey(hotkeys, Tablex.deep_copy(modes), {"Shift+q"}, {
+  define_hotkey(hotkeys, Table.deep_copy(modes), {"Shift+q"}, {
     name = "завершить игру",
     pre_action = function()
       love.event.push("quit")
     end,
   })
 
-  define_hotkey(hotkeys, Tablex.deep_copy(modes), {"Shift+r"}, {
+  define_hotkey(hotkeys, Table.deep_copy(modes), {"Shift+r"}, {
     name = "начать заново",
     pre_action = function()
       love.reload_flag = true
