@@ -34,6 +34,7 @@ return Module("state.gui.sidebar", function()
     notification = nil,
 
     last_mode = nil,
+    hovered_icon = nil,
 
     ACTION_GRID_W = 5,
     W = 320,
@@ -179,14 +180,16 @@ return Module("state.gui.sidebar", function()
         })
       end
 
-      if State.player then
-        local max = Table.extend({},
-          State.player:get_resources("move"),
-          State.player:get_resources("short"),
-          State.player:get_resources("long")
-        )
+      local max = Table.extend({},
+        State.player:get_resources("move"),
+        State.player:get_resources("short"),
+        State.player:get_resources("long")
+      )
 
-        append(Common.build_table(
+      do
+        local highlighted = -Query(self.hovered_icon).cost or {}
+
+        local table_render = Common.build_table(
           {"Ресурсы", ""},
           Fun.iter(State.player.resources)
             :map(function(k, v)
@@ -199,7 +202,9 @@ return Module("state.gui.sidebar", function()
               }
             end)
             :totable()
-        ))
+        )
+
+        append(table_render)
       end
 
       local hotkeys_table = Fun.iter(State.hotkeys[State:get_mode()])
@@ -214,20 +219,20 @@ return Module("state.gui.sidebar", function()
       end)
 
       append("\n\nУправление\n")
-      local render_table = Common.build_table(
+      local table_render = Common.build_table(
         {"", ""},
         Fun.iter(hotkeys_table)
           :map(function(t) return {t.key, Common.get_name(t.data)} end)
           :totable()
       ) / "\n"
-      append(render_table[2])
+      append(table_render[2])
 
       for i, t in ipairs(hotkeys_table) do
         append({
           t.data.action and not t.data.action:get_availability(State.player)
             and COLOR.INACTIVE
             or Colors.white,
-          "\n" .. render_table[i + 2]
+          "\n" .. table_render[i + 2]
         })
       end
 

@@ -6,6 +6,13 @@ love.errorhandler = function(msg)
   Log.fatal(debug.traceback("Error: " .. tostring(msg), 2):gsub("\n[^\n]+$", ""))
 end
 
+local native_pairs = pairs
+pairs = function(t)
+  local mt = getmetatable(t)
+  if mt and mt.__pairs then return mt.__pairs(t) end
+  return native_pairs(t)
+end
+
 -- global imports --
 Log = require("lib.log")
 Fun = require("lib.fun")
@@ -32,7 +39,7 @@ Vector = require("lib.types.vector")
 Grid = require("lib.types.grid")
 D = require("lib.types.d")
 Colors = require("lib.colors")
-SortedMap = require("lib.types.sorted_map")
+OrderedMap = require("lib.types.ordered_map")
 Promise = require("lib.types.promise")
 
 require("lib.tiny_dump_patch")()

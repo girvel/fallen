@@ -128,6 +128,7 @@ local ACTION_CELL_SIZE = 18
 gui.action_icon = function(hotkey_data, index, frame)
   index = index - 1
   return {
+    hotkey_data = hotkey_data,
     sprite = sprite.image("assets/sprites/icons/%s.png" % hotkey_data.codename),
     view = "actions",
     position = Vector({index % 5, math.floor(index / 5)}) * ACTION_CELL_SIZE,
@@ -137,8 +138,8 @@ gui.action_icon = function(hotkey_data, index, frame)
     boring_flag = true,
 
     is_active = function(self)
-      return (State.player:can_act() or not hotkey_data.action)
-        and (not hotkey_data.action or hotkey_data.action:get_availability(State.player))
+      return (State.player:can_act() or not self.hotkey_data.action)
+        and (not self.hotkey_data.action or self.hotkey_data.action:get_availability(State.player))
     end,
 
     on_hover = function(self)
@@ -147,14 +148,16 @@ gui.action_icon = function(hotkey_data, index, frame)
         State.audio:play_static(Random.choice(sounds.click))
       end
       frame.sprite = frame.sprites.active
+      State.gui.sidebar.hovered_icon = self
     end,
 
     on_hover_end = function(self)
       frame.sprite = frame.sprites.inactive
+      State.gui.sidebar.hovered_icon = nil
     end,
 
     on_click = function(self)
-      table.insert(State.player.action_factories, hotkey_data)
+      table.insert(State.player.action_factories, self.hotkey_data)
     end,
 
     changes_cursor = function(self)

@@ -1,8 +1,8 @@
 describe("Grid library", function()
   _G.Fun = require("lib.fun")
-  _G.Module = require("lib.module")
+  _G.Module = require("lib.types.module")
   _G.Vector = require("lib.types.vector")
-  _G.Table = require("lib.tablex")
+  _G.Table = require("lib.extensions.table")
   _G.unpack = table.unpack
   local grid = require("lib.types.grid")
   local vector = _G.Vector

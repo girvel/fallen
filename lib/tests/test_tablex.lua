@@ -1,4 +1,4 @@
-local tablex = require("lib.tablex")
+local tablex = require("lib.extensions.table")
 
 
 describe("Table extension module", function()
