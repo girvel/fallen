@@ -1,5 +1,5 @@
 local texting = require("state.gui.texting")
-local special = require("tech.special")
+local gui = require("tech.gui")
 local sprite = require("tech.sprite")
 local utf8 = require("utf8")
 
@@ -40,7 +40,7 @@ popup.show = function(position, relation, content, life_time)
     e.position = e.position + position
   end
 
-  table.insert(entities, State:add(special.rect(
+  table.insert(entities, State:add(gui.rect(
     position - Vector.one * MARGIN,
     "scene_popup_background",
     size + Vector.one * 2 * MARGIN,

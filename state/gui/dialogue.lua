@@ -1,5 +1,5 @@
 local texting = require("state.gui.texting")
-local special = require("tech.special")
+local gui = require("tech.gui")
 local random = require("utils.random")
 local sound = require("tech.sound")
 
@@ -19,8 +19,8 @@ return Module("state.gui.dialogue", function()
           math.min(love.graphics.getWidth() - 40, State.gui.TEXT_MAX_SIZE[1]),
           "dialogue_text", {}
         ),
-        {special.dialogue_background()},
-        portrait and {special.portrait(portrait)} or {}
+        {gui.dialogue_background()},
+        portrait and {gui.portrait(portrait)} or {}
       ))
     end,
 

@@ -24,6 +24,7 @@ module_mt.__call = function()
       sidebar_background = view(Vector.zero, 2, 1),
       actions = view(Vector.zero, 3, 1),
       action_keys = view(Vector.zero, 3, 1),
+      action_frames = view(Vector.zero, 3, 1),
       sidebar = view(Vector.zero, 2, 1),
       sidebar_text = view(Vector.zero, 1, 1),
       notification = view(Vector.zero, 1, 1),
@@ -38,7 +39,7 @@ module_mt.__call = function()
 
     views_order = {
       "scene", "scene_fx",
-      "sidebar_background", "actions", "action_keys", "sidebar", "sidebar_text",
+      "sidebar_background", "actions", "action_frames", "action_keys", "sidebar", "sidebar_text",
       "notification",
       "dialogue_background", "dialogue_portrait", "dialogue_text",
       "wiki", "character_creator",
@@ -50,6 +51,7 @@ module_mt.__call = function()
         scene_fx = gui._get_scene_offset(),
         scene = gui._get_scene_offset(),
         actions = gui._get_actions_offset(),
+        action_frames = gui._get_actions_offset(),
         action_keys = gui._get_actions_offset(),
         sidebar_background = Vector({love.graphics.getWidth() - State.gui.sidebar.W, 0}),
         sidebar = Vector({love.graphics.getWidth() - State.gui.sidebar.W, 0}),

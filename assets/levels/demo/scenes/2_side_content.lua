@@ -1,6 +1,6 @@
 local sound = require("tech.sound")
 local fx = require("tech.fx")
-local special = require("tech.special")
+local gui = require("tech.gui")
 local abilities = require("mech.abilities")
 local attacking = require("mech.attacking")
 local items = require("library.items")
@@ -315,7 +315,7 @@ return function()
           -- TODO as temporary effect
           local d = math.max(1, abilities.get_modifier(State.player.abilities.con))
           State.player.hp = State.player.hp + d
-          State:add(special.floating_damage("+" .. d, State.player.position, Colors.green))
+          State:add(gui.floating_damage("+" .. d, State.player.position, Colors.green))
 
           rails.entities.cook:rotate("up")
           api.narration("Аккуратный глоток.")

@@ -1,4 +1,4 @@
-local special = require("tech.special")
+local gui = require("tech.gui")
 local hostility = require("mech.hostility")
 local translation = require("tech.translation")
 local interactive = require("tech.interactive")
@@ -91,18 +91,22 @@ return Module("state.gui.sidebar", function()
     end,
 
     create_gui_entities = function(self)
-      State:add(special.gui_background())
-      self.hp_bar = State:add(special.hp_bar())
-      self.hp_text = State:add(special.hp_text())
-      self.notification = State:add(special.notification())
-      -- self.notification_fx = State:add(special.notification_fx())
+      State:add(gui.gui_background())
+      self.hp_bar = State:add(gui.hp_bar())
+      self.hp_text = State:add(gui.hp_text())
+      self.notification = State:add(gui.notification())
+      -- self.notification_fx = State:add(gui.notification_fx())
       State:add_multiple(Fun.iter(State.hotkeys[State:get_mode()])
         :filter(function(key, data) return data.codename and not data.hidden end)
         :enumerate()
-        :map(function(i, key, data) return {
-          special.action_icon(Log.trace(data.codename), i),
-          special.action_hotkey(key, i),
-        } end)
+        :map(function(i, key, data)
+          local frame = gui.action_frame(i)
+          return {
+            gui.action_icon(data.codename, i, frame),
+            frame,
+            gui.action_hotkey(key, i),
+          }
+        end)
         :reduce(Tablex.concat, {})
       )
     end,

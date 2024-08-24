@@ -1,4 +1,4 @@
-local special = require("tech.special")
+local gui = require("tech.gui")
 local html = require("state.gui.texting.html")
 local wrap = require("state.gui.texting.wrap")
 local sprite = require("tech.sprite")
@@ -18,7 +18,7 @@ local generate_entities = function(token_lines, view)
       local font = sprite.get_font(token.font_size)
       table.insert(result, Tablex.extend(
         clean_copy,
-        special.text(
+        gui.text(
           token.color and {token.color, token.content} or token.content,
           token.font_size,
           Vector({token.x, token.y})

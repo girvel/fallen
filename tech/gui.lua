@@ -3,9 +3,9 @@ local animated = require("tech.animated")
 local sprite = require("tech.sprite")
 
 
-local module, _, static = Module("tech.special")
+local gui, _, static = Module("tech.gui")
 
-module.floating_damage = function(number, scene_position, color)
+gui.floating_damage = function(number, scene_position, color)
   Log.debug("damage")
   number = tostring(number)
   return {
@@ -20,7 +20,7 @@ module.floating_damage = function(number, scene_position, color)
   }
 end
 
-module.text = function(text, font_size, position)
+gui.text = function(text, font_size, position)
   return {
     boring_flag = true,
     codename = "text",
@@ -30,11 +30,11 @@ module.text = function(text, font_size, position)
 end
 
 -- TODO figure out highlight behaviour structure
-module.highlight = function()
+gui.highlight = function()
   return Tablex.extend(animated("assets/sprites/animations/highlight"), {layer = "fx", view = "scene"})
 end
 
-module.hp_bar = function()
+gui.hp_bar = function()
   return Tablex.extend(
     animated("assets/sprites/hp_bar"),
     {
@@ -45,7 +45,7 @@ module.hp_bar = function()
   )
 end
 
-module.hp_text = function()
+gui.hp_text = function()
   return {
     codename = "hp_text",
     view = "sidebar_text",
@@ -54,7 +54,7 @@ module.hp_text = function()
   }
 end
 
-module.notification = function()
+gui.notification = function()
   return {
     codename = "notification",
     view = "notification",
@@ -63,7 +63,7 @@ module.notification = function()
   }
 end
 
-module.notification_fx = function()
+gui.notification_fx = function()
   return Tablex.extend(
     animated("assets/sprites/notification_fx"),
     {
@@ -75,7 +75,7 @@ module.notification_fx = function()
   )
 end
 
-module.gui_background = function()
+gui.gui_background = function()
   return {
     codename = "sidebar_background",
     view = "sidebar_background",
@@ -85,7 +85,7 @@ module.gui_background = function()
 end
 
 -- TODO replace w/ rect
-module.dialogue_background = function()
+gui.dialogue_background = function()
   local window_w, window_h = love.graphics.getDimensions()
   return {
     boring_flag = true,
@@ -99,7 +99,7 @@ module.dialogue_background = function()
   }
 end
 
-module.rect = function(position, view, size, color)
+gui.rect = function(position, view, size, color)
   return {
     boring_flag = true,
     codename = "rect",
@@ -112,7 +112,7 @@ module.rect = function(position, view, size, color)
   }
 end
 
-module.portrait = function(this_sprite)
+gui.portrait = function(this_sprite)
   return {
     boring_flag = true,
     codename = "portrait",
@@ -125,19 +125,46 @@ end
 
 local ACTION_CELL_SIZE = 18
 
-module.action_icon = function(codename, index)
+gui.action_icon = function(codename, index, frame)
   index = index - 1
   return {
     sprite = sprite.image("assets/sprites/icons/%s.png" % codename),
     view = "actions",
     position = Vector({index % 5, math.floor(index / 5)}) * ACTION_CELL_SIZE,
+    size = Vector.one * 16,
+
+    codename = "action_icon",
+    boring_flag = true,
+
+    on_hover = function(self)
+      frame.sprite = frame.sprites.active
+    end,
+
+    on_hover_end = function(self)
+      frame.sprite = frame.sprites.inactive
+    end,
+  }
+end
+
+local frame_sprites = {
+  active = sprite.image("assets/sprites/frame/active.png"),
+  inactive = sprite.image("assets/sprites/frame/inactive.png"),
+}
+
+gui.action_frame = function(index)
+  index = index - 1
+  return {
+    sprites = frame_sprites,
+    sprite = frame_sprites.inactive,
+    view = "action_frames",
+    position = Vector({index % 5, math.floor(index / 5)}) * ACTION_CELL_SIZE - Vector({1, 1}),
 
     codename = "action_icon",
     boring_flag = true,
   }
 end
 
-module.action_hotkey = function(key, index)
+gui.action_hotkey = function(key, index)
   index = index - 1
   local font_size = 18
   local font = sprite.get_font(font_size)
@@ -156,4 +183,4 @@ module.action_hotkey = function(key, index)
   }
 end
 
-return module
+return gui

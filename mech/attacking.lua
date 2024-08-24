@@ -1,5 +1,5 @@
 local abilities = require("mech.abilities")
-local special = require("tech.special")
+local gui = require("tech.gui")
 local item = require("tech.item")
 
 
@@ -18,12 +18,12 @@ attacking.attack = function(entity, target, attack_roll, damage_roll)
   )
 
   if is_nat_miss then
-    State:add(special.floating_damage("!", target.position))
+    State:add(gui.floating_damage("!", target.position))
     return false
   end
 
   if attack < ac and not is_nat then
-    State:add(special.floating_damage("-", target.position))
+    State:add(gui.floating_damage("-", target.position))
     return false
   end
 
@@ -41,7 +41,7 @@ attacking.attack_save = function(target, ability, save_dc, damage_roll)
   local success = abilities.saving_throw(target, ability, save_dc)
 
   if success then
-    State:add(special.floating_damage("-", target.position))
+    State:add(gui.floating_damage("-", target.position))
     return false
   end
 
@@ -55,9 +55,9 @@ attacking.damage = function(target, damage, is_critical)
   Log.info("damage: " .. damage)
 
   if is_critical then
-    State:add(special.floating_damage(damage .. "!", target.position))
+    State:add(gui.floating_damage(damage .. "!", target.position))
   else
-    State:add(special.floating_damage(damage, target.position))
+    State:add(gui.floating_damage(damage, target.position))
   end
 
   target.hp = target.hp - damage
