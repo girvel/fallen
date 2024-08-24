@@ -1,4 +1,6 @@
-return function(base)
+local sorted_map, module_mt, static = Module("lib.types.sorted_map")
+
+module_mt.__call = function(_, base)
   return setmetatable({
     base = Fun.pairs(base or {})
       :map(function(...) return {...} end)
@@ -41,3 +43,5 @@ return function(base)
     end,
   })
 end
+
+return sorted_map

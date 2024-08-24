@@ -37,6 +37,7 @@ return Module("state.hotkeys", function(modes, debug_mode)
       hidden = true,
       mutex_group = movement_group,
       name = "двигаться " .. direction_translation,
+      codename = "move_" .. direction_name,
       pre_action = function()
         State.player:rotate(direction_name)
       end,
@@ -46,6 +47,7 @@ return Module("state.hotkeys", function(modes, debug_mode)
 
   define_hotkey(hotkeys, {"combat"}, {"space"}, {
     name = "закончить ход",
+    codename = "finish_turn",
     action = actions.finish_turn,
   })
 
@@ -75,16 +77,19 @@ return Module("state.hotkeys", function(modes, debug_mode)
 
   define_hotkey(hotkeys, {"free", "combat"}, {"e"}, {
     name = "взаимодействие",
+    codename = "interact",
     action = actions.interact
   })
 
   define_hotkey(hotkeys, {"free", "combat"}, {"shift"}, {
     name = "рывок",
+    codename = "dash",
     action = actions.dash
   })
 
   define_hotkey(hotkeys, {"free"}, {"h"}, {
     name = "перевязать раны",
+    codename = "hit_dice",
     action = class.hit_dice_action,
   })
 

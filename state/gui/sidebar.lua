@@ -33,6 +33,8 @@ return Module("state.gui.sidebar", function()
     hp_text = nil,
     notification = nil,
 
+    last_mode = nil,
+
     ACTION_GRID_W = 5,
     W = 320,
 
@@ -42,6 +44,10 @@ return Module("state.gui.sidebar", function()
     update_indicators = function(self, dt)
       self:_update_hp_bar()
       self:_update_notifications(dt)
+      if self.last_mode ~= State:get_mode() then
+        self:refresh_action_grid()
+        self.last_mode = State:get_mode()
+      end
     end,
 
     _update_hp_bar = function(self)
@@ -96,7 +102,12 @@ return Module("state.gui.sidebar", function()
       self.hp_text = State:add(gui.hp_text())
       self.notification = State:add(gui.notification())
       -- self.notification_fx = State:add(gui.notification_fx())
-      State:add_multiple(Fun.iter(State.hotkeys[State:get_mode()])
+      self:refresh_action_grid()
+    end,
+
+    refresh_action_grid = function(self)
+      State:remove_multiple(self.action_entities)
+      self.action_entities = State:add_multiple(Fun.iter(State.hotkeys[State:get_mode()])
         :filter(function(key, data) return data.codename and not data.hidden end)
         :enumerate()
         :map(function(i, key, data)

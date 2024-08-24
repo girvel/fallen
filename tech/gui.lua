@@ -136,7 +136,11 @@ gui.action_icon = function(hotkey_data, index, frame)
     boring_flag = true,
 
     is_active = function(self)
-      return -Query(hotkey_data.action):get_availability(State.player)
+      if hotkey_data.codename == "action_surge" then
+        Log.trace(State.player:can_act(), hotkey_data.action)
+      end
+      return (State.player:can_act() or not hotkey_data.action)
+        and -Query(hotkey_data.action):get_availability(State.player)
     end,
 
     on_hover = function(self)
@@ -186,7 +190,7 @@ end
 
 gui.action_hotkey = function(key, index)
   index = index - 1
-  local font_size = 18
+  local font_size = 18 / (#key) ^ 0.5
   local font = sprite.get_font(font_size)
   local view_name = "action_keys"
   local view = State.gui.views[view_name]

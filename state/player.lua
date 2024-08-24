@@ -28,6 +28,11 @@ module_mt.__call = function(_)
 
     action_factories = {},
     _last_actions = {},
+
+    can_act = function(self)
+      return not State.combat or self == State.combat:get_current()
+    end,
+
     ai = {
       run = function(self)
         local mutex_factories, other_factories = Fun.iter(self.action_factories)
@@ -55,7 +60,7 @@ module_mt.__call = function(_)
       end,
 
       observe = function(self)
-        if State.combat and self ~= State.combat:get_current() then
+        if not self:can_act() then
           self.action_factories = {}
         end
         self.animation_rate = love.keyboard.isDown("lshift", "rshift") and 2 or 1

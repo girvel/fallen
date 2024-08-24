@@ -1,4 +1,4 @@
-local module, module_mt, static = Module("lib.grid")
+local module, module_mt, static = Module("lib.types.grid")
 
 module._grid_mt = static {}
 
