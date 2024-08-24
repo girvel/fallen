@@ -1,3 +1,4 @@
+local shaders = require("tech.shaders")
 local random = require("utils.random")
 local animated = require("tech.animated")
 local sprite = require("tech.sprite")
@@ -146,7 +147,15 @@ gui.action_icon = function(hotkey_data, index, frame)
 
     on_click = function(self)
       table.insert(State.player.action_factories, hotkey_data)
-    end
+    end,
+
+    ai = {
+      observe = function(self)
+        self.shader = not -Query(hotkey_data.action):get_availability(State.player)
+          and shaders.grayscale
+          or nil
+      end,
+    }
   }
 end
 

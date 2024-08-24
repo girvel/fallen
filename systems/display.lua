@@ -122,6 +122,11 @@ display.system = static(Tiny.sortedProcessingSystem({
 
     local current_view = State.gui.views[entity.view]
     local offset_position = current_view:apply(animated.get_render_position(entity))
+
+    if entity.shader then
+      State:set_shader(entity.shader)
+    end
+
     if entity.sprite.text then
       self:_process_text_sprite(entity, offset_position)
     elseif entity.sprite.image then
@@ -133,6 +138,10 @@ display.system = static(Tiny.sortedProcessingSystem({
       love.graphics.setColor(Colors.absolute_white)
     else
       -- error("Wrong sprite format of %s:\n%s" % {Common.get_name(entity), Inspect(entity.sprite)})
+    end
+
+    if entity.shader then
+      State:set_shader()
     end
   end,
 

@@ -42,4 +42,15 @@ shaders.latrine = static {
   ]]),
 }
 
+shaders.grayscale = static {
+  love_shader = love.graphics.newShader([[
+    vec4 effect(vec4 color, Image tex, vec2 texture_coords, vec2 screen_coords)
+    {
+      vec4 v = Texel(tex, texture_coords);
+      float value = (v.x + v.y + v.z) / 3;
+      return vec4(value, value, value, v.w);
+    }
+  ]]),
+}
+
 return shaders
