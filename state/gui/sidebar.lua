@@ -187,10 +187,8 @@ return Module("state.gui.sidebar", function()
       )
 
       do
-        local highlighted = -Query(self.hovered_icon).cost or {}
-
         local table_render = Common.build_table(
-          {"Ресурсы", ""},
+          {"", ""},
           OrderedMap.iter(State.player.resources)
             :map(function(k, v)
               return {
@@ -202,9 +200,29 @@ return Module("state.gui.sidebar", function()
               }
             end)
             :totable()
-        )
+        ) / "\n"
 
-        append(table_render)
+        append("Ресурсы\n")
+        append(table_render[2])
+
+        local highlighted = -Query(self.hovered_icon).hotkey_data.action.cost or {}
+
+        local i = 3
+        for k, v in Pairs(State.player.resources) do
+          local color = Colors.white
+          if highlighted[k] then
+            if highlighted[k] > v then
+              color = Colors.red
+            else
+              color = Colors.light_green
+            end
+          end
+          append({
+            Log.trace(color),
+            "\n" .. table_render[i],
+          })
+          i = i + 1
+        end
       end
 
       local hotkeys_table = OrderedMap.iter(State.hotkeys[State:get_mode()])

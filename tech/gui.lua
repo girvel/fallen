@@ -143,12 +143,14 @@ gui.action_icon = function(hotkey_data, index, frame)
     end,
 
     on_hover = function(self)
-      if not self:is_active() then return end
+      State.gui.sidebar.hovered_icon = self
+      if not self:is_active() then
+        return
+      end
       if frame.sprite ~= frame.sprites.active then
         State.audio:play_static(Random.choice(sounds.click))
       end
       frame.sprite = frame.sprites.active
-      State.gui.sidebar.hovered_icon = self
     end,
 
     on_hover_end = function(self)
