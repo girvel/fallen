@@ -240,16 +240,19 @@ return Module("state.hotkeys", function(modes, debug_mode)
 
   define_hotkey(hotkeys, {"free", "combat", "dialogue", "dialogue_options", "reading"}, {"k"}, {
     name = "кодекс",
+    codename = "open_codex",
     pre_action = function() State.gui.wiki:show("codex") end,
   })
 
   define_hotkey(hotkeys, {"free", "combat", "dialogue", "dialogue_options", "reading"}, {"j"}, {
     name = "журнал",
+    codename = "open_journal",
     pre_action = function() State.gui.wiki:show_journal() end,
   })
 
   define_hotkey(hotkeys, {"free", "combat", "dialogue", "dialogue_options", "reading"}, {"n"}, {
     name = "редактор персонажа",
+    codename = "open_creator",
     pre_action = function() State.gui.character_creator:refresh() end,
   })
 

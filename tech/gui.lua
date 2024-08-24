@@ -138,7 +138,7 @@ gui.action_icon = function(hotkey_data, index, frame)
 
     is_active = function(self)
       return (State.player:can_act() or not hotkey_data.action)
-        and -Query(hotkey_data.action):get_availability(State.player)
+        and (not hotkey_data.action or hotkey_data.action:get_availability(State.player))
     end,
 
     on_hover = function(self)
