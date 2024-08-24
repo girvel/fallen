@@ -35,7 +35,8 @@ end
 local function promise(deferred, next, success, failure, nonpromisecb)
 	if type(deferred) == 'table' and type(deferred.value) == 'table' and isfunction(next) then
 		local called = false
-		local ok, err = pcall(next, deferred.value, function(v)
+    local ok = true
+		local err = next(deferred.value, function(v)
 			if called then return end
 			called = true
 			deferred.value = v
@@ -67,12 +68,12 @@ local function fire(deferred)
 		deferred.state = REJECTING
 		fire(deferred)
 	end, function()
-		local ok
+		local ok = true
 		local v
 		if deferred.state == RESOLVING and isfunction(deferred.success) then
-			ok, v = pcall(deferred.success, deferred.value)
+		  v = deferred.success(deferred.value)
 		elseif deferred.state == REJECTING and isfunction(deferred.failure) then
-			ok, v = pcall(deferred.failure, deferred.value)
+			v = deferred.failure(deferred.value)
 			if ok then
 				deferred.state = RESOLVING
 			end
@@ -88,7 +89,7 @@ local function fire(deferred)
 		end
 
 		if deferred.value == deferred then
-			deferred.value = pcall(error, 'resolving promise with itself')
+			deferred.value = error('resolving promise with itself')
 			return finish(deferred)
 		else
 			promise(deferred, next, function()
@@ -160,7 +161,9 @@ end
 function M.new(options)
 	if isfunction(options) then
 		local d = M.new()
-		local ok, err = pcall(options, d)
+    local ok = true
+    local err
+		options(d)
 		if not ok then
 			d:reject(err)
 		end

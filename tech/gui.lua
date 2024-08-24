@@ -6,13 +6,12 @@ local sprite = require("tech.sprite")
 local gui, _, static = Module("tech.gui")
 
 gui.floating_damage = function(number, scene_position, color)
-  Log.debug("damage")
   number = tostring(number)
   return {
     boring_flag = true,
     codename = "floating_damage",
     position = scene_position * State.gui.views.scene:get_multiplier()
-      + Vector({random.d(12) - 6, random.d(12) - 6}),
+      + Vector({math.random(12) - 6, math.random(12) - 6}),
     view = "scene_fx",
     drift = Vector({0, -24}),
     sprite = sprite.text({color or Colors.red, number}, 14),

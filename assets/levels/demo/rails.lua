@@ -102,15 +102,15 @@ return function()
         :map(function(k, v) return k, State.grids.solids[Vector(v)] end)
         :tomap()
 
-      result.note = State:add(Table.extend(
+      result.note = State:add(
         note({colleague_note = true}),
         {position = Vector({19, 78})}
-      ))
+      )
 
-      result.detective_door = State:add(Table.extend(
+      result.detective_door = State:add(
         live.black_door({locked = true}),
         {position = Vector({21, 56})}
-      ))
+      )
 
       result.gloves = result[3].inventory.gloves
 
