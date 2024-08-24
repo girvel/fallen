@@ -231,7 +231,7 @@ display.system = static(Tiny.sortedProcessingSystem({
   _display_text_info = function(self)
     love.graphics.printf(
       State.gui.sidebar:get_text(), default_font,
-      love.graphics.getWidth() - State.gui.sidebar.W, 115,
+      love.graphics.getWidth() - State.gui.sidebar.W, 300,
       State.gui.sidebar.W - 15
     )
   end,

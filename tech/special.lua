@@ -123,12 +123,14 @@ module.portrait = function(this_sprite)
   }
 end
 
+local ACTION_CELL_SIZE = 18
+
 module.action_icon = function(codename, index)
   index = index - 1
   return {
     sprite = sprite.image("assets/sprites/icons/%s.png" % codename),
     view = "actions",
-    position = Vector({index % 5, math.floor(index / 5)}) * 24,
+    position = Vector({index % 5, math.floor(index / 5)}) * ACTION_CELL_SIZE,
 
     codename = "action_icon",
     boring_flag = true,
@@ -144,9 +146,9 @@ module.action_hotkey = function(key, index)
   return {
     sprite = sprite.text(key, font_size),
     view = view_name,
-    position = Vector({index % 5, math.floor(index / 5)}) * 24 + Vector({
-      16 - font:getWidth(key) / view:get_multiplier() / 2,
-      16 - font:getHeight() / view:get_multiplier() / 2,
+    position = Vector({index % 5, math.floor(index / 5)}) * ACTION_CELL_SIZE + Vector({
+      16 - font:getWidth(key) / view:get_multiplier(),
+      16 - font:getHeight() / view:get_multiplier(),
     }),
 
     codename = "action_hotkey",
