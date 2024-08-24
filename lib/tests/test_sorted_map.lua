@@ -7,6 +7,6 @@ describe("Sorted map", function()
     t.b = 2
     assert.equal(t.a, 1)
     assert.equal(t.b, 2)
-    assert.same(t.iter():map(function(...) return {...} end):totable(), {{"a", 1}, {"b", 2}})
+    assert.same(Fun.iter(t):map(function(...) return {...} end):totable(), {{"a", 1}, {"b", 2}})
   end)
 end)

@@ -1,27 +1,22 @@
-return function(base_array)
+return function(base)
   return setmetatable({
-    base_array = Fun.pairs(base_array or {})
+    base = Fun.pairs(base or {})
       :map(function(...) return {...} end)
       :totable(),
   }, {
     __index = function(self, k)
-      local base = rawget(self, "base_array")
-      if k == "iter" then
-        return function()
-          return Fun.iter(base)
-            :map(function(pair) return unpack(pair) end)
-        end
-      end
-      return Fun.iter(base)
+      local base = rawget(self, "base")
+      local pair = Fun.iter(base)
         :filter(function(pair) return pair[1] == k end)
-        :nth(1)[2]
+        :nth(1)
+      return pair and pair[2]
     end,
 
     __newindex = function(self, k, v)
-      local base = rawget(self, "base_array")
+      local base = rawget(self, "base")
 
       if v == nil then
-        rawset(self, "base_array", Fun.iter(base)
+        rawset(self, "base", Fun.iter(base)
           :filter(function(pair) return pair[1] ~= k end)
           :totable()
         )
@@ -38,6 +33,11 @@ return function(base_array)
       end
 
       table.insert(base, {k, v})
+    end,
+
+    __pairs = function(self)
+      return Fun.iter(rawget(self, "base"))
+        :map(function(pair) return unpack(pair) end)
     end,
   })
 end

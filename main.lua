@@ -23,6 +23,7 @@ Vector = require("lib.vector")
 Grid = require("lib.grid")
 D = require("lib.d")
 Colors = require("lib.colors")
+SortedMap = require("lib.sorted_map")
 
 require("lib.tiny_dump_patch")()
 

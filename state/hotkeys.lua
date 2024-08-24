@@ -14,7 +14,7 @@ local define_hotkey = function(collection, modes, keys, data)
 end
 
 return Module("state.hotkeys", function(modes, debug_mode)
-  local hotkeys = Fun.iter(modes):map(function(m) return m, {} end):tomap()
+  local hotkeys = Fun.iter(modes):map(function(m) return m, SortedMap() end):tomap()
 
   setmetatable(hotkeys, {
     __serialize = function(self)
