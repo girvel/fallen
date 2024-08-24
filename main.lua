@@ -1,3 +1,11 @@
+local love_errorhandler = love.errorhandler
+love.errorhandler = function(msg)
+  if love.shell_enabled then
+    return Debugx.handle_error(msg)
+  end
+  Log.fatal(debug.traceback("Error: " .. tostring(msg), 2):gsub("\n[^\n]+$", ""))
+end
+
 -- global imports --
 Log = require("lib.log")
 Fun = require("lib.fun")
@@ -10,30 +18,22 @@ Deferred = require("lib.deferred")
 Log.info("Starting basic LOVE setup")
 
 Tablex = require("lib.tablex")
-Query = require("lib.query")
+Query = require("lib.types.query")
 Mathx = require("lib.mathx")
 Common = require("lib.Common")
 Debugx = require("lib.debugx")
 
 Dump = require("lib.dump")
 Dump.require_path = "lib.dump"
-Module = require("lib.module")
-Enum = require("lib.enum")
-Vector = require("lib.vector")
-Grid = require("lib.grid")
-D = require("lib.d")
+Module = require("lib.types.module")
+Enum = require("lib.types.enum")
+Vector = require("lib.types.vector")
+Grid = require("lib.types.grid")
+D = require("lib.types.d")
 Colors = require("lib.colors")
-SortedMap = require("lib.sorted_map")
+SortedMap = require("lib.types.sorted_map")
 
 require("lib.tiny_dump_patch")()
-
-local love_errorhandler = love.errorhandler
-love.errorhandler = function(msg)
-  if love.shell_enabled then
-    return Debugx.handle_error(msg)
-  end
-  Log.fatal(debug.traceback("Error: " .. tostring(msg), 2):gsub("\n[^\n]+$", ""))
-end
 
 love.graphics.setDefaultFilter("nearest", "nearest")
 

@@ -1,6 +1,6 @@
 describe("Vector library", function()
   _G.Fun = require("lib.fun")
-  local vector = require("lib.vector")
+  local vector = require("lib.types.vector")
 
 
   describe("Vector.use", function()
