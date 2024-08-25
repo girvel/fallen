@@ -27,6 +27,7 @@ module_mt.__call = function(_)
     end,
 
     action_factories = {},
+    actions = {},
     _last_actions = {},
 
     can_act = function(self)
@@ -35,10 +36,21 @@ module_mt.__call = function(_)
 
     ai = {
       run = function(self)
+        if self.in_cutscene then return end
+        local result = Fun.iter(self.actions)
+          :map(function(f) return self:act(f.action) end)
+          :filter(function(v) return v == combat.TURN_END_SIGNAL end)
+          :nth(1)
+
+        self.actions = {}
+        return result
+      end,
+
+      observe = function(self)
         local mutex_factories, other_factories = Fun.iter(self.action_factories)
           :span(function(f) return f.mutex_group end)
 
-        local result = mutex_factories
+        self.actions = mutex_factories
           :group_by(function(f) return f.mutex_group, f end)
           :map(function(group, fs)
             local result = Fun.iter(fs)
@@ -50,18 +62,15 @@ module_mt.__call = function(_)
           :chain(other_factories)
           :map(function(f)
             Query(f).pre_action()
-            if not self.in_cutscene and f.action then return self:act(f.action) end
+            return f.action
           end)
-          :filter(function(v) return v == combat.TURN_END_SIGNAL end)
-          :nth(1)
+          :filter(Fun.op.truth)
+          :totable()
 
         self.action_factories = {}
-        return result
-      end,
 
-      observe = function(self)
         if not self:can_act() then
-          self.action_factories = {}
+          self.actions = {}
         end
         self.animation_rate = love.keyboard.isDown("lshift", "rshift") and 2 or 1
       end,

@@ -48,24 +48,28 @@ local clear = function()
 end
 
 local run = function(command)
+  local upvalues = Fun.iter(_stack[stack_index].locals)
+    :filter(function(pair) return not pair.name:startsWith("(*") end)
+
   local ok, result
   for _, form in ipairs({"return ", ""}) do
-    ok, result = pcall(loadstring(
+    ok, result = pcall(loadstring(Log.trace(
       "return function(cd, clear%s) %s%s end" % {
-        Fun.iter(_stack[stack_index].locals)
+        upvalues
           :map(function(pair) return ", " .. pair.name end)
           :reduce(Fun.op.concat, ""),
         form,
         command,
       },
       "shell #" .. #command_history
-    ))
+    )))
+    Log.trace(ok, result)
     if ok then break end
   end
 
   if ok then
     result = table.concat(Fun.iter({pcall(result, cd, clear, unpack(
-      Fun.iter(_stack[stack_index].locals)
+      upvalues
         :map(function(pair) return pair.value end)
         :totable()
     ))})
