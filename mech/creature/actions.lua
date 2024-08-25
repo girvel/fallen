@@ -69,39 +69,43 @@ local base_attack = function(entity, target, slot)
   end)
 end
 
-actions.hand_attack = static {
+actions.hand_attack = static .. action {
   codename = "hand_attack",
-  get_availability = function(self, entity)
+  cost = {
+    actions = 1,
+  },
+  _get_availability = function(self, entity)
     local target = State.grids.solids:safe_get(entity.position + Vector[entity.direction])
-    return entity.resources.actions > 0 and -Query(target).hp
+    return -Query(target).hp
   end,
-  run = function(self, entity)
+  _run = function(self, entity)
     local target = State.grids.solids:safe_get(entity.position + Vector[entity.direction])
-    entity.resources.actions = entity.resources.actions - 1
     base_attack(entity, target, "main_hand")
     return true
   end
 }
 
-actions.other_hand_attack = static {
+actions.other_hand_attack = static .. action {
   codename = "other_hand_attack",
-  get_availability = function(self, entity)
+  cost = {
+    bonus_actions = 1,
+  },
+  _get_availability = function(self, entity)
     local target = State.grids.solids:safe_get(entity.position + Vector[entity.direction])
-    return entity.resources.bonus_actions > 0 and -Query(target).hp and entity.inventory.other_hand
+    return -Query(target).hp and entity.inventory.other_hand
   end,
-  run = function(self, entity)
+  _run = function(self, entity)
     local target = State.grids.solids:safe_get(entity.position + Vector[entity.direction])
-    entity.resources.bonus_actions = entity.resources.bonus_actions - 1
     base_attack(entity, target, "other_hand")
     return true
-  end
+  end,
 }
 
-actions.move = static {
+actions.move = static .. action {
   codename = "move",
-  get_availability = function(self, entity)
-    return entity.resources.movement > 0
-  end,
+  cost = {
+    movement = 1,
+  },
   run = function(_, entity)
     local new_position = entity.position + Vector[entity.direction]
     if entity.movement_flag or not level.move(entity, new_position) then
@@ -141,18 +145,17 @@ actions.move = static {
   end,
 }
 
-actions.dash = static {
+actions.dash = static .. action {
   codename = "dash",
-  get_availability = function(self, entity)
-    return entity.resources.actions > 0
-  end,
-  run = function(_, entity)
-    entity.resources.actions = entity.resources.actions - 1
+  cost = {
+    actions = 1,
+  },
+  _run = function(_, entity)
     entity.resources.movement = entity.resources.movement + entity:get_resources("move").movement
   end,
 }
 
-actions.interact = static(action({
+actions.interact = static .. action {
   codename = "interact",
   cost = {
     bonus_actions = 1,
@@ -169,12 +172,11 @@ actions.interact = static(action({
     entity.resources.bonus_actions = entity.resources.bonus_actions - 1
     entity_to_interact:interact(entity)
   end
-}))
+}
 
-actions.finish_turn = static {
+actions.finish_turn = static .. action {
   codename = "finish_turn",
-  get_availability = function() return true end,
-  run = function(_, entity)
+  _run = function(_, entity)
     return combat.TURN_END_SIGNAL
     -- TODO maybe discard that and use a direct call to State.combat?
   end,

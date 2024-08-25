@@ -1,7 +1,7 @@
 local action, module_mt, static = Module("tech.action")
 
 module_mt.__call = function(_, base_table)
-  return Table.extend(base_table, {
+  return Table.extend({
     get_availability = function(self, entity)
       return (not self._get_availability or self:_get_availability(entity))
         and Fun.iter(self.cost or {})
@@ -14,7 +14,7 @@ module_mt.__call = function(_, base_table)
       end
       return self:_run(entity)
     end,
-  })
+  }, base_table)
 end
 
 return action

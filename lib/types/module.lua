@@ -36,7 +36,7 @@ _make_table_static = function(t, module_path, key_path)
 end
 
 local get_static_keyword = function(module_path)
-  return function(t)
+  local f = function(_, t)
     local ttype = type(t)
     assert(ttype == "table" or ttype == "function", "Only tables or functions can be static")
 
@@ -48,6 +48,7 @@ local get_static_keyword = function(module_path)
     metatable(t).__module = module_path
     return t
   end
+  return setmetatable({}, {__call = f, __concat = f})
 end
 
 return function(module_path, module_value)

@@ -1,3 +1,4 @@
+local action = require("tech.action")
 local class = require("mech.class")
 local perk = require("mech.perk")
 local abilities = require("mech.abilities")
@@ -7,28 +8,27 @@ local healing = require("mech.healing")
 
 local fighter, module_mt, static = Module("mech.classes.fighter")
 
-fighter.second_wind = static {
+fighter.second_wind = static .. action {
   codename = "second_wind",
-  get_availability = function(self, entity)
+  cost = {
+    bonus_actions = 1,
+    second_wind = 1,
+  },
+  _get_availability = function(self, entity)
     return entity.hp < entity:get_max_hp()
-      and entity.resources.bonus_actions > 0
-      and entity.resources.second_wind > 0
   end,
-  run = function(self, entity)
-    entity.resources.bonus_actions = entity.resources.bonus_actions - 1
-    entity.resources.second_wind = entity.resources.second_wind - 1
+  _run = function(self, entity)
     State:add(fx("assets/sprites/fx/second_wind", "fx_behind", entity.position))
     healing.heal(entity, (D(10) + entity.level):roll())
   end,
 }
 
-fighter.action_surge = static {
+fighter.action_surge = static .. action {
   codename = "action_surge",
-  get_availability = function(self, entity)
-    return entity.resources.action_surge > 0
-  end,
-  run = function(self, entity)
-    entity.resources.action_surge = entity.resources.action_surge - 1
+  cost = {
+    action_surge = 1,
+  },
+  _run = function(self, entity)
     State:add(fx("assets/sprites/fx/action_surge_proto", "fx_behind", entity.position))
     entity.resources.actions = entity.resources.actions + 1
   end,

@@ -218,7 +218,7 @@ return Module("state.gui.sidebar", function()
             end
           end
           append({
-            Log.trace(color),
+            color,
             "\n" .. table_render[i],
           })
           i = i + 1
