@@ -107,15 +107,15 @@ actions.move = static .. action {
     movement = 1,
   },
   run = function(_, entity)
-    local new_position = entity.position + Vector[entity.direction]
-    if entity.movement_flag or not level.move(entity, new_position) then
+    local old_position = entity.position
+    if entity.movement_flag or not level.move(entity, entity.position + Vector[entity.direction]) then
       return false
     end
 
     entity.resources.movement = entity.resources.movement - 1
 
     Fun.iter(Vector.directions)
-      :map(function(d) return State.grids.solids:safe_get(entity.position + d) end)
+      :map(function(d) return State.grids.solids:safe_get(old_position + d) end)
       :filter(function(e)
         return e
           and e ~= entity
