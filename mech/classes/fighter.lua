@@ -1,3 +1,4 @@
+local sound = require("tech.sound")
 local action = require("tech.action")
 local class = require("mech.class")
 local perk = require("mech.perk")
@@ -7,6 +8,8 @@ local healing = require("mech.healing")
 
 
 local fighter, module_mt, static = Module("mech.classes.fighter")
+
+fighter._second_wind_sound = static .. sound.multiple("assets/sounds/second_wind.mp3", .3)[1]
 
 fighter.second_wind = static .. action {
   codename = "second_wind",
@@ -19,9 +22,12 @@ fighter.second_wind = static .. action {
   end,
   _run = function(self, entity)
     State:add(fx("assets/sprites/fx/second_wind", "fx_behind", entity.position))
+    State.audio:play(entity, fighter._second_wind_sound, "small")
     healing.heal(entity, (D(10) + entity.level):roll())
   end,
 }
+
+fighter._action_surge_sound = static .. sound.multiple("assets/sounds/action_surge.mp3", .8)[1]
 
 fighter.action_surge = static .. action {
   codename = "action_surge",
@@ -30,6 +36,7 @@ fighter.action_surge = static .. action {
   },
   _run = function(self, entity)
     State:add(fx("assets/sprites/fx/action_surge_proto", "fx_behind", entity.position))
+    State.audio:play(entity, fighter._action_surge_sound, "small")
     entity.resources.actions = entity.resources.actions + 1
   end,
 }

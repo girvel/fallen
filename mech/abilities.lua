@@ -61,10 +61,12 @@ abilities.get_melee_modifier = function(entity, slot)
   return abilities.get_modifier(entity.abilities.str)
 end
 
-local ability_check_sound = sound.multiple("assets/sounds/coin_toss", 1)
+local ability_check_sound = {
+  success = sound.multiple("assets/sounds/coin_toss", 1),
+  failure = sound.multiple("assets/sounds/check_failed", 1),
+}
 
 abilities.check = function(entity, skill_or_abilities, dc)
-  State.audio:play(entity, Random.choice(ability_check_sound):clone(), "small")
   local roll = entity.abilities[skill_or_abilities]
     and D(20) + abilities.get_modifier(entity.abilities[skill_or_abilities])
     or entity.skill_throws[skill_or_abilities]
@@ -78,7 +80,13 @@ abilities.check = function(entity, skill_or_abilities, dc)
     Common.get_name(entity), skill_or_abilities, result, dc
   })
 
-  return result >= dc
+  local success = result >= dc
+  State.audio:play(
+    entity,
+    Random.choice(ability_check_sound[success and "success" or "failure"]):clone(),
+    "small"
+  )
+  return success
 end
 
 abilities.saving_throw = function(entity, ability, dc)
