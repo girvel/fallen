@@ -8,8 +8,14 @@ local utf8 = require("utf8")
 
 local define_hotkey = function(collection, modes, keys, data)
   for _, m in ipairs(modes) do
+    local first = true
     for _, k in ipairs(keys) do
-      collection[m][k] = data
+      if first then
+        collection[m][k] = data
+      else
+        collection[m][k] = Table.extend({}, data, {hidden = function() return true end})
+      end
+      first = false
     end
   end
 end
@@ -111,30 +117,37 @@ return Module("state.hotkeys", function(modes, debug_mode)
   })
 
   -- reading --
-  define_hotkey(hotkeys, {"reading"}, {"escape"}, {
+  define_hotkey(hotkeys, {"reading"}, {"esc"}, {
     name = "выйти из кодекса",
+    codename = "exit",
     pre_action = function() State.gui.wiki:exit() end
   })
 
   define_hotkey(hotkeys, {"reading"}, {"left"}, {
     name = "назад",
+    codename = "left",
     pre_action = function() State.gui.wiki:move_in_history(-1) end
   })
 
   define_hotkey(hotkeys, {"reading"}, {"right"}, {
     name = "вперёд",
+    codename = "right",
     pre_action = function() State.gui.wiki:move_in_history(1) end
   })
 
   -- dialogue --
   define_hotkey(hotkeys, {"dialogue"}, {"space"}, {
     name = "следующая фраза",
+    codename = "next",
+    hidden = function() return true end,
     pre_action = function() State.gui.dialogue:skip() end
   })
 
   -- dialogue options --
   define_hotkey(hotkeys, {"dialogue_options"}, {"w", "up"}, {
     name = "опция выше",
+    codename = "up",
+    hidden = function() return true end,
     pre_action = function()
       State.gui.dialogue.selected_option_i = Common.loop(
         State.gui.dialogue.selected_option_i - 1,
@@ -146,6 +159,8 @@ return Module("state.hotkeys", function(modes, debug_mode)
 
   define_hotkey(hotkeys, {"dialogue_options"}, {"s", "down"}, {
     name = "опция ниже",
+    codename = "down",
+    hidden = function() return true end,
     pre_action = function()
       State.gui.dialogue.selected_option_i = Common.loop(
         State.gui.dialogue.selected_option_i + 1,
@@ -157,6 +172,8 @@ return Module("state.hotkeys", function(modes, debug_mode)
 
   define_hotkey(hotkeys, {"dialogue_options"}, {"e", "enter"}, {
     name = "выбрать опцию",
+    codename = "submit",
+    hidden = function() return true end,
     pre_action = function()
       State.gui.dialogue:options_select()
     end,
@@ -201,23 +218,24 @@ return Module("state.hotkeys", function(modes, debug_mode)
     local keys, direction_name, direction_translation = unpack(t)
     define_hotkey(hotkeys, {"character_creator"}, keys, {
       name = direction_translation,
-      hidden = function() return true end,
+      codename = direction_name,
       pre_action = function()
         State.gui.character_creator:move_cursor(direction_name)
       end,
     })
   end
 
-  define_hotkey(hotkeys, {"character_creator"}, {"Ctrl+enter"}, {
+  define_hotkey(hotkeys, {"character_creator"}, {"enter"}, {
     name = "Создать",
+    codename = "submit",
     pre_action = function()
       State.gui.character_creator:submit()
     end,
   })
 
-  define_hotkey(hotkeys, {"character_creator"}, {"escape"}, {
-    hidden = function() return true end,
+  define_hotkey(hotkeys, {"character_creator"}, {"esc"}, {
     name = "Закрыть редактор",
+    codename = "exit",
     pre_action = function()
       State.gui.character_creator:close()
     end,

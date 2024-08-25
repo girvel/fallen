@@ -3,18 +3,19 @@ local input, _, static = Module("systems.collect_scancodes")
 input.system = static(Tiny.system({
   codename = "collect_scancodes",
   base_callback = "custom_keypressed",
-  update = function(_, event)
+  scancode_conversion = {
+    ["return"] = "enter",
+    escape = "ecs",
+    rshift = "shift",
+    lshift = "shift",
+    rctrl = "ctrl",
+    lctrl = "ctrl",
+    ralt = "alt",
+    lalt = "alt",
+  },
+  update = function(self, event)
     local scancode = unpack(event)
-
-    if scancode == "return" then
-      scancode = "enter"
-    elseif scancode:endsWith("shift") then
-      scancode = "shift"
-    elseif scancode:endsWith("ctrl") then
-      scancode = "ctrl"
-    elseif scancode:endsWith("alt") then
-      scancode = "alt"
-    end
+    scancode = self.scancode_conversion[scancode] or scancode
 
     local modifier = ""
     if scancode ~= "shift"

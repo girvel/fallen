@@ -109,11 +109,13 @@ display.system = static(Tiny.sortedProcessingSystem({
       State.gui.disable_ui and not Table.contains({"scene", "dialogue_text"}, entity.view)
       -- TODO this should be grouped w/ views?
       or mode == "character_creator" and not Table.contains(
-        {"sidebar", "sidebar_text", "sidebar_background", "character_creator"},
+        {"sidebar", "sidebar_text", "sidebar_background", "character_creator",
+         "actions", "action_frames", "action_keys"},
         entity.view
       )
       or mode == "reading" and not Table.contains(
-        {"sidebar", "sidebar_text", "sidebar_background", "wiki"},
+        {"sidebar", "sidebar_text", "sidebar_background", "wiki",
+         "actions", "action_frames", "action_keys"},
         entity.view
       )
       or mode == "death"
