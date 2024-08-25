@@ -2,7 +2,7 @@
 mkdir -p .build
 rm -rf .build/*
 
-zip -9 -r .build/fallen.love assets lib library mech state systems tech utils conf.lua main.lua
+zip -9 -r .build/fallen.love assets kernel lib library mech state systems tech utils conf.lua main.lua
 
 cat "$(which love.exe)" .build/fallen.love > .build/fallen.exe
 rm .build/fallen.love
