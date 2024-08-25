@@ -154,7 +154,6 @@ gui.action_icon = function(hotkey_data, index, frame)
     end,
 
     on_hover_end = function(self)
-      frame.sprite = frame.sprites.inactive
       State.gui.sidebar.hovered_icon = nil
     end,
 
@@ -168,6 +167,11 @@ gui.action_icon = function(hotkey_data, index, frame)
 
     ai = {
       observe = function(self)
+        if State.gui.sidebar.hovered_icon ~= self then
+          frame.sprite = frame.sprites[
+            -Query(self.hotkey_data).is_passive_enabled() and "passive" or "inactive"
+          ]
+        end
         self.shader = not self:is_active()
           and shaders.grayscale
           or nil
@@ -179,6 +183,7 @@ end
 local frame_sprites = {
   active = sprite.image("assets/sprites/frame/active.png"),
   inactive = sprite.image("assets/sprites/frame/inactive.png"),
+  passive = sprite.image("assets/sprites/frame/passive.png"),
 }
 
 gui.action_frame = function(index)

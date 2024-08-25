@@ -105,6 +105,9 @@ return Module("state.hotkeys", function(modes, debug_mode)
       local params = State.player.perk_params[feats.great_weapon_master]
       params.enabled = not params.enabled
     end,
+    is_passive_enabled = function()
+      return State.player.perk_params[feats.great_weapon_master].enabled
+    end,
   })
 
   -- reading --
