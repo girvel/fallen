@@ -53,7 +53,7 @@ local run = function(command)
 
   local ok, result
   for _, form in ipairs({"return ", ""}) do
-    ok, result = pcall(loadstring(Log.trace(
+    ok, result = pcall(loadstring(
       "return function(cd, clear%s) %s%s end" % {
         upvalues
           :map(function(pair) return ", " .. pair.name end)
@@ -62,8 +62,7 @@ local run = function(command)
         command,
       },
       "shell #" .. #command_history
-    )))
-    Log.trace(ok, result)
+    ))
     if ok then break end
   end
 

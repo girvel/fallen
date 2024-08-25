@@ -13,14 +13,6 @@ local COLOR = {
   HOSTILE = Colors.red,
 }
 
-local hotkeys_order = Fun.iter(
-  ("w a s d up left down right 1 2 3 4 5 6 7 8 9 0 e h return shift space k j n "
-  .. "Ctrl+enter Shift+q Shift+r enter") / " "
-)
-  :enumerate()
-  :map(function(i, e) return e, i end)
-  :tomap()
-
 local value_translations = {
   [true] = "да",
   [false] = "нет",
@@ -109,7 +101,7 @@ return Module("state.gui.sidebar", function()
     refresh_action_grid = function(self)
       State:remove_multiple(self.action_entities)
       self.action_entities = State:add_multiple(OrderedMap.iter(State.hotkeys[State:get_mode()])
-        :filter(function(key, data) return data.codename and not data.hidden end)
+        :filter(function(key, data) return data.codename and not -Query(data).hidden() end)
         :enumerate()
         :map(function(i, key, data)
           local frame = gui.action_frame(i)
@@ -223,35 +215,6 @@ return Module("state.gui.sidebar", function()
           })
           i = i + 1
         end
-      end
-
-      local hotkeys_table = OrderedMap.iter(State.hotkeys[State:get_mode()])
-        :filter(function(key, data) return not data.hidden end)
-        :map(function(key, data) return {key = key, data = data} end)
-        :totable()
-
-      table.sort(hotkeys_table, function(a, b)
-        if not hotkeys_order[a.key] then Log.warn("Hotkey %s is not ordered" % a.key) end
-        if not hotkeys_order[b.key] then Log.warn("Hotkey %s is not ordered" % b.key) end
-        return (hotkeys_order[a.key] or 0) < (hotkeys_order[b.key] or 0)
-      end)
-
-      append("\n\nУправление\n")
-      local table_render = Common.build_table(
-        {"", ""},
-        Fun.iter(hotkeys_table)
-          :map(function(t) return {t.key, Common.get_name(t.data)} end)
-          :totable()
-      ) / "\n"
-      append(table_render[2])
-
-      for i, t in ipairs(hotkeys_table) do
-        append({
-          t.data.action and not t.data.action:get_availability(State.player)
-            and COLOR.INACTIVE
-            or Colors.white,
-          "\n" .. table_render[i + 2]
-        })
       end
 
       if State.combat then

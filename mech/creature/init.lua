@@ -88,7 +88,12 @@ creature._methods = static {
     Table.extend(self, changes)
 
     if self.class then
+      -- TODO store build perks & feats in one table
       self.effects = self.class:get_effects(self.level, self.build)
+      self.perk_params = Fun.iter(self.effects)
+        :chain({self.feat})
+        :map(function(effect) return effect, {} end)
+        :tomap()
     end
     for k, v in Pairs(get_all_resources(self)) do
       self.resources[k] = (self.resources[k] or 0) + v - (old_resources[k] or 0)

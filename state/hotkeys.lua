@@ -1,3 +1,4 @@
+local feats = require("mech.feats")
 local game_save = require("state.game_save")
 local actions = require("mech.creature.actions")
 local fighter = require("mech.classes.fighter")
@@ -34,7 +35,7 @@ return Module("state.hotkeys", function(modes, debug_mode)
   }) do
     local keys, direction_name, direction_translation = unpack(t)
     define_hotkey(hotkeys, {"free", "combat"}, keys, {
-      hidden = true,
+      hidden = function() return true end,
       mutex_group = movement_group,
       name = "двигаться " .. direction_translation,
       codename = "move_" .. direction_name,
@@ -93,6 +94,19 @@ return Module("state.hotkeys", function(modes, debug_mode)
     action = class.hit_dice_action,
   })
 
+  define_hotkey(hotkeys, {"free", "combat"}, {"g"}, {
+    name = "мастер двуручного оружия",
+    codename = "toggle_gwm",
+    hidden = function(entity)
+      return State.player.feat ~= feats.great_weapon_master
+    end,
+    pre_action = function()
+      if State.player.feat ~= feats.great_weapon_master then return end
+      local params = State.player.perk_params[feats.great_weapon_master]
+      params.enabled = not params.enabled
+    end,
+  })
+
   -- reading --
   define_hotkey(hotkeys, {"reading"}, {"escape"}, {
     name = "выйти из кодекса",
@@ -148,7 +162,7 @@ return Module("state.hotkeys", function(modes, debug_mode)
   Fun.range(1, 9):each(function(i)
     define_hotkey(hotkeys, {"dialogue_options"}, {tostring(i)}, {
       name = "выбрать опцию #" .. i,
-      hidden = true,
+      hidden = function() return true end,
       pre_action = function()
         if i <= #State.gui.dialogue.options then
           State.gui.dialogue.selected_option_i = i
@@ -169,7 +183,7 @@ return Module("state.hotkeys", function(modes, debug_mode)
   define_hotkey(hotkeys, {"death"}, {"r"}, {
     name = "начать заново",
     pre_action = function()
-      love.reload_flag = true
+      love.reload_flag = function() return true end
     end,
   })
 
@@ -184,7 +198,7 @@ return Module("state.hotkeys", function(modes, debug_mode)
     local keys, direction_name, direction_translation = unpack(t)
     define_hotkey(hotkeys, {"character_creator"}, keys, {
       name = direction_translation,
-      hidden = true,
+      hidden = function() return true end,
       pre_action = function()
         State.gui.character_creator:move_cursor(direction_name)
       end,
@@ -199,7 +213,7 @@ return Module("state.hotkeys", function(modes, debug_mode)
   })
 
   define_hotkey(hotkeys, {"character_creator"}, {"escape"}, {
-    hidden = true,
+    hidden = function() return true end,
     name = "Закрыть редактор",
     pre_action = function()
       State.gui.character_creator:close()
@@ -208,7 +222,7 @@ return Module("state.hotkeys", function(modes, debug_mode)
 
   -- text input --
   define_hotkey(hotkeys, {"text_input"}, {"backspace"}, {
-    hidden = true,
+    hidden = function() return true end,
     pre_action = function()
       local input = State.gui.text_input
       if #input.text == 0 then return end
@@ -217,7 +231,7 @@ return Module("state.hotkeys", function(modes, debug_mode)
   })
 
   define_hotkey(hotkeys, {"text_input"}, {"enter"}, {
-    hidden = true,
+    hidden = function() return true end,
     pre_action = function()
       State.gui.text_input.active = false
     end
@@ -234,7 +248,7 @@ return Module("state.hotkeys", function(modes, debug_mode)
   define_hotkey(hotkeys, Table.deep_copy(modes), {"Shift+r"}, {
     name = "начать заново",
     pre_action = function()
-      love.reload_flag = true
+      love.reload_flag = function() return true end
     end,
   })
 
