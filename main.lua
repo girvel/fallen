@@ -110,7 +110,6 @@ love.load = function(args)
     Table.extend(State.gui.character_creator.parameters, {
       skills = {
         sleight_of_hand = true,
-        stealth = true,
         arcana = true,
         nature = true,
       },

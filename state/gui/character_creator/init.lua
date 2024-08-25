@@ -44,7 +44,7 @@ return Module("state.gui.character_creator", function()
         cha = 8,
       },
       abilities_final = nil,
-      free_skills = 4,
+      free_skills = 3,
       skills = {},
       current_index = 1,
       max_index = 1,

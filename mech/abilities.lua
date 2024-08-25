@@ -10,37 +10,29 @@ abilities.list = {
 
 abilities.skills = {
   "sleight_of_hand",
-  "stealth",
   "arcana",
   "history",
   "investigation",
   "nature",
   "religion",
-  "animal_handling",
   "insight",
   "medicine",
   "perception",
-  "deception",
   "intimidation",
-  "performance",
   "persuasion",
 }
 
 abilities.skill_bases = {
   sleight_of_hand = "dex",
-  stealth = "dex",
   arcana = "int",
   history = "int",
   investigation = "int",
   nature = "int",
   religion = "int",
-  animal_handling = "wis",
   insight = "wis",
   medicine = "wis",
   perception = "wis",
-  deception = "cha",
   intimidation = "cha",
-  performance = "cha",
   persuasion = "cha",
 }
 
