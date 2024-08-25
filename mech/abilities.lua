@@ -90,12 +90,18 @@ abilities.check = function(entity, skill_or_abilities, dc)
 end
 
 abilities.saving_throw = function(entity, ability, dc)
-  State.audio:play(entity, Random.choice(ability_check_sound):clone(), "small")
   local save = entity.saving_throws[ability]:roll()
   Log.info("%s rolls %s save %s against %s" % {
     Common.get_name(entity), ability, save, dc
   })
-  return save >= dc
+
+  local success = save >= dc
+  State.audio:play(
+    entity,
+    Random.choice(ability_check_sound[success and "success" or "failure"]):clone(),
+    "small"
+  )
+  return success
 end
 
 abilities.initiative_roll = function(entity)
