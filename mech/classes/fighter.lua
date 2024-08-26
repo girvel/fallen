@@ -27,7 +27,7 @@ fighter.second_wind = static .. action {
   end,
 }
 
-fighter._action_surge_sound = static .. sound.multiple("assets/sounds/action_surge.mp3", .8)[1]
+fighter._action_surge_sound = static .. sound.multiple("assets/sounds/action_surge.mp3", .3)[1]
 
 fighter.action_surge = static .. action {
   codename = "action_surge",

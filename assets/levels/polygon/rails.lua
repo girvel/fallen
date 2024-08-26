@@ -14,7 +14,7 @@ return function()
 
         run = function(self, rails, dt)
           self.enabled = false
-          api.narration("HI")
+          api.narration("hi")
         end,
       },
     },

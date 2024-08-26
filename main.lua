@@ -111,11 +111,10 @@ end
 local active_time = 0
 local frames_total = 0
 
--- TODO REF /kernel/
 local key_repetition_delays = {}
 local key_repetition_id = {}
 love.key_repetition_delay = .3
-love.key_repetition_rate = 20
+love.key_repetition_rate = 5
 
 love.run = function()
 	if love.load then love.load(love.arg.parseGameArguments(arg), arg) end
