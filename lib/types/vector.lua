@@ -10,7 +10,7 @@ module_mt.__call = function(_, base_object)
     #base_object == 2 and Fun.iter(pairs(base_object)):length() == 2,
     "Vector base should be a list of length 2"
   )
-  return setmetatable(base_object, vector_mt)
+  return ChangeMetatable(base_object, vector_mt)
 end
 
 module.zero = module({0, 0})

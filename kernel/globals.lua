@@ -4,6 +4,18 @@ return function()
     return pairs(t)
   end
 
+  ChangeMetatable = setmetatable
+  setmetatable = function(t, mt)
+    local old_mt = getmetatable(t)
+    if old_mt then
+      Log.warn(
+        ("Attempt at overwriting metatable;"
+        .. "\n  table: %s\n  old metatable: %s\n  new metatable: %s") % {t, old_mt, mt}
+      )
+    end
+    return ChangeMetatable(t, mt)
+  end
+
   -- global imports --
   Log = require("lib.log")
   Fun = require("lib.fun")
