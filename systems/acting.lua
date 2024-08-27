@@ -54,7 +54,10 @@ acting.system = static(Tiny.processingSystem({
   process = function(self, entity, event)
     self:_refresh_blood(entity)
 
-    Query(entity.ai).observe(entity, event)
+    local observe = entity.ai.observe
+    if observe then
+      Debug.pcall(observe, entity, event)
+    end
     if not entity.ai.run then return end
 
     -- TODO! REF
@@ -92,7 +95,7 @@ acting.system = static(Tiny.processingSystem({
   end,
 
   _process_outside_combat = function(self, entity, event)
-    entity.ai.run(entity, event)
+    Debug.pcall(entity.ai.run, entity, event)
     if -Query(entity.animation).current:startsWith("idle") then
       Table.extend(entity.resources, -Query(entity):get_resources("move"))
     end
@@ -118,8 +121,10 @@ acting.system = static(Tiny.processingSystem({
       Log.warn("%s's turn timed out" % Common.get_name(State.combat:get_current()))
     end
 
+    local ok, signal = Debug.pcall(entity.ai.run, entity, event)
     if
-      entity.ai.run(entity, event) == combat.TURN_END_SIGNAL and not is_world_turn
+      not ok
+      or signal == combat.TURN_END_SIGNAL and not is_world_turn
       or was_timeout_reached
     then
       self:_pass_turn()
