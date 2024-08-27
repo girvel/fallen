@@ -11,7 +11,8 @@
 
 local inspect = require("lib.inspect")
 
-local log = { _version = "0.1.0" }
+local module_mt = {}
+local log = setmetatable({ _version = "0.1.0" }, module_mt)
 
 local log_directory = love.filesystem.getSaveDirectory() .. "/logs"
 if not love.filesystem.getInfo(log_directory) then
@@ -23,20 +24,14 @@ log.outfile = "/logs/" .. os.date("%Y-%m-%d_%H-%M-%S") .. ".txt"
 log.level = "trace"
 
 
-local modes = {
-  { name = "trace", color = "\27[34m", },
-  { name = "debug", color = "\27[36m", },
-  { name = "info",  color = "\27[32m", },
-  { name = "warn",  color = "\27[33m", },
-  { name = "error", color = "\27[31m", },
-  { name = "fatal", color = "\27[35m", },
+local levels = {
+  trace = {color = "\27[34m", index = 1},
+  debug = {color = "\27[36m", index = 2},
+  info = {color = "\27[32m", index = 3},
+  warn = {color = "\27[33m", index = 4},
+  error = {color = "\27[31m", index = 5},
+  fatal = {color = "\27[35m", index = 6},
 }
-
-
-local levels = {}
-for i, v in ipairs(modes) do
-  levels[v.name] = i
-end
 
 
 local round = function(x, increment)
@@ -64,36 +59,39 @@ local tostring = function(...)
 end
 
 
-for i, x in ipairs(modes) do
-  local nameupper = x.name:upper()
-  log[x.name] = function(...)
+module_mt.__call = function(_, level, trace_shift, ...)
+  -- Return early if we're below the log level
+  if levels[level].index < levels[log.level].index then
+    return ...
+  end
 
-    -- Return early if we're below the log level
-    if i < levels[log.level] then
-      return ...
-    end
+  local msg = tostring(...)
+  local info = debug.getinfo(2 + trace_shift, "Sl")
+  local lineinfo = info.short_src .. ":" .. info.currentline
+  local nameupper = level:upper()
 
-    local msg = tostring(...)
-    local info = debug.getinfo(2, "Sl")
-    local lineinfo = info.short_src .. ":" .. info.currentline
+  -- Output to console
+  print(string.format("%s[%-6s%s]%s %s: %s",
+                      log.usecolor and levels[level].color or "",
+                      nameupper,
+                      os.date("%H:%M:%S"),
+                      log.usecolor and "\27[0m" or "",
+                      lineinfo,
+                      msg))
 
-    -- Output to console
-    print(string.format("%s[%-6s%s]%s %s: %s",
-                        log.usecolor and x.color or "",
-                        nameupper,
-                        os.date("%H:%M:%S"),
-                        log.usecolor and "\27[0m" or "",
-                        lineinfo,
-                        msg))
+  -- Output to log file
+  if log.outfile then
+    love.filesystem.append(
+      log.outfile, string.format("[%-6s%s] %s: %s\n", nameupper, os.date(), lineinfo, msg)
+    )
+  end
 
-    -- Output to log file
-    if log.outfile then
-      love.filesystem.append(
-        log.outfile, string.format("[%-6s%s] %s: %s\n", nameupper, os.date(), lineinfo, msg)
-      )
-    end
+  return ...
+end
 
-		return ...
+for level, _ in pairs(levels) do
+  log[level] = function(...)
+    return log(level, 0, ...)
   end
 end
 
