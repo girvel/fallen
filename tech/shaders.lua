@@ -37,7 +37,8 @@ shaders.latrine = static {
     vec4 effect(vec4 color, Image tex, vec2 texture_coords, vec2 screen_coords)
     {
       vec4 v = Texel(tex, texture_coords);
-      return vec4(v.x, (v.y + 1) / 2, v.z, v.w);
+      vec4 u = vec4(0.376,0.702,0.494, v.w);
+      return (v + u) / 2;
     }
   ]]),
 }
