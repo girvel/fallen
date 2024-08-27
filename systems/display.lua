@@ -125,7 +125,9 @@ display.system = static(Tiny.sortedProcessingSystem({
     local current_view = State.gui.views[entity.view]
     local offset_position = current_view:apply(animated.get_render_position(entity))
 
+    local old_shader
     if entity.shader then
+      old_shader = State.shader
       State:set_shader(entity.shader)
     end
 
@@ -143,7 +145,7 @@ display.system = static(Tiny.sortedProcessingSystem({
     end
 
     if entity.shader then
-      State:set_shader()
+      State:set_shader(old_shader)
     end
   end,
 

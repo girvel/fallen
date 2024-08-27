@@ -197,7 +197,8 @@ return function()
       name = "Enter latrine",
       enabled = false,
       start_predicate = function(self, rails, dt)
-        return not (State.shader or State.player.fov_radius == 1)
+        return not State.shader
+          and State.player.fov_radius ~= 1
           and State.player.position == rails.positions.enter_latrine
       end,
 
