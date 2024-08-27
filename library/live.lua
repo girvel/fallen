@@ -1,4 +1,4 @@
-local popup = require("state.gui.popup")
+local texting = require("state.gui.texting")
 local interactive = require("tech.interactive")
 local animated = require("tech.animated")
 local level = require("state.level")
@@ -40,7 +40,7 @@ for _, prefix in ipairs({"", "black_"}) do
       interactive(function(self)
         if self.locked then
           if not State:exists(self._popup[1]) then
-            self._popup = popup.show(self.position, "above", "Закрыто.")
+            self._popup = State:add_multiple(texting.popup(self.position, "above", "Закрыто."))
           end
           return
         end

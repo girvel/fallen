@@ -1,4 +1,4 @@
-local popup = require("state.gui.popup")
+local texting = require("state.gui.texting")
 local game_save = require("state.game_save")
 local fx = require("tech.fx")
 local hostility = require("mech.hostility")
@@ -122,7 +122,7 @@ railing.api.ability_check_message = function(ability, dc, content_success, conte
 end
 
 railing.api.message = function(content)
-  return popup.show(State.player.position + Vector.up, "above", content)
+  return State:add_multiple(texting.popup(State.player.position + Vector.up, "above", content))
 end
 
 railing.api.autosave = function()

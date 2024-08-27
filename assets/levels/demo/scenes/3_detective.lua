@@ -1,4 +1,4 @@
-local popup = require("state.gui.popup")
+local texting = require("state.gui.texting")
 local pipes = require("library.pipes")
 local api = require("tech.railing").api
 local actions = require("mech.creature.actions")
@@ -96,7 +96,7 @@ return function()
 
       run = function(self, rails, dt)
         self.enabled = false
-        popup.show(
+        State:add_multiple(texting.popup(
           rails.entities[1].position, "above",
           Random.choice({
             "УКС " .. math.random(15, 27) / 10,
@@ -105,7 +105,7 @@ return function()
             "ТМ " .. math.random(197, 310),
             "К 3, СПК",
           })
-        )
+        ))
       end,
     },
     {

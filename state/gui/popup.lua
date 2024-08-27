@@ -9,7 +9,7 @@ local MARGIN = 5
 
 local popup, module_mt, static = Module("state.gui.popup")
 
-popup.show = function(position, relation, content, life_time)
+State:add_multiple(texting.popup = function(position, relation, content, life_time)
   assert(relation == "above" or relation == "below")
   life_time = life_time or utf8.len(content) / 10 + 2
 
@@ -52,6 +52,6 @@ popup.show = function(position, relation, content, life_time)
   end
 
   return entities
-end
+end)
 
 return popup

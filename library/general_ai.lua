@@ -1,4 +1,4 @@
-local popup = require("state.gui.popup")
+local texting = require("state.gui.texting")
 local ai = require("tech.ai")
 local actions = require("mech.creature.actions")
 local hostility = require("mech.hostility")
@@ -41,7 +41,7 @@ general_ai_mt.__call = function(_, works_outside_of_combat)
 
       local mode_type = self.ai.mode.enum_variant
       if mode_type == general_ai.modes.skip_turn then
-        popup.show(self.position, "above", "Стой! Остановись, мужик!!! Не бей меня!")
+        State:add_multiple(texting.popup(self.position, "above", "Стой! Остановись, мужик!!! Не бей меня!"))
         self.ai.mode = general_ai.modes.normal()
         self.ai.look_for_aggression = true
         return

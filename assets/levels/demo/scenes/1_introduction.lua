@@ -1,4 +1,4 @@
-local popup = require("state.gui.popup")
+local texting = require("state.gui.texting")
 local shaders = require("tech.shaders")
 local api = require("tech.railing").api
 local mech = require("mech")
@@ -207,7 +207,7 @@ return function()
       end,
 
       run = function(self, rails, dt)
-        popup.show(rails.entities.upper_bunk.position, "above", Random.choice({
+        State:add_multiple(texting.popup(rails.entities.upper_bunk.position, "above", Random.choice({
           "Хрр...",
           "Фрыхрр...",
           "Хрумффф....",
@@ -216,7 +216,7 @@ return function()
           "Мгмф...",
           "Рмгфф...",
           "Ыгмфм...",
-        }))
+        })))
       end,
     },
   }
