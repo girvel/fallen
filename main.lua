@@ -198,7 +198,7 @@ for callback_name, _ in pairs(
 ) do
   love[callback_name] = function(...)
     State.world:refresh()
-    State.world:update(function(_, entity)
+    Debug.pcall(State.world.update, State.world, function(_, entity)
       return entity.base_callback == callback_name
     end, {...})  -- TODO REF maybe unpack the arguments?
   end
