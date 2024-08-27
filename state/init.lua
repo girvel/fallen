@@ -6,7 +6,7 @@ local sprite = require("tech.sprite")
 
 local module, module_mt, static = Module("state")
 
-module_mt.__call = function(_, systems, debug_mode)
+module_mt.__call = function(_, systems)
   local modes = {
     "character_creator", "death", "reading", "dialogue_options", "dialogue", "free", "combat",
     "text_input",
@@ -18,13 +18,11 @@ module_mt.__call = function(_, systems, debug_mode)
     world = Tiny.world(unpack(systems)),
     grids = nil,
 
-    debug_mode = debug_mode,
-
     SCALING_FACTOR = 4,
     MODES = modes,
 
     gui = require("state.gui")(),
-    hotkeys = require("state.hotkeys")(modes, debug_mode),
+    hotkeys = require("state.hotkeys")(modes),
     audio = require("state.audio")(),
 
     entities = {},

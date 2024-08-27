@@ -78,7 +78,8 @@ creature._methods = static {
 
   act = function(self, action)
     if not action:get_availability(self) then return false end
-    return action:run(self)
+    local ok, result = Debug.pcall(action.run, action, self)
+    if ok then return result end
   end,
 
   level_up = function(self, changes)

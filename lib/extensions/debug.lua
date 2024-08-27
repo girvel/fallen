@@ -192,14 +192,14 @@ debugx.call = function(f, ...)
 end
 
 debugx.pcall = function(f, ...)
-  local results = {xpcall(f, function(msg) Debug.extend_error(); return msg end, ...)}
-  if results[1] then
-    return unpack(results)
-  end
   if debugx.debug_mode then
-    
+    return true, f(...)
   end
-  error(unpack(results, 2))
+  local results = {pcall(f, ...)}
+  if not results[1] then
+    Log("error", 1, unpack(results, 2))
+  end
+  return unpack(results)
 end
 
 return debugx

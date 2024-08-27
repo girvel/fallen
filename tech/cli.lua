@@ -29,11 +29,6 @@ return {
     )
 
     parser:flag(
-      "-D --debug-shell",
-      "Use debug shell on errors"
-    )
-
-    parser:flag(
       "-A --disable-ambient",
       "Disable background sound"
     )

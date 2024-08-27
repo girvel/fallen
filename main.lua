@@ -1,6 +1,6 @@
 local love_errorhandler = love.errorhandler
 love.errorhandler = function(msg)
-  if love.shell_enabled then
+  if Debug.debug_mode then
     return Debug.handle_error(msg)
   end
   Log.fatal(debug.traceback("Error: " .. tostring(msg), 2):gsub("\n[^\n]+$", ""))
@@ -34,9 +34,10 @@ love.load = function(args)
   end
 
   args = cli.parse(args)
+
   Log.info("Command line arguments:", args)
   Log.level = args.debug and "trace" or "debug"
-  love.shell_enabled = args.debug_shell
+  Debug.debug_mode = args.debug
 
   local seed = os.time()
   Log.info("Loading the game; seed", seed)
@@ -45,7 +46,7 @@ love.load = function(args)
   if args.load_save then
     game_save.read()
   else
-    State = state(systems, args.debug)  -- TODO debug should not be stored in a save
+    State = state(systems)  -- TODO debug should not be stored in a save
     State:set_shader()
     State:load_level("assets/levels/" .. args.level, palette)
 

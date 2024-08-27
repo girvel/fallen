@@ -20,13 +20,13 @@ local define_hotkey = function(collection, modes, keys, data)
   end
 end
 
-return Module("state.hotkeys", function(modes, debug_mode)
+return Module("state.hotkeys", function(modes)
   local hotkeys = Fun.iter(modes):map(function(m) return m, OrderedMap() end):tomap()
 
   setmetatable(hotkeys, {
     __serialize = function(self)
       return function()
-        return require("state.hotkeys")(modes, debug_mode)
+        return require("state.hotkeys")(modes)
       end
     end
   })
@@ -259,7 +259,7 @@ return Module("state.hotkeys", function(modes, debug_mode)
   })
 
   -- universal --
-  define_hotkey(hotkeys, Table.deep_copy(modes), {"Shift+q"}, {
+  define_hotkey(hotkeys, Table.deep_copy(modes), {"Ctrl+d"}, {
     name = "завершить игру",
     pre_action = function()
       love.event.push("quit")
