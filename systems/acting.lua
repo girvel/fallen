@@ -114,7 +114,7 @@ acting.system = static(Tiny.processingSystem({
 
     local was_timeout_reached = (
       not entity.player_flag
-      and Common.period(20, self, State.combat:get_current())
+      and Common.period(10, self, State.combat:get_current())
     )
 
     if was_timeout_reached then
