@@ -83,16 +83,13 @@ module_mt.__call = function()
 end
 
 gui._get_scene_offset = function()
-  if not State.player then return Vector.zero end
+  local scene_k = State.gui.views.scene:get_multiplier()
   local window_w = love.graphics.getWidth()
   local window_h = love.graphics.getHeight()
-  local border_w = math.floor(window_w / 2)
-  local border_h = math.floor(window_h / 2)
-  local player_x, player_y = unpack(
-    animated.get_render_position(State.player)
-    * tech_constants.CELL_DISPLAY_SIZE * State.SCALING_FACTOR
-  )
-  local grid_w, grid_h = unpack(State.grids.solids.size * State.gui.views.scene:get_multiplier())
+  local border_w = math.floor(window_w / 2 - 1 * scene_k)
+  local border_h = math.floor(window_h / 2 - 1 * scene_k)
+  local player_x, player_y = unpack(animated.get_render_position(State.player) * scene_k)
+  local grid_w, grid_h = unpack(State.grids.solids.size * scene_k)
 
   local prev = State.gui.views.scene_fx.offset
   local target = -Vector({
