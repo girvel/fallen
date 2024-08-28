@@ -6,7 +6,7 @@ local sprite = require("tech.sprite")
 local sound = require("tech.sound")
 
 
-local live, _, static = Module("library.live")
+local live, _, static = Module("library.palette.live")
 
 -- plain sprites --
 local lever_packs = {

@@ -9,7 +9,7 @@ local constants = require("mech.constants")
 local general_ai = require("library.general_ai")
 
 
-local module, _, static = Module("library.mobs")
+local module, _, static = Module("library.palette.mobs")
 
 module.player = player
 

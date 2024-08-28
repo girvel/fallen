@@ -4,7 +4,7 @@ local factoring = require("tech.factoring")
 local level = require("state.level")
 
 
-local decorations, module_mt, static = Module("library.decorations")
+local decorations, module_mt, static = Module("library.palette.decorations")
 
 local decorations_atlas = "assets/sprites/atlases/decorations.png"
 factoring.from_atlas(decorations, decorations_atlas, {
