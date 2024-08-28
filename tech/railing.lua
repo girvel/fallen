@@ -4,22 +4,29 @@ local game_save = require("state.game_save")
 local fx = require("tech.fx")
 local hostility = require("mech.hostility")
 local abilities = require("mech.abilities")
-local utf8 = require("utf8")
 local translation = require("tech.translation")
 
 
 local railing, module_mt, static = Module("tech.railing")
 railing.api = static {}
 
-railing.api.narration = function(text, source)
-  State.gui.dialogue:show(text, source)
+railing.api.narration = function(text, params)
+  params = params or {}
+  if params.check then
+    text = '<span color="%s">[%s - %s] </span>' % {
+      params.check[2] and Colors.hex.green or Colors.hex.red,
+      translation.skill[params.check[1]] or translation.abilities[params.check[1]],
+      params.check[2] and "успех" or "провал"
+    } .. text
+  end
+  State.gui.dialogue:show(text, params.source)
   while State:get_mode() ~= "free" do coroutine.yield() end
 end
 
 railing.api.line = function(entity, text)
   railing.api.narration([[<span color="%s">%s</span><span>: %s</span>]] % {
     Common.color_to_hex(entity.sprite.color), Common.get_name(entity), text
-  }, entity)
+  }, {source = entity})
 end
 
 railing.api.wait_seconds = function(s)
@@ -89,14 +96,7 @@ railing.api.make_hostile = function(faction, entities)
 end
 
 railing.api.ability_check = function(ability, dc)
-  local success = abilities.check(State.player, ability, dc)
-
-  railing.api.message('<span color="%s">[%s]</span>' % {
-    success and Colors.hex.green or Colors.hex.red,
-    (translation.abilities[ability] or translation.skill[ability]):upper(),
-  })
-
-  return success
+  return abilities.check(State.player, ability, dc)
 end
 
 railing.api.saving_throw = function(ability, dc)
