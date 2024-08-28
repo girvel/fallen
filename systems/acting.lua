@@ -51,20 +51,19 @@ acting.system = static(Tiny.processingSystem({
     end
   end,
 
-  process = function(self, entity, event)
+  process = function(self, entity, dt)
     self:_refresh_blood(entity)
 
     local observe = entity.ai.observe
     if observe then
-      Debug.pcall(observe, entity, event)
+      Debug.pcall(observe, entity, dt)
     end
     if not entity.ai.run then return end
 
-    -- TODO! REF
     if not State.combat then
-      return self:_process_outside_combat(entity, event)
+      return self:_process_outside_combat(entity, dt)
     else
-      return self:_process_inside_combat(entity, event)
+      return self:_process_inside_combat(entity, dt)
     end
   end,
 
@@ -94,8 +93,8 @@ acting.system = static(Tiny.processingSystem({
     end
   end,
 
-  _process_outside_combat = function(self, entity, event)
-    Debug.pcall(entity.ai.run, entity, event)
+  _process_outside_combat = function(self, entity, dt)
+    Debug.pcall(entity.ai.run, entity, dt)
     if -Query(entity.animation).current:startsWith("idle") then
       Table.extend(entity.resources, -Query(entity):get_resources("move"))
     else
@@ -103,7 +102,7 @@ acting.system = static(Tiny.processingSystem({
     end
   end,
 
-  _process_inside_combat = function(self, entity, event)
+  _process_inside_combat = function(self, entity, dt)
     local is_world_turn = State.combat:get_current() == combat.WORLD_TURN
 
     if is_world_turn then
@@ -111,7 +110,7 @@ acting.system = static(Tiny.processingSystem({
     elseif State.combat:get_current() ~= entity then return end
 
     if is_world_turn then
-      event = {6}  -- 1 round is 6 seconds
+      dt = 6
     end
 
     local was_timeout_reached = (
@@ -123,7 +122,7 @@ acting.system = static(Tiny.processingSystem({
       Log.warn("%s's turn timed out" % Common.get_name(State.combat:get_current()))
     end
 
-    local ok, signal = Debug.pcall(entity.ai.run, entity, event)
+    local ok, signal = Debug.pcall(entity.ai.run, entity, dt)
     if
       not ok
       or signal == combat.TURN_END_SIGNAL and not is_world_turn

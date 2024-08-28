@@ -33,13 +33,13 @@ display.system = static(Tiny.sortedProcessingSystem({
     end
   end,
 
-  preProcess = function(self, event)
+  preProcess = function(self, dt)
     State.gui:update_views()
-    State.gui.sidebar:update_indicators(event[1])
-    self:process_grid(event)
+    State.gui.sidebar:update_indicators(dt)
+    self:process_grid()
   end,
 
-  process_grid = function(self, event)
+  process_grid = function(self)
     if Table.contains({"character_creator", "reading", "death", "text_input"}, State:get_mode()) then return end
 
     -- borders --

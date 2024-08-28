@@ -6,8 +6,7 @@ animation.system = static(Tiny.processingSystem({
   codename = "animation",
   base_callback = "update",
   filter = Tiny.requireAll("animation"),
-  process = function(_, entity, event)
-    local dt = unpack(event)
+  process = function(_, entity, dt)
     local this_animation = entity.animation
     if this_animation.paused then return end
 

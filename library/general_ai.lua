@@ -67,7 +67,7 @@ general_ai_mt.__call = function(_, works_outside_of_combat)
       end
     end, works_outside_of_combat),
 
-    observe = function(self, event)
+    observe = function(self, dt)
       api.aggregate_aggression(self.ai.was_attacked_by, self)
 
       if self.ai.look_for_aggression then

@@ -61,8 +61,7 @@ pipes.leaking_left_down = function()
     sound_loop = hissing_sound,
     paused = false,
 
-    ai = {run = function(self, event)
-      local dt = unpack(event)
+    ai = {run = function(self, dt)
       self.overflow_counter = self.overflow_counter + dt
 
       if self.overflow_counter >= 60 then

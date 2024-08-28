@@ -154,8 +154,7 @@ module_mt.__call = function(_, ...)
   return Table.extend(setmetatable({
     active_coroutines = {},
 
-    update = function(self, event)
-      local dt = event[1]
+    update = function(self, dt)
       self.active_coroutines = Fun.iter(self.active_coroutines)
         :chain(Fun.iter(pairs(self.scenes))
           :filter(function(s)

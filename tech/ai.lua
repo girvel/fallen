@@ -5,14 +5,13 @@ local ai, _, static = Module("tech.ai")
 ai.api = static {}
 
 ai.async = function(fun, works_outside_of_combat)
-  return Dump.ignore_upvalue_size .. function(self, event)
+  return Dump.ignore_upvalue_size .. function(self, dt)
     -- TODO support WORLD_TURN (which is 1 frame only btw)
     if
       not works_outside_of_combat
       and not Table.contains(-Query(State.combat).list or {}, self)
     then return end
 
-    local dt = unpack(event)
     while Common.relative_period(.25, dt, self) do
       if not self._ai_coroutine then
         self._ai_coroutine = coroutine.create(function(...)

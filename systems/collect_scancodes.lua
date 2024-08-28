@@ -13,8 +13,7 @@ input.system = static(Tiny.system({
     ralt = "alt",
     lalt = "alt",
   },
-  update = function(self, event)
-    local scancode = unpack(event)
+  update = function(self, scancode)
     scancode = self.scancode_conversion[scancode] or scancode
 
     local modifier = ""

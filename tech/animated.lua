@@ -17,7 +17,7 @@ local animation_methods = {
     animation_name = animation_name or "idle"
     self.animation.current = animation_name .. "_" .. (self.direction or "")
     if not self.animation.pack[self.animation.current] then
-      self.animation.current = animation_name  -- TODO! REF animation itself
+      self.animation.current = animation_name  -- TODO REF animation itself
     end
     if not self.animation.pack[self.animation.current] and animation_name ~= "idle" then
       return self:animate()

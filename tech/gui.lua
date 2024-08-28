@@ -69,7 +69,7 @@ gui.notification_fx = function()
     {
       codename = "notification_fx",
       view = "notification_fx",
-      position = Vector({0, -8}),
+      position = Vector({0, -6}),
     }
   )
 end

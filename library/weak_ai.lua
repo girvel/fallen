@@ -1,6 +1,5 @@
 local ai = require("tech.ai")
 local api = ai.api
--- TODO REF tech.texting?
 local texting = require("tech.texting")
 
 
@@ -10,7 +9,7 @@ module_mt.__call = function()
   return {
     _was_attacked_by = {},
     _line_entities = {},
-    run = ai.async(function(self, event)
+    run = ai.async(function(self, dt)
       if #self.ai._was_attacked_by > 0 then
         self.ai._was_attacked_by = {}
         if State:exists(self.ai._line_entities[1]) then
@@ -21,7 +20,7 @@ module_mt.__call = function()
         ))
       end
     end, true),
-    observe = function(self, event)
+    observe = function(self, dt)
       api.aggregate_aggression(self.ai._was_attacked_by, self)
     end
   }

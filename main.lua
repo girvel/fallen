@@ -200,7 +200,7 @@ for callback_name, _ in pairs(
     State.world:refresh()
     Debug.pcall(State.world.update, State.world, function(_, entity)
       return entity.base_callback == callback_name
-    end, {...})  -- TODO REF maybe unpack the arguments?
+    end, ...)  -- TODO REF maybe unpack the arguments?
   end
 end
 
