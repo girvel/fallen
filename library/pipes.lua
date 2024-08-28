@@ -21,7 +21,7 @@ factoring.from_atlas(pipes, atlas, {
   "x", "colored",
 })
 
-local valve_rotating_sounds = sound.multiple("assets/sounds/valve_rotate", 0.1)
+local valve_rotating_sounds = sound.multiple("assets/sounds/valve_rotate", 0.05)
 local pipe_valve_pack = animated.load_pack("assets/sprites/animations/pipe_valve")
 
 pipes.valve = function(leaking_pipe_position)
@@ -29,7 +29,7 @@ pipes.valve = function(leaking_pipe_position)
     animated(pipe_valve_pack),
     interactive(Dump.ignore_upvalue_size .. function(self, other)
       local target = State.grids.solids[leaking_pipe_position]
-      State.audio:play(self, Random.choice(valve_rotating_sounds), "medium")
+      State.audio:play(self, Random.choice(valve_rotating_sounds), "small")
       self:animate("rotate"):next(function()
         target.overflow_counter = 0
         pipes.burst_with_steam(target)

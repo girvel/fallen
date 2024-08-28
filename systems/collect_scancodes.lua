@@ -5,7 +5,7 @@ input.system = static(Tiny.system({
   base_callback = "custom_keypressed",
   scancode_conversion = {
     ["return"] = "enter",
-    escape = "ecs",
+    escape = "esc",
     rshift = "shift",
     lshift = "shift",
     rctrl = "ctrl",
@@ -18,20 +18,15 @@ input.system = static(Tiny.system({
     scancode = self.scancode_conversion[scancode] or scancode
 
     local modifier = ""
-    if scancode ~= "shift"
-      and (love.keyboard.isDown("rshift") or love.keyboard.isDown("lshift"))
-    then
+    if scancode ~= "shift" and love.keyboard.isDown("rshift", "lshift") then
       modifier = "Shift+" .. modifier
     end
 
-    if scancode ~= "alt"
-      and (love.keyboard.isDown("ralt") or love.keyboard.isDown("lalt"))
-    then
+    if scancode ~= "alt" and love.keyboard.isDown("ralt", "lalt") then
       modifier = "Alt+" .. modifier
     end
-    if scancode ~= "ctrl"
-      and (love.keyboard.isDown("rctrl") or love.keyboard.isDown("lctrl"))
-    then
+
+    if scancode ~= "ctrl" and love.keyboard.isDown("rctrl", "lctrl") then
       modifier = "Ctrl+" .. modifier
     end
 
