@@ -22,42 +22,31 @@ local engineer_mixin = function(ai_outside_of_combat)
   )
 end
 
-local dreamer_engineer_mixin = function()
-  return Table.extend(
-    engineer_mixin(),
-    {
-      max_hp = 22,
-      abilities = abilities(16, 14, 12, 8, 8, 8),
-      faction = "dreamers_detective",
-    }
-  )
-end
+local dreamer_engineer_mixin = {
+  max_hp = 22,
+  abilities = abilities(16, 14, 12, 8, 8, 8),
+  faction = "dreamers_detective",
+}
 
 -- [{7, 9}] = {"down", {main_hand = items.gas_key()}},
 -- [{5, 8}] = {"down"},
 -- [{5, 3}] = {"up", {gloves = items.yellow_gloves()}},
 -- [{8, 3}] = {"up"},
 
-module[1] = function()
-  return humanoid(Table.extend({
+local engineer_mixins = {
+  Table.extend({
     name = "инженер-полуэльф",
     race = races.half_elf,
     direction = "down",
     inventory = {main_hand = items.gas_key()},
-  }, dreamer_engineer_mixin()))
-end
-
-module[2] = function()
-  return humanoid(Table.extend({
+  }, dreamer_engineer_mixin),
+  Table.extend({
     name = "инженер-полурослик",
     race = races.halfling,
     direction = "down",
     inventory = {},
-  }, dreamer_engineer_mixin()))
-end
-
-module[3] = function()
-  return humanoid(Table.extend({
+  }, dreamer_engineer_mixin),
+  {
     name = "инженер-полуорк",
     race = races.half_orc,
     hp = 34,
@@ -80,16 +69,17 @@ module[3] = function()
         reactions = 1,
       }
     end,
-  }, engineer_mixin(true)))
-end
-
-module[4] = function()
-  return humanoid(Table.extend({
+  },
+  Table.extend({
     name = "инженер-дворф",
     race = races.dwarf,
     direction = "up",
     inventory = {},
-  }, dreamer_engineer_mixin()))
+  }, dreamer_engineer_mixin),
+}
+
+module.engineer = function(i)
+  return humanoid(Table.extend(engineer_mixins[i], engineer_mixin()))
 end
 
 local dreamer_races = {races.dwarf, races.human, races.half_elf, races.half_orc, races.halfling}

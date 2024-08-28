@@ -122,7 +122,7 @@ creature._methods = static {
 }
 
 module_mt.__call = function(_, animation_pack, object)
-  assert(object.max_hp or object.class)
+  assert(object.max_hp or object.class, "Creature should either have max_hp or class")
   local result = Table.extend(animated(animation_pack), {
     creature_flag = true,
 
