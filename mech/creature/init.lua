@@ -34,21 +34,18 @@ creature._methods = static {
 
   get_resources = function(self, rest_type)
     assert(
-      Common.set({"move", "short", "long"})[rest_type],
-      [[allowed values for rest_type: "move", "short", "long"]]
+      Common.set({"free", "move", "short", "long"})[rest_type],
+      [[allowed values for rest_type: "free", "move", "short", "long"]]
     )
 
-    local base
-    if rest_type == "move" then
-      base = OrderedMap {}
+    local base = OrderedMap {}
+    if rest_type == "free" then
+      base.movement = self.race.movement_speed
+    elseif rest_type == "move" then
       base.actions = 1
       base.bonus_actions = 1
       base.movement = self.race.movement_speed
       base.reactions = 1
-    elseif rest_type == "short" then
-      base = OrderedMap {}
-    else
-      base = OrderedMap {}
     end
 
     return Table.extend(base, -Query(self.class):get_resources(self.level, rest_type) or {})

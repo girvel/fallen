@@ -136,11 +136,12 @@ module.colored_pack = function(base_pack, color)
 end
 
 module.get_render_position = function(entity)
-  if not entity.movement_flag then
-    return entity.position
-  end
-  return entity.position - Vector[entity.direction]
-    * (1 - (entity.animation.frame - 1) / (#entity.animation.pack[entity.animation.current]))
+  return entity.position
+  -- if not entity.movement_flag then
+  --   return entity.position
+  -- end
+  -- return entity.position - Vector[entity.direction]
+  --   * (1 - (entity.animation.frame - 1) / (#entity.animation.pack[entity.animation.current]))
 end
 
 return module

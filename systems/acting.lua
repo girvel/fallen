@@ -98,6 +98,8 @@ acting.system = static(Tiny.processingSystem({
     Debug.pcall(entity.ai.run, entity, event)
     if -Query(entity.animation).current:startsWith("idle") then
       Table.extend(entity.resources, -Query(entity):get_resources("move"))
+    else
+      Table.extend(entity.resources, -Query(entity):get_resources("free"))
     end
   end,
 
