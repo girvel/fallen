@@ -41,6 +41,7 @@ creature._methods = static {
     local base = OrderedMap {}
     if rest_type == "free" then
       base.movement = self.race.movement_speed
+      base.bonus_actions = 1
     elseif rest_type == "move" then
       base.actions = 1
       base.bonus_actions = 1

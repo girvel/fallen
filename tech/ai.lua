@@ -13,7 +13,7 @@ ai.async = function(fun, works_outside_of_combat)
     then return end
 
     local dt = unpack(event)
-    while Common.relative_period(.1, dt, self) do
+    while Common.relative_period(.25, dt, self) do
       if not self._ai_coroutine then
         self._ai_coroutine = coroutine.create(function(...)
           return Debug.call(fun, ...)
@@ -55,8 +55,8 @@ ai.api.travel = function(entity, destination)
     while true do
       i = i + 1
       if i == 10 then return end
-      if ai.api.move(entity, position - entity.position) then break end
       coroutine.yield()
+      if ai.api.move(entity, position - entity.position) then break end
     end
   end
 end

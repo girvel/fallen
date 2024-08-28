@@ -10,7 +10,7 @@ module_mt.__call = function()
   return {
     _was_attacked_by = {},
     _line_entities = {},
-    run = function(self, event)
+    run = ai.async(function(self, event)
       if #self.ai._was_attacked_by > 0 then
         self.ai._was_attacked_by = {}
         if State:exists(self.ai._line_entities[1]) then
@@ -20,7 +20,7 @@ module_mt.__call = function()
           self.position, "above", Random.choice({"Ааай", "Оой"})
         ))
       end
-    end,
+    end, true),
     observe = function(self, event)
       api.aggregate_aggression(self.ai._was_attacked_by, self)
     end
