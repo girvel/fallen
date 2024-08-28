@@ -2,7 +2,7 @@ local player = require("state.player")
 local constants = require("tech.constants")
 
 
-local base_path = "assets.levels.ldtk"
+local base_path = "assets.levels.demo"
 local ldtk, module_mt, static = Module(base_path)
 base_path = base_path:gsub("%.", "/")
 
