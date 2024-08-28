@@ -102,18 +102,12 @@ module_mt.__call = function(_, systems)
     end,
 
     load_level = function(self, path, palette)
-      local level_size, new_entities, player_anchor = level.load_entities(
-        love.filesystem.read(path .. "/grid.txt"),
-        love.filesystem.getInfo(path .. "/grid_args.lua") and require(path .. "/grid_args") or {},
-        palette
-      )
-
-      self.gui.character_creator.player_anchor = player_anchor
+      local level_data = require(path).load()
 
       self.grids = Fun.iter(level.GRID_LAYERS)
         :map(function(layer)
           return layer, Grid(
-            level_size,
+            level_data.size,
             level.GRID_COMPLEX_LAYERS[layer]
               and function() return {} end
               or nil
@@ -121,21 +115,54 @@ module_mt.__call = function(_, systems)
         end)
         :tomap()
 
-      for _, entity in ipairs(new_entities) do
+      for _, entity in ipairs(level_data.entities) do
         local e = self:add(entity)
         if e.player_flag then self.player = e end
         if e.on_load then e:on_load(self) end
       end
 
-      if love.filesystem.getInfo(path .. "/rails.lua") then
-        self.rails = require(path .. "/rails")()
-        self.rails:initialize(self)
-      end
+      self.rails = level_data.rails
+      Query(self.rails):initialize(self)
 
       self.gui.sidebar:create_gui_entities()
       self.background_dummy = State:add({
         sprite = sprite.image("assets/sprites/water_sketch_02.png"),
       })
+
+      -- local level_size, new_entities, player_anchor = level.load_entities(
+      --   love.filesystem.read(path .. "/grid.txt"),
+      --   love.filesystem.getInfo(path .. "/grid_args.lua") and require(path .. "/grid_args") or {},
+      --   palette
+      -- )
+
+      -- self.gui.character_creator.player_anchor = player_anchor
+
+      -- self.grids = Fun.iter(level.GRID_LAYERS)
+      --   :map(function(layer)
+      --     return layer, Grid(
+      --       level_size,
+      --       level.GRID_COMPLEX_LAYERS[layer]
+      --         and function() return {} end
+      --         or nil
+      --     )
+      --   end)
+      --   :tomap()
+
+      -- for _, entity in ipairs(new_entities) do
+      --   local e = self:add(entity)
+      --   if e.player_flag then self.player = e end
+      --   if e.on_load then e:on_load(self) end
+      -- end
+
+      -- if love.filesystem.getInfo(path .. "/rails.lua") then
+      --   self.rails = require(path .. "/rails")()
+      --   self.rails:initialize(self)
+      -- end
+
+      -- self.gui.sidebar:create_gui_entities()
+      -- self.background_dummy = State:add({
+      --   sprite = sprite.image("assets/sprites/water_sketch_02.png"),
+      -- })
     end,
 
     get_mode = function(self)

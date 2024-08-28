@@ -4,13 +4,13 @@ return function()
     return pairs(t)
   end
 
-  -- global imports --
   Log = require("lib.log")
   Fun = require("lib.fun")
   Tiny = require("lib.tiny")
   Inspect = require("lib.inspect")
   Memoize = require("lib.memoize")
   require("lib.strong")
+  Json = require("lib.json")
 
   Log.info("Starting basic LOVE setup")
 
