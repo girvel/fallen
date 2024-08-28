@@ -1,3 +1,4 @@
+local quest = require("tech.quest")
 local railing = require("tech.railing")
 local api = railing.api
 
@@ -15,6 +16,7 @@ return function()
         run = function(self, rails, dt)
           self.enabled = false
           api.narration("hi")
+          api.update_quest({detective = quest.FAILED})
         end,
       },
     },

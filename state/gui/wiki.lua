@@ -1,3 +1,4 @@
+local quest = require("tech.quest")
 local texting = require("tech.texting")
 local html = require("tech.texting.html")
 
@@ -106,22 +107,36 @@ return Module("state.gui.wiki", function()
         </html>
       ]] % Fun.iter(self.quests)
         :filter(function(name) return self.quest_states[name] end)
-        :map(function(name, quest) return [[
-          <ul>
-            <h2><span color="%s">%s</span></h2>
-            %s
-          </ul>
-        ]] % {
-          self.quest_states[name] > #quest.tasks and "8b7c99" or Colors.hex.white,
-          quest.header,
-          Fun.iter(quest.tasks)
-            :take_n(self.quest_states[name])
-            :enumerate()
-            :map(function(i, task) return [[
-              <span color="%s"><li>%s</li></span>
-            ]] % {i == self.quest_states[name] and Colors.hex.white or "8b7c99", task} end)
-            :reduce(function(sum, v) return v .. sum end, "")
-        } end)
+        :map(function(name, this_quest)
+          local state_n = self.quest_states[name]
+          local status = ""
+          local status_color = Colors.hex.gray
+          if state_n == quest.COMPLETED then
+            status = " - завершено"
+            state_n = math.huge
+          elseif state_n == quest.FAILED then
+            status = " - провалено"
+            state_n = math.huge
+          end
+
+          return [[
+            <ul>
+              <h2><span color="%s">%s</span><span color="%s">%s</span></h2>
+              %s
+            </ul>
+          ]] % {
+            state_n > #this_quest.tasks and "8b7c99" or Colors.hex.white,
+            this_quest.header,
+            status_color, status,
+            Fun.iter(this_quest.tasks)
+              :take_n(state_n)
+              :enumerate()
+              :map(function(i, task) return [[
+                <span color="%s"><li>%s</li></span>
+              ]] % {i == state_n and Colors.hex.white or "8b7c99", task} end)
+              :reduce(function(sum, v) return v .. sum end, "")
+          }
+        end)
         :reduce(Fun.op.concat, "")
         self:_render_current_page()
     end,

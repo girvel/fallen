@@ -1,8 +1,8 @@
+local quest = require("tech.quest")
 local interactive = require("tech.interactive")
 local mobs = require("library.mobs")
 local level = require("state.level")
 local api = require("tech.railing").api
-local shaders = require("tech.shaders")
 
 
 return function()
@@ -224,7 +224,7 @@ return function()
           rails.entities.bird_cage.interact = nil
           rails.has_bird_food = false
 
-          api.update_quest({warmup = 7, detective = 1})
+          api.update_quest({warmup = quest.COMPLETED, detective = 1})
           rails.entities.detective_door.locked = false
 
           rails.entities.dining_room_door_1:close()

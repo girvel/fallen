@@ -1,3 +1,4 @@
+local quest = require("tech.quest")
 local api = require("tech.railing").api
 local general_ai = require("library.general_ai")
 local sprite = require("tech.sprite")
@@ -158,7 +159,7 @@ return function()
       run = function(self, rails, dt)
         self.enabled = false
         api.notification("Задача выполнена", true)
-        api.update_quest({detective = 3})
+        api.update_quest({detective = quest.COMPLETED})
       end,
     },
 
@@ -209,7 +210,7 @@ return function()
         self.enabled = false
         api.notification("Задача выполнена неудовлетворительно", true)
         api.discover_wiki({fought_dreamers = true})
-        api.update_quest({detective = 3})
+        api.update_quest({detective = quest.FAILED})
       end,
     },
 
@@ -240,8 +241,7 @@ return function()
         self.enabled = false
         State:remove(rails.entities[3])
         api.notification("Задача выполнена неудовлетворительно", true)
-        api.update_quest({detective = 3})
-        State.gui.wiki.quest_states.detective = 3
+        api.update_quest({detective = quest.FAILED})
       end,
     },
 

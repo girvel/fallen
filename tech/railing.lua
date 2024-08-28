@@ -1,3 +1,4 @@
+local quest = require("tech.quest")
 local texting = require("tech.texting")
 local game_save = require("state.game_save")
 local fx = require("tech.fx")
@@ -131,16 +132,14 @@ railing.api.autosave = function()
 end
 
 local quest_stage = function(k, v)
-  if v <= 0 then return "<NOT DISCOVERED>" end
   local tasks = State.gui.wiki.quests[k].tasks
-  if v > #tasks then return "<FINISHED>" end
-  return tasks[v]
+  return tasks[v] or tostring(v)
 end
 
 railing.api.update_quest = function(changes)
   local states = State.gui.wiki.quest_states
   for k, v in pairs(changes) do
-    if (states[k] or 0) > v then
+    if not Table.contains(quest.SPECIAL_STAGES, v) and (states[k] or 0) > v then
       error("Attempt to degrade quest %s from stage %s (%s) to stage %s (%s)" % {
         k, states[k], quest_stage(k, states[k]), v, quest_stage(k, v),
       }, 2)
