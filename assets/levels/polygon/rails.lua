@@ -17,6 +17,10 @@ return function()
           self.enabled = false
           api.narration("hi")
           api.update_quest({detective = quest.FAILED})
+          for i = 1, 5 do
+            api.notification(tostring(i))
+            api.wait_seconds(1)
+          end
         end,
       },
     },

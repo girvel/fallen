@@ -7,8 +7,10 @@ local actions = require("mech.creature.actions")
 
 
 local COLOR = {
-  ORDER = Common.hex_color("f7e5b2"),
+  ORDER = Colors.yellow,
   NOTIFICATION = Colors.white,
+  OLD_ORDER = Colors.dark_yellow,
+  OLD_NOTIFICATION = Colors.gray,
   INACTIVE = Colors.gray,
   HOSTILE = Colors.red,
 }
@@ -64,32 +66,81 @@ return Module("state.gui.sidebar", function()
     end,
 
     _update_notifications = function(self, dt)
-      self._notification_lifetime = self._notification_lifetime - dt
-      if self._notification_lifetime > 0 then return end
-
-      local text, is_order = unpack(table.remove(self._notification_queue, 1) or {})
-      if not text then
-        self.notification.sprite.text = ""
-        return
+      for i = 1, self._notifications_n do
+        local notification = self.notifications[i]
+        notification.display_time = math.max(0, notification.display_time - dt)
+        if notification.display_time == 0 then
+          notification.sprite.text = {COLOR.NOTIFICATION, ""}
+          self._notifications_n = self._notifications_n - 1
+        end
       end
 
-      self._notification_lifetime = 7
-      if is_order then
-        State.audio:play_static(self.order_sound)
-        self.notification_fx:animate("order")
-      else
-        State.audio:play_static(self.notification_sound)
-        self.notification_fx:animate("normal")
-      end
+      local d = math.min(#self.notifications - self._notifications_n, #self._notification_queue)
+      if d > 0 then
+        for i = #self.notifications - d, 1, -1 do
+          self.notifications[i + d].sprite.text = self.notifications[i].sprite.text
+          self.notifications[i + d].display_time = self.notifications[i].display_time
+          if i == 1 then
+            self.notifications[i + d].sprite.text[1] = ({
+              [COLOR.ORDER] = COLOR.OLD_ORDER,
+              [COLOR.NOTIFICATION] = COLOR.OLD_NOTIFICATION
+            })[self.notifications[i + d].sprite.text[1]]
+          end
+        end
+        local text, is_order
+        for i = 1, d do
+          local notification = self.notifications[i]
+          text, is_order = unpack(table.remove(self._notification_queue, 1))
+          notification.sprite.text = {is_order and COLOR.ORDER or COLOR.NOTIFICATION, text}
+          notification.display_time = 7
+        end
+        self._notifications_n = self._notifications_n + d
 
-      self.notification.sprite.text = {is_order and COLOR.ORDER or COLOR.NOTIFICATION, text}
+        if is_order then
+          State.audio:play_static(self.order_sound)
+          self.notification_fx:animate("order")
+        else
+          State.audio:play_static(self.notification_sound)
+          self.notification_fx:animate("normal")
+        end
+      end
+      -- local text, is_order = unpack(table.remove(self._notification_queue, 1) or {})
+      -- if not text then
+      --   self.notifications[1].sprite.text = {COLOR.NOTIFICATION, ""}
+      --   return
+      -- end
+
+      -- self._notification_lifetime = 7
+      -- if is_order then
+      --   State.audio:play_static(self.order_sound)
+      --   self.notification_fx:animate("order")
+      -- else
+      --   State.audio:play_static(self.notification_sound)
+      --   self.notification_fx:animate("normal")
+      -- end
+
+      -- for i = #self.notifications, 1, -1 do
+      --   local notification = self.notifications[i]
+      --   if i == 1 then
+      --     notification.sprite.text = {is_order and COLOR.ORDER or COLOR.NOTIFICATION, text}
+      --   else
+      --     local color, prev_text = unpack(self.notifications[i - 1].sprite.text)
+      --     color = ({
+      --       [COLOR.ORDER] = COLOR.OLD_ORDER,
+      --       [COLOR.NOTIFICATION] = COLOR.OLD_NOTIFICATION
+      --     })[color]
+      --     notification.sprite.text = {color, prev_text}
+      --   end
+      -- end
     end,
 
     create_gui_entities = function(self)
       State:add(gui.gui_background())
       self.hp_bar = State:add(gui.hp_bar())
       self.hp_text = State:add(gui.hp_text())
-      self.notification = State:add(gui.notification())
+      self.notifications = Fun.range(3)
+        :map(function(i) return State:add(gui.notification(i)) end)
+        :totable()
       self.notification_fx = State:add(gui.notification_fx())
       self:refresh_action_grid()
     end,
@@ -112,7 +163,7 @@ return Module("state.gui.sidebar", function()
     end,
 
     _notification_queue = {},
-    _notification_lifetime = 0,
+    _notifications_n = 0,
 
     push_notification = function(self, text, is_order)
       table.insert(self._notification_queue, {text, is_order})

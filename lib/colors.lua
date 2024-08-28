@@ -1,6 +1,6 @@
 local colors, module_mt, static = Module("lib.colors")
 
-local hex = {
+colors.hex = static {
   absolute_white = "ffffff",
   absolute_black = "000000",
 
@@ -12,11 +12,12 @@ local hex = {
   dark_red = "5d375a",
   gray = "8b7c99",
   dark_brown = "31222c",
+  yellow = "f7e5b2",
+  dark_yellow = "fcc48d",
 }
 
-module_mt.__index = function(_, k)
-  if k == "hex" then return hex end
-  return Common.hex_color(hex[k])
+for k, v in pairs(colors.hex) do
+  colors[k] = static .. Common.hex_color(v)
 end
 
 return colors

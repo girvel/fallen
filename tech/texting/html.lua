@@ -40,8 +40,7 @@ local transformers = {
       Fun.iter(children)
         :map(function(child)
           local result = Table.extend(child, styles.hate, {
-            on_update = function(self, event)
-              local dt = unpack(event)
+            on_update = function(self, dt)
               if self.delay > 0 then
                 self.delay = self.delay - dt
                 return

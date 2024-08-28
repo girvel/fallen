@@ -54,12 +54,13 @@ gui.hp_text = function()
   }
 end
 
-gui.notification = function()
+gui.notification = function(i)
   return {
     codename = "notification",
     view = "notification",
-    position = Vector.zero,
+    position = Vector.zero + Vector.up * 35 * (i - 1),
     sprite = sprite.text({Colors.white, ""}, 18),
+    display_time = 0,
   }
 end
 
