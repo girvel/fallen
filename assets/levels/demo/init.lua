@@ -41,9 +41,13 @@ local layer_handlers = {
     local layer_palette = palette[layer_id]
     return Fun.iter(layer.entityInstances)
       :map(function(instance)
-        local result = Table.extend(layer_palette[get_identifier(instance)](), {
-          position = Vector(instance.__grid),
-        })
+        local get_args = loadstring("return " .. (-Query(get_field(instance, "args")).__value or ""))
+        local result = Table.extend(
+          layer_palette[get_identifier(instance)](get_args()),
+          {
+            position = Vector(instance.__grid),
+          }
+        )
 
         local rails_name = -Query(get_field(instance, "rails_name")).__value:lower()
           or -Query(to_capture)[layer_id][result.position]

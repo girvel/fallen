@@ -5,30 +5,13 @@ local interactive = require("tech.interactive")
 local sprite = require("tech.sprite")
 
 
-local note = function(codex_update)
-  return Table.extend(
-    interactive(function(self, other)
-      self.interacted_by = other
-      api.discover_wiki(codex_update)
-      State:remove(self)
-    end),
-    {
-      sprite = sprite.image("assets/sprites/note.png"),
-      codename = "note",
-      layer = "above_solids",
-      view = "scene",
-      name = "записка",
-    }
-  )
-end
-
 return function(positions, entities)
   return railing({
     positions = positions,
     entities = entities,
 
     scenes = Table.join(
-      -- require("assets.levels.demo.scenes.1_introduction")(),
+      require("assets.levels.demo.scenes.1_introduction")(),
       -- require("assets.levels.demo.scenes.2_tutorial")(),
       -- require("assets.levels.demo.scenes.2_side_content")(),
       -- require("assets.levels.demo.scenes.3_detective")(),
