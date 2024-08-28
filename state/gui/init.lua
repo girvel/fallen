@@ -84,30 +84,44 @@ end
 
 gui._get_scene_offset = function()
   local scene_k = State.gui.views.scene:get_multiplier()
-  local window_w = love.graphics.getWidth()
-  local window_h = love.graphics.getHeight()
-  local border_w = math.floor(window_w / 2 - 1 * scene_k)
-  local border_h = math.floor(window_h / 2 - 1 * scene_k)
-  local player_x, player_y = unpack(animated.get_render_position(State.player) * scene_k)
-  local grid_w, grid_h = unpack(State.grids.solids.size * scene_k)
+  local window_size = Vector({love.graphics.getDimensions()})
+  local border_size = (window_size / 2 - Vector.one * scene_k):map(math.floor)
+  local player_position = animated.get_render_position(State.player) * scene_k
+  local grid_size = State.grids.solids.size * scene_k
 
   local prev = State.gui.views.scene_fx.offset
-  local target = -Vector({
-    Math.median(
-      0,
-      player_x - window_w + border_w,
-      -prev[1],
-      player_x - border_w,
-      grid_w - window_w
-    ),
-    Math.median(
-      0,
-      player_y - window_h + border_h,
-      -prev[2],
-      player_y - border_h,
-      grid_h - window_h
-    )
-  })
+  local target = -Vector.use(Math.median,
+    Vector.zero,
+    player_position - window_size + border_size,
+    -prev,
+    player_position - border_size,
+    grid_size - window_size
+  )
+
+  -- local window_w = love.graphics.getWidth()
+  -- local window_h = love.graphics.getHeight()
+  -- local border_w = math.floor(window_w / 2 - 1 * scene_k)
+  -- local border_h = math.floor(window_h / 2 - 1 * scene_k)
+  -- local player_x, player_y = unpack(animated.get_render_position(State.player) * scene_k)
+  -- local grid_w, grid_h = unpack(State.grids.solids.size * scene_k)
+
+  -- local prev = State.gui.views.scene_fx.offset
+  -- local target = -Vector({
+  --   Math.median(
+  --     0,
+  --     player_x - window_w + border_w,
+  --     -prev[1],
+  --     player_x - border_w,
+  --     grid_w - window_w
+  --   ),
+  --   Math.median(
+  --     0,
+  --     player_y - window_h + border_h,
+  --     -prev[2],
+  --     player_y - border_h,
+  --     grid_h - window_h
+  --   )
+  -- })
 
   local d = target - prev
   return prev + d / 20
