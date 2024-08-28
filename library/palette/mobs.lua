@@ -1,3 +1,4 @@
+local player = require("state.player")
 local weak_ai = require("library.weak_ai")
 local humanoid = require("mech.humanoid")
 local interactive = require("tech.interactive")
@@ -9,6 +10,8 @@ local general_ai = require("library.general_ai")
 
 
 local module, _, static = Module("library.mobs")
+
+module.player = player
 
 local engineer_mixin = function(ai_outside_of_combat)
   return Table.extend(

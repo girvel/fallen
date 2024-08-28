@@ -12,7 +12,7 @@ factoring.from_atlas = function(t, atlas, mixin, names)
       else
         current_mixin = mixin
       end
-      t[name] = function()
+      t[i] = function()
         return Table.extend({
           sprite = sprite.from_atlas(atlas, i),
           codename = name,

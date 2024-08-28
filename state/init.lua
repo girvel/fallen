@@ -101,7 +101,7 @@ module_mt.__call = function(_, systems)
       table.insert(self.dependencies[parent], child)
     end,
 
-    load_level = function(self, path, palette)
+    load_level = function(self, path)
       local level_data = require(path).load()
 
       self.grids = Fun.iter(level.GRID_LAYERS)

@@ -12,7 +12,6 @@ require("kernel.globals")()
 
 
 -- local imports --
-local palette = require("library.palette")
 local quests = require("library.quests")
 local factions = require("library.factions")
 local sound = require("tech.sound")
@@ -48,7 +47,7 @@ love.load = function(args)
   else
     State = state(systems)  -- TODO debug should not be stored in a save
     State:set_shader()
-    State:load_level("assets/levels/" .. args.level, palette)
+    State:load_level("assets/levels/" .. args.level)
 
     State.gui.wiki.quests = quests
     State.factions = factions()
