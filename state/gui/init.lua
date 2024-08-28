@@ -92,21 +92,28 @@ gui._get_scene_offset = function()
     animated.get_render_position(State.player)
     * tech_constants.CELL_DISPLAY_SIZE * State.SCALING_FACTOR
   )
+  local grid_w, grid_h = unpack(State.grids.solids.size * State.gui.views.scene:get_multiplier())
 
-  local result = -Vector({
+  local prev = State.gui.views.scene_fx.offset
+  local target = -Vector({
     Math.median(
+      0,
       player_x - window_w + border_w,
-      -State.gui.views.scene_fx.offset[1],
-      player_x - border_w
+      -prev[1],
+      player_x - border_w,
+      grid_w - window_w
     ),
     Math.median(
+      0,
       player_y - window_h + border_h,
-      -State.gui.views.scene_fx.offset[2],
-      player_y - border_h
+      -prev[2],
+      player_y - border_h,
+      grid_h - window_h
     )
   })
 
-  return result
+  local d = target - prev
+  return prev + d / 20
 end
 
 gui._get_dialogue_offset = function()
