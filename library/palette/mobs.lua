@@ -13,14 +13,6 @@ local module, _, static = Module("library.palette.mobs")
 
 module.player = player
 
-local engineer_mixin = function(ai_outside_of_combat)
-  return Table.extend(
-    interactive.detector(),
-    {
-      ai = general_ai(ai_outside_of_combat),
-    }
-  )
-end
 
 local dreamer_engineer_mixin = {
   max_hp = 22,
@@ -39,12 +31,14 @@ local engineer_mixins = {
     race = races.half_elf,
     direction = "down",
     inventory = {main_hand = items.gas_key()},
+    ai = general_ai(),
   }, dreamer_engineer_mixin),
   Table.extend({
     name = "инженер-полурослик",
     race = races.halfling,
     direction = "down",
     inventory = {},
+    ai = general_ai(),
   }, dreamer_engineer_mixin),
   {
     name = "инженер-полуорк",
@@ -61,6 +55,8 @@ local engineer_mixins = {
     interacted_by = nil,
     will_beg = true,
 
+    ai = general_ai(true),
+
     get_resources = function()
       return {
         movement = constants.DEFAULT_MOVEMENT_SPEED,
@@ -75,11 +71,12 @@ local engineer_mixins = {
     race = races.dwarf,
     direction = "up",
     inventory = {},
+    ai = general_ai(),
   }, dreamer_engineer_mixin),
 }
 
 module.engineer = function(i)
-  return humanoid(Table.extend(engineer_mixins[i], engineer_mixin()))
+  return humanoid(Table.extend(engineer_mixins[i], interactive.detector()))
 end
 
 local dreamer_races = {races.dwarf, races.human, races.half_elf, races.half_orc, races.halfling}

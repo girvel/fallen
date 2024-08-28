@@ -13,7 +13,7 @@ return function(positions, entities)
       -- require("assets.levels.demo.scenes.2_tutorial")(),
       -- require("assets.levels.demo.scenes.2_side_content")(),
       require("assets.levels.demo.scenes.3_detective")(),
-      -- require("assets.levels.demo.scenes.3_fight")(),
+      require("assets.levels.demo.scenes.3_fight")(),
       {
         checkpoint_0 = {
           name = "Checkpoint -- captain's deck",
@@ -33,10 +33,6 @@ return function(positions, entities)
 
     initialize = function(self)
       -- self.positions = {
-      --   [2] = {20, 53},
-      --   exit = {22, 56},
-      --   detective_notification_activation = {23, 56},
-      --   player_room_exit = {15, 75},
       --   leaky_vent_check = {11, 79},
       --   enter_latrine = {28, 104},
       --   exit_latrine = {28, 103},
@@ -44,7 +40,6 @@ return function(positions, entities)
       --   world_map_message = {11, 91},
       --   scratched_table_message = {45, 92},
       --   empty_dorm_message = {22, 68},
-      --   sign_message = {27, 91},
       --   mouse_check = {28, 85},
       --   dirty_magazine = {24, 105},
       --   kitchen_bucket = {22, 101},
@@ -68,18 +63,15 @@ return function(positions, entities)
       self.old_hp = Fun.range(4)
         :map(function(i) return self.entities["engineer_" .. i].hp end)
         :totable()
+
+      self.entities.gloves = self.entities.engineer_3.inventory.gloves
+
+      self.entities.engineer_1:animate("holding")
+      self.entities.engineer_1:animation_set_paused(true)
     end,
 
     -- initialize_entities = Dump.ignore_upvalue_size .. function(self)
     --   local result = Fun.pairs({
-    --     {22, 54},
-    --     self.positions[2],
-    --     {20, 48},
-    --     {23, 48},
-    --     leaking_valve = {22, 55},
-    --     device_panel = {21, 48},
-    --     neighbour = {20, 77},
-    --     upper_bunk = {20, 74},
     --     dining_room_door_1 = {24, 100},
     --     dining_room_door_2 = {26, 97},
     --     mannequin = {37, 95},
@@ -88,24 +80,6 @@ return function(positions, entities)
     --   })
     --     :map(function(k, v) return k, State.grids.solids[Vector(v)] end)
     --     :tomap()
-
-    --   result.note = State:add(
-    --     note({colleague_note = true}),
-    --     {position = Vector({19, 78})}
-    --   )
-
-    --   result.detective_door = State:add(
-    --     live.black_door({locked = true}),
-    --     {position = Vector({21, 56})}
-    --   )
-
-    --   result.gloves = result[3].inventory.gloves
-
-    --   result[1]:animate("holding")
-    --   result[1]:animation_set_paused(true)
-
-    --   result.neighbour:rotate("up")
-    --   result.upper_bunk:lie(result.neighbour)
 
     --   State:add(walls.steel_with_map(), {position = Vector({10, 90})})
     --   State:add(decorations.scratched_table(), {position = Vector({45, 91})})
