@@ -1,8 +1,6 @@
 local level = require("state.level")
 local railing = require("tech.railing")
 local api = railing.api
-local interactive = require("tech.interactive")
-local sprite = require("tech.sprite")
 
 
 return function(positions, entities)
@@ -14,7 +12,7 @@ return function(positions, entities)
       require("assets.levels.demo.scenes.1_introduction")(),
       -- require("assets.levels.demo.scenes.2_tutorial")(),
       -- require("assets.levels.demo.scenes.2_side_content")(),
-      -- require("assets.levels.demo.scenes.3_detective")(),
+      require("assets.levels.demo.scenes.3_detective")(),
       -- require("assets.levels.demo.scenes.3_fight")(),
       {
         checkpoint_0 = {
@@ -65,6 +63,11 @@ return function(positions, entities)
 
       self.entities.neighbour:rotate("up")
       self.entities.upper_bunk:lie(self.entities.neighbour)
+
+      self.dreamers_talked_to = {}
+      self.old_hp = Fun.range(4)
+        :map(function(i) return self.entities["engineer_" .. i].hp end)
+        :totable()
     end,
 
     -- initialize_entities = Dump.ignore_upvalue_size .. function(self)
@@ -100,11 +103,6 @@ return function(positions, entities)
 
     --   result[1]:animate("holding")
     --   result[1]:animation_set_paused(true)
-
-    --   self.dreamers_talked_to = {}
-    --   self.old_hp = Fun.range(4)
-    --     :map(function(i) return result[i].hp end)
-    --     :totable()
 
     --   result.neighbour:rotate("up")
     --   result.upper_bunk:lie(result.neighbour)

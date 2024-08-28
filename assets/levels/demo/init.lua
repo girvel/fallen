@@ -80,27 +80,24 @@ ldtk.load = function()
     :nth(1)
 
   local to_capture = Fun.iter(raw.layerInstances):map(function(l) return get_identifier(l), Grid(size) end):tomap()
-  local positions = Fun.iter(positions_layer.entityInstances)
-    :map(function(instance)
-      if get_identifier(instance) == "entity_capture" then
-        to_capture
-          [get_field(instance, "layer").__value:lower()]
-          [Vector(instance.__grid)]
-          = get_field(instance, "rails_name").__value:lower()
-        return
-      end
-      return instance.fieldInstances[1].__value:lower(), Vector(instance.__grid)
-    end)
-    :filter(Fun.op.truth)
-    :tomap()
+
+  local positions = {}
+  for _, instance in ipairs(positions_layer.entityInstances) do
+    if get_identifier(instance) == "entity_capture" then
+      to_capture
+        [get_field(instance, "layer").__value:lower()]
+        [Vector(instance.__grid)]
+        = get_field(instance, "rails_name").__value:lower()
+    else
+      positions[instance.fieldInstances[1].__value:lower()] = Vector(instance.__grid)
+    end
+  end
 
   local captured_entities = {}
 
   local entities = Fun.iter(raw.layerInstances)
     :map(function(layer) return layer_handlers[layer.__type:lower()](layer, palette, captured_entities, to_capture) end)
     :reduce(Table.concat, {})
-
-  Log.trace(captured_entities)
 
   return {
     size = size,

@@ -11,7 +11,7 @@
 	"iid": "1bd1ae20-4ce0-11ef-896a-fbdee15fad32",
 	"jsonVersion": "1.5.3",
 	"appBuildId": 473703,
-	"nextUid": 38,
+	"nextUid": 42,
 	"identifierStyle": "Free",
 	"toc": [],
 	"worldLayout": "Free",
@@ -828,6 +828,116 @@
 					"allowedRefsEntityUid": null,
 					"allowedRefTags": [],
 					"tilesetUid": null
+				},
+				{
+					"identifier": "rails_name",
+					"doc": null,
+					"__type": "String",
+					"uid": 38,
+					"type": "F_String",
+					"isArray": false,
+					"canBeNull": true,
+					"arrayMinLength": null,
+					"arrayMaxLength": null,
+					"editorDisplayMode": "ValueOnly",
+					"editorDisplayScale": 1,
+					"editorDisplayPos": "Above",
+					"editorLinkStyle": "StraightArrow",
+					"editorDisplayColor": null,
+					"editorAlwaysShow": false,
+					"editorShowInWorld": true,
+					"editorCutLongValues": true,
+					"editorTextSuffix": null,
+					"editorTextPrefix": null,
+					"useForSmartColor": false,
+					"exportToToc": false,
+					"searchable": false,
+					"min": null,
+					"max": null,
+					"regex": null,
+					"acceptFileTypes": null,
+					"defaultOverride": null,
+					"textLanguageMode": null,
+					"symmetricalRef": false,
+					"autoChainRef": true,
+					"allowOutOfLevelRef": true,
+					"allowedRefs": "OnlySame",
+					"allowedRefsEntityUid": null,
+					"allowedRefTags": [],
+					"tilesetUid": null
+				}
+			]
+		},
+		{
+			"identifier": "black_door",
+			"uid": 39,
+			"tags": ["live"],
+			"exportToToc": false,
+			"allowOutOfBounds": false,
+			"doc": null,
+			"width": 16,
+			"height": 16,
+			"resizableX": false,
+			"resizableY": false,
+			"minWidth": null,
+			"maxWidth": null,
+			"minHeight": null,
+			"maxHeight": null,
+			"keepAspectRatio": false,
+			"tileOpacity": 1,
+			"fillOpacity": 0.08,
+			"lineOpacity": 0,
+			"hollow": false,
+			"color": "#3E2731",
+			"renderMode": "Tile",
+			"showName": true,
+			"tilesetId": 40,
+			"tileRenderMode": "FitInside",
+			"tileRect": { "tilesetUid": 40, "x": 0, "y": 0, "w": 16, "h": 16 },
+			"uiTileRect": null,
+			"nineSliceBorders": [],
+			"maxCount": 0,
+			"limitScope": "PerLevel",
+			"limitBehavior": "MoveLastOne",
+			"pivotX": 0,
+			"pivotY": 0,
+			"fieldDefs": [
+				{
+					"identifier": "rails_name",
+					"doc": null,
+					"__type": "String",
+					"uid": 41,
+					"type": "F_String",
+					"isArray": false,
+					"canBeNull": true,
+					"arrayMinLength": null,
+					"arrayMaxLength": null,
+					"editorDisplayMode": "ValueOnly",
+					"editorDisplayScale": 1,
+					"editorDisplayPos": "Above",
+					"editorLinkStyle": "StraightArrow",
+					"editorDisplayColor": null,
+					"editorAlwaysShow": false,
+					"editorShowInWorld": true,
+					"editorCutLongValues": true,
+					"editorTextSuffix": null,
+					"editorTextPrefix": null,
+					"useForSmartColor": false,
+					"exportToToc": false,
+					"searchable": false,
+					"min": null,
+					"max": null,
+					"regex": null,
+					"acceptFileTypes": null,
+					"defaultOverride": null,
+					"textLanguageMode": null,
+					"symmetricalRef": false,
+					"autoChainRef": true,
+					"allowOutOfLevelRef": true,
+					"allowedRefs": "OnlySame",
+					"allowedRefsEntityUid": null,
+					"allowedRefTags": [],
+					"tilesetUid": null
 				}
 			]
 		}
@@ -844,7 +954,7 @@
 			"tileGridSize": 16,
 			"spacing": 0,
 			"padding": 0,
-			"tags": [],
+			"tags": ["standalone"],
 			"tagsSourceEnumUid": null,
 			"enumTags": [],
 			"customData": [],
@@ -863,7 +973,7 @@
 			"tileGridSize": 16,
 			"spacing": 0,
 			"padding": 0,
-			"tags": ["tiles"],
+			"tags": ["atlas"],
 			"tagsSourceEnumUid": null,
 			"enumTags": [],
 			"customData": [],
@@ -882,7 +992,7 @@
 			"tileGridSize": 16,
 			"spacing": 0,
 			"padding": 0,
-			"tags": ["tiles"],
+			"tags": ["atlas"],
 			"tagsSourceEnumUid": null,
 			"enumTags": [],
 			"customData": [],
@@ -904,7 +1014,7 @@
 			"tileGridSize": 16,
 			"spacing": 0,
 			"padding": 0,
-			"tags": [],
+			"tags": ["standalone"],
 			"tagsSourceEnumUid": null,
 			"enumTags": [],
 			"customData": [],
@@ -923,7 +1033,7 @@
 			"tileGridSize": 16,
 			"spacing": 0,
 			"padding": 0,
-			"tags": ["tiles"],
+			"tags": ["atlas"],
 			"tagsSourceEnumUid": null,
 			"enumTags": [],
 			"customData": [],
@@ -945,7 +1055,7 @@
 			"tileGridSize": 16,
 			"spacing": 0,
 			"padding": 0,
-			"tags": ["tiles"],
+			"tags": ["atlas"],
 			"tagsSourceEnumUid": null,
 			"enumTags": [],
 			"customData": [],
@@ -967,7 +1077,7 @@
 			"tileGridSize": 16,
 			"spacing": 0,
 			"padding": 0,
-			"tags": ["tiles"],
+			"tags": ["atlas"],
 			"tagsSourceEnumUid": null,
 			"enumTags": [],
 			"customData": [],
@@ -1011,14 +1121,41 @@
 			"tileGridSize": 16,
 			"spacing": 0,
 			"padding": 0,
-			"tags": [],
+			"tags": ["standalone"],
 			"tagsSourceEnumUid": null,
 			"enumTags": [],
 			"customData": [],
 			"savedSelections": [],
 			"cachedPixelData": { "opaqueTiles": "0", "averageColors": "0ccb" }
+		},
+		{
+			"__cWid": 1,
+			"__cHei": 1,
+			"identifier": "black_door",
+			"uid": 40,
+			"relPath": "../../sprites/animations/black_door/closed/idle.png",
+			"embedAtlas": null,
+			"pxWid": 16,
+			"pxHei": 16,
+			"tileGridSize": 16,
+			"spacing": 0,
+			"padding": 0,
+			"tags": ["standalone"],
+			"tagsSourceEnumUid": null,
+			"enumTags": [],
+			"customData": [],
+			"savedSelections": [],
+			"cachedPixelData": { "opaqueTiles": "1", "averageColors": "f213" }
 		}
-	], "enums": [{ "identifier": "layer", "uid": 29, "values": [{ "id": "decorations", "tileRect": null, "color": 12470831 }], "iconTilesetUid": null, "externalRelPath": null, "externalFileChecksum": null, "tags": [] }], "externalEnums": [], "levelFields": [] },
+	], "enums": [{ "identifier": "layer", "uid": 29, "values": [
+		{ "id": "live", "tileRect": null, "color": 15389866 },
+		{ "id": "mobs", "tileRect": null, "color": 14120515 },
+		{ "id": "decorations", "tileRect": null, "color": 12470831 },
+		{ "id": "pipes", "tileRect": null, "color": 14984818 },
+		{ "id": "walls", "tileRect": null, "color": 7552569 },
+		{ "id": "on_tiles", "tileRect": null, "color": 4073265 },
+		{ "id": "tiles", "tileRect": null, "color": 16690740 }
+	], "iconTilesetUid": null, "externalRelPath": null, "externalFileChecksum": null, "tags": [] }], "externalEnums": [], "levelFields": [] },
 	"levels": [
 		{
 			"identifier": "Level_0",
@@ -1108,6 +1245,132 @@
 							],
 							"__worldX": 320,
 							"__worldY": 1184
+						},
+						{
+							"__identifier": "position",
+							"__grid": [22,56],
+							"__pivot": [0,0],
+							"__tags": ["positions"],
+							"__tile": null,
+							"__smartColor": "#19AD51",
+							"iid": "b261c570-4ce0-11ef-896a-c5135e88cc80",
+							"width": 16,
+							"height": 16,
+							"defUid": 22,
+							"px": [352,896],
+							"fieldInstances": [{ "__identifier": "name", "__type": "String", "__value": "exit", "__tile": null, "defUid": 23, "realEditorValues": [{
+								"id": "V_String",
+								"params": ["exit"]
+							}] }],
+							"__worldX": 352,
+							"__worldY": 896
+						},
+						{
+							"__identifier": "position",
+							"__grid": [20,53],
+							"__pivot": [0,0],
+							"__tags": ["positions"],
+							"__tile": null,
+							"__smartColor": "#19AD51",
+							"iid": "bbd5d0b0-4ce0-11ef-896a-797bc9ed5e14",
+							"width": 16,
+							"height": 16,
+							"defUid": 22,
+							"px": [320,848],
+							"fieldInstances": [{ "__identifier": "name", "__type": "String", "__value": "engineer_2", "__tile": null, "defUid": 23, "realEditorValues": [{
+								"id": "V_String",
+								"params": ["engineer_2"]
+							}] }],
+							"__worldX": 320,
+							"__worldY": 848
+						},
+						{
+							"__identifier": "position",
+							"__grid": [23,56],
+							"__pivot": [0,0],
+							"__tags": ["positions"],
+							"__tile": null,
+							"__smartColor": "#19AD51",
+							"iid": "c29b36b0-4ce0-11ef-896a-e7077fecbe95",
+							"width": 16,
+							"height": 16,
+							"defUid": 22,
+							"px": [368,896],
+							"fieldInstances": [{ "__identifier": "name", "__type": "String", "__value": "detective_notification_activation", "__tile": null, "defUid": 23, "realEditorValues": [{
+								"id": "V_String",
+								"params": ["detective_notification_activation"]
+							}] }],
+							"__worldX": 368,
+							"__worldY": 896
+						},
+						{
+							"__identifier": "position",
+							"__grid": [15,75],
+							"__pivot": [0,0],
+							"__tags": ["positions"],
+							"__tile": null,
+							"__smartColor": "#19AD51",
+							"iid": "e35a1650-4ce0-11ef-896a-cfce3904c0ee",
+							"width": 16,
+							"height": 16,
+							"defUid": 22,
+							"px": [240,1200],
+							"fieldInstances": [{ "__identifier": "name", "__type": "String", "__value": "player_room_exit", "__tile": null, "defUid": 23, "realEditorValues": [{
+								"id": "V_String",
+								"params": ["player_room_exit"]
+							}] }],
+							"__worldX": 240,
+							"__worldY": 1200
+						},
+						{
+							"__identifier": "entity_capture",
+							"__grid": [22,55],
+							"__pivot": [0,0],
+							"__tags": ["positions"],
+							"__tile": null,
+							"__smartColor": "#EAD4AA",
+							"iid": "01121e90-4ce0-11ef-896a-9ffc81d56de7",
+							"width": 16,
+							"height": 16,
+							"defUid": 28,
+							"px": [352,880],
+							"fieldInstances": [
+								{ "__identifier": "layer", "__type": "LocalEnum.layer", "__value": "pipes", "__tile": null, "defUid": 30, "realEditorValues": [{
+									"id": "V_String",
+									"params": ["pipes"]
+								}] },
+								{ "__identifier": "rails_name", "__type": "String", "__value": "leaking_valve", "__tile": null, "defUid": 31, "realEditorValues": [{
+									"id": "V_String",
+									"params": ["leaking_valve"]
+								}] }
+							],
+							"__worldX": 352,
+							"__worldY": 880
+						},
+						{
+							"__identifier": "entity_capture",
+							"__grid": [21,48],
+							"__pivot": [0,0],
+							"__tags": ["positions"],
+							"__tile": null,
+							"__smartColor": "#EAD4AA",
+							"iid": "4d818860-4ce0-11ef-896a-9f3b2492525a",
+							"width": 16,
+							"height": 16,
+							"defUid": 28,
+							"px": [336,768],
+							"fieldInstances": [
+								{ "__identifier": "layer", "__type": "LocalEnum.layer", "__value": "decorations", "__tile": null, "defUid": 30, "realEditorValues": [{
+									"id": "V_String",
+									"params": ["decorations"]
+								}] },
+								{ "__identifier": "rails_name", "__type": "String", "__value": "device_panel", "__tile": null, "defUid": 31, "realEditorValues": [{
+									"id": "V_String",
+									"params": ["device_panel"]
+								}] }
+							],
+							"__worldX": 336,
+							"__worldY": 768
 						}
 					]
 				},
@@ -1463,6 +1726,25 @@
 							"fieldInstances": [],
 							"__worldX": 240,
 							"__worldY": 944
+						},
+						{
+							"__identifier": "black_door",
+							"__grid": [21,56],
+							"__pivot": [0,0],
+							"__tags": ["live"],
+							"__tile": { "tilesetUid": 40, "x": 0, "y": 0, "w": 16, "h": 16 },
+							"__smartColor": "#3E2731",
+							"iid": "61da1440-4ce0-11ef-896a-ad0fdd83d6f6",
+							"width": 16,
+							"height": 16,
+							"defUid": 39,
+							"px": [336,896],
+							"fieldInstances": [{ "__identifier": "rails_name", "__type": "String", "__value": "detective_door", "__tile": null, "defUid": 41, "realEditorValues": [{
+								"id": "V_String",
+								"params": ["detective_door"]
+							}] }],
+							"__worldX": 336,
+							"__worldY": 896
 						}
 					]
 				},
@@ -1537,10 +1819,16 @@
 							"height": 16,
 							"defUid": 36,
 							"px": [352,864],
-							"fieldInstances": [{ "__identifier": "args", "__type": "String", "__value": "1", "__tile": null, "defUid": 37, "realEditorValues": [{
-								"id": "V_String",
-								"params": ["1"]
-							}] }],
+							"fieldInstances": [
+								{ "__identifier": "args", "__type": "String", "__value": "1", "__tile": null, "defUid": 37, "realEditorValues": [{
+									"id": "V_String",
+									"params": ["1"]
+								}] },
+								{ "__identifier": "rails_name", "__type": "String", "__value": "engineer_1", "__tile": null, "defUid": 38, "realEditorValues": [{
+									"id": "V_String",
+									"params": ["engineer_1"]
+								}] }
+							],
 							"__worldX": 352,
 							"__worldY": 864
 						},
@@ -1556,10 +1844,16 @@
 							"height": 16,
 							"defUid": 36,
 							"px": [320,848],
-							"fieldInstances": [{ "__identifier": "args", "__type": "String", "__value": "2", "__tile": null, "defUid": 37, "realEditorValues": [{
-								"id": "V_String",
-								"params": ["2"]
-							}] }],
+							"fieldInstances": [
+								{ "__identifier": "args", "__type": "String", "__value": "2", "__tile": null, "defUid": 37, "realEditorValues": [{
+									"id": "V_String",
+									"params": ["2"]
+								}] },
+								{ "__identifier": "rails_name", "__type": "String", "__value": "engineer_2", "__tile": null, "defUid": 38, "realEditorValues": [{
+									"id": "V_String",
+									"params": ["engineer_2"]
+								}] }
+							],
 							"__worldX": 320,
 							"__worldY": 848
 						},
@@ -1575,10 +1869,16 @@
 							"height": 16,
 							"defUid": 36,
 							"px": [320,768],
-							"fieldInstances": [{ "__identifier": "args", "__type": "String", "__value": "3", "__tile": null, "defUid": 37, "realEditorValues": [{
-								"id": "V_String",
-								"params": ["3"]
-							}] }],
+							"fieldInstances": [
+								{ "__identifier": "args", "__type": "String", "__value": "3", "__tile": null, "defUid": 37, "realEditorValues": [{
+									"id": "V_String",
+									"params": ["3"]
+								}] },
+								{ "__identifier": "rails_name", "__type": "String", "__value": "engineer_3", "__tile": null, "defUid": 38, "realEditorValues": [{
+									"id": "V_String",
+									"params": ["engineer_3"]
+								}] }
+							],
 							"__worldX": 320,
 							"__worldY": 768
 						},
@@ -1594,10 +1894,16 @@
 							"height": 16,
 							"defUid": 36,
 							"px": [368,768],
-							"fieldInstances": [{ "__identifier": "args", "__type": "String", "__value": "4", "__tile": null, "defUid": 37, "realEditorValues": [{
-								"id": "V_String",
-								"params": ["4"]
-							}] }],
+							"fieldInstances": [
+								{ "__identifier": "args", "__type": "String", "__value": "4", "__tile": null, "defUid": 37, "realEditorValues": [{
+									"id": "V_String",
+									"params": ["4"]
+								}] },
+								{ "__identifier": "rails_name", "__type": "String", "__value": "engineer_4", "__tile": null, "defUid": 38, "realEditorValues": [{
+									"id": "V_String",
+									"params": ["engineer_4"]
+								}] }
+							],
 							"__worldX": 368,
 							"__worldY": 768
 						}
@@ -1690,6 +1996,7 @@
 						{ "px": [304,864], "src": [0,0], "f": 0, "t": 0, "d": [3475], "a": 1 },
 						{ "px": [320,864], "src": [0,0], "f": 0, "t": 0, "d": [3476], "a": 1 },
 						{ "px": [336,864], "src": [0,16], "f": 0, "t": 4, "d": [3477], "a": 1 },
+						{ "px": [352,880], "src": [16,80], "f": 0, "t": 21, "d": [3542], "a": 1 },
 						{ "px": [240,1152], "src": [48,16], "f": 0, "t": 7, "d": [4623], "a": 1 },
 						{ "px": [256,1152], "src": [16,0], "f": 0, "t": 1, "d": [4624], "a": 1 },
 						{ "px": [272,1152], "src": [0,0], "f": 0, "t": 0, "d": [4625], "a": 1 },
