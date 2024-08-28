@@ -22,6 +22,13 @@ display.system = static(Tiny.sortedProcessingSystem({
       local iterator = Fun.iter(State.gui.views_order):enumerate()
       local first_i = iterator:filter(function(i, name) return name == first.view end):nth(1)
       local second_i = iterator:filter(function(i, name) return name == second.view end):nth(1)
+      if not first_i or not second_i then
+        local nil_view = first.view
+        if not second_i then
+          nil_view = second.view
+        end
+        Log.error("View %s is unordered" % nil_view)
+      end
       return first_i < second_i
     end
   end,

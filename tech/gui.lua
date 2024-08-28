@@ -68,9 +68,8 @@ gui.notification_fx = function()
     animated("assets/sprites/notification_fx"),
     {
       codename = "notification_fx",
-      view = "notification",
-      --position = Vector({-117, 4})
-      position = Vector.zero,
+      view = "notification_fx",
+      position = Vector({0, -6}),
     }
   )
 end
