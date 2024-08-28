@@ -22,9 +22,10 @@ local note = function(codex_update)
   )
 end
 
-return function(positions)
+return function(positions, entities)
   return railing({
     positions = positions,
+    entities = entities,
 
     scenes = Table.join(
       -- require("assets.levels.demo.scenes.1_introduction")(),
@@ -78,6 +79,9 @@ return function(positions)
 
       self.been_to_latrine = false
       self.tolerates_latrine = nil
+
+      self.entities.neighbour:rotate("up")
+      self.entities.upper_bunk:lie(self.entities.neighbour)
     end,
 
     -- initialize_entities = Dump.ignore_upvalue_size .. function(self)

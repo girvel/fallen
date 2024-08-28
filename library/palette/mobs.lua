@@ -102,8 +102,18 @@ module.old_dreamer = function()
     inventory = {},
     max_hp = 15,
     abilities = abilities(10, 10, 10, 10, 10, 10),
-    faction = "dreamers_detective",
     ai = weak_ai(),
+  })
+end
+
+module.dreamer = function()
+  return humanoid({
+    name = "...",
+    race = Random.choice(dreamer_races),
+    direction = "up",
+    inventory = {},
+    max_hp = 15,
+    abilities = abilities(10, 10, 10, 10, 10, 10),
   })
 end
 

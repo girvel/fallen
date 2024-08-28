@@ -3,6 +3,7 @@ local module, module_mt, static = Module("lib.types.grid")
 module._grid_mt = static {}
 
 module_mt.__call = function(_, size, factory)
+  assert(size)
   return setmetatable({
     size = size,
     _inner_array = factory
