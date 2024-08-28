@@ -94,10 +94,13 @@ local throw_tiles_under = function(grid, palette, result)
             :map(function(...) return {...} end)
             :max_by(function(a, b) return a[2] > b[2] and a or b end)[1]
 
-          table.insert(result, Table.extend(
-            get_factory(grid, position, most_frequent_tile, palette)(),
-            {position = position, layer = "tiles", view = "scene"}
-          ))
+          local factory = get_factory(grid, position, most_frequent_tile, palette)
+          if factory then
+            table.insert(result, Table.extend(
+              factory(),
+              {position = position, layer = "tiles", view = "scene"}
+            ))
+          end
         end
       end
     end

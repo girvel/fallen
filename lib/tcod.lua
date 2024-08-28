@@ -39,10 +39,21 @@ end
 
 Log.error("Unable to locate libtcod library")
 return {
-  TCOD_map_new = function() end,
+  TCOD_map_new = function()
+    return {}
+  end,
   TCOD_map_set_properties = function() end,
-  TCOD_map_compute_fov = function() end,
-  TCOD_map_is_transparent = function() return true end,
-  TCOD_map_is_walkable = function() return true end,
-  TCOD_map_is_in_fov = function() return true end,
+  TCOD_map_compute_fov = function(t, player_x, player_y, r)
+    t.player_position = Vector({player_x, player_y})
+    t.r = r
+  end,
+  TCOD_map_is_transparent = function()
+    return true
+  end,
+  TCOD_map_is_walkable = function()
+    return true
+  end,
+  TCOD_map_is_in_fov = function(t, x, y)
+    return (Vector({x, y}) - t.player_position):abs() <= t.r
+  end,
 }
