@@ -5,7 +5,7 @@ local abilities = require("mech.abilities")
 local attacking = require("mech.attacking")
 local items = require("library.items")
 local item = require("tech.item")
-local pipes = require("library.pipes")
+local pipes = require("library.palette.pipes")
 local shaders = require("tech.shaders")
 local api = require("tech.railing").api
 

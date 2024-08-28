@@ -1,5 +1,5 @@
 local texting = require("tech.texting")
-local pipes = require("library.pipes")
+local pipes = require("library.palette.pipes")
 local api = require("tech.railing").api
 local actions = require("mech.creature.actions")
 local level = require("state.level")
