@@ -126,7 +126,7 @@ module_mt.__call = function(_, systems)
 
       self.gui.sidebar:create_gui_entities()
       self.background_dummy = State:add({
-        sprite = sprite.image("assets/sprites/water_sketch_02.png"),
+        sprite = sprite.image(level_data.background_image),
       })
 
       -- local level_size, new_entities, player_anchor = level.load_entities(

@@ -56,6 +56,7 @@ common.reset_period = function(...)
   common.set_by_path(common._periods, {...}, nil)
 end
 
+-- TODO REF move to Colors.lua
 common.hex_color = function(str)
   return Fun.range(#str / 2)
     :map(function(i) return tonumber(str:sub(i * 2 - 1, i * 2), 16) / 255 end)
@@ -168,6 +169,18 @@ common.indent = function(str)
   return table.concat(Fun.iter(str / "\n")
     :map(function(line) return "  " .. line end)
     :totable(), "\n")
+end
+
+common.resolve_path = function(path)
+  local result = {}
+  for _, part in ipairs(path / "/") do
+    if part == ".." then
+      table.remove(result)
+    else
+      table.insert(result, part)
+    end
+  end
+  return table.concat(result, "/")
 end
 
 return common
