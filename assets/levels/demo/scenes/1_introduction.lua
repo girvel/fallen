@@ -51,12 +51,13 @@ return function()
         State:set_shader(shaders.black_and_white_and_red)
         api.wait_seconds(0.5)
         State:set_shader()
-        rails.scenes.snoring.enabled = true
 
         api.narration("Руки инстинктивно отскакивают от потока ледяной воды")
         api.narration("Перед тобой мутное зеркало и видавший лучшую жизнь умывальник")
         api.narration("Справа неопрятный сортир")
         api.narration("Стены спаяны из металлических листов, от них эхом отражается любой звук")
+        rails.scenes.snoring.enabled = true
+        rails.scenes.snoring.triggered = true
         api.narration("Один из звуков - храп с верхней кровати.")
         api.narration("Почему-то он не раздражает, кажется родным.")
 
@@ -202,11 +203,13 @@ return function()
     snoring = {
       name = "Snoring",
       enabled = false,
+      triggered = false,
       start_predicate = function(self, rails, dt)
-        return Common.relative_period(45, dt, self)
+        return self.triggered or Common.relative_period(45, dt, self)
       end,
 
       run = function(self, rails, dt)
+        self.triggered = false
         State:add_multiple(texting.popup(rails.entities.upper_bunk.position, "above", Random.choice({
           "Хрр...",
           "Фрыхрр...",
