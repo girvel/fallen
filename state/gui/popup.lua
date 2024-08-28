@@ -1,4 +1,4 @@
-local texting = require("state.gui.texting")
+local texting = require("tech.texting")
 local gui = require("tech.gui")
 local sprite = require("tech.sprite")
 local utf8 = require("utf8")

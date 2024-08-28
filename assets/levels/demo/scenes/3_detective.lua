@@ -1,4 +1,4 @@
-local texting = require("state.gui.texting")
+local texting = require("tech.texting")
 local pipes = require("library.pipes")
 local api = require("tech.railing").api
 local actions = require("mech.creature.actions")
@@ -23,7 +23,7 @@ return function()
         rails.entities.detective_door.locked = false
         State.player.experience = mech.experience_for_level[2]
         State.gui.character_creator:refresh()
-        -- State.gui.character_creator:submit()
+        State.gui.character_creator:submit()
         State:add(items.pole(), {position = State.player.position + Vector.left})
       end,
     },

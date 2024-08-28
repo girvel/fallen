@@ -1,4 +1,4 @@
-local texting = require("state.gui.texting")
+local texting = require("tech.texting")
 local ai = require("tech.ai")
 local api = ai.api
 local actions = require("mech.creature.actions")

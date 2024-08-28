@@ -1,5 +1,5 @@
-local texting = require("state.gui.texting")
-local html = require("state.gui.texting.html")
+local texting = require("tech.texting")
+local html = require("tech.texting.html")
 
 
 local load_wiki = function(path)

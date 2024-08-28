@@ -1,7 +1,7 @@
 local ai = require("tech.ai")
 local api = ai.api
 -- TODO REF tech.texting?
-local texting = require("state.gui.texting")
+local texting = require("tech.texting")
 
 
 local weak_ai, module_mt, static = Module("library.weak_ai")

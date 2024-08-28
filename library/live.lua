@@ -1,4 +1,4 @@
-local texting = require("state.gui.texting")
+local texting = require("tech.texting")
 local interactive = require("tech.interactive")
 local animated = require("tech.animated")
 local level = require("state.level")

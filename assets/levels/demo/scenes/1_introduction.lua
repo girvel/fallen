@@ -1,4 +1,4 @@
-local texting = require("state.gui.texting")
+local texting = require("tech.texting")
 local shaders = require("tech.shaders")
 local api = require("tech.railing").api
 local mech = require("mech")

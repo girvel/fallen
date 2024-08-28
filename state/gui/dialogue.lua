@@ -1,5 +1,5 @@
 local sounds = require("tech.sounds")
-local texting = require("state.gui.texting")
+local texting = require("tech.texting")
 local gui = require("tech.gui")
 
 

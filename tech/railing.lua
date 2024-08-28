@@ -1,4 +1,4 @@
-local texting = require("state.gui.texting")
+local texting = require("tech.texting")
 local game_save = require("state.game_save")
 local fx = require("tech.fx")
 local hostility = require("mech.hostility")

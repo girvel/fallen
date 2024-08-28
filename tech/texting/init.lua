@@ -1,10 +1,10 @@
 local gui = require("tech.gui")
-local html = require("state.gui.texting.html")
-local wrap = require("state.gui.texting.wrap")
+local html = require("tech.texting.html")
+local wrap = require("tech.texting.wrap")
 local sprite = require("tech.sprite")
 
 
-local texting, _, static = Module("state.gui.texting")
+local texting, _, static = Module("tech.texting")
 
 local generate_entities = function(token_lines, view)
   local result = {}
