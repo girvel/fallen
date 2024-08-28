@@ -91,6 +91,7 @@ return function()
         {20, 48},
         {23, 48},
         leaking_valve = {22, 55},
+        device_panel = {21, 48},
         neighbour = {20, 77},
         upper_bunk = {20, 74},
         dining_room_door_1 = {24, 100},

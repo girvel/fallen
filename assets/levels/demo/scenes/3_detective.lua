@@ -70,6 +70,20 @@ return function()
         api.update_quest({detective = 2})
       end,
     },
+    {
+      name = "Experiment",
+      enabled = true,
+      start_predicate = function(self, rails, dt)
+        return not State:exists(rails.entities.device_panel)
+      end,
+
+      run = function(self, rails, dt)
+        self.enabled = false
+        rails.entities[3]:rotate("down")
+        api.wait_seconds(0.5)
+        rails.entities[3]:rotate("up")
+      end,
+    },
     second_rotates_valve = {
       name = "Second rotates the valve",
       enabled = true,
