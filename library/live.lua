@@ -63,7 +63,7 @@ for _, prefix in ipairs({"", "black_"}) do
             self.interact = nil
           end)
         end,
-        close = function(self)
+        close = Dump.ignore_upvalue_size .. function(self)
           if not self.is_open then return end
           self.animation.pack = closed_door_pack
           level.change_layer(self, "solids")

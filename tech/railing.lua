@@ -158,7 +158,11 @@ module_mt.__call = function(_, ...)
       local dt = event[1]
       self.active_coroutines = Fun.iter(self.active_coroutines)
         :chain(Fun.iter(pairs(self.scenes))
-          :filter(function(s) return s.enabled and s:start_predicate(self, dt) end)
+          :filter(function(s)
+            return s.enabled
+              and (not self:is_running(s) or s.multiple_instances_flag)
+              and s:start_predicate(self, dt)
+          end)
           :map(function(s)
             Log.info("Scene `" .. s.name .. "` starts")
             return {

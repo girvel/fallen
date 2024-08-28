@@ -128,6 +128,8 @@ gui.action_icon = function(hotkey_data, index, frame)
   index = index - 1
   return {
     hotkey_data = hotkey_data,
+    _frame = frame,
+
     sprite = sprite.image("assets/sprites/icons/%s.png" % hotkey_data.codename),
     view = "actions",
     position = Vector({index % 5, math.floor(index / 5)}) * ACTION_CELL_SIZE,
@@ -146,10 +148,10 @@ gui.action_icon = function(hotkey_data, index, frame)
       if not self:is_active() then
         return
       end
-      if frame.sprite ~= frame.sprites.active then
+      if self._frame.sprite ~= self._frame.sprites.active then
         State.audio:play_static(Random.choice(sounds.click))
       end
-      frame.sprite = frame.sprites.active
+      self._frame.sprite = self._frame.sprites.active
     end,
 
     on_hover_end = function(self)
@@ -167,7 +169,7 @@ gui.action_icon = function(hotkey_data, index, frame)
     ai = {
       observe = function(self)
         if State.gui.sidebar.hovered_icon ~= self then
-          frame.sprite = frame.sprites[
+          self._frame.sprite = self._frame.sprites[
             -Query(self.hotkey_data).is_passive_enabled() and "passive" or "inactive"
           ]
         end
