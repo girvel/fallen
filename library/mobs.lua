@@ -1,3 +1,4 @@
+local weak_ai = require("library.weak_ai")
 local humanoid = require("mech.humanoid")
 local interactive = require("tech.interactive")
 local items = require("library.items")
@@ -90,7 +91,7 @@ end
 
 local dreamer_races = {races.dwarf, races.human, races.half_elf, races.half_orc, races.halfling}
 
-module.dreamer = function()
+module.old_dreamer = function()
   return humanoid({
     name = "...",
     race = Random.choice(dreamer_races),
@@ -99,6 +100,7 @@ module.dreamer = function()
     max_hp = 15,
     abilities = abilities(10, 10, 10, 10, 10, 10),
     faction = "dreamers_detective",
+    ai = weak_ai(),
   })
 end
 

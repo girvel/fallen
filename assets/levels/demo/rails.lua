@@ -135,7 +135,7 @@ return function()
       ))
       State:add(things.magazine(), {position = self.positions.dirty_magazine})
       result.cook = State:add(
-        mobs.dreamer(), interactive.detector(true), {position = Vector({19, 102})}
+        mobs.old_dreamer(), interactive.detector(true), {position = Vector({19, 102})}
       )
 
       State:add(note({fighting_guide = true}), {position = Vector({32, 96})})

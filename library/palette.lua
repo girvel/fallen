@@ -71,7 +71,7 @@ return Module("library.palette", {
     Q = live.mannequin,
     R = live.lever,
 
-    ["0"] = mobs.dreamer,
+    ["0"] = mobs.old_dreamer,
     ["1"] = mobs[1],
     ["2"] = mobs[2],
     ["3"] = mobs[3],

@@ -61,4 +61,11 @@ ai.api.travel = function(entity, destination)
   end
 end
 
+ai.api.aggregate_aggression = function(t, entity)
+  return Table.concat(t, Fun.iter(State.aggression_log)
+    :filter(function(pair) return pair[2] == entity end)
+    :map(function(pair) return pair[1] end)
+    :totable())
+end
+
 return ai

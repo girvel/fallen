@@ -1,5 +1,6 @@
 local texting = require("state.gui.texting")
 local ai = require("tech.ai")
+local api = ai.api
 local actions = require("mech.creature.actions")
 local hostility = require("mech.hostility")
 
@@ -48,11 +49,11 @@ general_ai_mt.__call = function(_, works_outside_of_combat)
       end
 
       if mode_type == general_ai.modes.run_away_to then
-        ai.api.travel(self, self.ai.mode:unpack())
+        api.travel(self, self.ai.mode:unpack())
         return
       end
 
-      ai.api.travel(self, State.player.position)
+      api.travel(self, State.player.position)
 
       local direction = State.player.position - self.position
       if direction:abs() == 1 then
@@ -67,10 +68,7 @@ general_ai_mt.__call = function(_, works_outside_of_combat)
     end, works_outside_of_combat),
 
     observe = function(self, event)
-      Table.concat(self.ai.was_attacked_by, Fun.iter(State.aggression_log)
-        :filter(function(pair) return pair[2] == self end)
-        :map(function(pair) return pair[1] end)
-        :totable())
+      api.aggregate_aggression(self.ai.was_attacked_by, self)
 
       if self.ai.look_for_aggression then
         self.resources.reactions = 0
