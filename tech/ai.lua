@@ -2,7 +2,7 @@ local actions = require("mech.creature.actions")
 
 
 local ai, _, static = Module("tech.ai")
-ai.api = {}
+ai.api = static {}
 
 ai.async = function(fun, works_outside_of_combat)
   return Dump.ignore_upvalue_size .. function(self, event)

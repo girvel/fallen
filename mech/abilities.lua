@@ -105,7 +105,9 @@ abilities.saving_throw = function(entity, ability, dc)
 end
 
 abilities.initiative_roll = function(entity)
-  return D(20) + abilities.get_modifier(entity.abilities.dex) + (entity.initiative_bonus or 0)
+  local result = D(20) + abilities.get_modifier(entity.abilities.dex) + (entity.initiative_bonus or 0)
+  Log.debug("%s rolls initiative" % {Common.get_name(entity)})
+  return result
 end
 
 return abilities
