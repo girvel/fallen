@@ -1,4 +1,3 @@
-local player = require("state.player")
 local constants = require("tech.constants")
 
 
@@ -23,7 +22,10 @@ local layer_handlers = {
   end,
 
   entities = function(layer, palette)
-    local layer_palette = palette[get_identifier(layer)]
+    local identifier = get_identifier(layer)
+    if identifier == "positions" then return {} end
+
+    local layer_palette = palette[identifier]
     return Fun.iter(layer.entityInstances)
       :map(function(instance)
         return Table.extend(layer_palette[get_identifier(instance)](), {
@@ -47,13 +49,22 @@ ldtk.load = function()
   local raw = Json.decode(love.filesystem.read(base_path .. "/level.ldtk")).levels[1]
   local palette = load_palette("library/palette")
 
+  local positions_layer = Fun.iter(raw.layerInstances)
+    :filter(function(layer) return get_identifier(layer) == "positions" end)
+    :nth(1)
+
   return {
     size = Vector({raw.pxWid, raw.pxHei}) / constants.CELL_DISPLAY_SIZE,
     entities = Fun.iter(raw.layerInstances)
       :map(function(layer) return layer_handlers[layer.__type:lower()](layer, palette) end)
       :reduce(Table.concat, {}),
-    rails = nil,
     background_image = Common.resolve_path(base_path .. "/" .. raw.bgRelPath),
+    rails = require(base_path .. "/rails")(Fun.iter(positions_layer.entityInstances)
+      :map(function(instance)
+        return instance.fieldInstances[1].__value:lower(), Vector(instance.__grid)
+      end)
+      :tomap()
+    ),
   }
 end
 
