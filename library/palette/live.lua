@@ -4,7 +4,6 @@ local animated = require("tech.animated")
 local level = require("state.level")
 local sprite = require("tech.sprite")
 local sound = require("tech.sound")
-local railing = require("tech.railing")
 
 
 local live, _, static = Module("library.live")
