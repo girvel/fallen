@@ -117,13 +117,13 @@ return function()
           }) == 1
         then
           if api.ability_check("sleight_of_hand", 12) then
-            api.narration("Ты аккуратно заводишь пальцы за звенящий участок трубы и достаешь застрявший острый предмет.")
+            api.narration("Ты аккуратно заводишь пальцы за звенящий участок трубы и достаешь застрявший острый предмет.", {check = {"sleight_of_hand", true}})
             item.drop(State.player, "main_hand")
             item.give(State.player, State:add(items.knife()))
             api.narration("Это пыльный наточенный нож, кто-то из прошлого спрятал его здесь.")
             api.narration("Зачем?")
           else
-            api.narration("Ты несколько раз постукиваешь по трубе, пытаясь понять природу искаженного звука.")
+            api.narration("Ты несколько раз постукиваешь по трубе, пытаясь понять природу искаженного звука.", {check = {"sleight_of_hand", true}})
             pipes.burst_with_steam(rails.entities.colored_pipe)
             api.narration("Вдруг резкий поток пара бьёт тебя прямо в лицо.")
             api.narration("Да, не стоит лишний раз совать пальцы куда попало.")
@@ -282,9 +282,11 @@ return function()
         api.narration("Десятки вскрытых металлических банок грудой навалены в мусорное ведро.")
         api.narration("Внутренняя поверхность каждой полностью вычищена, крысам ничего не достанется.")
         if api.ability_check("history", 10) then
-          api.narration("Взгляд останавливается на выбитых в металле знаках: “Упаковано в 221 году З.Э. город Сент-Целест”. Эта банка встречала Мировую Войну.", {check = {"history", true}})
+          api.narration("Взгляд останавливается на выбитых в металле знаках: “Упаковано в 221 году З.Э. город Сент-Целест”.", {check = {"history", true}})
+          api.narration("Эта банка встречала Мировую Войну.")
         else
-          api.narration("Взгляд останавливается на этикетке с изображением пышногрудой воительницы. Как оно связано с содержанием консервы?", {check = {"history", false}})
+          api.narration("Взгляд останавливается на этикетке с изображением пышногрудой воительницы.", {check = {"history", false}})
+          api.narration("Как оно связано с содержанием консервы?")
         end
       end,
     },
@@ -310,7 +312,7 @@ return function()
 
         -- TODO display this!
         if api.ability_check("cha", 14) then
-          api.narration("Твоё нутро издаёт громкий голодный звук.")
+          api.narration("Твоё нутро издаёт громкий голодный звук.", {check = {"cha", true}})
           api.narration("После этого старик берёт с полки металлическую кружку и зачерпывает в неё рагу.")
           api.line(rails.entities.cook, "Держи, грешно оставлять голодную душу")
 
@@ -327,7 +329,7 @@ return function()
           api.narration("Всё приятное так быстро кончается.")
         else
           rails.entities.cook:rotate("up")
-          api.narration("Старик отворачивается и продолжает перемешивать кулинарную амальгаму.")
+          api.narration("Старик отворачивается и продолжает перемешивать кулинарную амальгаму.", {check = {"cha", false}})
           api.narration("Такую подозрительную.")
           api.narration("И такую манящую.")
         end

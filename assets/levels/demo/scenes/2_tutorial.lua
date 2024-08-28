@@ -129,10 +129,10 @@ return function()
 
             e = State:add(mobs.phantom_knight(), {position = Vector({31, 97})})
             if api.ability_check("arcana", 10) then
-              api.narration("Это обыкновенная иллюзия, она не может причинять вряд.")
+              api.narration("Это обыкновенная иллюзия, она не может причинять вряд.", {check = {"arcana", true}})
               api.narration("Должно быть, машина создает фантом на основе схемы.")
             else
-              api.narration("Машина призвала воителя из былых времён.")
+              api.narration("Машина призвала воителя из былых времён.", {check = {"arcana", false}})
               api.narration("Ты должен показать ему, на что способен.")
             end
             break
@@ -275,7 +275,7 @@ return function()
         api.narration("Она этой участи не заслужила")
 
         local options = {
-          "*Осмотреть труп*",
+          "[Медицина] *Осмотреть труп*",
           "*Взять остатки птицы*",
           "*Уйти*"
         }
@@ -285,10 +285,10 @@ return function()
 
           if o == 1 then
             if api.ability_check("medicine", 12) then
-              api.narration("Без сомнений, это был простой человек; он не выглядит больным или истощенным.")
+              api.narration("Без сомнений, это был простой человек; он не выглядит больным или истощенным.", {check = {"medicine", true}})
               api.narration("И... Убивал он не из-за голода.")
             else
-              api.narration("Люди способны на всякое; но мертвое существо неизвестной природы, несомненно, лишь приняло облик человека.")
+              api.narration("Люди способны на всякое; но мертвое существо неизвестной природы, несомненно, лишь приняло облик человека.", {check = {"medicine", false}})
             end
           elseif o == 2 then
             rails.scenes.return_bird_remains.enabled = true
