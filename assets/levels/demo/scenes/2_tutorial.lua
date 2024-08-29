@@ -147,7 +147,7 @@ return function()
         while State.combat do
           if State.combat:get_current() ~= State.player then break end
           if State.player.resources.movement == 0 then
-            popup = api.message("Больше двигаться ты не сможешь, время передать ход")
+            popup = api.message.temporal("Больше двигаться ты не сможешь, время передать ход")
             break
           end
           coroutine.yield()
@@ -157,7 +157,7 @@ return function()
           api.wait_while(function() return State.combat:get_current() == State.player end)
           api.wait_while(function() return State.combat:get_current() ~= State.player end)
           State:remove_multiple(popup)
-          api.message("Это всего лишь иллюзия.")
+          api.message.temporal("Это всего лишь иллюзия.")
           api.wait_seconds(2)
           api.notification("Добей иллюзию", true)
         end

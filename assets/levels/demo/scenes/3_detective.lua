@@ -110,16 +110,13 @@ return function()
 
       run = function(self, rails, dt)
         self.enabled = false
-        State:add_multiple(texting.popup(
-          rails.entities.engineer_1.position, "above",
-          Random.choice({
-            "УКС " .. math.random(15, 27) / 10,
-            "ДО " .. math.random(40, 80),
-            "МПА " .. math.random(26, 52) / 10,
-            "ТМ " .. math.random(197, 310),
-            "К 3, СПК",
-          })
-        ))
+        api.message.temporal(Random.choice({
+          "УКС " .. math.random(15, 27) / 10,
+          "ДО " .. math.random(40, 80),
+          "МПА " .. math.random(26, 52) / 10,
+          "ТМ " .. math.random(197, 310),
+          "К 3, СПК",
+        }))
       end,
     },
     {

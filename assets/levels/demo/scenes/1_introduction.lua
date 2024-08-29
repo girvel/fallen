@@ -210,7 +210,7 @@ return function()
 
       run = function(self, rails, dt)
         self.triggered = false
-        State:add_multiple(texting.popup(rails.entities.upper_bunk.position, "above", Random.choice({
+        api.message.temporal(Random.choice({
           "Хрр...",
           "Фрыхрр...",
           "Хрумффф....",
@@ -219,7 +219,7 @@ return function()
           "Мгмф...",
           "Рмгфф...",
           "Ыгмфм...",
-        })))
+        }))
       end,
     },
   }

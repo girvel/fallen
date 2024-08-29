@@ -56,7 +56,7 @@ for _, prefix in ipairs({"", "black_"}) do
       interactive(function(self)
         if self.locked then
           if not State:exists(self._popup[1]) then
-            self._popup = State:add_multiple(texting.popup(self.position, "above", "Закрыто."))
+            self._popup = railing.api.message.positional("Закрыто.")
           end
           return
         end

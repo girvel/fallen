@@ -1,3 +1,4 @@
+local railing = require("tech.railing")
 local ai = require("tech.ai")
 local api = ai.api
 local texting = require("tech.texting")
@@ -15,9 +16,7 @@ module_mt.__call = function()
         if State:exists(self.ai._line_entities[1]) then
           State:remove_multiple(self.ai._line_entities)
         end
-        self.ai._line_entities = State:add_multiple(texting.popup(
-          self.position, "above", Random.choice({"Ааай", "Оой"})
-        ))
+        self.ai._line_entities = railing.api.message.temporal(Random.choice({"Ааай", "Оой"}))
       end
     end, true),
     observe = function(self, dt)

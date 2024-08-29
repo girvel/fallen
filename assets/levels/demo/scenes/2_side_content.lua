@@ -37,7 +37,7 @@ return function()
 
       run = function(self, rails, dt)
         self.enabled = false
-        api.message("Кровати плохо заправлены, будто это делали в одно движение.")
+        api.message.positional("Кровати плохо заправлены, будто это делали в одно движение.")
       end,
     },
 
@@ -50,7 +50,7 @@ return function()
 
       run = function(self, rails, dt)
         self.enabled = false
-        api.message("На стене висит старая мировая карта. Тяжело различить хоть какой-то текст или даже очертания границ.")
+        api.message.positional("На стене висит старая мировая карта. Тяжело различить хоть какой-то текст или даже очертания границ.")
       end,
     },
 
@@ -80,7 +80,7 @@ return function()
 
       run = function(self, rails, dt)
         self.enabled = false
-        api.message("Толстый слой пыли, отсутствие матраса и постельного белья. В этой комнате никто не живёт, очень давно.")
+        api.message.positional("Толстый слой пыли, отсутствие матраса и постельного белья. В этой комнате никто не живёт, очень давно.")
       end,
     },
 
@@ -94,7 +94,7 @@ return function()
       run = function(self, rails, dt)
         self.enabled = false
         State.player:rotate("up")
-        api.message("Старый выцветший указатель. Налево - столовая, направо - кают-компания.")
+        api.message.positional("Старый выцветший указатель. Налево - столовая, направо - кают-компания.")
       end,
     },
 
