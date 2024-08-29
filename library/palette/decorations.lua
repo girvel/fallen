@@ -4,7 +4,7 @@ local factoring = require("tech.factoring")
 local level = require("state.level")
 
 
-local decorations, module_mt, static = Module("library.decorations")
+local decorations, module_mt, static = Module("library.palette.decorations")
 
 local decorations_atlas = "assets/sprites/atlases/decorations.png"
 factoring.from_atlas(decorations, decorations_atlas, {
@@ -17,7 +17,7 @@ factoring.from_atlas(decorations, decorations_atlas, {
   "lower_bed", "chamber_pot", "bucket", "cauldron", "countertop_right_down", "oven", "kitchen_sink", "countertop_left_down",
   "table_up", "mirage_block", "stool", "sofa", "countertop_left", "bed", "sink", "countertop_right",
   "table_ver", "steel_wall_window", "steel_wall_transparent", "scratched_table", "countertop_left_corner_down", "countertop", "empty_bed", "countertop_right_corner_down",
-  "table_down", "cage", false, false, "countertop_left_corner_up", false, false, "countertop_right_corner_up",
+  "table_down", "cage", "device_panel_right_down", "device_panel_down", "countertop_left_corner_up", false, false, "countertop_right_corner_up",
 })
 
 factoring.extend(decorations, "mirage_block", {name = "Блок миража"})

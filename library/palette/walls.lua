@@ -1,7 +1,7 @@
 local factoring = require("tech.factoring")
 
 
-local walls, module_mt, static = Module("library.walls")
+local walls, module_mt, static = Module("library.palette.walls")
 
 factoring.from_atlas(walls, "assets/sprites/atlases/walls.png", {
   layer = "solids",

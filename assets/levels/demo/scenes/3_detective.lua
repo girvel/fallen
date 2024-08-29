@@ -1,10 +1,10 @@
 local texting = require("tech.texting")
-local pipes = require("library.pipes")
+local pipes = require("library.palette.pipes")
 local api = require("tech.railing").api
 local actions = require("mech.creature.actions")
 local level = require("state.level")
 local mech = require("mech")
-local items = require("library.items")
+local items = require("library.palette.items")
 
 
 return function()
@@ -79,9 +79,9 @@ return function()
 
       run = function(self, rails, dt)
         self.enabled = false
-        rails.entities[3]:rotate("down")
+        rails.entities.engineer_3:rotate("down")
         api.wait_seconds(0.5)
-        rails.entities[3]:rotate("up")
+        rails.entities.engineer_3:rotate("up")
       end,
     },
     second_rotates_valve = {
@@ -90,15 +90,15 @@ return function()
       start_predicate = function(self, _, dt) return Common.relative_period(30, dt, self) end,
 
       run = function(self, rails, dt)
-        if not State:exists(rails.entities[2])
-          or rails.entities[2].position ~= rails.positions[2]
+        if not State:exists(rails.entities.engineer_2)
+          or rails.entities.engineer_2.position ~= rails.positions[2]
         then
           self.enabled = false
           return
         end
 
-        rails.entities[2]:rotate("down")
-        rails.entities[2]:act(actions.interact)
+        rails.entities.engineer_2:rotate("down")
+        rails.entities.engineer_2:act(actions.interact)
       end,
     },
     first_shouts = {
@@ -111,7 +111,7 @@ return function()
       run = function(self, rails, dt)
         self.enabled = false
         State:add_multiple(texting.popup(
-          rails.entities[1].position, "above",
+          rails.entities.engineer_1.position, "above",
           Random.choice({
             "УКС " .. math.random(15, 27) / 10,
             "ДО " .. math.random(40, 80),
@@ -126,11 +126,11 @@ return function()
       name = "Talking to the first",
       enabled = true,
       start_predicate = function(self, rails, dt)
-        return rails.entities[1].interacted_by == State.player
+        return rails.entities.engineer_1.interacted_by == State.player
       end,
 
       run = function(self, rails, dt)
-        rails.entities[1].interacted_by = nil
+        rails.entities.engineer_1.interacted_by = nil
 
         State.player.in_cutscene = true
         api.narration("Когда ты подходишь ближе, измазанный сажей полуэльф всё так же не оборачивается.")
@@ -144,18 +144,18 @@ return function()
             "*Уйти*",
           })
           if picked_option == 1 then
-            api.line(rails.entities[1], "Главный инженер")
-            api.line(rails.entities[1], "Моя работа - наблюдать за приборами")
-            api.line(rails.entities[1], "В данный момент слежу за показателями давления")
+            api.line(rails.entities.engineer_1, "Главный инженер")
+            api.line(rails.entities.engineer_1, "Моя работа - наблюдать за приборами")
+            api.line(rails.entities.engineer_1, "В данный момент слежу за показателями давления")
           elseif picked_option == 2 then
-            api.line(rails.entities[1], "Наблюдать могу только оборудование")
-            api.line(rails.entities[1], "Но слышал громкий звук удара по металлу")
-            api.line(rails.entities[1], "Несколько раз")
-            api.line(rails.entities[1], "Потом крик")
-            api.line(rails.entities[1], "Ещё громкий звук пара")
-            api.line(rails.entities[1], "Несколько раз")
+            api.line(rails.entities.engineer_1, "Наблюдать могу только оборудование")
+            api.line(rails.entities.engineer_1, "Но слышал громкий звук удара по металлу")
+            api.line(rails.entities.engineer_1, "Несколько раз")
+            api.line(rails.entities.engineer_1, "Потом крик")
+            api.line(rails.entities.engineer_1, "Ещё громкий звук пара")
+            api.line(rails.entities.engineer_1, "Несколько раз")
           elseif picked_option == 3 then
-            api.line(rails.entities[1], "Я не знаю")
+            api.line(rails.entities.engineer_1, "Я не знаю")
           elseif picked_option == 4 then
             break
           end
@@ -168,16 +168,16 @@ return function()
       name = "Talking to the second",
       enabled = true,
       start_predicate = function(self, rails, dt)
-        return rails.entities[2].interacted_by == State.player
+        return rails.entities.engineer_2.interacted_by == State.player
       end,
 
       run = function(self, rails, dt)
-        rails.entities[2].interacted_by = nil
-        local old_direction = rails.entities[2].direction
-        rails.entities[2]:rotate(Vector.name_from_direction(
-          State.player.position - rails.entities[2].position
+        rails.entities.engineer_2.interacted_by = nil
+        local old_direction = rails.entities.engineer_2.direction
+        rails.entities.engineer_2:rotate(Vector.name_from_direction(
+          State.player.position - rails.entities.engineer_2.position
         ))
-        rails.entities[2]:animate()
+        rails.entities.engineer_2:animate()
 
         State.player.in_cutscene = true
         api.narration("Уродливый полурослик с перевязанным лицом делает один оборот массивного красного вентиля.")
@@ -194,22 +194,22 @@ return function()
             "*Уйти*",
           })
           if picked_option == 1 then
-            api.line(rails.entities[2], "Инженер")
-            api.line(rails.entities[2], "Моя работа - обслуживание оборудования")
-            api.line(rails.entities[2], "В данный момент спускаю давление")
+            api.line(rails.entities.engineer_2, "Инженер")
+            api.line(rails.entities.engineer_2, "Моя работа - обслуживание оборудования")
+            api.line(rails.entities.engineer_2, "В данный момент спускаю давление")
           elseif picked_option == 2 then
-            api.line(rails.entities[2], "Наблюдаю больше давления")
-            api.line(rails.entities[2], "Стало больше пара")
-            api.line(rails.entities[2], "Уши плохо слышат")
-            api.line(rails.entities[2], "Тело плохо отвечает")
+            api.line(rails.entities.engineer_2, "Наблюдаю больше давления")
+            api.line(rails.entities.engineer_2, "Стало больше пара")
+            api.line(rails.entities.engineer_2, "Уши плохо слышат")
+            api.line(rails.entities.engineer_2, "Тело плохо отвечает")
           elseif picked_option == 3 then
-            api.line(rails.entities[2], "Я не знаю")
+            api.line(rails.entities.engineer_2, "Я не знаю")
           elseif picked_option == 4 then
             break
           end
         end
         rails.dreamers_talked_to[2] = true
-        rails.entities[2]:rotate(old_direction)
+        rails.entities.engineer_2:rotate(old_direction)
         State.player.in_cutscene = false
       end,
     },
@@ -217,11 +217,11 @@ return function()
       name = "Talking to the third",
       enabled = true,
       start_predicate = function(self, rails, dt)
-        return rails.entities[3].interacted_by == State.player
+        return rails.entities.engineer_3.interacted_by == State.player
       end,
 
       run = function(self, rails, dt)
-        rails.entities[3].interacted_by = nil
+        rails.entities.engineer_3.interacted_by = nil
 
         State.player.in_cutscene = true
         api.narration("Сутулый полуорк в ярко-жёлтых огнеупорных перчатках работает с незнакомым тебе устройством.")
@@ -238,15 +238,15 @@ return function()
             "*Уйти*",
           })
           if picked_option == 1 then
-            api.line(rails.entities[3], "Инженер.")
-            api.line(rails.entities[3], "Моя работа - обслуживать оборудование")
-            api.line(rails.entities[3], "В данный момент работаю с машиной")
+            api.line(rails.entities.engineer_3, "Инженер.")
+            api.line(rails.entities.engineer_3, "Моя работа - обслуживать оборудование")
+            api.line(rails.entities.engineer_3, "В данный момент работаю с машиной")
           elseif picked_option == 2 then
-            api.line(rails.entities[3], "Был громкий шум")
-            api.line(rails.entities[3], "Потом кто-то ударил")
-            api.line(rails.entities[3], "Всё")
+            api.line(rails.entities.engineer_3, "Был громкий шум")
+            api.line(rails.entities.engineer_3, "Потом кто-то ударил")
+            api.line(rails.entities.engineer_3, "Всё")
           elseif picked_option == 3 then
-            api.line(rails.entities[3], "Не знаю")
+            api.line(rails.entities.engineer_3, "Не знаю")
           elseif picked_option == 4 then
             break
           end
@@ -259,16 +259,16 @@ return function()
       name = "Talking to the fourth",
       enabled = true,
       start_predicate = function(self, rails, dt)
-        return rails.entities[4].interacted_by == State.player
+        return rails.entities.engineer_4.interacted_by == State.player
       end,
 
       run = function(self, rails, dt)
-        rails.entities[4].interacted_by = nil
-        local old_direction = rails.entities[4].direction
-        rails.entities[4]:rotate(Vector.name_from_direction(
-          State.player.position - rails.entities[4].position
+        rails.entities.engineer_4.interacted_by = nil
+        local old_direction = rails.entities.engineer_4.direction
+        rails.entities.engineer_4:rotate(Vector.name_from_direction(
+          State.player.position - rails.entities.engineer_4.position
         ))
-        rails.entities[4]:animate()
+        rails.entities.engineer_4:animate()
 
         State.player.in_cutscene = true
         api.narration("Дварфийка покрытыми волдырями руками засовывает вглубь небольшой печи очередную порцию чего-то, похожего на чёрную смолу.")
@@ -289,27 +289,27 @@ return function()
 
           local picked_option = api.options(options)
           if picked_option == 1 then
-            api.line(rails.entities[4], "Инженер")
-            api.line(rails.entities[4], "Моя работа - обслуживать печь")
-            api.line(rails.entities[4], "В данный момент добавляю больше топлива")
+            api.line(rails.entities.engineer_4, "Инженер")
+            api.line(rails.entities.engineer_4, "Моя работа - обслуживать печь")
+            api.line(rails.entities.engineer_4, "В данный момент добавляю больше топлива")
           elseif picked_option == 2 then
-            api.line(rails.entities[4], "Стало горячо рукам")
-            api.line(rails.entities[4], "Потом шум, но не настолько как горячо рукам")
+            api.line(rails.entities.engineer_4, "Стало горячо рукам")
+            api.line(rails.entities.engineer_4, "Потом шум, но не настолько как горячо рукам")
           elseif picked_option == 3 then
-            api.line(rails.entities[4], "Я не знаю")
+            api.line(rails.entities.engineer_4, "Я не знаю")
           elseif picked_option == #options then
             break
           elseif picked_option == 4 then
             local gloves = State.player.inventory.gloves
-            rails.entities[4].inventory.gloves = gloves
+            rails.entities.engineer_4.inventory.gloves = gloves
             State.player.inventory.gloves = nil
 
             api.narration("Дварфийка с пустым взглядом надевает перчатки на обожженные руки")
-            api.line(rails.entities[4], "Благодарю")
-            api.line(rails.entities[4], "Теперь смогу проработать дольше")
+            api.line(rails.entities.engineer_4, "Благодарю")
+            api.line(rails.entities.engineer_4, "Теперь смогу проработать дольше")
           end
         end
-        rails.entities[4]:rotate(old_direction)
+        rails.entities.engineer_4:rotate(old_direction)
         rails.dreamers_talked_to[4] = true
         State.player.in_cutscene = false
       end,
@@ -320,7 +320,7 @@ return function()
       enabled = true,
       start_predicate = function(self, rails)
         return Fun.range(4)
-          :filter(function(i) return State:exists(rails.entities[i]) end)
+          :filter(function(i) return State:exists(rails.entities["engineer_" .. i]) end)
           :all(function(i) return rails.dreamers_talked_to[i] end)
       end,
       run = function(self, rails)

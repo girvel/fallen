@@ -72,6 +72,16 @@ sprite.from_atlas = function(path, index, anchor)
   return sprite.image(image_data, anchor)
 end
 
+sprite.get_atlas_position = function(path, index)
+  if not _atlases_cache[path] then
+    _atlases_cache[path] = atlas(path)
+  end
+  local canvas = _atlases_cache[path]
+  local w = canvas:getWidth() / tech_constants.CELL_DISPLAY_SIZE
+  index = index - 1
+  return Vector({index % w, math.floor(index / w)})
+end
+
 local font_cache = {}
 
 sprite.get_font = function(size)

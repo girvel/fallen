@@ -1,60 +1,46 @@
+local player = require("state.player")
 local weak_ai = require("library.weak_ai")
 local humanoid = require("mech.humanoid")
 local interactive = require("tech.interactive")
-local items = require("library.items")
+local items = require("library.palette.items")
 local abilities = require("mech.abilities")
 local races = require("mech.races")
 local constants = require("mech.constants")
 local general_ai = require("library.general_ai")
 
 
-local module, _, static = Module("library.mobs")
+local module, _, static = Module("library.palette.mobs")
 
-local engineer_mixin = function(ai_outside_of_combat)
-  return Table.extend(
-    interactive.detector(),
-    {
-      ai = general_ai(ai_outside_of_combat),
-    }
-  )
-end
+module.player = player
 
-local dreamer_engineer_mixin = function()
-  return Table.extend(
-    engineer_mixin(),
-    {
-      max_hp = 22,
-      abilities = abilities(16, 14, 12, 8, 8, 8),
-      faction = "dreamers_detective",
-    }
-  )
-end
+
+local dreamer_engineer_mixin = {
+  max_hp = 22,
+  abilities = abilities(16, 14, 12, 8, 8, 8),
+  faction = "dreamers_detective",
+}
 
 -- [{7, 9}] = {"down", {main_hand = items.gas_key()}},
 -- [{5, 8}] = {"down"},
 -- [{5, 3}] = {"up", {gloves = items.yellow_gloves()}},
 -- [{8, 3}] = {"up"},
 
-module[1] = function()
-  return humanoid(Table.extend({
+local engineer_mixins = {
+  Table.extend({
     name = "инженер-полуэльф",
     race = races.half_elf,
     direction = "down",
     inventory = {main_hand = items.gas_key()},
-  }, dreamer_engineer_mixin()))
-end
-
-module[2] = function()
-  return humanoid(Table.extend({
+    ai = general_ai(),
+  }, dreamer_engineer_mixin),
+  Table.extend({
     name = "инженер-полурослик",
     race = races.halfling,
     direction = "down",
     inventory = {},
-  }, dreamer_engineer_mixin()))
-end
-
-module[3] = function()
-  return humanoid(Table.extend({
+    ai = general_ai(),
+  }, dreamer_engineer_mixin),
+  {
     name = "инженер-полуорк",
     race = races.half_orc,
     hp = 34,
@@ -69,6 +55,8 @@ module[3] = function()
     interacted_by = nil,
     will_beg = true,
 
+    ai = general_ai(true),
+
     get_resources = function()
       return {
         movement = constants.DEFAULT_MOVEMENT_SPEED,
@@ -77,16 +65,18 @@ module[3] = function()
         reactions = 1,
       }
     end,
-  }, engineer_mixin(true)))
-end
-
-module[4] = function()
-  return humanoid(Table.extend({
+  },
+  Table.extend({
     name = "инженер-дворф",
     race = races.dwarf,
     direction = "up",
     inventory = {},
-  }, dreamer_engineer_mixin()))
+    ai = general_ai(),
+  }, dreamer_engineer_mixin),
+}
+
+module.engineer = function(i)
+  return humanoid(Table.extend(engineer_mixins[i], interactive.detector()))
 end
 
 local dreamer_races = {races.dwarf, races.human, races.half_elf, races.half_orc, races.halfling}
@@ -99,8 +89,25 @@ module.old_dreamer = function()
     inventory = {},
     max_hp = 15,
     abilities = abilities(10, 10, 10, 10, 10, 10),
-    faction = "dreamers_detective",
     ai = weak_ai(),
+  })
+end
+
+module.cook = function()
+  return Table.extend(
+    module.old_dreamer(),
+    interactive.detector(true)
+  )
+end
+
+module.dreamer = function()
+  return humanoid({
+    name = "...",
+    race = Random.choice(dreamer_races),
+    direction = "up",
+    inventory = {},
+    max_hp = 15,
+    abilities = abilities(10, 10, 10, 10, 10, 10),
   })
 end
 

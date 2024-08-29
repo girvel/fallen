@@ -1,12 +1,9 @@
 local animated = require("tech.animated")
 local animation_packs = require("library.animation_packs")
 local item = require("tech.item")
-local interactive = require("tech.interactive")
-local railing = require("tech.railing")
-local sprite = require("tech.sprite")
 
 
-local module, _, static = Module("library.items")
+local module, _, static = Module("library.palette.items")
 
 module.knife = function()
   return Table.extend(

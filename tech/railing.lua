@@ -87,9 +87,9 @@ railing.api.discover_wiki = function(page_table)
 end
 
 railing.api.make_hostile = function(faction, entities)
-  Fun.iter(entities)
-    :filter(function(e) return e.faction == faction end)
-    :each(function(e)
+  Fun.pairs(entities)
+    :filter(function(_, e) return e.faction == faction end)
+    :each(function(_, e)
       State:add(fx("assets/sprites/fx/aggression", "fx", e.position))
     end)
   hostility.make_hostile(faction)

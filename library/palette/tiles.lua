@@ -2,7 +2,7 @@ local factoring = require("tech.factoring")
 local sound = require("tech.sound")
 
 
-local tiles, module_mt, static = Module("library.tiles")
+local tiles, module_mt, static = Module("library.palette.tiles")
 
 local move_sounds = {
   planks = sound.multiple("assets/sounds/move_planks", 0.1),

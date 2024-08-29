@@ -1,6 +1,6 @@
 local quest = require("tech.quest")
 local interactive = require("tech.interactive")
-local mobs = require("library.mobs")
+local mobs = require("library.palette.mobs")
 local level = require("state.level")
 local api = require("tech.railing").api
 

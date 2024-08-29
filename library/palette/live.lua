@@ -7,9 +7,25 @@ local sound = require("tech.sound")
 local railing = require("tech.railing")
 
 
-local live, _, static = Module("library.live")
+local live, _, static = Module("library.palette.live")
 
--- plain sprites --
+live.note = function(codex_update)
+  return Table.extend(
+    interactive(function(self, other)
+      self.interacted_by = other
+      railing.api.discover_wiki(codex_update)
+      State:remove(self)
+    end),
+    {
+      sprite = sprite.image("assets/sprites/note.png"),
+      codename = "note",
+      layer = "above_solids",
+      view = "scene",
+      name = "записка",
+    }
+  )
+end
+
 local lever_packs = {
   on = animated.load_pack("assets/sprites/animations/lever_on"),
   off = animated.load_pack("assets/sprites/animations/lever_off"),
