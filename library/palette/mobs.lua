@@ -93,6 +93,13 @@ module.old_dreamer = function()
   })
 end
 
+module.cook = function()
+  return Table.extend(
+    module.old_dreamer(),
+    interactive.detector(true)
+  )
+end
+
 module.dreamer = function()
   return humanoid({
     name = "...",
