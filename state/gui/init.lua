@@ -55,7 +55,9 @@ module_mt.__call = function()
     {"wiki", 1, 1, gui.offsets.full_screen_text},
     {"character_creator", 1, 1, gui.offsets.creator_text},
     {"scene_popup_background", 1, 1, gui.offsets.scene},
-    {"scene_popup_content", 1, 1, gui.offsets.scene},
+    {"scene_popup", 1, 1, gui.offsets.scene},
+    {"tooltip_background", 1, 1, gui.offsets.tooltip},
+    {"tooltip", 1, 1, gui.offsets.tooltip},
   })
 
   -- TODO maybe move this?
@@ -64,6 +66,7 @@ module_mt.__call = function()
   result.dialogue = require("state.gui.dialogue")()
   result.character_creator = require("state.gui.character_creator")()
   result.text_input = require("state.gui.text_input")()
+  result.popup = require("state.gui.popup")()
 
   return result
 end
@@ -127,6 +130,10 @@ end
 
 gui.offsets.notification = static .. function()
   return gui.offsets.sidebar() + Vector.up * 70
+end
+
+gui.offsets.tooltip = function()
+  return State.gui.popup.position
 end
 
 return gui

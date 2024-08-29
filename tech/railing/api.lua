@@ -128,7 +128,11 @@ api.message = {}
 api.message.positional = function(content, life_time)
   life_time = life_time or 5
 
-  local entities = texting.popup(State.player.position + Vector.up, "above", content)
+  local entities = texting.popup(
+    (State.player.position + Vector.up) * State.gui.views.scene:get_multiplier(),
+    "above", "scene_popup", content
+  )
+
   Table.extend(entities[1], {
     _epicenter = State.player.position,
     _dependent_entities = Table.extend({}, entities),
@@ -152,7 +156,11 @@ local SLOW_READING_SPEED = 10
 api.message.temporal = function(content, life_time)
   life_time = life_time or utf8.len(content) / SLOW_READING_SPEED + 2
 
-  local entities = texting.popup(State.player.position + Vector.up, "above", content)
+  local entities = texting.popup(
+    (State.player.position + Vector.up) * State.gui.views.scene:get_multiplier(),
+    "above", "scene_popup", content
+  )
+
   for _, e in ipairs(entities) do
     State:add(e, {life_time = life_time})
   end
