@@ -1,3 +1,4 @@
+local interactive = require("tech.interactive")
 local level = require("state.level")
 local railing = require("tech.railing")
 local api = railing.api
@@ -10,7 +11,7 @@ return function(positions, entities)
 
     scenes = Table.join(
       require("assets.levels.demo.scenes.1_introduction")(),
-      -- require("assets.levels.demo.scenes.2_tutorial")(),
+      require("assets.levels.demo.scenes.2_tutorial")(),
       require("assets.levels.demo.scenes.2_side_content")(),
       require("assets.levels.demo.scenes.3_detective")(),
       require("assets.levels.demo.scenes.3_fight")(),
@@ -47,17 +48,8 @@ return function(positions, entities)
 
       self.entities.engineer_1:animate("holding")
       self.entities.engineer_1:animation_set_paused(true)
+
+      State:refresh(self.entities.mirage_block, interactive.detector(true))
     end,
-
-    -- initialize_entities = Dump.ignore_upvalue_size .. function(self)
-    --   State:add(note({fighting_guide = true}), {position = Vector({32, 96})})
-    --   result.mirage_block = State:add(
-    --     decorations.mirage_block(),
-    --     interactive.detector(true),
-    --     {position = Vector({37, 101})}
-    --   )
-
-    --   return result
-    -- end
   })
 end

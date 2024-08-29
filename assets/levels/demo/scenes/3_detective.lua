@@ -4,7 +4,7 @@ local api = require("tech.railing").api
 local actions = require("mech.creature.actions")
 local level = require("state.level")
 local mech = require("mech")
-local items = require("library.items")
+local items = require("library.palette.items")
 
 
 return function()

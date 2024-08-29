@@ -86,8 +86,8 @@ module_mt.__call = function(_, systems)
         :totable()
     end,
 
-    refresh = function(self, entity)
-      self.world:add(entity)
+    refresh = function(self, entity, ...)
+      self.world:add(Table.extend(entity, ...))
     end,
 
     exists = function(self, entity)
