@@ -183,4 +183,8 @@ common.resolve_path = function(path)
   return table.concat(result, "/")
 end
 
+common.is_over = function(position, entity)
+  return position > entity.position and position < entity.position + entity.size
+end
+
 return common

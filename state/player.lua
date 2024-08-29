@@ -17,6 +17,7 @@ module_mt.__call = function(_)
     faction = "player",
     fov_radius = 15,
     race = races.human,
+    tooltip = "<pre>Hello, world!</pre>",
 
     immortal = true,
     on_death = function(self)

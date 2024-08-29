@@ -10,12 +10,7 @@ detect_hover.system = static(Tiny.processingSystem({
 
   process = function(self, entity)
     local relative_mouse_position = State.gui.views[entity.view]:inverse(Vector({love.mouse.getPosition()}))
-    if not (
-      relative_mouse_position > entity.position
-      and relative_mouse_position < entity.position + entity.size
-    ) then
-      return
-    end
+    if not Common.is_over(relative_mouse_position, entity) then return end
 
     Query(entity):on_hover()
     self._now_hovered[entity] = true

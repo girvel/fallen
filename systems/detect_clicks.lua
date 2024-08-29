@@ -6,12 +6,7 @@ detect_clicks.system = static(Tiny.processingSystem({
   filter = Tiny.requireAll("on_click", "position", "size"),
   process = function(_, entity)
     local relative_mouse_position = State.gui.views[entity.view]:inverse(Vector({love.mouse.getPosition()}))
-    if not (
-      relative_mouse_position > entity.position
-      and relative_mouse_position < entity.position + entity.size
-    ) then
-      return
-    end
+    if not Common.is_over(relative_mouse_position, entity) then return end
 
     entity:on_click(State.player)
   end,

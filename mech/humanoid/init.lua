@@ -14,7 +14,7 @@ return Module("mech.humanoid", function(base_object)
   )
 
   return Table.extend(
-    {transparent_flag = true},
+    {transparent_flag = true, size = Vector.one},
     creature(pack_by_race(base_object.race), base_object)
   )
 end)

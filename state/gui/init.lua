@@ -66,7 +66,7 @@ module_mt.__call = function()
   result.dialogue = require("state.gui.dialogue")()
   result.character_creator = require("state.gui.character_creator")()
   result.text_input = require("state.gui.text_input")()
-  result.popup = require("state.gui.popup")()
+  result.tooltip = require("state.gui.tooltip")()
 
   return result
 end
@@ -129,11 +129,11 @@ gui.offsets.sidebar = static .. function()
 end
 
 gui.offsets.notification = static .. function()
-  return gui.offsets.sidebar() + Vector.up * 70
+  return gui.offsets.dialogue() + Vector.up * 70
 end
 
 gui.offsets.tooltip = function()
-  return State.gui.popup.position
+  return State.gui.tooltip.position
 end
 
 return gui

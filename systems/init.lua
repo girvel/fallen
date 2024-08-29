@@ -8,6 +8,7 @@ return Module("systems", {
   require("systems.process_scancodes").system,
   require("systems.change_cursor").system,
   require("systems.detect_hover").system,
+  require("systems.trigger_tooltip").system,
   require("systems.acting").system,
   require("systems.animation").system,
   require("systems.timed_death").system,

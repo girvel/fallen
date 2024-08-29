@@ -70,6 +70,9 @@ texting.popup = function(position, relation, view, content)
     position = position
       + Vector.up * size[2]
       + Vector.left * math.floor(size[1] / 2)
+  else
+    position = position
+      + Vector.one * MARGIN * 2
   end
 
   for _, e in ipairs(entities) do
