@@ -74,7 +74,7 @@ return Module("state.gui.wiki", function()
         color = Colors.dark_red,
       },
       a = {
-        color = Common.hex_color("3f5d92"),
+        color = Colors.from_hex("3f5d92"),
       },
       hate = {
         color = Colors.red,

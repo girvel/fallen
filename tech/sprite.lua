@@ -41,7 +41,7 @@ sprite.image = function(base, anchor, paint_color)
   return setmetatable({
     image = love.graphics.newImage(base),
     data = base,
-    color = Common.get_color(base),
+    color = Colors.get(base),
     anchor = anchor,
     _paint_color = paint_color,
   }, sprite.image_mt)

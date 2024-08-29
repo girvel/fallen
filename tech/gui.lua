@@ -94,7 +94,7 @@ gui.dialogue_background = function()
     position = Vector({0, window_h - 140}),
     size = Vector({window_w, 140}),
     sprite = {
-      rect_color = Common.hex_color("31222c"),
+      rect_color = Colors.from_hex("31222c"),
     },
   }
 end

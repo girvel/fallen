@@ -1,5 +1,28 @@
 local colors, module_mt, static = Module("lib.colors")
 
+colors.from_hex = function(str)
+  return Fun.range(#str / 2)
+    :map(function(i) return tonumber(str:sub(i * 2 - 1, i * 2), 16) / 255 end)
+    :totable()
+end
+
+colors.to_hex = function(color)
+  return Fun.iter(color)
+    :map(function(v) return "%x" % (v * 255) end)
+    :reduce(Fun.op.concat, "")
+end
+
+colors.get = function(image_data)
+  for x = 0, image_data:getWidth() - 1 do
+    for y = 0, image_data:getHeight() - 1 do
+      local color = {image_data:getPixel(x, y)}
+      if (color[1] > 0 or color[2] > 0 or color[3] > 0) and color[4] > 0 then
+        return color
+      end
+    end
+  end
+end
+
 colors.hex = static {
   absolute_white = "ffffff",
   absolute_black = "000000",
@@ -17,7 +40,7 @@ colors.hex = static {
 }
 
 for k, v in pairs(colors.hex) do
-  colors[k] = static .. Common.hex_color(v)
+  colors[k] = static .. colors.from_hex(v)
 end
 
 return colors

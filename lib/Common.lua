@@ -56,30 +56,6 @@ common.reset_period = function(...)
   common.set_by_path(common._periods, {...}, nil)
 end
 
--- TODO REF move to Colors.lua
-common.hex_color = function(str)
-  return Fun.range(#str / 2)
-    :map(function(i) return tonumber(str:sub(i * 2 - 1, i * 2), 16) / 255 end)
-    :totable()
-end
-
-common.color_to_hex = function(color)
-  return Fun.iter(color)
-    :map(function(v) return "%x" % (v * 255) end)
-    :reduce(Fun.op.concat, "")
-end
-
-common.get_color = function(image_data)
-  for x = 0, image_data:getWidth() - 1 do
-    for y = 0, image_data:getHeight() - 1 do
-      local color = {image_data:getPixel(x, y)}
-      if (color[1] > 0 or color[2] > 0 or color[3] > 0) and color[4] > 0 then
-        return color
-      end
-    end
-  end
-end
-
 common.set = function(list)
   return Fun.iter(list)
     :map(function(e) return e, true end)

@@ -111,7 +111,7 @@ end
 local postprocess = function(root, content, styles)
   if root.attributes.color then
     Fun.iter(content):each(function(token)
-      token.color = Common.hex_color(root.attributes.color)
+      token.color = Colors.from_hex(root.attributes.color)
     end)
   end
   assign_event("on_click", root, content)
