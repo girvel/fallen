@@ -12,10 +12,9 @@ attacking.attack = function(entity, target, attack_roll, damage_roll)
   local is_nat_miss = attack == attack_roll:min()
   local ac = (-Query(target):get_armor() or 0)
 
-  Log.info(
-    Common.get_name(entity) .. " attacks " .. Common.get_name(target) .. "; attack roll: " ..
-    attack .. ", armor: " .. ac
-  )
+  Log.info("%s attacks %s; attack roll: %s, armor: %s" % {
+    Common.get_name(entity), Common.get_name(target), attack, ac
+  })
 
   if is_nat_miss then
     State:add(gui.floating_damage("!", target.position))

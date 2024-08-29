@@ -48,11 +48,11 @@ end
 local whoosh = sound.multiple("assets/sounds/whoosh", 0.05)
 
 local base_attack = function(entity, target, slot)
-  State:register_aggression(entity, target)
-
   entity:rotate(Vector.name_from_direction((target.position - entity.position):normalized()))
   State.audio:play(entity, Random.choice(whoosh))
   entity:animate(slot .. "_attack"):next(function()
+    State:register_aggression(entity, target)
+
     if not attacking.attack(
       entity, target,
       actions.get_melee_attack_roll(entity, slot),
