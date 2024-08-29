@@ -10,7 +10,7 @@ factoring.from_atlas = function(t, atlas, mixin, names)
     if name then
       local current_mixin
       if type(mixin) == "function" then
-        current_mixin = mixin(name)
+        current_mixin = mixin(name, sprite.get_atlas_position(atlas, i))
       else
         current_mixin = mixin
       end
