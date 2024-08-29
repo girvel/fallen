@@ -6,6 +6,21 @@ local sprite = require("tech.sprite")
 
 local gui, module_mt, static = Module("state.gui")
 
+local produce_views = function(matrix)
+  local views = {}
+  local views_order = {}
+  local views_offset_functions = {}
+
+  for _, v in ipairs(matrix) do
+    local name, scale, cell_size, f = unpack(v)
+    views[name] = view(Vector.zero, scale, cell_size)
+    table.insert(views_order, name)
+    views_offset_functions[name] = f
+  end
+
+  return views, views_order, views_offset_functions
+end
+
 local PORTRAIT_SPACE = Vector({360, 190})
 
 module_mt.__call = function()
@@ -16,61 +31,32 @@ module_mt.__call = function()
     disable_ui = false,
     pressed_scancodes = {},
 
-    -- TODO unify views, views order and updating views?
-    -- Vector.zero and duplicating the order suggest that
-    views = {
-      scene = view(Vector.zero, 4, 16),
-      scene_fx = view(Vector.zero, 1, 1),
-      sidebar_background = view(Vector.zero, 2, 1),
-      actions = view(Vector.zero, 3, 1),
-      action_keys = view(Vector.zero, 3, 1),
-      action_frames = view(Vector.zero, 3, 1),
-      sidebar = view(Vector.zero, 2, 1),
-      sidebar_text = view(Vector.zero, 1, 1),
-      notification = view(Vector.zero, 1, 1),
-      notification_fx = view(Vector.zero, 2, 1),
-      dialogue_background = view(Vector.zero, 1, 1),
-      dialogue_portrait = view(Vector.zero, 2, 1),
-      dialogue_text = view(Vector.zero, 1, 1),
-      wiki = view(Vector.zero, 1, 1),
-      character_creator = view(Vector.zero, 1, 1),
-      scene_popup_background = view(Vector.zero, 1, 1),
-      scene_popup_content = view(Vector.zero, 1, 1),
-    },
-
-    views_order = {
-      "scene", "scene_fx",
-      "sidebar_background", "actions", "action_frames", "action_keys", "sidebar", "sidebar_text",
-      "notification", "notification_fx",
-      "dialogue_background", "dialogue_portrait", "dialogue_text",
-      "wiki", "character_creator",
-      "scene_popup_background", "scene_popup_content",
-    },
-
     update_views = function(self)
-      for key, value in pairs({
-        scene_fx = gui._get_scene_offset(),
-        scene = gui._get_scene_offset(),
-        actions = gui._get_actions_offset(),
-        action_frames = gui._get_actions_offset(),
-        action_keys = gui._get_actions_offset(),
-        sidebar_background = Vector({love.graphics.getWidth() - State.gui.sidebar.W, 0}),
-        sidebar = Vector({love.graphics.getWidth() - State.gui.sidebar.W, 0}),
-        sidebar_text = Vector({love.graphics.getWidth() - State.gui.sidebar.W, 0}),
-        notification = gui._get_dialogue_offset() + Vector.up * 70,
-        notification_fx = gui._get_dialogue_offset() + Vector.up * 70,
-        dialogue_background = Vector.zero,
-        dialogue_portrait = gui._get_dialogue_offset() - PORTRAIT_SPACE,
-        dialogue_text = gui._get_dialogue_offset(),
-        wiki = gui._get_full_screen_text_offset(),
-        character_creator = gui._get_creator_text_offset(),
-        scene_popup_background = gui._get_scene_offset(),
-        scene_popup_content = gui._get_scene_offset(),
-      }) do
-        State.gui.views[key].offset = value
+      for key, f in pairs(self.views_offset_functions) do
+        State.gui.views[key].offset = f()
       end
     end,
   }
+
+  result.views, result.views_order, result.views_offset_functions = produce_views({
+    {"scene", 4, 16, gui.offsets.scene},
+    {"scene_fx", 1, 1, gui.offsets.scene},
+    {"sidebar_background", 2, 1, gui.offsets.sidebar},
+    {"actions", 3, 1, gui.offsets.actions},
+    {"action_keys", 3, 1, gui.offsets.actions},
+    {"action_frames", 3, 1, gui.offsets.actions},
+    {"sidebar", 2, 1, gui.offsets.sidebar},
+    {"sidebar_text", 1, 1, gui.offsets.sidebar},
+    {"notification", 1, 1, gui.offsets.notification},
+    {"notification_fx", 2, 1, gui.offsets.notification},
+    {"dialogue_background", 1, 1, nil},
+    {"dialogue_portrait", 2, 1, gui.offsets.portrait},
+    {"dialogue_text", 1, 1, gui.offsets.dialogue},
+    {"wiki", 1, 1, gui.offsets.full_screen_text},
+    {"character_creator", 1, 1, gui.offsets.creator_text},
+    {"scene_popup_background", 1, 1, gui.offsets.scene},
+    {"scene_popup_content", 1, 1, gui.offsets.scene},
+  })
 
   -- TODO maybe move this?
   result.wiki = require("state.gui.wiki")()
@@ -82,7 +68,9 @@ module_mt.__call = function()
   return result
 end
 
-gui._get_scene_offset = function()
+gui.offsets = static {}
+
+gui.offsets.scene = static .. function()
   local scene_k = State.gui.views.scene:get_multiplier()
   local window_size = Vector({love.graphics.getDimensions()})
   local border_size = (window_size / 2 - Vector.one * scene_k):map(math.floor)
@@ -102,7 +90,7 @@ gui._get_scene_offset = function()
   return prev + d / 20
 end
 
-gui._get_dialogue_offset = function()
+gui.offsets.dialogue = static .. function()
   local window_w = love.graphics.getWidth()
   local window_h = love.graphics.getHeight()
   local dialogue_w = math.min(window_w - 15, State.gui.TEXT_MAX_SIZE[1] + PORTRAIT_SPACE[1])
@@ -110,13 +98,17 @@ gui._get_dialogue_offset = function()
   return Vector({math.ceil((window_w - dialogue_w) / 2 + PORTRAIT_SPACE[1]), window_h - 115})
 end
 
-gui._get_full_screen_text_offset = function()
+gui.offsets.portrait = static .. function()
+  return gui.offsets.dialogue() - PORTRAIT_SPACE
+end
+
+gui.offsets.full_screen_text = static .. function()
   local w, h = love.graphics.getDimensions()
   local sx, sy = unpack(State.gui.TEXT_MAX_SIZE)
   return (Vector({math.max(30, w - sx), math.max(30, h - sy)}) / 2):ceil()
 end
 
-gui._get_creator_text_offset = function()
+gui.offsets.creator_text = static .. function()
   local w, h = love.graphics.getDimensions()
   local sx, sy = unpack(State.gui.TEXT_MAX_SIZE)
   return (Vector({
@@ -125,8 +117,16 @@ gui._get_creator_text_offset = function()
   }) / 2):ceil()
 end
 
-gui._get_actions_offset = function()
+gui.offsets.actions = static .. function()
   return Vector({love.graphics.getWidth() - State.gui.sidebar.W + 16, 64 + 15})
+end
+
+gui.offsets.sidebar = static .. function()
+  return Vector({love.graphics.getWidth() - State.gui.sidebar.W, 0})
+end
+
+gui.offsets.notification = static .. function()
+  return gui.offsets.sidebar() + Vector.up * 70
 end
 
 return gui
