@@ -1,13 +1,39 @@
-local texting = require("tech.texting")
 local interactive = require("tech.interactive")
 local animated = require("tech.animated")
 local level = require("state.level")
 local sprite = require("tech.sprite")
 local sound = require("tech.sound")
 local railing = require("tech.railing")
+local pipes   = require("library.palette.pipes")
 
 
 local live, _, static = Module("library.palette.live")
+
+local valve_rotating_sounds = sound.multiple("assets/sounds/valve_rotate", 0.05)
+local pipe_valve_pack = animated.load_pack("assets/sprites/animations/pipe_valve")
+
+-- TODO! move to live
+live.valve = function(leaking_pipe_name)
+  return Table.extend(
+    animated(pipe_valve_pack),
+    interactive(Dump.ignore_upvalue_size .. function(self, other)
+      local target = State.rails.entities[self._leaking_pipe_name]
+      State.audio:play(self, Random.choice(valve_rotating_sounds), "small")
+      self:animate("rotate"):next(function()
+        target.overflow_counter = 0
+        pipes.burst_with_steam(target)
+      end)
+    end, true),
+    {
+      layer = "above_solids",
+      view = "scene",
+      name = "Вентиль",
+      codename = "valve",
+      transparent_flag = true,
+      _leaking_pipe_name = leaking_pipe_name,
+    }
+  )
+end
 
 live.note = function(codex_update)
   return Table.extend(

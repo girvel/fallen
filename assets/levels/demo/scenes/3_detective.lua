@@ -24,7 +24,7 @@ return function()
         State.player.experience = mech.experience_for_level[2]
         State.gui.character_creator:refresh()
         State.gui.character_creator:submit()
-        State:add(items.pole(), {position = State.player.position + Vector.left})
+        State:add(items.pole(), {position = State.player.position + Vector.left, bonus = 100})
       end,
     },
     {
@@ -91,7 +91,7 @@ return function()
 
       run = function(self, rails, dt)
         if not State:exists(rails.entities.engineer_2)
-          or rails.entities.engineer_2.position ~= rails.positions[2]
+          or rails.entities.engineer_2.position ~= rails.positions.engineer_2
         then
           self.enabled = false
           return

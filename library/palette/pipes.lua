@@ -21,31 +21,6 @@ factoring.from_atlas(pipes, "assets/sprites/atlases/pipes.png", {
   "colored", "leaking_left_down",
 })
 
-local valve_rotating_sounds = sound.multiple("assets/sounds/valve_rotate", 0.05)
-local pipe_valve_pack = animated.load_pack("assets/sprites/animations/pipe_valve")
-
--- TODO! move to live
-pipes.valve = function(leaking_pipe_position)
-  return Table.extend(
-    animated(pipe_valve_pack),
-    interactive(Dump.ignore_upvalue_size .. function(self, other)
-      local target = State.grids.solids[leaking_pipe_position]
-      State.audio:play(self, Random.choice(valve_rotating_sounds), "small")
-      self:animate("rotate"):next(function()
-        target.overflow_counter = 0
-        pipes.burst_with_steam(target)
-      end)
-    end, true),
-    {
-      layer = "solids",
-      view = "scene",
-      name = "Вентиль",
-      codename = "valve",
-      transparent_flag = true,
-    }
-  )
-end
-
 local hissing_sound = sound.multiple("assets/sounds/steam_hissing_loop.wav", 1)[1]
 hissing_sound.source:setLooping(true)
 

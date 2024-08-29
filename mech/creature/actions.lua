@@ -166,11 +166,16 @@ actions.interact = static .. action {
   _run = function(_, entity)
     local entity_to_interact = interactive.get_for(entity)
     if not entity_to_interact then return end
-    if entity_to_interact.position ~= entity.position and not entity_to_interact.hp then
-      entity:animate("attack")
+    if entity_to_interact.position ~= entity.position
+      and not entity_to_interact.hp
+      and not -Query(entity.inventory).main_hand
+    then
+      entity:animate("main_hand_attack"):next(function()
+        entity_to_interact:interact(entity)
+      end)
+    else
+      entity_to_interact:interact(entity)
     end
-    entity.resources.bonus_actions = entity.resources.bonus_actions - 1
-    entity_to_interact:interact(entity)
   end
 }
 

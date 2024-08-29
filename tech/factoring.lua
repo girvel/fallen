@@ -20,6 +20,7 @@ factoring.from_atlas = function(t, atlas, mixin, names)
           codename = name,
         }, current_mixin)
       end
+      t[name] = t[i]
     end
   end
 
@@ -38,6 +39,7 @@ factoring.extend = function(t, codename, ...)
   t[k] = function(...)
     return Table.extend(wrapped(...), unpack(mixins))
   end
+  t[codename] = t[k]
 end
 
 return factoring
