@@ -50,7 +50,8 @@ fighter.fighting_style = static(perk.choice({
   {
     codename = "two_handed_style",
     modify_damage_roll = function(entity, roll)
-      if not -Query(entity.inventory).main_hand.tags.two_handed then
+      local weapon = entity.inventory.main_hand
+      if not (weapon and (weapon.tags.two_handed or weapon.tags.versatile)) then
         return roll
       end
       return roll:extended({reroll = {1, 2}})

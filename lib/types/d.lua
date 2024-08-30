@@ -29,8 +29,8 @@ module.die = function(sides_n)
     __tostring = function(self)
       return "d%s%s%s" % {
         self.sides_n,
-        self.advantage and ", преим." or "",
-        #self.reroll > 0 and ("🗘" .. table.concat(self.reroll, ", ")) or ""
+        self.advantage and "↑" or "",
+        #self.reroll > 0 and ("🗘(%s)" % table.concat(self.reroll, ",")) or ""
       }
     end,
   })
