@@ -125,16 +125,20 @@ end
 
 api.message = {}
 
-api.message.positional = function(content, params)
+local message = function(content, params)
   params = params or {}
   local offset = Vector({0.5, not params.source and -1 or 0})
   params.source = params.source or State.player
-  params.life_time = params.life_time or 5
 
-  local entities = texting.popup(
+  return texting.popup(
     (params.source.position + offset) * State.gui.views.scene:get_multiplier(),
     "above", "scene_popup", content, State.gui.wiki.styles
   )
+end
+
+api.message.positional = function(content, params)
+  local entities = message(content, params)
+  local life_time = -Query(params).life_time or 5
 
   Table.extend(entities[1], {
     _epicenter = State.player.position,
@@ -144,7 +148,7 @@ api.message.positional = function(content, params)
         if (State.player.position - self._epicenter):abs() <= 2 then return end
 
         for _, e in ipairs(self._dependent_entities) do
-          State:refresh(e, {life_time = params.life_time})
+          State:refresh(e, {life_time = life_time})
         end
         self.ai.observe = nil
       end,
@@ -157,18 +161,11 @@ end
 local SLOW_READING_SPEED = 10
 
 api.message.temporal = function(content, params)
-  params = params or {}
-  local offset = Vector({0.5, not params.source and -1 or 0})
-  params.source = params.source or State.player
-  params.life_time = params.life_time or utf8.len(content) / SLOW_READING_SPEED + 2
-
-  local entities = texting.popup(
-    (params.source.position + offset) * State.gui.views.scene:get_multiplier(),
-    "above", "scene_popup", content, State.gui.wiki.styles
-  )
+  local entities = message(content, params)
+  local life_time = params.life_time or utf8.len(content) / SLOW_READING_SPEED + 2
 
   for _, e in ipairs(entities) do
-    State:add(e, {life_time = params.life_time})
+    State:add(e, {life_time = life_time})
   end
 
   return entities
