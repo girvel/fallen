@@ -61,8 +61,7 @@ return Module("state.hotkeys", function(modes)
   local attack_description = function(slot)
     return function(self)
       return Html(function()
-        return p {
-          color = "4e7a80",
+        return stats {
           "Атака: ", actions.get_melee_attack_roll(State.player, slot), br(),
           "Урон: ", actions.get_melee_damage_roll(State.player, slot),
         }
