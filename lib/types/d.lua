@@ -76,12 +76,15 @@ module.d_mt.__mul = function(self, other)
 end
 
 module.d_mt.__tostring = function(self)
-  return table.concat(
+  local dice = table.concat(
     Fun.iter(self.dice)
       :map(tostring)
       :totable(),
     " + "
-  ) .. (self.bonus > 0 and (" + " .. self.bonus) or "")
+  )
+  local bonus = self.bonus > 0 and tostring(self.bonus) or ""
+  local plus = #dice > 0 and #bonus > 0 and " + " or ""
+  return dice .. plus .. bonus
 end
 
 d_methods.roll = function(self)

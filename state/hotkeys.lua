@@ -62,6 +62,16 @@ return Module("state.hotkeys", function(modes)
     name = "атака правой",
     codename = "hand_attack",
     action = actions.hand_attack,
+
+    get_description = function(self)
+      return Html(function()
+        return p {
+          color = "4e7a80",
+          "Атака: ", actions.get_melee_attack_roll(State.player, "main_hand"), br(),
+          "Урон: ", actions.get_melee_damage_roll(State.player, "main_hand"), br(),
+        }
+      end)
+    end,
   })
 
   define_hotkey(hotkeys, {"free", "combat"}, {"2"}, {
@@ -210,8 +220,8 @@ return Module("state.hotkeys", function(modes)
   -- character creator --
   for _, t in ipairs({
     {{"w", "up"}, "up", "вверх"},
-    {{"a", "left"}, "left", "влево"},
     {{"s", "down"}, "down", "вниз"},
+    {{"a", "left"}, "left", "влево"},
     {{"d", "right"}, "right", "вправо"},
     {{"e", "enter"}, "zero"},
   }) do

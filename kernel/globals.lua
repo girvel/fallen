@@ -1,9 +1,4 @@
 return function()
-  Pairs = function(t)
-    if OrderedMap.is(t) then return OrderedMap.pairs(t) end
-    return pairs(t)
-  end
-
   Log = require("lib.log")
   Fun = require("lib.fun")
   Tiny = require("lib.tiny")
@@ -11,9 +6,11 @@ return function()
   Memoize = require("lib.memoize")
   require("lib.strong")
   Json = require("lib.json")
+  Html = require("lib.html")
 
   Log.info("Starting basic LOVE setup")
 
+  Pairs = require("lib.extensions.pairs")
   Table = require("lib.extensions.table")
   Query = require("lib.types.query")
   Math = require("lib.extensions.math")

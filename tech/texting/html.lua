@@ -7,7 +7,7 @@ local transformers = {
   head = function() return {} end,
   h1 = function(node, children, styles)
     return Table.concat(
-      {Table.extend({content = "# "}, styles.h1_prefix)},
+      {Table.extend({content = "# "}, styles.h1, styles.h1_prefix)},
       Fun.iter(children)
         :map(function(child) return Table.extend(child, styles.h1) end)
         :totable(),
@@ -16,7 +16,7 @@ local transformers = {
   end,
   h2 = function(node, children, styles)
     return Table.concat(
-      {Table.extend({content = "# "}, styles.h2_prefix)},
+      {Table.extend({content = "# "}, styles.h2, styles.h2_prefix)},
       Fun.iter(children)
         :map(function(child) return Table.extend(child, styles.h2) end)
         :totable(),
@@ -25,6 +25,9 @@ local transformers = {
   end,
   p = function(node, children, styles)
     return Table.concat(children, {{content = "\n\n"}})
+  end,
+  br = function()
+    return {{content = "\n"}}
   end,
   li = function(node, children, styles)
     return Table.concat({{content = "- "}}, children, {{content = "\n"}})
@@ -64,10 +67,6 @@ local transformers = {
 }
 
 transformers.ul = transformers.p
-
-local transform_default_node = function(node, children, styles)
-  return children
-end
 
 local run_script = function(script, args, script_name)
   return assert(loadstring(
@@ -154,7 +153,7 @@ visit_html = function(root, args, styles, preserve_whitespace)
     Table.concat(nodes, {{content = prepare(content)}})
   end
 
-  local result = (transformers[root.name] or transform_default_node)(root, nodes, styles)
+  local result = -Query(transformers[root.name])(root, nodes, styles) or nodes
   return postprocess(root, result, styles)
 end
 

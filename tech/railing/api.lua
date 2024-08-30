@@ -130,7 +130,7 @@ api.message.positional = function(content, life_time)
 
   local entities = texting.popup(
     (State.player.position + Vector.up) * State.gui.views.scene:get_multiplier(),
-    "above", "scene_popup", content
+    "above", "scene_popup", content, State.gui.wiki.styles
   )
 
   Table.extend(entities[1], {
@@ -158,7 +158,7 @@ api.message.temporal = function(content, life_time)
 
   local entities = texting.popup(
     (State.player.position + Vector.up) * State.gui.views.scene:get_multiplier(),
-    "above", "scene_popup", content
+    "above", "scene_popup", content, State.gui.wiki.styles
   )
 
   for _, e in ipairs(entities) do

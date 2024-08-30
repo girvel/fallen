@@ -43,7 +43,7 @@ local load_wiki = function(path)
   return loaded_pages
 end
 
-return Module("state.gui.wiki", function()
+return Module("state.gui.wiki", function(gui)
   return {
     pages = load_wiki("assets/wiki"),
     codex = {},
@@ -54,34 +54,14 @@ return Module("state.gui.wiki", function()
     quests = {},
     quest_states = {},
 
-    styles = {
-      default = {
-        font_size = 12,
-        color = Colors.white,
-      },
+    styles = Table.extend(gui.styles, {
       h1 = {
         font_size = 24,
-      },
-      h1_prefix = {
-        font_size = 24,
-        color = Colors.dark_red,
       },
       h2 = {
         font_size = 16,
       },
-      h2_prefix = {
-        font_size = 16,
-        color = Colors.dark_red,
-      },
-      a = {
-        color = Colors.from_hex("3f5d92"),
-      },
-      hate = {
-        color = Colors.red,
-        delay = 0.1,
-        appearance_time = .4,
-      },
-    },
+    }),
 
     show = function(self, id)
       assert(self.pages[id], "Wiki page \"%s\" does not exist" % id)

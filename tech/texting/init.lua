@@ -48,12 +48,12 @@ local W = 300
 local MARGIN = 5
 
 -- TODO redo to be a general popup, move hint/description implementations to railing API
-texting.popup = function(position, relation, view, content)
+texting.popup = function(position, relation, view, content, styles)
   assert(relation == "above" or relation == "below")
 
   -- TODO styles should probably be hierarchical, common in gui and specialized in wiki, creator, dialogue etc.
   local entities = texting.generate(
-    "<span>%s</span>" % content, State.gui.wiki.styles, W, view, {}
+    "<span>%s</span>" % content, styles, W, view, {}
   )
 
   -- TODO more elegant way to handle this, probably instead of texting.generate returning 

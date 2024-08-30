@@ -23,13 +23,34 @@ end
 
 local PORTRAIT_SPACE = Vector({360, 190})
 
-module_mt.__call = function()
+module_mt.__call = function(_)
   local result = {
     TEXT_MAX_SIZE = Vector({1000, 800}),
     font_size = 12,
     show_fps = nil,  -- set from main.lua
     disable_ui = false,
     pressed_scancodes = {},
+
+    styles = {
+      default = {
+        font_size = 12,
+        color = Colors.white,
+      },
+      a = {
+        color = Colors.from_hex("3f5d92"),
+      },
+      hate = {
+        color = Colors.red,
+        delay = 0.1,
+        appearance_time = .4,
+      },
+      h1_prefix = {
+        color = Colors.dark_red,
+      },
+      h2_prefix = {
+        color = Colors.dark_red,
+      },
+    },
 
     update_views = function(self)
       for key, f in pairs(self.views_offset_functions) do
@@ -61,12 +82,12 @@ module_mt.__call = function()
   })
 
   -- TODO maybe move this?
-  result.wiki = require("state.gui.wiki")()
+  result.wiki = require("state.gui.wiki")(result)
   result.sidebar = require("state.gui.sidebar")()
   result.dialogue = require("state.gui.dialogue")()
   result.character_creator = require("state.gui.character_creator")()
   result.text_input = require("state.gui.text_input")()
-  result.tooltip = require("state.gui.tooltip")()
+  result.tooltip = require("state.gui.tooltip")(result)
 
   return result
 end
