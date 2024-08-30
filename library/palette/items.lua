@@ -60,7 +60,7 @@ module.pole = function()
     {
       name = "шест",
       damage_roll = D(6),
-      bonus = 0,
+      bonus = -1,
       tags = {
         finesse = true,
         versatile = true,

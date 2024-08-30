@@ -205,18 +205,12 @@ return Module("state.gui.sidebar", function()
 
       local main_weapon = -Query(State.player).inventory.main_hand
       if main_weapon then
-        append("Оружие: %s (%s)\n\n" % {
-          main_weapon.name,
-          actions.get_melee_damage_roll(State.player, "main_hand")
-        })
+        append("Оружие: %s\n\n" % tostring(main_weapon))
       end
 
       local second_weapon = -Query(State.player).inventory.other_hand
       if second_weapon then
-        append("Второе оружие: %s (%s)\n\n" % {
-          second_weapon.name,
-          actions.get_melee_damage_roll(State.player, "other_hand")
-        })
+        append("Второе оружие: %s\n\n" % tostring(second_weapon))
       end
 
       local max = Table.extend({},

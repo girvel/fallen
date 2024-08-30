@@ -123,7 +123,7 @@ return function()
             api.narration("Это пыльный наточенный нож, кто-то из прошлого спрятал его здесь.")
             api.narration("Зачем?")
           else
-            api.narration("Ты несколько раз постукиваешь по трубе, пытаясь понять природу искаженного звука.", {check = {"sleight_of_hand", true}})
+            api.narration("Ты несколько раз постукиваешь по трубе, пытаясь понять природу искаженного звука.", {check = {"sleight_of_hand", false}})
             pipes.burst_with_steam(rails.entities.colored_pipe)
             api.narration("Вдруг резкий поток пара бьёт тебя прямо в лицо.")
             api.narration("Да, не стоит лишний раз совать пальцы куда попало.")
