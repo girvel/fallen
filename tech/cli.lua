@@ -63,6 +63,11 @@ return {
       "Skip all api.wait_seconds"
     )
 
+    parser:flag(
+      "-F --show-fps",
+      "Display FPS on the edge of the screen"
+    )
+
     local result = parser:parse(args)
 
     if result.resolution then
