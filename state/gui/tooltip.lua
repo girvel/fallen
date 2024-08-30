@@ -20,7 +20,7 @@ module_mt.__call = function(_, gui)
       end
       self.position = Vector.use(
         math.min,
-        position, Vector({love.graphics.getDimensions()}) - self._entities[1].size
+        position + Vector.down * 16, Vector({love.graphics.getDimensions()}) - self._entities[1].size
       )
     end,
     hide = function(self)

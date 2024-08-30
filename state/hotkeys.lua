@@ -58,32 +58,43 @@ return Module("state.hotkeys", function(modes)
     action = actions.finish_turn,
   })
 
+  local attack_description = function(slot)
+    return function(self)
+      return Html(function()
+        return p {
+          color = "4e7a80",
+          "Атака: ", actions.get_melee_attack_roll(State.player, slot), br(),
+          "Урон: ", actions.get_melee_damage_roll(State.player, slot),
+        }
+      end)
+    end
+  end
+
   define_hotkey(hotkeys, {"free", "combat"}, {"1"}, {
     name = "атака правой",
     codename = "hand_attack",
     action = actions.hand_attack,
-
-    get_description = function(self)
-      return Html(function()
-        return p {
-          color = "4e7a80",
-          "Атака: ", actions.get_melee_attack_roll(State.player, "main_hand"), br(),
-          "Урон: ", actions.get_melee_damage_roll(State.player, "main_hand"), br(),
-        }
-      end)
-    end,
+    get_description = attack_description("main_hand"),
   })
 
   define_hotkey(hotkeys, {"free", "combat"}, {"2"}, {
     name = "атака левой",
     codename = "other_hand_attack",
     action = actions.other_hand_attack,
+    get_description = attack_description("other_hand"),
   })
 
   define_hotkey(hotkeys, {"free", "combat"}, {"3"}, {
     name = "второе дыхание",
     codename = "second_wind",
     action = fighter.second_wind,
+    -- get_description = function(self)
+    --   return Html(function()
+    --     return p {
+    --       color = "
+    --     }
+    --   end
+    -- end
   })
 
   define_hotkey(hotkeys, {"combat"}, {"4"}, {
