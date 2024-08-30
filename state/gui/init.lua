@@ -111,7 +111,8 @@ gui.offsets.scene = static .. function()
   )
 
   local d = target - prev
-  return prev + d / 20
+  local length = d:abs()
+  return prev + (d:fully_normalized() * Math.median(3, length / 20, length)):map(math.floor)
 end
 
 gui.offsets.dialogue = static .. function()

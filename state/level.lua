@@ -1,6 +1,6 @@
 local level, _, static = Module("state.level")
 
-level.GRID_LAYERS = {"tiles", "items", "fx_behind", "solids", "above_solids", "fx"}
+level.GRID_LAYERS = {"under_tiles", "tiles", "items", "fx_behind", "solids", "above_solids", "fx"}
 level.GRID_COMPLEX_LAYERS = {fx_behind = true, fx = true}
 
 level.move = function(entity, position)

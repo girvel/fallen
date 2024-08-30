@@ -102,7 +102,6 @@ ldtk.load = function()
   return {
     size = size,
     entities = entities,
-    background_image = Common.resolve_path(base_path .. "/" .. raw.bgRelPath),
     rails = require(base_path .. "/rails")(positions, captured_entities),
   }
 end

@@ -109,4 +109,9 @@ vector_methods.normalized = function(self)
   assert(false, "Can not normalize Vector.zero")
 end
 
+vector_methods.fully_normalized = function(self)
+  if self == Vector.zero then return Vector.zero end
+  return self / self:abs()
+end
+
 return module
