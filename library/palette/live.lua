@@ -82,7 +82,7 @@ for _, prefix in ipairs({"", "black_"}) do
       interactive(function(self)
         if self.locked then
           if not State:exists(self._popup[1]) then
-            self._popup = railing.api.message.positional("Закрыто.")
+            self._popup = railing.api.message.positional("Закрыто.", {source = self})
           end
           return
         end

@@ -219,7 +219,7 @@ return function()
           "Мгмф...",
           "Рмгфф...",
           "Ыгмфм...",
-        }))
+        }), {source = rails.entities.neighbour})
       end,
     },
   }

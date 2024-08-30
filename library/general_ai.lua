@@ -42,7 +42,7 @@ general_ai_mt.__call = function(_, works_outside_of_combat)
 
       local mode_type = self.ai.mode.enum_variant
       if mode_type == general_ai.modes.skip_turn then
-        railing.api.message.temporal("Стой! Остановись, мужик!!! Не бей меня!")
+        railing.api.message.temporal("Стой! Остановись, мужик!!! Не бей меня!", {source = self})
         self.ai.mode = general_ai.modes.normal()
         self.ai.look_for_aggression = true
         return

@@ -106,17 +106,17 @@ return function()
       enabled = true,
       start_predicate = function(self, rails, dt)
         return Common.relative_period(40, dt, self)
+          and State:exists(rails.entities.engineer_1)
       end,
 
       run = function(self, rails, dt)
-        self.enabled = false
         api.message.temporal(Random.choice({
           "УКС " .. math.random(15, 27) / 10,
           "ДО " .. math.random(40, 80),
           "МПА " .. math.random(26, 52) / 10,
           "ТМ " .. math.random(197, 310),
           "К 3, СПК",
-        }))
+        }), {source = rails.entities.engineer_1})
       end,
     },
     {
