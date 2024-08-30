@@ -56,7 +56,7 @@ return Module("state.gui.character_creator", function()
       build_options = {},
 
       _get_indicator = function(self, i)
-        return '<span on_update="self.sprite.text = State.gui.character_creator.parameters.current_index == %s and [[&gt;]] or [[ ]]">&gt;</span>' % i
+        return '<span on_update="self.sprite.text = State.gui.character_creator.parameters.current_index == %s and [[&gt;]] or [[ ]]"> </span>' % i
       end,
       scroll = 0,
 
