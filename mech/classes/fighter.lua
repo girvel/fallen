@@ -17,13 +17,16 @@ fighter.second_wind = static .. action {
     bonus_actions = 1,
     second_wind = 1,
   },
+  get_healing_roll = function(self, entity)
+    return D(10) + entity.level
+  end,
   _get_availability = function(self, entity)
     return entity.hp < entity:get_max_hp()
   end,
   _run = function(self, entity)
     State:add(fx("assets/sprites/fx/second_wind", "fx_behind", entity.position))
     State.audio:play(entity, fighter._second_wind_sound, "small")
-    healing.heal(entity, (D(10) + entity.level):roll())
+    healing.heal(entity, self:get_healing_roll(entity):roll())
   end,
 }
 

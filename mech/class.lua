@@ -1,3 +1,4 @@
+local action = require("tech.action")
 local perk = require("mech.perk")
 local abilities = require("mech.abilities")
 local healing = require("mech.healing")
@@ -16,15 +17,19 @@ class.get_choices = function(progression_table, level)
     :reduce(Table.concat, {})
 end
 
-class.hit_dice_action = {
+class.hit_dice_action = static .. action {
   codename = "hit_dice_action",
-  get_availability = function(self, entity)
-    return entity.hp < entity:get_max_hp()
-      and entity.resources.hit_dice > 0
+  get_healing_roll = function(self, entity)
+    return D(entity.class.hp_die) + abilities.get_modifier(entity.abilities.con)
   end,
-  run = function(self, entity)
-    entity.resources.hit_dice = entity.resources.hit_dice - 1
-    healing.heal(entity, (D(entity.class.hp_die) + abilities.get_modifier(entity.abilities.con)):roll())
+  cost = {
+    hit_dice = 1,
+  },
+  _get_availability = function(self, entity)
+    return entity.hp < entity:get_max_hp()
+  end,
+  _run = function(self, entity)
+    healing.heal(entity, self:get_healing_roll():roll())
   end,
 }
 

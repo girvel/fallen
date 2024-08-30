@@ -150,8 +150,11 @@ actions.dash = static .. action {
   cost = {
     actions = 1,
   },
-  _run = function(_, entity)
-    entity.resources.movement = entity.resources.movement + entity:get_resources("move").movement
+  get_movement_bonus = function(self, entity)
+    return entity:get_resources("move").movement
+  end,
+  _run = function(self, entity)
+    entity.resources.movement = entity.resources.movement + self:get_movement_bonus(entity)
   end,
 }
 

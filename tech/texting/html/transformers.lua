@@ -75,7 +75,7 @@ end
 
 transformers.map.stats = function(node, children, styles)
   return Fun.iter(children)
-    :map(function(c) return Table.extend({color = Colors.from_hex("4e7a80")}, c) end)
+    :map(function(c) return Table.extend({color = Colors.from_hex("619cc3")}, c) end)
     :totable()
 end
 

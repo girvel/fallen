@@ -83,10 +83,19 @@ return Module("state.hotkeys", function(modes)
     get_description = attack_description("other_hand"),
   })
 
+  local healing_description = function(self)
+    return Html(function()
+      return stats {
+        "Восстанавливает ", self.action:get_healing_roll(State.player), " здоровья"
+      }
+    end)
+  end
+
   define_hotkey(hotkeys, {"free", "combat"}, {"3"}, {
     name = "второе дыхание",
     codename = "second_wind",
     action = fighter.second_wind,
+    get_description = healing_description,
     -- get_description = function(self)
     --   return Html(function()
     --     return p {
@@ -100,6 +109,13 @@ return Module("state.hotkeys", function(modes)
     name = "всплеск действий",
     codename = "action_surge",
     action = fighter.action_surge,
+    get_description = function(self)
+      return Html(function()
+        return stats {
+          "+1 действие на один ход",
+        }
+      end)
+    end
   })
 
   define_hotkey(hotkeys, {"free", "combat"}, {"e"}, {
@@ -111,28 +127,46 @@ return Module("state.hotkeys", function(modes)
   define_hotkey(hotkeys, {"free", "combat"}, {"shift"}, {
     name = "рывок",
     codename = "dash",
-    action = actions.dash
+    action = actions.dash,
+    get_description = function(self)
+      return Html(function()
+        return stats {
+          "+", self.action:get_movement_bonus(State.player), " к скорости движения",
+        }
+      end)
+    end,
   })
 
   define_hotkey(hotkeys, {"free"}, {"h"}, {
     name = "перевязать раны",
     codename = "hit_dice",
     action = class.hit_dice_action,
+    get_description = healing_description,
   })
 
   define_hotkey(hotkeys, {"free", "combat"}, {"g"}, {
     name = "мастер двуручного оружия",
     codename = "toggle_gwm",
-    hidden = function(entity)
-      return State.player.feat ~= feats.great_weapon_master
+    _perk = feats.great_weapon_master,
+    get_description = function(self)
+      return Html(function()
+        return stats {
+          "%+i" % self._perk.attack_modifier, " к атаке", br(),
+          "%+i" % self._perk.damage_modifier, " к урону", br(),
+          "Двуручное или полуторное оружие"
+        }
+      end)
     end,
-    pre_action = function()
-      if State.player.feat ~= feats.great_weapon_master then return end
-      local params = State.player.perk_params[feats.great_weapon_master]
+    hidden = function(self)
+      return State.player.feat ~= self._perk
+    end,
+    pre_action = function(self)
+      if self:hidden() then return end
+      local params = State.player.perk_params[self._perk]
       params.enabled = not params.enabled
     end,
-    is_passive_enabled = function()
-      return State.player.perk_params[feats.great_weapon_master].enabled
+    is_passive_enabled = function(self)
+      return State.player.perk_params[self._perk].enabled
     end,
   })
 

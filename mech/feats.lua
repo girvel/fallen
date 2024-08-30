@@ -12,13 +12,15 @@ end
 
 feats.great_weapon_master = static {
   codename = "great_weapon_master",
+  attack_modifier = -5,
+  damage_modifier = 10,
   modify_attack_roll = function(entity, roll)
     if not feats._gwm_condition(entity) then return roll end
-    return roll - 5
+    return roll + self.attack_modifier
   end,
   modify_damage_roll = function(entity, roll, slot)
     if slot ~= "main_hand" or not feats._gwm_condition(entity) then return roll end
-    return roll + 10
+    return roll + self.damage_modifier
   end,
 }
 

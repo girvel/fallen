@@ -60,7 +60,7 @@ module_mt.__call = function(_)
           end)
           :chain(other_factories)
           :map(function(f)
-            Query(f).pre_action()
+            Query(f):pre_action()
             return f.action
           end)
           :filter(Fun.op.truth)

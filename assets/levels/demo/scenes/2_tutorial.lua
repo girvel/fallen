@@ -17,7 +17,7 @@ return function()
         level.move(State.player, Vector({28, 97}))
         State.player.experience = require("mech").experience_for_level[2]
         State.gui.character_creator:refresh()
-        State.gui.character_creator:submit()
+        -- State.gui.character_creator:submit()
       end,
     },
 

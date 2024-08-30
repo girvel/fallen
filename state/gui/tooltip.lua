@@ -15,7 +15,7 @@ module_mt.__call = function(_, gui)
       if not self._entities or self._content ~= content then
         State:remove_multiple(self._entities or {})
         self._entities = State:add_multiple(texting.popup(
-          Vector.zero, "below", "tooltip", content, State.gui.tooltip.styles
+          Vector.zero, "below", "tooltip", content, State.gui.tooltip.styles, 500
         ))
       end
       self.position = Vector.use(
