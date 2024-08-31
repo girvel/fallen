@@ -14,7 +14,7 @@ return {
       "Scenes to run immediately after the start of the game"
     )
       :args("+")
-      :default({})
+      :default({"intro", "character_created", "warning_leaving_player_room", "checkpoint_2"})
 
     parser:option(
       "-l --level",
