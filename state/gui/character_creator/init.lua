@@ -140,8 +140,8 @@ return Module("state.gui.character_creator", function()
         build = Fun.iter(params.build_options)
           :filter(function(o) return Table.contains(active_choices, o) end)
           :tomap(),
-        feat = races[params.race].feat_flag
-          and feats.perk.options[params.build_options[feats.perk]]
+        feats = races[params.race].feat_flag
+          and {feats.perk.options[params.build_options[feats.perk]]}
           or nil,
         level = params.level,
         class = params.class,

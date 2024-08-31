@@ -23,7 +23,7 @@ general_ai_mt.__call = function(_, works_outside_of_combat)
     -- TODO optimize
     run = ai.async(function(self, dt)
       if
-        not State.combat
+        not api.in_combat(self)
         and self.ai.mode.enum_variant ~= general_ai.modes.run_away_to
       then return end
 

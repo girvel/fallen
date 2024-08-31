@@ -60,6 +60,23 @@ ai.api.travel = function(entity, destination)
   end
 end
 
+ai.api.try_attacking = function(entity, target)
+  local direction = target.position - entity.position
+  if direction:abs() ~= 1 then return end
+
+  Log.debug("Attempt at attacking %s" % Common.get_name(target))
+  entity:rotate(Vector.name_from_direction(direction))
+  while entity:act(actions.hand_attack) or entity:act(actions.other_hand_attack) do
+    while not entity.animation.current:startsWith("idle") do
+      coroutine.yield()
+    end
+  end
+end
+
+ai.api.in_combat = function(entity)
+  return Table.contains(-Query(State.combat).list or {}, entity)
+end
+
 ai.api.aggregate_aggression = function(t, entity)
   return Table.concat(t, Fun.iter(State.aggression_log)
     :filter(function(pair) return pair[2] == entity end)

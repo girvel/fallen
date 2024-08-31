@@ -9,7 +9,7 @@
         "love.filesystem.load": "loadfile"
     },
     "diagnostics.neededFileStatus": {
-        "undefined-field": "None!",
-        "undefined-global": "None!"
+        "undefined-field": "None!"
+        // "undefined-global": "None!"
     }
 }

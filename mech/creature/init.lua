@@ -17,7 +17,7 @@ end
 creature._methods = static {
   get_effect = function(self, name, value, ...)
     local args = {...}
-    return Fun.chain(self.effects, {self.feat})
+    return Fun.chain(self.effects, self.feats)
       :map(function(effect) return effect[name] end)
       :filter(Fun.op.truth)
       :reduce(
@@ -90,7 +90,7 @@ creature._methods = static {
       -- TODO store build perks & feats in one table
       self.effects = self.class:get_effects(self.level, self.build)
       self.perk_params = Fun.iter(self.effects)
-        :chain({self.feat})
+        :chain(self.feats)
         :map(function(effect) return effect, {} end)
         :tomap()
     end
@@ -139,6 +139,7 @@ module_mt.__call = function(_, animation_pack, object)
     },
 
     effects = {},
+    feats = {},
   }, creature._methods, object)
 
   result.hp = result.hp or result:get_max_hp()

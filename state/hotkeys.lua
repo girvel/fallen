@@ -158,7 +158,7 @@ return Module("state.hotkeys", function(modes)
       end)
     end,
     hidden = function(self)
-      return State.player.feat ~= self._perk
+      return not Table.contains(State.player.feats, self._perk)
     end,
     pre_action = function(self)
       if self:hidden() then return end

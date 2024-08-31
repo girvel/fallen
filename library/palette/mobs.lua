@@ -1,3 +1,5 @@
+local fighter = require("mech.classes.fighter")
+local combat_ai = require("library.combat_ai")
 local player = require("state.player")
 local weak_ai = require("library.weak_ai")
 local humanoid = require("mech.humanoid")
@@ -116,6 +118,9 @@ module.combat_dreamer = function()
     name = "...",
     race = Random.choice(dreamer_races),
     direction = Random.choice(Vector.direction_names),
+    faction = "combat_dreamers",
+
+    ai = combat_ai(),
 
     armor_class = 16,
     max_hp = 32,
@@ -124,6 +129,7 @@ module.combat_dreamer = function()
       main_hand = items.mace(),
       other_hand = items.spiked_shield(),
     },
+    feats = {fighter.fighting_style.options[3]},
   })
 end
 
