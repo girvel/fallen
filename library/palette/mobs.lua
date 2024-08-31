@@ -111,6 +111,22 @@ module.dreamer = function()
   })
 end
 
+module.combat_dreamer = function()
+  return humanoid({
+    name = "...",
+    race = Random.choice(dreamer_races),
+    direction = Random.choice(Vector.direction_names),
+
+    armor_class = 16,
+    max_hp = 32,
+    abilities = abilities(15, 10, 14, 7, 12, 7),
+    inventory = {
+      main_hand = items.mace(),
+      other_hand = items.spiked_shield(),
+    },
+  })
+end
+
 module.phantom_knight = function()
   return humanoid({
     ai = general_ai(),

@@ -34,10 +34,27 @@ local big_weapon_anchors = {
   },
 }
 
+local shield_anchors = {
+  idle_right = {
+    Vector({7, 8}),
+  },
+  idle_left = {
+    Vector({7, 8}),
+  },
+  idle_down = {
+    Vector({7, 8}),
+  },
+  idle_up = {
+    Vector({7, 8}),
+  },
+}
+
 animation_packs.rapier = animated.load_pack("assets/sprites/animations/rapier", small_weapon_anchors)
 animation_packs.dagger = animated.load_atlas_pack("assets/sprites/animations/dagger", small_weapon_anchors)
 animation_packs.knife = animated.load_atlas_pack("assets/sprites/animations/knife", small_weapon_anchors)
 animation_packs.machete = animated.load_atlas_pack("assets/sprites/animations/machete", small_weapon_anchors)
+animation_packs.mace = animated.load_atlas_pack("assets/sprites/animations/mace", small_weapon_anchors)
+animation_packs.shield = animated.load_atlas_pack("assets/sprites/animations/shield", shield_anchors)
 animation_packs.greatsword = animated.load_pack("assets/sprites/animations/greatsword", big_weapon_anchors)
 animation_packs.pole = animated.load_atlas_pack("assets/sprites/animations/pole", big_weapon_anchors)
 

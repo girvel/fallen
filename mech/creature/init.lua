@@ -29,7 +29,7 @@ creature._methods = static {
   end,
 
   get_armor = function(self)
-    return 10 + abilities.get_modifier(self.abilities.dex)
+    return self.armor_class or (10 + abilities.get_modifier(self.abilities.dex))
   end,
 
   get_resources = function(self, rest_type)

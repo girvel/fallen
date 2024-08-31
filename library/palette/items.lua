@@ -70,6 +70,40 @@ module.pole = function()
   )
 end
 
+module.mace = function()
+  return Table.extend(
+    item.mixin(),
+    animated(animation_packs.mace),
+    {
+      direction = "right",
+      name = "булава",
+      damage_roll = D(8),
+      bonus = 0,
+      tags = {
+        light = true
+      },
+      slot = "hands",
+    }
+  )
+end
+
+module.spiked_shield = function()
+  return Table.extend(
+    item.mixin(),
+    animated(animation_packs.shield),
+    {
+      direction = "right",
+      name = "шипастый щит",
+      damage_roll = D(6),
+      bonus = 0,
+      tags = {
+        light = true
+      },
+      slot = "other_hand",
+    }
+  )
+end
+
 module.greatsword = function()
   return Table.extend(
     item.mixin(),
