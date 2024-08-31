@@ -125,6 +125,17 @@ end
 
 local ACTION_CELL_SIZE = 18
 
+local icon_indexes = Fun.iter({
+  "zero", "up", "down", "left", "right", "open_codex", "open_journal", "open_creator",
+  "submit", "exit", "finish_turn", "hand_attack", "other_hand_attack", "dash", "interact", "hit_dice",
+  "second_wind", "action_surge", "fighting_spirit", false, false, false, false, false,
+  "toggle_gwm", false, false, false, false, false, false, false,
+  "brutal_attack", "aim",
+})
+  :enumerate()
+  :map(function(k, v) return v, k end)
+  :tomap()
+
 gui.action_icon = function(hotkey_data, index, frame)
   index = index - 1
   return {
@@ -142,7 +153,10 @@ gui.action_icon = function(hotkey_data, index, frame)
     end,
     _frame = frame,
 
-    sprite = sprite.image("assets/sprites/icons/%s.png" % hotkey_data.codename),
+    sprite = sprite.from_atlas(
+      "assets/sprites/atlases/icons.png",
+      icon_indexes[hotkey_data.codename]
+    ),
     view = "actions",
     position = Vector({index % 5, math.floor(index / 5)}) * ACTION_CELL_SIZE,
     size = Vector.one * 16,
