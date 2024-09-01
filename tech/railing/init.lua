@@ -2,11 +2,10 @@ local railing, module_mt, static = Module("tech.railing")
 
 railing.api = require("tech.railing.api")
 
-railing._methods = static {a = static .. {}}
-railing._methods.b = static {}
+railing._methods = static {}
 
 railing._methods.update = static .. function(self, dt)
-  Log.trace("started updating rails")
+  Log.trace("started updating rail")
   self._active_coroutines = Fun.iter(self._active_coroutines)
     :chain(Fun.iter(pairs(self.scenes))
       :filter(function(s)
