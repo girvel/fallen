@@ -33,6 +33,13 @@ _make_table_static = function(t, module_path, key_path)
   mt.__serialize = function(_)
     return function() return Common.get_by_path(require(module_path), key_path_copy) end
   end
+  mt.__newindex = function(self, k, v)
+    if type(v) == "table" then
+      _process_table(v, module_path, {k})
+      _walk_table(v, module_path, {k}, 1)
+    end
+    rawset(self, k, v)
+  end
 end
 
 local get_static_keyword = function(module_path)
@@ -64,13 +71,5 @@ return function(module_path, module_value)
   module_value = static(module_value)
   _make_table_static(module_value, module_path, {})
   _walk_table(module_value, module_path, {}, 0)
-  local mt = getmetatable(module_value)
-  mt.__newindex = function(self, k, v)
-    if type(v) == "table" then
-      _process_table(v, module_path, {k})
-      _walk_table(v, module_path, {k}, 1)
-    end
-    rawset(self, k, v)
-  end
-  return module_value, mt, static
+  return module_value, getmetatable(module_value), static
 end

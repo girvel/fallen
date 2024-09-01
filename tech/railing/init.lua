@@ -69,7 +69,7 @@ railing._methods.is_running = static .. function(self, scene)
 end
 
 module_mt.__call = function(_, ...)
-  local result = setmetatable(Table.extend(
+  return setmetatable(Table.extend(
     {_active_coroutines = {}},
     railing._methods,
     ...
@@ -83,9 +83,6 @@ module_mt.__call = function(_, ...)
       end
     end,
   })
-
-  love.filesystem.write("dump.lua", Dump(railing._methods.b))
-  return result
 end
 
 return railing
