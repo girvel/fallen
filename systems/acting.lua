@@ -136,6 +136,7 @@ acting.system = static(Tiny.processingSystem({
     local current = State.combat:get_current()
     Common.reset_period(self, current)
     Table.extend(current.resources, -Query(current):get_resources("move") or {})
+    current.disengaged_flag = nil  -- TODO redo as condition
     State.combat:move_to_next()
     current = State.combat:get_current()
     Log.info("%s's turn" % Common.get_name(current))

@@ -114,20 +114,22 @@ actions.move = static .. action {
 
     entity.resources.movement = entity.resources.movement - 1
 
-    Fun.iter(Vector.directions)
-      :map(function(d) return State.grids.solids:safe_get(old_position + d) end)
-      :filter(function(e)
-        return e
-          and e ~= entity
-          and e.abilities
-          and hostility.are_hostile(entity, e)
-          and e.resources
-          and e.resources.reactions > 0
+    if not entity.disengaged_flag then
+      Fun.iter(Vector.directions)
+        :map(function(d) return State.grids.solids:safe_get(old_position + d) end)
+        :filter(function(e)
+          return e
+            and e ~= entity
+            and e.abilities
+            and hostility.are_hostile(entity, e)
+            and e.resources
+            and e.resources.reactions > 0
+          end)
+        :each(function(e)
+          e.resources.reactions = e.resources.reactions - 1
+          base_attack(e, entity, "main_hand")
         end)
-      :each(function(e)
-        e.resources.reactions = e.resources.reactions - 1
-        base_attack(e, entity, "main_hand")
-      end)
+    end
 
     if entity.animate then
       entity.movement_flag = true
@@ -179,6 +181,16 @@ actions.interact = static .. action {
     else
       entity_to_interact:interact(entity)
     end
+  end
+}
+
+actions.disengage = static .. action {
+  codename = "disengage",
+  cost = {
+    actions = 1,
+  },
+  _run = function(_, entity)
+    entity.disengaged_flag = true
   end
 }
 

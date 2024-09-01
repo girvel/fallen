@@ -137,6 +137,17 @@ return Module("state.hotkeys", function(modes)
     end,
   })
 
+  define_hotkey(hotkeys, {"combat"}, {"z"}, {
+    name = "отход",
+    codename = "disengage",
+    action = actions.disengage,
+    get_description = function(self)
+      return Html(function()
+        return stats {"Не провоцировать атаки при движении"}
+      end)
+    end
+  })
+
   define_hotkey(hotkeys, {"free"}, {"h"}, {
     name = "перевязать раны",
     codename = "hit_dice",

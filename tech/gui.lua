@@ -127,7 +127,8 @@ local ACTION_CELL_SIZE = 18
 
 local icon_indexes = Fun.iter({
   "zero", "up", "down", "left", "right", "open_codex", "open_journal", "open_creator",
-  "submit", "exit", "finish_turn", "hand_attack", "other_hand_attack", "dash", "interact", "hit_dice",
+  "submit", "exit", false, false, false, false, false, false,
+  "finish_turn", "dash", "interact", "disengage", "hit_dice", "hand_attack", "other_hand_attack", false,
   "second_wind", "action_surge", "fighting_spirit", false, false, false, false, false,
   "toggle_gwm", false, false, false, false, false, false, false,
   "brutal_attack", "aim",

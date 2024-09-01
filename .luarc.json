@@ -11,5 +11,8 @@
     "diagnostics.neededFileStatus": {
         "undefined-field": "None!"
         // "undefined-global": "None!"
-    }
+    },
+    "diagnostics": {
+        "globals": ["stats", "h1", "p", "span"]
+    },
 }
