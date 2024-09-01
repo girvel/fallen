@@ -24,12 +24,6 @@ local systems = require("systems")
 
 
 love.load = function(args)
-  -- TODO RM
-  love.filesystem.write("dump.lua", Dump {
-    sound("assets/sounds/music/doom.mp3", 0.1),
-    sound("assets/sounds/music/drone_ambience.mp3", 0.5),
-  })
-
   local closure_args = Table.deep_copy(args)
   love.reload = function()
     State.world:clearEntities()

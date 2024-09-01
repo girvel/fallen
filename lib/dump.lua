@@ -127,6 +127,7 @@ return setmetatable({
     end,
   }),
   require_path = nil,
+  serializers = {},
 }, {
   __call = function(self, x)
     assert(
