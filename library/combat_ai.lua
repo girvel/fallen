@@ -17,14 +17,17 @@ module_mt.__call = function()
     end, true),
 
     observe = function(entity, dt)
-      if State:check_aggression(State.player, entity) then
+      if not hostility.are_hostile(entity, State.player)
+        and State:check_aggression(State.player, entity)
+      then
         hostility.make_hostile(entity.faction)
-        State:add(fx("assets/sprites/fx/aggression", "fx", entity.position))
-        State:start_combat({entity, State.player})
       end
 
-      if State.combat and hostility.are_hostile(entity, State.player) then
-        State:start_combat({entity})
+      if not Table.contains(-Query(State.combat).list or {}, entity)
+        and hostility.are_hostile(entity, State.player)
+      then
+        State:add(fx("assets/sprites/fx/aggression", "fx", entity.position))
+        State:start_combat({entity, State.player})
       end
     end,
   }

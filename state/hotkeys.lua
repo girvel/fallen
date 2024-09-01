@@ -344,7 +344,7 @@ return Module("state.hotkeys", function(modes)
     end,
   })
 
-  define_hotkey(hotkeys, Table.deep_copy(modes), {"Shift+r"}, {
+  define_hotkey(hotkeys, Table.deep_copy(modes), {"Ctrl+r"}, {
     name = "начать заново",
     pre_action = function()
       love.reload_flag = function() return true end

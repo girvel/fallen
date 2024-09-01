@@ -173,6 +173,7 @@ end
 
 api.autosave = function()
   Log.info("Autosave")
+  api.notification("Игра сохранена")
   game_save.write()
 end
 

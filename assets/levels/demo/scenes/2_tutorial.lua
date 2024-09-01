@@ -14,10 +14,23 @@ return function()
 
       run = function(self, rails, dt)
         self.enabled = false
-        level.move(State.player, Vector({39, 89}))
+        level.move(State.player, rails.positions.checkpoint_2)
         State.player.experience = require("mech").experience_for_level[3]
         State.gui.character_creator:refresh()
         -- State.gui.character_creator:submit()
+      end,
+    },
+
+    minmax_fight_save = {
+      name = "Save before minmax fight",
+      enabled = true,
+      start_predicate = function(self, rails, dt)
+        return State.player.position == rails.positions.minmax_fight_save
+      end,
+
+      run = function(self, rails)
+        self.enabled = false
+        api.autosave()
       end,
     },
 

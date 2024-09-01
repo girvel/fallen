@@ -35,7 +35,7 @@ attacking.attack = function(entity, target, attack_roll, damage_roll)
   end
 
   local protector = Fun.iter(Vector.directions)
-    :map(function(d) return State.grids[entity.layer]:safe_get(entity.position + d) end)
+    :map(function(d) return State.grids[entity.layer]:safe_get(target.position + d) end)
     :filter(function(e)
       return e
         and e ~= target
