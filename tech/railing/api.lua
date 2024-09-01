@@ -162,7 +162,7 @@ local SLOW_READING_SPEED = 10
 
 api.message.temporal = function(content, params)
   local entities = message(content, params)
-  local life_time = params.life_time or utf8.len(content) / SLOW_READING_SPEED + 2
+  local life_time = -Query(params).life_time or utf8.len(content) / SLOW_READING_SPEED + 2
 
   for _, e in ipairs(entities) do
     State:add(e, {life_time = life_time})
