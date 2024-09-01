@@ -130,6 +130,8 @@ module.combat_dreamer = function()
       other_hand = items.spiked_shield(),
     },
     feats = {fighter.fighting_style.options[3]},
+
+    shield_block_flag = true,  -- TODO redo with reactions refactor
   })
 end
 

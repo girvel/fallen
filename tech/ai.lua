@@ -66,6 +66,7 @@ ai.api.try_attacking = function(entity, target)
 
   Log.debug("Attempt at attacking %s" % Common.get_name(target))
   entity:rotate(Vector.name_from_direction(direction))
+  if entity.resources.actions <= 0 then return end  -- TODO RM after multiattacks
   while entity:act(actions.hand_attack) or entity:act(actions.other_hand_attack) do
     while not entity.animation.current:startsWith("idle") do
       coroutine.yield()
