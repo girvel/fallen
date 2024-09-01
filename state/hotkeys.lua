@@ -274,7 +274,7 @@ return Module("state.hotkeys", function(modes)
   define_hotkey(hotkeys, {"death"}, {"enter", "e"}, {
     name = "начать с последнего сохранения",
     pre_action = function()
-      game_save.read()
+      love.load_flag = true
     end,
   })
 
