@@ -49,7 +49,7 @@ fighter.action_surge = static .. action {
 fighter.fighting_style = static(perk.choice({
   {
     codename = "two_handed_style",
-    modify_damage_roll = function(entity, roll)
+    modify_damage_roll = function(self, entity, roll)
       local weapon = entity.inventory.main_hand
       if not (weapon and (weapon.tags.two_handed or weapon.tags.versatile)) then
         return roll
@@ -60,7 +60,7 @@ fighter.fighting_style = static(perk.choice({
 
   {
     codename = "duelist",
-    modify_damage_roll = function(entity, roll)
+    modify_damage_roll = function(self, entity, roll)
       local weapon = entity.inventory.main_hand
       if not weapon or weapon.tags.two_handed then
         return roll
@@ -71,7 +71,7 @@ fighter.fighting_style = static(perk.choice({
 
   {
     codename = "two_weapon_fighting",
-    modify_damage_roll = function(entity, roll, slot)
+    modify_damage_roll = function(self, entity, roll, slot)
       local weapon = entity.inventory.other_hand
       if not weapon or slot ~= "other_hand" then
         return roll
@@ -80,6 +80,18 @@ fighter.fighting_style = static(perk.choice({
     end,
   },
 }))
+
+fighter.fighting_spirit = static .. action {
+  codename = "fighting_spirit",
+  cost = {
+    fighting_spirit = 1,
+    bonus_actions = 1,
+  },
+  _run = function(self, entity)
+    entity.advantage_flag = true
+    entity.hp = math.min(entity:get_max_hp(), entity.hp) + 5  -- TODO temp hp
+  end,
+}
 
 fighter.progression_table = static {
   [1] = {
@@ -90,6 +102,10 @@ fighter.progression_table = static {
   [2] = {
     perk.action(fighter.action_surge),
     perk.resource("short", "action_surge", 1),
+  },
+  [3] = {
+    perk.action(fighter.fighting_spirit),
+    perk.resource("long", "fighting_spirit", 3),
   },
 }
 

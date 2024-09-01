@@ -118,6 +118,19 @@ return Module("state.hotkeys", function(modes)
     end
   })
 
+  define_hotkey(hotkeys, {"combat"}, {"5"}, {
+    name = "боевой дух",
+    codename = "fighting_spirit",
+    action = fighter.fighting_spirit,
+    get_description = function(self)
+      return Html(function(self)
+        return stats {
+          "преимущество до конца хода",
+        }
+      end)
+    end
+  })
+
   define_hotkey(hotkeys, {"free", "combat"}, {"e"}, {
     name = "взаимодействие",
     codename = "interact",

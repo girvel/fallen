@@ -18,11 +18,10 @@ creature._methods = static {
   get_effect = function(self, name, value, ...)
     local args = {...}
     return Fun.chain(self.effects, self.feats)
-      :map(function(effect) return effect[name] end)
-      :filter(Fun.op.truth)
+      :filter(function(effect) return effect[name] end)
       :reduce(
-        function(v, modifier)
-          return modifier(self, v, unpack(args))
+        function(v, effect)
+          return effect[name](effect, self, v, unpack(args))
         end,
         value
       )

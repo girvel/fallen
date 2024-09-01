@@ -7,6 +7,9 @@ local attacking, _, static = Module("mech.attacking")
 
 --- Attacks with given attack/damage rolls
 attacking.attack = function(entity, target, attack_roll, damage_roll)
+  if entity.advantage_flag then  -- TODO RM with conditions
+    attack_roll = attack_roll:extended {advantage = true}
+  end
   local attack = attack_roll:roll()
   local is_nat = attack == attack_roll:max()
   local is_nat_miss = attack == attack_roll:min()
