@@ -5,7 +5,6 @@ railing.api = require("tech.railing.api")
 railing._methods = static {}
 
 railing._methods.update = static .. function(self, dt)
-  Log.trace("started updating rail")
   self._active_coroutines = Fun.iter(self._active_coroutines)
     :chain(Fun.iter(pairs(self.scenes))
       :filter(function(s)
@@ -25,12 +24,10 @@ railing._methods.update = static .. function(self, dt)
       end)
     )
     :filter(function(c)
-      Log.trace("Scene", Common.get_name(c.base_scene))
       Common.resume_logged(c.coroutine, dt)
       return coroutine.status(c.coroutine) ~= "dead"
     end)
     :totable()
-  Log.trace("finished updating rails")
 end
 
 railing._methods.run_task = static .. function(self, task)

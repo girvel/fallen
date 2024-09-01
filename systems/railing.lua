@@ -5,8 +5,6 @@ railing.system = static(Tiny.system({
   base_callback = "update",
   update = function(_, dt)
     if State.rails and State.player then State.rails:update(dt) end
-  end,
-  postProcess = function(self)
     Log.trace("railing finished")
   end,
 }))
