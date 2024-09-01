@@ -56,9 +56,12 @@ love.load = function(args)
   State.gui.show_fps = args.show_fps
   State.fast_scenes = args.fast_scenes
 
-  for _, scene in ipairs(args.scenes) do
-    scene = State.rails.scenes[scene]
-    scene.enabled = not scene.enabled
+  for _, scene in ipairs(args.enable_scenes) do
+    Query(State.rails.scenes[scene]).enabled = true
+  end
+
+  for _, scene in ipairs(args.disable_scenes) do
+    Query(State.rails.scenes[scene]).enabled = false
   end
 
   love.audio.stop()

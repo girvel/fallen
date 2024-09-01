@@ -10,11 +10,18 @@ return {
       :description("Launch the Unalive")
 
     parser:option(
-      "-s --scenes",
-      "Scenes to run immediately after the start of the game"
+      "-s --enable-scenes",
+      "Scenes to enable"
     )
       :args("+")
-      :default({"intro", "character_created", "warning_leaving_player_room", "checkpoint_2"})
+      :default({"checkpoint_2"})
+
+    parser:option(
+      "-S --disable-scenes",
+      "Scenes to disable"
+    )
+      :args("+")
+      :default({"intro", "character_created", "warning_leaving_player_room"})
 
     parser:option(
       "-l --level",
@@ -54,7 +61,7 @@ return {
     )
 
     parser:flag(
-      "-S --load-save",
+      "-L --load-save",
       "Load save with the given name from default saves folder"
     )
 

@@ -14,7 +14,7 @@ return function()
       start_predicate = function(self, rails, dt) return true end,
 
       run = function(self, rails, dt)
-        self.enabled = false
+        rails:remove_scene("checkpoint_2")
         level.move(State.player, rails.positions.checkpoint_2)
         State.player.experience = require("mech").experience_for_level[3]
         State.gui.character_creator:refresh()
