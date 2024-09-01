@@ -4,8 +4,8 @@ local sound = require("tech.sound")
 return Module("state.audio", function()
   return {
     music = {
-      sound.multiple("assets/sounds/music/doom.mp3", 0.1)[1],
-      sound.multiple("assets/sounds/music/drone_ambience.mp3", 0.5)[1],
+      sound("assets/sounds/music/doom.mp3", 0.1),
+      sound("assets/sounds/music/drone_ambience.mp3", 0.5),
     },
     current_music = nil,
     disable_ambient = false,
@@ -16,6 +16,7 @@ return Module("state.audio", function()
       if self.disable_ambient then return end
       local current_track = self.current_music
       if -Query(current_track):isPlaying() then return end
+      Log.trace(self.music)
       while #self.music > 1 and self.current_music == current_track do
         self.current_music = Random.choice(self.music)
       end

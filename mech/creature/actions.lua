@@ -176,7 +176,7 @@ actions.interact = static .. action {
       and not -Query(entity.inventory).main_hand
     then
       entity:animate("main_hand_attack"):next(function()
-        entity_to_interact:interact(entity)
+        Query(entity_to_interact):interact(entity)
       end)
     else
       entity_to_interact:interact(entity)
