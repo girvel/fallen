@@ -35,8 +35,8 @@ _make_table_static = function(t, module_path, key_path)
   end
   mt.__newindex = function(self, k, v)
     if type(v) == "table" then
-      _process_table(v, module_path, {k})
-      _walk_table(v, module_path, {k}, 1)
+      _process_table(v, module_path, Table.concat({}, key_path_copy, {k}))
+      _walk_table(v, module_path, Table.concat({}, key_path_copy, {k}), 1)
     end
     rawset(self, k, v)
   end
