@@ -88,6 +88,7 @@ fighter.fighting_spirit = static .. action {
     bonus_actions = 1,
   },
   _run = function(self, entity)
+    State:add(fx("assets/sprites/fx/fighting_spirit", "fx_behind", entity.position))
     entity.advantage_flag = true
     entity.hp = math.min(entity:get_max_hp(), entity.hp) + 5  -- TODO temp hp
   end,
