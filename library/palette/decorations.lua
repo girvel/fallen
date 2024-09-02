@@ -18,7 +18,7 @@ factoring.from_atlas(decorations, decorations_atlas, {
   "table_up", "mirage_block", "stool", "sofa", "countertop_left", "bed", "sink", "countertop_right",
   "table_ver", "steel_wall_window", "steel_wall_transparent", "scratched_table", "countertop_left_corner_down", "countertop", "empty_bed", "countertop_right_corner_down",
   "table_down", "cage", "device_panel_right", "device_panel_right_down", "countertop_left_corner_up", "cabinet_right_down", "cabinet_left_down", "countertop_right_corner_up",
-  "", "", "", "",
+  "", "", "", "", "", "",
 })
 
 factoring.extend(decorations, "mirage_block", {name = "Блок миража"})
