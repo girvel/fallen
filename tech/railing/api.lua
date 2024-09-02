@@ -175,8 +175,8 @@ end
 
 api.autosave = function()
   Log.info("Autosave")
+  love.save_flag = true
   api.notification("Игра сохранена")
-  game_save.write()
 end
 
 local quest_stage = function(k, v)

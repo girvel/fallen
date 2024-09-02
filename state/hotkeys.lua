@@ -280,7 +280,7 @@ return Module("state.hotkeys", function(modes)
   define_hotkey(hotkeys, {"death"}, {"r"}, {
     name = "начать заново",
     pre_action = function()
-      love.reload_flag = function() return true end
+      love.reload_flag = true
     end,
   })
 
@@ -347,9 +347,18 @@ return Module("state.hotkeys", function(modes)
   define_hotkey(hotkeys, Table.deep_copy(modes), {"Ctrl+r"}, {
     name = "начать заново",
     pre_action = function()
-      love.reload_flag = function() return true end
+      love.reload_flag = true
     end,
   })
+
+  if Debug.debug_mode then
+    define_hotkey(hotkeys, Table.deep_copy(modes), {"Ctrl+s"}, {
+      name = "загрузить сохранение",
+      pre_action = function()
+        love.load_flag = true
+      end
+    })
+  end
 
   define_hotkey(hotkeys, {"free", "combat", "dialogue", "dialogue_options", "reading"}, {"k"}, {
     name = "кодекс",

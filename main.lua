@@ -131,6 +131,7 @@ love.run = function()
 
 	-- Main loop time.
 	return function()
+    -- TODO REF State.flags & state_management preupdate system
     if love.reload_flag then
       love.reload()
       love.reload_flag = nil
@@ -139,6 +140,11 @@ love.run = function()
     if love.load_flag then
       game_save.read()
       love.load_flag = nil
+    end
+
+    if love.save_flag then
+      game_save.write()
+      love.save_flag = nil
     end
 
     local current_time = love.timer.getTime()
@@ -197,11 +203,10 @@ love.run = function()
 end
 
 for callback_name, _ in pairs(
-  Fun.iter(systems)
-    :reduce(function(acc, system)
-      acc[system.base_callback] = true
-      return acc
-    end, {})
+  Fun.iter(systems):reduce(function(acc, system)
+    acc[system.base_callback] = true
+    return acc
+  end, {})
 ) do
   love[callback_name] = function(...)
     State.world:refresh()
