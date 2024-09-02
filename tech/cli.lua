@@ -14,14 +14,14 @@ return {
       "Scenes to enable"
     )
       :args("+")
-      :default({"checkpoint_2"})
+      :default({})
 
     parser:option(
       "-S --disable-scenes",
       "Scenes to disable"
     )
       :args("+")
-      :default({"intro", "character_created", "warning_leaving_player_room"})
+      :default({})
 
     parser:option(
       "-l --level",

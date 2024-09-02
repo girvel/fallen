@@ -187,7 +187,7 @@ forms.skills = static(function(params)
 end)
 
 forms.class = static(function(params)
-  return "   <h2>Класс: %s, %s уровень</h2>" % {translation.class[params.class.codename], params.level}
+  return "   <h2>Класс: %s, уровень %s</h2>" % {translation.class[params.class.codename], params.level}
     .. Fun.iter(class.get_choices(params.class.progression_table, params.level))
       :map(function(choice) return perk_form(choice, params) end)
       :reduce(Fun.op.concat, "")

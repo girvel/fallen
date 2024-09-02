@@ -71,7 +71,6 @@ acting.system = static(Tiny.processingSystem({
     if -Query(State.combat):get_current() == combat.WORLD_TURN then
       self:_pass_turn()
     end
-    Log.trace("acting finished")
   end,
 
   _refresh_blood = function(self, entity)

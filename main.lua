@@ -144,7 +144,6 @@ love.run = function()
     local current_time = love.timer.getTime()
 
 		-- Process events.
-    Log.trace("Frame", frames_total)
 		if love.event then
 			love.event.pump()
 			for name, a,b,c,d,e,f in love.event.poll() do
@@ -161,7 +160,6 @@ love.run = function()
 				love.handlers[name](a,b,c,d,e,f)
 			end
 		end
-    Log.trace("events were processed")
 
 		-- Update dt, as we'll be passing it to update
 		dt = love.timer.step()
@@ -177,7 +175,6 @@ love.run = function()
 
 		-- Call update and draw
 		if love.update then love.update(dt) end -- will pass 0 if love.timer is disabled
-    Log.trace("update finished")
 
 		if love.graphics and love.graphics.isActive() then
 			love.graphics.origin()

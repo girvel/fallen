@@ -29,7 +29,7 @@ class.hit_dice_action = static .. action {
     return entity.hp < entity:get_max_hp()
   end,
   _run = function(self, entity)
-    healing.heal(entity, self:get_healing_roll():roll())
+    healing.heal(entity, self:get_healing_roll(entity):roll())
   end,
 }
 

@@ -11,13 +11,13 @@ sound.mt = static {
   __serialize = function(self)
     local path = self._path
     local volume = self.source:getVolume()
-    local relative, x, y, rolloff, ref, max, looping
+    local looping = self.source:isLooping()
+    local relative, x, y, rolloff, ref, max
     if self.source:getChannelCount() == 1 then
       relative = self.source:isRelative()
       x, y = self.source:getPosition()
       rolloff = self.source:getRolloff()
       ref, max = self.source:getAttenuationDistances()
-      looping = self.source:isLooping()
     end
 
     return function()

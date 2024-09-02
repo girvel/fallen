@@ -4,7 +4,6 @@ writing_text.system = static(Tiny.system({
   codename = "writing_text",
   base_callback = "textinput",
   update = function(self, text)
-    Log.trace("writing_text")
     if State:get_mode() ~= "text_input" then return end
     local new_text = State.gui.text_input.text .. text
     if new_text:find("^%s*$") then return end
