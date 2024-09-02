@@ -61,9 +61,20 @@ return Module("tech.translation", {
     second_wind = "второе дыхание",
     action_surge = "всплеск действий",
     hit_dice = "перевязать раны",
+    fighting_spirit = "боевой дух",
   },
 
   class = {
     fighter = "воин",
-  }
+  },
+
+  items = {
+    tags = {
+      two_handed = "двуручное",
+      light = "лёгкое",
+      finnesse = "фехтовальное",
+      heavy = "тяжёлое",
+      versatile = "полуторное",
+    },
+  },
 })

@@ -82,9 +82,12 @@ module.d_mt.__tostring = function(self)
       :totable(),
     " + "
   )
-  local bonus = self.bonus > 0 and tostring(self.bonus) or ""
-  local plus = #dice > 0 and #bonus > 0 and " + " or ""
-  return dice .. plus .. bonus
+  local bonus = ""
+  if self.bonus ~= 0 then
+    bonus = "%+i" % self.bonus
+    bonus = " " .. bonus:sub(1, 1) .. " " .. bonus:sub(2)
+  end
+  return dice .. bonus
 end
 
 d_methods.roll = function(self)

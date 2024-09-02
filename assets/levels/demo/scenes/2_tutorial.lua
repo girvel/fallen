@@ -16,22 +16,9 @@ return function()
       run = function(self, rails, dt)
         rails:remove_scene("checkpoint_2")
         level.move(State.player, rails.positions.checkpoint_2)
-        State.player.experience = require("mech").experience_for_level[3]
+        State.player.experience = require("mech").experience_for_level[2]
         State.gui.character_creator:refresh()
         -- State.gui.character_creator:submit()
-      end,
-    },
-
-    minmax_fight_save = {
-      name = "Save before minmax fight",
-      enabled = true,
-      start_predicate = function(self, rails, dt)
-        return State.player.position == rails.positions.minmax_fight_save
-      end,
-
-      run = function(self, rails)
-        self.enabled = false
-        api.autosave()
       end,
     },
 
@@ -137,7 +124,7 @@ return function()
           elseif o == 2 then
             self.enabled = false
             rails.entities.mirage_block.interact = nil
-            api.narration("Блок громко жужжит, после чего выпускает из левой грани множество потоков световых лучей.")
+            api.narration("Блок громко жужжит, после чего выпускает из левой грани множество световых лучей.")
             api.narration("В конце комнаты свет формирует призрачную фигуру рыцаря.")
 
             e = State:add(mobs.phantom_knight(), {position = Vector({31, 97})})

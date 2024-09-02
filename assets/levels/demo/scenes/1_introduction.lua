@@ -54,7 +54,6 @@ return function()
 
         api.narration("Руки инстинктивно отскакивают от потока ледяной воды")
         api.narration("Перед тобой мутное зеркало и видавший лучшую жизнь умывальник")
-        api.narration("Справа неопрятный сортир")
         api.narration("Стены спаяны из металлических листов, от них эхом отражается любой звук")
         rails.scenes.snoring.enabled = true
         rails.scenes.snoring.triggered = true
