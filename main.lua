@@ -111,13 +111,15 @@ love.load = function(args)
   Log.info("Game is loaded")
 end
 
-local active_time = 0
-local frames_total = 0
+love._custom = {
+  active_time = 0,
+  frames_total = 0,
 
-local key_repetition_delays = {}
-local key_repetition_id = {}
-love.key_repetition_delay = .3
-love.key_repetition_rate = 5
+  key_repetition_delays = {},
+  key_repetition_id = {},
+  key_repetition_delay = .3,
+  key_repetition_rate = 5,
+}
 
 love.run = function()
 	if love.load then love.load(love.arg.parseGameArguments(arg), arg) end
@@ -148,6 +150,7 @@ love.run = function()
     end
 
     local current_time = love.timer.getTime()
+    local custom = love._custom
 
 		-- Process events.
 		if love.event then
@@ -158,10 +161,10 @@ love.run = function()
 						return a or 0
 					end
         elseif name == "keypressed" then
-          key_repetition_delays[b] = love.key_repetition_delay
+          custom.key_repetition_delays[b] = custom.key_repetition_delay
           love.custom_keypressed(b)
         elseif name == "keyreleased" then
-          key_repetition_delays[b] = nil
+          custom.key_repetition_delays[b] = nil
 				end
 				love.handlers[name](a,b,c,d,e,f)
 			end
@@ -170,10 +173,10 @@ love.run = function()
 		-- Update dt, as we'll be passing it to update
 		dt = love.timer.step()
 
-    for k, v in pairs(key_repetition_delays) do
-      key_repetition_delays[k] = math.max(0, v - dt)
-      if key_repetition_delays[k] == 0 then
-        while Common.period(1 / love.key_repetition_rate, key_repetition_id, k) do
+    for k, v in pairs(custom.key_repetition_delays) do
+      custom.key_repetition_delays[k] = math.max(0, v - dt)
+      if custom.key_repetition_delays[k] == 0 then
+        while Common.period(1 / custom.key_repetition_rate, custom.key_repetition_id, k) do
           love.custom_keypressed(k)
         end
       end
@@ -191,8 +194,8 @@ love.run = function()
 			love.graphics.present()
 		end
 
-    active_time = active_time + love.timer.getTime() - current_time
-    frames_total = frames_total + 1
+    custom.active_time = custom.active_time + love.timer.getTime() - current_time
+    custom.frames_total = custom.frames_total + 1
 		love.timer.sleep(0.001)
 
     if love.is_running_tests then
@@ -218,7 +221,7 @@ end
 
 love.quit = function()
   Log.info("Exited smoothly")
-  Log.info("Max potential FPS: %.2f" % (frames_total / active_time))
+  Log.info("Max potential FPS: %.2f" % (love._custom.frames_total / love._custom.active_time))
   if State.profiler then
     State.profiler.stop()
     Log.info("===== PROFILE =====\n\n" .. State.profiler.report(100))

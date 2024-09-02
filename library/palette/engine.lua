@@ -16,11 +16,7 @@ factoring.from_atlas(engine, "assets/sprites/engine2.png", function(_, position)
     mixin.layer = "above_solids"
   end
 
-  if not (
-    position[2] == 0
-    or Table.contains({4, 5, 6}, position[2])
-      and Table.contains({2, 3, 4}, position[1])
-  ) then
+  if position[2] ~= 0 then
     mixin.transparent_flag = true
   end
 
