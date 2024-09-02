@@ -19,7 +19,7 @@ local generate_entities = function(token_lines, view)
       table.insert(result, Table.extend(
         clean_copy,
         gui.text(
-          token.color and {token.color, token.content} or token.content,
+          token.color and {Table.extend({}, token.color), token.content} or token.content,
           token.font_size,
           Vector({token.x, token.y})
         ),

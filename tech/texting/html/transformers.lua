@@ -58,11 +58,11 @@ transformers.map.hate = function(node, children, styles)
 
             local color = self.sprite.text[1]
             if color[4] < 1 then
-              color = {color[1], color[2], color[3], color[4] + dt / self.appearance_time}
+              color[4] = color[4] + dt / self.appearance_time
             end
           end,
         })
-        result.color = {result.color[1], result.color[2], result.color[3], 0}
+        result.color[4] = 0
         return result
       end)
       :totable()
