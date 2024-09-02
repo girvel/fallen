@@ -40,7 +40,9 @@ colors.hex = static {
 }
 
 for k, v in pairs(colors.hex) do
-  colors[k] = static .. colors.from_hex(v)
+  colors[k] = function()
+    return colors.from_hex(v)
+  end
 end
 
 return colors

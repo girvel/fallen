@@ -1,5 +1,4 @@
 local feats = require("mech.feats")
-local game_save = require("state.game_save")
 local actions = require("mech.creature.actions")
 local fighter = require("mech.classes.fighter")
 local class = require("mech.class")
@@ -324,7 +323,7 @@ return Module("state.hotkeys", function(modes)
     hidden = function() return true end,
     pre_action = function()
       local input = State.gui.text_input
-      if #input.text == 0 then return end
+      if #input.text == 0 or utf8.len(input.text) > 100 then return end
       input.text = input.text:sub(1, utf8.offset(input.text, utf8.len(input.text)) - 1)
     end
   })
@@ -332,6 +331,7 @@ return Module("state.hotkeys", function(modes)
   define_hotkey(hotkeys, {"text_input"}, {"enter"}, {
     hidden = function() return true end,
     pre_action = function()
+      if State.gui.text_input.text:find("^%s*$") then return end
       State.gui.text_input.active = false
     end
   })

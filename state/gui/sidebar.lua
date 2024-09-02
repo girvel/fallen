@@ -7,12 +7,12 @@ local actions = require("mech.creature.actions")
 
 
 local COLOR = {
-  ORDER = Colors.yellow,
-  NOTIFICATION = Colors.white,
-  OLD_ORDER = Colors.dark_yellow,
-  OLD_NOTIFICATION = Colors.gray,
-  INACTIVE = Colors.gray,
-  HOSTILE = Colors.red,
+  ORDER = Colors.yellow(),
+  NOTIFICATION = Colors.white(),
+  OLD_ORDER = Colors.dark_yellow(),
+  OLD_NOTIFICATION = Colors.gray(),
+  INACTIVE = Colors.gray(),
+  HOSTILE = Colors.red(),
 }
 
 local value_translations = {
@@ -78,15 +78,21 @@ return Module("state.gui.sidebar", function()
       local d = math.min(#self.notifications - self._notifications_n, #self._notification_queue)
       if d > 0 then
         for i = #self.notifications - d, 1, -1 do
-          self.notifications[i + d].sprite.text = self.notifications[i].sprite.text
-          self.notifications[i + d].display_time = self.notifications[i].display_time
+          local to = self.notifications[i + d]
+          local from = self.notifications[i]
+
+          to.sprite.text = from.sprite.text
+          to.display_time = from.display_time
+
           if i == 1 then
-            self.notifications[i + d].sprite.text[1] = ({
-              [COLOR.ORDER] = COLOR.OLD_ORDER,
-              [COLOR.NOTIFICATION] = COLOR.OLD_NOTIFICATION
-            })[self.notifications[i + d].sprite.text[1]]
+            if Table.shallow_same(to.sprite.text[1], COLOR.ORDER) then
+              to.sprite.text[1] = COLOR.OLD_ORDER
+            else
+              to.sprite.text[1] = COLOR.OLD_NOTIFICATION
+            end
           end
         end
+
         local text, is_order
         for i = 1, d do
           local notification = self.notifications[i]
@@ -242,12 +248,12 @@ return Module("state.gui.sidebar", function()
 
         local i = 3
         for k, v in Pairs(State.player.resources) do
-          local color = Colors.white
+          local color = Colors.white()
           if highlighted[k] then
             if highlighted[k] > v then
-              color = Colors.red
+              color = Colors.red()
             else
-              color = Colors.light_green
+              color = Colors.light_green()
             end
           end
           append({
@@ -264,7 +270,7 @@ return Module("state.gui.sidebar", function()
           State.combat:iter_entities_only()
             :map(function(e)
               return {
-                hostility.are_hostile(State.player, e) and COLOR.HOSTILE or Colors.white,
+                hostility.are_hostile(State.player, e) and COLOR.HOSTILE or Colors.white(),
                 "\n%s %s" % {
                   State.combat:get_current() == e and "x" or "-",
                   Common.get_name(e),

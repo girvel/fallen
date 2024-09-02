@@ -15,7 +15,7 @@ gui.floating_damage = function(number, scene_position, color)
       + Vector({math.random(12) - 6, math.random(12) - 6}),
     view = "scene_fx",
     drift = Vector({0, -24}),
-    sprite = sprite.text({color or Colors.red, number}, 14),
+    sprite = sprite.text({color or Colors.red(), number}, 14),
     life_time = 3,
   }
 end
@@ -59,7 +59,7 @@ gui.notification = function(i)
     codename = "notification",
     view = "notification",
     position = Vector.zero + Vector.up * 35 * (i - 1),
-    sprite = sprite.text({Colors.white, ""}, 18),
+    sprite = sprite.text({Colors.white(), ""}, 18),
     display_time = 0,
   }
 end

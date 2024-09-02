@@ -146,7 +146,7 @@ display.system = static(Tiny.sortedProcessingSystem({
       local x, y = unpack(offset_position)
       love.graphics.setColor(entity.sprite.rect_color)
       love.graphics.rectangle("fill", x, y, unpack(entity.size * current_view:get_multiplier()))
-      love.graphics.setColor(Colors.absolute_white)
+      love.graphics.setColor(Colors.absolute_white())
     else
       -- error("Wrong sprite format of %s:\n%s" % {Common.get_name(entity), Inspect(entity.sprite)})
     end
@@ -171,7 +171,7 @@ display.system = static(Tiny.sortedProcessingSystem({
         love.graphics.setColor(entity.sprite.text[1])
       end
       love.graphics.line(start[1], start[2], unpack(finish))
-      love.graphics.setColor(Colors.absolute_white)
+      love.graphics.setColor(Colors.absolute_white())
     end
   end,
 
@@ -261,10 +261,10 @@ display.system = static(Tiny.sortedProcessingSystem({
     local x = (love.graphics.getWidth() - hint_font:getWidth(content)) / 2
     local y = love.graphics.getHeight() - hint_font:getHeight() - 50
 
-    love.graphics.setColor(Colors.black)
+    love.graphics.setColor(Colors.black())
     love.graphics.rectangle("fill", x, y, hint_font:getWidth(content), hint_font:getHeight())
-    love.graphics.setColor(Colors.absolute_white)
-    love.graphics.print({Colors.gray, content}, hint_font, x, y)
+    love.graphics.setColor(Colors.absolute_white())
+    love.graphics.print({Colors.gray(), content}, hint_font, x, y)
   end,
 }))
 
