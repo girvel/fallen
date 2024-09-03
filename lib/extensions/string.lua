@@ -7,7 +7,7 @@ stringx.utf_sub = function(str, a, b)
   if not b then
     b = stringx.utf_len(str)
   elseif b < 1 then
-    b = b + stringx.utf_len(str)
+    b = b + stringx.utf_len(str) + 1
   end
   return str:sub(utf8.offset(str, a), utf8.offset(str, b + 1) - 1)
 end

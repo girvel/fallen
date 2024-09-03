@@ -330,7 +330,7 @@ return Module("state.hotkeys", function(modes)
     pre_action = function()
       local input = State.gui.text_input
       if #input.text == 0 or utf8.len(input.text) > 100 then return end
-      input.text = String.utf_sub(input.text, 1, -1)
+      input.text = String.utf_sub(input.text, 1, -2)
     end
   })
 

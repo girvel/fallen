@@ -13,6 +13,9 @@
         // "undefined-global": "None!"
     },
     "diagnostics": {
-        "globals": ["stats", "h1", "p", "span", "br"]
+        "globals": [
+            "describe", "it",
+            "stats", "h1", "p", "span", "br"
+        ]
     },
 }
