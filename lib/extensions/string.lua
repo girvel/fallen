@@ -23,8 +23,8 @@ methods.utf_lower = function(str)
   str = str:lower()
   for i = 1, methods.utf_len(ru_lower) do
     str = str:gsub(
-      methods.utf_sub(ru_upper, i, i + 1),
-      methods.utf_sub(ru_lower, i, i + 1)
+      methods.utf_sub(ru_upper, i, i),
+      methods.utf_sub(ru_lower, i, i)
     )
   end
   return str
@@ -34,8 +34,8 @@ methods.utf_upper = function(str)
   str = str:upper()
   for i = 1, methods.utf_len(ru_lower) do
     str = str:gsub(
-      methods.utf_sub(ru_lower, i, i + 1),
-      methods.utf_sub(ru_upper, i, i + 1)
+      methods.utf_sub(ru_lower, i, i),
+      methods.utf_sub(ru_upper, i, i)
     )
   end
   return str
