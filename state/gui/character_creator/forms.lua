@@ -1,3 +1,4 @@
+local utf8 = require("utf8")
 local abilities = require("mech.abilities")
 local races = require("mech.races")
 local translation = require("tech.translation")
@@ -143,6 +144,13 @@ forms.skills = static(function(params)
   local text = "   <h2>Навыки</h2>"
     .. "   Свободные навыки: %s\n\n" % params.free_skills
 
+  local base_column = Fun.iter(abilities.skill_bases)
+    :map(function(s, a)
+      local translated = translation.abilities[abilities.skill_bases[s]]
+      return s, translated:sub(utf8.offset(translated, 1), utf8.offset(translated, 4) - 1)
+    end)
+    :tomap()
+
   local bonus_column = Fun.iter(abilities.skill_bases)
     :map(function(s, a) return s, abilities.get_modifier(params.abilities_final[a]) end)
     :tomap()
@@ -153,7 +161,7 @@ forms.skills = static(function(params)
 
   text = text
     .. Common.build_table(
-      {" ", "Навык ", "Владение", "Бонус", "Результат"},
+      {" ", "Навык ", "Владение", "База", "Бонус", "Результат"},
       Fun.iter(abilities.skills)
         :enumerate()
         :map(function(i, s)
@@ -161,6 +169,7 @@ forms.skills = static(function(params)
             params:_get_indicator(i + params.max_index),
             translation.skill[s],
             params.skills[s] and "x" or " ",
+            base_column[s],
             "%+i" % bonus_column[s],
             "= %+i" % result_column[s],
           }
