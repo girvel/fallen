@@ -79,31 +79,6 @@ function string:camelize(upper)
   return upper and self:gsub("^%l", string.upper) or self
 end
 
-local ru_lower = "абвгдеёжзийклмнопрстуфхцчшщъыьэюя"
-local ru_upper = "АБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯ"
-
-function string:better_lower()
-  self = self:lower()
-  for i = 1, utf8.len(ru_lower) do
-    self = self:gsub(
-      ru_upper:sub(utf8.offset(ru_upper, i), utf8.offset(ru_upper, i + 1) - 1),
-      ru_lower:sub(utf8.offset(ru_lower, i), utf8.offset(ru_lower, i + 1) - 1)
-    )
-  end
-  return self
-end
-
-function string:better_upper()
-  self = self:upper()
-  for i = 1, utf8.len(ru_lower) do
-    self = self:gsub(
-      ru_lower:sub(utf8.offset(ru_lower, i), utf8.offset(ru_lower, i + 1) - 1),
-      ru_upper:sub(utf8.offset(ru_upper, i), utf8.offset(ru_upper, i + 1) - 1)
-    )
-  end
-  return self
-end
-
 function string:capitalize()
   return self:lower():gsub("^%l", string.upper)
 end

@@ -1,5 +1,8 @@
 describe("lib.extensions.string", function()
-  local stringx = require("lib.extensions.string")
+  local mt = {__index = {}}
+  local stringx = setmetatable({}, mt)
+  require("lib.extensions.string").inject(mt)
+
   describe("utf_sub", function()
     it("performs UTF8-compatible substring", function()
       assert.equal("Приве", stringx.utf_sub("Привет, мир!", 1, 5))
