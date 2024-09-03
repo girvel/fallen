@@ -41,7 +41,7 @@ methods.utf_upper = function(str)
   return str
 end
 
-methods.startsWith = function(str, prefix)
+methods.starts_with = function(str, prefix)
   return str:sub(1, #prefix) == prefix
 end
 
@@ -105,6 +105,10 @@ end
 
 
 local mt = {}
+
+mt.__mul = function(a, b)
+  return a:rep(b)
+end
 
 mt.__div = function(a, b)
   return methods.split(a, b, true)

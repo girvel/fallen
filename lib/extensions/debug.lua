@@ -46,7 +46,7 @@ end
 
 local run = function(command)
   local upvalues = Fun.iter(_stack[stack_index].locals)
-    :filter(function(pair) return not pair.name:startsWith("(*") end)
+    :filter(function(pair) return not pair.name:starts_with("(*") end)
 
   local ok, result
   for _, form in ipairs({"return ", ""}) do
@@ -83,7 +83,7 @@ local font = love.graphics.newFont("assets/fonts/clacon2.ttf", 24)
 
 local keypressed = function(scancode)
   if scancode == "backspace" then
-    current_command = String.utf_sub(current_command, 1, -2)
+    current_command = current_command:utf_sub(1, -2)
   end
 
   if scancode == "return" then
@@ -100,7 +100,7 @@ local keypressed = function(scancode)
 
   if scancode == "up" then
     current_command = Fun.iter(command_history)
-      :filter(function(c) return c:startsWith(current_command) end)
+      :filter(function(c) return c:starts_with(current_command) end)
       :reduce(Fun.op.land, current_command)
   end
 

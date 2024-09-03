@@ -19,11 +19,11 @@ local load_wiki = function(path)
     local title_b = html.get_title(b[2])
 
     local appendix = "Приложение"
-    if title_a:startsWith(appendix) then
-      if not title_b:startsWith(appendix) then
+    if title_a:starts_with(appendix) then
+      if not title_b:starts_with(appendix) then
         return false
       end
-    elseif title_b:startsWith(appendix) then
+    elseif title_b:starts_with(appendix) then
       return true
     end
 

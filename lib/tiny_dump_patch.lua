@@ -6,7 +6,7 @@ module_mt.__call = function(_)
     local systems = self.systems
     return function()
       for k, v in pairs(package.loaded) do
-        if k:startsWith("systems") then
+        if k:starts_with("systems") then
           package.loaded[k] = nil
         end
       end

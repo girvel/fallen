@@ -38,7 +38,7 @@ sound.multiple = function(path_beginning, volume)
   local _, _, directory = path_beginning:find("^(.*)/[^/]*$")
   return Fun.iter(love.filesystem.getDirectoryItems(directory))
     :map(function(filename) return directory .. "/" .. filename end)
-    :filter(function(path) return path:startsWith(path_beginning) end)
+    :filter(function(path) return path:starts_with(path_beginning) end)
     :map(function(path) return sound(path, volume or 1) end)
     :totable()
 end

@@ -4,7 +4,6 @@ return function()
   Tiny = require("lib.tiny")
   Inspect = require("lib.inspect")
   Memoize = require("lib.memoize")
-  require("lib.strong")
   Json = require("lib.json")
   Html = require("lib.html")
 
@@ -12,7 +11,7 @@ return function()
 
   Pairs = require("lib.extensions.pairs")
   Table = require("lib.extensions.table")
-  String = require("lib.extensions.string")
+  require("lib.extensions.string").inject(getmetatable(""))
 
   Query = require("lib.types.query")
   Math = require("lib.extensions.math")

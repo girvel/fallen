@@ -92,11 +92,10 @@ common.loop = function(v, loop)
 end
 
 local len = function(str)
-  return String.utf_len(
-    str
-      :gsub("<[^>]*>", "")
-      :gsub("&.t;", "&")
-  )
+  return str
+    :gsub("<[^>]*>", "")
+    :gsub("&.t;", "&")
+    :utf_len()
 end
 
 common.build_table = function(headers, matrix, needs_shift)
