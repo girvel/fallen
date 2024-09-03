@@ -5,7 +5,7 @@ module_mt.__call = function(_, base_table)
     get_availability = function(self, entity)
       return (not self._get_availability or self:_get_availability(entity))
         and Fun.iter(self.cost or {})
-          :all(function(k, v) return entity.resources[k] >= v end)
+          :all(function(k, v) return (entity.resources[k] or 0) >= v end)
     end,
     run = function(self, entity)
       if not self:get_availability(entity) then return end

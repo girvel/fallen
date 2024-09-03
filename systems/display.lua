@@ -95,13 +95,15 @@ display.system = static(Tiny.sortedProcessingSystem({
         for y = start[2], finish[2] do
           if tcod.TCOD_map_is_in_fov(self._fov_map, x, y) then
             local cell = grid:fast_get(x, y)
-            if level.GRID_COMPLEX_LAYERS[layer] then
-              for _, e in ipairs(cell) do
-                if e then self:process(e) end
-              end
-            else
-              if cell then
-                self:process(cell)
+            if not level.GRID_COMPLEX_LAYERS[layer] then cell = {cell} end
+            for _, e in ipairs(cell) do
+              local is_hidden_by_perspective = (
+                not tcod.TCOD_map_is_transparent(self._fov_map, x, y)
+                and e.perspective_flag
+                and e.position[2] > State.player.position[2]
+              )
+              if e and not is_hidden_by_perspective then
+                self:process(e)
               end
             end
           end
@@ -110,11 +112,11 @@ display.system = static(Tiny.sortedProcessingSystem({
     end
   end,
 
-  process = function(self, entity)
+  process = function(self, entity, is_on_edge)
     local mode = State:get_mode()
     if
       State.gui.disable_ui and not Table.contains({"scene", "dialogue_text"}, entity.view)
-      -- TODO this should be grouped w/ views?
+      -- TODO REF this should be grouped w/ modes themselves?
       or mode == "character_creator" and not Table.contains(
         {"sidebar", "sidebar_text", "sidebar_background", "character_creator",
          "actions", "action_frames", "action_keys"},
