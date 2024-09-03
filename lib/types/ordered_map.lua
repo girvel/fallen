@@ -1,3 +1,6 @@
+local fun = require("lib.fun")
+
+
 local ordered_map, module_mt, static = Module("lib.types.ordered_map")
 
 local BASE_KEY = "_ordered_map__base"
@@ -12,19 +15,19 @@ ordered_map.pairs = function(self)
 end
 
 ordered_map.iter = function(self)
-  return Fun.iter(rawget(self, BASE_KEY))
+  return fun.iter(rawget(self, BASE_KEY))
     :map(function(pair) return unpack(pair) end)
 end
 
 module_mt.__call = function(_, base)
   return setmetatable({
-    [BASE_KEY] = Fun.pairs(base or {})
+    [BASE_KEY] = fun.pairs(base or {})
       :map(function(...) return {...} end)
       :totable(),
   }, {
     __index = function(self, k)
       local base = rawget(self, BASE_KEY)
-      local pair = Fun.iter(base)
+      local pair = fun.iter(base)
         :filter(function(pair) return pair[1] == k end)
         :nth(1)
       return pair and pair[2]
@@ -34,14 +37,14 @@ module_mt.__call = function(_, base)
       local base = rawget(self, BASE_KEY)
 
       if v == nil then
-        rawset(self, BASE_KEY, Fun.iter(base)
+        rawset(self, BASE_KEY, fun.iter(base)
           :filter(function(pair) return pair[1] ~= k end)
           :totable()
         )
         return
       end
 
-      local pair = Fun.iter(base)
+      local pair = fun.iter(base)
         :filter(function(pair) return pair[1] == k end)
         :nth(1)
 
