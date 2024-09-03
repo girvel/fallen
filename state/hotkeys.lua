@@ -308,6 +308,9 @@ return Module("state.hotkeys", function(modes)
     pre_action = function()
       State.gui.character_creator:submit()
     end,
+    get_availability = function()
+      return State.gui.character_creator:can_submit()
+    end,
   })
 
   define_hotkey(hotkeys, {"character_creator"}, {"esc"}, {
@@ -315,6 +318,9 @@ return Module("state.hotkeys", function(modes)
     codename = "exit",
     pre_action = function()
       State.gui.character_creator:close()
+    end,
+    get_availability = function()
+      return State.gui.character_creator:can_close()
     end,
   })
 

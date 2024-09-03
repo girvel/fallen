@@ -7,10 +7,6 @@ local feats = require("mech.feats")
 local mech = require("mech")
 
 
-local is_change_needed = function()
-  return State.player.experience > mech.experience_for_level[State.player.level + 1]
-end
-
 return Module("state.gui.character_creator", function()
   local result = {
     player_anchor = nil,
@@ -103,15 +99,19 @@ return Module("state.gui.character_creator", function()
         params.current_index = (params.current_index) % params.max_index + 1
       elseif direction_name == "up" then
         params.current_index = (params.current_index - 2) % params.max_index + 1
-      elseif is_change_needed() then
+      elseif not self:can_close() then
         Query(params.movement_functions[params.current_index])(Vector[direction_name][1])
         self:refresh()
       end
       params.scroll = -40 * (params.current_index - 1)
     end,
 
+    can_close = function(self)
+      return State.player.experience <= mech.experience_for_level[State.player.level + 1]
+    end,
+
     close = function(self)
-      if is_change_needed() then
+      if not self:can_close() then
         State.gui.sidebar:push_notification("Редактирование персонажа не закончено")
         return
       end
@@ -119,16 +119,23 @@ return Module("state.gui.character_creator", function()
       self.text_entities = nil
     end,
 
+    can_submit = function(self)
+      local params = self.parameters
+      return not self:can_close() and (params.points <= 0 or params.free_skills <= 0)
+    end,
+
     submit = function(self)
       local params = self.parameters
-      if not is_change_needed() then
+
+      if self:can_close() then
         State.gui.sidebar:push_notification("Нельзя изменить персонажа")
         return
       end
-      if params.points > 0 or params.free_skills > 0 then
+      if not self:can_submit() then
         State.gui.sidebar:push_notification("Не все ресурсы распределены")
         return
-      end  -- TODO notification
+      end
+
       local active_choices = class.get_choices(fighter.progression_table, 2)
 
       local changes = {

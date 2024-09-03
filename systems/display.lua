@@ -119,7 +119,7 @@ display.system = static(Tiny.sortedProcessingSystem({
       -- TODO REF this should be grouped w/ modes themselves?
       or mode == "character_creator" and not Table.contains(
         {"sidebar", "sidebar_text", "sidebar_background", "character_creator",
-         "actions", "action_frames", "action_keys"},
+         "actions", "action_frames", "action_keys", "notification", "notification_fx"},
         entity.view
       )
       or mode == "reading" and not Table.contains(
