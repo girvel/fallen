@@ -1,3 +1,5 @@
+local tablex = require("lib.extensions.table")
+local vector = require("lib.types.vector")
 local module = require("lib.types.module")
 local fun = require("lib.fun")
 
@@ -28,7 +30,7 @@ end
 
 grid._grid_methods = {
   can_fit = function(self, v)
-    return Vector.zero < v and self.size >= v
+    return vector.zero < v and self.size >= v
   end,
 
   safe_get = function(self, v, default)
@@ -68,7 +70,7 @@ grid._grid_methods = {
     local current_vertex = start
     local current_distance = 0
     while true do
-      for _, direction in ipairs(Vector.directions) do
+      for _, direction in ipairs(vector.directions) do
         local neighbour = current_vertex + direction
 
         if neighbour == finish then
@@ -89,7 +91,7 @@ grid._grid_methods = {
         end
       end
 
-      Table.remove_breaking_at(vertices_to_visit, current_vertex_i)
+      tablex.remove_breaking_at(vertices_to_visit, current_vertex_i)
       visited_vertices[current_vertex] = true
       table.insert(visited_vertices_list, current_vertex)
 

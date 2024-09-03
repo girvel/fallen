@@ -1,10 +1,8 @@
 describe("Grid library", function()
   _G.unpack = table.unpack
-  _G.Fun = require("lib.fun")
-  _G.Vector = require("lib.types.vector")
-  _G.Table = require("lib.extensions.table")
+
   local grid = require("lib.types.grid")
-  local vector = _G.Vector
+  local vector = require("lib.types.vector")
 
 
   describe("grid.from_matrix()", function()

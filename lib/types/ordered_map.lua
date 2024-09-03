@@ -1,8 +1,8 @@
 local fun = require("lib.fun")
-local module = require("lib.types.module")
 
 
-local ordered_map, module_mt, static = module("lib.types.ordered_map")
+local module_mt = {}
+local ordered_map = setmetatable({}, module_mt)
 
 local BASE_KEY = "_ordered_map__base"
 ordered_map.is = function(self) return rawget(self, BASE_KEY) end
