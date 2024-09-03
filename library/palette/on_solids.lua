@@ -8,7 +8,7 @@ factoring.from_atlas(on_solids, "assets/sprites/atlases/on_solids.png", {
   view = "scene",
   perspective_flag = true,
 }, {
-  "mirror", "dirt", "airway", "map", "sign", false, false, "cauldron",
+  "mirror", "dirt", "airway", "map", "sign", "window", false, "cauldron",
   "vines", "vines", "vines", "vines", "vines", false, false, "cauldron",
   false, "vines", "vines", "vines", "vines", false, false, false,
   false, false, false, "vines", "vines", false, false, false,
