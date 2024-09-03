@@ -7,9 +7,10 @@ factoring.from_atlas(walls, "assets/sprites/atlases/walls.png", {
   layer = "solids",
   view = "scene",
 }, {
-  "steel", "steel", "steel", "steel", false, false, false, false,
-  false, false, "steel", "steel", false, false, false, false,
-  "megadoor", "megadoor", "megadoor",
+  "steel", "steel", "steel", "steel", "steel", "steel", false, false,
+  false, false, "steel", "steel", "steel", "steel", false, false,
+  "megadoor", "megadoor", "megadoor", false, "steel", "steel", false, false,
+  false, false, false, false, "steel", "steel",
 })
 
 return walls
