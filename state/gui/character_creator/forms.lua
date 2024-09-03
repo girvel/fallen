@@ -145,10 +145,7 @@ forms.skills = static(function(params)
     .. "   Свободные навыки: %s\n\n" % params.free_skills
 
   local base_column = Fun.iter(abilities.skill_bases)
-    :map(function(s, a)
-      local translated = translation.abilities[abilities.skill_bases[s]]
-      return s, translated:sub(utf8.offset(translated, 1), utf8.offset(translated, 4) - 1)
-    end)
+    :map(function(s, a) return s, String.utf_sub(translation.abilities[a], 1, 3) end)
     :tomap()
 
   local bonus_column = Fun.iter(abilities.skill_bases)

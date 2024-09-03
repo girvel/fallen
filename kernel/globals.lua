@@ -12,6 +12,8 @@ return function()
 
   Pairs = require("lib.extensions.pairs")
   Table = require("lib.extensions.table")
+  String = require("lib.extensions.string")
+
   Query = require("lib.types.query")
   Math = require("lib.extensions.math")
   Common = require("lib.Common")
