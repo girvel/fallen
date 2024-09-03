@@ -13,7 +13,7 @@ factoring.from_atlas(engine, "assets/sprites/engine2.png", function(_, position)
   then
     mixin.layer = "solids"
   else
-    mixin.layer = "above_solids"
+    mixin.layer = "on_solids"
   end
 
   if position[2] ~= 0 then

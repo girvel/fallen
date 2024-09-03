@@ -14,7 +14,7 @@ factoring.from_atlas(decorations, decorations_atlas, {
 }, {
   "device_panel", "device_panel_broken", "furnace", "table", "locker", "locker_damaged", "cabinet", "cabinet_damaged",
   "upper_bed", "crate", "crate_open", "chest", "chest_open", "table_left", "table_hor", "table_right",
-  "lower_bed", "chamber_pot", "bucket", "cauldron", "countertop_right_down", "oven", "kitchen_sink", "countertop_left_down",
+  "lower_bed", "chamber_pot", "bucket", false, "countertop_right_down", "oven", "kitchen_sink", "countertop_left_down",
   "table_up", "mirage_block", "stool", "sofa", "countertop_left", "bed", "sink", "countertop_right",
   "table_ver", "steel_wall_window", "steel_wall_transparent", "scratched_table", "countertop_left_corner_down", "countertop", "empty_bed", "countertop_right_corner_down",
   "table_down", "cage", "device_panel_right", "device_panel_right_down", "countertop_left_corner_up", "cabinet_right_down", "cabinet_left_down", "countertop_right_corner_up",
@@ -37,7 +37,7 @@ factoring.extend(decorations, "device_panel", {
 for _, name in ipairs({"bed", "upper_bed"}) do
   factoring.extend(decorations, name, {
     lie = function(self, other)
-      level.change_layer(other, "above_solids")
+      level.change_layer(other, "on_solids")
       level.move(other, self.position)
       other:animate("lying")
       other:animation_set_paused(true)

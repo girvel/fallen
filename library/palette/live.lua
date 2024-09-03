@@ -25,7 +25,7 @@ live.valve = function(leaking_pipe_name)
       end)
     end, true),
     {
-      layer = "above_solids",
+      layer = "on_solids",
       view = "scene",
       name = "Вентиль",
       codename = "valve",
@@ -45,7 +45,7 @@ live.note = function(codex_update)
     {
       sprite = sprite.image("assets/sprites/note.png"),
       codename = "note",
-      layer = "above_solids",
+      layer = "on_solids",
       view = "scene",
       name = "записка",
     }
@@ -99,7 +99,7 @@ for _, prefix in ipairs({"", "black_"}) do
           if self.is_open then return end
           self:animate("open"):next(function(_)
             self.animation.pack = open_door_pack
-            level.change_layer(self, "above_solids")
+            level.change_layer(self, "on_solids")
             self.is_open = true
             self._interact = self.interact
             self.interact = nil

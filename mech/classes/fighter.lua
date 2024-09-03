@@ -24,7 +24,7 @@ fighter.second_wind = static .. action {
     return entity.hp < entity:get_max_hp()
   end,
   _run = function(self, entity)
-    State:add(fx("assets/sprites/fx/second_wind", "fx_behind", entity.position))
+    State:add(fx("assets/sprites/fx/second_wind", "fx_under", entity.position))
     State.audio:play(entity, fighter._second_wind_sound, "small")
     healing.heal(entity, self:get_healing_roll(entity):roll())
   end,
@@ -38,7 +38,7 @@ fighter.action_surge = static .. action {
     action_surge = 1,
   },
   _run = function(self, entity)
-    State:add(fx("assets/sprites/fx/action_surge_proto", "fx_behind", entity.position))
+    State:add(fx("assets/sprites/fx/action_surge_proto", "fx_under", entity.position))
     State.audio:play(entity, fighter._action_surge_sound, "small")
     entity.resources.actions = entity.resources.actions + 1
   end,
@@ -88,7 +88,7 @@ fighter.fighting_spirit = static .. action {
     bonus_actions = 1,
   },
   _run = function(self, entity)
-    State:add(fx("assets/sprites/fx/fighting_spirit", "fx_behind", entity.position))
+    State:add(fx("assets/sprites/fx/fighting_spirit", "fx_under", entity.position))
     entity.advantage_flag = true
     entity.hp = math.min(entity:get_max_hp(), entity.hp) + 5  -- TODO temp hp
   end,

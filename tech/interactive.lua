@@ -8,7 +8,7 @@ module.get_for = function(entity)
     State.grids.items[entity.position],
     State.grids.tiles[entity.position],
     State.grids.solids:safe_get(entity.position + Vector[entity.direction]),
-    State.grids.above_solids:safe_get(entity.position + Vector[entity.direction]),
+    State.grids.on_solids:safe_get(entity.position + Vector[entity.direction]),
   }))
     :filter(function(x) return x and x.interact end)
     :nth(1)

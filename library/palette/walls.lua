@@ -7,8 +7,9 @@ factoring.from_atlas(walls, "assets/sprites/atlases/walls.png", {
   layer = "solids",
   view = "scene",
 }, {
-  "steel", "steel_variant", "steel_with_mirror", "steel_vined", "steel_dirty", "megadoor_left", "megadoor_middle", "megadoor_right",
-  "steel_vented", "steel_behind_cauldron", "steel_with_map", "steel_with_sign",
+  "steel", "steel", "steel", "steel", false, false, false, false,
+  false, false, "steel", "steel", false, false, false, false,
+  "megadoor", "megadoor", "megadoor",
 })
 
 return walls

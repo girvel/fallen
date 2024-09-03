@@ -144,7 +144,7 @@ acting.system = static(Tiny.processingSystem({
 
     if current == State.player then
       State.audio:play_static(your_move_sound)
-      State:add(fx("assets/sprites/fx/turn_starts", "fx_behind", current.position))
+      State:add(fx("assets/sprites/fx/turn_starts", "fx_under", current.position))
     end
   end,
 }))
