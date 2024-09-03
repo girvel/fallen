@@ -63,7 +63,7 @@ end
 
 local ability_check_sound = {
   success = sound.multiple("assets/sounds/coin_toss", 1),
-  failure = sound.multiple("assets/sounds/check_failed", 1),
+  failure = sound.multiple("assets/sounds/check_failed", 0.3),
 }
 
 abilities.check = function(entity, skill_or_abilities, dc)
