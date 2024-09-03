@@ -1,4 +1,6 @@
 describe("Html generator", function()
+  _G.unpack = table.unpack
+
   local html = require("lib.html")
   _G.setfenv = function(fn, env)
     local i = 1

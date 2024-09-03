@@ -2,6 +2,8 @@ local common = require("lib.common")
 
 
 describe("Common module", function()
+  _G.unpack = table.unpack
+
   describe("get_path", function()
     it("gets the table contents recursively", function()
       assert.equal(

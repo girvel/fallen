@@ -1,4 +1,6 @@
 describe("lib.extensions.string", function()
+  _G.unpack = table.unpack
+
   local mt = {__index = {}}
   local stringx = setmetatable({}, mt)
   require("lib.extensions.string").inject(mt)

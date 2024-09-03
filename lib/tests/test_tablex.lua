@@ -2,6 +2,8 @@ local tablex = require("lib.extensions.table")
 
 
 describe("Table extension module", function()
+  _G.unpack = table.unpack
+
   describe("extend", function()
     it("uses pairs to copy data", function()
       local t = {a = 1}

@@ -2,6 +2,8 @@ local dump = require("lib.dump")
 dump.require_path = "lib.dump"
 
 describe("Serialization library", function()
+  _G.unpack = table.unpack
+
   describe("basic functionality", function()
     it("dumps a number", function()
       assert.are_equal(1, load(dump(1))())
