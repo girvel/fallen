@@ -14,7 +14,7 @@ audio._base = static {
     love.audio.setPosition(x, y, 0)
     if self.disable_ambient then return end
     local current_track = self.current_music
-    if -Query(current_track):isPlaying() then return end
+    if -Query(current_track).source:isPlaying() then return end
     while #self.music > 1 and self.current_music == current_track do
       self.current_music = Random.choice(self.music)
     end

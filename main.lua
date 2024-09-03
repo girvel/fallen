@@ -52,6 +52,7 @@ love.load = function(args)
     State.gui.wiki.quests = quests
     State.factions = factions()
   end
+
   State.audio.disable_ambient = args.disable_ambient
   State.gui.show_fps = args.show_fps
   State.fast_scenes = args.fast_scenes
