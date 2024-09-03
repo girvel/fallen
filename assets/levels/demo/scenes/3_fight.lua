@@ -255,8 +255,7 @@ return function()
 
       run = function(self, rails, dt)
         self.enabled = false
-        State.gui.sidebar:clear_notifications()
-        api.notification("Не стоит покидать комнату, диверсант может сбежать", false, true)
+        api.notification("Не стоит покидать комнату, диверсант может сбежать", false)
       end,
     },
   }

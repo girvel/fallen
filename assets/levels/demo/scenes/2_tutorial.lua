@@ -79,17 +79,17 @@ return function()
             if State:check_aggression(State.player, rails.entities.mannequin) then
               if rails.entities.mannequin.hp < old_hp then
                 old_hp = rails.entities.mannequin.hp
-                api.notification(remark, true, true)
+                api.notification(remark, true)
                 break
               elseif not miss_remarked then
-                api.notification("Целься лучше, в настоящем бою они будут ещё и двигаться", true, true)
+                api.notification("Целься лучше, в настоящем бою они будут ещё и двигаться", true)
                 miss_remarked = true
               end
             end
           end
         end
 
-        api.notification("Запусти блок миража, чтобы перейти к демонстрации", true, true)
+        api.notification("Запусти блок миража, чтобы перейти к демонстрации", true)
         api.update_quest({warmup = 5})
       end,
     },

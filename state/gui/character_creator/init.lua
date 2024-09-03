@@ -112,7 +112,6 @@ return Module("state.gui.character_creator", function()
 
     close = function(self)
       if is_change_needed() then
-        State.gui.sidebar:clear_notifications()
         State.gui.sidebar:push_notification("Редактирование персонажа не закончено")
         return
       end
@@ -123,12 +122,10 @@ return Module("state.gui.character_creator", function()
     submit = function(self)
       local params = self.parameters
       if not is_change_needed() then
-        State.gui.sidebar:clear_notifications()
         State.gui.sidebar:push_notification("Нельзя изменить персонажа")
         return
       end
       if params.points > 0 or params.free_skills > 0 then
-        State.gui.sidebar:clear_notifications()
         State.gui.sidebar:push_notification("Не все ресурсы распределены")
         return
       end  -- TODO notification

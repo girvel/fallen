@@ -72,10 +72,7 @@ api.options = function(options, remove_picked)
   return converted_i
 end
 
-api.notification = function(text, is_order, is_overwriting)
-  if is_overwriting then
-    State.gui.sidebar:clear_notifications()
-  end
+api.notification = function(text, is_order)
   State.gui.sidebar:push_notification(text, is_order)
 end
 

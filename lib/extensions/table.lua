@@ -119,4 +119,8 @@ tablex.contains = function(t, item)
   return Fun.iter(t):any(function(x) return x == item end)
 end
 
+tablex.last = function(t)
+  return t[#t]
+end
+
 return tablex

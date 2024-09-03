@@ -36,6 +36,7 @@ return Module("state.gui.sidebar", function()
     order_sound = sound.multiple("assets/sounds/electricity.wav", 0.08)[1],
     notification_sound = sound.multiple("assets/sounds/notification.mp3", 0.01)[1],
 
+    -- TODO REF move notification to a separate module
     update_indicators = function(self, dt)
       self:_update_hp_bar()
       self:_update_notifications(dt)
@@ -65,21 +66,22 @@ return Module("state.gui.sidebar", function()
       )
     end,
 
+    _notification_push_id = {},
+    _notification_queue = {},
+
     _update_notifications = function(self, dt)
-      for i = 1, self._notifications_n do
-        local notification = self.notifications[i]
+      for _, notification in ipairs(self.notifications) do
         notification.display_time = math.max(0, notification.display_time - dt)
         if notification.display_time == 0 then
           notification.sprite.text = {COLOR.NOTIFICATION, ""}
-          self._notifications_n = self._notifications_n - 1
         end
       end
 
-      local d = math.min(#self.notifications - self._notifications_n, #self._notification_queue)
-      if d > 0 then
-        for i = #self.notifications - d, 1, -1 do
-          local to = self.notifications[i + d]
+      if #self._notification_queue > 0 and Common.period(0.5, self._notification_push_id) then
+        local text, is_order = unpack(table.remove(self._notification_queue, 1))
+        for i = #self.notifications - 1, 1, -1 do
           local from = self.notifications[i]
+          local to = self.notifications[i + 1]
 
           to.sprite.text = from.sprite.text
           to.display_time = from.display_time
@@ -93,14 +95,8 @@ return Module("state.gui.sidebar", function()
           end
         end
 
-        local text, is_order
-        for i = 1, d do
-          local notification = self.notifications[i]
-          text, is_order = unpack(table.remove(self._notification_queue, 1))
-          notification.sprite.text = {is_order and COLOR.ORDER or COLOR.NOTIFICATION, text}
-          notification.display_time = 7
-        end
-        self._notifications_n = self._notifications_n + d
+        self.notifications[1].sprite.text = {is_order and COLOR.ORDER or COLOR.NOTIFICATION, text}
+        self.notifications[1].display_time = 7
 
         if is_order then
           State.audio:play_static(self.order_sound)
@@ -110,34 +106,6 @@ return Module("state.gui.sidebar", function()
           self.notification_fx:animate("normal")
         end
       end
-      -- local text, is_order = unpack(table.remove(self._notification_queue, 1) or {})
-      -- if not text then
-      --   self.notifications[1].sprite.text = {COLOR.NOTIFICATION, ""}
-      --   return
-      -- end
-
-      -- self._notification_lifetime = 7
-      -- if is_order then
-      --   State.audio:play_static(self.order_sound)
-      --   self.notification_fx:animate("order")
-      -- else
-      --   State.audio:play_static(self.notification_sound)
-      --   self.notification_fx:animate("normal")
-      -- end
-
-      -- for i = #self.notifications, 1, -1 do
-      --   local notification = self.notifications[i]
-      --   if i == 1 then
-      --     notification.sprite.text = {is_order and COLOR.ORDER or COLOR.NOTIFICATION, text}
-      --   else
-      --     local color, prev_text = unpack(self.notifications[i - 1].sprite.text)
-      --     color = ({
-      --       [COLOR.ORDER] = COLOR.OLD_ORDER,
-      --       [COLOR.NOTIFICATION] = COLOR.OLD_NOTIFICATION
-      --     })[color]
-      --     notification.sprite.text = {color, prev_text}
-      --   end
-      -- end
     end,
 
     create_gui_entities = function(self)
@@ -168,16 +136,8 @@ return Module("state.gui.sidebar", function()
       )
     end,
 
-    _notification_queue = {},
-    _notifications_n = 0,
-
     push_notification = function(self, text, is_order)
       table.insert(self._notification_queue, {text, is_order})
-    end,
-
-    clear_notifications = function(self)
-      self._notification_queue = {}
-      self._notification_lifetime = 0
     end,
 
     hint_override = nil,
