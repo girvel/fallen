@@ -15,7 +15,7 @@ return function()
 
   Query = require("lib.types.query")
   Math = require("lib.extensions.math")
-  Common = require("lib.Common")
+  Common = require("lib.common")
   Debug = require("lib.extensions.debug")
   Random = require("lib.extensions.random")
 
