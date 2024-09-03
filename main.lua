@@ -200,7 +200,7 @@ love.run = function()
 		love.timer.sleep(0.001)
 
     if love.is_running_tests then
-      require("tests.test_serialization")
+      require("tests_integration.test_serialization")
       return 0
     end
 	end
