@@ -1,7 +1,5 @@
 local animated = require("tech.animated")
-local view = require("utils.view")
-local tech_constants = require("tech.constants")
-local sprite = require("tech.sprite")
+local view = require("tech.view")
 
 
 local gui, module_mt, static = Module("state.gui")

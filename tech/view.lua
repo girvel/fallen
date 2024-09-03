@@ -1,4 +1,4 @@
-return Module("utils.view", function(offset, scale, cell_size)  -- TODO! move to /tech/
+return Module("tech.view", function(offset, scale, cell_size)  -- TODO! move to /tech/
   return {
     offset = offset,
     scale = scale,
