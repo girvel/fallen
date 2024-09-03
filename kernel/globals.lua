@@ -1,11 +1,10 @@
 return function()
-  Log = require("lib.log")
-  Fun = require("lib.fun")
-  Tiny = require("lib.tiny")
-  Inspect = require("lib.inspect")
-  Memoize = require("lib.memoize")
-  Json = require("lib.json")
-  Html = require("lib.html")
+  Log = require("lib.vendor.log")
+  Fun = require("lib.vendor.fun")
+  Tiny = require("lib.vendor.tiny")
+  Inspect = require("lib.vendor.inspect")
+  Memoize = require("lib.vendor.memoize")
+  Json = require("lib.vendor.json")
 
   Log.info("Starting basic LOVE setup")
 
@@ -17,8 +16,9 @@ return function()
   Math = require("lib.extensions.math")
   Common = require("lib.common")
   Debug = require("lib.extensions.debug")
-  Random = require("lib.extensions.random")
+  Random = require("lib.random")
 
+  Html = require("lib.html")
   Dump = require("lib.dump")
   Dump.require_path = "lib.dump"
   Module = require("lib.types.module")

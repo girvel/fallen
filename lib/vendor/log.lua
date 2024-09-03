@@ -9,7 +9,7 @@
 -- under the terms of the MIT license. See LICENSE for details.
 --
 
-local inspect = require("lib.inspect")
+local inspect = require("lib.vendor.inspect")
 
 local module_mt = {}
 local log = setmetatable({ _version = "0.1.0" }, module_mt)

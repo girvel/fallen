@@ -101,7 +101,7 @@ love.load = function(args)
   end
 
   if args.enable_profiler then
-    State.profiler = require("lib.profile")
+    State.profiler = require("lib.vendor.profile")
     State.profiler.setclock(love.timer.getTime)
   end
 

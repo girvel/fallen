@@ -1,4 +1,4 @@
-local lust = require("lib.lust")
+local lust = require("lib.vendor.lust")
 local describe = lust.describe
 local it = lust.it
 local expect = lust.expect

@@ -1,10 +1,4 @@
-local tablex = require("lib.extensions.table")
-local vector = require("lib.types.vector")
-local module = require("lib.types.module")
-local fun = require("lib.fun")
-
-
-local grid, module_mt, static = module("lib.types.grid")
+local grid, module_mt, static = Module("lib.types.grid")
 
 grid._grid_mt = static {}
 
@@ -13,7 +7,7 @@ module_mt.__call = function(_, size, factory)
   return setmetatable({
     size = size,
     _inner_array = factory
-      and fun.range(1, size[1] * size[2]):map(factory):totable()
+      and Fun.range(1, size[1] * size[2]):map(factory):totable()
       or {},
   }, grid._grid_mt)
 end
@@ -30,7 +24,7 @@ end
 
 grid._grid_methods = {
   can_fit = function(self, v)
-    return vector.zero < v and self.size >= v
+    return Vector.zero < v and self.size >= v
   end,
 
   safe_get = function(self, v, default)
@@ -43,7 +37,7 @@ grid._grid_methods = {
   end,
 
   iter = function(self)
-    return fun.iter(pairs(self._inner_array))
+    return Fun.iter(pairs(self._inner_array))
   end,
 
   find_path = function(self, start, finish, max_distance)
@@ -70,7 +64,7 @@ grid._grid_methods = {
     local current_vertex = start
     local current_distance = 0
     while true do
-      for _, direction in ipairs(vector.directions) do
+      for _, direction in ipairs(Vector.directions) do
         local neighbour = current_vertex + direction
 
         if neighbour == finish then
@@ -91,7 +85,7 @@ grid._grid_methods = {
         end
       end
 
-      tablex.remove_breaking_at(vertices_to_visit, current_vertex_i)
+      Table.remove_breaking_at(vertices_to_visit, current_vertex_i)
       visited_vertices[current_vertex] = true
       table.insert(visited_vertices_list, current_vertex)
 
@@ -106,7 +100,7 @@ grid._grid_methods = {
       end
 
       if #vertices_to_visit == 0 or current_distance > (max_distance or math.huge) then
-        local next_best_finish = fun.iter(visited_vertices_list)
+        local next_best_finish = Fun.iter(visited_vertices_list)
           :min_by(function(a, b)
             return (a - finish):abs() < (b - finish):abs() and a or b
           end)

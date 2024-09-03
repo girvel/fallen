@@ -1,4 +1,4 @@
-local fun = require("lib.fun")
+local fun = require("lib.vendor.fun")
 
 
 local N = 100000

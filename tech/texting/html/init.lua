@@ -1,5 +1,5 @@
 local transformers = require("tech.texting.html.transformers")
-local htmlparser = require("lib.htmlparser")
+local htmlparser = require("lib.vendor.htmlparser")
 
 
 local html, _, static = Module("tech.texting.html")
