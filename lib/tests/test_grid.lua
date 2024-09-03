@@ -1,9 +1,8 @@
 describe("Grid library", function()
+  _G.unpack = table.unpack
   _G.Fun = require("lib.fun")
-  _G.Module = require("lib.types.module")
   _G.Vector = require("lib.types.vector")
   _G.Table = require("lib.extensions.table")
-  _G.unpack = table.unpack
   local grid = require("lib.types.grid")
   local vector = _G.Vector
 
@@ -24,7 +23,7 @@ describe("Grid library", function()
 
   describe("find_path", function()
     it("should find paths", function()
-      local grid = grid.from_matrix({
+      local this_grid = grid.from_matrix({
         {nil, nil, nil},
         {nil, 1,   nil},
         {nil, nil, nil},
@@ -32,7 +31,7 @@ describe("Grid library", function()
 
       assert.are_same(
         {vector({1, 1}), vector({2, 1}), vector({3, 1})},
-        grid:find_path(vector({1, 2}), vector({3, 1}))
+        this_grid:find_path(vector({1, 2}), vector({3, 1}))
       )
     end)
 

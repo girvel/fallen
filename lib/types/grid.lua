@@ -1,19 +1,23 @@
-local module, module_mt, static = Module("lib.types.grid")
+local module = require("lib.types.module")
+local fun = require("lib.fun")
 
-module._grid_mt = static {}
+
+local grid, module_mt, static = module("lib.types.grid")
+
+grid._grid_mt = static {}
 
 module_mt.__call = function(_, size, factory)
   assert(size)
   return setmetatable({
     size = size,
     _inner_array = factory
-      and Fun.range(1, size[1] * size[2]):map(factory):totable()
+      and fun.range(1, size[1] * size[2]):map(factory):totable()
       or {},
-  }, module._grid_mt)
+  }, grid._grid_mt)
 end
 
-module.from_matrix = function(matrix, size)
-  local result = module(size)
+grid.from_matrix = function(matrix, size)
+  local result = grid(size)
   for x = 1, size[1] do
     for y = 1, size[2] do
       result._inner_array[result:_get_inner_index(x, y)] = matrix[y][x]
@@ -22,7 +26,7 @@ module.from_matrix = function(matrix, size)
   return result
 end
 
-module._grid_methods = {
+grid._grid_methods = {
   can_fit = function(self, v)
     return Vector.zero < v and self.size >= v
   end,
@@ -37,15 +41,15 @@ module._grid_methods = {
   end,
 
   iter = function(self)
-    return Fun.iter(pairs(self._inner_array))
+    return fun.iter(pairs(self._inner_array))
   end,
 
   find_path = function(self, start, finish, max_distance)
     if start == finish then return {} end
 
-    local distance_to = module(self.size)
-    local way_back = module(self.size)
-    local visited_vertices = module(self.size)
+    local distance_to = grid(self.size)
+    local way_back = grid(self.size)
+    local visited_vertices = grid(self.size)
     local visited_vertices_list = {}
     local vertices_to_visit = {start}  -- TODO OPT use sorted list
     distance_to[start] = 0
@@ -100,7 +104,7 @@ module._grid_methods = {
       end
 
       if #vertices_to_visit == 0 or current_distance > (max_distance or math.huge) then
-        local next_best_finish = Fun.iter(visited_vertices_list)
+        local next_best_finish = fun.iter(visited_vertices_list)
           :min_by(function(a, b)
             return (a - finish):abs() < (b - finish):abs() and a or b
           end)
@@ -114,17 +118,17 @@ module._grid_methods = {
   end,
 }
 
-module._grid_mt.__index = function(self, v)
-  local method = module._grid_methods[v]
+grid._grid_mt.__index = function(self, v)
+  local method = grid._grid_methods[v]
   if method then return method end
 
   assert(self:can_fit(v))
   return self._inner_array[self:_get_inner_index(unpack(v))]
 end
 
-module._grid_mt.__newindex = function(self, v, value)
+grid._grid_mt.__newindex = function(self, v, value)
   assert(self:can_fit(v), tostring(v) .. " does not fit into grid size " .. tostring(self.size))
   self._inner_array[self:_get_inner_index(unpack(v))] = value
 end
 
-return module
+return grid
