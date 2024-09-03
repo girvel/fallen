@@ -2,7 +2,6 @@ local feats = require("mech.feats")
 local actions = require("mech.creature.actions")
 local fighter = require("mech.classes.fighter")
 local class = require("mech.class")
-local utf8 = require("utf8")
 
 
 local define_hotkey = function(collection, modes, keys, data)
@@ -329,7 +328,7 @@ return Module("state.hotkeys", function(modes)
     hidden = function() return true end,
     pre_action = function()
       local input = State.gui.text_input
-      if #input.text == 0 or utf8.len(input.text) > 100 then return end
+      if #input.text == 0 or String.utf_len(input.text) > 100 then return end
       input.text = String.utf_sub(input.text, 1, -2)
     end
   })

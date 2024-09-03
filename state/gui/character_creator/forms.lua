@@ -1,4 +1,3 @@
-local utf8 = require("utf8")
 local abilities = require("mech.abilities")
 local races = require("mech.races")
 local translation = require("tech.translation")

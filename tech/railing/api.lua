@@ -1,7 +1,5 @@
-local utf8 = require("utf8")
 local quest = require("tech.quest")
 local texting = require("tech.texting")
-local game_save = require("state.game_save")
 local fx = require("tech.fx")
 local hostility = require("mech.hostility")
 local abilities = require("mech.abilities")
@@ -161,7 +159,7 @@ local SLOW_READING_SPEED = 10
 
 api.message.temporal = function(content, params)
   local entities = message(content, params)
-  local life_time = -Query(params).life_time or utf8.len(content) / SLOW_READING_SPEED + 2
+  local life_time = -Query(params).life_time or String.utf_len(content) / SLOW_READING_SPEED + 2
 
   for _, e in ipairs(entities) do
     State:add(e, {life_time = life_time})

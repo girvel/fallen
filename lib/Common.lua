@@ -1,6 +1,3 @@
-local utf8 = require("utf8")
-
-
 local common = {}
 
 common.get_by_path = function(t, identifier, i)
@@ -95,10 +92,11 @@ common.loop = function(v, loop)
 end
 
 local len = function(str)
-  str = str
-    :gsub("<[^>]*>", "")
-    :gsub("&.t;", "&")
-  return utf8.len(str)
+  return String.utf_len(
+    str
+      :gsub("<[^>]*>", "")
+      :gsub("&.t;", "&")
+  )
 end
 
 common.build_table = function(headers, matrix, needs_shift)

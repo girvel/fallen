@@ -1,6 +1,3 @@
-local utf8 = require("utf8")
-
-
 local module_mt = {}
 local debugx = setmetatable({}, module_mt)
 
@@ -86,9 +83,7 @@ local font = love.graphics.newFont("assets/fonts/clacon2.ttf", 24)
 
 local keypressed = function(scancode)
   if scancode == "backspace" then
-    current_command = current_command:sub(
-      1, utf8.offset(current_command, utf8.len(current_command)) - 1
-    )
+    current_command = String.utf_sub(current_command, 1, -2)
   end
 
   if scancode == "return" then
