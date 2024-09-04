@@ -8,7 +8,7 @@ local cursors = {
 change_cursor.system = static(Tiny.processingSystem({
   codename = "change_cursor",
   base_callback = "update",
-  filter = Tiny.requireAll("on_click", "position", "size"),
+  filter = Tiny.requireAll(Tiny.requireAny("on_click", "changes_cursor"), "position", "size"),
 
   _detected = false,
 
@@ -18,11 +18,9 @@ change_cursor.system = static(Tiny.processingSystem({
 
   process = function(self, entity)
     local relative_mouse_position = State.gui.views[entity.view]:inverse(Vector({love.mouse.getPosition()}))
-    if not (
-      relative_mouse_position > entity.position
-      and relative_mouse_position < entity.position + entity.size
-      and (not entity.changes_cursor or entity:changes_cursor())
-    ) then
+    if not Common.is_over(relative_mouse_position, entity)
+      or entity.changes_cursor and not entity:changes_cursor()
+    then
       return
     end
 

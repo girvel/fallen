@@ -81,7 +81,7 @@ module.mixin = function()
         State:refresh(self)
         return
       end
-    end),
+    end, {highlight = true}),
     {
       layer = "items",
       view = "scene",

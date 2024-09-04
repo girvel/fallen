@@ -14,11 +14,12 @@ module.get_for = function(entity)
     :nth(1)
 end
 
-module_mt.__call = function(_, callback, disable_highlight)
+module_mt.__call = function(_, callback, params)
+  params = params or {}
   return {
     was_interacted_with = false,
     on_add = function(self)
-      if not disable_highlight then
+      if params.highlight then
         self._highlight = State:add(gui.highlight(), {position = self.position})
         State:add_dependency(self, self._highlight)
       end
@@ -31,6 +32,20 @@ module_mt.__call = function(_, callback, disable_highlight)
       end
       callback(self, other)
     end,
+    on_click = function(self)
+      local d = self.position - State.player.position
+      if d:abs() > 1 then return end
+
+      local actions = require("mech.creature.actions")
+      table.insert(State.player.action_factories, {
+        pre_action = function()
+          if d:abs() == 0 then return end
+          State.player:rotate(Vector.name_from_direction(d))
+        end,
+        action = actions.interact
+      })
+    end,
+    size = Vector.one,
   }
 end
 
@@ -38,7 +53,7 @@ module.detector = function(disable_highlight)
   return module(function(self, other)
     self.interacted_by = other
     Log.debug("%s interacts with %s" % {Common.get_name(other), Common.get_name(self)})
-  end, disable_highlight)
+  end, {highlight = not disable_highlight})
 end
 
 return module

@@ -56,6 +56,8 @@ return function()
             love.custom_keypressed(b)
           elseif name == "keyreleased" then
             custom.key_repetition_delays[b] = nil
+          elseif name == "mousepressed" then
+            love.custom_keypressed(c)
           end
           love.handlers[name](a,b,c,d,e,f)
         end

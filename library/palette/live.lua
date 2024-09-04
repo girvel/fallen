@@ -23,7 +23,7 @@ live.valve = function(leaking_pipe_name)
         target.overflow_counter = 0
         pipes.burst_with_steam(target)
       end)
-    end, true),
+    end),
     {
       layer = "on_solids",
       view = "scene",
@@ -41,7 +41,7 @@ live.note = function(codex_update)
       self.interacted_by = other
       railing.api.discover_wiki(codex_update)
       State:remove(self)
-    end),
+    end, {highlighted = true}),
     {
       sprite = sprite.image("assets/sprites/note.png"),
       codename = "note",
@@ -88,7 +88,7 @@ for _, prefix in ipairs({"", "black_"}) do
         end
 
         self:open()
-      end, not args.highlighted),
+      end, {highlighted = args.highlighted}),
       {
         codename = prefix .. "door",
         layer = "solids",

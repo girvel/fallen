@@ -1,6 +1,7 @@
-local input, _, static = Module("systems.collect_scancodes")
+local collect_scancodes, _, static = Module("systems.collect_scancodes")
 
-input.system = static(Tiny.system({
+-- TODO REF unsplit input systems
+collect_scancodes.system = static(Tiny.system({
   codename = "collect_scancodes",
   base_callback = "custom_keypressed",
   scancode_conversion = {
@@ -12,6 +13,12 @@ input.system = static(Tiny.system({
     lctrl = "ctrl",
     ralt = "alt",
     lalt = "alt",
+
+    [1] = "lmb",
+    [2] = "rmb",
+    [3] = "mmb",
+    [4] = "backmb",
+    [5] = "forwardmb",
   },
   update = function(self, scancode)
     scancode = self.scancode_conversion[scancode] or scancode
@@ -34,4 +41,4 @@ input.system = static(Tiny.system({
   end,
 }))
 
-return input
+return collect_scancodes

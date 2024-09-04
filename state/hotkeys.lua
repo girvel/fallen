@@ -199,20 +199,20 @@ return Module("state.hotkeys", function(modes)
     pre_action = function() State.gui.wiki:exit() end
   })
 
-  define_hotkey(hotkeys, {"reading"}, {"left"}, {
+  define_hotkey(hotkeys, {"reading"}, {"left", "rmb", "backmb"}, {
     name = "назад",
     codename = "left",
     pre_action = function() State.gui.wiki:move_in_history(-1) end
   })
 
-  define_hotkey(hotkeys, {"reading"}, {"right"}, {
+  define_hotkey(hotkeys, {"reading"}, {"right", "forwardmb"}, {
     name = "вперёд",
     codename = "right",
     pre_action = function() State.gui.wiki:move_in_history(1) end
   })
 
   -- dialogue --
-  define_hotkey(hotkeys, {"dialogue"}, {"space"}, {
+  define_hotkey(hotkeys, {"dialogue"}, {"space", "lmb"}, {
     name = "следующая фраза",
     codename = "next",
     hidden = function() return true end,
