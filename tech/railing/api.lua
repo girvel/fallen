@@ -18,7 +18,7 @@ api.narration = function(text, params)
     } .. text
   end
   State.gui.dialogue:show(text, params.source)
-  while State:get_mode() ~= "free" do coroutine.yield() end
+  while State.mode:get() ~= State.mode.free do coroutine.yield() end
 end
 
 api.line = function(entity, text)
@@ -58,7 +58,7 @@ end
 
 api.options = function(options, remove_picked)
   State.gui.dialogue:options_present(options)
-  while State:get_mode() ~= "free" do coroutine.yield() end
+  while State.mode:get() ~= State.mode.free do coroutine.yield() end
   local converted_i = State.gui.dialogue.selected_option_i
   if remove_picked then
     options.removed = options.removed or {}

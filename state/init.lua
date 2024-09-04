@@ -7,23 +7,11 @@ local sprite = require("tech.sprite")
 local module, module_mt, static = Module("state")
 
 module_mt.__call = function(_, systems)
-  local modes = {
-    "character_creator", "death", "reading", "dialogue_options", "dialogue", "free", "combat",
-    "text_input",
-  }
-
-	return {
+	local result = {
     -- grids
     -- rails
     world = Tiny.world(unpack(systems)),
     grids = nil,
-
-    SCALING_FACTOR = 4,
-    MODES = modes,
-
-    gui = require("state.gui")(),
-    hotkeys = require("state.hotkeys")(modes),
-    audio = require("state.audio")(),
 
     entities = {},
     dependencies = {},
@@ -165,26 +153,6 @@ module_mt.__call = function(_, systems)
       -- })
     end,
 
-    get_mode = function(self)
-      if self.gui.text_input.active then
-        return "text_input"
-      elseif self.gui.character_creator.text_entities then
-        return "character_creator"
-      elseif self.player.hp <= 0 then
-        return "death"
-      elseif self.gui.wiki.text_entities then
-        return "reading"
-      elseif self.gui.dialogue.options then
-        return "dialogue_options"
-      elseif self.gui.dialogue._entities then
-        return "dialogue"
-      elseif self.combat then
-        return "combat"
-      else
-        return "free"
-      end
-    end,
-
     start_combat = function(self, list)
       local current_i = 1
       if State.combat then
@@ -214,6 +182,18 @@ module_mt.__call = function(_, systems)
         :any(function(pair) return pair[1] == source and pair[2] == target end)
     end,
 	}
+
+  local modes = {
+    "character_creator", "death", "reading", "dialogue_options", "dialogue", "free", "combat",
+    "text_input",
+  }
+
+  result.gui = require("state.gui")()
+  result.hotkeys = require("state.hotkeys")(modes)
+  result.audio = require("state.audio")()
+  result.mode = require("state.mode")(result.gui.views_order)
+
+  return result
 end
 
 return module

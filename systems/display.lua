@@ -40,7 +40,7 @@ display.system = static(Tiny.sortedProcessingSystem({
   end,
 
   process_grid = function(self)
-    if Table.contains({"character_creator", "reading", "death", "text_input"}, State:get_mode()) then return end
+    if not State.mode:get().displayed_views.scene then return end
 
     -- borders --
     local view = State.gui.views.scene
@@ -112,26 +112,8 @@ display.system = static(Tiny.sortedProcessingSystem({
     end
   end,
 
-  process = function(self, entity, is_on_edge)
-    local mode = State:get_mode()
-    if
-      State.gui.disable_ui and not Table.contains({"scene", "dialogue_text"}, entity.view)
-      -- TODO REF this should be grouped w/ modes themselves?
-      or mode == "character_creator" and not Table.contains(
-        {"sidebar", "sidebar_text", "sidebar_background", "character_creator",
-         "actions", "action_frames", "action_keys", "notification", "notification_fx",
-         "tooltip", "tooltip_background"},
-        entity.view
-      )
-      or mode == "reading" and not Table.contains(
-        {"sidebar", "sidebar_text", "sidebar_background", "wiki",
-         "actions", "action_frames", "action_keys", "notification", "notification_fx",
-         "tooltip", "tooltip_background"},
-        entity.view
-      )
-      or mode == "death"
-      or mode == "text_input"
-    then return end
+  process = function(self, entity)
+    if not State.mode:get().displayed_views[entity.view] then return end
 
     local current_view = State.gui.views[entity.view]
     local offset_position = current_view:apply(animated.get_render_position(entity))
@@ -218,11 +200,11 @@ display.system = static(Tiny.sortedProcessingSystem({
     if State.gui.show_fps then
       love.graphics.print("FPS: %.2f" % (1 / love.timer.getAverageDelta()), default_font, 5, 5)
     end
-    local mode = State:get_mode()
-    if mode == "text_input" then return State.gui.text_input:display() end
-    if mode == "death" then return self:_display_death_message() end
+    local mode = State.mode:get()
+    if mode == State.mode.text_input then return State.gui.text_input:display() end
+    if mode == State.mode.death then return self:_display_death_message() end
     self:_display_hint()
-    if Table.contains({"reading"}, mode) or State.shader or State.gui.disable_ui then return end
+    if mode == State.mode.reading or State.shader or State.gui.disable_ui then return end
     self:_display_text_info()
   end,
 

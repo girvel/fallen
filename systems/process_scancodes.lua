@@ -5,7 +5,7 @@ process_scancodes.system = static(Tiny.system({
   base_callback = "update",
   update = function(self, dt)
     Table.concat(State.player.action_factories, Fun.iter(State.gui.pressed_scancodes)
-      :map(function(s) return -Query(State.hotkeys)[State:get_mode()][s] end)
+      :map(function(s) return -Query(State.hotkeys)[State.mode:get().codename][s] end)
       :filter(Fun.op.truth)
       :totable()
     )

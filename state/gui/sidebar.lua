@@ -40,9 +40,9 @@ return Module("state.gui.sidebar", function()
     update_indicators = function(self, dt)
       self:_update_hp_bar()
       self:_update_notifications(dt)
-      if self.last_mode ~= State:get_mode() then
+      if self.last_mode ~= State.mode:get() then
         self:refresh_action_grid()
-        self.last_mode = State:get_mode()
+        self.last_mode = State.mode:get()
       end
     end,
 
@@ -122,7 +122,7 @@ return Module("state.gui.sidebar", function()
     refresh_action_grid = function(self)
       State:remove_multiple(self.action_entities)
       local player_actions = State.player:get_actions()
-      self.action_entities = State:add_multiple(OrderedMap.iter(State.hotkeys[State:get_mode()])
+      self.action_entities = State:add_multiple(OrderedMap.iter(State.hotkeys[State.mode:get().codename])
         :filter(function(key, data)
           return data.codename
             and not -Query(data):hidden()
@@ -147,9 +147,10 @@ return Module("state.gui.sidebar", function()
 
     hint_override = nil,
 
+    -- TODO REF hint should be separated
     get_hint = function(self)
       if self.hint_override then return self.hint_override end
-      if not Table.contains({"free", "fight"}, State:get_mode()) then return "" end
+      if not Table.contains({"free", "fight"}, State.mode:get().codename) then return "" end
       local interaction = interactive.get_for(State.player)
       if interaction then
         return "[E] для взаимодействия с " .. Common.get_name(interaction)
