@@ -52,7 +52,7 @@ end
 module.detector = function(disable_highlight)
   return module(function(self, other)
     self.interacted_by = other
-    Log.debug("%s interacts with %s" % {Common.get_name(other), Common.get_name(self)})
+    Log.debug("%s interacts with %s" % {Entity.name(other), Entity.name(self)})
   end, {highlight = not disable_highlight})
 end
 

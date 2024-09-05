@@ -40,7 +40,7 @@ acting.system = static(Tiny.processingSystem({
         Log.info(
           "Fight ends as only %s are left standing"
            % table.concat(Fun.iter(combatants)
-            :map(Common.get_name)
+            :map(Entity.name)
             :totable(), ", ")
         )
         Fun.iter(combatants):each(function(e)
@@ -119,7 +119,7 @@ acting.system = static(Tiny.processingSystem({
     )
 
     if was_timeout_reached then
-      Log.warn("%s's turn timed out" % Common.get_name(State.combat:get_current()))
+      Log.warn("%s's turn timed out" % Entity.name(State.combat:get_current()))
     end
 
     local ok, signal = Debug.pcall(entity.ai.run, entity, dt)
@@ -140,7 +140,7 @@ acting.system = static(Tiny.processingSystem({
     current.advantage_flag = nil  -- TODO redo as condition
     State.combat:move_to_next()
     current = State.combat:get_current()
-    Log.info("%s's turn" % Common.get_name(current))
+    Log.info("%s's turn" % Entity.name(current))
 
     if current == State.player then
       State.audio:play_static(your_move_sound)

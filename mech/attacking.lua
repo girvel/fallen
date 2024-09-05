@@ -16,7 +16,7 @@ attacking.attack = function(entity, target, attack_roll, damage_roll)
   local ac = (-Query(target):get_armor() or 0)
 
   Log.info("%s attacks %s; attack roll: %s, armor: %s" % {
-    Common.get_name(entity), Common.get_name(target), attack, ac
+    Entity.name(entity), Entity.name(target), attack, ac
   })
 
   if is_nat_miss then
@@ -95,7 +95,7 @@ attacking.damage = function(target, damage, is_critical)
     end
 
     State:remove(target)
-    Log.info(Common.get_name(target) .. " is killed")
+    Log.info(Entity.name(target) .. " is killed")
   end
 end
 

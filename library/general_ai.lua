@@ -27,7 +27,7 @@ general_ai_mt.__call = function(_, works_outside_of_combat)
         and self.ai.mode.enum_variant ~= general_ai.modes.run_away_to
       then return end
 
-      Log.debug("--- %s ---" % Common.get_name(self))
+      Log.debug("--- %s ---" % Entity.name(self))
 
       local was_attacked_by = self.ai.was_attacked_by
       self.ai.was_attacked_by = {}

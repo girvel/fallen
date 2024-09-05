@@ -134,7 +134,7 @@ display.system = static(Tiny.sortedProcessingSystem({
       love.graphics.rectangle("fill", x, y, unpack(entity.size * current_view:get_multiplier()))
       love.graphics.setColor(Colors.absolute_white())
     else
-      -- error("Wrong sprite format of %s:\n%s" % {Common.get_name(entity), Inspect(entity.sprite)})
+      -- error("Wrong sprite format of %s:\n%s" % {Entity.name(entity), Inspect(entity.sprite)})
     end
 
     if entity.shader then

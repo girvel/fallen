@@ -7,7 +7,7 @@ level.move = function(entity, position)
   local grid = State.grids[entity.layer]
   if not grid:can_fit(position) or grid[position] then return end
   if grid[position] then
-    Log.warn("level.move: replacing %s with %s" % {Common.get_name(grid[position]), Common.get_name(entity)})
+    Log.warn("level.move: replacing %s with %s" % {Entity.name(grid[position]), Entity.name(entity)})
   end
   grid[entity.position] = nil
   grid[position] = entity
@@ -34,7 +34,7 @@ level.put = function(entity)
 
   if grid[entity.position] then
     Log.warn("Grid collision at %s[%s]: %s replaces %s" % {
-      entity.layer, entity.position, Common.get_name(entity), Common.get_name(grid[entity.position])
+      entity.layer, entity.position, Entity.name(entity), Entity.name(grid[entity.position])
     })
   end
   grid[entity.position] = entity

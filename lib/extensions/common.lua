@@ -59,10 +59,6 @@ common.set = function(list)
     :tomap()
 end
 
-common.get_name = function(entity)
-  return -Query(entity).name or -Query(entity).codename or "???"
-end
-
 common.resume_logged = function(coroutine_, ...)
   local t = love.timer.getTime()
   local success, message = coroutine.resume(coroutine_, ...)
@@ -150,10 +146,6 @@ common.resolve_path = function(path)
     end
   end
   return table.concat(result, "/")
-end
-
-common.is_over = function(position, entity)
-  return position > entity.position and position < entity.position + entity.size
 end
 
 return common

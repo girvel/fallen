@@ -52,7 +52,7 @@ module_mt.__call = function(_, systems)
 
     remove = function(self, entity)
       if not entity.boring_flag then
-        Log.debug("State:remove(%s)" % Common.get_name(entity))
+        Log.debug("State:remove(%s)" % Entity.name(entity))
       end
       self.world:remove(entity)
       self.entities[entity] = nil

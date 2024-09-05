@@ -96,7 +96,7 @@ module.mixin = function()
           (self.bonus or 0) ~= 0 and "%+i" % self.bonus or ""
         }
       end
-      return Common.get_name(self) .. postfix
+      return Entity.name(self) .. postfix
     end
   })
 end

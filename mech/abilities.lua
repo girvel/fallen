@@ -77,7 +77,7 @@ abilities.check = function(entity, skill_or_abilities, dc)
 
   local result = roll:roll()
   Log.info("%s rolls check %s: %s against %s" % {
-    Common.get_name(entity), skill_or_abilities, result, dc
+    Entity.name(entity), skill_or_abilities, result, dc
   })
 
   local success = result >= dc
@@ -92,7 +92,7 @@ end
 abilities.saving_throw = function(entity, ability, dc)
   local save = entity.saving_throws[ability]:roll()
   Log.info("%s rolls %s save %s against %s" % {
-    Common.get_name(entity), ability, save, dc
+    Entity.name(entity), ability, save, dc
   })
 
   local success = save >= dc
@@ -106,7 +106,7 @@ end
 
 abilities.initiative_roll = function(entity)
   local result = D(20) + abilities.get_modifier(entity.abilities.dex) + (entity.initiative_bonus or 0)
-  Log.debug("%s rolls initiative" % {Common.get_name(entity)})
+  Log.debug("%s rolls initiative" % {Entity.name(entity)})
   return result
 end
 

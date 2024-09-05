@@ -23,7 +23,7 @@ end
 
 api.line = function(entity, text)
   api.narration([[<span color="%s">%s</span><span>: %s</span>]] % {
-    Colors.to_hex(entity.sprite.color), Common.get_name(entity), text
+    Colors.to_hex(entity.sprite.color), Entity.name(entity), text
   }, {source = entity})
 end
 
