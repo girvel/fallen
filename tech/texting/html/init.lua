@@ -49,6 +49,13 @@ local postprocess = function(root, content, styles)
       token.color = Colors.from_hex(root.attributes.color)
     end)
   end
+  if root.attributes.tooltip then
+    local tooltip_content = love.filesystem.read("/assets/tooltips/%s.html" % root.attributes.tooltip)
+    local f = function() return tooltip_content end
+    for _, token in ipairs(content) do
+      token.get_tooltip = f
+    end
+  end
   assign_event("on_click", root, content)
   assign_event("on_hover", root, content)
   assign_event("on_update", root, content)
