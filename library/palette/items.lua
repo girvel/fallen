@@ -62,7 +62,7 @@ module.pole = function()
       damage_roll = D(6),
       bonus = -1,
       tags = {
-        finesse = true,
+        heavy = true,
         versatile = true,
       },
       slot = "hands",

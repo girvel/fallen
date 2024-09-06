@@ -48,6 +48,9 @@ module_mt.__call = function(_)
       h2_prefix = {
         color = Colors.dark_red(),
       },
+      b = {
+        color = Colors.dark_yellow(),
+      }
     },
 
     update_views = function(self)

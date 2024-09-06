@@ -11,7 +11,7 @@ feats.great_weapon_master = static {
     local weapon = entity.inventory.main_hand
     return entity.perk_params[feats.great_weapon_master].enabled
       and weapon
-      and (weapon.tags.two_handed or weapon.tags.versatile and not entity.inventory.other_hand)
+      and weapon.tags.heavy
   end,
   modify_attack_roll = function(self, entity, roll)
     if not self:_gwm_condition(entity) then return roll end

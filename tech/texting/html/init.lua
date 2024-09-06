@@ -96,7 +96,7 @@ visit_html = function(root, args, styles, preserve_whitespace)
     Table.concat(nodes, {{content = prepare(content)}})
   end
 
-  local result = -Query(transformers.map[root.name])(root, nodes, styles) or nodes
+  local result = (transformers.map[root.name] or transformers.default)(root, nodes, styles)
   return postprocess(root, result, styles)
 end
 

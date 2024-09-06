@@ -79,4 +79,10 @@ transformers.map.stats = function(node, children, styles)
     :totable()
 end
 
+transformers.default = function(node, children, styles)
+  return Fun.iter(children)
+    :map(function(c) return Table.extend({}, styles[node.name] or {}, c) end)
+    :totable()
+end
+
 return transformers
