@@ -91,8 +91,12 @@ module.mixin = function()
     __tostring = function(self)
       local postfix = ""
       if self.damage_roll then
+        local damage_roll = self.tags.versatile
+          and D(self.damage_roll.dice[1].sides_n + 2)
+          or self.damage_roll
+
         postfix = postfix .. " (%s%s)" % {
-          self.damage_roll,
+          damage_roll,
           (self.bonus or 0) ~= 0 and "%+i" % self.bonus or ""
         }
       end
