@@ -104,11 +104,11 @@ gui.offsets.scene = static .. function()
 
   local prev = State.gui.views.scene_fx.offset
   local target = -Vector.use(Math.median,
-    Vector.zero,
+    --Vector.zero,
     player_position - window_size + border_size,
     -prev,
-    player_position - border_size,
-    grid_size - window_size
+    player_position - border_size
+    --grid_size - window_size
   )
 
   local d = target - prev

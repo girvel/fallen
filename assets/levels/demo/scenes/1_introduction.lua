@@ -1,4 +1,3 @@
-local texting = require("tech.texting")
 local shaders = require("tech.shaders")
 local api = require("tech.railing").api
 local mech = require("mech")
@@ -19,6 +18,7 @@ return function()
         local old_fov = State.player.fov_radius
         State.player.fov_radius = 0
         State.player.in_cutscene = true
+        api.center_camera()
 
         State.gui.sidebar.hint_override = "[пробел]"
         api.narration('... никогда не забуду тебя ненавидеть')
