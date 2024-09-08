@@ -71,8 +71,7 @@ module_mt.__call = function(self, pack, pack_type)
   return result
 end
 
-module.load_pack = function(folder_path, anchors)
-  anchors = anchors or {}
+module.load_pack = function(folder_path)
   assert(love.filesystem.getInfo(folder_path), "No folder " .. folder_path)
 
   local result = {}
@@ -89,15 +88,13 @@ module.load_pack = function(folder_path, anchors)
 
     if not result[animation_name] then result[animation_name] = {} end
 
-    local anchor = anchors[animation_name] and anchors[animation_name][frame_number]
     local image_data = love.image.newImageData(folder_path .. "/" .. file_name)
-    result[animation_name][frame_number] = sprite.image(image_data, anchor)
+    result[animation_name][frame_number] = sprite.image(image_data)
   end
   return result
 end
 
-module.load_atlas_pack = function(folder_path, anchors)
-  anchors = anchors or {}
+module.load_atlas_pack = function(folder_path)
   assert(love.filesystem.getInfo(folder_path), "No folder " .. folder_path)
 
   local result = {}
@@ -116,7 +113,7 @@ module.load_atlas_pack = function(folder_path, anchors)
       local full_name = animation_name .. "_" .. direction_name
       if not result[full_name] then result[full_name] = {} end
       result[full_name][frame_number] = sprite.from_atlas(
-        folder_path .. "/" .. file_name, i, -Query(anchors)[full_name][frame_number]
+        folder_path .. "/" .. file_name, i
       )
     end
   end
@@ -128,7 +125,7 @@ module.colored_pack = function(base_pack, color)
     :map(function(animation_name, animation)
       return animation_name, Fun.iter(animation)
         :map(function(s)
-          return sprite.image(s.data, s.anchor, color)
+          return sprite.image(s.data, color, s.anchors)
         end)
         :totable()
     end)

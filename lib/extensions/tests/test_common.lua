@@ -1,8 +1,6 @@
-local common = require("lib.common")
-
-
 describe("Common module", function()
   _G.unpack = table.unpack
+  local common = require("lib.extensions.common")
 
   describe("get_path", function()
     it("gets the table contents recursively", function()

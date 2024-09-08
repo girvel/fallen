@@ -5,7 +5,7 @@ local fullscreen_reading = "sidebar_background actions action_keys action_frames
 
 module_mt.__call = function(_, views)
   return Table.extend(
-    Log.trace(Fun.pairs({
+    Fun.pairs({
       free = "*",
       combat = "*",
       dialogue = "*",
@@ -21,7 +21,7 @@ module_mt.__call = function(_, views)
           codename = k,
         }
       end)
-      :tomap()),
+      :tomap(),
   {
     get = function(self)
       if State.gui.text_input.active then

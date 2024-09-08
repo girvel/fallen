@@ -167,9 +167,10 @@ display.system = static(Tiny.sortedProcessingSystem({
       if not item_sprite then return end
 
       local anchor_offset
-      local entity_anchor = -Query(entity.sprite).anchor[slot]
-      if item_sprite.anchor and entity_anchor then
-        anchor_offset = (entity_anchor - item_sprite.anchor) * scale
+      local entity_anchor = -Query(entity.sprite).anchors[slot]
+      local item_anchor = -Query(item_sprite).anchors.parent
+      if item_anchor and entity_anchor then
+        anchor_offset = (entity_anchor - item_anchor) * scale
       else
         anchor_offset = Vector.zero
       end

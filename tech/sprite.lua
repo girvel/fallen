@@ -7,10 +7,10 @@ sprite.image_mt = static {
   __serialize = function(self)
     local data = self.data:getString()
     local w, h = self.data:getDimensions()
-    local anchor = self.anchor
+    local anchors = self.anchors
     local paint_color = self._paint_color
     return function()
-      return sprite.image(love.image.newImageData(w, h, "rgba8", data), anchor, paint_color)
+      return sprite.image(love.image.newImageData(w, h, "rgba8", data), paint_color, anchors)
     end
   end
 }
@@ -25,27 +25,43 @@ sprite.text_mt = static {
   end
 }
 
-sprite.image = function(base, anchor, paint_color)
+-- TODO! FFI
+sprite.image = Memoize(function(base, paint_color, anchors)
   if type(base) == "string" then
     base = love.image.newImageData(base)
   end
 
-  if paint_color then
-    base:mapPixel(function(_, _, r, g, b, a)
-      if a == 0 then return 0, 0, 0, 0 end
-      if r == 0 and g == 0 and b == 0 then return 0, 0, 0, 1 end
+  local main_color = Colors.get(base)
+  anchors = anchors or {}
+  base:mapPixel(function(x, y, r, g, b, a)
+    local anchor_name = Fun.iter(Colors.anchor)
+      :filter(function(name, this_anchor)
+        return Colors.equal(this_anchor(), {r, g, b})
+      end)
+      :nth(1)
+
+    if anchor_name then
+      anchors[anchor_name] = Vector({x, y})
+      return unpack(main_color)
+    end
+
+    if a == 0 then return 0, 0, 0, 0 end
+    if r == 0 and g == 0 and b == 0 then return 0, 0, 0, 1 end
+    if paint_color then
       return unpack(paint_color)
-    end)
-  end
+    else
+      return r, g, b, a
+    end
+  end)
 
   return setmetatable({
     image = love.graphics.newImage(base),
     data = base,
-    color = Colors.get(base),
-    anchor = anchor,
+    color = main_color,
+    anchors = anchors,
     _paint_color = paint_color,
   }, sprite.image_mt)
-end
+end)
 
 local _atlases_cache = {}
 
@@ -58,7 +74,7 @@ local atlas = function(path)
   return canvas
 end
 
-sprite.from_atlas = function(path, index, anchor)
+sprite.from_atlas = Memoize(function(path, index)
   if not _atlases_cache[path] then
     _atlases_cache[path] = atlas(path)
   end
@@ -69,8 +85,8 @@ sprite.from_atlas = function(path, index, anchor)
   index = (index - 1) * size
   local image_data = canvas:newImageData(nil, nil, index % w, math.floor(index / w) * size, size, size)
 
-  return sprite.image(image_data, anchor)
-end
+  return sprite.image(image_data)
+end)
 
 sprite.get_atlas_position = function(path, index)
   if not _atlases_cache[path] then

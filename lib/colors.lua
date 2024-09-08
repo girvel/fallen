@@ -13,14 +13,33 @@ colors.to_hex = function(color)
 end
 
 colors.get = function(image_data)
+  local color_ns = {}
   for x = 0, image_data:getWidth() - 1 do
     for y = 0, image_data:getHeight() - 1 do
       local color = {image_data:getPixel(x, y)}
-      if (color[1] > 0 or color[2] > 0 or color[3] > 0) and color[4] > 0 then
+      if (color[1] > 0 or color[2] > 0 or color[3] > 0)
+        and color[4] > 0
+        and Fun.iter(colors.anchor)
+          :all(function(_, a) return not colors.equal(color, a()) end)
+      then
+        if color[1] == 1 then
+          Log.trace(color)
+          Log.trace(Fun.iter(colors.anchor)
+            :all(function(_, a) return not colors.equal(Log.trace(color, a())) end))
+        end
         return color
       end
     end
   end
+end
+
+colors.equal = function(a, b)
+  for i = 1, 4 do
+    if math.abs((a[i] or 1) - (b[i] or 1)) > 1 / 256 then
+      return false
+    end
+  end
+  return true
 end
 
 colors.hex = static {
@@ -41,6 +60,17 @@ colors.hex = static {
 
 for k, v in pairs(colors.hex) do
   colors[k] = function()
+    return colors.from_hex(v)
+  end
+end
+
+colors.anchor = {}
+for k, v in pairs({
+  parent = "ff0000",
+  main_hand = "fb0000",
+  other_hand = "f70000",
+}) do
+  colors.anchor[k] = function()
     return colors.from_hex(v)
   end
 end
