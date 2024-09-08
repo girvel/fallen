@@ -71,7 +71,13 @@ module_mt.__call = function(_)
         if not self:can_act() then
           self.actions = {}
         end
-        self.animation_rate = love.keyboard.isDown("lshift", "rshift") and 2 or 1
+
+        local k = love.keyboard.isDown("lshift", "rshift") and 1.5 or 1
+
+        self.animation_rate = k
+        for _, key in ipairs({"w", "a", "s", "d"}) do
+          love.custom.set_key_rate(key, love.custom.get_rate() * k)
+        end
       end,
     },
   })
