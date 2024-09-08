@@ -10,7 +10,6 @@ local your_move_sound = sound.multiple("assets/sounds/your_move1", 0.5)
 
 local blood_factory = function()
   return Table.extend(
-    item.mixin(),
     animated("assets/sprites/animations/hurt", "atlas"),
     {
       direction = "right",

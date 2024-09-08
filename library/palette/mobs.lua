@@ -1,3 +1,4 @@
+local body_parts = require("library.body_parts")
 local fighter = require("mech.classes.fighter")
 local combat_ai = require("library.combat_ai")
 local player = require("state.player")
@@ -99,6 +100,18 @@ module.cook = function()
   return Table.extend(
     module.old_dreamer(),
     interactive.detector(true)
+  )
+end
+
+module.markis = function()
+  return Table.extend(
+    module.old_dreamer(),
+    interactive.detector(true),
+    {
+      inventory = {
+        hair = body_parts.furry_head(),
+      }
+    }
   )
 end
 

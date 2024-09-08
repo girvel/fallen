@@ -69,11 +69,12 @@ sound.play = function(head, ...)
   local sounds, volume, position, size
   if type(head) == "string" then
     volume, position, size = ...
-    sounds = sounds.multiple(head, volume)
+    sounds = sound.multiple(head, volume)
   else
     position, size = ...
     sounds = head
   end
+  assert(#sounds > 0, "Empty sound collection")
   local this_sound = Random.choice(sounds):clone()
 
   if position then
