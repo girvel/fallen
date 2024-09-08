@@ -53,4 +53,10 @@ module.phantom = {
   movement_speed = 6,
 }
 
+module.furry = {
+  codename = "furry",
+  skin_color = Colors.from_hex("3f5d92"),
+  movement_speed = 6,
+}
+
 return module

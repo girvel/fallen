@@ -12,9 +12,9 @@ local constants = require("mech.constants")
 local general_ai = require("library.general_ai")
 
 
-local module, _, static = Module("library.palette.mobs")
+local mobs, _, static = Module("library.palette.mobs")
 
-module.player = player
+mobs.player = player
 
 
 local dreamer_engineer_mixin = {
@@ -78,13 +78,13 @@ local engineer_mixins = {
   }, dreamer_engineer_mixin),
 }
 
-module.engineer = function(i)
+mobs.engineer = function(i)
   return humanoid(Table.extend(engineer_mixins[i], interactive.detector()))
 end
 
 local dreamer_races = {races.dwarf, races.human, races.half_elf, races.half_orc, races.halfling}
 
-module.old_dreamer = function()
+mobs.old_dreamer = function()
   return humanoid({
     name = "...",
     race = Random.choice(dreamer_races),
@@ -96,26 +96,31 @@ module.old_dreamer = function()
   })
 end
 
-module.cook = function()
+mobs.cook = function()
   return Table.extend(
-    module.old_dreamer(),
+    mobs.old_dreamer(),
     interactive.detector(true)
   )
 end
 
-module.markis = function()
+mobs.markis = function()
   return Table.extend(
-    module.old_dreamer(),
-    interactive.detector(true),
-    {
+    humanoid {
+      name = "Маркис",
+      race = races.furry,
+      direction = "right",
       inventory = {
-        hair = body_parts.furry_head(),
-      }
-    }
+        head = body_parts.furry_head(),
+      },
+      max_hp = 15,
+      abilities = abilities(10, 10, 10, 10, 10, 10),
+      ai = weak_ai(),
+    },
+    interactive.detector(true)
   )
 end
 
-module.dreamer = function()
+mobs.dreamer = function()
   return humanoid({
     name = "...",
     race = Random.choice(dreamer_races),
@@ -126,7 +131,7 @@ module.dreamer = function()
   })
 end
 
-module.combat_dreamer = function()
+mobs.combat_dreamer = function()
   return humanoid({
     name = "...",
     race = Random.choice(dreamer_races),
@@ -148,7 +153,7 @@ module.combat_dreamer = function()
   })
 end
 
-module.phantom_knight = function()
+mobs.phantom_knight = function()
   return humanoid({
     ai = general_ai(),
     name = "Фантом",
@@ -161,7 +166,7 @@ module.phantom_knight = function()
   })
 end
 
-module.possessed = function()
+mobs.possessed = function()
   return humanoid({
     ai = general_ai(),
     name = "Потрясённый",
@@ -181,4 +186,4 @@ module.possessed = function()
   })
 end
 
-return module
+return mobs

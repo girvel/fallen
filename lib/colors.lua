@@ -69,6 +69,7 @@ for k, v in pairs({
   parent = "ff0000",
   main_hand = "fb0000",
   other_hand = "f70000",
+  head = "f30000",
 }) do
   colors.anchor[k] = function()
     return colors.from_hex(v)

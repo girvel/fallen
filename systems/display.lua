@@ -191,6 +191,7 @@ display.system = static(Tiny.sortedProcessingSystem({
       love.graphics.draw(entity.sprite.image, x, y, 0, scale)
     end
 
+    display_slot("head")
     display_slot("hurt")
     display_slot("gloves")
     if not is_main_hand_in_background then display_slot("main_hand") end
