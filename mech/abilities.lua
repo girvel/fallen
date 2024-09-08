@@ -81,9 +81,9 @@ abilities.check = function(entity, skill_or_abilities, dc)
   })
 
   local success = result >= dc
-  State.audio:play(
-    entity,
-    Random.choice(ability_check_sound[success and "success" or "failure"]):clone(),
+  sound.play(
+    ability_check_sound[success and "success" or "failure"],
+    entity.position,
     "small"
   )
   return success
@@ -96,9 +96,9 @@ abilities.saving_throw = function(entity, ability, dc)
   })
 
   local success = save >= dc
-  State.audio:play(
-    entity,
-    Random.choice(ability_check_sound[success and "success" or "failure"]):clone(),
+  sound.play(
+    ability_check_sound[success and "success" or "failure"],
+    entity.position,
     "small"
   )
   return success

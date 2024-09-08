@@ -18,7 +18,7 @@ live.valve = function(leaking_pipe_name)
     animated(pipe_valve_pack),
     interactive(Dump.ignore_upvalue_size .. function(self, other)
       local target = State.rails.entities[self._leaking_pipe_name]
-      State.audio:play(self, Random.choice(valve_rotating_sounds), "small")
+      sound.play(valve_rotating_sounds, self.position, "small")
       self:animate("rotate"):next(function()
         target.overflow_counter = 0
         pipes.burst_with_steam(target)
@@ -41,7 +41,7 @@ live.note = function(codex_update)
       self.interacted_by = other
       railing.api.discover_wiki(codex_update)
       State:remove(self)
-    end, {highlighted = true}),
+    end, {highlight = true}),
     {
       sprite = sprite.image("assets/sprites/note.png"),
       codename = "note",

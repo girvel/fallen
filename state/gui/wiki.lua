@@ -64,8 +64,8 @@ return Module("state.gui.wiki", function(gui)
       },
     }),
 
-    _open_sound = sound.multiple("assets/sounds/open_wiki.mp3", 0.3)[1],
-    _close_sound = sound.multiple("assets/sounds/close_wiki.mp3")[1],
+    _open_sound = sound.multiple("assets/sounds/open_wiki.mp3", 0.3),
+    _close_sound = sound.multiple("assets/sounds/close_wiki.mp3"),
 
     show = function(self, id)
       assert(self.pages[id], "Wiki page \"%s\" does not exist" % id)
@@ -126,7 +126,7 @@ return Module("state.gui.wiki", function(gui)
     end,
 
     _render_current_page = function(self)
-      State.audio:play_static(self._open_sound)
+      sound.play(self._open_sound)
       self:_close_page()
       local id = self.history[self.current_history_index]
 
@@ -152,7 +152,7 @@ return Module("state.gui.wiki", function(gui)
     end,
 
     exit = function(self)
-      State.audio:play_static(self._close_sound)
+      sound.play(self._close_sound)
       self:_close_page()
       self.history = {}
       self.current_history_index = 0

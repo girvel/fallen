@@ -1,3 +1,4 @@
+local sound = require("tech.sound")
 local sounds = require("tech.sounds")
 local shaders = require("tech.shaders")
 local animated = require("tech.animated")
@@ -177,7 +178,7 @@ gui.action_icon = function(hotkey_data, index, frame)
         return
       end
       if self._frame.sprite ~= self._frame.sprites.active then
-        State.audio:play_static(Random.choice(sounds.click))
+        sound.play(sounds.click)
       end
       self._frame.sprite = self._frame.sprites.active
     end,

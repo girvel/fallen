@@ -21,7 +21,7 @@ factoring.from_atlas(pipes, "assets/sprites/atlases/pipes.png", {
   "colored", "leaking_left_down",
 })
 
-local hissing_sound = sound.multiple("assets/sounds/steam_hissing_loop.wav", 1)[1]
+local hissing_sound = sound("assets/sounds/steam_hissing_loop.wav", 1)
 hissing_sound.source:setLooping(true)
 
 factoring.extend(pipes, "leaking_left_down", {
@@ -34,7 +34,7 @@ factoring.extend(pipes, "leaking_left_down", {
     self.overflow_counter = self.overflow_counter + dt
 
     if self.overflow_counter >= 60 then
-      State.audio:play(self, self.sound_loop)
+      sound.play({self.sound_loop}, self.position)
       if Common.relative_period(1, dt, self, "steam") then
         pipes.burst_with_steam(self)
       end
@@ -49,14 +49,14 @@ factoring.extend(pipes, "leaking_left_down", {
   end},
 })
 
-local steam_hissing_sound = sound.multiple("assets/sounds/steam_hissing.wav", 0.8)[1]
+local steam_hissing_sound = sound("assets/sounds/steam_hissing.wav", 0.8)
 
 pipes.burst_with_steam = Dump.ignore_upvalue_size .. function(pipe)
   State:add(Table.extend(
     library_fx.steam("right"),
     {position = pipe.position}
   ))
-  State.audio:play(pipe, steam_hissing_sound:clone())
+  sound.play({steam_hissing_sound}, pipe.position)
 end
 
 factoring.extend(pipes, "colored",

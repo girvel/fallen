@@ -53,7 +53,7 @@ love.load = function(args)
     State.factions = factions()
   end
 
-  State.audio.disable_ambient = args.disable_ambient
+  State.ambient.disabled = args.disable_ambient
   State.gui.show_fps = args.show_fps
   State.fast_scenes = args.fast_scenes
 
@@ -70,7 +70,7 @@ love.load = function(args)
   if not args.disable_ambient then
     local engine = sound("assets/sounds/ship_engine.mp3", 1)
     engine.source:setLooping(true)
-    State.audio:play({position = Vector({12, 64})}, engine, "large")
+    sound.play({engine}, Vector({12, 64}), "large")
   end
 
   if not args.debug then

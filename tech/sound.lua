@@ -34,23 +34,62 @@ sound.mt = static {
   end,
 }
 
-sound.multiple = function(path_beginning, volume)
+sound.multiple = Memoize(function(path_beginning, volume)
   local _, _, directory = path_beginning:find("^(.*)/[^/]*$")
   return Fun.iter(love.filesystem.getDirectoryItems(directory))
     :map(function(filename) return directory .. "/" .. filename end)
     :filter(function(path) return path:starts_with(path_beginning) end)
     :map(function(path) return sound(path, volume or 1) end)
     :totable()
-end
+end)
 
 
-module_mt.__call = function(_, path, volume)
+module_mt.__call = Memoize(function(_, path, volume)
   local source = love.audio.newSource(path, "static")
   if volume then source:setVolume(volume) end
   return setmetatable({
     source = source,
     _path = path,
   }, sound.mt)
+end)
+
+sound.sizes = static .. {
+  small = {
+    1, 10,
+  },
+  medium = {
+    7, 20,
+  },
+  large = {
+    15, 30,
+  },
+}
+
+sound.play = function(head, ...)
+  local sounds, volume, position, size
+  if type(head) == "string" then
+    volume, position, size = ...
+    sounds = sounds.multiple(head, volume)
+  else
+    position, size = ...
+    sounds = head
+  end
+  local this_sound = Random.choice(sounds):clone()
+
+  if position then
+    local limits = assert(
+      sound.sizes[size or "small"],
+      "Incorrect sound size %s; sounds can be small, medium or large" % tostring(size)
+    )
+
+    this_sound.source:setPosition(unpack(position))
+    this_sound.source:setAttenuationDistances(unpack(limits))
+    this_sound.source:setRolloff(2)
+  elseif this_sound.source:getChannelCount() == 1 then
+    this_sound.source:setRelative(true)
+  end
+
+  this_sound.source:play()
 end
 
 return sound

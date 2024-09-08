@@ -1,3 +1,4 @@
+local sound = require("tech.sound")
 local sounds = require("tech.sounds")
 local texting = require("tech.texting")
 local gui = require("tech.gui")
@@ -24,7 +25,7 @@ return Module("state.gui.dialogue", function()
 
     skip = function(self)
       if not self._entities then return end
-      State.audio:play_static(Random.choice(sounds.click):clone())
+      sound.play(sounds.click)
       State:remove_multiple(self._entities)
       self._entities = nil
     end,

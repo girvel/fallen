@@ -155,7 +155,7 @@ module_mt.__call = function(_, systems)
 
   result.gui = require("state.gui")()
   result.hotkeys = require("state.hotkeys")(modes)
-  result.audio = require("state.audio")()
+  result.ambient = require("state.ambient")()
   result.mode = require("state.mode")(result.gui.views_order)
 
   return result

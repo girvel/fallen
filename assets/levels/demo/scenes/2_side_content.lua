@@ -347,7 +347,7 @@ return function()
       run = function(self, rails, dt)
         self.enabled = false
         State:add(fx("assets/sprites/fx/disappearing_dude", "fx", Vector({23, 97})))
-        State.audio:play_static(sound.multiple("assets/sounds/creepy", .1)[1])
+        sound.play("assets/sounds/creepy", .1)
       end,
     },
   }

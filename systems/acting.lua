@@ -6,7 +6,7 @@ local sound = require("tech.sound")
 local hostility = require("mech.hostility")
 
 
-local your_move_sound = sound.multiple("assets/sounds/your_move1", 0.5)[1]
+local your_move_sound = sound.multiple("assets/sounds/your_move1", 0.5)
 
 local blood_factory = function()
   return Table.extend(
@@ -143,7 +143,7 @@ acting.system = static(Tiny.processingSystem({
     Log.info("%s's turn" % Entity.name(current))
 
     if current == State.player then
-      State.audio:play_static(your_move_sound)
+      sound.play(your_move_sound)
       State:add(fx("assets/sprites/fx/turn_starts", "fx_under", current.position))
     end
   end,

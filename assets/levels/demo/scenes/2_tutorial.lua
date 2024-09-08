@@ -248,13 +248,12 @@ return function()
         return (State.player.position - rails.entities.possessed.position):abs() < 5
       end,
 
-      turns_around_sound = sound.multiple("assets/sounds/possessed_turns_around.mp3", .15)[1],
       run = function(self, rails, dt)
         self.enabled = false
 
         api.narration("На стуле бледный мужчина с диким взглядом зубами — нет — пастью разрывает иволгу.")
         api.narration("Его одежда разорвана; всё вокруг покрыто кровью и перьями прекрасной птицы.")
-        State.audio:play_static(self.turns_around_sound)
+        sound.play("assets/sounds/possessed_turns_around.mp3", .15)
         api.narration("Внезапно демон в человеческом обличье замечает тебя.")
 
         State:start_combat({State.player, rails.entities.possessed})

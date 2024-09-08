@@ -33,8 +33,8 @@ return Module("state.gui.sidebar", function()
     ACTION_GRID_W = 5,
     W = 320,
 
-    order_sound = sound.multiple("assets/sounds/electricity.wav", 0.08)[1],
-    notification_sound = sound.multiple("assets/sounds/notification.mp3", 0.01)[1],
+    order_sound = sound.multiple("assets/sounds/electricity.wav", 0.08),
+    notification_sound = sound.multiple("assets/sounds/notification.mp3", 0.01),
 
     -- TODO REF move notification to a separate module
     update_indicators = function(self, dt)
@@ -99,10 +99,10 @@ return Module("state.gui.sidebar", function()
         self.notifications[1].display_time = 7
 
         if is_order then
-          State.audio:play_static(self.order_sound)
+          sound.play(self.order_sound)
           self.notification_fx:animate("order")
         else
-          State.audio:play_static(self.notification_sound)
+          sound.play(self.notification_sound)
           self.notification_fx:animate("normal")
         end
       end

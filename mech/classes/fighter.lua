@@ -25,7 +25,7 @@ fighter.second_wind = static .. action {
   end,
   _run = function(self, entity)
     State:add(fx("assets/sprites/fx/second_wind", "fx_under", entity.position))
-    State.audio:play(entity, fighter._second_wind_sound, "small")
+    sound.play(fighter._second_wind_sound, entity.position, "small")
     healing.heal(entity, self:get_healing_roll(entity):roll())
   end,
 }
@@ -39,7 +39,7 @@ fighter.action_surge = static .. action {
   },
   _run = function(self, entity)
     State:add(fx("assets/sprites/fx/action_surge_proto", "fx_under", entity.position))
-    State.audio:play(entity, fighter._action_surge_sound, "small")
+    sound.play(fighter._action_surge_sound, entity.position, "small")
     entity.resources.actions = entity.resources.actions + 1
   end,
 }
