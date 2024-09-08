@@ -272,7 +272,7 @@ return Module("state.hotkeys", function(modes)
   define_hotkey(hotkeys, {"death"}, {"enter", "e"}, {
     name = "начать с последнего сохранения",
     pre_action = function()
-      love.load_flag = true
+      love.custom.load("last.fallen_save")
     end,
   })
 
@@ -360,7 +360,7 @@ return Module("state.hotkeys", function(modes)
     define_hotkey(hotkeys, Table.deep_copy(modes), {"Ctrl+s"}, {
       name = "загрузить сохранение",
       pre_action = function()
-        love.load_flag = true
+        love.custom.load("last.fallen_save")
       end
     })
   end

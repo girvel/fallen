@@ -170,7 +170,7 @@ end
 
 api.autosave = function()
   Log.info("Autosave")
-  love.save_flag = true
+  love.custom.save("last.fallen_save")
   api.notification("Игра сохранена")
 end
 

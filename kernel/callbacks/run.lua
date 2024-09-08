@@ -13,20 +13,20 @@ return function()
 
   -- Main loop time.
   return function()
-    -- TODO REF State.flags & state_management preupdate system
+    -- TODO RM
     if love.reload_flag then
       love.reload()
       love.reload_flag = nil
     end
 
-    if love.load_flag then
-      game_save.read()
-      love.load_flag = nil
+    if love._custom.load then
+      game_save.read(love._custom.load)
+      love._custom.load = nil
     end
 
-    if love.save_flag then
-      game_save.write()
-      love.save_flag = nil
+    if love._custom.save then
+      game_save.write(love._custom.save)
+      love._custom.save = nil
     end
 
     local current_time = love.timer.getTime()

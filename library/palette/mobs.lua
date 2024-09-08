@@ -106,7 +106,7 @@ end
 mobs.markis = function()
   return Table.extend(
     humanoid {
-      name = "Маркис",
+      name = "Кот",
       race = races.furry,
       direction = "right",
       inventory = {

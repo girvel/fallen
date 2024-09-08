@@ -23,6 +23,14 @@ kernel.initialize = function()
     set_key_rate = function(key, value)
       love._custom.key_repetition.specific_rates[key] = value
     end,
+
+    load = function(filepath)
+      love._custom.load = filepath
+    end,
+
+    save = function(filepath)
+      love._custom.save = filepath
+    end,
   }
 end
 
