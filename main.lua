@@ -24,14 +24,6 @@ local systems = require("systems")
 
 
 love.load = function(args)
-  local closure_args = Table.deep_copy(args)
-  love.reload = function()
-    State.world:clearEntities()
-    State.world:clearSystems()
-    State.world:refresh()
-    return love.load(closure_args)
-  end
-
   args = cli.parse(args)
 
   if not args.debug then
@@ -127,10 +119,10 @@ for callback_name, _ in pairs(
   end, {})
 ) do
   love[callback_name] = function(...)
-    State.world:refresh()
     Debug.pcall(State.world.update, State.world, function(_, entity)
       return entity.base_callback == callback_name
     end, ...)
+    State.world:refresh()
   end
 end
 

@@ -22,11 +22,6 @@ colors.get = function(image_data)
         and Fun.iter(colors.anchor)
           :all(function(_, a) return not colors.equal(color, a()) end)
       then
-        if color[1] == 1 then
-          Log.trace(color)
-          Log.trace(Fun.iter(colors.anchor)
-            :all(function(_, a) return not colors.equal(Log.trace(color, a())) end))
-        end
         return color
       end
     end
