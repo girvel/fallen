@@ -1,16 +1,11 @@
 local gui = require("tech.gui")
 local hostility = require("mech.hostility")
 local translation = require("tech.translation")
-local interactive = require("tech.interactive")
 local sound = require("tech.sound")
 local actions = require("mech.creature.actions")
 
 
 local COLOR = {
-  ORDER = Colors.yellow(),
-  NOTIFICATION = Colors.white(),
-  OLD_ORDER = Colors.dark_yellow(),
-  OLD_NOTIFICATION = Colors.gray(),
   INACTIVE = Colors.gray(),
   HOSTILE = Colors.red(),
 }
@@ -25,7 +20,6 @@ return Module("state.gui.sidebar", function()
     action_entities = {},
     hp_bar = nil,
     hp_text = nil,
-    notification = nil,
 
     last_mode = nil,
     hovered_icon = nil,
@@ -33,13 +27,9 @@ return Module("state.gui.sidebar", function()
     ACTION_GRID_W = 5,
     W = 320,
 
-    order_sound = sound.multiple("assets/sounds/electricity.wav", 0.08),
-    notification_sound = sound.multiple("assets/sounds/notification.mp3", 0.01),
-
     -- TODO REF move notification to a separate module
-    update_indicators = function(self, dt)
+    update = function(self, dt)
       self:_update_hp_bar()
-      self:_update_notifications(dt)
       if self.last_mode ~= State.mode:get() then
         self:refresh_action_grid()
         self.last_mode = State.mode:get()
@@ -66,56 +56,10 @@ return Module("state.gui.sidebar", function()
       )
     end,
 
-    _notification_push_id = {},
-    _notification_queue = {},
-
-    _update_notifications = function(self, dt)
-      for _, notification in ipairs(self.notifications) do
-        notification.display_time = math.max(0, notification.display_time - dt)
-        if notification.display_time == 0 then
-          notification.sprite.text = {COLOR.NOTIFICATION, ""}
-        end
-      end
-
-      if #self._notification_queue > 0 and Common.period(0.5, self._notification_push_id) then
-        local text, is_order = unpack(table.remove(self._notification_queue, 1))
-        for i = #self.notifications - 1, 1, -1 do
-          local from = self.notifications[i]
-          local to = self.notifications[i + 1]
-
-          to.sprite.text = from.sprite.text
-          to.display_time = from.display_time
-
-          if i == 1 then
-            if Table.shallow_same(to.sprite.text[1], COLOR.ORDER) then
-              to.sprite.text[1] = COLOR.OLD_ORDER
-            else
-              to.sprite.text[1] = COLOR.OLD_NOTIFICATION
-            end
-          end
-        end
-
-        self.notifications[1].sprite.text = {is_order and COLOR.ORDER or COLOR.NOTIFICATION, text}
-        self.notifications[1].display_time = 7
-
-        if is_order then
-          sound.play(self.order_sound)
-          self.notification_fx:animate("order")
-        else
-          sound.play(self.notification_sound)
-          self.notification_fx:animate("normal")
-        end
-      end
-    end,
-
-    create_gui_entities = function(self)
+    initialize = function(self)
       State:add(gui.gui_background())
       self.hp_bar = State:add(gui.hp_bar())
       self.hp_text = State:add(gui.hp_text())
-      self.notifications = Fun.range(3)
-        :map(function(i) return State:add(gui.notification(i)) end)
-        :totable()
-      self.notification_fx = State:add(gui.notification_fx())
       self:refresh_action_grid()
     end,
 
@@ -139,23 +83,6 @@ return Module("state.gui.sidebar", function()
         end)
         :reduce(Table.concat, {})
       )
-    end,
-
-    push_notification = function(self, text, is_order)
-      table.insert(self._notification_queue, {text, is_order})
-    end,
-
-    hint_override = nil,
-
-    -- TODO REF hint should be separated
-    get_hint = function(self)
-      if self.hint_override then return self.hint_override end
-      if not Table.contains({"free", "fight"}, State.mode:get().codename) then return "" end
-      local interaction = interactive.get_for(State.player)
-      if interaction then
-        return "[E] для взаимодействия с " .. Entity.name(interaction)
-      end
-      return ""
     end,
 
     get_text = function(self)

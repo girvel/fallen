@@ -112,7 +112,7 @@ module_mt.__call = function(_, systems)
       self.rails = level_data.rails
       Query(self.rails):initialize(self)
 
-      self.gui.sidebar:create_gui_entities()
+      self.gui:initialize()
       self.background_dummy = State:add({
         sprite = sprite.image("assets/sprites/water_sketch_02.png"),
       })

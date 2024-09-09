@@ -112,7 +112,7 @@ return Module("state.gui.character_creator", function()
 
     close = function(self)
       if not self:can_close() then
-        State.gui.sidebar:push_notification("Редактирование персонажа не закончено")
+        State.gui.notifier:push("Редактирование персонажа не закончено")
         return
       end
       State:remove_multiple(self.text_entities)
@@ -128,11 +128,11 @@ return Module("state.gui.character_creator", function()
       local params = self.parameters
 
       if self:can_close() then
-        State.gui.sidebar:push_notification("Нельзя изменить персонажа")
+        State.gui.notifier:push("Нельзя изменить персонажа")
         return
       end
       if not self:can_submit() then
-        State.gui.sidebar:push_notification("Не все ресурсы распределены")
+        State.gui.notifier:push("Не все ресурсы распределены")
         return
       end
 

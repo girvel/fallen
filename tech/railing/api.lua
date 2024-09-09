@@ -71,7 +71,7 @@ api.options = function(options, remove_picked)
 end
 
 api.notification = function(text, is_order)
-  State.gui.sidebar:push_notification(text, is_order)
+  State.gui.notifier:push(text, is_order)
 end
 
 api.discover_wiki = function(page_table)

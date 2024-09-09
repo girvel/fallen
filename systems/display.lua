@@ -15,7 +15,7 @@ local _timer = {
     self.data[name] = self.data[name] or {}
     table.insert(self.data[name], t - self.t)
     if #self.data[name] >= 20 then
-      Log.debug("%s: %.2f ms" % {name, 1000 * Math.average(self.data[name])})
+      --Log.debug("%s: %.2f ms" % {name, 1000 * Math.average(self.data[name])})
       self.data[name] = {}
     end
     self.t = love.timer.getTime()
@@ -61,8 +61,7 @@ display.system = static(Tiny.sortedProcessingSystem({
   end,
 
   preProcess = function(self, dt)
-    State.gui:update_views()
-    State.gui.sidebar:update_indicators(dt)
+    State.gui:update(dt)
     self:process_grid()
   end,
 
@@ -286,7 +285,7 @@ display.system = static(Tiny.sortedProcessingSystem({
   end,
 
   _display_hint = function(self)
-    local content = State.gui.sidebar:get_hint()
+    local content = State.gui.hint:get()
     local x = (love.graphics.getWidth() - hint_font:getWidth(content)) / 2
     local y = love.graphics.getHeight() - hint_font:getHeight() - 50
 

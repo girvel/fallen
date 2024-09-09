@@ -53,9 +53,28 @@ module_mt.__call = function(_)
       }
     },
 
-    update_views = function(self)
+    _update_views = function(self)
       for key, f in pairs(self.views_offset_functions) do
         State.gui.views[key].offset = f()
+      end
+    end,
+
+    initialize = function(self)
+      for _, k in ipairs({
+        "sidebar",
+        "notifier",
+      }) do
+        self[k]:initialize()
+      end
+    end,
+
+    update = function(self, dt)
+      self:_update_views()
+      for _, k in ipairs({
+        "sidebar",
+        "notifier",
+      }) do
+        self[k]:update(dt)
       end
     end,
   }
@@ -89,6 +108,8 @@ module_mt.__call = function(_)
   result.character_creator = require("state.gui.character_creator")()
   result.text_input = require("state.gui.text_input")()
   result.tooltip = require("state.gui.tooltip")(result)
+  result.hint = require("state.gui.hint")()
+  result.notifier = require("state.gui.notifier")()
 
   return result
 end

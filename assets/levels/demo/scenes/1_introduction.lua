@@ -20,9 +20,9 @@ return function()
         State.player.in_cutscene = true
         api.center_camera()
 
-        State.gui.sidebar.hint_override = "[пробел]"
+        State.gui.hint.override = "[пробел]"
         api.narration('... никогда не забуду тебя ненавидеть')
-        State.gui.sidebar.hint_override = nil
+        State.gui.hint.override = nil
         api.narration("...")
         api.narration("... не забуду тебя ненавидеть")
         api.narration("... не на ви деть")
@@ -191,11 +191,11 @@ return function()
 
       run = function(self, rails, dt)
         self.enabled = false
-        State.gui.sidebar.hint_override = "Нажмите [K] чтобы открыть кодекс"
+        State.gui.hint.override = "Нажмите [K] чтобы открыть кодекс"
         while Table.last(State.gui.wiki.history) ~= "codex" and not Common.period(10, self) do
           coroutine.yield()
         end
-        State.gui.sidebar.hint_override = nil
+        State.gui.hint.override = nil
       end,
     },
 
