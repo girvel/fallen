@@ -36,7 +36,7 @@ return Module("tech.translation", {
       duelist = "дуэлянт",
       two_weapon_fighting = "бой двумя оружиями",
     },
-    [feats.perk] = {
+    [feats.feature] = {
       savage_attacker = "свирепый атакующий",
       great_weapon_master = "мастер двуручного оружия",
     },
@@ -44,7 +44,7 @@ return Module("tech.translation", {
 
   perks = {
     [fighter.fighting_style] = "стиль боя",
-    [feats.perk] = "черта",
+    [feats.feature] = "черта",
   },
 
   race = {

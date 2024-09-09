@@ -65,7 +65,7 @@ return Module("state.gui.sidebar", function()
 
     refresh_action_grid = function(self)
       State:remove_multiple(self.action_entities)
-      local player_actions = State.player:get_actions()
+      local player_actions = State.player.potential_actions
       self.action_entities = State:add_multiple(OrderedMap.iter(State.hotkeys[State.mode:get().codename])
         :filter(function(key, data)
           return data.codename

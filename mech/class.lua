@@ -1,5 +1,5 @@
 local action = require("tech.action")
-local perk = require("mech.perk")
+local feature = require("mech.feature")
 local abilities = require("mech.abilities")
 local healing = require("mech.healing")
 
@@ -11,7 +11,7 @@ class.get_choices = function(progression_table, level)
     :take_n(level)
     :map(function(perks)
       return Fun.iter(perks)
-        :filter(function(p) return p.enum_variant == perk.choice end)
+        :filter(function(p) return p.enum_variant == feature.choice end)
         :totable()
     end)
     :reduce(Table.concat, {})
@@ -40,7 +40,7 @@ class.mixin = function()
         :take_n(level)
         :map(function(perks)
           return Fun.iter(perks)
-            :filter(function(p) return p.enum_variant == perk.action end)
+            :filter(function(p) return p.enum_variant == feature.action end)
             :map(function(p) return p.action end)
             :totable()
         end)
@@ -53,10 +53,10 @@ class.mixin = function()
         :map(function(perks)
           return Fun.iter(perks)
             :map(function(p)
-              if p.enum_variant == perk.effect then
+              if p.enum_variant == feature.perk then
                 return p.modifier
               end
-              if p.enum_variant == perk.choice then
+              if p.enum_variant == feature.choice then
                 return p.options[build[p]]
               end
             end)
@@ -78,7 +78,7 @@ class.mixin = function()
         :map(function(perks)
           return Fun.iter(perks)
             :filter(function(p)
-              return p.enum_variant == perk.resource
+              return p.enum_variant == feature.resource
                 and p.rest_type == rest_type
             end)
             :map(function(p) return p.codename, p.amount end)

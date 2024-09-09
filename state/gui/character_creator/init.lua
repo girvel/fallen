@@ -145,7 +145,7 @@ return Module("state.gui.character_creator", function()
           :filter(function(o) return Table.contains(active_choices, o) end)
           :tomap(),
         feats = races[params.race].feat_flag
-          and {feats.perk.options[params.build_options[feats.perk]]}
+          and {feats.feature.options[params.build_options[feats.feature]]}
           or nil,
         level = params.level,
         class = params.class,

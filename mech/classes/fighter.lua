@@ -1,7 +1,7 @@
 local sound = require("tech.sound")
 local action = require("tech.action")
 local class = require("mech.class")
-local perk = require("mech.perk")
+local feature = require("mech.feature")
 local abilities = require("mech.abilities")
 local fx = require("tech.fx")
 local healing = require("mech.healing")
@@ -42,7 +42,7 @@ fighter.action_surge = static .. action {
 
 -- TODO perk.choice.option is of type list<modifier>
 --   but should be of type list<list<perk>>
-fighter.fighting_style = static(perk.choice({
+fighter.fighting_style = static(feature.choice({
   {
     codename = "two_handed_style",
     modify_damage_roll = function(self, entity, roll)
@@ -92,17 +92,17 @@ fighter.fighting_spirit = static .. action {
 
 fighter.progression_table = static {
   [1] = {
-    perk.action(fighter.second_wind),
-    perk.resource("short", "second_wind", 1),
+    feature.action(fighter.second_wind),
+    feature.resource("short", "second_wind", 1),
     fighter.fighting_style,
   },
   [2] = {
-    perk.action(fighter.action_surge),
-    perk.resource("short", "action_surge", 1),
+    feature.action(fighter.action_surge),
+    feature.resource("short", "action_surge", 1),
   },
   [3] = {
-    perk.action(fighter.fighting_spirit),
-    perk.resource("long", "fighting_spirit", 3),
+    feature.action(fighter.fighting_spirit),
+    feature.resource("long", "fighting_spirit", 3),
   },
 }
 

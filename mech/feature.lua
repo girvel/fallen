@@ -1,6 +1,6 @@
-return Module("mech.perk", Enum({
+return Module("mech.feature", Enum({
   action = {"action"},
   resource = {"rest_type", "codename", "amount"},
-  effect = {"modifier"},
+  perk = {"modifier"},
   choice = {"options"},
 }))

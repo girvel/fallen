@@ -72,7 +72,7 @@ forms.race = static(function(params)
   end
 
   if races[params.race].feat_flag then
-    text = text .. "\n" .. perk_form(feats.perk, params)
+    text = text .. "\n" .. perk_form(feats.feature, params)
   end
 
   return text .. "\n\n"

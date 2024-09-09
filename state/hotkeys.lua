@@ -180,6 +180,7 @@ return Module("state.hotkeys", function(modes)
       end)
     end,
     hidden = function(self)
+      Log.trace(State.player.feats)
       return not Table.contains(State.player.feats, self._perk)
     end,
     pre_action = function(self)
