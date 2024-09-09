@@ -12,23 +12,22 @@ local animation_methods = {
       self._on_animation_end:resolve(self)
       self._on_animation_end = nil
     end
-
     self:animation_set_paused(false)
-    animation_name = animation_name or "idle"
-    self.animation.current = animation_name .. "_" .. (self.direction or "")
-    if not self.animation.pack[self.animation.current] then
-      self.animation.current = animation_name  -- TODO REF animation itself
+
+    for _, candidate in ipairs({
+      "%s_%s" % {animation_name, self.direction or "right"},
+      animation_name,
+      "idle",
+    }) do
+      self.animation.current = candidate
+      if self.animation.pack[self.animation.current] then break end
     end
-    if not self.animation.pack[self.animation.current] and animation_name ~= "idle" then
-      return self:animate()
-    end
+
     self.animation.frame = 1
     self:animation_refresh()
 
-    if self.inventory then
-      Fun.iter(self.inventory):each(function(slot, it)
-        Query(it):animate(animation_name)
-      end)
+    for _, it in pairs(self.inventory or {}) do
+      Query(it):animate(animation_name)
     end
 
     self._on_animation_end = Promise()
@@ -67,7 +66,7 @@ module_mt.__call = function(self, pack, pack_type)
     _on_animation_end = nil,
   }, animation_methods)
 
-  result:animate("idle")
+  result:animate()
   return result
 end
 
