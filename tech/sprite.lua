@@ -8,9 +8,8 @@ sprite.image_mt = static {
     local data = self.data:getString()
     local w, h = self.data:getDimensions()
     local anchors = self.anchors
-    local paint_color = self._paint_color
     return function()
-      return sprite.image(love.image.newImageData(w, h, "rgba8", data), paint_color, anchors)
+      return sprite.image(love.image.newImageData(w, h, "rgba8", data), nil, anchors)
     end
   end
 }
@@ -30,36 +29,38 @@ sprite.image = Memoize(function(base, paint_color, anchors)
   if type(base) == "string" then
     base = love.image.newImageData(base)
   end
+  base = base:clone()
 
-  local main_color = Colors.get(base)
-  anchors = anchors or {}
-  base:mapPixel(function(x, y, r, g, b, a)
-    local anchor_name = Fun.iter(Colors.anchor)
-      :filter(function(name, this_anchor)
-        return Colors.equal(this_anchor(), {r, g, b})
-      end)
-      :nth(1)
+  local main_color = paint_color or Colors.get(base)
+  if paint_color or not anchors then
+    anchors = anchors or {}
+    base:mapPixel(function(x, y, r, g, b, a)
+      local anchor_name = Fun.iter(Colors.anchor)
+        :filter(function(name, this_anchor)
+          return Colors.equal(this_anchor(), {r, g, b})
+        end)
+        :nth(1)
 
-    if anchor_name then
-      anchors[anchor_name] = Vector({x, y})
-      return unpack(main_color)
-    end
+      if anchor_name then
+        anchors[anchor_name] = Vector({x, y})
+        return unpack(main_color)
+      end
 
-    if a == 0 then return 0, 0, 0, 0 end
-    if r == 0 and g == 0 and b == 0 then return 0, 0, 0, 1 end
-    if paint_color then
-      return unpack(paint_color)
-    else
-      return r, g, b, a
-    end
-  end)
+      if a == 0 then return 0, 0, 0, 0 end
+      if r == 0 and g == 0 and b == 0 then return 0, 0, 0, 1 end
+      if paint_color then
+        return unpack(paint_color)
+      else
+        return r, g, b, a
+      end
+    end)
+  end
 
   return setmetatable({
     image = love.graphics.newImage(base),
     data = base,
     color = main_color,
     anchors = anchors,
-    _paint_color = paint_color,
   }, sprite.image_mt)
 end)
 
