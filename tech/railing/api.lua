@@ -94,7 +94,6 @@ api.ability_check = function(ability, dc)
   return abilities.check(State.player, ability, dc)
 end
 
--- TODO REF remove message
 api.saving_throw = function(ability, dc)
   local success = abilities.saving_throw(State.player, ability, dc)
 

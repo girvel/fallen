@@ -13,8 +13,8 @@ animation.system = static(Tiny.processingSystem({
     local rate = FPS * (entity.animation_rate or 1)
     this_animation.frame = this_animation.frame + dt * rate
 
-    if not this_animation.pack[this_animation.current]
-      or math.floor(this_animation.frame) > #this_animation.pack[this_animation.current]
+    if not this_animation.current
+      or math.floor(this_animation.frame) > #this_animation.current
     then
       entity:animate("idle")
     end

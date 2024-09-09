@@ -8,19 +8,20 @@ module._packs_cache = {}
 
 local animation_methods = {
   animate = function(self, animation_name)
-    if self._on_animation_end then
-      self._on_animation_end:resolve(self)
-      self._on_animation_end = nil
+    animation_name = animation_name or "idle"
+
+    if self.animation._on_end then
+      self.animation._on_end:resolve(self)
+      self.animation._on_end = nil
     end
     self:animation_set_paused(false)
 
     for _, candidate in ipairs({
       "%s_%s" % {animation_name, self.direction or "right"},
       animation_name,
-      "idle",
     }) do
-      self.animation.current = candidate
-      if self.animation.pack[self.animation.current] then break end
+      self.animation.current = self.animation.pack[candidate]
+      if self.animation.current then break end
     end
 
     self.animation.frame = 1
@@ -30,13 +31,13 @@ local animation_methods = {
       Query(it):animate(animation_name)
     end
 
-    self._on_animation_end = Promise()
-    return self._on_animation_end
+    self.animation._on_end = Promise()
+    return self.animation._on_end
   end,
 
   animation_refresh = function(self)
-    if not self.animation.pack[self.animation.current] then return end
-    self.sprite = self.animation.pack[self.animation.current][math.floor(self.animation.frame)]
+    if not self.animation.current then return end
+    self.sprite = self.animation.current[math.floor(self.animation.frame)]
   end,
 
   animation_set_paused = function(self, value)
@@ -61,9 +62,9 @@ module_mt.__call = function(self, pack, pack_type)
     animation = {
       pack = pack,
       paused = false,
+      _on_end = nil,
     },
     sprite = {},
-    _on_animation_end = nil,
   }, animation_methods)
 
   result:animate()
@@ -85,7 +86,9 @@ module.load_pack = function(folder_path)
       animation_name = file_name:sub(0, i - 1)
     end
 
-    if not result[animation_name] then result[animation_name] = {} end
+    if not result[animation_name] then
+      result[animation_name] = {codename = animation_name}
+    end
 
     local image_data = love.image.newImageData(folder_path .. "/" .. file_name)
     result[animation_name][frame_number] = sprite.image(image_data)
@@ -110,7 +113,7 @@ module.load_atlas_pack = function(folder_path)
 
     for i, direction_name in ipairs({"up", "left", "down", "right"}) do
       local full_name = animation_name .. "_" .. direction_name
-      if not result[full_name] then result[full_name] = {} end
+      if not result[full_name] then result[full_name] = {codename = full_name} end
       result[full_name][frame_number] = sprite.from_atlas(
         folder_path .. "/" .. file_name, i
       )
@@ -122,11 +125,11 @@ end
 module.colored_pack = function(base_pack, color)
   return Fun.iter(base_pack)
     :map(function(animation_name, animation)
-      return animation_name, Fun.iter(animation)
+      return animation_name, Table.extend(Fun.iter(animation)
         :map(function(s)
           return sprite.image(s.data, color, s.anchors)
         end)
-        :totable()
+        :totable(), {codename = animation_name})
     end)
     :tomap()
 end
@@ -137,7 +140,7 @@ module.get_render_position = function(entity)
   --   return entity.position
   -- end
   -- return entity.position - Vector[entity.direction]
-  --   * (1 - (entity.animation.frame - 1) / (#entity.animation.pack[entity.animation.current]))
+  --   * (1 - (entity.animation.frame - 1) / (#entity.animation.current))
 end
 
 return module

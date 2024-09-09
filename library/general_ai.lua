@@ -60,7 +60,7 @@ general_ai_mt.__call = function(_, works_outside_of_combat)
         Log.debug("Attempt at attacking the player")
         self:rotate(Vector.name_from_direction(direction))
         while self:act(actions.hand_attack) do
-          while not self.animation.current:starts_with("idle") do
+          while not self.animation.current.codename:starts_with("idle") do
             coroutine.yield()
           end
         end

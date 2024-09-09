@@ -12,7 +12,6 @@ local live, _, static = Module("library.palette.live")
 local valve_rotating_sounds = sound.multiple("assets/sounds/valve_rotate", 0.05)
 local pipe_valve_pack = animated.load_pack("assets/sprites/animations/pipe_valve")
 
--- TODO! move to live
 live.valve = function(leaking_pipe_name)
   return Table.extend(
     animated(pipe_valve_pack),

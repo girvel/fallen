@@ -310,7 +310,6 @@ return function()
         api.narration("Старик оборачивается, замечая твой взгляд.")
         api.line(rails.entities.cook, "Ещё не готово, подходи к обеду")
 
-        -- TODO display this!
         if api.ability_check("cha", 14) then
           api.narration("Твоё нутро издаёт громкий голодный звук.", {check = {"cha", true}})
           api.narration("После этого старик берёт с полки металлическую кружку и зачерпывает в неё рагу.")

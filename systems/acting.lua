@@ -79,9 +79,9 @@ acting.system = static(Tiny.processingSystem({
         local blood = State:add(blood_factory())
         State:add_dependency(entity, blood)
         blood.direction = entity.direction
-        blood:animate(entity.animation.current)
-        blood.animation.paused = entity.animation.paused
-        -- TODO abstract this away as picking up an item?
+        blood:animate(entity.animation.current.codename)
+        blood:animation_set_paused(entity.animation.paused)
+        -- TODO! abstract this away as picking up an item?
         entity.inventory.hurt = blood
       end
     else
