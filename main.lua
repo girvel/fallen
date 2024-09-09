@@ -34,6 +34,12 @@ love.load = function(args)
 
   args = cli.parse(args)
 
+  if not args.debug then
+    love.errorhandler = love_errorhandler
+  else
+    jit.off()
+  end
+
   Log.info("Command line arguments:", args)
   Log.level = args.debug and "trace" or "debug"
   Debug.debug_mode = args.debug
@@ -65,18 +71,7 @@ love.load = function(args)
     Query(State.rails.scenes[scene]).enabled = false
   end
 
-  love.audio.stop()
-  love.audio.setDistanceModel("exponent")
-  if not args.disable_ambient then
-    local engine = sound("assets/sounds/ship_engine.mp3", 1)
-    engine.source:setLooping(true)
-    sound.play({engine}, Vector({12, 64}), "large")
-  end
-
-  if not args.debug then
-    love.errorhandler = love_errorhandler
-  else
-    jit.off()
+  if args.debug then
     Table.extend(State.gui.character_creator.parameters, {
       skills = {
         sleight_of_hand = true,
@@ -96,6 +91,14 @@ love.load = function(args)
     })
   end
 
+  love.audio.stop()
+  love.audio.setDistanceModel("exponent")
+  if not args.disable_ambient then
+    local engine = sound("assets/sounds/ship_engine.mp3", 1)
+    engine.source:setLooping(true)
+    sound.play({engine}, Vector({12, 64}), "large")
+  end
+
   if args.resolution then
     love.window.updateMode(args.resolution[1], args.resolution[2], {fullscreen = false})
   end
@@ -110,6 +113,8 @@ love.load = function(args)
   end
 
   Log.info("Game is loaded")
+
+  love.custom.save("start.fallen_save")
 end
 
 for callback_name, _ in pairs(

@@ -13,20 +13,9 @@ return function()
 
   -- Main loop time.
   return function()
-    -- TODO RM
-    if love.reload_flag then
-      love.reload()
-      love.reload_flag = nil
-    end
-
     if love._custom.load then
       game_save.read(love._custom.load)
       love._custom.load = nil
-    end
-
-    if love._custom.save then
-      game_save.write(love._custom.save)
-      love._custom.save = nil
     end
 
     local current_time = love.timer.getTime()
@@ -84,6 +73,12 @@ return function()
     if love.is_running_tests then
       require("tests.test_serialization")
       return 0
+    end
+
+    -- should go last to capture at least 1 tick
+    if love._custom.save then
+      game_save.write(love._custom.save)
+      love._custom.save = nil
     end
   end
 end

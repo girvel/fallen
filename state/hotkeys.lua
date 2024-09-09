@@ -279,7 +279,7 @@ return Module("state.hotkeys", function(modes)
   define_hotkey(hotkeys, {"death"}, {"r"}, {
     name = "начать заново",
     pre_action = function()
-      love.reload_flag = true
+      love.custom.load("start.fallen_save")
     end,
   })
 
@@ -352,7 +352,7 @@ return Module("state.hotkeys", function(modes)
   define_hotkey(hotkeys, Table.deep_copy(modes), {"Ctrl+r"}, {
     name = "начать заново",
     pre_action = function()
-      love.reload_flag = true
+      love.custom.load("start.fallen_save")
     end,
   })
 
