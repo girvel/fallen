@@ -180,16 +180,15 @@ return Module("state.hotkeys", function(modes)
       end)
     end,
     hidden = function(self)
-      Log.trace(State.player.feats)
-      return not Table.contains(State.player.feats, self._perk)
+      return not Table.contains(State.player.perks, self._perk)
     end,
     pre_action = function(self)
       if self:hidden() then return end
-      local params = State.player.perk_params[self._perk]
+      local params = State.player.effect_params[self._perk]
       params.enabled = not params.enabled
     end,
     is_passive_enabled = function(self)
-      return State.player.perk_params[self._perk].enabled
+      return State.player.effect_params[self._perk].enabled
     end,
   })
 

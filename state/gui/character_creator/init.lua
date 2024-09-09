@@ -1,3 +1,4 @@
+local feature = require("mech.feature")
 local texting = require("tech.texting")
 local races = require("mech.races")
 local forms = require("state.gui.character_creator.forms")
@@ -136,20 +137,35 @@ return Module("state.gui.character_creator", function()
         return
       end
 
-      local active_choices = class.get_choices(fighter.progression_table, 2)
+      local table_slice = Fun.iter(params.class.progression_table)
+        :take_n(params.level)
+        :reduce(Table.concat, {})
+
+      local perks = Fun.iter(table_slice)
+        :map(function(f)
+          if f.enum_variant == feature.perk then
+            return f.modifier
+          end
+
+          if f.enum_variant == feature.choice then
+            return f.options[params.build_options[f]]
+          end
+        end)
+        :filter(Fun.op.truth)
+        :chain(races[params.race].feat_flag
+          and {feats.feature.options[params.build_options[feats.feature]]}
+          or {}
+        )
+        :totable()
 
       local changes = {
         abilities = params.abilities_final,
         race = races[params.race],
-        build = Fun.iter(params.build_options)
-          :filter(function(o) return Table.contains(active_choices, o) end)
-          :tomap(),
-        feats = races[params.race].feat_flag
-          and {feats.feature.options[params.build_options[feats.feature]]}
-          or nil,
+
         level = params.level,
         class = params.class,
         skills = params.skills,
+        perks = perks,
       }
 
       Log.info("Finishing character creation with args:", changes)

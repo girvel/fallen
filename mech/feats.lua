@@ -9,7 +9,7 @@ feats.great_weapon_master = static {
   damage_modifier = 10,
   _gwm_condition = function(self, entity)
     local weapon = entity.inventory.main_hand
-    return entity.perk_params[feats.great_weapon_master].enabled
+    return entity.effect_params[self].enabled
       and weapon
       and weapon.tags.heavy
   end,

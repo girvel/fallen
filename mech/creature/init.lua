@@ -17,11 +17,11 @@ end
 creature._methods = static {
   get_effect = function(self, name, value, ...)
     local args = {...}
-    return Fun.chain(self.effects, self.feats)
-      :filter(function(effect) return effect[name] end)
+    return Fun.iter(self.perks)
+      :filter(function(perk) return perk[name] end)
       :reduce(
-        function(v, effect)
-          return effect[name](effect, self, v, unpack(args))
+        function(v, perk)
+          return perk[name](perk, self, v, unpack(args))
         end,
         value
       )
@@ -85,14 +85,10 @@ creature._methods = static {
 
     Table.extend(self, changes)
 
-    if self.class then
-      -- TODO store build perks & feats in one table
-      self.effects = self.class:get_effects(self.level, self.build)
-      self.perk_params = Fun.iter(self.effects)
-        :chain(self.feats)
-        :map(function(effect) return effect, {} end)
-        :tomap()
-    end
+    self.effect_params = Fun.iter(self.perks)
+      :map(function(perk) return perk, {} end)
+      :tomap()
+
     for k, v in Pairs(get_all_resources(self)) do
       self.resources[k] = (self.resources[k] or 0) + v - (old_resources[k] or 0)
     end
@@ -137,8 +133,7 @@ module_mt.__call = function(_, animation_pack, object)
       hit = sound.multiple("assets/sounds/hits_body", 0.3),
     },
 
-    effects = {},
-    feats = {},
+    perks = {},
   }, creature._methods, object)
 
   result.hp = result.hp or result:get_max_hp()

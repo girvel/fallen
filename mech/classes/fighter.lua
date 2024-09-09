@@ -90,6 +90,12 @@ fighter.fighting_spirit = static .. action {
   end,
 }
 
+-- fighter.progression_table = static {
+--   [1] = {fighter.second_wind, fighter.fighting_style},  -- second_wind is a perk
+--   [2] = {fighter.action_surge}, 
+--   [3] = {fighter.fighting_spirit},
+-- }
+
 fighter.progression_table = static {
   [1] = {
     feature.action(fighter.second_wind),
