@@ -3,6 +3,33 @@ local level = require("state.level")
 local tcod = require("lib.tcod")
 
 
+local _timer = {
+  t = nil,
+  te = nil,
+  data = {},
+  start = function(self)
+    self.t = love.timer.getTime()
+  end,
+  step = function(self, name)
+    local t = love.timer.getTime()
+    self.data[name] = self.data[name] or {}
+    table.insert(self.data[name], t - self.t)
+    if #self.data[name] >= 20 then
+      Log.debug("%s: %.2f ms" % {name, 1000 * Math.average(self.data[name])})
+      self.data[name] = {}
+    end
+    self.t = love.timer.getTime()
+  end,
+  start_exclude = function(self)
+    self.te = love.timer.getTime()
+  end,
+  stop_exclude = function(self)
+    self.t = self.t + love.timer.getTime() - self.te
+    self.te = nil
+  end,
+}
+
+
 local default_font = love.graphics.newFont("assets/fonts/joystix.monospace-regular.otf", 12)
 default_font:setLineHeight(1.2)
 
@@ -41,6 +68,7 @@ display.system = static(Tiny.sortedProcessingSystem({
 
   process_grid = function(self)
     if not State.mode:get().displayed_views.scene then return end
+    _timer:start()
 
     -- borders --
     local view = State.gui.views.scene
@@ -49,6 +77,7 @@ display.system = static(Tiny.sortedProcessingSystem({
 
     local start = Vector.use(Math.median, Vector.one, _start, State.grids.solids.size)
     local finish = Vector.use(Math.median, Vector.one, _finish, State.grids.solids.size)
+    _timer:step("start/finish")
 
     -- mask --
     local solids = State.grids.solids
@@ -74,20 +103,24 @@ display.system = static(Tiny.sortedProcessingSystem({
 
     local px, py = unpack(State.player.position)
     tcod.TCOD_map_compute_fov(self._fov_map, px, py, State.player.fov_radius, true, tcod.FOV_PERMISSIVE_8)
+    _timer:step("compute FOV")
 
     for x = _start[1], _finish[1] do
       for y = _start[2], _finish[2] do
         local p = Vector({x, y})
         if tcod.TCOD_map_is_in_fov(self._fov_map, x, y)
           and not State.grids.tiles:safe_get(p) then
+            _timer:start_exclude()
             self:_process_image_sprite(
               State.background_dummy,
               State.gui.views.scene:apply(p),
               State.gui.views.scene.scale
             )
+            _timer:stop_exclude()
         end
       end
     end
+    _timer:step("bg")
 
     for _, layer in ipairs(level.GRID_LAYERS) do
       local grid = State.grids[layer]
@@ -103,13 +136,16 @@ display.system = static(Tiny.sortedProcessingSystem({
                 and e.position[2] > State.player.position[2]
               )
               if e and not is_hidden_by_perspective then
+                _timer:start_exclude()
                 self:process(e)
+                _timer:stop_exclude()
               end
             end
           end
         end
       end
     end
+    _timer:step("fg")
   end,
 
   process = function(self, entity)
@@ -178,10 +214,13 @@ display.system = static(Tiny.sortedProcessingSystem({
       love.graphics.draw(item_sprite.image, wx, wy, 0, scale)
     end
 
-    local is_main_hand_in_background = entity.direction == "up"
-    local is_other_hand_in_background = entity.direction ~= "down"
-    if is_main_hand_in_background then display_slot("main_hand") end
-    if is_other_hand_in_background then display_slot("other_hand") end
+    local is_main_hand_in_background, is_other_hand_in_background
+    if entity.inventory then
+      is_main_hand_in_background = entity.direction == "up"
+      is_other_hand_in_background = entity.direction ~= "down"
+      if is_main_hand_in_background then display_slot("main_hand") end
+      if is_other_hand_in_background then display_slot("other_hand") end
+    end
 
     local x, y = unpack(offset_position)
     Query(State.shader):preprocess(entity)
@@ -191,11 +230,13 @@ display.system = static(Tiny.sortedProcessingSystem({
       love.graphics.draw(entity.sprite.image, x, y, 0, scale)
     end
 
-    display_slot("head")
-    display_slot("hurt")
-    display_slot("gloves")
-    if not is_main_hand_in_background then display_slot("main_hand") end
-    if not is_other_hand_in_background then display_slot("other_hand") end
+    if entity.inventory then
+      display_slot("head")
+      display_slot("hurt")
+      display_slot("gloves")
+      if not is_main_hand_in_background then display_slot("main_hand") end
+      if not is_other_hand_in_background then display_slot("other_hand") end
+    end
   end,
 
   postProcess = function(self)

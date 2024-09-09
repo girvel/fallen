@@ -104,7 +104,10 @@ love.load = function(args)
   end
 
   if args.enable_profiler then
-    State.profiler = require("lib.vendor.profile")
+    State.profiler = setmetatable(
+      require("lib.vendor.profile"),
+      {__serialize = function() return function() end end}
+    )
     State.profiler.setclock(love.timer.getTime)
   end
 

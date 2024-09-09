@@ -27,7 +27,7 @@ return function(positions, entities)
             rails:remove_scene("checkpoint_0")
             level.move(State.player, Vector({28, 9}))
             api.wait_seconds(2)
-            api.autosave()
+            --api.autosave()
           end,
         },
       }

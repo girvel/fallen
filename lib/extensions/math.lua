@@ -10,4 +10,8 @@ module.median = function(...)
   return t[math.ceil(#t / 2)]
 end
 
+module.average = function(t)
+  return Fun.iter(t):sum() / #t
+end
+
 return module
