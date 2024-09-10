@@ -5,6 +5,20 @@ local healing = require("mech.healing")
 
 local class, _, static = Module("mech.class")
 
+class.choice = static .. setmetatable({}, {
+  __call = function(self, options)
+    return {
+      options = options,
+      __type = self,
+    }
+  end
+})
+
+class.provide_action = static .. function(self, entity, base)
+  table.insert(base, self.action)
+  return base
+end
+
 class.hit_dice = static {
   codename = "hit_dice",
 
@@ -30,19 +44,7 @@ class.hit_dice = static {
     return base
   end,
 
-  modify_actions = function(self, entity, base)
-    table.insert(base, self.action)
-    return base
-  end,
+  modify_actions = class.provide_action,
 }
-
-class.choice = static .. setmetatable({}, {
-  __call = function(self, options)
-    return {
-      options = options,
-      __type = self,
-    }
-  end
-})
 
 return class

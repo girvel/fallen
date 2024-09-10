@@ -147,7 +147,7 @@ mobs.combat_dreamer = function()
       main_hand = items.mace(),
       other_hand = items.spiked_shield(),
     },
-    perks = {fighter.fighting_style.options[3]},
+    perks = {fighter.styles.two_weapon_fighting},
   })
 end
 

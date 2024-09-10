@@ -8,35 +8,58 @@ local healing = require("mech.healing")
 
 local fighter, module_mt, static = Module("mech.classes.fighter")
 
-fighter.second_wind = static .. action {
+fighter.second_wind = static {
   codename = "second_wind",
-  cost = {
-    bonus_actions = 1,
-    second_wind = 1,
+
+  action = static .. action {
+    cost = {
+      bonus_actions = 1,
+      second_wind = 1,
+    },
+    get_healing_roll = function(self, entity)
+      return D(10) + entity.level
+    end,
+    _get_availability = function(self, entity)
+      return entity.hp < entity:get_max_hp()
+    end,
+    _run = function(self, entity)
+      State:add(fx("assets/sprites/fx/second_wind", "fx_under", entity.position))
+      sound.play("assets/sounds/second_wind.mp3", .3, entity.position, "small")
+      healing.heal(entity, self:get_healing_roll(entity):roll())
+    end,
   },
-  get_healing_roll = function(self, entity)
-    return D(10) + entity.level
+
+  modify_resources = function(self, entity, base, rest_type)
+    if rest_type == "short" or rest_type == "long" then
+      base.second_wind = 1
+    end
+    return base
   end,
-  _get_availability = function(self, entity)
-    return entity.hp < entity:get_max_hp()
-  end,
-  _run = function(self, entity)
-    State:add(fx("assets/sprites/fx/second_wind", "fx_under", entity.position))
-    sound.play("assets/sounds/second_wind.mp3", .3, entity.position, "small")
-    healing.heal(entity, self:get_healing_roll(entity):roll())
-  end,
+
+  modify_actions = class.provide_action,
 }
 
-fighter.action_surge = static .. action {
+fighter.action_surge = static {
   codename = "action_surge",
-  cost = {
-    action_surge = 1,
+  action = static .. action {
+    cost = {
+      action_surge = 1,
+    },
+    _run = function(self, entity)
+      State:add(fx("assets/sprites/fx/action_surge_proto", "fx_under", entity.position))
+      sound.play("assets/sounds/action_surge.mp3", .3, entity.position, "small")
+      entity.resources.actions = entity.resources.actions + 1
+    end,
   },
-  _run = function(self, entity)
-    State:add(fx("assets/sprites/fx/action_surge_proto", "fx_under", entity.position))
-    sound.play("assets/sounds/action_surge.mp3", .3, entity.position, "small")
-    entity.resources.actions = entity.resources.actions + 1
+
+  modify_resources = function(self, entity, base, rest_type)
+    if rest_type == "short" or rest_type == "long" then
+      base.action_surge = 1
+    end
+    return base
   end,
+
+  modify_actions = class.provide_action,
 }
 
 fighter.styles = static {
@@ -80,38 +103,42 @@ fighter.fighting_style = static .. class.choice {
   fighter.styles.two_weapon_fighting
 }
 
-fighter.fighting_spirit = static .. action {
+fighter.fighting_spirit = static {
   codename = "fighting_spirit",
-  cost = {
-    fighting_spirit = 1,
-    bonus_actions = 1,
+  action = static .. action {
+    cost = {
+      fighting_spirit = 1,
+      bonus_actions = 1,
+    },
+    _run = function(self, entity)
+      State:add(fx("assets/sprites/fx/fighting_spirit", "fx_under", entity.position))
+      entity.advantage_flag = true
+      entity.hp = math.min(entity:get_max_hp(), entity.hp) + 5  -- TODO temp hp
+    end,
   },
-  _run = function(self, entity)
-    State:add(fx("assets/sprites/fx/fighting_spirit", "fx_under", entity.position))
-    entity.advantage_flag = true
-    entity.hp = math.min(entity:get_max_hp(), entity.hp) + 5  -- TODO temp hp
-  end,
-}
 
--- fighter.progression_table = static {
---   [1] = {fighter.second_wind, fighter.fighting_style},  -- second_wind is a perk
---   [2] = {fighter.action_surge}, 
---   [3] = {fighter.fighting_spirit},
--- }
+  modify_resources = function(self, entity, base, rest_type)
+    if rest_type == "long" then
+      base.fighting_spirit = 3
+    end
+    return base
+  end,
+
+  modify_actions = class.provide_action,
+}
 
 fighter.progression_table = static {
   [1] = {
     class.hit_dice,
     fighter.fighting_style,
-  --   feature.action(fighter.second_wind),
-  --   fighter.fighting_style,
+    fighter.second_wind,
   },
-  -- [2] = {
-  --   feature.action(fighter.action_surge),
-  -- },
-  -- [3] = {
-  --   feature.action(fighter.fighting_spirit),
-  -- },
+  [2] = {
+    fighter.action_surge,
+  },
+  [3] = {
+    fighter.fighting_spirit,
+  },
 }
 
 fighter.class = static {

@@ -144,7 +144,7 @@ return Module("state.gui.character_creator", function()
           if f.__type == class.choice then
             return f.options[params.build_options[f]]
           end
-          return f.modifier
+          return f
         end)
         :filter(Fun.op.truth)
         :chain(races[params.race].feat_flag

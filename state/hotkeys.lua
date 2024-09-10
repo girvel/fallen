@@ -92,21 +92,14 @@ return Module("state.hotkeys", function(modes)
   define_hotkey(hotkeys, {"free", "combat"}, {"3"}, {
     name = "второе дыхание",
     codename = "second_wind",
-    action = fighter.second_wind,
+    action = fighter.second_wind.action,
     get_description = healing_description,
-    -- get_description = function(self)
-    --   return Html(function()
-    --     return p {
-    --       color = "
-    --     }
-    --   end
-    -- end
   })
 
   define_hotkey(hotkeys, {"combat"}, {"4"}, {
     name = "всплеск действий",
     codename = "action_surge",
-    action = fighter.action_surge,
+    action = fighter.action_surge.action,
     get_description = function(self)
       return Html(function()
         return stats {
@@ -119,7 +112,7 @@ return Module("state.hotkeys", function(modes)
   define_hotkey(hotkeys, {"combat"}, {"5"}, {
     name = "боевой дух",
     codename = "fighting_spirit",
-    action = fighter.fighting_spirit,
+    action = fighter.fighting_spirit.action,
     get_description = function(self)
       return Html(function(self)
         return stats {
@@ -162,7 +155,7 @@ return Module("state.hotkeys", function(modes)
   define_hotkey(hotkeys, {"free"}, {"h"}, {
     name = "перевязать раны",
     codename = "hit_dice",
-    action = class.hit_dice_action,
+    action = class.hit_dice.action,
     get_description = healing_description,
   })
 
