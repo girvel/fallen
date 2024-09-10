@@ -1,8 +1,8 @@
+local mech = require("mech")
 local abilities = require("mech.abilities")
 local races = require("mech.races")
 local translation = require("tech.translation")
 local perk_form = require("state.gui.character_creator.perk_form")
-local feats = require("mech.feats")
 local class = require("mech.class")
 
 
@@ -71,9 +71,10 @@ forms.race = static(function(params)
     params.max_index = params.max_index + #races[params.race].bonuses
   end
 
-  if races[params.race].feat_flag then
-    text = text .. "\n" .. perk_form(feats.perk, params)
-  end
+  text = text .. "\n" .. Fun.iter(mech.get_progression(races[params.race], params.level))
+    :filter(function(f) return f.__type == class.choice end)
+    :map(function(choice) return perk_form(choice, params) end)
+    :reduce(Fun.op.concat, "")
 
   return text .. "\n\n"
 end)
@@ -191,13 +192,13 @@ forms.skills = static(function(params)
   return text .. "\n\n\n"
 end)
 
-forms.class = static(function(params)
+forms.class = static .. function(params)
   return "   <h2>Класс: %s, уровень %s</h2>" % {translation.class[params.class.codename], params.level}
-    .. Fun.iter(class.get_progression(params.class, params.level))
+    .. Fun.iter(mech.get_progression(params.class, params.level))
       :filter(function(f) return f.__type == class.choice end)
       :map(function(choice) return perk_form(choice, params) end)
       :reduce(Fun.op.concat, "")
     .. "\n"
-end)
+end
 
 return forms

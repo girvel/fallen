@@ -136,7 +136,10 @@ return Module("state.gui.character_creator", function()
         return
       end
 
-      local perks = Fun.iter(class.get_progression(params.class, params.level))
+      local perks = Fun.chain(
+        mech.get_progression(params.class, params.level),
+        mech.get_progression(races[params.race], params.level)
+      )
         :map(function(f)
           if f.__type == class.choice then
             return f.options[params.build_options[f]]

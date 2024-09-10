@@ -34,25 +34,7 @@ attacking.attack = function(entity, target, attack_roll, damage_roll)
     damage_roll = damage_roll + D.roll(damage_roll.dice, 0)
   end
 
-  local protector = Fun.iter(Vector.directions)
-    :map(function(d) return State.grids[entity.layer]:safe_get(target.position + d) end)
-    :filter(function(e)
-      return e
-        and e ~= target
-        and e.shield_block_flag
-        and e.faction == target.faction
-        and e.resources.reactions > 0
-    end)
-    :nth(1)
-
-  local damage = damage_roll:roll()
-  if protector then
-    protector.resources.reactions = protector.resources.reactions - 1
-    damage = math.floor(damage / 2)
-    Log.debug("Damage is halved")
-  end
-
-  attacking.damage(target, damage, is_critical)
+  attacking.damage(target, damage_roll:roll(), is_critical)
   return true
 end
 

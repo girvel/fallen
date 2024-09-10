@@ -147,9 +147,7 @@ mobs.combat_dreamer = function()
       main_hand = items.mace(),
       other_hand = items.spiked_shield(),
     },
-    feats = {fighter.fighting_style.options[3]},
-
-    shield_block_flag = true,  -- TODO redo with reactions refactor
+    perks = {fighter.fighting_style.options[3]},
   })
 end
 

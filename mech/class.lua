@@ -45,10 +45,4 @@ class.choice = static .. setmetatable({}, {
   end
 })
 
-class.get_progression = function(this_class, level)
-  return Fun.iter(this_class.progression_table)
-    :take_n(level)
-    :reduce(Table.concat, {})
-end
-
 return class
