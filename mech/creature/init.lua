@@ -91,16 +91,6 @@ creature._methods = static {
     self.potential_actions = self:get_actions()
 
     self.hp = self.hp + self:get_max_hp() - old_max_hp
-    self.saving_throws = Fun.iter(self.abilities)
-      :map(function(name, value)
-        return name, D(20)
-          + abilities.get_modifier(value)
-          + ((-Query(self).class.save_proficiencies[name]
-            or -Query(self).save_proficiencies[name])
-            and 2
-            or 0)
-      end)
-      :tomap()
     self.skill_throws = Fun.iter(abilities.skill_bases)
       :map(function(skill, a)
         return skill, D(20)
@@ -109,6 +99,14 @@ creature._methods = static {
       end)
       :tomap()
   end,
+
+  get_saving_throw = function(self, ability)
+    return self:get_effect(
+      "modify_saving_throw",
+      D(20) + abilities.get_modifier(self.abilities[ability]),
+      ability
+    )
+  end
 }
 
 module_mt.__call = function(_, animation_pack, object)

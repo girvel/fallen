@@ -3,8 +3,8 @@ local pipes = require("library.palette.pipes")
 local api = require("tech.railing").api
 local actions = require("mech.creature.actions")
 local level = require("state.level")
-local mech = require("mech")
 local items = require("library.palette.items")
+local experience = require("mech.experience")
 
 
 return function()
@@ -21,7 +21,7 @@ return function()
         level.move(State.player, Vector({20, 56}))
         api.update_quest({detective = 1})
         rails.entities.detective_door.locked = false
-        State.player.experience = mech.experience_for_level[3]
+        State.player.experience = experience.for_level[3]
         State.gui.character_creator:refresh()
         --State.gui.character_creator:submit()
         State:add(items.pole(), {position = State.player.position + Vector.left})

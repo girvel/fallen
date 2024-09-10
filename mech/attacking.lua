@@ -39,7 +39,6 @@ attacking.attack = function(entity, target, attack_roll, damage_roll)
 end
 
 attacking.attack_save = function(target, ability, save_dc, damage_roll)
-  if not -Query(target).saving_throws[ability] then return false end
   local success = abilities.saving_throw(target, ability, save_dc)
 
   if success then

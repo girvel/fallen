@@ -1,3 +1,4 @@
+local experience = require("mech.experience")
 local texting = require("tech.texting")
 local races = require("mech.races")
 local forms = require("state.gui.character_creator.forms")
@@ -70,7 +71,7 @@ return Module("state.gui.character_creator", function()
       local text = "   <h1>Редактор персонажа</h1>"
 
       if State.player.experience >= 0 then
-        params.level = Fun.iter(mech.experience_for_level)
+        params.level = Fun.iter(experience.for_level)
           :enumerate()
           :filter(function(level, exp) return exp <= State.player.experience end)
           :map(function(level, exp) return level end)
@@ -107,7 +108,7 @@ return Module("state.gui.character_creator", function()
     end,
 
     can_close = function(self)
-      return State.player.experience <= mech.experience_for_level[State.player.level + 1]
+      return State.player.experience <= experience.for_level[State.player.level + 1]
     end,
 
     close = function(self)
@@ -137,8 +138,8 @@ return Module("state.gui.character_creator", function()
       end
 
       local perks = Fun.chain(
-        mech.get_progression(params.class, params.level),
-        mech.get_progression(races[params.race], params.level)
+        experience.get_progression(params.class, params.level),
+        experience.get_progression(races[params.race], params.level)
       )
         :map(function(f)
           if f.__type == class.choice then

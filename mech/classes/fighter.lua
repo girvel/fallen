@@ -127,26 +127,24 @@ fighter.fighting_spirit = static {
   modify_actions = class.provide_action,
 }
 
-fighter.progression_table = static {
-  [1] = {
-    class.hit_dice,
-    fighter.fighting_style,
-    fighter.second_wind,
-  },
-  [2] = {
-    fighter.action_surge,
-  },
-  [3] = {
-    fighter.fighting_spirit,
-  },
-}
-
 fighter.class = static {
   codename = "fighter",
   hp_die = 10,
-  save_proficiencies = Common.set({"str", "con"}),
 
-  progression_table = fighter.progression_table,
+  progression_table = static {
+    [1] = {
+      class.hit_dice,
+      class.save_proficiency("con", "str"),
+      fighter.fighting_style,
+      fighter.second_wind,
+    },
+    [2] = {
+      fighter.action_surge,
+    },
+    [3] = {
+      fighter.fighting_spirit,
+    },
+  },
 }
 
 return fighter

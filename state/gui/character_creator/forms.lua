@@ -1,3 +1,4 @@
+local experience = require("mech.experience")
 local mech = require("mech")
 local abilities = require("mech.abilities")
 local races = require("mech.races")
@@ -71,7 +72,7 @@ forms.race = static(function(params)
     params.max_index = params.max_index + #races[params.race].bonuses
   end
 
-  text = text .. "\n" .. Fun.iter(mech.get_progression(races[params.race], params.level))
+  text = text .. "\n" .. Fun.iter(experience.get_progression(races[params.race], params.level))
     :filter(function(f) return f.__type == class.choice end)
     :map(function(choice) return perk_form(choice, params) end)
     :reduce(Fun.op.concat, "")
@@ -194,7 +195,7 @@ end)
 
 forms.class = static .. function(params)
   return "   <h2>Класс: %s, уровень %s</h2>" % {translation.class[params.class.codename], params.level}
-    .. Fun.iter(mech.get_progression(params.class, params.level))
+    .. Fun.iter(experience.get_progression(params.class, params.level))
       :filter(function(f) return f.__type == class.choice end)
       :map(function(choice) return perk_form(choice, params) end)
       :reduce(Fun.op.concat, "")

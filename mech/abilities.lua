@@ -90,7 +90,7 @@ abilities.check = function(entity, skill_or_abilities, dc)
 end
 
 abilities.saving_throw = function(entity, ability, dc)
-  local save = entity.saving_throws[ability]:roll()
+  local save = entity:get_saving_throw(ability):roll()
   Log.info("%s rolls %s save %s against %s" % {
     Entity.name(entity), ability, save, dc
   })

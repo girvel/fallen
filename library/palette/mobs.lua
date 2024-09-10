@@ -1,3 +1,4 @@
+local class = require("mech.class")
 local body_parts = require("library.body_parts")
 local fighter = require("mech.classes.fighter")
 local combat_ai = require("library.combat_ai")
@@ -53,7 +54,9 @@ local engineer_mixins = {
     faction = "half_orc",
 
     abilities = abilities(18, 6, 12, 8, 8, 8),
-    save_proficiencies = {dex = true},
+    perks = {
+      class.save_proficiency("dex"),
+    },
 
     interacted_by = nil,
     will_beg = true,

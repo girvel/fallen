@@ -1,3 +1,4 @@
+local experience = require("mech.experience")
 local sound = require("tech.sound")
 local quest = require("tech.quest")
 local interactive = require("tech.interactive")
@@ -16,7 +17,7 @@ return function()
       run = function(self, rails, dt)
         rails:remove_scene("checkpoint_2")
         level.move(State.player, rails.positions.checkpoint_2)
-        State.player.experience = require("mech").experience_for_level[2]
+        State.player.experience = experience.for_level[2]
         State.gui.character_creator:refresh()
         -- State.gui.character_creator:submit()
       end,

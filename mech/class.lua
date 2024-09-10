@@ -1,3 +1,4 @@
+local experience = require("mech.experience")
 local action = require("tech.action")
 local abilities = require("mech.abilities")
 local healing = require("mech.healing")
@@ -46,5 +47,17 @@ class.hit_dice = static {
 
   modify_actions = class.provide_action,
 }
+
+class.save_proficiency = function(...)
+  return {
+    _abilities = Common.set {...},
+    modify_saving_throw = function(self, entity, roll, ability)
+      if self._abilities[ability] then
+        roll = roll + experience.get_proficiency_modifier(entity.level)
+      end
+      return roll
+    end
+  }
+end
 
 return class

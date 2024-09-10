@@ -1,6 +1,6 @@
+local experience = require("mech.experience")
 local shaders = require("tech.shaders")
 local api = require("tech.railing").api
-local mech = require("mech")
 
 
 return function()
@@ -64,7 +64,7 @@ return function()
         api.line(State.player, "В нём я")
         api.line(State.player, "Но кто <hate>я</hate>?")
 
-        State.player.experience = mech.experience_for_level[2]
+        State.player.experience = experience.for_level[2]
         State.gui.character_creator:refresh()
         State.player.in_cutscene = false
       end,
