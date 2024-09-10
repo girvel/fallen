@@ -27,10 +27,6 @@ creature._methods = static {
       )
   end,
 
-  get_armor = function(self)
-    return self.armor_class or (10 + abilities.get_modifier(self.abilities.dex))
-  end,
-
   get_resources = function(self, rest_type)
     assert(
       Common.set({"free", "move", "short", "long"})[rest_type],
@@ -48,7 +44,11 @@ creature._methods = static {
       base.reactions = 1
     end
 
-    return Table.extend(base, -Query(self.class):get_resources(self.level, rest_type) or {})
+    return self:get_effect("modify_resources", base, rest_type)
+  end,
+
+  get_actions = function(self)
+    return self:get_effect("modify_actions", Table.extend({}, actions.list))
   end,
 
   get_max_hp = function(self)
@@ -58,11 +58,8 @@ creature._methods = static {
       + (self.level - 1) * (self.class.hp_die / 2 + 1 + con_bonus)
   end,
 
-  get_actions = function(self)
-    return Table.concat(
-      -Query(self.class):get_actions(self.level) or {},
-      actions.list
-    )
+  get_armor = function(self)
+    return self.armor_class or (10 + abilities.get_modifier(self.abilities.dex))
   end,
 
   rotate = function(self, direction_name)
@@ -88,13 +85,12 @@ creature._methods = static {
     self.effect_params = Fun.iter(self.perks)
       :map(function(perk) return perk, {} end)
       :tomap()
-
     for k, v in Pairs(get_all_resources(self)) do
       self.resources[k] = (self.resources[k] or 0) + v - (old_resources[k] or 0)
     end
-    self.hp = self.hp + self:get_max_hp() - old_max_hp
     self.potential_actions = self:get_actions()
 
+    self.hp = self.hp + self:get_max_hp() - old_max_hp
     self.saving_throws = Fun.iter(self.abilities)
       :map(function(name, value)
         return name, D(20)
@@ -105,7 +101,6 @@ creature._methods = static {
             or 0)
       end)
       :tomap()
-
     self.skill_throws = Fun.iter(abilities.skill_bases)
       :map(function(skill, a)
         return skill, D(20)
@@ -113,7 +108,7 @@ creature._methods = static {
           + (-Query(self.skills)[skill] and 2 or 0)
       end)
       :tomap()
-  end
+  end,
 }
 
 module_mt.__call = function(_, animation_pack, object)

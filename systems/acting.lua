@@ -94,7 +94,7 @@ acting.system = static(Tiny.processingSystem({
 
   _process_outside_combat = function(self, entity, dt)
     Debug.pcall(entity.ai.run, entity, dt)
-    if -Query(entity.animation).current:starts_with("idle") then
+    if -Query(entity.animation).current.codename:starts_with("idle") then
       Table.extend(entity.resources, -Query(entity):get_resources("move"))
     else
       Table.extend(entity.resources, -Query(entity):get_resources("free"))

@@ -72,7 +72,7 @@ forms.race = static(function(params)
   end
 
   if races[params.race].feat_flag then
-    text = text .. "\n" .. perk_form(feats.feature, params)
+    text = text .. "\n" .. perk_form(feats.perk, params)
   end
 
   return text .. "\n\n"
@@ -193,7 +193,8 @@ end)
 
 forms.class = static(function(params)
   return "   <h2>Класс: %s, уровень %s</h2>" % {translation.class[params.class.codename], params.level}
-    .. Fun.iter(class.get_choices(params.class.progression_table, params.level))
+    .. Fun.iter(class.get_progression(params.class, params.level))
+      :filter(function(f) return f.__type == class.choice end)
       :map(function(choice) return perk_form(choice, params) end)
       :reduce(Fun.op.concat, "")
     .. "\n"

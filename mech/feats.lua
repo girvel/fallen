@@ -1,4 +1,4 @@
-local feature = require("mech.feature")
+local class = require("mech.class")
 
 
 local feats, _, static = Module("mech.feats")
@@ -32,9 +32,9 @@ feats.savage_attacker = static {
   end,
 }
 
-feats.feature = static(feature.choice({
+feats.perk = static .. class.choice {
   feats.great_weapon_master,
   feats.savage_attacker,
-}))
+}
 
 return feats

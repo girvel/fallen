@@ -1,4 +1,3 @@
-local feature = require("mech.feature")
 local texting = require("tech.texting")
 local races = require("mech.races")
 local forms = require("state.gui.character_creator.forms")
@@ -47,7 +46,7 @@ return Module("state.gui.character_creator", function()
       max_index = 1,
       movement_functions = {},
       race = "human",
-      class = fighter(),
+      class = fighter.class,
       bonuses = {},
 
       build_options = {},
@@ -137,23 +136,16 @@ return Module("state.gui.character_creator", function()
         return
       end
 
-      local table_slice = Fun.iter(params.class.progression_table)
-        :take_n(params.level)
-        :reduce(Table.concat, {})
-
-      local perks = Fun.iter(table_slice)
+      local perks = Fun.iter(class.get_progression(params.class, params.level))
         :map(function(f)
-          if f.enum_variant == feature.perk then
-            return f.modifier
-          end
-
-          if f.enum_variant == feature.choice then
+          if f.__type == class.choice then
             return f.options[params.build_options[f]]
           end
+          return f.modifier
         end)
         :filter(Fun.op.truth)
         :chain(races[params.race].feat_flag
-          and {feats.feature.options[params.build_options[feats.feature]]}
+          and {feats.perk.options[params.build_options[feats.perk]]}
           or {}
         )
         :totable()

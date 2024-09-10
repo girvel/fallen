@@ -1,7 +1,6 @@
 local sound = require("tech.sound")
 local action = require("tech.action")
 local class = require("mech.class")
-local feature = require("mech.feature")
 local abilities = require("mech.abilities")
 local fx = require("tech.fx")
 local healing = require("mech.healing")
@@ -40,10 +39,8 @@ fighter.action_surge = static .. action {
   end,
 }
 
--- TODO perk.choice.option is of type list<modifier>
---   but should be of type list<list<perk>>
-fighter.fighting_style = static(feature.choice({
-  {
+fighter.styles = static {
+  two_handed = static {
     codename = "two_handed_style",
     modify_damage_roll = function(self, entity, roll)
       local weapon = entity.inventory.main_hand
@@ -54,7 +51,7 @@ fighter.fighting_style = static(feature.choice({
     end,
   },
 
-  {
+  duelist = static {
     codename = "duelist",
     modify_damage_roll = function(self, entity, roll)
       local weapon = entity.inventory.main_hand
@@ -65,7 +62,7 @@ fighter.fighting_style = static(feature.choice({
     end,
   },
 
-  {
+  two_weapon_fighting = static {
     codename = "two_weapon_fighting",
     modify_damage_roll = function(self, entity, roll, slot)
       local weapon = entity.inventory.other_hand
@@ -75,7 +72,13 @@ fighter.fighting_style = static(feature.choice({
       return roll + abilities.get_melee_modifier(entity, slot)
     end,
   },
-}))
+}
+
+fighter.fighting_style = static .. class.choice {
+  fighter.styles.two_handed,
+  fighter.styles.duelist,
+  fighter.styles.two_weapon_fighting
+}
 
 fighter.fighting_spirit = static .. action {
   codename = "fighting_spirit",
@@ -98,29 +101,25 @@ fighter.fighting_spirit = static .. action {
 
 fighter.progression_table = static {
   [1] = {
-    feature.action(fighter.second_wind),
-    feature.resource("short", "second_wind", 1),
+    class.hit_dice,
     fighter.fighting_style,
+  --   feature.action(fighter.second_wind),
+  --   fighter.fighting_style,
   },
-  [2] = {
-    feature.action(fighter.action_surge),
-    feature.resource("short", "action_surge", 1),
-  },
-  [3] = {
-    feature.action(fighter.fighting_spirit),
-    feature.resource("long", "fighting_spirit", 3),
-  },
+  -- [2] = {
+  --   feature.action(fighter.action_surge),
+  -- },
+  -- [3] = {
+  --   feature.action(fighter.fighting_spirit),
+  -- },
 }
 
--- TODO maybe not a factory?
-module_mt.__call = function(_)
-  return Table.extend(class.mixin(), {
-    codename = "fighter",
-    hp_die = 10,
-    save_proficiencies = Common.set({"str", "con"}),
+fighter.class = static {
+  codename = "fighter",
+  hp_die = 10,
+  save_proficiencies = Common.set({"str", "con"}),
 
-    progression_table = fighter.progression_table,
-  })
-end
+  progression_table = fighter.progression_table,
+}
 
 return fighter
