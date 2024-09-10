@@ -1,3 +1,6 @@
+local ffi = require("ffi")
+
+
 local common = {}
 
 common.get_by_path = function(t, identifier, i)
@@ -146,6 +149,18 @@ common.resolve_path = function(path)
     end
   end
   return table.concat(result, "/")
+end
+
+common.load_c_library = function(name)
+  for _, path in ipairs({
+    "lib/vendor/" .. name,
+    love.filesystem.getSource() .. "/lib/vendor/" .. name,
+    love.filesystem.getSourceBaseDirectory() .. "/" .. name,
+  }) do
+    local ok, result = pcall(ffi.load, path)
+    Log.info("Loading libtcod @ %s: %s, %s" % {path, ok, result})
+    if ok then return result end
+  end
 end
 
 return common
