@@ -83,7 +83,7 @@ creature._methods = static {
     Table.extend(self, changes)
 
     self.effect_params = Fun.iter(self.perks)
-      :map(function(perk) return perk, {} end)
+      :map(function(perk) return perk, -Query(perk):initialize_params() or {} end)
       :tomap()
     for k, v in Pairs(get_all_resources(self)) do
       self.resources[k] = (self.resources[k] or 0) + v - (old_resources[k] or 0)

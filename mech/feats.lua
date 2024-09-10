@@ -13,6 +13,9 @@ feats.great_weapon_master = static {
       and weapon
       and weapon.tags.heavy
   end,
+  initialize_params = function(self)
+    return {enabled = true}
+  end,
   modify_attack_roll = function(self, entity, roll)
     if not self:_gwm_condition(entity) then return roll end
     return roll + self.attack_modifier
