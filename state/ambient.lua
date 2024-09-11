@@ -12,7 +12,7 @@ ambient._base = static {
   update = static .. function(self)
     local x, y = unpack(-Query(State.player).position or -Vector.one * math.huge)
     love.audio.setPosition(x, y, 0)
-    if self.disable_ambient then return end
+    if self.disabled then return end
     local current_track = self.current_music
     if -Query(current_track).source:isPlaying() then return end
     while #self.music > 1 and self.current_music == current_track do

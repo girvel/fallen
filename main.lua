@@ -43,7 +43,7 @@ love.load = function(args)
   if args.load_save then
     game_save.read("last.fallen_save")
   else
-    State = state(systems)  -- TODO debug should not be stored in a save
+    State = state(systems)
     State:set_shader()
     State:load_level("assets/levels/" .. args.level)
 

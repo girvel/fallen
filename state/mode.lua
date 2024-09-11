@@ -22,27 +22,28 @@ module_mt.__call = function(_, views)
         }
       end)
       :tomap(),
-  {
-    get = function(self)
-      if State.gui.text_input.active then
-        return self.text_input
-      elseif State.gui.character_creator.text_entities then
-        return self.character_creator
-      elseif State.player.hp <= 0 then
-        return self.death
-      elseif State.gui.wiki.text_entities then
-        return self.reading
-      elseif State.gui.dialogue.options then
-        return self.dialogue_options
-      elseif State.gui.dialogue._entities then
-        return self.dialogue
-      elseif State.combat then
-        return self.combat
-      else
-        return self.free
-      end
-    end,
-  })
+    {
+      get = function(self)
+        if State.gui.text_input.active then
+          return self.text_input
+        elseif State.gui.character_creator.text_entities then
+          return self.character_creator
+        elseif State.player.hp <= 0 then
+          return self.death
+        elseif State.gui.wiki.text_entities then
+          return self.reading
+        elseif State.gui.dialogue.options then
+          return self.dialogue_options
+        elseif State.gui.dialogue._entities then
+          return self.dialogue
+        elseif State.combat then
+          return self.combat
+        else
+          return self.free
+        end
+      end,
+    }
+  )
 end
 
 return mode
