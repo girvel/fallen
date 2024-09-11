@@ -158,7 +158,7 @@ common.load_c_library = function(name)
     love.filesystem.getSourceBaseDirectory() .. "/" .. name,
   }) do
     local ok, result = pcall(ffi.load, path)
-    Log.info("Loading libtcod @ %s: %s, %s" % {path, ok, result})
+    Log.info("Loading %s @ %s: %s, %s" % {name, path, ok, result})
     if ok then return result end
   end
 end

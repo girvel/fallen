@@ -24,10 +24,6 @@ local systems = require("systems")
 
 
 love.load = function(args)
-  -- TODO RM
-  local discord = require("lib.discord")
-  Log.trace(discord())
-
   args = cli.parse(args)
 
   if not args.debug then
