@@ -17,6 +17,7 @@ end
 creature._methods = static {
   get_effect = function(self, name, value, ...)
     local args = {...}
+    -- TODO OPT should be cached
     return Fun.iter(self.perks)
       :filter(function(perk) return perk[name] end)
       :reduce(
@@ -91,13 +92,6 @@ creature._methods = static {
     self.potential_actions = self:get_actions()
 
     self.hp = self.hp + self:get_max_hp() - old_max_hp
-    self.skill_throws = Fun.iter(abilities.skill_bases)
-      :map(function(skill, a)
-        return skill, D(20)
-          + abilities.get_modifier(self.abilities[a])
-          + (-Query(self.skills)[skill] and 2 or 0)
-      end)
-      :tomap()
   end,
 
   get_saving_throw = function(self, ability)
@@ -106,7 +100,15 @@ creature._methods = static {
       D(20) + abilities.get_modifier(self.abilities[ability]),
       ability
     )
-  end
+  end,
+
+  get_skill_throw = function(self, skill)
+    return self:get_effect(
+      "modify_skill_throw",
+      D(20) + abilities.get_modifier(abilities.skill_bases[skill]),
+      skill
+    )
+  end,
 }
 
 module_mt.__call = function(_, animation_pack, object)

@@ -69,7 +69,7 @@ local ability_check_sound = {
 abilities.check = function(entity, skill_or_abilities, dc)
   local roll = entity.abilities[skill_or_abilities]
     and D(20) + abilities.get_modifier(entity.abilities[skill_or_abilities])
-    or entity.skill_throws[skill_or_abilities]
+    or entity:get_skill_throw(skill_or_abilities)
 
   if not roll then
     error("No abilities or skill %s" % skill_or_abilities, 2)

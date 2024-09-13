@@ -48,11 +48,23 @@ class.hit_dice = static {
   modify_actions = class.provide_action,
 }
 
-class.save_proficiency = function(...)
+class.save_proficiency = function(ability)
   return {
-    _abilities = Common.set {...},
-    modify_saving_throw = function(self, entity, roll, ability)
-      if self._abilities[ability] then
+    _ability = ability,
+    modify_saving_throw = function(self, entity, roll, current_ability)
+      if current_ability == self._ability then
+        roll = roll + experience.get_proficiency_modifier(entity.level)
+      end
+      return roll
+    end
+  }
+end
+
+class.skill_proficiency = function(skill)
+  return {
+    _skill = skill,
+    modify_skill_throw = function(self, entity, roll, current_skill)
+      if current_skill == self._skill then
         roll = roll + experience.get_proficiency_modifier(entity.level)
       end
       return roll
