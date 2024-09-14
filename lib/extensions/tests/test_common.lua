@@ -1,5 +1,6 @@
 describe("Common module", function()
   _G.unpack = table.unpack
+  _G.package.loaded.ffi = {}
   local common = require("lib.extensions.common")
 
   describe("get_path", function()
