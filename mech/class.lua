@@ -51,6 +51,7 @@ class.hit_dice = static {
 class.save_proficiency = function(...)
   return {
     _abilities = Common.set {...},
+    codename = "save_proficiency",
     modify_saving_throw = function(self, entity, roll, ability)
       if self._abilities[ability] then
         roll = roll + experience.get_proficiency_modifier(entity.level)
