@@ -105,7 +105,7 @@ module_mt.__call = function(_)
   result.wiki = require("state.gui.wiki")(result)
   result.sidebar = require("state.gui.sidebar")()
   result.dialogue = require("state.gui.dialogue")()
-  result.character_creator = require("state.gui.character_creator")()
+  result.character_creator = require("state.gui.creator")()
   result.text_input = require("state.gui.text_input")()
   result.tooltip = require("state.gui.tooltip")(result)
   result.hint = require("state.gui.hint")()
@@ -156,11 +156,12 @@ gui.offsets.full_screen_text = static .. function()
 end
 
 gui.offsets.creator_text = static .. function()
+  -- TODO! reimplement scroll
   local w, h = love.graphics.getDimensions()
   local sx, sy = unpack(State.gui.TEXT_MAX_SIZE)
   return (Vector({
     math.max(30, w - sx),
-    math.max(30, h - sy) + State.gui.character_creator.parameters.scroll
+    math.max(30, h - sy)
   }) / 2):ceil()
 end
 

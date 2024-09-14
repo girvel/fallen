@@ -24,7 +24,7 @@ sprite.text_mt = static {
   end
 }
 
--- TODO! FFI
+-- TODO FFI
 sprite.image = Memoize(function(base, paint_color, anchors)
   if type(base) == "string" then
     base = love.image.newImageData(base)

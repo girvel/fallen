@@ -63,25 +63,26 @@ love.load = function(args)
     Query(State.rails.scenes[scene]).enabled = false
   end
 
-  if args.debug then
-    Table.extend(State.gui.character_creator.parameters, {
-      skills = {
-        sleight_of_hand = true,
-        arcana = true,
-        nature = true,
-      },
-      abilities_raw = {
-        str = 15,
-        dex = 15,
-        con = 15,
-        int = 8,
-        wis = 8,
-        cha = 8,
-      },
-      points = 0,
-      free_skills = 0,
-    })
-  end
+  -- TODO! rework this
+  -- if args.debug then
+  --   Table.extend(State.gui.character_creator.parameters, {
+  --     skills = {
+  --       sleight_of_hand = true,
+  --       arcana = true,
+  --       nature = true,
+  --     },
+  --     abilities_raw = {
+  --       str = 15,
+  --       dex = 15,
+  --       con = 15,
+  --       int = 8,
+  --       wis = 8,
+  --       cha = 8,
+  --     },
+  --     points = 0,
+  --     free_skills = 0,
+  --   })
+  -- end
 
   love.audio.stop()
   love.audio.setDistanceModel("exponent")

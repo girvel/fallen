@@ -15,7 +15,7 @@
     "diagnostics": {
         "globals": [
             "describe", "it",
-            "stats", "h1", "p", "span", "br"
+            "stats", "h1", "p", "span", "br", "pre",
         ]
     },
 }
