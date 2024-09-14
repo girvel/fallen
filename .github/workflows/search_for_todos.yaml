@@ -1,5 +1,5 @@
-name: Run tests
-on: [push, pull_request]
+name: Search for TODO!s
+on: [pull_request]
 jobs:
   test:
     runs-on: ubuntu-latest
