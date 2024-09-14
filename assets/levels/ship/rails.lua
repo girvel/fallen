@@ -10,11 +10,11 @@ return function(positions, entities)
     entities = entities,
 
     scenes = Table.join(
-      require("assets.levels.demo.scenes.1_introduction")(),
-      require("assets.levels.demo.scenes.2_tutorial")(),
-      require("assets.levels.demo.scenes.2_side_content")(),
-      require("assets.levels.demo.scenes.3_detective")(),
-      require("assets.levels.demo.scenes.3_fight")(),
+      require("assets.levels.ship.scenes.1_introduction")(),
+      require("assets.levels.ship.scenes.2_tutorial")(),
+      require("assets.levels.ship.scenes.2_side_content")(),
+      require("assets.levels.ship.scenes.3_detective")(),
+      require("assets.levels.ship.scenes.3_fight")(),
       {
         checkpoint_0 = {
           name = "Checkpoint -- captain's deck",

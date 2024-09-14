@@ -17,6 +17,7 @@ return function()
   Debug = require("lib.extensions.debug")
   Random = require("lib.extensions.random")
   Entity = require("lib.extensions.entity")
+  Fn = require("lib.extensions.fn")
 
   Html = require("lib.html")
   Dump = require("lib.dump")

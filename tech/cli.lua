@@ -28,7 +28,7 @@ return {
       "Name of the level to load."
     )
       :args(1)
-      :default("demo")
+      :default("ship")
 
     parser:flag(
       "-d --debug",
