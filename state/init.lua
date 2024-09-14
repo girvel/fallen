@@ -109,6 +109,10 @@ module_mt.__call = function(_, systems)
         if e.on_load then e:on_load(self) end
       end
 
+      if not self.player then
+        error("Player entity not found when loading %q" % path)
+      end
+
       self.rails = level_data.rails
       Query(self.rails):initialize(self)
 
