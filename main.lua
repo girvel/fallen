@@ -65,7 +65,7 @@ love.load = function(args)
 
   -- TODO! rework this
   -- if args.debug then
-  --   Table.extend(State.gui.character_creator.parameters, {
+  --   Table.extend(State.gui.creator.parameters, {
   --     skills = {
   --       sleight_of_hand = true,
   --       arcana = true,

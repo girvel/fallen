@@ -26,7 +26,7 @@ module_mt.__call = function(_, views)
       get = function(self)
         if State.gui.text_input.active then
           return self.text_input
-        elseif State.gui.character_creator:is_active() then
+        elseif State.gui.creator:is_active() then
           return self.character_creator
         elseif State.player.hp <= 0 then
           return self.death

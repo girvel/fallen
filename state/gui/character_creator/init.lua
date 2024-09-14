@@ -5,7 +5,6 @@ local forms = require("state.gui.character_creator.forms")
 local class = require("mech.class")
 local fighter = require("mech.classes.fighter")
 local feats = require("mech.feats")
-local mech = require("mech")
 
 
 return Module("state.gui.character_creator", function()
@@ -53,7 +52,7 @@ return Module("state.gui.character_creator", function()
       build_options = {},
 
       _get_indicator = function(self, i)
-        return '<span on_update="self.sprite.text = State.gui.character_creator.parameters.current_index == %s and [[&gt;]] or [[ ]]"> </span>' % i
+        return '<span on_update="self.sprite.text = State.gui.creator.parameters.current_index == %s and [[&gt;]] or [[ ]]"> </span>' % i
       end,
       scroll = 0,
 

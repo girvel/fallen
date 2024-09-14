@@ -101,11 +101,10 @@ module_mt.__call = function(_)
     {"tooltip", 1, 1, gui.offsets.tooltip},
   })
 
-  -- TODO maybe move this?
   result.wiki = require("state.gui.wiki")(result)
   result.sidebar = require("state.gui.sidebar")()
   result.dialogue = require("state.gui.dialogue")()
-  result.character_creator = require("state.gui.creator")()
+  result.creator = require("state.gui.creator")(result)
   result.text_input = require("state.gui.text_input")()
   result.tooltip = require("state.gui.tooltip")(result)
   result.hint = require("state.gui.hint")()
@@ -121,7 +120,7 @@ gui.offsets.scene = static .. function()
   local window_size = Vector({love.graphics.getDimensions()})
   local border_size = (window_size / 2 - Vector.one * scene_k):map(math.floor)
   local player_position = animated.get_render_position(State.player) * scene_k
-  local grid_size = State.grids.solids.size * scene_k
+  --local grid_size = State.grids.solids.size * scene_k
 
   local prev = State.gui.views.scene_fx.offset
   local target = -Vector.use(Math.median,

@@ -17,8 +17,8 @@ return function()
           self.enabled = false
 
           State.player.experience = experience.for_level[3]
-          State.gui.character_creator:refresh()
-          --State.gui.character_creator:submit()
+          State.gui.creator:refresh()
+          --State.gui.creator:submit()
         end,
       },
     },

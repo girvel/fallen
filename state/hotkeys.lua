@@ -289,7 +289,7 @@ return Module("state.hotkeys", function(modes)
       name = direction_translation,
       codename = direction_name,
       pre_action = function()
-        State.gui.character_creator:move_cursor(direction_name)
+        State.gui.creator:move_cursor(direction_name)
       end,
     })
   end
@@ -298,10 +298,10 @@ return Module("state.hotkeys", function(modes)
     name = "Создать",
     codename = "submit",
     pre_action = function()
-      State.gui.character_creator:submit()
+      State.gui.creator:submit()
     end,
     get_availability = function()
-      return State.gui.character_creator:can_submit()
+      return State.gui.creator:can_submit()
     end,
   })
 
@@ -309,10 +309,10 @@ return Module("state.hotkeys", function(modes)
     name = "Закрыть редактор",
     codename = "exit",
     pre_action = function()
-      State.gui.character_creator:close()
+      State.gui.creator:close()
     end,
     get_availability = function()
-      return State.gui.character_creator:can_close()
+      return State.gui.creator:can_close()
     end,
   })
 
@@ -373,7 +373,7 @@ return Module("state.hotkeys", function(modes)
   define_hotkey(hotkeys, {"free", "combat", "dialogue", "dialogue_options", "reading"}, {"n"}, {
     name = "редактор персонажа",
     codename = "open_creator",
-    pre_action = function() State.gui.character_creator:refresh() end,
+    pre_action = function() State.gui.creator:refresh() end,
   })
 
   return hotkeys

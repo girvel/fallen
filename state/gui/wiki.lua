@@ -55,7 +55,7 @@ return Module("state.gui.wiki", function(gui)
     quests = {},
     quest_states = {},
 
-    styles = Table.extend(gui.styles, {
+    styles = Table.extend({}, gui.styles, {
       h1 = {
         font_size = 24,
       },

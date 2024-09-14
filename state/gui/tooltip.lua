@@ -5,7 +5,7 @@ module_mt.__call = function(_, gui)
   return {
     _entities = nil,
     _content = nil,
-    styles = Table.extend(gui.styles, {
+    styles = Table.extend({}, gui.styles, {
       h1 = {
         font_size = 14,
       },

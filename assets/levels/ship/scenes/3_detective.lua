@@ -22,8 +22,8 @@ return function()
         api.update_quest({detective = 1})
         rails.entities.detective_door.locked = false
         State.player.experience = experience.for_level[3]
-        State.gui.character_creator:refresh()
-        --State.gui.character_creator:submit()
+        State.gui.creator:refresh()
+        --State.gui.creator:submit()
         State:add(items.pole(), {position = State.player.position + Vector.left})
         api.center_camera()
       end,

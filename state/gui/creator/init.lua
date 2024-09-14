@@ -3,7 +3,7 @@ local texting = require("tech.texting")
 
 local init, module_mt, static = Module("state.gui.creator.init")
 
-module_mt.__call = function(_)
+module_mt.__call = function(_, gui)
   return {
     is_active = function(self)
       return not not self._text_entities
@@ -35,6 +35,17 @@ module_mt.__call = function(_)
     submit = nil,
 
     _text_entities = nil,
+    _styles = Table.extend({}, gui.styles, {
+      default = {
+        font_size = 18,
+      },
+      h1 = {
+        font_size = 30,
+      },
+      h2 = {
+        font_size = 24,
+      },
+    }),
   }
 end
 
