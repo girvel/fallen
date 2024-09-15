@@ -50,7 +50,7 @@ local postprocess = function(root, content, styles)
     end)
   end
   if root.attributes.tooltip then
-    local tooltip_content = love.filesystem.read("/assets/tooltips/%s.html" % root.attributes.tooltip)
+    local tooltip_content = love.filesystem.read("/assets/html/tooltips/%s.html" % root.attributes.tooltip)
     local f = function() return tooltip_content end
     for _, token in ipairs(content) do
       token.get_tooltip = f

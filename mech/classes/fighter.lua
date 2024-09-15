@@ -9,6 +9,7 @@ local healing = require("mech.healing")
 local fighter, module_mt, static = Module("mech.classes.fighter")
 
 fighter.second_wind = static {
+  name = "второе дыхание",
   codename = "second_wind",
 
   action = static .. action {
@@ -16,12 +17,15 @@ fighter.second_wind = static {
       bonus_actions = 1,
       second_wind = 1,
     },
+
     get_healing_roll = function(self, entity)
       return D(10) + entity.level
     end,
+
     _get_availability = function(self, entity)
       return entity.hp < entity:get_max_hp()
     end,
+
     _run = function(self, entity)
       State:add(fx("assets/sprites/fx/second_wind", "fx_under", entity.position))
       sound.play("assets/sounds/second_wind.mp3", .3, entity.position, "small")
@@ -40,6 +44,7 @@ fighter.second_wind = static {
 }
 
 fighter.action_surge = static {
+  name = "всплеск действий",
   codename = "action_surge",
   action = static .. action {
     cost = {

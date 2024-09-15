@@ -46,7 +46,7 @@ end
 
 return Module("state.gui.wiki", function(gui)
   return {
-    pages = load_wiki("assets/wiki"),
+    pages = load_wiki("assets/html/wiki"),
     codex = {},
     history = {},
     current_history_index = 0,
