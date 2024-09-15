@@ -6,14 +6,11 @@ local healing = require("mech.healing")
 
 local class, _, static = Module("mech.class")
 
-class.choice = static .. setmetatable({}, {
-  __call = function(self, options)
-    return {
-      options = options,
-      __type = self,
-    }
-  end
-})
+class.choice = static .. Type .. function(options)
+  return {
+    options = options,
+  }
+end
 
 class.provide_action = static .. function(self, entity, base)
   table.insert(base, self.action)

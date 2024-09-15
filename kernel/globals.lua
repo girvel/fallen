@@ -31,6 +31,8 @@ return function()
   Colors = require("lib.colors")
   OrderedMap = require("lib.types.ordered_map")
   Promise = require("lib.types.promise")
+  Keyword = require("lib.types.keyword")
+  Type = require("lib.types.type")
 
   require("lib.tiny_dump_patch")()
 end
