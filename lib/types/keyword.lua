@@ -1,12 +1,9 @@
-local keyword = function(f)
+local keyword = function(_, f)
+  assert(type(f) == "function")
   return setmetatable({}, {
-    __call = function(...)
-      return f(...)
-    end,
-    __concat = function(self, other)
-      return f(self, other)
-    end,
+    __call = function(...) return f(...) end,
+    __concat = function(...) return f(...) end,
   })
 end
 
-return keyword(keyword)
+return keyword(nil, keyword)

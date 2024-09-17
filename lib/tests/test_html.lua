@@ -1,30 +1,10 @@
 describe("Html generator", function()
   _G.unpack = table.unpack
+  _G.Fn = require("lib.extensions.fn")
+  _G.Keyword = require("lib.types.keyword")  -- TODO! too
+  _G.Type = require("lib.types.type")  -- TODO! type is in essentials/
 
   local html = require("lib.html")
-  _G.setfenv = function(fn, env)
-    local i = 1
-    while true do
-      local name = debug.getupvalue(fn, i)
-      if name == "_ENV" then
-        debug.upvaluejoin(fn, i, (function()
-          return env
-        end), 1)
-        break
-      elseif not name then
-        break
-      end
-
-      i = i + 1
-    end
-
-    return fn
-  end
-
-  -- _G.Table = require("lib.extensions.table")
-  -- _G.Pairs = require("lib.extensions.pairs")
-  -- _G.Module = require("lib.types.module")
-  -- _G.OrderedMap = require("lib.types.ordered_map")
 
   it("generates an internal representation tree", function()
     local tag = html().tag
