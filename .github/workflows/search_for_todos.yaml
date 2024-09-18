@@ -11,4 +11,4 @@ jobs:
         sudo apt-get install ripgrep
     - name: Search for "TODO!"
       run: |
-        rg 'TODO!' . && exit 1 || exit 0
+        sh scripts/todo.zsh
