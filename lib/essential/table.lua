@@ -5,7 +5,7 @@ local tablex = {}
 -- from left to right.
 tablex.extend = function(base, extension, ...)
   if extension == nil then return base end
-  for k, v in Pairs(extension) do
+  for k, v in tablex.pairs(extension) do
     base[k] = v
   end
   return tablex.extend(base, ...)
@@ -121,6 +121,12 @@ end
 
 tablex.last = function(t)
   return t[#t]
+end
+
+tablex.pairs = function(t)
+  local ordered_map = require("lib.types.ordered_map")
+  if ordered_map.is(t) then return ordered_map.pairs(t) end
+  return pairs(t)
 end
 
 return tablex

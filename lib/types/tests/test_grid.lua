@@ -3,7 +3,7 @@ describe("Grid library", function()
   _G.Table = require("lib.essential.table")
   _G.Fun = require("lib.vendor.fun")
   _G.Vector = require("lib.types.vector")
-  _G.Module = require("lib.types.module")
+  _G.Module = require("lib.essential.module")
 
   local grid = require("lib.types.grid")
   local vector = require("lib.types.vector")

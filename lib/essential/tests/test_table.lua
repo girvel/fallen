@@ -1,6 +1,5 @@
 describe("Table extension module", function()
   _G.unpack = table.unpack
-  _G.Pairs = require("lib.essential.pairs")
 
   local tablex = require("lib.essential.table")
 

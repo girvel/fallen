@@ -8,7 +8,6 @@ return function()
 
   Log.info("Starting basic LOVE setup")
 
-  Pairs = require("lib.essential.pairs")
   Table = require("lib.essential.table")
   require("lib.essential.string").inject(getmetatable(""))
   Query = require("lib.types.query")
@@ -22,7 +21,7 @@ return function()
   Html = require("lib.html")
   Dump = require("lib.dump")
   Dump.require_path = "lib.dump"
-  Module = require("lib.types.module")
+  Module = require("lib.essential.module")
 
   Enum = require("lib.types.enum")
   Vector = require("lib.types.vector")
@@ -31,8 +30,8 @@ return function()
   Colors = require("lib.colors")
   OrderedMap = require("lib.types.ordered_map")
   Promise = require("lib.types.promise")
-  Keyword = require("lib.types.keyword")
-  Type = require("lib.types.type")
+  Keyword = require("lib.essential.keyword")
+  Type = require("lib.essential.type")
 
   require("lib.tiny_dump_patch")()
 end

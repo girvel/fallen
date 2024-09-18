@@ -1,6 +1,6 @@
-describe("lib.types.type", function()
-  _G.Keyword = require("lib.types.keyword")
-  local typex = require("lib.types.type")
+describe("lib.essential.type", function()
+  _G.Keyword = require("lib.essential.keyword")
+  local typex = require("lib.essential.type")
 
   it("remembers parent factory", function()
     local custom_type = typex .. function(parent_type, value)
