@@ -38,14 +38,14 @@ end
 
 local visit_node
 
-html_functions.parse = function(html_string)
+html_functions.parse = function(html_string, attribute_factories)
   local root = htmlparser.parse(html_string)
-  return visit_node(root)
+  return visit_node(root, attribute_factories or {})
 end
 
-visit_node = function(node, preserve_whitespace)
+visit_node = function(node, attribute_factories, preserve_whitespace)
   if node.name == "root" then
-    return visit_node(node.nodes[1], preserve_whitespace)
+    return visit_node(node.nodes[1], attribute_factories, preserve_whitespace)
   end
 
   preserve_whitespace = preserve_whitespace or node.name == "pre"
@@ -64,8 +64,10 @@ visit_node = function(node, preserve_whitespace)
 
   for _, element in ipairs(node.nodes) do
     i, j = raw_content:find(element:gettext(), 1, true)
-    table.insert(content, prepare_text(raw_content:sub(1, i - 1)))
-    table.insert(content, visit_node(element, preserve_whitespace))
+    if i > 1 then
+      table.insert(content, prepare_text(raw_content:sub(1, i - 1)))
+    end
+    table.insert(content, visit_node(element, attribute_factories, preserve_whitespace))
     raw_content = raw_content:sub(j + 1)
   end
 
@@ -73,9 +75,18 @@ visit_node = function(node, preserve_whitespace)
     table.insert(content, prepare_text(raw_content))
   end
 
+  local attributes = {}
+  for k, v in pairs(node.attributes) do
+    local factory = attribute_factories[k]
+    if factory then
+      v = factory(v)
+    end
+    attributes[k] = v
+  end
+
   return html_functions.tag {
     name = node.name,
-    attributes = node.attributes,
+    attributes = attributes,
     content = content,
   }
 end

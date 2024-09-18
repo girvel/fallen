@@ -5,9 +5,9 @@ describe("Html generator", function()
   _G.Type = require("lib.essential.type")  -- TODO! type is in essentials/
 
   local html = require("lib.html")
+  local tag = html().tag
 
   it("generates an internal representation tree", function()
-    local tag = html().tag
     assert.same(
       {
         __type = tag,
@@ -51,7 +51,7 @@ describe("Html generator", function()
     local f = function() end
     assert.same(
       {
-        __type = html().tag,
+        __type = tag,
         name = "div",
         attributes = {
           class = "based",
@@ -78,7 +78,6 @@ describe("Html generator", function()
   end)
 
   it("can parse HTML", function()
-    local tag = html().tag
     assert.same(
       {
         __type = tag,
@@ -99,5 +98,45 @@ describe("Html generator", function()
     )
   end)
 
-  -- TODO! html().convert? params for html().parse?
+  it("can convert attributes to appropriate types", function()
+    assert.same(
+      {
+        __type = tag,
+        name = "div",
+        attributes = {id = 3},
+        content = {
+          {
+            __type = tag,
+            name = "span",
+            attributes = {hidden = true},
+            content = {},
+          }
+        },
+      },
+      html().parse(
+        '<div id="3"><span hidden="true"></span></div>',
+        {
+          id = tonumber,
+          hidden = function(string)
+            assert(string == "true" or string == "false")
+            return string == "true"
+          end,
+        }
+      )
+    )
+  end)
+
+  it("can handle empty tag", function()
+    assert.same(
+      {
+        __type = tag,
+        name = "div",
+        attributes = {},
+        content = {},
+      },
+      html().parse("<div></div>")
+    )
+  end)
+
+  -- TODO! handling br/
 end)
