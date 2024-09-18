@@ -8,7 +8,7 @@ describe("Html generator", function()
 
   it("generates an internal representation tree", function()
     local tag = html().tag
-    assert.equal(
+    assert.same(
       {
         __type = tag,
         tag = "div",
@@ -54,6 +54,7 @@ describe("Html generator", function()
         __type = html().tag,
         tag = "div",
         attributes = {
+          class = "based",
           integer = 1,
           boolean = true,
           fn = f,
