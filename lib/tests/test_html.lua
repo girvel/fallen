@@ -1,6 +1,6 @@
 describe("Html generator", function()
   _G.unpack = table.unpack
-  _G.Fn = require("lib.extensions.fn")
+  _G.Fn = require("lib.essential.fn")
   _G.Keyword = require("lib.types.keyword")  -- TODO! too
   _G.Type = require("lib.types.type")  -- TODO! type is in essentials/
 

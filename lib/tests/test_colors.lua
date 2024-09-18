@@ -1,8 +1,8 @@
 describe("Colors", function()
   _G.unpack = table.unpack
   _G.Module = require("lib.types.module")
-  _G.Pairs = require("lib.extensions.pairs")
-  _G.Table = require("lib.extensions.table")
+  _G.Pairs = require("lib.essential.pairs")
+  _G.Table = require("lib.essential.table")
   local colors = require("lib.colors")
 
   describe(".equal(a, b)", function()

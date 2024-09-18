@@ -1,4 +1,4 @@
-local tablex = require("lib.extensions.table")
+local tablex = require("lib.essential.table")
 
 
 local module_mt = {}

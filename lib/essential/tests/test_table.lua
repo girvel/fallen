@@ -1,8 +1,8 @@
 describe("Table extension module", function()
   _G.unpack = table.unpack
-  _G.Pairs = require("lib.extensions.pairs")
+  _G.Pairs = require("lib.essential.pairs")
 
-  local tablex = require("lib.extensions.table")
+  local tablex = require("lib.essential.table")
 
   describe("extend", function()
     it("uses pairs to copy data", function()
