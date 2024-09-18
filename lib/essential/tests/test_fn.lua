@@ -1,6 +1,6 @@
-describe("lib.extensions.fn", function()
+describe("lib.essential.fn", function()
   _G.unpack = table.unpack
-  local fn = require("lib.extensions.fn")
+  local fn = require("lib.essential.fn")
 
   describe("__call(_, ...)", function()
     it("creates a static function", function()
