@@ -138,5 +138,17 @@ describe("Html generator", function()
     )
   end)
 
+  it("can handle void element", function()
+    assert.same(
+      {
+        __type = tag,
+        name = "br",
+        attributes = {},
+        content = {},
+      },
+      html().parse("<br />")
+    )
+  end)
+
   -- TODO! handling br/
 end)
