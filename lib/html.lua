@@ -1,6 +1,5 @@
 local html_functions = {}
 local html = setmetatable({}, {
-  -- TODO! use .tests for tests?
   __call = Fn(html_functions),
   __index = function(_, item)
     return function(t)
