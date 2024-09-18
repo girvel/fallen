@@ -1,4 +1,4 @@
-describe("Keyword", function()
+describe("lib.types.keyword", function()
   local keyword = require("lib.types.keyword")
 
   it("Allows .. syntax for functions", function()
