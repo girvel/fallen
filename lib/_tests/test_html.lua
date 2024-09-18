@@ -11,25 +11,25 @@ describe("Html generator", function()
     assert.same(
       {
         __type = tag,
-        tag = "div",
+        name = "div",
         attributes = {
           class = "someclass",
         },
         content = {
           {
             __type = tag,
-            tag = "h1",
+            name = "h1",
             attributes = {},
             content = {"ABC"},
           },
           {
             __type = tag,
-            tag = "p",
+            name = "p",
             attributes = {},
             content = {
               {
                 __type = tag,
-                tag = "span",
+                name = "span",
                 attributes = {},
                 content = {"A"},
               },
@@ -52,7 +52,7 @@ describe("Html generator", function()
     assert.same(
       {
         __type = html().tag,
-        tag = "div",
+        name = "div",
         attributes = {
           class = "based",
           integer = 1,
@@ -82,13 +82,13 @@ describe("Html generator", function()
     assert.same(
       {
         __type = tag,
-        tag = "div",
+        name = "div",
         attributes = {class = "a"},
         content = {
           "Hello, ",
           {
             __type = tag,
-            tag = "span",
+            name = "span",
             attributes = {},
             content = {"world"},
           },
@@ -99,5 +99,5 @@ describe("Html generator", function()
     )
   end)
 
-  -- TODO! it can convert attribute types
+  -- TODO! html().convert? params for html().parse?
 end)
