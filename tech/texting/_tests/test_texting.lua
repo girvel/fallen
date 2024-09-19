@@ -1,0 +1,12 @@
+describe("Text entities generation facade", function()
+  local texting = require("tech.texting")
+
+  it("can parse raw HTML with changing attribute types", function()
+    local node = texting.parse('<div color="ffffff" if="true" on_hover="State = nil"></div>')
+    assert.equal("div", node.name)
+    assert.same({}, node.content)
+    assert.same({1, 1, 1}, node.attributes.color)
+    assert.equal("function", type(node.attributes["if"]))
+    assert.equal("function", type(node.attributes.on_hover))
+  end)
+end)

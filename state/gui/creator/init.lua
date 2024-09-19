@@ -19,19 +19,17 @@ module_mt.__call = function(_, gui)
         State:remove_multiple(self._text_entities)
       end
 
-      local text = Html(function()
-        return pre {
-          "   ", h1 {"Редактор персонажа"},
-          -- TODO!
-          -- forms.abilities(),
-          -- forms.skills(),
-          -- forms.race(),
-          forms.class(self._mixin),
-        }
-      end)
+      local text = Html.pre {
+        "   ", Html.h1 {"Редактор персонажа"},
+        -- TODO!
+        -- forms.abilities(),
+        -- forms.skills(),
+        -- forms.race(),
+        forms.class(self._mixin),
+      }
 
       self._text_entities = State:add_multiple(texting.generate(
-        text, State.gui.wiki.styles,  -- TODO! have our own nested
+        text, self._styles,
         math.min(love.graphics.getWidth() - 40, State.gui.TEXT_MAX_SIZE[1]),
         "character_creator",  -- TODO! rename to creator
         {}

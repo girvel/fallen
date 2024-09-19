@@ -17,10 +17,8 @@ return function()
   Random = require("lib.essential.random")
   Entity = require("lib.essential.entity")
   Fn = require("lib.essential.fn")
-
-  Html = require("lib.html")
-  Dump = require("lib.dump")
-  Dump.require_path = "lib.dump"
+  Keyword = require("lib.essential.keyword")
+  Type = require("lib.essential.type")
   Module = require("lib.essential.module")
 
   Enum = require("lib.types.enum")
@@ -30,8 +28,10 @@ return function()
   Colors = require("lib.colors")
   OrderedMap = require("lib.types.ordered_map")
   Promise = require("lib.types.promise")
-  Keyword = require("lib.essential.keyword")
-  Type = require("lib.essential.type")
+
+  Html = require("lib.html")
+  Dump = require("lib.dump")
+  Dump.require_path = "lib.dump"
 
   require("lib.tiny_dump_patch")()
 end
