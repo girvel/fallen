@@ -82,7 +82,7 @@ end
 
 transformers.default = function(node, children, styles)
   return Fun.iter(children)
-    :map(function(c) return Table.extend({}, styles[node.name] or {}, c) end)
+    :map(function(c) return Table.extend(c, styles[node.name]) end)
     :totable()
 end
 

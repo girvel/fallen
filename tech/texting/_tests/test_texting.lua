@@ -28,20 +28,33 @@ describe("Text entities generation facade", function()
       local node = Html.div {
         "Hello, ",
         Html.span {
-          "world",
+          "world!",
         }
       }
 
       local stream = streamer.visit(node, {}, styles)
 
-      expect(stream).to.equal({{content = "Hello, "}, {content = "world"}})
-    end)
-
-    it("can do built-in HTML tags", function()
-      expect(true).to.be(false)
+      expect(stream).to.equal({{content = "Hello, "}, {content = "world!"}})
     end)
 
     it("can do styling", function()
+      expect(streamer.visit(
+        Html.div {
+          "Hello, ",
+          Html.large {"world!"},
+        },
+        {},
+        {
+          default = {font_size = 12},
+          large = {font_size = 18},
+        }
+      )).to.equal({
+        {content = "Hello, ", font_size = 12},
+        {content = "world!", font_size = 18},
+      })
+    end)
+
+    it("can do built-in HTML tags", function()
       expect(true).to.be(false)
     end)
 

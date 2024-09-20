@@ -19,7 +19,7 @@ end
 
 visit = function(root, args, styles)
   if type(root) == "string" then
-    return {{content = root}}
+    return {Table.extend({content = root}, styles.default)}
   end
 
   if not streamer.get_availability(root, args) then return {} end
