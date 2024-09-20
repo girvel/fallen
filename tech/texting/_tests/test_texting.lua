@@ -22,6 +22,7 @@ describe("Text entities generation facade", function()
 
   describe("(stage 2)", function()
     local streamer = require("tech.texting._streamer")
+    local styles = {default = {}}
 
     it("can turn html-based tree into the stream of text pieces", function()
       local node = Html.div {
@@ -31,9 +32,37 @@ describe("Text entities generation facade", function()
         }
       }
 
-      local stream = streamer.visit(node, {}, {default = {}})
+      local stream = streamer.visit(node, {}, styles)
 
       expect(stream).to.equal({{content = "Hello, "}, {content = "world"}})
+    end)
+
+    it("can do built-in HTML tags", function()
+      expect(true).to.be(false)
+    end)
+
+    it("can do styling", function()
+      expect(true).to.be(false)
+    end)
+
+    it("can skip some data conditionally", function()
+      local node = Html.div {
+        "Hello, ",
+        Html.span {
+          ["if"] = function(args) return args.global end,
+          "world!",
+        },
+        Html.span {
+          ["if"] = function(args) return not args.global end,
+          "player.",
+        },
+      }
+
+      expect(streamer.visit(node, {global = true}, styles))
+        .to.equal({{content = "Hello, "}, {content = "world!"}})
+
+      expect(streamer.visit(node, {global = false}, styles))
+        .to.equal({{content = "Hello, "}, {content = "player."}})
     end)
   end)
 end)
