@@ -91,6 +91,22 @@ describe("Text entities generation process", function()
       expect(streamer.visit(node, {global = false}, styles))
         .to.equal({{content = "Hello, "}, {content = "player."}})
     end)
+
+    it("turns non-reserved attributes into fields", function()
+      local node = Html.div {
+        ["if"] = Fn(true),
+        on_hover = Fn(),
+        color = {1, 1, 1},
+        "Hi",
+      }
+
+      local piece = streamer.visit(node, {}, styles)[1]
+
+      expect(piece.content).to.be("Hi")
+      expect(piece["if"]).to_not.exist()
+      expect(piece.on_hover).to.be.a("function")
+      expect(piece.color).to.equal({1, 1, 1})
+    end)
   end)
 
   describe("(stage 3)", function()

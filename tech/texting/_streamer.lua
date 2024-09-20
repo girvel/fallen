@@ -28,7 +28,16 @@ visit = function(root, args, styles)
     :map(function(node) return visit(node, args, styles) end)
     :reduce(Table.concat, {})
 
-  return (transformers.map[root.name] or transformers.default)(root, nodes, styles)
+  nodes = (transformers.map[root.name] or transformers.default)(root, nodes, styles)
+
+  local attributes = Table.extend({}, root.attributes)
+  attributes["if"] = nil
+
+  for _, node in ipairs(nodes) do
+    Table.extend(node, attributes)
+  end
+
+  return nodes
 end
 
 return streamer

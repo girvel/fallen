@@ -7,7 +7,10 @@ local forms, module_mt, static = Module("state.gui.creator.forms")
 local perk_to_html = function(perk)
   return Html.p {
     "   ",
-    Html.span {tooltip = perk.codename, Entity.name(perk)},
+    Html.span {
+      get_tooltip = function() return Html.pre {"Oh hi Mark"} end,
+      Entity.name(perk)
+    },
   }
 end
 

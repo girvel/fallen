@@ -1,6 +1,8 @@
 local wrap = require("tech.texting._wrap")
 local generate = require("tech.texting._generate")
 local streamer = require("tech.texting._streamer")
+local gui = require("tech.gui")
+local sprite = require("tech.sprite")
 
 
 local texting, _, static = Module("tech.texting")
@@ -8,9 +10,11 @@ local texting, _, static = Module("tech.texting")
 texting.parse = require("tech.texting._parse")
 
 texting.generate = function(root, styles, w, view, args)
-  return generate(
-    wrap(streamer.visit(root, args, styles), w), view
-  )
+  return Log.trace(generate(
+    wrap(
+      streamer.visit(root, args, styles), w
+    ), view
+  ))
 end
 
 local MARGIN = 5
