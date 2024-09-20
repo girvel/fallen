@@ -23,7 +23,7 @@ texting.popup = function(position, relation, view, content, styles, width)
   assert(relation == "above" or relation == "below")
 
   local entities = texting.generate(
-    "<span>%s</span>" % content, styles, width, view, {}
+    content, styles, width, view, {}
   )
 
   -- TODO more elegant way to handle this, probably instead of texting.generate returning 
