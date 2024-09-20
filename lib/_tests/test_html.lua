@@ -1,8 +1,8 @@
 describe("Html generator", function()
   _G.unpack = table.unpack
   _G.Fn = require("lib.essential.fn")
-  _G.Keyword = require("lib.essential.keyword")  -- TODO! too
-  _G.Type = require("lib.essential.type")  -- TODO! type is in essentials/
+  _G.Keyword = require("lib.essential.keyword")
+  _G.Type = require("lib.essential.type")
 
   local html = require("lib.html")
   local tag = html().tag
@@ -149,6 +149,4 @@ describe("Html generator", function()
       html().parse("<br />")
     )
   end)
-
-  -- TODO! handling br/
 end)
