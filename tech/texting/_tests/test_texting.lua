@@ -21,9 +21,9 @@ describe("Text entities generation facade", function()
   end)
 
   describe("(stage 2)", function()
-    local tokenizer = require("tech.texting._tokenizer")
+    local streamer = require("tech.texting._streamer")
 
-    it("can turn html-based tree into the list of tokens", function()
+    it("can turn html-based tree into the stream of text pieces", function()
       local node = Html.div {
         "Hello, ",
         Html.span {
@@ -31,9 +31,9 @@ describe("Text entities generation facade", function()
         }
       }
 
-      local tokens = tokenizer.visit(node, {}, {default = {}})
+      local stream = streamer.visit(node, {}, {default = {}})
 
-      expect(tokens).to.equal({{content = "Hello, "}, {content = "world"}})
+      expect(stream).to.equal({{content = "Hello, "}, {content = "world"}})
     end)
   end)
 end)
