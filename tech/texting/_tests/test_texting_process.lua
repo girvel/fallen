@@ -7,12 +7,12 @@ local expect = lust.expect
 -- TODO! clean up or create a task for serialization tests
 
 
-describe("Text entities generation facade", function()
-  local texting = require("tech.texting")
-
+describe("Text entities generation process", function()
   describe("(stage 1)", function()
+    local parse = require("tech.texting._parse")
+
     it("(stage 1) can parse raw HTML with changing attribute types", function()
-      local node = texting.parse('<div color="ffffff" if="true" on_hover="State = nil"></div>')
+      local node = parse('<div color="ffffff" if="true" on_hover="State = nil"></div>')
       expect(node.name).to.be("div")
       expect(node.content).to.equal({})
       expect(node.attributes.color).to.equal({1, 1, 1})
@@ -106,6 +106,14 @@ describe("Text entities generation facade", function()
           :map(function(bit) return sprite.get_font(bit.font_size):getWidth(bit.content) end)
           :sum() <= w
       end)).to.be(true)
+    end)
+  end)
+
+  describe("(stage 4)", function()
+    local generate = require("tech.texting._generate")
+
+    it("can generate ", function()
+      
     end)
   end)
 end)

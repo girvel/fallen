@@ -1,13 +1,4 @@
-local love_errorhandler = love.errorhandler
-love.errorhandler = function(msg)
-  if Debug.debug_mode then
-    return Debug.handle_error(msg)
-  end
-  Log.fatal(debug.traceback("Error: " .. tostring(msg), 2):gsub("\n[^\n]+$", ""))
-end
-
 love.graphics.setDefaultFilter("nearest", "nearest")
-
 require("kernel").initialize()
 
 
@@ -27,7 +18,7 @@ love.load = function(args)
   args = cli.parse(args)
 
   if not args.debug then
-    love.errorhandler = love_errorhandler
+    love.errorhandler = love.custom.old_errorhandler
   else
     jit.off()
   end

@@ -2,7 +2,6 @@ local kernel = {}
 
 kernel.initialize = function()
   require("kernel.globals")()
-  love.run = require("kernel.callbacks.run")
 
   love._custom = {
     active_time = 0,
@@ -32,6 +31,10 @@ kernel.initialize = function()
       love._custom.save = filepath
     end,
   }
+
+  love.run = require("kernel.callbacks.run")
+  love.custom.old_errorhandler = love.errorhandler
+  love.errorhandler = require("kernel.callbacks.errorhandler")
 end
 
 return kernel

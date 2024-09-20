@@ -20,7 +20,7 @@ return function()
 
     if love.is_running_tests then
       Log.info("\n\n========== TESTS ==========\n")
-      require("tech.texting._tests.test_texting")
+      require("tech.texting._tests.test_texting_process")
       return 0
     end
 
