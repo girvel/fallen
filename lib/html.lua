@@ -6,6 +6,8 @@ local html = setmetatable({}, {
   __call = Fn(html_functions),
   __index = function(_, item)
     return function(t)
+      assert(t.__type ~= html_functions.tag)
+
       local attributes = {}
       for k, v in pairs(t) do
         if type(k) == "string" then

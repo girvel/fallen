@@ -1054,6 +1054,11 @@ local operator = {
     lor = function(a, b) return a or b end,
     lnot = function(a) return not a end,
     truth = function(a) return not not a end,
+
+    ----------------------------------------------------------------------------
+    -- Other operators
+    ----------------------------------------------------------------------------
+    call = function(self, ...) return self(...) end,
 }
 exports.operator = operator
 methods.operator = operator
