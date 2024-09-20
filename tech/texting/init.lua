@@ -1,5 +1,5 @@
 local gui = require("tech.gui")
-local wrap = require("tech.texting.wrap")
+local wrap = require("tech.texting._wrap")
 local sprite = require("tech.sprite")
 
 

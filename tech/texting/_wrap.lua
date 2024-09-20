@@ -82,6 +82,7 @@ local wrap_lines = function(token_lines, max_w)
   return result
 end
 
-return Module("tech.texting.wrap", function(content, w)
+-- TODO! test how slow wrap & overall texting is
+return Module("tech.texting._wrap", function(content, w)
   return wrap_lines(convert_line_breaks(content), w)
 end)

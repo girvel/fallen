@@ -1,3 +1,4 @@
+local sprite = require("tech.sprite")
 local lust = require("lib.vendor.lust")
 local describe = lust.describe
 local it = lust.it
@@ -88,6 +89,23 @@ describe("Text entities generation facade", function()
 
       expect(streamer.visit(node, {global = false}, styles))
         .to.equal({{content = "Hello, "}, {content = "player."}})
+    end)
+  end)
+
+  describe("(stage 3)", function()
+    local wrap = require("tech.texting._wrap")
+
+    it("can wrap text", function()
+      local w = 400
+      local stream = {{content = "Lorem ipsum dolor sit amet lalalalalala", font_size = 20}}
+      local lines = wrap(stream, w)
+
+      expect(#lines > 1).to.be(true)
+      expect(Fun.iter(lines):all(function(line)
+        return Fun.iter(line)
+          :map(function(bit) return sprite.get_font(bit.font_size):getWidth(bit.content) end)
+          :sum() <= w
+      end)).to.be(true)
     end)
   end)
 end)
