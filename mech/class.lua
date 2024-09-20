@@ -6,10 +6,9 @@ local healing = require("mech.healing")
 
 local class, _, static = Module("mech.class")
 
-class.choice = static .. Type .. function(options)
-  return {
-    options = options,
-  }
+class.choice = static .. Type .. function(_, t)
+  assert(t.options)
+  return t
 end
 
 class.provide_action = static .. function(self, entity, base)
@@ -19,6 +18,7 @@ end
 
 class.hit_dice = static {
   codename = "hit_dice",
+  hidden = true,
 
   action = static .. action {
     get_healing_roll = function(self, entity)
@@ -49,6 +49,7 @@ class.save_proficiency = function(...)
   return {
     _abilities = Common.set {...},
     codename = "save_proficiency",
+    hidden = true,
     modify_saving_throw = function(self, entity, roll, ability)
       if self._abilities[ability] then
         roll = roll + experience.get_proficiency_modifier(entity.level)

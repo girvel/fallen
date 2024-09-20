@@ -1,5 +1,3 @@
-TODO! RM
-
    # Редактор персонажа
    
 
@@ -25,3 +23,9 @@ TODO! RM
  - Способность: Второе дыхание
  - Способность: Всплеск действий (если только что получен уровень 2 то цвет новости)
 
+TODO! RM
+TODO! prefix & tooltips for action-based perks
+TODO! highlight recently added content
+TODO! changable stuff
+TODO! normal scrolling
+TODO! hide some stuff

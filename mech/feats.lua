@@ -36,8 +36,10 @@ feats.savage_attacker = static {
 }
 
 feats.perk = static .. class.choice {
-  feats.great_weapon_master,
-  feats.savage_attacker,
+  options = {
+    feats.great_weapon_master,
+    feats.savage_attacker,
+  },
 }
 
 return feats

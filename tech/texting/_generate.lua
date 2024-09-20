@@ -15,7 +15,7 @@ return function(lines, view)
       table.insert(result, Table.extend(
         clean_copy,
         gui.text(
-          token.color and {Table.extend({}, token.color), token.content} or token.content,
+          token.color and Log.trace({Table.extend({}, token.color), token.content}) or token.content,
           token.font_size
         ),
         {

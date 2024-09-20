@@ -13,6 +13,10 @@ fighter.second_wind = static {
   codename = "second_wind",
 
   action = static .. action {
+    name = "второе дыхание",
+
+    _get_description = action.descriptions.healing,
+
     cost = {
       bonus_actions = 1,
       second_wind = 1,
@@ -103,12 +107,16 @@ fighter.styles = static {
 }
 
 fighter.fighting_style = static .. class.choice {
-  fighter.styles.two_handed,
-  fighter.styles.duelist,
-  fighter.styles.two_weapon_fighting
+  name = "стиль боя",
+  options = {
+    fighter.styles.two_handed,
+    fighter.styles.duelist,
+    fighter.styles.two_weapon_fighting
+  },
 }
 
 fighter.fighting_spirit = static {
+  name = "боевой дух",
   codename = "fighting_spirit",
   action = static .. action {
     cost = {
@@ -133,6 +141,7 @@ fighter.fighting_spirit = static {
 }
 
 fighter.class = static {
+  name = "воин",
   codename = "fighter",
   hp_die = 10,
 

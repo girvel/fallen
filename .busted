@@ -1,6 +1,6 @@
 return {
   default = {
-    ROOT = {"lib", "tech"},
+    ROOT = {"lib"},
     pattern = "test_",
     verbose = true,
   },
