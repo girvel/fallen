@@ -1,10 +1,11 @@
-local sprite = require("tech.sprite")
 local lust = require("lib.vendor.lust")
 local describe = lust.describe
 local it = lust.it
 local expect = lust.expect
 -- TODO! automate integration tests
--- TODO! clean up or create a task for serialization tests
+-- TODO! clean up serialization tests
+
+local sprite = require("tech.sprite")
 
 
 describe("Text entities generation process", function()
@@ -114,7 +115,7 @@ describe("Text entities generation process", function()
 
     it("can generate entities from the list of lines", function()
       local lines = {{{content = "Oh hi Mark", font_size = 20}}}
-      Log.trace(generate(lines, "text"))
+      local _ = generate(lines, "text")
     end)
   end)
 end)

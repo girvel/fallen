@@ -1,47 +1,15 @@
-local gui = require("tech.gui")
 local wrap = require("tech.texting._wrap")
-local sprite = require("tech.sprite")
+local generate = require("tech.texting._generate")
+local streamer = require("tech.texting._streamer")
 
 
 local texting, _, static = Module("tech.texting")
 
 texting.parse = require("tech.texting._parse")
 
-local generate_entities = function(token_lines, view)
-  local result = {}
-  for y, line in ipairs(token_lines) do
-    for _, token in ipairs(line) do
-      local clean_copy = Table.extend({}, token)
-      Fun.iter("x y link font content color on_update" / " "):each(function(k)
-        clean_copy[k] = nil
-      end)
-
-      local font = sprite.get_font(token.font_size)
-      table.insert(result, Table.extend(
-        clean_copy,
-        gui.text(
-          token.color and {Table.extend({}, token.color), token.content} or token.content,
-          token.font_size,
-          Vector({token.x, token.y})
-        ),
-        {
-          view = view,
-          on_click = token.on_click or token.link and function()
-            State.gui.wiki:show(token.link)
-          end,
-          size = Vector({font:getWidth(token.content), font:getHeight()}),
-          link_flag = token.link or nil,
-          ai = token.on_update and {observe = token.on_update},
-        }
-      ))
-    end
-  end
-  return result
-end
-
-texting.generate = function(content, styles, w, view, args)
-  return generate_entities(
-    wrap(html.tokenize(content, args, styles), w), view
+texting.generate = function(root, styles, w, view, args)
+  return generate(
+    wrap(streamer.visit(root, args, styles), w), view
   )
 end
 

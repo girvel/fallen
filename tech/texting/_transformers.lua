@@ -4,25 +4,21 @@ transformers.map = {}
 
 transformers.map.head = function() return {} end
 
-transformers.map.h1 = function(node, children, styles)
-  return Table.concat(
-    {Table.extend({content = "# "}, styles.h1, styles.h1_prefix)},
-    Fun.iter(children)
-      :map(function(child) return Table.extend(child, styles.h1) end)
-      :totable(),
-    {{content = "\n\n"}}
-  )
+local h = function(level)
+  return function(node, children, styles)
+    return Table.concat(
+      {Table.extend({content = "# "},
+       styles.default, styles["h%s" % level], styles["h%s_prefix" % level])},
+      Fun.iter(children)
+        :map(function(child) return Table.extend(child, styles["h%s" % level]) end)
+        :totable(),
+      {{content = "\n\n"}}
+    )
+  end
 end
 
-transformers.map.h2 = function(node, children, styles)
-  return Table.concat(
-    {Table.extend({content = "# "}, styles.h2, styles.h2_prefix)},
-    Fun.iter(children)
-      :map(function(child) return Table.extend(child, styles.h2) end)
-      :totable(),
-    {{content = "\n\n"}}
-  )
-end
+transformers.map.h1 = h(1)
+transformers.map.h2 = h(2)
 
 transformers.map.p = function(node, children, styles)
   return Table.concat(children, {{content = "\n\n"}})

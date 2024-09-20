@@ -2,6 +2,7 @@ local transformers = require("tech.texting.html.transformers")
 local htmlparser = require("lib.vendor.htmlparser")
 
 
+-- TODO! RM html folder
 local html, _, static = Module("tech.texting.html")
 
 local run_script = function(script, args, script_name)
