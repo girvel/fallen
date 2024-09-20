@@ -9,12 +9,31 @@ local expect = lust.expect
 describe("Text entities generation facade", function()
   local texting = require("tech.texting")
 
-  it("can parse raw HTML with changing attribute types", function()
-    local node = texting.parse('<div color="ffffff" if="true" on_hover="State = nil"></div>')
-    expect(node.name).to.be("div")
-    expect(node.content).to.equal({})
-    expect(node.attributes.color).to.equal({1, 1, 1})
-    expect(type(node.attributes["if"])).to.be("function")
-    expect(type(node.attributes.on_hover)).to.be("function")
+  describe("(stage 1)", function()
+    it("(stage 1) can parse raw HTML with changing attribute types", function()
+      local node = texting.parse('<div color="ffffff" if="true" on_hover="State = nil"></div>')
+      expect(node.name).to.be("div")
+      expect(node.content).to.equal({})
+      expect(node.attributes.color).to.equal({1, 1, 1})
+      expect(type(node.attributes["if"])).to.be("function")
+      expect(type(node.attributes.on_hover)).to.be("function")
+    end)
+  end)
+
+  describe("(stage 2)", function()
+    local tokenizer = require("tech.texting._tokenizer")
+
+    it("can turn html-based tree into the list of tokens", function()
+      local node = Html.div {
+        "Hello, ",
+        Html.span {
+          "world",
+        }
+      }
+
+      local tokens = tokenizer.visit(node, {}, {default = {}})
+
+      expect(tokens).to.equal({{content = "Hello, "}, {content = "world"}})
+    end)
   end)
 end)

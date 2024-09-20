@@ -100,17 +100,6 @@ visit_html = function(root, args, styles, preserve_whitespace)
   return postprocess(root, result, styles)
 end
 
-html.parse = function(content)
-  
-end
-
-html.tokenize = function(root, args, styles)
-  if not styles or not styles.default then
-    error("Can not parse HTML without the default style", 2)
-  end
-  return tokenize(root, args, styles)
-end
-
 html.is_available = function(content, args)
   return get_availability(htmlparser.parse(content)("html")[1], args)
 end

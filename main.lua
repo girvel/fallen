@@ -40,6 +40,12 @@ love.load = function(args)
   Log.info("Loading the game; seed", seed)
   math.randomseed(seed)
 
+  if args.tests then
+    -- TODO use love.custom function
+    love.is_running_tests = true
+    love.window.minimize()
+  end
+
   if args.load_save then
     game_save.read("last.fallen_save")
   else
@@ -102,12 +108,6 @@ love.load = function(args)
       {__serialize = function() return function() end end}
     )
     State.profiler.setclock(love.timer.getTime)
-  end
-
-  if args.tests then
-    -- TODO use love.custom function
-    love.is_running_tests = true
-    love.window.minimize()
   end
 
   Log.info("Game is loaded")
