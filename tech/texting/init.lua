@@ -10,11 +10,11 @@ local texting, _, static = Module("tech.texting")
 texting.parse = require("tech.texting._parse")
 
 texting.generate = function(root, styles, w, view, args)
-  return Log.trace(generate(
+  return generate(
     wrap(
       streamer.visit(root, args, styles), w
     ), view
-  ))
+  )
 end
 
 local MARGIN = 5
