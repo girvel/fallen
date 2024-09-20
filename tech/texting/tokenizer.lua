@@ -1,15 +1,15 @@
 local html, module_mt, static = Module("tech.texting.html")
 
-local tokenize, get_availability
+local visit, get_availability
 
-html.tokenize = function(root, args, styles)
+html.visit = function(root, args, styles)
   if not styles or not styles.default then
     error("Can not parse HTML without the default style", 2)
   end
-  return tokenize(root, args, styles)
+  return visit(root, args, styles)
 end
 
-tokenize = function(root, args, styles)
+visit = function(root, args, styles)
   if type(root) == "string" then
     return {{content = root}}
   end

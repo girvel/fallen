@@ -19,7 +19,7 @@ module_mt.__call = function(_, gui)
         State:remove_multiple(self._text_entities)
       end
 
-      local text = Html.pre {
+      local page = Html.pre {
         "   ", Html.h1 {"Редактор персонажа"},
         -- TODO!
         -- forms.abilities(),
@@ -29,7 +29,7 @@ module_mt.__call = function(_, gui)
       }
 
       self._text_entities = State:add_multiple(texting.generate(
-        text, self._styles,
+        page, self._styles,
         math.min(love.graphics.getWidth() - 40, State.gui.TEXT_MAX_SIZE[1]),
         "character_creator",  -- TODO! rename to creator
         {}

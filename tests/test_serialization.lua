@@ -8,8 +8,6 @@ local clone = function(x)
   return load(Dump(x))()
 end
 
-Log.info("\n\n========== TESTS ==========\n")
-
 describe("Global serialization logic", function()
   describe("package data handling", function()
     local package_path = "tests.resources.package"

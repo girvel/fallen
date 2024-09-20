@@ -1,10 +1,11 @@
 local gui = require("tech.gui")
-local html = require("tech.texting.html")
 local wrap = require("tech.texting.wrap")
 local sprite = require("tech.sprite")
 
 
 local texting, _, static = Module("tech.texting")
+
+texting.parse = require("tech.texting._parse")
 
 local generate_entities = function(token_lines, view)
   local result = {}
@@ -40,7 +41,7 @@ end
 
 texting.generate = function(content, styles, w, view, args)
   return generate_entities(
-    wrap(html.parse(content, args, styles), w), view
+    wrap(html.tokenize(content, args, styles), w), view
   )
 end
 

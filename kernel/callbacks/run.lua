@@ -18,6 +18,12 @@ return function()
       love._custom.load = nil
     end
 
+    if love.is_running_tests then
+      Log.info("\n\n========== TESTS ==========\n")
+      require("tech.texting._tests.test_texting")
+      return 0
+    end
+
     local current_time = love.timer.getTime()
     local key_data = love._custom.key_repetition
 
@@ -69,11 +75,6 @@ return function()
     love._custom.active_time = love._custom.active_time + love.timer.getTime() - current_time
     love._custom.frames_total = love._custom.frames_total + 1
     love.timer.sleep(0.001)
-
-    if love.is_running_tests then
-      require("tests.test_serialization")
-      return 0
-    end
 
     -- should go last to capture at least 1 tick
     if love._custom.save then

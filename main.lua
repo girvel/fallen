@@ -105,7 +105,9 @@ love.load = function(args)
   end
 
   if args.tests then
+    -- TODO use love.custom function
     love.is_running_tests = true
+    love.window.minimize()
   end
 
   Log.info("Game is loaded")
