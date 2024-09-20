@@ -67,8 +67,7 @@ local wrap_lines = function(token_lines, max_w)
         else
           table.insert(result[#result], Table.extend({}, token, {
             content = inserted_line,
-            x = current_w,
-            y = current_h,
+            position = Vector({current_w, current_h}),
           }))
           current_content = Fun.iter(current_content)
             :drop_n(break_i)

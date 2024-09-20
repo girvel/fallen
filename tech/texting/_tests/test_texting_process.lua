@@ -103,7 +103,7 @@ describe("Text entities generation process", function()
       expect(#lines > 1).to.be(true)
       expect(Fun.iter(lines):all(function(line)
         return Fun.iter(line)
-          :map(function(bit) return sprite.get_font(bit.font_size):getWidth(bit.content) end)
+          :map(function(piece) return sprite.get_font(piece.font_size):getWidth(piece.content) end)
           :sum() <= w
       end)).to.be(true)
     end)
@@ -112,8 +112,9 @@ describe("Text entities generation process", function()
   describe("(stage 4)", function()
     local generate = require("tech.texting._generate")
 
-    it("can generate ", function()
-      
+    it("can generate entities from the list of lines", function()
+      local lines = {{{content = "Oh hi Mark", font_size = 20}}}
+      Log.trace(generate(lines, "text"))
     end)
   end)
 end)
