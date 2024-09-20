@@ -38,7 +38,7 @@ describe("Text entities generation facade", function()
     end)
 
     it("can do styling", function()
-      expect(streamer.visit(
+      local stream = streamer.visit(
         Html.div {
           "Hello, ",
           Html.large {"world!"},
@@ -48,14 +48,26 @@ describe("Text entities generation facade", function()
           default = {font_size = 12},
           large = {font_size = 18},
         }
-      )).to.equal({
+      )
+
+      expect(stream).to.equal({
         {content = "Hello, ", font_size = 12},
         {content = "world!", font_size = 18},
       })
     end)
 
     it("can do built-in HTML tags", function()
-      expect(true).to.be(false)
+      local stream = streamer.visit(
+        Html.h1 {"Oh hi Mark"},
+        {},
+        {default = {}, h1 = {font_size = 30}, h1_prefix = {color = {0, 0, 0}}}
+      )
+
+      expect(stream).to.equal({
+        {content = "# ", font_size = 30, color = {0, 0, 0}},
+        {content = "Oh hi Mark", font_size = 30},
+        {content = "\n\n"},
+      })
     end)
 
     it("can skip some data conditionally", function()
