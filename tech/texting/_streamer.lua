@@ -14,12 +14,15 @@ streamer.visit = function(root, args, styles)
   if not styles or not styles.default then
     error("Can not parse HTML without the default style", 2)
   end
-  return visit(root, args, styles)
+
+  return Fun.iter(visit(root, args, styles))
+    :map(function(node) return Table.extend({}, styles.default, node) end)
+    :totable()
 end
 
 visit = function(root, args, styles)
   if type(root) == "string" then
-    return {Table.extend({content = root}, styles.default)}
+    return {Table.extend({content = root})}
   end
 
   if not streamer.get_availability(root, args) then return {} end

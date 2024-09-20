@@ -31,7 +31,9 @@ texting.popup = function(position, relation, view, content, styles, width)
   local last = entities[#entities]
   local size = Vector({
     Fun.iter(entities)
-      :map(function(e) return e.position[1] + sprite.get_font(e.font_size):getWidth(e.sprite.text[2]) end)
+      :map(function(e)
+        return e.position[1] + sprite.get_font(e.font_size):getWidth(e.sprite.text[2])
+      end)
       :max() - entities[1].position[1],
     last.position[2] - entities[1].position[2] + sprite.get_font(last.font_size):getHeight()
   })

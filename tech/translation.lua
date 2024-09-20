@@ -1,7 +1,3 @@
-local fighter = require("mech.classes.fighter")
-local feats = require("mech.feats")
-
-
 return Module("tech.translation", {
   abilities = {
     str = "сила",

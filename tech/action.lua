@@ -1,3 +1,6 @@
+local translation = require("tech.translation")
+
+
 local action, module_mt, static = Module("tech.action")
 
 module_mt.__call = function(_, base_table)
@@ -20,7 +23,15 @@ module_mt.__call = function(_, base_table)
       local result = {}
 
       table.insert(result, -Query(self):_get_description(entity))
-      -- TODO! cost
+
+      if next(self.cost or {}) then
+        table.insert(result, Html.span {
+          Html.h2 {"Стоимость:"},
+          Html.ul (Fun.pairs(self.cost)
+            :map(function(k, v) return Html.li {"%s: %s" % {translation.resources[k], v}} end)
+            :totable()),
+        })
+      end
 
       if #result > 0 then
         return Html.span(Fun.iter(result)

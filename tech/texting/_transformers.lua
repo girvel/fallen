@@ -7,8 +7,11 @@ transformers.map.head = function() return {} end
 local h = function(level)
   return function(node, children, styles)
     return Table.concat(
-      {Table.extend({content = "# "},
-       styles.default, styles["h%s" % level], styles["h%s_prefix" % level])},
+      {
+        Table.extend({content = "# "},
+        styles["h%s" % level] or {},  -- TODO allow nil arguments in the middle?
+        styles["h%s_prefix" % level])
+      },
       Fun.iter(children)
         :map(function(child) return Table.extend(child, styles["h%s" % level]) end)
         :totable(),
