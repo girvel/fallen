@@ -15,7 +15,6 @@ module_mt.__call = function(_, perk)
 
     table.insert(creator._movement_functions, function(dx)
       choices[perk] = (choices[perk] - 1 + dx) % #perk.options + 1
-      creator:refresh()  -- TODO! not use refresh
     end)
 
     return Html.p {

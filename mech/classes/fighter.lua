@@ -73,6 +73,7 @@ fighter.action_surge = static {
 
 fighter.styles = static {
   two_handed = static {
+    name = "бой двуручным оружием",
     codename = "two_handed_style",
     modify_damage_roll = function(self, entity, roll)
       local weapon = entity.inventory.main_hand
@@ -85,6 +86,7 @@ fighter.styles = static {
 
   duelist = static {
     codename = "duelist",
+    name = "дуэлянт",
     modify_damage_roll = function(self, entity, roll)
       local weapon = entity.inventory.main_hand
       if not weapon or weapon.tags.two_handed then
@@ -96,6 +98,7 @@ fighter.styles = static {
 
   two_weapon_fighting = static {
     codename = "two_weapon_fighting",
+    name = "бой двумя оружиями",
     modify_damage_roll = function(self, entity, roll, slot)
       local weapon = entity.inventory.other_hand
       if not weapon or slot ~= "other_hand" then
