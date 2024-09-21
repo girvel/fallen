@@ -14,6 +14,7 @@ module_mt.__call = function(_, gui)
 
     refresh = function(self)
       self._mixin.level = experience.get_level(State.player.experience)
+      self._movement_functions = {}
 
       if self._text_entities then
         State:remove_multiple(self._text_entities)
@@ -36,7 +37,25 @@ module_mt.__call = function(_, gui)
       ))
     end,
 
-    move_cursor = Fn(),  -- TODO! implement
+    move_cursor = function(self, direction)
+      assert(Table.contains(Vector.directions, direction) or direction == Vector.zero)
+
+      local creator = State.gui.creator
+
+      if direction[2] ~= 0 then
+        creator._current_selection_index
+          = (creator._current_selection_index - 1 + direction[2])
+            % #creator._movement_functions + 1
+      else-- TODO! if not readonly
+        Query(creator._movement_functions[creator._current_selection_index])(direction[1])
+        self:refresh()
+        -- maybe one day I can figure out how to regenerate only a part of the page
+      end
+
+      -- TODO! implement scroll through anchor
+      -- params.scroll = -40 * (params.current_index - 1)
+    end,
+
     can_close = Fn(false),  -- TODO! implement
     close = nil,
     can_submit = Fn(false),  -- TODO! implement
@@ -61,6 +80,9 @@ module_mt.__call = function(_, gui)
     },
 
     _choices = {},
+
+    _movement_functions = {},
+    _current_selection_index = 1,
   }
 end
 

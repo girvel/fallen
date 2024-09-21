@@ -3,7 +3,37 @@ local class = require("mech.class")
 
 local perk_form, module_mt, static = Module("state.gui.creator.perk_form")
 
-local modifier_form = function(perk)
+local modifier_form, anchor
+
+module_mt.__call = function(_, perk)
+  local creator = State.gui.creator
+
+  if perk.__type == class.choice then
+    local choices = creator._choices
+    choices[perk] = choices[perk] or 1
+    local chosen_modifier = perk.options[choices[perk]]
+
+    table.insert(creator._movement_functions, function(dx)
+      choices[perk] = (choices[perk] - 1 + dx) % #perk.options + 1
+      creator:refresh()  -- TODO! not use refresh
+    end)
+
+    return Html.p {
+      anchor(#creator._movement_functions),
+      Entity.name(perk),
+      ": < ",
+      modifier_form(chosen_modifier),
+      " >",
+    }
+  end
+
+  return Html.p {
+    "   ",
+    modifier_form(perk),
+  }
+end
+
+modifier_form = function(perk)
   local get_tooltip
   local prefix = ""
 
@@ -20,24 +50,18 @@ local modifier_form = function(perk)
   }
 end
 
-module_mt.__call = function(_, perk)
-  if perk.__type == class.choice then
-    local choices = State.gui.creator._choices
-    choices[perk] = choices[perk] or 1
-    local chosen_modifier = perk.options[choices[perk]]
-
-    return Html.p {
-      "   ",
-      Entity.name(perk),
-      ": < ",
-      modifier_form(chosen_modifier),
-      " >"
-    }
-  end
-
-  return Html.p {
-    "   ",
-    modifier_form(perk),
+anchor = function(index)
+  return Html.span {
+    " ",
+    Html.span {
+      on_update = function(self)
+        self.sprite.text = State.gui.creator._current_selection_index == index
+          and ">"
+          or " "
+      end,
+      " ",
+    },
+    " ",
   }
 end
 

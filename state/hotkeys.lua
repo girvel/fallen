@@ -289,7 +289,7 @@ return Module("state.hotkeys", function(modes)
       name = direction_translation,
       codename = direction_name,
       pre_action = function()
-        State.gui.creator:move_cursor(direction_name)
+        State.gui.creator:move_cursor(Vector[direction_name])
       end,
     })
   end
