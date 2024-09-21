@@ -1,7 +1,7 @@
 local entityx = {}
 
 entityx.is_over = function(position, entity)
-  return position > entity.position and position < entity.position + entity.size
+  return position >= entity.position and position < entity.position + entity.size
 end
 
 entityx.name = function(entity)

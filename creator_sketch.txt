@@ -26,8 +26,9 @@
 
 
 TODO! list:
-- prefix for action-based perks
+x prefix for action-based perks
 x tooltip for action-based perks (sketch)
+c inline lists
 - do tooltips for all perks
 - highlight current level perks
 - choice perks

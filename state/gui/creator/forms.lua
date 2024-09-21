@@ -4,29 +4,20 @@ local experience = require("mech.experience")
 local forms, module_mt, static = Module("state.gui.creator.forms")
 
 local perk_to_html = function(perk)
-  local tooltip_sources = {}
+  local get_tooltip
+  local prefix = ""
 
-  for _, action in ipairs(-Query(perk):modify_actions(State.player, {}) or {}) do
-    table.insert(tooltip_sources, function()
-      return Html.span {
-        Html.p {"Новая способность: ", Entity.name(action)},
-        action.get_description
-          and Html.p {action:get_description(State.player)}
-          or "",
-      }
-    end)
+  local new_action = -Query(perk):modify_actions(State.player, {})[1]
+  if new_action and new_action.get_description then
+    get_tooltip = Fn(new_action:get_description(State.player))
+    prefix = "Новая способность: "
   end
 
   return Html.p {
     "   ",
     Html.span {
-      get_tooltip = function()
-        return Html.span {
-          unpack(Fun.iter(tooltip_sources)
-            :map(Fun.op.call)
-            :totable())
-        }
-      end,
+      get_tooltip = get_tooltip,
+      prefix,
       Entity.name(perk),
     },
   }
