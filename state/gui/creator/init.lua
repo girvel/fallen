@@ -59,6 +59,8 @@ module_mt.__call = function(_, gui)
       class = fighter.class,
       level = nil,
     },
+
+    _choices = {},
   }
 end
 
