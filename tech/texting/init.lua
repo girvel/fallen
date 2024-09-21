@@ -26,6 +26,8 @@ texting.popup = function(position, relation, view, content, styles, width)
     content, styles, width, view, {}
   )
 
+  if #entities == 0 then return end
+
   -- TODO more elegant way to handle this, probably instead of texting.generate returning 
   --   multiple entities return {entities...}, w, h
   local last = entities[#entities]

@@ -23,9 +23,14 @@
  - Способность: Второе дыхание
  - Способность: Всплеск действий (если только что получен уровень 2 то цвет новости)
 
-TODO! RM
-TODO! prefix & tooltips for action-based perks
-TODO! highlight recently added content
-TODO! changable stuff
-TODO! normal scrolling
-TODO! hide some stuff
+
+
+TODO! list:
+- prefix for action-based perks
+x tooltip for action-based perks (sketch)
+- do tooltips for all perks
+- highlight current level perks
+- choice perks
+- normal scrolling
+x hide some perks
+- RM this file
