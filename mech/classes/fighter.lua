@@ -50,10 +50,16 @@ fighter.second_wind = static {
 fighter.action_surge = static {
   name = "всплеск действий",
   codename = "action_surge",
+
   action = static .. action {
     cost = {
       action_surge = 1,
     },
+    _get_description = function(self, entity)
+      return Html.stats {
+        "+1 действие на один ход",
+      }
+    end,
     _run = function(self, entity)
       State:add(fx("assets/sprites/fx/action_surge_proto", "fx_under", entity.position))
       sound.play("assets/sounds/action_surge.mp3", .3, entity.position, "small")
@@ -75,30 +81,64 @@ fighter.styles = static {
   two_handed = static {
     name = "бой двуручным оружием",
     codename = "two_handed_style",
+
+    _reroll = {1, 2},
+
+    get_description = function(self)
+      local start = table.concat(self._reroll, ", ", 1, #self._reroll - 1)
+      local finish = Table.last(self._reroll)
+
+      return Html.span {
+        Html.p {Html.stats {
+          "Перебросить %s или %s на кости урона оружия в двух руках." % {
+            start, finish
+          },
+        }},
+        "Повышает средний урон для двуручного оружия и полуторного, взятого в обе руки",
+      }
+    end,
+
     modify_damage_roll = function(self, entity, roll)
       local weapon = entity.inventory.main_hand
       if not (weapon and (weapon.tags.two_handed or weapon.tags.versatile)) then
         return roll
       end
-      return roll:extended({reroll = {1, 2}})
+      return roll:extended({reroll = self._reroll})
     end,
   },
 
   duelist = static {
     codename = "duelist",
     name = "дуэлянт",
+
+    _bonus = 2,
+
+    get_description = function(self)
+      return Html.stats {
+        "Бонус %+i к урону одноручным рукопашным оружием, если во второй руке нет оружия."
+          % self._bonus
+      }
+    end,
+
     modify_damage_roll = function(self, entity, roll)
       local weapon = entity.inventory.main_hand
-      if not weapon or weapon.tags.two_handed then
+      if not weapon or weapon.tags.two_handed or entity.inventory.other_hand then
         return roll
       end
-      return roll + 2
+      return roll + self._bonus
     end,
   },
 
   two_weapon_fighting = static {
     codename = "two_weapon_fighting",
     name = "бой двумя оружиями",
+
+    get_description = function(self, entity)
+      return Html.stats {
+        "Добавляет модификатор характеристики к урону от атаки второй рукой."
+      }
+    end,
+
     modify_damage_roll = function(self, entity, roll, slot)
       local weapon = entity.inventory.other_hand
       if not weapon or slot ~= "other_hand" then
@@ -126,6 +166,11 @@ fighter.fighting_spirit = static {
       fighting_spirit = 1,
       bonus_actions = 1,
     },
+    _get_description = function(self, entity)
+      return Html.stats {
+        "+5 здоровья и преимущество на атаки до конца хода.",
+      }
+    end,
     _run = function(self, entity)
       State:add(fx("assets/sprites/fx/fighting_spirit", "fx_under", entity.position))
       entity.advantage_flag = true

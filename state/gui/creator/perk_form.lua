@@ -36,10 +36,14 @@ modifier_form = function(perk)
   local get_tooltip
   local prefix = ""
 
-  local new_action = -Query(perk):modify_actions(State.player, {})[1]
-  if new_action and new_action.get_description then
-    get_tooltip = Fn(new_action:get_description(State.player))
-    prefix = "Новая способность: "
+  if perk.get_description then
+    get_tooltip = Fn.curry(perk.get_description, perk, State.player)
+  else
+    local new_action = -Query(perk):modify_actions(State.player, {})[1]
+    if new_action and new_action.get_description then
+      get_tooltip = Fn.curry(new_action.get_description, new_action, State.player)
+      prefix = "Новая способность: "
+    end
   end
 
   return Html.span {
