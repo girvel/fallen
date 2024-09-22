@@ -53,13 +53,13 @@ creature._methods = static {
 
   get_max_hp = function(self)
     if not self.class then return self.max_hp end
-    local con_bonus = abilities.get_modifier(self.abilities.con)
+    local con_bonus = self:get_modifier("con")
     return self.class.hp_die + con_bonus
       + (self.level - 1) * (self.class.hp_die / 2 + 1 + con_bonus)
   end,
 
   get_armor = function(self)
-    return self.armor_class or (10 + abilities.get_modifier(self.abilities.dex))
+    return self.armor_class or (10 + self:get_ability_modifier("dex"))
   end,
 
   rotate = function(self, direction_name)
@@ -91,21 +91,30 @@ creature._methods = static {
     self.potential_actions = self:get_actions()
 
     self.hp = self.hp + self:get_max_hp() - old_max_hp
-    self.skill_throws = Fun.iter(abilities.skill_bases)
-      :map(function(skill, a)
-        return skill, D(20)
-          + abilities.get_modifier(self.abilities[a])
-          + (-Query(self.skills)[skill] and 2 or 0)
-      end)
-      :tomap()
+    -- TODO! redo skills
+    -- self.skill_throws = Fun.iter(abilities.skill_bases)
+    --   :map(function(skill, a)
+    --     return skill, D(20)
+    --       + abilities.get_modifier(self.abilities[a])
+    --       + (-Query(self.skills)[skill] and 2 or 0)
+    --   end)
+    --   :tomap()
   end,
 
   get_saving_throw = function(self, ability)
     return self:get_effect(
       "modify_saving_throw",
-      D(20) + abilities.get_modifier(self.abilities[ability]),
+      D(20) + self:get_ability_modifier(ability),
       ability
     )
+  end,
+
+  get_ability_modifier = function(self, ability)
+    return abilities.get_modifier(self:get_effect(
+      "modify_ability_score",
+      self.base_abilities[ability],
+      ability
+    ))
   end
 }
 
@@ -115,7 +124,7 @@ module_mt.__call = function(_, animation_pack, object)
     creature_flag = true,
 
     sprite = {},
-    abilities = abilities(10, 10, 10, 10, 10, 10),
+    base_abilities = abilities(10, 10, 10, 10, 10, 10),
     direction = "right",
     proficiency_bonus = 2,
     inventory = {},

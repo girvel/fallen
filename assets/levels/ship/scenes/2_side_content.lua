@@ -1,7 +1,6 @@
 local sound = require("tech.sound")
 local fx = require("tech.fx")
 local gui = require("tech.gui")
-local abilities = require("mech.abilities")
 local attacking = require("mech.attacking")
 local items = require("library.palette.items")
 local item = require("tech.item")
@@ -316,7 +315,7 @@ return function()
           api.line(rails.entities.cook, "Держи, грешно оставлять голодную душу")
 
           -- TODO as temporary effect
-          local d = math.max(1, abilities.get_modifier(State.player.abilities.con))
+          local d = math.max(1, State.player:get_modifier("con"))
           State.player.hp = State.player.hp + d
           State:add(gui.floating_damage("+" .. d, State.player.position, Colors.green()))
 

@@ -16,13 +16,23 @@ class.provide_action = static .. function(self, entity, base)
   return base
 end
 
+class.universal_ability_bonus = static .. Type .. function(_, bonus)
+  return {
+    name = "%+i ко всем характеристикам" % bonus,
+
+    modify_ability_score = function(self, entity, score)
+      return score + bonus
+    end,
+  }
+end
+
 class.hit_dice = static {
   codename = "hit_dice",
   hidden = true,
 
   action = static .. action {
     get_healing_roll = function(self, entity)
-      return D(entity.class.hp_die) + abilities.get_modifier(entity.abilities.con)
+      return D(entity.class.hp_die) + entity:get_ability_modifier("con")
     end,
     cost = {
       hit_dice = 1,

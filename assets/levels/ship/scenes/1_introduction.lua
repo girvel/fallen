@@ -104,7 +104,7 @@ return function()
           },
         }
 
-        local sorted_abilities = Fun.iter(State.player.abilities)
+        local sorted_abilities = Fun.iter(State.player.base_abilities)
           :map(function(...) return {...} end)
           :totable()
         table.sort(

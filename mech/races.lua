@@ -1,3 +1,4 @@
+local class = require("mech.class")
 local feats = require("mech.feats")
 
 
@@ -36,8 +37,11 @@ races.human = static {
   codename = "human",
   skin_color = Colors.from_hex("8ed3dc"),
   movement_speed = 6,
-  bonuses = {1, 1, 1, 1, 1, 1},
-  progression_table = {},
+  progression_table = {
+    [1] = {
+      class.universal_ability_bonus(1),
+    },
+  },
 }
 
 races.variant_human_1 = static {
