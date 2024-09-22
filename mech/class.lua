@@ -1,3 +1,4 @@
+local translation = require("tech.translation")
 local experience = require("mech.experience")
 local action = require("tech.action")
 local abilities = require("mech.abilities")
@@ -16,7 +17,28 @@ class.provide_action = static .. function(self, entity, base)
   return base
 end
 
-class.universal_ability_bonus = static .. Type .. function(_, bonus)
+local concrete_ability_bonus = function(this_ability, bonus)
+  return {
+    name = translation.abilities[this_ability],
+    modify_ability_score = function(self, entity, score, ability)
+      if ability == this_ability then
+        score = score + bonus
+      end
+      return score
+    end,
+  }
+end
+
+class.ability_bonus = static .. function(bonus)
+  return class.choice {
+    name = "Бонус %+i" % bonus,
+    options = Fun.iter(abilities.list)
+      :map(function(a) return concrete_ability_bonus(a, bonus) end)
+      :totable(),
+  }
+end
+
+class.universal_ability_bonus = static .. function(bonus)
   return {
     name = "%+i ко всем характеристикам" % bonus,
 

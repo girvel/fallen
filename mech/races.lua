@@ -51,7 +51,9 @@ races.variant_human_1 = static {
   movement_speed = 6,
   bonuses = {1, 1},
   progression_table = {
-    [1] = {feats.perk},
+    [1] = {
+      feats.perk,
+    },
   },
 }
 
@@ -62,7 +64,10 @@ races.variant_human_2 = static {
   movement_speed = 6,
   bonuses = {2},
   progression_table = {
-    [1] = {feats.perk},
+    [1] = {
+      class.ability_bonus(2),
+      feats.perk,
+    },
   },
 }
 
