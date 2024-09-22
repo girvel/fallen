@@ -2,7 +2,6 @@ local tags, module_mt, static = Module("state.gui.creator.tags")
 
 tags.anchor = function(index)
   return Html.span {
-    " ",
     Html.span {
       on_update = function(self)
         self.sprite.text = State.gui.creator._current_selection_index == index
@@ -11,7 +10,7 @@ tags.anchor = function(index)
       end,
       " ",
     },
-    " ",
+    "  ",
   }
 end
 

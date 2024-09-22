@@ -25,8 +25,8 @@ module_mt.__call = function(_, gui)
         -- TODO!
         -- forms.abilities(),
         -- forms.skills(),
-        -- forms.race(),
-        forms.class(self._mixin),
+        forms.race(),
+        forms.class(),
       }
 
       self._text_entities = State:add_multiple(texting.generate(

@@ -32,6 +32,7 @@ races.dwarf = static {
 }
 
 races.human = static {
+  name = "Человек",
   codename = "human",
   skin_color = Colors.from_hex("8ed3dc"),
   movement_speed = 6,
@@ -40,6 +41,7 @@ races.human = static {
 }
 
 races.variant_human_1 = static {
+  name = "Человек (вариант) +1/+1",
   codename = "variant_human_1",
   skin_color = Colors.from_hex("8ed3dc"),
   movement_speed = 6,
@@ -50,6 +52,7 @@ races.variant_human_1 = static {
 }
 
 races.variant_human_2 = static {
+  name = "Человек (вариант) +2",
   codename = "variant_human_2",
   skin_color = Colors.from_hex("8ed3dc"),
   movement_speed = 6,
