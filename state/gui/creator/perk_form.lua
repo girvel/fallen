@@ -1,9 +1,10 @@
 local class = require("mech.class")
+local tags = require("state.gui.creator.tags")
 
 
 local perk_form, module_mt, static = Module("state.gui.creator.perk_form")
 
-local modifier_form, anchor
+local modifier_form
 
 module_mt.__call = function(_, perk)
   local creator = State.gui.creator
@@ -13,16 +14,26 @@ module_mt.__call = function(_, perk)
     choices[perk] = choices[perk] or 1
     local chosen_modifier = perk.options[choices[perk]]
 
+    local free_space = Fun.iter(perk.options)
+      :map(function(o) return o.name:utf_len() end)
+      :max() - chosen_modifier.name:utf_len()
+    local rjust = math.floor(free_space / 2)
+    local ljust = free_space - rjust
+
     table.insert(creator._movement_functions, function(dx)
       choices[perk] = (choices[perk] - 1 + dx) % #perk.options + 1
     end)
+    local index = #creator._movement_functions
 
     return Html.p {
-      anchor(#creator._movement_functions),
+      tags.anchor(index),
       Entity.name(perk),
-      ": < ",
+      ": ",
+      tags.button(index, -1),
+      " " * (1 + rjust),
       modifier_form(chosen_modifier),
-      " >",
+      " " * (1 + ljust),
+      tags.button(index, 1),
     }
   end
 
@@ -50,21 +61,6 @@ modifier_form = function(perk)
     get_tooltip = get_tooltip,
     prefix,
     Entity.name(perk),
-  }
-end
-
-anchor = function(index)
-  return Html.span {
-    " ",
-    Html.span {
-      on_update = function(self)
-        self.sprite.text = State.gui.creator._current_selection_index == index
-          and ">"
-          or " "
-      end,
-      " ",
-    },
-    " ",
   }
 end
 
