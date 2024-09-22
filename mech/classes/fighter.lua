@@ -14,6 +14,7 @@ fighter.second_wind = static {
 
   action = static .. action {
     name = "второе дыхание",
+    codename = "second_wind",
 
     _get_description = action.descriptions.healing,
 
@@ -52,6 +53,7 @@ fighter.action_surge = static {
   codename = "action_surge",
 
   action = static .. action {
+    codename = "action_surge",
     cost = {
       action_surge = 1,
     },
@@ -162,6 +164,7 @@ fighter.fighting_spirit = static {
   name = "боевой дух",
   codename = "fighting_spirit",
   action = static .. action {
+    codename = "fighting_spirit",
     cost = {
       fighting_spirit = 1,
       bonus_actions = 1,

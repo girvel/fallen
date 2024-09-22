@@ -3,6 +3,8 @@ local translation = require("tech.translation")
 
 local action, module_mt, static = Module("tech.action")
 
+local get_periodization
+
 module_mt.__call = function(_, base_table)
   return Table.extend({
     get_availability = function(self, entity)
@@ -24,12 +26,26 @@ module_mt.__call = function(_, base_table)
 
       table.insert(result, -Query(self):_get_description(entity))
 
-      if next(self.cost or {}) then
-        table.insert(result, Html.span {
-          Html.h2 {"Стоимость:"},
-          Html.ul (Fun.pairs(self.cost)
-            :map(function(k, v) return Html.li {"%s: %s" % {translation.resources[k], v}} end)
-            :totable()),
+      local cost = Table.extend({}, self.cost)
+      if next(cost) then
+        local postfix
+        local unique_resource = cost[self.codename]
+        if unique_resource then
+          cost[self.codename] = nil
+          postfix = get_periodization(entity, self.codename, unique_resource)
+        end
+
+        local cost_repr
+        if next(cost) then
+          cost_repr = table.concat(Fun.pairs(cost)
+            :map(function(k, v) return "%s: %s" % {translation.resources[k], v} end)
+            :totable(), ", ")
+        end
+
+        table.insert(result, Html.p {
+          cost_repr or "",
+          cost_repr and postfix and ", " or "",
+          postfix or "",
         })
       end
 
@@ -48,6 +64,24 @@ action.descriptions.healing = function(self)
   return Html.stats {
     "Восстанавливает ", self:get_healing_roll(State.player), " здоровья"
   }
+end
+
+local rest_kind_postfix = {
+  move = "ход",
+  short = "бой",
+  long = "долгий отдых",
+}
+
+get_periodization = function(entity, resource_name, resource)
+  for _, rest_kind in ipairs {"move", "short", "long"} do
+    Log.trace(rest_kind)
+    local resource_max = Log.trace(entity:get_resources(rest_kind))[resource_name]
+    if resource_max then
+      return "%s раз(а) за %s" % {
+        math.floor(resource_max / resource), rest_kind_postfix[rest_kind]
+      }
+    end
+  end
 end
 
 return action
