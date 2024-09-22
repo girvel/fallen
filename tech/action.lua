@@ -74,8 +74,7 @@ local rest_kind_postfix = {
 
 get_periodization = function(entity, resource_name, resource)
   for _, rest_kind in ipairs {"move", "short", "long"} do
-    Log.trace(rest_kind)
-    local resource_max = Log.trace(entity:get_resources(rest_kind))[resource_name]
+    local resource_max = entity:get_resources(rest_kind)[resource_name]
     if resource_max then
       return "%s раз(а) за %s" % {
         math.floor(resource_max / resource), rest_kind_postfix[rest_kind]

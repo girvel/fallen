@@ -6,25 +6,14 @@ local perk_form = require("state.gui.creator.perk_form")
 
 local forms, module_mt, static = Module("state.gui.creator.forms")
 
+local progression_form
+
 forms.class = static .. function()
   local mixin = State.gui.creator._mixin
   return Html.span {
     "   ",
     Html.h2 {"Класс: %s, уровень %s" % {mixin.class.name, mixin.level}},
-    unpack(Fun.iter(mixin.class.progression_table)
-      :take_n(mixin.level)
-      :enumerate()
-      :map(function(i, perks)
-        return Html.span {
-          color = i == mixin.level and Colors.green() or nil,
-          unpack(Fun.iter(perks)
-            :filter(function(p) return not p.hidden end)
-            :map(perk_form)
-            :totable())
-        }
-      end)
-      :totable()
-    ),
+    progression_form(mixin.class.progression_table),
   }
 end
 
@@ -60,11 +49,28 @@ forms.race = static .. function()
       " " * (1 + ljust),
       tags.button(index, 1),
     },
+    progression_form(mixin.race.progression_table),
   }
-  -- local text = "%s  <h2>Раса: &lt; %s &gt;</h2>" % {
-  --   params:_get_indicator(params.max_index + 1),
-  --   translation.race[params.race]
-  -- }
+end
+
+
+progression_form = function(progression_table)
+  local mixin = State.gui.creator._mixin
+  return Html.p(
+    Fun.iter(progression_table)
+      :take_n(mixin.level)
+      :enumerate()
+      :map(function(i, perks)
+        return Html.span {
+          color = i == mixin.level and Colors.green() or nil,
+          unpack(Fun.iter(perks)
+            :filter(function(p) return not p.hidden end)
+            :map(perk_form)
+            :totable())
+        }
+      end)
+      :totable()
+  )
 end
 
 return forms

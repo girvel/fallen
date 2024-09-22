@@ -9,7 +9,6 @@ local healing = require("mech.healing")
 local fighter, module_mt, static = Module("mech.classes.fighter")
 
 fighter.second_wind = static {
-  name = "второе дыхание",
   codename = "second_wind",
 
   action = static .. action {
@@ -49,10 +48,10 @@ fighter.second_wind = static {
 }
 
 fighter.action_surge = static {
-  name = "всплеск действий",
   codename = "action_surge",
 
   action = static .. action {
+    name = "всплеск действий",
     codename = "action_surge",
     cost = {
       action_surge = 1,
@@ -92,11 +91,11 @@ fighter.styles = static {
 
       return Html.span {
         Html.p {Html.stats {
-          "Перебросить %s или %s на кости урона оружия в двух руках." % {
+          "Перебросить %s или %s на костях урона оружия, взятого в обе руки." % {
             start, finish
           },
         }},
-        "Повышает средний урон для двуручного оружия и полуторного, взятого в обе руки",
+        Html.p {"Повышает средний урон для двуручного оружия и полуторного, взятого в обе руки"},
       }
     end,
 
@@ -161,9 +160,9 @@ fighter.fighting_style = static .. class.choice {
 }
 
 fighter.fighting_spirit = static {
-  name = "боевой дух",
   codename = "fighting_spirit",
   action = static .. action {
+    name = "боевой дух",
     codename = "fighting_spirit",
     cost = {
       fighting_spirit = 1,
