@@ -66,6 +66,7 @@ for k, v in pairs({
   other_hand = "f70000",
   head = "f30000",
 }) do
+  -- TODO try to refactor this using immutable colors?
   colors.anchor[k] = function()
     return colors.from_hex(v)
   end

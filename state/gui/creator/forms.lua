@@ -8,9 +8,18 @@ forms.class = static .. function(mixin)
   return Html.span {
     "   ",
     Html.h2 {"Класс: %s, уровень %s" % {mixin.class.name, mixin.level}},
-    unpack(Fun.iter(experience.get_progression(mixin.class, mixin.level))
-      :filter(function(p) return not p.hidden end)
-      :map(perk_form)
+    unpack(Fun.iter(mixin.class.progression_table)
+      :take_n(mixin.level)
+      :enumerate()
+      :map(function(i, perks)
+        return Html.span {
+          color = i == mixin.level and Colors.green() or nil,
+          unpack(Fun.iter(perks)
+            :filter(function(p) return not p.hidden end)
+            :map(perk_form)
+            :totable())
+        }
+      end)
       :totable()
     ),
   }
