@@ -4,24 +4,25 @@ local tags = require("state.gui.creator.tags")
 
 local perk_form, module_mt, static = Module("state.gui.creator.perk_form")
 
-local modifier_form, get_options
+local modifier_form, next_value
 
 module_mt.__call = function(_, perk)
   local creator = State.gui.creator
 
   if perk.__type == class.choice then
     local choices = creator._choices
-    choices[perk] = choices[perk] or 1
-    local chosen_modifier = get_options(perk)[choices[perk]]
+    choices[perk] = choices[perk] or next_value(perk.options, Table.last(perk.options), 1)
+    -- TODO! can be null
 
     local free_space = Fun.iter(perk.options)
       :map(function(o) return Entity.name(o):utf_len() end)
-      :max() - Entity.name(chosen_modifier):utf_len()
+      :max() - Entity.name(choices[perk]):utf_len()
     local rjust = math.floor(free_space / 2)
     local ljust = free_space - rjust
 
     table.insert(creator._movement_functions, function(dx)
-      choices[perk] = (choices[perk] - 1 + dx) % #get_options(perk) + 1
+      if dx == 0 then return end
+      choices[perk] = next_value(perk.options, choices[perk], dx)
     end)
     local index = #creator._movement_functions
 
@@ -31,7 +32,7 @@ module_mt.__call = function(_, perk)
       ": ",
       tags.button(index, -1),
       " " * (1 + rjust),
-      modifier_form(chosen_modifier),
+      modifier_form(choices[perk]),
       " " * (1 + ljust),
       tags.button(index, 1),
     }
@@ -71,16 +72,22 @@ modifier_form = function(perk)
   }
 end
 
-get_options = function(perk)
-  return Fun.iter(perk.options)
-    :filter(function(o)
-      return Fun.iter(State.gui.creator._choices)
-        :all(function(other_choice, i)
-          return other_choice == perk
-            or not class.is_equivalent(-Query(other_choice).options[i], o)
-        end)
-    end)
-    :totable()
+next_value = function(t, value, direction)
+  local i = Table.index_of(t, value)
+
+  local a, b, c
+  if direction < 0 then
+    a, b, c = 1, #t, 1
+  else
+    a, b, c = #t, 1, -1
+  end
+
+  for dx = a, b, c do
+    local result = t[(i + dx - 1) % #t + 1]
+    if Fun.pairs(State.gui.creator._choices)
+      :all(function(_, p) return not class.is_equivalent(p, result) end)
+    then return result end
+  end
 end
 
 return perk_form

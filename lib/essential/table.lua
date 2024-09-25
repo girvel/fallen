@@ -116,7 +116,7 @@ tablex.remove_breaking_at = function(t, i)
 end
 
 tablex.contains = function(t, item)
-  return Fun.iter(t):any(function(x) return x == item end)
+  return Fun.pairs(t):any(function(_, x) return x == item end)
 end
 
 tablex.last = function(t)
