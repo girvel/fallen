@@ -52,6 +52,8 @@ races.variant_human_1 = static {
   bonuses = {1, 1},
   progression_table = {
     [1] = {
+      class.ability_bonus(1),
+      class.ability_bonus(1),
       feats.perk,
     },
   },

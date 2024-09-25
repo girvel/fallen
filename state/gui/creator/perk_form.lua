@@ -4,7 +4,7 @@ local tags = require("state.gui.creator.tags")
 
 local perk_form, module_mt, static = Module("state.gui.creator.perk_form")
 
-local modifier_form
+local modifier_form, get_options
 
 module_mt.__call = function(_, perk)
   local creator = State.gui.creator
@@ -12,7 +12,7 @@ module_mt.__call = function(_, perk)
   if perk.__type == class.choice then
     local choices = creator._choices
     choices[perk] = choices[perk] or 1
-    local chosen_modifier = perk.options[choices[perk]]
+    local chosen_modifier = get_options(perk)[choices[perk]]
 
     local free_space = Fun.iter(perk.options)
       :map(function(o) return Entity.name(o):utf_len() end)
@@ -21,7 +21,7 @@ module_mt.__call = function(_, perk)
     local ljust = free_space - rjust
 
     table.insert(creator._movement_functions, function(dx)
-      choices[perk] = (choices[perk] - 1 + dx) % #perk.options + 1
+      choices[perk] = (choices[perk] - 1 + dx) % #get_options(perk) + 1
     end)
     local index = #creator._movement_functions
 
@@ -69,6 +69,18 @@ modifier_form = function(perk)
     get_tooltip = get_tooltip,
     name or Entity.name(perk),
   }
+end
+
+get_options = function(perk)
+  return Fun.iter(perk.options)
+    :filter(function(o)
+      return Fun.iter(State.gui.creator._choices)
+        :all(function(other_choice, i)
+          return other_choice == perk
+            or not class.is_equivalent(-Query(other_choice).options[i], o)
+        end)
+    end)
+    :totable()
 end
 
 return perk_form

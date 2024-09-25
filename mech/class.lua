@@ -17,9 +17,14 @@ class.provide_action = static .. function(self, entity, base)
   return base
 end
 
+local ability_bonus_ids = Fun.iter(abilities.list)
+  :map(function(a) return a, {} end)
+  :tomap()
+
 local concrete_ability_bonus = function(this_ability, bonus)
   return {
     name = translation.abilities[this_ability],
+    id = ability_bonus_ids[this_ability],
     modify_ability_score = function(self, entity, score, ability)
       if ability == this_ability then
         score = score + bonus
@@ -46,6 +51,13 @@ class.universal_ability_bonus = static .. function(bonus)
       return score + bonus
     end,
   }
+end
+
+class.is_equivalent = function(perk1, perk2)
+  if perk1 == perk2 then return true end
+  local id1 = -Query(perk1).id
+  local id2 = -Query(perk2).id
+  return id1 and id2 and id1 == id2
 end
 
 class.hit_dice = static {
