@@ -1,12 +1,12 @@
 local htmlparser = require("lib.vendor.htmlparser")
 
 
-local html_functions = {}
+local html_api = {}
 local html = setmetatable({}, {
-  __call = Fn(html_functions),
+  __call = Fn(html_api),
   __index = function(_, item)
     return function(t)
-      assert(t.__type ~= html_functions.tag)
+      assert(t.__type ~= html_api.tag)
 
       local attributes = {}
       for k, v in pairs(t) do
@@ -17,14 +17,14 @@ local html = setmetatable({}, {
 
       local content = {}
       for _, v in ipairs(t) do
-        if type(v) == "table" and v.__type == html_functions.tag then
+        if type(v) == "table" and v.__type == html_api.tag then
           table.insert(content, v)
         else
           table.insert(content, tostring(v))
         end
       end
 
-      return html_functions.tag {
+      return html_api.tag {
         name = item,
         attributes = attributes,
         content = content,
@@ -33,14 +33,14 @@ local html = setmetatable({}, {
   end,
 })
 
-html_functions.tag = Type .. function(_, t)
+html_api.tag = Type .. function(_, t)
   assert(t.name and t.attributes and t.content)
   return t
 end
 
 local visit_node
 
-html_functions.parse = function(html_string, attribute_factories)
+html_api.parse = function(html_string, attribute_factories)
   local root = htmlparser.parse(html_string)
   return visit_node(root, attribute_factories or {})
 end
@@ -86,11 +86,33 @@ visit_node = function(node, attribute_factories, preserve_whitespace)
     attributes[k] = v
   end
 
-  return html_functions.tag {
+  return html_api.tag {
     name = node.name,
     attributes = attributes,
     content = content,
   }
+end
+
+local build_cell
+
+html_api.build_table = function(matrix)
+  return Html.table(Fun.iter(matrix)
+    :map(function(row)
+      return Html.tr(Fun.iter(row):map(build_cell):totable())
+    end)
+    :totable()
+  )
+end
+
+build_cell = function(content)
+  local is_tag = content.__type == html_api.tag
+  if is_tag then
+    if content.name == "tline" then return content end
+    content = {content}
+  elseif type(content) == "string" then
+    content = {content}
+  end
+  return Html.td(content)
 end
 
 return html

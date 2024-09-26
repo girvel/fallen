@@ -1,6 +1,5 @@
 local tags = require("state.gui.creator.tags")
 local races = require("mech.races")
-local experience = require("mech.experience")
 local perk_form = require("state.gui.creator.perk_form")
 
 
@@ -54,11 +53,19 @@ forms.race = static .. function()
 end
 
 forms.abilities = function()
-  -- TODO! Html().build_table(t)
   return Html.span {
     "   ",
     Html.h2 {"Характеристики"},
     Html.p {
+      -- TODO Html().build_table(t)?
+      Html().build_table(
+        {
+          {" ", "H1", "H2"},
+          {" ", Html.tline {}},
+          {" ", "One", "Two"},
+          {" ", "Three", "Four"},
+        }
+      ),
       Html.table {
         Html.tr {Html.td {" "}, Html.tline {}},
         Html.tr {Html.td {" "}, Html.td {"One"}, Html.td {"Two"}},
