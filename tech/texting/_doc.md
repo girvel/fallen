@@ -1,6 +1,6 @@
 # Texting module
 
-Provides functionality for turning raw text into displayable in-game entities. `tech.texting` is an idiomatic way to display text, because it is much more robust in comparison to direct `love.graphics.printf` call.
+Provides functionality for turning raw text into displayable in-game entities. `tech.texting` is an idiomatic way to display text; in comparison to direct `love.graphics.printf` call, it handles fully functional entities that can be interacted with, animated, moved etc.
 
 ## Overview
 
@@ -15,7 +15,7 @@ State:add(texting.generate(
 
 ## In-depth
 
-<managing entities, wrapping, attribute handling, attribute types>
+<stages of texting, managing created entities, word wrapping, HTML storage and generation, attribute handling, attribute types, tags>
 
 ## API
 

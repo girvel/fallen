@@ -1,3 +1,4 @@
+local processors = require("tech.texting._processors")
 local transformers = require("tech.texting._transformers")
 
 
@@ -22,15 +23,12 @@ end
 
 visit = function(root, args, styles)
   if type(root) == "string" then
-    return {Table.extend({content = root})}
+    return {{content = root}}
   end
 
   if not streamer.get_availability(root, args) then return {} end
 
-  local nodes = Fun.iter(root.content)
-    :map(function(node) return visit(node, args, styles) end)
-    :reduce(Table.concat, {})
-
+  local nodes = (processors.map[root.name] or processors.default)(root, args, styles, visit)
   nodes = (transformers.map[root.name] or transformers.default)(root, nodes, styles)
 
   local attributes = Table.extend({}, root.attributes)

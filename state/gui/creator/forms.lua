@@ -53,6 +53,15 @@ forms.race = static .. function()
   }
 end
 
+forms.abilities = function()
+  -- TODO! Html().build_table(t)
+  return Html.table {
+    -- Html.tline {},
+    Html.tr {Html.td {"One"}, Html.td {"Two"}},
+    Html.tr {Html.td {"Three"}, Html.td {"Four"}},
+  }
+end
+
 
 progression_form = function(progression_table)
   local mixin = State.gui.creator._mixin
