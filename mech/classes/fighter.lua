@@ -190,6 +190,8 @@ fighter.fighting_spirit = static {
   modify_actions = class.provide_action,
 }
 
+local skills = "athletics perception intimidation history insight" / " "
+
 fighter.class = static {
   name = "воин",
   codename = "fighter",
@@ -199,6 +201,8 @@ fighter.class = static {
     [1] = {
       class.hit_dice,
       class.save_proficiency("con", "str"),
+      class.skill_proficiency(skills),
+      class.skill_proficiency(skills),
       fighter.fighting_style,
       fighter.second_wind,
     },

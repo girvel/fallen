@@ -9,6 +9,7 @@ return Module("tech.translation", {
   },
 
   skill = {
+    athletics = "атлетика",
     sleight_of_hand = "ловкость рук",
     stealth = "скрытность",
     arcana = "магия",

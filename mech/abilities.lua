@@ -9,6 +9,7 @@ abilities.list = {
 }
 
 abilities.skills = {
+  "athletics",
   "sleight_of_hand",
   "arcana",
   "history",

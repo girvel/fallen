@@ -53,7 +53,32 @@ class.universal_ability_bonus = static .. function(bonus)
   }
 end
 
-class.is_equivalent = function(perk1, perk2)
+local skill_proficiency_ids = Fun.iter(abilities.skills)
+  :map(function(s) return s, {} end)
+  :tomap()
+
+local concrete_skill_proficiency = function(skill)
+  return {
+    name = translation.skill[skill],
+    id = skill_proficiency_ids[skill],
+
+    -- TODO! implement effect call
+    modify_skill_score = function(self, entity, score)
+      return score + experience.get_proficiency_modifier(entity.level)
+    end,
+  }
+end
+
+class.skill_proficiency = static .. function(skill_list)
+  return class.choice {
+    name = "навык",
+    options = Fun.iter(skill_list)
+      :map(concrete_skill_proficiency)
+      :totable(),
+  }
+end
+
+class.is_equivalent = static .. function(perk1, perk2)
   if perk1 == perk2 then return true end
   local id1 = -Query(perk1).id
   local id2 = -Query(perk2).id
