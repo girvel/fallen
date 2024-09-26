@@ -55,10 +55,16 @@ end
 
 forms.abilities = function()
   -- TODO! Html().build_table(t)
-  return Html.table {
-    -- Html.tline {},
-    Html.tr {Html.td {"One"}, Html.td {"Two"}},
-    Html.tr {Html.td {"Three"}, Html.td {"Four"}},
+  return Html.span {
+    "   ",
+    Html.h2 {"Характеристики"},
+    Html.p {
+      Html.table {
+        Html.tr {Html.td {" "}, Html.tline {}},
+        Html.tr {Html.td {" "}, Html.td {"One"}, Html.td {"Two"}},
+        Html.tr {Html.td {" "}, Html.td {"Three"}, Html.td {"Four"}},
+      },
+    }
   }
 end
 

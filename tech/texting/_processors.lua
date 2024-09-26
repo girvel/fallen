@@ -1,9 +1,9 @@
-local processors, module_mt, static = Module(".mnt.c.Users.widau.Documents.workshop.fallen.tech.texting._processors")
+local processors, module_mt, static = Module("tech.texting._processors")
 
 
-processors.map = {}
+processors.map = static {}
 
-local sizeof
+local sizeof, tline
 
 processors.map.table = function(root, args, styles, visit)
   local matrix = {}
@@ -14,25 +14,38 @@ processors.map.table = function(root, args, styles, visit)
     local matrix_row = {}
 
     for x, cell in ipairs(row.content) do
-      assert(cell.name == "td")
-      local children = visit(cell, args, styles)
-      column_sizes[x] = math.max(column_sizes[x] or 0, sizeof(children))
-      table.insert(matrix_row, children)
+      if cell.name == "tline" then
+        table.insert(matrix_row, tline)
+      elseif cell.name == "td" then
+        local children = visit(cell, args, styles)
+        column_sizes[x] = math.max(column_sizes[x] or 0, sizeof(children))
+        table.insert(matrix_row, children)
+      else
+        error()
+      end
     end
 
     table.insert(matrix, matrix_row)
   end
-  Log.trace(Inspect(matrix))
 
   local result = {}
 
   for _, row in ipairs(matrix) do
     for y, children in ipairs(row) do
-      Table.concat(
-        result,
-        children,
-        {{content = " " * (column_sizes[y] - sizeof(children) + 2)}}
-      )
+      if children == tline then
+        table.insert(result, {
+          content = "-" * (Fun.iter(column_sizes)
+            :drop_n(y - 1)
+            :map(function(n) return n + 2 end)
+            :sum() - 2)
+        })
+      else
+        Table.concat(
+          result,
+          children,
+          {{content = " " * (column_sizes[y] - sizeof(children) + 2)}}
+        )
+      end
     end
     Table.concat(result, {{content = "\n"}})
   end
@@ -51,5 +64,7 @@ sizeof = function(children)
     :map(function(c) return c.content:utf_len() end)
     :sum()
 end
+
+tline = {}
 
 return processors
