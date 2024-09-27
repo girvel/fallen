@@ -802,6 +802,10 @@ end
 methods.totable = method0(totable)
 exports.totable = export0(totable)
 
+methods.unpack = function(self)
+  return unpack(self:totable())
+end
+
 local tomap = function(gen_x, param_x, state_x)
     local tab, key, val = {}
     while true do

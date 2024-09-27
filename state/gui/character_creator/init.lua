@@ -5,6 +5,7 @@ local forms = require("state.gui.character_creator.forms")
 local class = require("mech.class")
 local fighter = require("mech.classes.fighter")
 local feats = require("mech.feats")
+-- TODO! RM old folder
 
 
 return Module("state.gui.character_creator", function()

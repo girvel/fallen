@@ -57,20 +57,12 @@ forms.abilities = function()
     "   ",
     Html.h2 {"Характеристики"},
     Html.p {
-      -- TODO Html().build_table(t)?
       Html().build_table(
         {
-          {" ", "H1", "H2"},
+          {" ", "Способность ", "Значение", "Бонус расы", "Результат", "Модификатор"},
           {" ", Html.tline {}},
-          {" ", "One", "Two"},
-          {" ", "Three", "Four"},
         }
       ),
-      Html.table {
-        Html.tr {Html.td {" "}, Html.tline {}},
-        Html.tr {Html.td {" "}, Html.td {"One"}, Html.td {"Two"}},
-        Html.tr {Html.td {" "}, Html.td {"Three"}, Html.td {"Four"}},
-      },
     }
   }
 end
@@ -85,10 +77,10 @@ progression_form = function(progression_table)
       :map(function(i, perks)
         return Html.span {
           color = i == mixin.level and Colors.green() or nil,
-          unpack(Fun.iter(perks)
+          Fun.iter(perks)
             :filter(function(p) return not p.hidden end)
             :map(perk_form)
-            :totable())
+            :unpack()
         }
       end)
       :totable()
