@@ -163,23 +163,10 @@ return Module("state.hotkeys", function(modes)
     name = "мастер двуручного оружия",
     codename = "toggle_gwm",
     _perk = feats.great_weapon_master,
-    get_description = function(self)
-      return Html(function()
-        return stats {
-          "%+i" % self._perk.attack_modifier, " к атаке", br(),
-          "%+i" % self._perk.damage_modifier, " к урону", br(),
-          "Двуручное или полуторное оружие"
-        }
-      end)
-    end,
     hidden = function(self)
       return not Table.contains(State.player.perks, self._perk)
     end,
-    pre_action = function(self)
-      if self:hidden() then return end
-      local params = State.player.effect_params[self._perk]
-      params.enabled = not params.enabled
-    end,
+    action = feats.great_weapon_master.action,
     is_passive_enabled = function(self)
       return State.player.effect_params[self._perk].enabled
     end,
@@ -288,6 +275,7 @@ return Module("state.hotkeys", function(modes)
     define_hotkey(hotkeys, {"character_creator"}, keys, {
       name = direction_translation,
       codename = direction_name,
+      hidden = Fn(true),
       pre_action = function()
         State.gui.creator:move_cursor(Vector[direction_name])
       end,
