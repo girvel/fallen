@@ -57,8 +57,19 @@ module_mt.__call = function(_, gui)
       -- params.scroll = -40 * (params.current_index - 1)
     end,
 
-    can_close = Fn(false),  -- TODO! implement
-    close = nil,
+    is_readonly = function(self)
+      return self._mixin.level ~= State.player.level
+    end,
+
+    close = function(self)
+      if not self:is_readonly() then
+        State.gui.notifier:push("Редактирование персонажа не закончено")
+        return
+      end
+      State:remove_multiple(self.text_entities)
+      self.text_entities = nil
+    end,
+
     can_submit = Fn(false),  -- TODO! implement
     submit = nil,
 

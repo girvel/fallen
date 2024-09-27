@@ -300,7 +300,7 @@ return Module("state.hotkeys", function(modes)
       State.gui.creator:close()
     end,
     get_availability = function()
-      return State.gui.creator:can_close()
+      return State.gui.creator:is_readonly()
     end,
   })
 
