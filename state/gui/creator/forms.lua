@@ -42,6 +42,7 @@ forms.race = static .. function()
 
   return Html.span {
     tags.anchor(index),
+    "  ",
     Html.h2 {
       "Раса: ",
       tags.button(index, -1),
@@ -54,36 +55,27 @@ forms.race = static .. function()
   }
 end
 
+local ability_line
+
 forms.abilities = function()
   local creator = State.gui.creator
 
   return Html.span {
-    "   ",
-    Html.h2 {"Характеристики"},
+    "   ", Html.h2 {"Характеристики"},
+    Html.p {
+      "   Свободные очки: ",
+      Html.span {
+        color = creator._ability_points == 0 and Colors.white() or Colors.red(),
+        creator._ability_points,
+      },
+    },
     Html.p {
       Html().build_table(
         {
           {" ", "Способность ", "Значение", "Бонус расы", "Результат", "Модификатор"},
           {" ", Html.tline {}},
           Fun.iter(abilities.list)
-            :map(function(a)
-              table.insert(creator._movement_functions, Fn())
-              local index = #creator._movement_functions
-              return {
-                tags.anchor(index),
-                translation.abilities[a],
-                Html.span {
-                  tags.button(index, -1),
-                  " ", 
-                  creator._mixin.base_abilities[a],
-                  " ",
-                  tags.button(index, 1),
-                },
-                "?",
-                "?",
-                "?",
-              }
-            end)
+            :map(ability_line)
             :unpack(),
         }
       ),
@@ -109,6 +101,52 @@ progression_form = function(progression_table)
       end)
       :totable()
   )
+end
+
+local cost = {
+  [8] = 0,
+  [9] = 1,
+  [10] = 2,
+  [11] = 3,
+  [12] = 4,
+  [13] = 5,
+  [14] = 7,
+  [15] = 9,
+}
+
+ability_line = function(a)
+  local creator = State.gui.creator
+
+  table.insert(creator._movement_functions, function(dx)
+    local this_value = creator._mixin.base_abilities[a]
+    local next_value = this_value + dx
+    if dx < 0 and this_value <= 8
+      or dx > 0 and (
+        this_value >= 15
+        or creator._ability_points < cost[next_value] - cost[this_value]
+      )
+    then return end
+
+    creator._ability_points = creator._ability_points + cost[this_value] - cost[next_value]
+    creator._mixin.base_abilities[a] = next_value
+  end)
+
+  local index = #creator._movement_functions
+
+  return {
+    tags.anchor(index),
+    translation.abilities[a],
+    Html.span {
+      tags.button(index, -1),
+      " ",
+      tostring(creator._mixin.base_abilities[a]):rjust(2, "0"),
+      " ",
+      tags.button(index, 1),
+    },
+    "?",
+    "?",
+    "?",
+  }
 end
 
 return forms

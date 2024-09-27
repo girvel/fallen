@@ -80,6 +80,7 @@ module_mt.__call = function(_, gui)
       level = nil,
       base_abilities = abilities(8, 8, 8, 8, 8, 8),
     },
+    _ability_points = 27,
 
     _choices = {},
 

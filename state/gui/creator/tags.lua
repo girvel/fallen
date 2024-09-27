@@ -10,7 +10,6 @@ tags.anchor = function(index)
       end,
       " ",
     },
-    "  ",
   }
 end
 

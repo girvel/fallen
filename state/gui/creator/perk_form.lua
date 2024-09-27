@@ -28,6 +28,7 @@ module_mt.__call = function(_, perk)
 
     return Html.p {
       tags.anchor(index),
+      "  ",
       Entity.name(perk),
       ": ",
       tags.button(index, -1),
