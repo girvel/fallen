@@ -8,4 +8,4 @@ This is an index page of Fallen's documentation.
 
 ## Module documentation:
 
-- [tech.texting](/tech/texting/_doc.md) -- text rendering & manipulation
+- [tech.texting](/tech/_docs/texting.md) -- text rendering & manipulation

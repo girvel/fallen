@@ -29,6 +29,6 @@ README.md  -- README file, kind of self-explanatory
 ## Code folders
 
 - `init.lua` files are lua standard for requiring the folder itself
-- `_doc.md` contains documentation for the module
+- `_docs/` contains documentation for the module
 - `_tests/` contains unit tests
 - files starting with `_` are considered internal for the module; they are not intended for requiring from the outside
