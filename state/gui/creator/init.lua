@@ -1,3 +1,4 @@
+local abilities = require("mech.abilities")
 local experience = require("mech.experience")
 local fighter = require("mech.classes.fighter")
 local forms = require("state.gui.creator.forms")
@@ -77,6 +78,7 @@ module_mt.__call = function(_, gui)
     _mixin = {
       class = fighter.class,
       level = nil,
+      base_abilities = abilities(8, 8, 8, 8, 8, 8),
     },
 
     _choices = {},

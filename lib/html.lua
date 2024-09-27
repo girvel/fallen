@@ -107,14 +107,10 @@ html_api.build_table = function(matrix)
 end
 
 build_cell = function(content)
-  local is_tag = content.__type == html_api.tag
-  if is_tag then
-    if content.name == "tline" then return content end
-    content = {content}
-  elseif type(content) == "string" then
-    content = {content}
+  if -Query(content).__type == html_api.tag and content.name == "tline" then
+    return content
   end
-  return Html.td(content)
+  return Html.td {content}
 end
 
 return html

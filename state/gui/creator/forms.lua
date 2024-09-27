@@ -1,3 +1,5 @@
+local translation = require("tech.translation")
+local abilities = require("mech.abilities")
 local tags = require("state.gui.creator.tags")
 local races = require("mech.races")
 local perk_form = require("state.gui.creator.perk_form")
@@ -53,6 +55,8 @@ forms.race = static .. function()
 end
 
 forms.abilities = function()
+  local creator = State.gui.creator
+
   return Html.span {
     "   ",
     Html.h2 {"Характеристики"},
@@ -61,6 +65,26 @@ forms.abilities = function()
         {
           {" ", "Способность ", "Значение", "Бонус расы", "Результат", "Модификатор"},
           {" ", Html.tline {}},
+          Fun.iter(abilities.list)
+            :map(function(a)
+              table.insert(creator._movement_functions, Fn())
+              local index = #creator._movement_functions
+              return {
+                tags.anchor(index),
+                translation.abilities[a],
+                Html.span {
+                  tags.button(index, -1),
+                  " ", 
+                  creator._mixin.base_abilities[a],
+                  " ",
+                  tags.button(index, 1),
+                },
+                "?",
+                "?",
+                "?",
+              }
+            end)
+            :unpack(),
         }
       ),
     }
