@@ -95,6 +95,8 @@ end
 
 local build_cell
 
+-- TODO! test
+-- TODO! document
 html_api.build_table = function(matrix)
   return Html.table(Fun.iter(matrix)
     :map(function(row)
