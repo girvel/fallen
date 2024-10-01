@@ -91,7 +91,7 @@ class.hit_dice = static {
 
   action = static .. action {
     get_healing_roll = function(self, entity)
-      return D(entity.class.hp_die) + entity:get_ability_modifier("con")
+      return D(entity.class.hp_die) + entity:get_modifier("con")
     end,
     cost = {
       hit_dice = 1,

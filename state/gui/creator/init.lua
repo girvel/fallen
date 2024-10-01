@@ -1,3 +1,4 @@
+local class = require("mech.class")
 local abilities = require("mech.abilities")
 local experience = require("mech.experience")
 local fighter = require("mech.classes.fighter")
@@ -77,7 +78,32 @@ module_mt.__call = function(_, gui)
       return not self:is_readonly() and self._ability_points == 0
     end,
 
-    submit = nil,
+    submit = function(self)
+      if self:is_readonly() then
+        State.gui.notifier:push("Нельзя изменить персонажа")
+        return
+      end
+      if not self:can_submit() then
+        State.gui.notifier:push("Не все ресурсы распределены")
+        return
+      end
+
+      self._mixin.perks = Fun.chain(
+        experience.get_progression(self._mixin.class, self._mixin.level),
+        experience.get_progression(self._mixin.race, self._mixin.level)
+      )
+        :map(function(it)
+          if it.__type == class.choice then
+            return self._choices[it]
+          end
+          return it
+        end)
+        :totable()
+
+      Log.info("Finishing character creation with args:", self._mixin)
+      State.player:level_up(self._mixin)
+      self:close()
+    end,
 
     _text_entities = nil,
     _styles = Table.merge({}, gui.styles, {

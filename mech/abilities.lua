@@ -58,11 +58,11 @@ end
 abilities.get_melee_modifier = function(entity, slot)
   if -Query(entity).inventory[slot].tags.finesse then
     return math.max(
-      entity:get_ability_modifier("str"),
-      entity:get_ability_modifier("dex")
+      entity:get_modifier("str"),
+      entity:get_modifier("dex")
     )
   end
-  return entity:get_ability_modifier("str")
+  return entity:get_modifier("str")
 end
 
 local ability_check_sound = {
@@ -72,7 +72,7 @@ local ability_check_sound = {
 
 abilities.check = function(entity, skill_or_ability, dc)
   local roll = Table.contains(abilities.list, skill_or_ability)
-    and D(20) + entity:get_ability_modifier(abilities[skill_or_ability])
+    and D(20) + entity:get_modifier(abilities[skill_or_ability])
     or entity.skill_throws[skill_or_ability]
 
   if not roll then
@@ -109,7 +109,7 @@ abilities.saving_throw = function(entity, ability, dc)
 end
 
 abilities.initiative_roll = function(entity)
-  local result = D(20) + entity:get_ability_modifier("dex") + (entity.initiative_bonus or 0)
+  local result = D(20) + entity:get_modifier("dex") + (entity.initiative_bonus or 0)
   Log.debug("%s rolls initiative" % {Entity.name(entity)})
   return result
 end

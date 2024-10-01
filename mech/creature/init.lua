@@ -59,7 +59,7 @@ creature._methods = static {
   end,
 
   get_armor = function(self)
-    return self.armor_class or (10 + self:get_ability_modifier("dex"))
+    return self.armor_class or (10 + self:get_modifier("dex"))
   end,
 
   rotate = function(self, direction_name)
@@ -104,12 +104,12 @@ creature._methods = static {
   get_saving_throw = function(self, ability)
     return self:get_effect(
       "modify_saving_throw",
-      D(20) + self:get_ability_modifier(ability),
+      D(20) + self:get_modifier(ability),
       ability
     )
   end,
 
-  get_ability_modifier = function(self, ability)
+  get_modifier = function(self, ability)
     return abilities.get_modifier(self:get_effect(
       "modify_ability_score",
       self.base_abilities[ability],
