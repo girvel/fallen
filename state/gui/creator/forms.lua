@@ -118,8 +118,8 @@ local cost = {
 ability_line = function(ability_name)
   local creator = State.gui.creator
 
+  local this_value = creator._mixin.base_abilities[ability_name]
   table.insert(creator._movement_functions, function(dx)
-    local this_value = creator._mixin.base_abilities[ability_name]
     local next_value = this_value + dx
     if dx < 0 and this_value <= 8
       or dx > 0 and (
@@ -149,13 +149,14 @@ ability_line = function(ability_name)
     tags.anchor(index),
     translation.abilities[ability_name],
     Html.span {
-      creator._mixin.base_abilities[ability_name] > 8
+      this_value > 8
         and tags.button(index, -1)
         or " ",
       " ",
       tostring(value):rjust(2, "0"),
       " ",
-      creator._mixin.base_abilities[ability_name] < 15
+      this_value < 15
+        and creator._ability_points >= cost[this_value + 1] - cost[this_value]
         and tags.button(index, 1)
         or " ",
     },

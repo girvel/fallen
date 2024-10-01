@@ -35,3 +35,4 @@ x choice perks
 - normal scrolling
 x hide some perks
 - RM this file
+- fix codex
