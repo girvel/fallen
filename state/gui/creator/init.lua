@@ -25,12 +25,14 @@ module_mt.__call = function(_, gui)
         State:remove_multiple(self._text_entities)
       end
 
+      local race = forms.race()
+
       local page = Html.pre {
         "   ", Html.h1 {"Редактор персонажа"},
         -- TODO!
         forms.abilities(),
         -- forms.skills(),
-        forms.race(),
+        race,
         forms.class(),
       }
 
@@ -51,7 +53,7 @@ module_mt.__call = function(_, gui)
         creator._current_selection_index
           = (creator._current_selection_index - 1 + direction[2])
             % #creator._movement_functions + 1
-      else-- TODO! if not readonly
+      elseif not self:is_readonly() then
         Query(creator._movement_functions[creator._current_selection_index])(direction[1])
         self:refresh()
         -- maybe one day I can figure out how to regenerate only a part of the page

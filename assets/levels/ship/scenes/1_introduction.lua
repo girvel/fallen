@@ -26,7 +26,7 @@ return function()
         api.narration("...")
         api.narration("... не забуду тебя ненавидеть")
         api.narration("... не на ви деть")
-        api.narration("... тебя <hate>ненавидеть</hate>")
+        api.narration("... тебя <hate>ненавидеть</hate>")  -- TODO! test <hate> and other rail tags
 
         State.gui.disable_ui = false
 

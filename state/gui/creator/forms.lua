@@ -25,6 +25,7 @@ forms.race = static .. function()
   local mixin = creator._mixin
   local choices = creator._choices
 
+  -- TODO create forms in 2 steps -- initialize and render -- to resolve dependency issues
   choices.race = choices.race or 1
   mixin.race = allowed_races[choices.race]
 
@@ -132,6 +133,17 @@ ability_line = function(ability_name)
   end)
 
   local index = #creator._movement_functions
+  local value = creator._mixin.base_abilities[ability_name]
+  local bonus = Fun.iter(-Query(creator._mixin.race).progression_table[1] or {})
+    :filter(function(p) return p.modify_ability_score end)
+    :reduce(
+      function(acc, p)
+        local success, result = pcall(p.modify_ability_score, p, nil, acc, ability_name)
+        if success then return result end
+        return acc
+      end,
+      0
+    )
 
   return {
     tags.anchor(index),
@@ -141,16 +153,15 @@ ability_line = function(ability_name)
         and tags.button(index, -1)
         or " ",
       " ",
-      tostring(creator._mixin.base_abilities[ability_name]):rjust(2, "0"),
+      tostring(value):rjust(2, "0"),
       " ",
       creator._mixin.base_abilities[ability_name] < 15
         and tags.button(index, 1)
         or " ",
     },
-    -- TODO! finish
-    "?",
-    "?",
-    "?",
+    bonus,
+    value + bonus,
+    "%+i" % abilities.get_modifier(value + bonus),
   }
 end
 
