@@ -16,6 +16,7 @@ return function()
         run = function(self, rails)
           self.enabled = false
 
+          api.checkpoint_base()
           State.player.experience = experience.for_level[2]
           State.gui.creator:refresh()
           --State.gui.creator:submit()

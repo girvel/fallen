@@ -14,6 +14,8 @@ module_mt.__call = function(_, gui)
     end,
 
     refresh = function(self)
+      if State.player.experience < 0 then return end
+
       self._mixin.level = experience.get_level(State.player.experience)
       self._movement_functions = {}
       self._active_choices = {}
@@ -59,7 +61,7 @@ module_mt.__call = function(_, gui)
     end,
 
     is_readonly = function(self)
-      return self._mixin.level ~= State.player.level
+      return self._mixin.level == State.player.level
     end,
 
     close = function(self)
@@ -67,11 +69,14 @@ module_mt.__call = function(_, gui)
         State.gui.notifier:push("Редактирование персонажа не закончено")
         return
       end
-      State:remove_multiple(self.text_entities)
-      self.text_entities = nil
+      State:remove_multiple(self._text_entities)
+      self._text_entities = nil
     end,
 
-    can_submit = Fn(false),  -- TODO! implement
+    can_submit = function(self)
+      return not self:is_readonly() and self._ability_points == 0
+    end,
+
     submit = nil,
 
     _text_entities = nil,

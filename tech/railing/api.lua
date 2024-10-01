@@ -191,4 +191,9 @@ api.update_quest = function(changes)
   end
 end
 
+api.checkpoint_base = function()
+  State.gui.creator._ability_points = 0
+  State.gui.creator._mixin.base_abilities = abilities(15, 15, 15, 8, 8, 8)
+end
+
 return api
