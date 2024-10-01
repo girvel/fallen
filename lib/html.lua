@@ -33,9 +33,24 @@ local html = setmetatable({}, {
   end,
 })
 
+local tag_methods = {}
+local tag_mt = {__index = tag_methods}
+
 html_api.tag = Type .. function(_, t)
   assert(t.name and t.attributes and t.content)
-  return t
+  return setmetatable(t, tag_mt)
+end
+
+tag_methods.find_by_name = function(self, name)
+  return Fun.iter(self.content)
+    :filter(function(e) return -Query(e).name == name end)
+    :nth(1)
+end
+
+tag_methods.get_title = function(self)
+  local tag = -Query(self):find_by_name("head"):find_by_name("title")
+  if not tag then return nil end
+  return table.concat(tag.content, "")
 end
 
 local visit_node

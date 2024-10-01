@@ -10,7 +10,7 @@ return function()
 
   _G.Table = require("lib.essential.table")
   require("lib.essential.string").inject(getmetatable(""))
-  _G.Query = require("lib.types.query")
+  _G.Query = require("lib.essential.query")
   _G.Math = require("lib.essential.math")
   _G.Common = require("lib.essential.common")
   _G.Debug = require("lib.essential.debug")

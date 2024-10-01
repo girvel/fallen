@@ -32,7 +32,7 @@ c inline lists
 x do tooltips for all perks
 x highlight current level perks
 x choice perks
-- normal scrolling
+x normal scrolling
 x hide some perks
 - RM this file
 - fix codex

@@ -10,13 +10,13 @@ local load_wiki = function(path)
     :filter(function(name) return name:find(pattern) end)
     :map(function(name)
       local _, _, codename = name:find(pattern)
-      return {codename, love.filesystem.read(path .. "/" .. name)}
+      return {codename, texting.parse(love.filesystem.read(path .. "/" .. name))}
     end)
     :totable()
 
   table.sort(loaded_pages, function(a, b)
-    local title_a = html.get_title(a[2])
-    local title_b = html.get_title(b[2])
+    local title_a = Html().get_title(a[2])
+    local title_b = Html().get_title(b[2])
 
     local appendix = "Приложение"
     if title_a:starts_with(appendix) then

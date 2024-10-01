@@ -3,6 +3,8 @@ describe("Html generator", function()
   _G.Fn = require("lib.essential.fn")
   _G.Keyword = require("lib.essential.keyword")
   _G.Type = require("lib.essential.type")
+  _G.Fun = require("lib.vendor.fun")
+  _G.Query = require("lib.essential.query")
 
   local html = require("lib.html")
   local tag = html().tag
@@ -161,6 +163,48 @@ describe("Html generator", function()
         },
         html().parse("<br />")
       )
+    end)
+  end)
+
+  describe("Tag methods", function()
+    local body = html().tag {
+      name = "body",
+      attributes = {},
+      content = {},
+    }
+
+    local page = html().tag {
+      name = "html",
+      attributes = {},
+      content = {
+        html().tag {
+          name = "head",
+          attributes = {},
+          content = {
+            html().tag {
+              name = "title",
+              attributes = {},
+              content = {"Hello, ", "world!"},
+            },
+          },
+        },
+        "AAA",
+        body,
+      },
+    }
+
+    it(":find_by_name() searches tag by its name", function()
+      assert.equal(body, page:find_by_name("body"))
+    end)
+
+    describe(":get_title()", function()
+      it("returns page's title", function()
+        assert.equal("Hello, world!", page:get_title())
+      end)
+
+      it("returns nil if something goes wrong", function()
+        assert.equal(nil, body:get_title())
+      end)
     end)
   end)
 end)
