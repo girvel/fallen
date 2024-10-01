@@ -202,7 +202,6 @@ fighter.class = static {
       class.hit_dice,
       class.save_proficiency("con", "str"),
       class.skill_proficiency(skills),
-      class.skill_proficiency(skills),
       fighter.fighting_style,
       fighter.second_wind,
     },

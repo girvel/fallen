@@ -147,6 +147,7 @@ ability_line = function(ability_name)
         and tags.button(index, 1)
         or " ",
     },
+    -- TODO! finish
     "?",
     "?",
     "?",

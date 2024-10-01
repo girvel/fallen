@@ -42,6 +42,7 @@ races.human = static {
     [1] = {
       class.universal_ability_bonus(1),
       class.skill_proficiency(abilities.skills),
+      class.skill_proficiency(abilities.skills),
     },
   },
 }
@@ -57,6 +58,7 @@ races.variant_human_1 = static {
       class.ability_bonus(1),
       class.ability_bonus(1),
       class.skill_proficiency(abilities.skills),
+      class.skill_proficiency(abilities.skills),
       feats.perk,
     },
   },
@@ -71,6 +73,8 @@ races.variant_human_2 = static {
   progression_table = {
     [1] = {
       class.ability_bonus(2),
+      class.skill_proficiency(abilities.skills),
+      class.skill_proficiency(abilities.skills),
       class.skill_proficiency(abilities.skills),
       feats.perk,
     },

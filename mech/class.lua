@@ -36,7 +36,7 @@ end
 
 class.ability_bonus = static .. function(bonus)
   return class.choice {
-    name = "Бонус %+i" % bonus,
+    name = "%+i" % bonus,
     options = Fun.iter(abilities.list)
       :map(function(a) return concrete_ability_bonus(a, bonus) end)
       :totable(),
