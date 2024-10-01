@@ -1,7 +1,6 @@
 local sound = require("tech.sound")
 local quest = require("tech.quest")
 local texting = require("tech.texting")
-local html = require("tech.texting.html")
 
 
 local load_wiki = function(path)
@@ -15,8 +14,8 @@ local load_wiki = function(path)
     :totable()
 
   table.sort(loaded_pages, function(a, b)
-    local title_a = Html().get_title(a[2])
-    local title_b = Html().get_title(b[2])
+    local title_a = a[2]:get_title()
+    local title_b = b[2]:get_title()
 
     local appendix = "Приложение"
     if title_a:starts_with(appendix) then
@@ -32,14 +31,25 @@ local load_wiki = function(path)
 
   loaded_pages = Fun.iter(loaded_pages):map(unpack):tomap()
 
-  loaded_pages.codex = loaded_pages.codex % Fun.iter(loaded_pages)
-    :filter(function(page) return page ~= "codex" end)
-    :map(function(page, content)
-      return '<li if="html.is_available(pages.%s, args)"><a href="%s">%s</a></li>\n' % {
-        page, page, html.get_title(content),
+  loaded_pages.codex
+    :find_by_name("body")
+    :find_by_name("content").content
+  = Fun.iter(loaded_pages)
+    :filter(function(page_name) return page_name ~= "codex" end)
+    :map(function(page_name, page)
+      return Html.li {
+        ["if"] = function(args)
+          return page.attributes["if"](args)
+        end,
+        Html.a {
+          href = page_name,
+          page:get_title(),
+        }
       }
     end)
-    :reduce(Fun.op.concat, "")
+    :totable()
+
+  Log.trace(loaded_pages.codex)
 
   return loaded_pages
 end
@@ -82,6 +92,7 @@ return Module("state.gui.wiki", function(gui)
     show_journal = function(self)
       self.history = {"journal"}
       self.current_history_index = 1
+      -- TODO!
       self.pages.journal = [[
         <html>
           <body>
@@ -135,11 +146,10 @@ return Module("state.gui.wiki", function(gui)
       local args = {
         codex = self.codex,
         pages = self.pages,
-        html = html,
         api = require("tech.railing").api,
       }
 
-      html.run_scripts(page, args)
+      -- TODO! run scripts on texting.generate
       self.text_entities = State:add_multiple(texting.generate(
         page, self.styles, State.gui.TEXT_MAX_SIZE[1], "wiki", args
       ))

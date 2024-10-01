@@ -29,7 +29,7 @@ parse_expression = function(event_name)
         [[
           return function(args)
             %s
-            %s
+            return %s
           end
         ]] % {
           Fun.iter(args)
@@ -37,10 +37,10 @@ parse_expression = function(event_name)
             :reduce(Fun.op.concat, ""),
           string,
         }
-      )()
+      )
 
-      if f then return f(args) end
-      Log.error("Error loading %s attribute\n%s\n%s" % {event_name, err})
+      if f then return f()(args) end
+      Log.error("Error loading %s attribute\n%s\n%s" % {event_name, err, string})
     end
   end
 end
