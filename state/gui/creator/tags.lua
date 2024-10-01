@@ -4,9 +4,12 @@ tags.anchor = function(index)
   return Html.span {
     Html.span {
       on_update = function(self)
-        self.sprite.text = State.gui.creator._current_selection_index == index
-          and ">"
-          or " "
+        if State.gui.creator._current_selection_index == index then
+          self.sprite.text = ">"
+          State.gui.creator.scroll = -self.position[2]
+          return
+        end
+        self.sprite.text = " "
       end,
       " ",
     },

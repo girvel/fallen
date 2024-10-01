@@ -157,11 +157,17 @@ end
 gui.offsets.creator_text = static .. function()
   -- TODO! reimplement scroll
   local w, h = love.graphics.getDimensions()
-  local sx, sy = unpack(State.gui.TEXT_MAX_SIZE)
-  return (Vector({
-    math.max(30, w - sx),
-    math.max(30, h - sy)
-  }) / 2):ceil()
+  local tw, th = unpack(State.gui.TEXT_MAX_SIZE)
+  local marginx = math.ceil(math.max(30, w - tw) / 2)
+  local marginy = math.ceil(math.max(30, h - th) / 2)
+  return Vector {
+    marginx,
+    Math.median(
+      marginy,
+      w / 3 + State.gui.creator.scroll,
+      State.gui.creator.size[2] + marginy * 2 - h
+    ),
+  }
 end
 
 gui.offsets.actions = static .. function()

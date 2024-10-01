@@ -4,7 +4,7 @@ local sprite = require("tech.sprite")
 
 return function(lines, view)
   local result = {}
-  for y, line in ipairs(lines) do
+  for _, line in ipairs(lines) do
     for _, token in ipairs(line) do
       local clean_copy = Table.extend({}, token)
       Fun.iter("link content color on_update" / " "):each(function(k)

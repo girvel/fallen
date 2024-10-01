@@ -17,6 +17,18 @@ texting.generate = function(root, styles, w, view, args)
   )
 end
 
+texting.get_size = function(entities)
+  local last = Table.last(entities)
+  return Vector({
+    Fun.iter(entities)
+      :map(function(e)
+        return e.position[1] + sprite.get_font(e.font_size):getWidth(e.sprite.text[2])
+      end)
+      :max() - entities[1].position[1],
+    last.position[2] - entities[1].position[2] + sprite.get_font(last.font_size):getHeight()
+  })
+end
+
 local MARGIN = 5
 
 texting.popup = function(position, relation, view, content, styles, width)
@@ -30,15 +42,7 @@ texting.popup = function(position, relation, view, content, styles, width)
 
   -- TODO more elegant way to handle this, probably instead of texting.generate returning 
   --   multiple entities return {entities...}, w, h
-  local last = entities[#entities]
-  local size = Vector({
-    Fun.iter(entities)
-      :map(function(e)
-        return e.position[1] + sprite.get_font(e.font_size):getWidth(e.sprite.text[2])
-      end)
-      :max() - entities[1].position[1],
-    last.position[2] - entities[1].position[2] + sprite.get_font(last.font_size):getHeight()
-  })
+  local size = texting.get_size(entities)
 
   if relation == "above" then
     position = position

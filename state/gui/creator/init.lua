@@ -1,3 +1,4 @@
+local races = require("mech.races")
 local class = require("mech.class")
 local abilities = require("mech.abilities")
 local experience = require("mech.experience")
@@ -10,6 +11,9 @@ local init, module_mt, static = Module("state.gui.creator.init")
 
 module_mt.__call = function(_, gui)
   return {
+    scroll = 0,
+    size = 0,
+
     is_active = function(self)
       return not not self._text_entities
     end,
@@ -25,14 +29,12 @@ module_mt.__call = function(_, gui)
         State:remove_multiple(self._text_entities)
       end
 
-      local race = forms.race()
-
       local page = Html.pre {
         "   ", Html.h1 {"Редактор персонажа"},
         -- TODO!
         forms.abilities(),
         -- forms.skills(),
-        race,
+        forms.race(),
         forms.class(),
       }
 
@@ -42,6 +44,7 @@ module_mt.__call = function(_, gui)
         "character_creator",  -- TODO! rename to creator
         {}
       ))
+      self.size = texting.get_size(self._text_entities)
     end,
 
     move_cursor = function(self, direction)
@@ -58,9 +61,6 @@ module_mt.__call = function(_, gui)
         self:refresh()
         -- maybe one day I can figure out how to regenerate only a part of the page
       end
-
-      -- TODO! implement scroll through anchor
-      -- params.scroll = -40 * (params.current_index - 1)
     end,
 
     is_readonly = function(self)
@@ -122,6 +122,7 @@ module_mt.__call = function(_, gui)
 
     _mixin = {
       class = fighter.class,
+      race = races.human,
       level = nil,
       base_abilities = abilities(8, 8, 8, 8, 8, 8),
     },
