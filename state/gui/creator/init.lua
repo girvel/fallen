@@ -16,6 +16,7 @@ module_mt.__call = function(_, gui)
     refresh = function(self)
       self._mixin.level = experience.get_level(State.player.experience)
       self._movement_functions = {}
+      self._active_choices = {}
 
       if self._text_entities then
         State:remove_multiple(self._text_entities)
@@ -94,6 +95,7 @@ module_mt.__call = function(_, gui)
     _ability_points = 27,
 
     _choices = {},
+    _active_choices = {},
 
     _movement_functions = {},
     _current_selection_index = 1,

@@ -12,6 +12,7 @@ module_mt.__call = function(_, perk)
   if perk.__type == class.choice then
     local choices = creator._choices
     choices[perk] = choices[perk] or next_value(perk.options, Table.last(perk.options), 1)
+    creator._active_choices[perk] = true
     -- TODO! can be null
 
     local free_space = Fun.iter(perk.options)
@@ -74,6 +75,7 @@ modifier_form = function(perk)
 end
 
 next_value = function(t, value, direction)
+  local creator = State.gui.creator
   local i = Table.index_of(t, value)
 
   local a, b, c
@@ -85,9 +87,11 @@ next_value = function(t, value, direction)
 
   for dx = a, b, c do
     local result = t[(i + dx - 1) % #t + 1]
-    if Fun.pairs(State.gui.creator._choices)
-      :all(function(_, p) return not class.is_equivalent(p, result) end)
-    then return result end
+    if Fun.pairs(creator._choices):all(function(choice, p)
+      return not creator._active_choices[choice] or not class.is_equivalent(p, result)
+    end) then
+      return result
+    end
   end
 end
 
