@@ -94,7 +94,7 @@ module_mt.__call = function(_)
     {"dialogue_portrait", 2, 1, gui.offsets.portrait},
     {"dialogue_text", 1, 1, gui.offsets.dialogue},
     {"wiki", 1, 1, gui.offsets.full_screen_text},
-    {"character_creator", 1, 1, gui.offsets.creator_text},
+    {"creator_text", 1, 1, gui.offsets.creator_text},
     {"scene_popup_background", 1, 1, gui.offsets.scene},
     {"scene_popup", 1, 1, gui.offsets.scene},
     {"tooltip_background", 1, 1, gui.offsets.tooltip},

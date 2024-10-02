@@ -41,7 +41,7 @@ module_mt.__call = function(_, gui)
       self._text_entities = State:add_multiple(texting.generate(
         page, self._styles,
         math.min(love.graphics.getWidth() - 40, State.gui.TEXT_MAX_SIZE[1]),
-        "character_creator",  -- TODO! rename to creator
+        "creator_text",
         {}
       ))
       self.size = texting.get_size(self._text_entities)
