@@ -53,6 +53,20 @@ tag_methods.get_title = function(self)
   return table.concat(tag.content, "")
 end
 
+tag_mt.__tostring = function(self)
+  return "<%s%s>\n%s\n</%s>" % {
+    self.name,
+    Fun.pairs(self.attributes)
+      :map(function(k, v) return " %s=%s" % {k, Inspect(v)} end)
+      :reduce(Fun.op.concat, ""),
+    Fun.iter(self.content)
+      :map(tostring)
+      :reduce(Fun.op.concat, "")
+      :indent(),
+    self.name,
+  }
+end
+
 local visit_node
 
 html_api.parse = function(html_string, attribute_factories)

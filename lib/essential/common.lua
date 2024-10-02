@@ -133,12 +133,6 @@ common.build_table = function(headers, matrix, needs_shift)
   return text
 end
 
-common.indent = function(str)
-  return table.concat(Fun.iter(str / "\n")
-    :map(function(line) return "  " .. line end)
-    :totable(), "\n")
-end
-
 common.resolve_path = function(path)
   local result = {}
   for _, part in ipairs(path / "/") do

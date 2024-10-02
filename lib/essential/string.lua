@@ -103,6 +103,12 @@ methods.strip = function(str)
   return methods.rstrip(methods.lstrip(str))
 end
 
+methods.indent = function(str)
+  return table.concat(Fun.iter(str / "\n")
+    :map(function(line) return "  " .. line end)
+    :totable(), "\n")
+end
+
 
 local mt = {}
 
