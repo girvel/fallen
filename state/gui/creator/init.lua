@@ -12,7 +12,7 @@ local init, module_mt, static = Module("state.gui.creator.init")
 module_mt.__call = function(_, gui)
   return {
     scroll = 0,
-    size = 0,
+    size = Vector.zero,
 
     is_active = function(self)
       return not not self._text_entities
