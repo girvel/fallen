@@ -49,8 +49,6 @@ local load_wiki = function(path)
     end)
     :totable()
 
-  Log.trace(loaded_pages.codex)
-
   return loaded_pages
 end
 
@@ -92,48 +90,58 @@ return Module("state.gui.wiki", function(gui)
     show_journal = function(self)
       self.history = {"journal"}
       self.current_history_index = 1
-      -- TODO!
-      self.pages.journal = [[
-        <html>
-          <body>
-            <h1>Журнал задач</h1>
-            %s
-          </body>
-        </html>
-      ]] % Fun.iter(self.quests)
-        :filter(function(name) return self.quest_states[name] end)
-        :map(function(name, this_quest)
-          local state_n = self.quest_states[name]
-          local status = ""
-          local status_color = Colors.hex.gray
-          if state_n == quest.COMPLETED then
-            status = " - завершено"
-            state_n = math.huge
-          elseif state_n == quest.FAILED then
-            status = " - провалено"
-            state_n = math.huge
-          end
+      self.pages.journal = self:_generate_journal()
+      self:_render_current_page()
+    end,
 
-          return [[
-            <ul>
-              <h2><span color="%s">%s</span><span color="%s">%s</span></h2>
-              %s
-            </ul>
-          ]] % {
-            state_n > #this_quest.tasks and "8b7c99" or Colors.hex.white,
-            this_quest.header,
-            status_color, status,
-            Fun.iter(this_quest.tasks)
-              :take_n(state_n)
-              :enumerate()
-              :map(function(i, task) return [[
-                <span color="%s"><li>%s</li></span>
-              ]] % {i == state_n and Colors.hex.white or "8b7c99", task} end)
-              :reduce(function(sum, v) return v .. sum end, "")
-          }
-        end)
-        :reduce(Fun.op.concat, "")
-        self:_render_current_page()
+    _generate_journal = function(self)
+      local content = {
+        Html.h1 {"Журнал задач"},
+        Fun.iter(self.quests)
+          :filter(function(name) return self.quest_states[name] end)
+          :map(function(name, this_quest)
+            local state_n = self.quest_states[name]
+            local status = ""
+            local status_color = Colors.gray
+            if state_n == quest.COMPLETED then
+              status = " - завершено"
+              state_n = math.huge
+            elseif state_n == quest.FAILED then
+              status = " - провалено"
+              state_n = math.huge
+            end
+
+            return Html.span {
+              Html.h2 {
+                Html.span {
+                  color = state_n > #this_quest.tasks
+                    and Colors.from_hex("8b7c99")
+                    or Colors.white,
+                  this_quest.header,
+                },
+                Html.span {
+                  color = status_color,
+                  status,
+                },
+              },
+              Fun.iter(this_quest.tasks)
+                :take_n(state_n)
+                :enumerate()
+                :map(function(i, task)
+                  return Html.span {
+                    color = i == state_n
+                      and Colors.white
+                      or Colors.from_hex("8b7c99"),
+                    Html.li {task},
+                  }
+                end)
+                :unpack()
+            }
+          end)
+          :unpack()
+      }
+
+      return Html.html {Html.body(content)}
     end,
 
     _render_current_page = function(self)
