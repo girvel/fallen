@@ -62,8 +62,8 @@ local concrete_skill_proficiency = function(skill)
     name = translation.skill[skill],
     id = skill_proficiency_ids[skill],
 
-    -- TODO! implement effect call
-    modify_skill_score = function(self, entity, score)
+    modify_skill_score = function(self, entity, score, current_skill)
+      if skill ~= current_skill then return score end
       return score + experience.get_proficiency_modifier(entity.level)
     end,
   }
