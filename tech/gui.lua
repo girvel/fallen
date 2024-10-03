@@ -145,14 +145,15 @@ gui.action_icon = function(hotkey_data, index, frame)
     hotkey_data = hotkey_data,
     get_tooltip = function(self)
       local header = self.hotkey_data.name
-      local description = -Query(self.hotkey_data):get_description()
+      local description =
+        -Query(self.hotkey_data):get_description() or
+        -Query(self.hotkey_data.action):get_description()
+
       if not header and not description then return end
-      return Html(function()
-        return span {
-          header and h1 {header} or "",
-          description or "",
-        }
-      end)
+      return Html.span {
+        header and Html.h1 {header} or "",
+        description or "",
+      }
     end,
     _frame = frame,
 

@@ -10,14 +10,13 @@ local sound = require("tech.sound")
 
 local actions, _, static = Module("mech.creature.actions")
 
+-- TODO unify with creature methods?
 actions.get_melee_attack_roll = function(entity, slot)
-  local roll = D(20) + entity.proficiency_bonus
+  local roll = D(20) + entity.proficiency_bonus + abilities.get_melee_modifier(entity, slot)
 
   local weapon = entity.inventory[slot]
-  if not weapon then
-    roll = roll + abilities.get_modifier(entity.abilities.str)
-  else
-    roll = roll + weapon.bonus + abilities.get_melee_modifier(entity, slot)
+  if weapon then
+    roll = roll + weapon.bonus
   end
 
   return entity:get_effect("modify_attack_roll", roll)
@@ -26,7 +25,7 @@ end
 actions.get_melee_damage_roll = function(entity, slot)
   local weapon = entity.inventory[slot]
   if not weapon then
-    return D.roll({}, abilities.get_modifier(entity.abilities.str))
+    return D.roll({}, entity:get_modifier("str"))
   end
 
   local roll
@@ -118,7 +117,6 @@ actions.move = static .. action {
         :filter(function(e)
           return e
             and e ~= entity
-            and e.abilities
             and hostility.are_hostile(entity, e)
             and e.resources
             and e.resources.reactions > 0

@@ -8,21 +8,18 @@ return function()
 
   Log.info("Starting basic LOVE setup")
 
-  Pairs = require("lib.extensions.pairs")
-  Table = require("lib.extensions.table")
-  require("lib.extensions.string").inject(getmetatable(""))
-  Query = require("lib.types.query")
-  Math = require("lib.extensions.math")
-  Common = require("lib.extensions.common")
-  Debug = require("lib.extensions.debug")
-  Random = require("lib.extensions.random")
-  Entity = require("lib.extensions.entity")
-  Fn = require("lib.extensions.fn")
-
-  Html = require("lib.html")
-  Dump = require("lib.dump")
-  Dump.require_path = "lib.dump"
-  Module = require("lib.types.module")
+  _G.Table = require("lib.essential.table")
+  require("lib.essential.string").inject(getmetatable(""))
+  _G.Query = require("lib.essential.query")
+  _G.Math = require("lib.essential.math")
+  _G.Common = require("lib.essential.common")
+  _G.Debug = require("lib.essential.debug")
+  _G.Random = require("lib.essential.random")
+  _G.Entity = require("lib.essential.entity")
+  _G.Fn = require("lib.essential.fn")
+  _G.Keyword = require("lib.essential.keyword")
+  _G.Type = require("lib.essential.type")
+  _G.Module = require("lib.essential.module")
 
   Enum = require("lib.types.enum")
   Vector = require("lib.types.vector")
@@ -31,6 +28,10 @@ return function()
   Colors = require("lib.colors")
   OrderedMap = require("lib.types.ordered_map")
   Promise = require("lib.types.promise")
+
+  Html = require("lib.html")
+  Dump = require("lib.dump")
+  Dump.require_path = "lib.dump"
 
   require("lib.tiny_dump_patch")()
 end

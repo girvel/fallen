@@ -1,13 +1,4 @@
-local love_errorhandler = love.errorhandler
-love.errorhandler = function(msg)
-  if Debug.debug_mode then
-    return Debug.handle_error(msg)
-  end
-  Log.fatal(debug.traceback("Error: " .. tostring(msg), 2):gsub("\n[^\n]+$", ""))
-end
-
 love.graphics.setDefaultFilter("nearest", "nearest")
-
 require("kernel").initialize()
 
 
@@ -27,7 +18,7 @@ love.load = function(args)
   args = cli.parse(args)
 
   if not args.debug then
-    love.errorhandler = love_errorhandler
+    love.errorhandler = love.custom.old_errorhandler
   else
     jit.off()
   end
@@ -39,6 +30,12 @@ love.load = function(args)
   local seed = os.time()
   Log.info("Loading the game; seed", seed)
   math.randomseed(seed)
+
+  if args.tests then
+    -- TODO use love.custom function
+    love.is_running_tests = true
+    love.window.minimize()
+  end
 
   if args.load_save then
     game_save.read("last.fallen_save")
@@ -63,26 +60,6 @@ love.load = function(args)
     Query(State.rails.scenes[scene]).enabled = false
   end
 
-  if args.debug then
-    Table.extend(State.gui.character_creator.parameters, {
-      skills = {
-        sleight_of_hand = true,
-        arcana = true,
-        nature = true,
-      },
-      abilities_raw = {
-        str = 15,
-        dex = 15,
-        con = 15,
-        int = 8,
-        wis = 8,
-        cha = 8,
-      },
-      points = 0,
-      free_skills = 0,
-    })
-  end
-
   love.audio.stop()
   love.audio.setDistanceModel("exponent")
   if not args.disable_ambient then
@@ -101,10 +78,6 @@ love.load = function(args)
       {__serialize = function() return function() end end}
     )
     State.profiler.setclock(love.timer.getTime)
-  end
-
-  if args.tests then
-    love.is_running_tests = true
   end
 
   Log.info("Game is loaded")

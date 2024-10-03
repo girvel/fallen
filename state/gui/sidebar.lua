@@ -140,7 +140,7 @@ return Module("state.gui.sidebar", function()
         local highlighted = -Query(self.hovered_icon).hotkey_data.action.cost or {}
 
         local i = 3
-        for k, v in Pairs(State.player.resources) do
+        for k, v in Table.pairs(State.player.resources) do
           local color = Colors.white()
           if highlighted[k] then
             if highlighted[k] > v then

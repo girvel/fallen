@@ -14,7 +14,7 @@ return Module("state.gui.dialogue", function()
       local portrait = -Query(source).portrait
       self._entities = State:add_multiple(Table.concat(
         texting.generate(
-          "<pre>%s</pre>" % line, State.gui.wiki.styles,  -- TODO move styles?
+          texting.parse("<pre>%s</pre>" % line), State.gui.wiki.styles,  -- TODO move styles?
           math.min(love.graphics.getWidth() - 40, State.gui.TEXT_MAX_SIZE[1]),
           "dialogue_text", {}
         ),

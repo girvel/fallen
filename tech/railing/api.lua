@@ -1,3 +1,4 @@
+local experience = require("mech.experience")
 local quest = require("tech.quest")
 local texting = require("tech.texting")
 local fx = require("tech.fx")
@@ -97,10 +98,9 @@ end
 api.saving_throw = function(ability, dc)
   local success = abilities.saving_throw(State.player, ability, dc)
 
-  api.message.temporal('<span color="%s">[%s - %s]</span>' % {
-    success and Colors.hex.green or Colors.hex.red,
-    (translation.abilities[ability]):upper(),
-    success and "успех" or "провал",
+  api.message.temporal(Html.span {
+    color = success and Colors.green() or Colors.red(),
+    "[%s - %s]" % {translation.abilities[ability]:upper(), success and "успех" or "провал"},
   })
 
   return success
@@ -109,11 +109,15 @@ end
 api.ability_check_message = function(ability, dc, content_success, content_failure)
   local success = abilities.check(State.player, ability, dc)
 
-  api.message.positional('<span color="%s">[%s - %s]</span> %s' % {
-    success and Colors.hex.green or Colors.hex.red,
-    (translation.abilities[ability] or translation.skill[ability]):upper(),
-    success and "успех" or "провал",
-    success and content_success or content_failure,
+  api.message.positional(Html.span {
+    Html.span {
+      color = success and Colors.green() or Colors.red(),
+      "[%s - %s]" % {
+        (translation.abilities[ability] or translation.skill[ability]):upper(),
+        success and "успех" or "провал",
+      },
+    },
+    " %s" % {success and content_success or content_failure},
   })
 
   return success
@@ -158,7 +162,13 @@ local SLOW_READING_SPEED = 10
 
 api.message.temporal = function(content, params)
   local entities = message(content, params)
-  local life_time = -Query(params).life_time or content:utf_len() / SLOW_READING_SPEED + 2
+  local life_time = -Query(params).life_time
+    or Fun.iter(entities)
+      :map(function(e)
+        if not -Query(e).sprite.text then return 0 end
+        return (type(e.sprite.text) == "string" and e.sprite.text or e.sprite.text[2]):utf_len()
+      end)
+      :sum() / SLOW_READING_SPEED + 2
 
   for _, e in ipairs(entities) do
     State:add(e, {life_time = life_time})
@@ -189,6 +199,11 @@ api.update_quest = function(changes)
     Log.info("Quest %s: %s -> %s" % {k, states[k], v})
     states[k] = v
   end
+end
+
+api.checkpoint_base = function()
+  State.gui.creator._ability_points = 0
+  State.gui.creator._mixin.base_abilities = abilities(15, 15, 15, 8, 8, 8)
 end
 
 return api

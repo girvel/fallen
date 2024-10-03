@@ -1,4 +1,6 @@
+local class = require("mech.class")
 local feats = require("mech.feats")
+local abilities = require("mech.abilities")
 
 
 local races, _, static = Module("mech.races")
@@ -32,30 +34,50 @@ races.dwarf = static {
 }
 
 races.human = static {
+  name = "Человек",
   codename = "human",
   skin_color = Colors.from_hex("8ed3dc"),
   movement_speed = 6,
-  bonuses = {1, 1, 1, 1, 1, 1},
-  progression_table = {},
+  progression_table = {
+    [1] = {
+      class.universal_ability_bonus(1),
+      class.skill_proficiency(abilities.skills),
+      class.skill_proficiency(abilities.skills),
+    },
+  },
 }
 
 races.variant_human_1 = static {
+  name = "Человек (вариант) +1/+1",
   codename = "variant_human_1",
   skin_color = Colors.from_hex("8ed3dc"),
   movement_speed = 6,
   bonuses = {1, 1},
   progression_table = {
-    [1] = {feats.perk},
+    [1] = {
+      class.ability_bonus(1),
+      class.ability_bonus(1),
+      class.skill_proficiency(abilities.skills),
+      class.skill_proficiency(abilities.skills),
+      feats.perk,
+    },
   },
 }
 
 races.variant_human_2 = static {
+  name = "Человек (вариант) +2",
   codename = "variant_human_2",
   skin_color = Colors.from_hex("8ed3dc"),
   movement_speed = 6,
   bonuses = {2},
   progression_table = {
-    [1] = {feats.perk},
+    [1] = {
+      class.ability_bonus(2),
+      class.skill_proficiency(abilities.skills),
+      class.skill_proficiency(abilities.skills),
+      class.skill_proficiency(abilities.skills),
+      feats.perk,
+    },
   },
 }
 

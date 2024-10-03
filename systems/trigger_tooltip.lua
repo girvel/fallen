@@ -1,5 +1,6 @@
 local trigger_tooltip, module_mt, static = Module("systems.trigger_tooltip")
 
+-- TODO maybe join with detect_hover system?
 trigger_tooltip.system = static .. Tiny.processingSystem {
   base_callback = "update",
   filter = Tiny.requireAll("get_tooltip", "position", "size"),

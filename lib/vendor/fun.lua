@@ -802,6 +802,10 @@ end
 methods.totable = method0(totable)
 exports.totable = export0(totable)
 
+methods.unpack = function(self)
+  return unpack(self:totable())
+end
+
 local tomap = function(gen_x, param_x, state_x)
     local tab, key, val = {}
     while true do
@@ -1054,6 +1058,11 @@ local operator = {
     lor = function(a, b) return a or b end,
     lnot = function(a) return not a end,
     truth = function(a) return not not a end,
+
+    ----------------------------------------------------------------------------
+    -- Other operators
+    ----------------------------------------------------------------------------
+    call = function(self, ...) return self(...) end,
 }
 exports.operator = operator
 methods.operator = operator

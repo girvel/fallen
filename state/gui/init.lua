@@ -94,18 +94,17 @@ module_mt.__call = function(_)
     {"dialogue_portrait", 2, 1, gui.offsets.portrait},
     {"dialogue_text", 1, 1, gui.offsets.dialogue},
     {"wiki", 1, 1, gui.offsets.full_screen_text},
-    {"character_creator", 1, 1, gui.offsets.creator_text},
+    {"creator_text", 1, 1, gui.offsets.creator_text},
     {"scene_popup_background", 1, 1, gui.offsets.scene},
     {"scene_popup", 1, 1, gui.offsets.scene},
     {"tooltip_background", 1, 1, gui.offsets.tooltip},
     {"tooltip", 1, 1, gui.offsets.tooltip},
   })
 
-  -- TODO maybe move this?
   result.wiki = require("state.gui.wiki")(result)
   result.sidebar = require("state.gui.sidebar")()
   result.dialogue = require("state.gui.dialogue")()
-  result.character_creator = require("state.gui.character_creator")()
+  result.creator = require("state.gui.creator")(result)
   result.text_input = require("state.gui.text_input")()
   result.tooltip = require("state.gui.tooltip")(result)
   result.hint = require("state.gui.hint")()
@@ -121,7 +120,7 @@ gui.offsets.scene = static .. function()
   local window_size = Vector({love.graphics.getDimensions()})
   local border_size = (window_size / 2 - Vector.one * scene_k):map(math.floor)
   local player_position = animated.get_render_position(State.player) * scene_k
-  local grid_size = State.grids.solids.size * scene_k
+  --local grid_size = State.grids.solids.size * scene_k
 
   local prev = State.gui.views.scene_fx.offset
   local target = -Vector.use(Math.median,
@@ -157,11 +156,17 @@ end
 
 gui.offsets.creator_text = static .. function()
   local w, h = love.graphics.getDimensions()
-  local sx, sy = unpack(State.gui.TEXT_MAX_SIZE)
-  return (Vector({
-    math.max(30, w - sx),
-    math.max(30, h - sy) + State.gui.character_creator.parameters.scroll
-  }) / 2):ceil()
+  local tw, th = unpack(State.gui.TEXT_MAX_SIZE)
+  local marginx = math.ceil(math.max(30, w - tw) / 2)
+  local marginy = math.ceil(math.max(30, h - th) / 2)
+  return Vector {
+    marginx,
+    Math.median(
+      marginy,
+      w / 3 + State.gui.creator.scroll,
+      State.gui.creator.size[2] + marginy * 2 - h
+    ),
+  }
 end
 
 gui.offsets.actions = static .. function()

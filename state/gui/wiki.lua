@@ -1,7 +1,6 @@
 local sound = require("tech.sound")
 local quest = require("tech.quest")
 local texting = require("tech.texting")
-local html = require("tech.texting.html")
 
 
 local load_wiki = function(path)
@@ -10,13 +9,13 @@ local load_wiki = function(path)
     :filter(function(name) return name:find(pattern) end)
     :map(function(name)
       local _, _, codename = name:find(pattern)
-      return {codename, love.filesystem.read(path .. "/" .. name)}
+      return {codename, texting.parse(love.filesystem.read(path .. "/" .. name))}
     end)
     :totable()
 
   table.sort(loaded_pages, function(a, b)
-    local title_a = html.get_title(a[2])
-    local title_b = html.get_title(b[2])
+    local title_a = a[2]:get_title()
+    local title_b = b[2]:get_title()
 
     local appendix = "Приложение"
     if title_a:starts_with(appendix) then
@@ -32,21 +31,30 @@ local load_wiki = function(path)
 
   loaded_pages = Fun.iter(loaded_pages):map(unpack):tomap()
 
-  loaded_pages.codex = loaded_pages.codex % Fun.iter(loaded_pages)
-    :filter(function(page) return page ~= "codex" end)
-    :map(function(page, content)
-      return '<li if="html.is_available(pages.%s, args)"><a href="%s">%s</a></li>\n' % {
-        page, page, html.get_title(content),
+  loaded_pages.codex
+    :find_by_name("body")
+    :find_by_name("content").content
+  = Fun.iter(loaded_pages)
+    :filter(function(page_name) return page_name ~= "codex" end)
+    :map(function(page_name, page)
+      return Html.li {
+        ["if"] = function(args)
+          return page.attributes["if"](args)
+        end,
+        Html.a {
+          href = page_name,
+          page:get_title(),
+        }
       }
     end)
-    :reduce(Fun.op.concat, "")
+    :totable()
 
   return loaded_pages
 end
 
 return Module("state.gui.wiki", function(gui)
   return {
-    pages = load_wiki("assets/wiki"),
+    pages = load_wiki("assets/html/wiki"),
     codex = {},
     history = {},
     current_history_index = 0,
@@ -55,7 +63,7 @@ return Module("state.gui.wiki", function(gui)
     quests = {},
     quest_states = {},
 
-    styles = Table.extend(gui.styles, {
+    styles = Table.extend({}, gui.styles, {
       h1 = {
         font_size = 24,
       },
@@ -82,47 +90,58 @@ return Module("state.gui.wiki", function(gui)
     show_journal = function(self)
       self.history = {"journal"}
       self.current_history_index = 1
-      self.pages.journal = [[
-        <html>
-          <body>
-            <h1>Журнал задач</h1>
-            %s
-          </body>
-        </html>
-      ]] % Fun.iter(self.quests)
-        :filter(function(name) return self.quest_states[name] end)
-        :map(function(name, this_quest)
-          local state_n = self.quest_states[name]
-          local status = ""
-          local status_color = Colors.hex.gray
-          if state_n == quest.COMPLETED then
-            status = " - завершено"
-            state_n = math.huge
-          elseif state_n == quest.FAILED then
-            status = " - провалено"
-            state_n = math.huge
-          end
+      self.pages.journal = self:_generate_journal()
+      self:_render_current_page()
+    end,
 
-          return [[
-            <ul>
-              <h2><span color="%s">%s</span><span color="%s">%s</span></h2>
-              %s
-            </ul>
-          ]] % {
-            state_n > #this_quest.tasks and "8b7c99" or Colors.hex.white,
-            this_quest.header,
-            status_color, status,
-            Fun.iter(this_quest.tasks)
-              :take_n(state_n)
-              :enumerate()
-              :map(function(i, task) return [[
-                <span color="%s"><li>%s</li></span>
-              ]] % {i == state_n and Colors.hex.white or "8b7c99", task} end)
-              :reduce(function(sum, v) return v .. sum end, "")
-          }
-        end)
-        :reduce(Fun.op.concat, "")
-        self:_render_current_page()
+    _generate_journal = function(self)
+      local content = {
+        Html.h1 {"Журнал задач"},
+        Fun.iter(self.quests)
+          :filter(function(name) return self.quest_states[name] end)
+          :map(function(name, this_quest)
+            local state_n = self.quest_states[name]
+            local status = ""
+            local status_color = Colors.gray()
+            if state_n == quest.COMPLETED then
+              status = " - завершено"
+              state_n = math.huge
+            elseif state_n == quest.FAILED then
+              status = " - провалено"
+              state_n = math.huge
+            end
+
+            return Html.span {
+              Html.h2 {
+                Html.span {
+                  color = state_n > #this_quest.tasks
+                    and Colors.from_hex("8b7c99")
+                    or Colors.white(),
+                  this_quest.header,
+                },
+                Html.span {
+                  color = status_color,
+                  status,
+                },
+              },
+              Fun.iter(this_quest.tasks)
+                :take_n(state_n)
+                :enumerate()
+                :map(function(i, task)
+                  return Html.span {
+                    color = i == state_n
+                      and Colors.white()
+                      or Colors.from_hex("8b7c99"),
+                    Html.li {task},
+                  }
+                end)
+                :unpack()
+            }
+          end)
+          :unpack()
+      }
+
+      return Html.html {Html.body(content)}
     end,
 
     _render_current_page = function(self)
@@ -135,11 +154,9 @@ return Module("state.gui.wiki", function(gui)
       local args = {
         codex = self.codex,
         pages = self.pages,
-        html = html,
         api = require("tech.railing").api,
       }
 
-      html.run_scripts(page, args)
       self.text_entities = State:add_multiple(texting.generate(
         page, self.styles, State.gui.TEXT_MAX_SIZE[1], "wiki", args
       ))

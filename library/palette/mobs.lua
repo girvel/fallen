@@ -20,7 +20,7 @@ mobs.player = player
 
 local dreamer_engineer_mixin = {
   max_hp = 22,
-  abilities = abilities(16, 14, 12, 8, 8, 8),
+  base_abilities = abilities(16, 14, 12, 8, 8, 8),
   faction = "dreamers_detective",
 }
 
@@ -53,7 +53,7 @@ local engineer_mixins = {
     inventory = {gloves = items.yellow_gloves()},
     faction = "half_orc",
 
-    abilities = abilities(18, 6, 12, 8, 8, 8),
+    base_abilities = abilities(18, 6, 12, 8, 8, 8),
     perks = {
       class.save_proficiency("dex"),
     },
@@ -94,7 +94,7 @@ mobs.old_dreamer = function()
     direction = "up",
     inventory = {},
     max_hp = 15,
-    abilities = abilities(10, 10, 10, 10, 10, 10),
+    base_abilities = abilities(10, 10, 10, 10, 10, 10),
     ai = weak_ai(),
   })
 end
@@ -116,7 +116,7 @@ mobs.markis = function()
         head = body_parts.furry_head(),
       },
       max_hp = 15,
-      abilities = abilities(10, 10, 10, 10, 10, 10),
+      base_abilities = abilities(10, 10, 10, 10, 10, 10),
       ai = weak_ai(),
     },
     interactive.detector(true)
@@ -130,7 +130,7 @@ mobs.dreamer = function()
     direction = "up",
     inventory = {},
     max_hp = 15,
-    abilities = abilities(10, 10, 10, 10, 10, 10),
+    base_abilities = abilities(10, 10, 10, 10, 10, 10),
   })
 end
 
@@ -145,7 +145,7 @@ mobs.combat_dreamer = function()
 
     armor_class = 16,
     max_hp = 32,
-    abilities = abilities(15, 10, 14, 7, 12, 7),
+    base_abilities = abilities(15, 10, 14, 7, 12, 7),
     inventory = {
       main_hand = items.mace(),
       other_hand = items.spiked_shield(),
@@ -161,7 +161,7 @@ mobs.phantom_knight = function()
     race = races.phantom,
     direction = "right",
     max_hp = 12,
-    abilities = abilities(0, 14, 0, 0, 0, 0),
+    base_abilities = abilities(0, 14, 0, 0, 0, 0),
     faction = "monster",
     initiative_bonus = -30,
   })
@@ -174,7 +174,7 @@ mobs.possessed = function()
     race = Random.choice(dreamer_races),
     direction = "left",
     max_hp = 18,
-    abilities = abilities(14, 13, 12, 9, 11, 10),
+    base_abilities = abilities(14, 13, 12, 9, 11, 10),
     faction = "monster",
     inventory = {main_hand = {
       damage_roll = D(8),

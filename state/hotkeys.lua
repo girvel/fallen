@@ -163,23 +163,10 @@ return Module("state.hotkeys", function(modes)
     name = "мастер двуручного оружия",
     codename = "toggle_gwm",
     _perk = feats.great_weapon_master,
-    get_description = function(self)
-      return Html(function()
-        return stats {
-          "%+i" % self._perk.attack_modifier, " к атаке", br(),
-          "%+i" % self._perk.damage_modifier, " к урону", br(),
-          "Двуручное или полуторное оружие"
-        }
-      end)
-    end,
     hidden = function(self)
       return not Table.contains(State.player.perks, self._perk)
     end,
-    pre_action = function(self)
-      if self:hidden() then return end
-      local params = State.player.effect_params[self._perk]
-      params.enabled = not params.enabled
-    end,
+    action = feats.great_weapon_master.action,
     is_passive_enabled = function(self)
       return State.player.effect_params[self._perk].enabled
     end,
@@ -285,34 +272,35 @@ return Module("state.hotkeys", function(modes)
     {{"e", "enter"}, "zero"},
   }) do
     local keys, direction_name, direction_translation = unpack(t)
-    define_hotkey(hotkeys, {"character_creator"}, keys, {
+    define_hotkey(hotkeys, {"creator"}, keys, {
       name = direction_translation,
       codename = direction_name,
+      hidden = Fn(true),
       pre_action = function()
-        State.gui.character_creator:move_cursor(direction_name)
+        State.gui.creator:move_cursor(Vector[direction_name])
       end,
     })
   end
 
-  define_hotkey(hotkeys, {"character_creator"}, {"enter"}, {
+  define_hotkey(hotkeys, {"creator"}, {"enter"}, {
     name = "Создать",
     codename = "submit",
     pre_action = function()
-      State.gui.character_creator:submit()
+      State.gui.creator:submit()
     end,
     get_availability = function()
-      return State.gui.character_creator:can_submit()
+      return State.gui.creator:can_submit()
     end,
   })
 
-  define_hotkey(hotkeys, {"character_creator"}, {"esc"}, {
+  define_hotkey(hotkeys, {"creator"}, {"esc"}, {
     name = "Закрыть редактор",
     codename = "exit",
     pre_action = function()
-      State.gui.character_creator:close()
+      State.gui.creator:close()
     end,
     get_availability = function()
-      return State.gui.character_creator:can_close()
+      return State.gui.creator:is_readonly()
     end,
   })
 
@@ -373,7 +361,7 @@ return Module("state.hotkeys", function(modes)
   define_hotkey(hotkeys, {"free", "combat", "dialogue", "dialogue_options", "reading"}, {"n"}, {
     name = "редактор персонажа",
     codename = "open_creator",
-    pre_action = function() State.gui.character_creator:refresh() end,
+    pre_action = function() State.gui.creator:refresh() end,
   })
 
   return hotkeys

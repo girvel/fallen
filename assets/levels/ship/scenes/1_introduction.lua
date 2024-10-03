@@ -65,7 +65,7 @@ return function()
         api.line(State.player, "Но кто <hate>я</hate>?")
 
         State.player.experience = experience.for_level[2]
-        State.gui.character_creator:refresh()
+        State.gui.creator:refresh()
         State.player.in_cutscene = false
       end,
     },
@@ -104,7 +104,7 @@ return function()
           },
         }
 
-        local sorted_abilities = Fun.iter(State.player.abilities)
+        local sorted_abilities = Fun.iter(State.player.base_abilities)
           :map(function(...) return {...} end)
           :totable()
         table.sort(

@@ -12,16 +12,24 @@ fighter.second_wind = static {
   codename = "second_wind",
 
   action = static .. action {
+    name = "второе дыхание",
+    codename = "second_wind",
+
+    _get_description = action.descriptions.healing,
+
     cost = {
       bonus_actions = 1,
       second_wind = 1,
     },
+
     get_healing_roll = function(self, entity)
       return D(10) + entity.level
     end,
+
     _get_availability = function(self, entity)
       return entity.hp < entity:get_max_hp()
     end,
+
     _run = function(self, entity)
       State:add(fx("assets/sprites/fx/second_wind", "fx_under", entity.position))
       sound.play("assets/sounds/second_wind.mp3", .3, entity.position, "small")
@@ -41,10 +49,18 @@ fighter.second_wind = static {
 
 fighter.action_surge = static {
   codename = "action_surge",
+
   action = static .. action {
+    name = "всплеск действий",
+    codename = "action_surge",
     cost = {
       action_surge = 1,
     },
+    _get_description = function(self, entity)
+      return Html.stats {
+        "+1 действие на один ход",
+      }
+    end,
     _run = function(self, entity)
       State:add(fx("assets/sprites/fx/action_surge_proto", "fx_under", entity.position))
       sound.play("assets/sounds/action_surge.mp3", .3, entity.position, "small")
@@ -64,29 +80,66 @@ fighter.action_surge = static {
 
 fighter.styles = static {
   two_handed = static {
+    name = "бой двуручным оружием",
     codename = "two_handed_style",
+
+    _reroll = {1, 2},
+
+    get_description = function(self)
+      local start = table.concat(self._reroll, ", ", 1, #self._reroll - 1)
+      local finish = Table.last(self._reroll)
+
+      return Html.span {
+        Html.p {Html.stats {
+          "Перебросить %s или %s на костях урона оружия, взятого в обе руки." % {
+            start, finish
+          },
+        }},
+        Html.p {"Повышает средний урон для двуручного оружия и полуторного, взятого в обе руки"},
+      }
+    end,
+
     modify_damage_roll = function(self, entity, roll)
       local weapon = entity.inventory.main_hand
       if not (weapon and (weapon.tags.two_handed or weapon.tags.versatile)) then
         return roll
       end
-      return roll:extended({reroll = {1, 2}})
+      return roll:extended({reroll = self._reroll})
     end,
   },
 
   duelist = static {
     codename = "duelist",
+    name = "дуэлянт",
+
+    _bonus = 2,
+
+    get_description = function(self)
+      return Html.stats {
+        "Бонус %+i к урону одноручным рукопашным оружием, если во второй руке нет оружия."
+          % self._bonus
+      }
+    end,
+
     modify_damage_roll = function(self, entity, roll)
       local weapon = entity.inventory.main_hand
-      if not weapon or weapon.tags.two_handed then
+      if not weapon or weapon.tags.two_handed or entity.inventory.other_hand then
         return roll
       end
-      return roll + 2
+      return roll + self._bonus
     end,
   },
 
   two_weapon_fighting = static {
     codename = "two_weapon_fighting",
+    name = "бой двумя оружиями",
+
+    get_description = function(self, entity)
+      return Html.stats {
+        "Добавляет модификатор характеристики к урону от атаки второй рукой."
+      }
+    end,
+
     modify_damage_roll = function(self, entity, roll, slot)
       local weapon = entity.inventory.other_hand
       if not weapon or slot ~= "other_hand" then
@@ -98,18 +151,28 @@ fighter.styles = static {
 }
 
 fighter.fighting_style = static .. class.choice {
-  fighter.styles.two_handed,
-  fighter.styles.duelist,
-  fighter.styles.two_weapon_fighting
+  name = "стиль боя",
+  options = {
+    fighter.styles.two_handed,
+    fighter.styles.duelist,
+    fighter.styles.two_weapon_fighting
+  },
 }
 
 fighter.fighting_spirit = static {
   codename = "fighting_spirit",
   action = static .. action {
+    name = "боевой дух",
+    codename = "fighting_spirit",
     cost = {
       fighting_spirit = 1,
       bonus_actions = 1,
     },
+    _get_description = function(self, entity)
+      return Html.stats {
+        "+5 здоровья и преимущество на атаки до конца хода.",
+      }
+    end,
     _run = function(self, entity)
       State:add(fx("assets/sprites/fx/fighting_spirit", "fx_under", entity.position))
       entity.advantage_flag = true
@@ -127,7 +190,10 @@ fighter.fighting_spirit = static {
   modify_actions = class.provide_action,
 }
 
+local skills = "athletics perception intimidation history insight" / " "
+
 fighter.class = static {
+  name = "воин",
   codename = "fighter",
   hp_die = 10,
 
@@ -135,6 +201,7 @@ fighter.class = static {
     [1] = {
       class.hit_dice,
       class.save_proficiency("con", "str"),
+      class.skill_proficiency(skills),
       fighter.fighting_style,
       fighter.second_wind,
     },
@@ -143,6 +210,7 @@ fighter.class = static {
     },
     [3] = {
       fighter.fighting_spirit,
+      class.skill_proficiency("history insight persuasion" / " "),
     },
   },
 }

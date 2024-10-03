@@ -2,6 +2,8 @@
 -- https://github.com/bjornbytes/lust
 -- MIT LICENSE
 
+local inspect = require("lib.vendor.inspect")
+
 local lust = {}
 lust.level = 0
 lust.passes = 0
@@ -144,8 +146,8 @@ local paths = {
   equal = {
     test = function(v, x)
       return strict_eq(v, x),
-        'expected ' .. tostring(v) .. ' and ' .. tostring(x) .. ' to be exactly equal',
-        'expected ' .. tostring(v) .. ' and ' .. tostring(x) .. ' to not be exactly equal'
+        'expected ' .. inspect(v) .. ' and ' .. inspect(x) .. ' to be exactly equal',
+        'expected ' .. inspect(v) .. ' and ' .. inspect(x) .. ' to not be exactly equal'
     end
   },
   have = {

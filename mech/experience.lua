@@ -15,4 +15,13 @@ experience.get_proficiency_modifier = function(level)
   return 1 + math.ceil(level / 4)
 end
 
+experience.get_level = function(xp)
+  if xp < 0 then return 0 end
+  return Fun.iter(experience.for_level)
+    :enumerate()
+    :filter(function(level, exp) return exp <= xp end)
+    :map(function(level, exp) return level end)
+    :max()
+end
+
 return experience
