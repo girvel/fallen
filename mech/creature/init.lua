@@ -91,14 +91,6 @@ creature._methods = static {
     self.potential_actions = self:get_actions()
 
     self.hp = self.hp + self:get_max_hp() - old_max_hp
-    -- TODO! redo skills
-    -- self.skill_throws = Fun.iter(abilities.skill_bases)
-    --   :map(function(skill, a)
-    --     return skill, D(20)
-    --       + abilities.get_modifier(self.abilities[a])
-    --       + (-Query(self.skills)[skill] and 2 or 0)
-    --   end)
-    --   :tomap()
   end,
 
   get_saving_throw = function(self, ability)

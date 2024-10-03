@@ -2,8 +2,6 @@ local lust = require("lib.vendor.lust")
 local describe = lust.describe
 local it = lust.it
 local expect = lust.expect
--- TODO! automate integration tests
--- TODO! clean up serialization tests
 
 local sprite = require("tech.sprite")
 
