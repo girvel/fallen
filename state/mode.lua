@@ -11,7 +11,7 @@ module_mt.__call = function(_, views)
       dialogue = "*",
       dialogue_options = "*",
       reading = fullscreen_reading .. " wiki",
-      character_creator = fullscreen_reading .. " character_creator",
+      creator = fullscreen_reading .. " creator_text",
       text_input = "",
       death = "",
     })
@@ -27,7 +27,7 @@ module_mt.__call = function(_, views)
         if State.gui.text_input.active then
           return self.text_input
         elseif State.gui.creator:is_active() then
-          return self.character_creator
+          return self.creator
         elseif State.player.hp <= 0 then
           return self.death
         elseif State.gui.wiki.text_entities then

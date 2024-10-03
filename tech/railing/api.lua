@@ -1,3 +1,4 @@
+local experience = require("mech.experience")
 local quest = require("tech.quest")
 local texting = require("tech.texting")
 local fx = require("tech.fx")

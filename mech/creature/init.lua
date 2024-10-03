@@ -109,13 +109,21 @@ creature._methods = static {
     )
   end,
 
-  get_modifier = function(self, ability)
-    return abilities.get_modifier(self:get_effect(
-      "modify_ability_score",
-      self.base_abilities[ability],
-      ability
-    ))
-  end
+  get_modifier = function(self, name)
+    if Table.contains(abilities.list, name) then
+      return abilities.get_modifier(self:get_effect(
+        "modify_ability_score",
+        self.base_abilities[name],
+        name
+      ))
+    end
+
+    return self:get_effect(
+      "modify_skill_score",
+      self:get_modifier(abilities.skill_bases[name]),
+      name
+    )
+  end,
 }
 
 module_mt.__call = function(_, animation_pack, object)

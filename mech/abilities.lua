@@ -70,18 +70,16 @@ local ability_check_sound = {
   failure = sound.multiple("assets/sounds/check_failed", 0.3),
 }
 
-abilities.check = function(entity, skill_or_ability, dc)
-  local roll = Table.contains(abilities.list, skill_or_ability)
-    and D(20) + entity:get_modifier(abilities[skill_or_ability])
-    or entity.skill_throws[skill_or_ability]
+abilities.check = function(entity, name, dc)
+  local roll = D(20) + entity:get_modifier(name)
 
   if not roll then
-    error("No abilities or skill %s" % skill_or_ability, 2)
+    error("No abilities or skill %s" % name, 2)
   end
 
   local result = roll:roll()
   Log.info("%s rolls check %s: %s against %s" % {
-    Entity.name(entity), skill_or_ability, result, dc
+    Entity.name(entity), name, result, dc
   })
 
   local success = result >= dc

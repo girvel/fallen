@@ -13,7 +13,7 @@ module_mt.__call = function(_, perk)
     local choices = creator._choices
     choices[perk] = choices[perk] or next_value(perk.options, Table.last(perk.options), 1)
     creator._active_choices[perk] = true
-    -- TODO! can be null
+    -- TODO can be null
 
     local free_space = Fun.iter(perk.options)
       :map(function(o) return Entity.name(o):utf_len() end)
