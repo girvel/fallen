@@ -39,8 +39,11 @@ end
 
 transformers.map.a = function(node, children, styles)
   return Fun.iter(children):map(function(child)
-    -- TODO! directly generate a function
-    child.link = node.attributes.href
+    local link = node.attributes.href
+    child.on_click = function()
+      State.gui.wiki:show(link)
+    end
+    child.link_flag = true
     return Table.extend({}, styles.a or {}, child)
   end):totable()
 end
