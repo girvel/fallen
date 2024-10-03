@@ -272,7 +272,7 @@ return Module("state.hotkeys", function(modes)
     {{"e", "enter"}, "zero"},
   }) do
     local keys, direction_name, direction_translation = unpack(t)
-    define_hotkey(hotkeys, {"character_creator"}, keys, {
+    define_hotkey(hotkeys, {"creator"}, keys, {
       name = direction_translation,
       codename = direction_name,
       hidden = Fn(true),
@@ -282,7 +282,7 @@ return Module("state.hotkeys", function(modes)
     })
   end
 
-  define_hotkey(hotkeys, {"character_creator"}, {"enter"}, {
+  define_hotkey(hotkeys, {"creator"}, {"enter"}, {
     name = "Создать",
     codename = "submit",
     pre_action = function()
@@ -293,7 +293,7 @@ return Module("state.hotkeys", function(modes)
     end,
   })
 
-  define_hotkey(hotkeys, {"character_creator"}, {"esc"}, {
+  define_hotkey(hotkeys, {"creator"}, {"esc"}, {
     name = "Закрыть редактор",
     codename = "exit",
     pre_action = function()

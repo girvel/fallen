@@ -153,7 +153,7 @@ module_mt.__call = function(_, systems)
 	}
 
   local modes = {
-    "character_creator", "death", "reading", "dialogue_options", "dialogue", "free", "combat",
+    "creator", "death", "reading", "dialogue_options", "dialogue", "free", "combat",
     "text_input",
   }
 
