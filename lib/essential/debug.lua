@@ -28,8 +28,7 @@ local status = function()
 
   for i, data in ipairs(_stack[stack_index].locals) do
     result = result .. "  %s = %s\n" % {
-      -- TODO! fix debug console
-      data.name, Common.indent(Inspect(data.value, {depth = 1, keys_limit = 5})):sub(3),
+      data.name, Inspect(data.value, {depth = 1, keys_limit = 5}):indent():sub(3),
     }
   end
 
