@@ -69,10 +69,6 @@ transformers.map.hate = function(node, children, styles)
   )
 end
 
-transformers.map.script = function()
-  return {}
-end
-
 transformers.map.stats = function(node, children, styles)
   return Fun.iter(children)
     :map(function(c) return Table.extend({color = Colors.from_hex("619cc3")}, c) end)

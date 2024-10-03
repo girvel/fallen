@@ -31,9 +31,7 @@ module_mt.__call = function(_, gui)
 
       local page = Html.pre {
         "   ", Html.h1 {"Редактор персонажа"},
-        -- TODO!
         forms.abilities(),
-        -- forms.skills(),
         forms.race(),
         forms.class(),
       }

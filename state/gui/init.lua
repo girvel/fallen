@@ -155,7 +155,6 @@ gui.offsets.full_screen_text = static .. function()
 end
 
 gui.offsets.creator_text = static .. function()
-  -- TODO! reimplement scroll
   local w, h = love.graphics.getDimensions()
   local tw, th = unpack(State.gui.TEXT_MAX_SIZE)
   local marginx = math.ceil(math.max(30, w - tw) / 2)

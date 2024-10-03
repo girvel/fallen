@@ -210,6 +210,7 @@ fighter.class = static {
     },
     [3] = {
       fighter.fighting_spirit,
+      class.skill_proficiency("history insight persuasion" / " "),
     },
   },
 }

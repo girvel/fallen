@@ -157,7 +157,6 @@ return Module("state.gui.wiki", function(gui)
         api = require("tech.railing").api,
       }
 
-      -- TODO! run scripts on texting.generate
       self.text_entities = State:add_multiple(texting.generate(
         page, self.styles, State.gui.TEXT_MAX_SIZE[1], "wiki", args
       ))
