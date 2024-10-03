@@ -91,7 +91,7 @@ describe("Html generator", function()
     end)
   end)
 
-  describe("self().parse", function()
+  describe("Html().parse", function()
     it("can parse HTML", function()
       assert.same(
         {
@@ -162,6 +162,25 @@ describe("Html generator", function()
           content = {},
         },
         html().parse("<br />")
+      )
+    end)
+  end)
+
+  describe("Html().build_table", function()
+    it("builds HTML table from 2d matrix", function()
+      assert.same(
+        html.table {
+          html.tr {
+            html.td {"1"}, html.td {"2"},
+          },
+          html.tr {
+            html.td {html.span {"1", "4"}}, html.td {"28"},
+          },
+        },
+        html().build_table {
+          {"1", "2"},
+          {html.span {"1", tostring(2 + 2)}, "28"}
+        }
       )
     end)
   end)

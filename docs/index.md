@@ -8,4 +8,5 @@ This is an index page of Fallen's documentation.
 
 ## Module documentation:
 
+- [lib.html](/lib/_docs/html.md) -- HTML generation, storage & parsing
 - [tech.texting](/tech/_docs/texting.md) -- text rendering & manipulation

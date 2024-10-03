@@ -124,12 +124,10 @@ end
 
 local build_cell
 
--- TODO! test
--- TODO! document
 html_api.build_table = function(matrix)
-  return Html.table(Fun.iter(matrix)
+  return html.table(Fun.iter(matrix)
     :map(function(row)
-      return Html.tr(Fun.iter(row):map(build_cell):totable())
+      return html.tr(Fun.iter(row):map(build_cell):totable())
     end)
     :totable()
   )
@@ -139,7 +137,7 @@ build_cell = function(content)
   if -Query(content).__type == html_api.tag and content.name == "tline" then
     return content
   end
-  return Html.td {content}
+  return html.td {content}
 end
 
 return html

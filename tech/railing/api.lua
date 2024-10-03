@@ -162,7 +162,13 @@ local SLOW_READING_SPEED = 10
 
 api.message.temporal = function(content, params)
   local entities = message(content, params)
-  local life_time = -Query(params).life_time or content:utf_len() / SLOW_READING_SPEED + 2
+  local life_time = -Query(params).life_time
+    or Fun.iter(entities)
+      :map(function(e)
+        if not -Query(e).sprite.text then return 0 end
+        return (type(e.sprite.text) == "string" and e.sprite.text or e.sprite.text[2]):utf_len()
+      end)
+      :sum() / SLOW_READING_SPEED + 2
 
   for _, e in ipairs(entities) do
     State:add(e, {life_time = life_time})
