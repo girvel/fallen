@@ -28,10 +28,10 @@ ldtk.load = function(world_filepath, level_id, params)
     if get_identifier(instance) == "entity_capture" then
       to_capture
         [get_field(instance, "layer").__value:lower()]
-        [Vector(instance.__grid)]
+        [Vector(instance.__grid) + Vector.one]
         = get_field(instance, "rails_name").__value:lower()
     else
-      positions[instance.fieldInstances[1].__value:lower()] = Vector(instance.__grid)
+      positions[instance.fieldInstances[1].__value:lower()] = Vector(instance.__grid) + Vector.one
     end
   end
 
@@ -69,7 +69,7 @@ layer_handlers = {
     return Fun.iter(layer.gridTiles)
       :map(function(instance)
         local result = Table.extend(layer_palette[instance.t + 1](), {
-          position = Vector(instance.px) / constants.CELL_DISPLAY_SIZE,
+          position = Vector(instance.px) / constants.CELL_DISPLAY_SIZE + Vector.one,
         })
         local rails_name = -Query(to_capture)[layer_id][result.position]
         if rails_name then
@@ -87,11 +87,14 @@ layer_handlers = {
     local layer_palette = palette[layer_id]
     return Fun.iter(layer.entityInstances)
       :map(function(instance)
-        local get_args = loadstring("return " .. (-Query(get_field(instance, "args")).__value or ""))
+        local get_args = assert(loadstring(
+          "return " .. (-Query(get_field(instance, "args")).__value or "")
+        ))
+
         local result = Table.extend(
           layer_palette[get_identifier(instance)](get_args()),
           {
-            position = Vector(instance.__grid),
+            position = Vector(instance.__grid) + Vector.one,
           }
         )
 

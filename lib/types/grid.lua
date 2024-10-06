@@ -1,3 +1,6 @@
+--- indexing starts from 1
+
+
 local grid, module_mt, static = Module("lib.types.grid")
 
 grid._grid_mt = static {}
