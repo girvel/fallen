@@ -1,6 +1,7 @@
 local interactive = require("tech.interactive")
 local level = require("state.level")
 local railing = require("tech.railing")
+local decorations = require("library.palette.decorations")
 local api = railing.api
 
 
@@ -37,7 +38,7 @@ return function(positions, entities)
       self.tolerates_latrine = nil
 
       self.entities.neighbour:rotate("up")
-      self.entities.upper_bunk:lie(self.entities.neighbour)
+      decorations.lie(self.entities.neighbour, self.entities.upper_bunk)
 
       self.dreamers_talked_to = {}
       self.old_hp = Fun.range(4)
