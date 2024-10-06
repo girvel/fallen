@@ -67,17 +67,14 @@ display.system = static(Tiny.sortedProcessingSystem({
 
   process_grid = function(self)
     if not State.mode:get().displayed_views.scene then return end
-    -- TODO RM timer?
-    _timer:start()
 
     -- borders --
     local view = State.gui.views.scene
     local _start = -(view.offset / view:get_multiplier()):map(math.floor)
     local _finish = _start + (Vector({love.graphics.getDimensions()}) / view:get_multiplier()):map(math.ceil)
 
-    local start = Vector.use(Math.median, Vector.one, _start, State.grids.solids.size)
+    local start = Vector.use(Math.median, Vector.one, _start - Vector.one, State.grids.solids.size)
     local finish = Vector.use(Math.median, Vector.one, _finish, State.grids.solids.size)
-    _timer:step("start/finish")
 
     -- mask --
     local solids = State.grids.solids
@@ -107,24 +104,20 @@ display.system = static(Tiny.sortedProcessingSystem({
     tcod.TCOD_map_compute_fov(
       self._fov_map, px, py, State.player.fov_radius, true, tcod.FOV_PERMISSIVE_8
     )
-    _timer:step("compute FOV")
 
     for x = start[1], finish[1] do
       for y = start[2], finish[2] do
         local p = Vector({x, y})
         if tcod.TCOD_map_is_in_fov(self._fov_map, x - 1, y - 1)
           and not State.grids.tiles:safe_get(p) then
-            _timer:start_exclude()
             self:_process_image_sprite(
               State.background_dummy,
               State.gui.views.scene:apply(p),
               State.gui.views.scene.scale
             )
-            _timer:stop_exclude()
         end
       end
     end
-    _timer:step("bg")
 
     for _, layer in ipairs(level.GRID_LAYERS) do
       local grid = State.grids[layer]
@@ -140,16 +133,13 @@ display.system = static(Tiny.sortedProcessingSystem({
                 and e.position[2] > State.player.position[2]
               )
               if e and not is_hidden_by_perspective then
-                _timer:start_exclude()
                 self:process(e)
-                _timer:stop_exclude()
               end
             end
           end
         end
       end
     end
-    _timer:step("fg")
   end,
 
   process = function(self, entity)
