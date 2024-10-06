@@ -104,9 +104,13 @@ vector_methods.abs = function(self)
 end
 
 vector_methods.normalized = function(self)
-  if self[1] ~= 0 then return module({Math.sign(self[1]), 0}) end
-  if self[2] ~= 0 then return module({0, Math.sign(self[2])}) end
-  assert(false, "Can not normalize Vector.zero")
+  if math.abs(self[1]) > math.abs(self[2]) then
+    return module({Math.sign(self[1]), 0})
+  elseif self[2] ~= 0 then
+    return module({0, Math.sign(self[2])})
+  else
+    error("Can not normalize Vector.zero")
+  end
 end
 
 vector_methods.fully_normalized = function(self)

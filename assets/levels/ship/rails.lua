@@ -15,6 +15,7 @@ return function(positions, entities)
       require("assets.levels.ship.scenes.2_side_content")(),
       require("assets.levels.ship.scenes.3_detective")(),
       require("assets.levels.ship.scenes.3_fight")(),
+      require("assets.levels.ship.scenes.3_dwarf")(),
       {
         checkpoint_0 = {
           name = "Checkpoint -- captain's deck",
@@ -26,8 +27,6 @@ return function(positions, entities)
           run = function(self, rails, dt)
             rails:remove_scene("checkpoint_0")
             level.move(State.player, Vector({28, 9}))
-            --api.wait_seconds(2)
-            --api.autosave()
           end,
         },
       }

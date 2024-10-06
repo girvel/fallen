@@ -1,4 +1,4 @@
-local texting = require("tech.texting")
+local item = require("tech.item")
 local pipes = require("library.palette.pipes")
 local api = require("tech.railing").api
 local actions = require("mech.creature.actions")
@@ -18,13 +18,17 @@ return function()
 
       run = function(self, rails, dt)
         self.enabled = false
+        api.checkpoint_base()
+
         level.move(State.player, Vector({20, 56}))
         api.update_quest({detective = 1})
         rails.entities.detective_door.locked = false
+
         State.player.experience = experience.for_level[3]
         State.gui.creator:refresh()
-        --State.gui.creator:submit()
-        State:add(items.pole(), {position = State.player.position + Vector.left})
+        State.gui.creator:submit()
+
+        item.give(State.player, State:add(items.pole()))
         api.center_camera()
       end,
     },
@@ -172,9 +176,7 @@ return function()
       run = function(self, rails, dt)
         rails.entities.engineer_2.interacted_by = nil
         local old_direction = rails.entities.engineer_2.direction
-        rails.entities.engineer_2:rotate(Vector.name_from_direction(
-          State.player.position - rails.entities.engineer_2.position
-        ))
+        api.rotate_to_player(rails.entities.engineer_2)
         rails.entities.engineer_2:animate()
 
         State.player.in_cutscene = true
@@ -253,7 +255,7 @@ return function()
         State.player.in_cutscene = false
       end,
     },
-    {
+    engineer_4_normal_dialogue = {
       name = "Talking to the fourth",
       enabled = true,
       start_predicate = function(self, rails, dt)
@@ -263,9 +265,7 @@ return function()
       run = function(self, rails, dt)
         rails.entities.engineer_4.interacted_by = nil
         local old_direction = rails.entities.engineer_4.direction
-        rails.entities.engineer_4:rotate(Vector.name_from_direction(
-          State.player.position - rails.entities.engineer_4.position
-        ))
+        api.rotate_to_player(rails.entities.engineer_4)
         rails.entities.engineer_4:animate()
 
         State.player.in_cutscene = true
@@ -305,6 +305,10 @@ return function()
             api.narration("Дварфийка с пустым взглядом надевает перчатки на обожженные руки")
             api.line(rails.entities.engineer_4, "Благодарю")
             api.line(rails.entities.engineer_4, "Теперь смогу проработать дольше")
+
+            self.enabled = false
+            rails.scenes.dwarf_signals_talking.enabled = true
+            rails.scenes.dwarf_talks_about_rront.enabled = true
           end
         end
         rails.entities.engineer_4:rotate(old_direction)

@@ -167,8 +167,9 @@ return function()
       name = "Player attacks one of the dreamers",
       enabled = true,
       start_predicate = function(self, rails, dt)
-        return Fun.iter({1, 2, 4})
-          :any(function(i) return State:check_aggression(State.player, rails.entities["engineer_" .. i]) end)
+        return Fun.iter({1, 2, 4}):any(function(i)
+          return State:check_aggression(State.player, rails.entities["engineer_" .. i])
+        end)
       end,
 
       run = function(self, rails, dt)
