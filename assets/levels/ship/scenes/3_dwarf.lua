@@ -1,3 +1,4 @@
+local sprite = require("tech.sprite")
 local railing = require("tech.railing")
 local api = railing.api
 
@@ -29,6 +30,9 @@ return function()
       run = function(self, rails)
         self.enabled = false
         rails.scenes.dwarf_signals_talking.enabled = false
+        --rails.entities.engineer_3.portrait = sprite.image("assets/sprites/portraits/dwarf.png")
+
+        local is_rront_alive = rails.entities.engineer_3.hp > 0
 
         api.rotate_to_player(rails.entities.engineer_4)
         api.narration("Дварфийка сосредоточенно всматривается в твой живот.")
@@ -41,30 +45,53 @@ return function()
 
         api.narration("Она несколько раз открывает рот, пытаясь найти нужные слова.")
 
-        api.line(rails.entities.engineer_4, "Эти перчатки…")
-        api.line(rails.entities.engineer_4, "Я отдала их, потому что он чувствовал боль.")
+        if is_rront_alive then
+          api.line(rails.entities.engineer_4, "Ты спас его.")
+          api.line(rails.entities.engineer_4, "Хотя должен был убить.")
+          api.line(rails.entities.engineer_4, "Перчатки что были на нём…")
+          api.line(rails.entities.engineer_4, "Я отдала их, потому что он чувствовал боль.")
+        else
+          api.line(rails.entities.engineer_4, "Эти перчатки…")
+          api.line(rails.entities.engineer_4, "Я отдала их, потому что он чувствовал боль.")
+        end
+
         api.line(rails.entities.engineer_4, "Это противоречит указанию, я знаю.")
         api.line(rails.entities.engineer_4, "Но в моем сердце выбиты другие правила, я посчитала их выше текущих.")
-        api.line(rails.entities.engineer_4, "А ты убил его.")
-        api.line(rails.entities.engineer_4, "Но отдал мне перчатки.")
-        api.line(rails.entities.engineer_4, "Почему?")
 
-        api.line(State.player, "(Она хочет знать ответ? Всё очень просто)")
+        if is_rront_alive then
+          api.line(rails.entities.engineer_4, "Почему ты отпустил его? Почему нарушил указания?")
 
-        api.options({
-          "Я не знаю, почему их дал; мои действия не обязательно должны иметь объяснение",
-          "Я понял, что они принадлежат тебе, логичнее было вернуть всё к порядку.",
-          "Я увидел, что у тебя обожжены руки, перчатки должны защитить от дальнейших повреждений.",
-          "Я не собираюсь в чем-то перед тобой отчитываться.",
-          "Я сделал это, потому что могу. Других объяснений не будет.",
-        })
+          api.options({
+            "Я не знаю, почему отпустил, мои действия не обязательно должны иметь объяснение",
+            "Я понял, что он не виноват, логичнее было его отпустить.",
+            "Я увидел, что он напуган, вот-вот обмочится. На такого рука у меня не поднялась.",
+            "Я не собираюсь в чем-то перед тобой отчитываться.",
+            "Я отпустил его, потому что могу. Других объяснений не будет.",
+          })
+        else
+          api.line(rails.entities.engineer_4, "А ты убил его.")
+          api.line(rails.entities.engineer_4, "Но отдал мне перчатки.")
+          api.line(rails.entities.engineer_4, "Почему?")
+
+          api.line(State.player, "(Она хочет знать ответ? Всё очень просто)")
+
+          api.options({
+            "Я не знаю, почему их дал; мои действия не обязательно должны иметь объяснение",
+            "Я понял, что они принадлежат тебе, логичнее было вернуть всё к порядку.",
+            "Я увидел, что у тебя обожжены руки, перчатки должны защитить от дальнейших повреждений.",
+            "Я не собираюсь в чем-то перед тобой отчитываться.",
+            "Я сделал это, потому что могу. Других объяснений не будет.",
+          })
+        end
 
         api.narration("Дварфийка поднимает голову, смотрит прямо в твои глаза.")
         api.narration("На секунду кажется, что она выше тебя.")
 
         api.line(rails.entities.engineer_4, "Твой ответ неважен.")
         api.line(rails.entities.engineer_4, "Ведь он исходит от тебя лично, каким бы ни был.")
-        api.line(rails.entities.engineer_4, "В этом ты похож на того, кого убил.")
+        api.line(rails.entities.engineer_4, "В этом ты похож на того, кого %s." % {
+          is_rront_alive and "отпустил" or "убил"
+        })
         api.line(rails.entities.engineer_4, "И не похож на меня.")
         api.line(rails.entities.engineer_4, "Свобода - это благо, дарованное немногим, постарайся распоряжаться ей достойно.")
 

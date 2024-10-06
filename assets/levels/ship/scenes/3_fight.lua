@@ -143,6 +143,10 @@ return function()
             else
               rails.entities.engineer_3.ai.mode = general_ai.modes.run_away_to(rails.positions.exit)
               rails.scenes.player_attacks_half_orc.enabled = true
+
+              rails.scenes.engineer_4_normal_dialogue.enabled = false
+              rails.scenes.dwarf_signals_talking.enabled = true
+              rails.scenes.dwarf_talks_about_rront.enabled = true
             end
             break
           end
