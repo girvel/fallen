@@ -67,6 +67,7 @@ display.system = static(Tiny.sortedProcessingSystem({
 
   process_grid = function(self)
     if not State.mode:get().displayed_views.scene then return end
+    -- TODO RM timer?
     _timer:start()
 
     -- borders --
@@ -91,7 +92,9 @@ display.system = static(Tiny.sortedProcessingSystem({
     for x = start[1], finish[1] do
       for y = start[2], finish[2] do
         local e = solids:safe_get(Vector({x, y}))
-        tcod.TCOD_map_set_properties(self._fov_map, x, y, bool(not e or e.transparent_flag), not e)
+        tcod.TCOD_map_set_properties(
+          self._fov_map, x - 1, y - 1, bool(not e or e.transparent_flag), not e
+        )
       end
     end
 
@@ -100,14 +103,16 @@ display.system = static(Tiny.sortedProcessingSystem({
       return
     end
 
-    local px, py = unpack(State.player.position)
-    tcod.TCOD_map_compute_fov(self._fov_map, px, py, State.player.fov_radius, true, tcod.FOV_PERMISSIVE_8)
+    local px, py = unpack(State.player.position - Vector.one)
+    tcod.TCOD_map_compute_fov(
+      self._fov_map, px, py, State.player.fov_radius, true, tcod.FOV_PERMISSIVE_8
+    )
     _timer:step("compute FOV")
 
-    for x = _start[1], _finish[1] do
-      for y = _start[2], _finish[2] do
+    for x = start[1], finish[1] do
+      for y = start[2], finish[2] do
         local p = Vector({x, y})
-        if tcod.TCOD_map_is_in_fov(self._fov_map, x, y)
+        if tcod.TCOD_map_is_in_fov(self._fov_map, x - 1, y - 1)
           and not State.grids.tiles:safe_get(p) then
             _timer:start_exclude()
             self:_process_image_sprite(
@@ -125,12 +130,12 @@ display.system = static(Tiny.sortedProcessingSystem({
       local grid = State.grids[layer]
       for x = start[1], finish[1] do
         for y = start[2], finish[2] do
-          if tcod.TCOD_map_is_in_fov(self._fov_map, x, y) then
+          if tcod.TCOD_map_is_in_fov(self._fov_map, x - 1, y - 1) then
             local cell = grid:fast_get(x, y)
             if not level.GRID_COMPLEX_LAYERS[layer] then cell = {cell} end
             for _, e in ipairs(cell) do
               local is_hidden_by_perspective = (
-                not tcod.TCOD_map_is_transparent(self._fov_map, x, y)
+                not tcod.TCOD_map_is_transparent(self._fov_map, x - 1, y - 1)
                 and e.perspective_flag
                 and e.position[2] > State.player.position[2]
               )
