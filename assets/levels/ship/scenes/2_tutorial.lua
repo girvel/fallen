@@ -46,6 +46,7 @@ return function()
 
       run = function(self, rails, dt)
         self.enabled = false
+        if (State.gui.wiki.quest_states.warmup or 0) >= 3 then return end
         if not State.player.inventory.main_hand then
           api.notification("Найди себе подходящее оружие", true)
           api.update_quest({warmup = 3})
@@ -128,7 +129,7 @@ return function()
             api.narration("Блок громко жужжит, после чего выпускает из левой грани множество световых лучей.")
             api.narration("В конце комнаты свет формирует призрачную фигуру рыцаря.")
 
-            e = State:add(mobs.phantom_knight(), {position = Vector({31, 97})})
+            e = State:add(mobs.phantom_knight(), {position = rails.positions.officer_room_enter})
             if api.ability_check("arcana", 10) then
               api.narration("Это обыкновенная иллюзия, она не может причинять вряд.", {check = {"arcana", true}})
               api.narration("Должно быть, машина создает фантом на основе схемы.")
@@ -220,25 +221,31 @@ return function()
           table.insert(options, 1, "*положить корм в клетку*")
         end
 
-        if api.options(options) ~= #options then
-          self.enabled = false
-          rails.entities.bird_cage.interact = nil
-          rails.has_bird_food = false
+        if api.options(options) == #options then return end
 
-          api.update_quest({warmup = quest.COMPLETED, detective = 1})
-          rails.entities.detective_door.locked = false
+        self.enabled = false
+        rails.entities.bird_cage.interact = nil
+        rails.has_bird_food = false
 
-          rails.entities.dining_room_door_1:close()
-          rails.entities.dining_room_door_2:close()
-          rails.scenes.sees_possessed.enabled = false
-          rails.scenes.sees_possessed_again.enabled = true
-          rails.scenes.kills_possessed.enabled = true
-          rails.entities.possessed = State:add(mobs.possessed(), {position = Vector({17, 97})})
+        api.update_quest({warmup = quest.COMPLETED, detective = 1})
+        rails.entities.detective_door.locked = false
 
-          api.notification("Направляйся к комнате с черной дверью.", true)
+        rails.entities.dining_room_door_1:close()
+        rails.entities.dining_room_door_2:close()
+        rails.scenes.sees_possessed.enabled = false
+        rails.scenes.sees_possessed_again.enabled = true
+        rails.scenes.kills_possessed.enabled = true
+        rails.entities.possessed = State:add(mobs.possessed(), {
+          position = rails.positions.possessed_spawn
+        })
 
-          api.wait_seconds(10)
-        end
+        api.notification("Направляйся к комнате с черной дверью.", true)
+
+        rails.entities.megadoor11:open()
+        rails.entities.megadoor12:open()
+        rails.entities.megadoor13:open()
+
+        api.wait_seconds(10)
       end,
     },
 

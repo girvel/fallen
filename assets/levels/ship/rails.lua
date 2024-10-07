@@ -27,7 +27,7 @@ return function(positions, entities)
 
           run = function(self, rails, dt)
             rails:remove_scene("checkpoint_0")
-            level.move(State.player, Vector({28, 9}))
+            level.move(State.player, rails.positions.checkpoint_0)
           end,
         },
       }

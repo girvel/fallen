@@ -20,7 +20,7 @@ return function()
         self.enabled = false
         api.checkpoint_base()
 
-        level.move(State.player, Vector({20, 56}))
+        level.move(State.player, rails.positions.detective_exit_warning)
         api.update_quest({detective = 1})
         rails.entities.detective_door.locked = false
 
