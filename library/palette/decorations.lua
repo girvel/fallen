@@ -18,7 +18,7 @@ factoring.from_atlas(decorations, decorations_atlas, {
   "table_up", "mirage_block", "stool", "sofa", "countertop_left", "bed", "sink", "countertop",
   "table_ver", "transparent_wall", "low_wall", "scratched_table", "countertop", "countertop", "empty_bed", "countertop",
   "table_down", "cage", "device_panel_v", "device_panel_v", "countertop", "cabinet", "cabinet", "countertop",
-  "cabinet", "cabinet", "cabinet", "cabinet", "sofa", "sofa", false, false,
+  "cabinet", "cabinet", "cabinet", "cabinet", "sofa", "sofa", "stand", false,
   "low_wall", "low_wall", "low_wall", "low_wall", false, false, false, false,
   "low_wall", "low_wall", "low_wall", "low_wall", false, false, false, false,
   false, false, "low_wall", "low_wall", false, false, false, false,
