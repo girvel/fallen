@@ -1,6 +1,6 @@
 local quest = require("tech.quest")
 local api = require("tech.railing").api
-local general_ai = require("library.general_ai")
+local general_ai = require("library.ais.general")
 local sprite = require("tech.sprite")
 local hostility = require("mech.hostility")
 

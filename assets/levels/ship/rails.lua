@@ -17,6 +17,7 @@ return function(positions, entities)
       require("assets.levels.ship.scenes.3_detective")(),
       require("assets.levels.ship.scenes.3_fight")(),
       require("assets.levels.ship.scenes.3_dwarf")(),
+      require("assets.levels.ship.scenes.4_markis")(),
       {
         checkpoint_0 = {
           name = "Checkpoint -- captain's deck",

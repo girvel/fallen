@@ -23,6 +23,7 @@ return function(variants)
       return variant_name, setmetatable(result_variant, {
         __call = function(_, ...)
           local result = Fun.zip(argument_names, {...}):tomap()
+          result.codename = variant_name
           result.enum_variant = result_variant
           result.unpack = unpack_arguments
           return setmetatable(result, instance_mt)

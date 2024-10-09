@@ -4,7 +4,7 @@ local api = ai.api
 local texting = require("tech.texting")
 
 
-local weak_ai, module_mt, static = Module("library.weak_ai")
+local weak_ai, module_mt, static = Module("library.ais.weak")
 
 module_mt.__call = function()
   return {

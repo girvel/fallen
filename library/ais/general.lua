@@ -5,7 +5,7 @@ local actions = require("mech.creature.actions")
 local hostility = require("mech.hostility")
 
 
-local general_ai, general_ai_mt, static = Module("library.general_ai")
+local general_ai, module_mt, static = Module("library.ais.general")
 
 general_ai.modes = Enum({
   run_away_to = {"destination"},
@@ -13,7 +13,7 @@ general_ai.modes = Enum({
   normal = {},
 })
 
-general_ai_mt.__call = function(_, works_outside_of_combat)
+module_mt.__call = function(_, works_outside_of_combat)
   return {
     mode = general_ai.modes.normal(),
 

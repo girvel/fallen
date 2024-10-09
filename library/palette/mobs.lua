@@ -1,16 +1,17 @@
+local markis_ai = require("library.ais.markis")
 local class = require("mech.class")
 local body_parts = require("library.body_parts")
 local fighter = require("mech.classes.fighter")
 local combat_ai = require("library.combat_ai")
 local player = require("state.player")
-local weak_ai = require("library.weak_ai")
+local weak_ai = require("library.ais.weak")
 local humanoid = require("mech.humanoid")
 local interactive = require("tech.interactive")
 local items = require("library.palette.items")
 local abilities = require("mech.abilities")
 local races = require("mech.races")
 local constants = require("mech.constants")
-local general_ai = require("library.general_ai")
+local general_ai = require("library.ais.general")
 
 
 local mobs, _, static = Module("library.palette.mobs")
@@ -106,7 +107,7 @@ mobs.cook = function()
   )
 end
 
-mobs.markis = function()
+mobs.markis = function(travel_points)
   return Table.extend(
     humanoid {
       name = "Кот",
@@ -117,7 +118,7 @@ mobs.markis = function()
       },
       max_hp = 15,
       base_abilities = abilities(10, 10, 10, 10, 10, 10),
-      ai = weak_ai(),
+      ai = markis_ai(travel_points),
     },
     interactive.detector(true)
   )

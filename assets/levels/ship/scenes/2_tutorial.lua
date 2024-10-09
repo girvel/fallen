@@ -23,7 +23,7 @@ return function()
       end,
     },
 
-    {
+    player_leaves_his_room = {
       name = "Player leaves his room",
       enabled = true,
       start_predicate = function(self, rails, dt)
@@ -241,9 +241,7 @@ return function()
 
         api.notification("Направляйся к комнате с черной дверью.", true)
 
-        rails.entities.megadoor11:open()
-        rails.entities.megadoor12:open()
-        rails.entities.megadoor13:open()
+        rails.scenes.open_left_megadoor.enabled = true
 
         api.wait_seconds(10)
       end,

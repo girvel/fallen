@@ -11,7 +11,7 @@
 	"iid": "1bd1ae20-4ce0-11ef-896a-fbdee15fad32",
 	"jsonVersion": "1.5.3",
 	"appBuildId": 473703,
-	"nextUid": 69,
+	"nextUid": 70,
 	"identifierStyle": "Free",
 	"toc": [],
 	"worldLayout": "Free",
@@ -1585,7 +1585,45 @@
 			"limitBehavior": "MoveLastOne",
 			"pivotX": 0,
 			"pivotY": 0,
-			"fieldDefs": []
+			"fieldDefs": [
+				{
+					"identifier": "args",
+					"doc": null,
+					"__type": "String",
+					"uid": 69,
+					"type": "F_String",
+					"isArray": false,
+					"canBeNull": true,
+					"arrayMinLength": null,
+					"arrayMaxLength": null,
+					"editorDisplayMode": "NameAndValue",
+					"editorDisplayScale": 1,
+					"editorDisplayPos": "Above",
+					"editorLinkStyle": "StraightArrow",
+					"editorDisplayColor": null,
+					"editorAlwaysShow": false,
+					"editorShowInWorld": true,
+					"editorCutLongValues": true,
+					"editorTextSuffix": null,
+					"editorTextPrefix": null,
+					"useForSmartColor": false,
+					"exportToToc": false,
+					"searchable": false,
+					"min": null,
+					"max": null,
+					"regex": null,
+					"acceptFileTypes": null,
+					"defaultOverride": null,
+					"textLanguageMode": null,
+					"symmetricalRef": false,
+					"autoChainRef": true,
+					"allowOutOfLevelRef": true,
+					"allowedRefs": "OnlySame",
+					"allowedRefsEntityUid": null,
+					"allowedRefTags": [],
+					"tilesetUid": null
+				}
+			]
 		}
 	], "tilesets": [
 		{
@@ -1686,7 +1724,7 @@
 			"savedSelections": [],
 			"cachedPixelData": {
 				"opaqueTiles": "111011110000000010000000000000000110000000010110000000100000000000000000000000000000000000000000",
-				"averageColors": "f369f258f4349369f369f258f434f42474668467835694489448a369a36aa369fd54453534480000e235c235c234e235b37a6aa73234b744a23574665235a235d37af236f32493699235c23563559235b36a33477369f3696235f534f53462357535753574347434c734b734f23400007325832433244325335523553355000083247224b325c324000000000000000000000000c324b32400000000000000000000000043243224000000000000000000000000000000000000000000000000"
+				"averageColors": "f369f258f4349369f369f258f434f42474668467835694489448a369a36aa369fd54453534480000e235c235c234e235b37a6aa73234b744a23574665235a235d37af236f32493699235c23563559235b36a33477369f3696235f534f53462357535753574347434c734b734f23400007325832433244325000000000000000083247224b325c324000000000000000000000000c324b32400000000000000000000000043243224000000000000000000000000000000000000000000000000"
 			}
 		},
 		{
@@ -1948,7 +1986,7 @@
 			"savedSelections": [],
 			"cachedPixelData": {
 				"opaqueTiles": "0000000000000000000000000000000000000000000000000000000000000000",
-				"averageColors": "29cc432346686743358a387a7466253445782578257805781578299c0000574500002578257835783578488b000000000000000000003578357800000000000000000000000015781578000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000"
+				"averageColors": "29cc432346686743358a387a7466253445782578257805781578299c0000574500002578257835783578488b000000007466235533553578357800000000000000000000000015781578000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000"
 			}
 		}
 	], "enums": [{ "identifier": "layer", "uid": 29, "values": [
@@ -2718,6 +2756,63 @@
 							}] }],
 							"__worldX": 448,
 							"__worldY": 144
+						},
+						{
+							"__identifier": "position",
+							"__grid": [14,51],
+							"__pivot": [0,0],
+							"__tags": ["positions"],
+							"__tile": null,
+							"__smartColor": "#19AD51",
+							"iid": "79137c60-73f0-11ef-b94b-8be141110183",
+							"width": 16,
+							"height": 16,
+							"defUid": 22,
+							"px": [224,816],
+							"fieldInstances": [{ "__identifier": "name", "__type": "String", "__value": "checkpoint_4", "__tile": null, "defUid": 23, "realEditorValues": [{
+								"id": "V_String",
+								"params": ["checkpoint_4"]
+							}] }],
+							"__worldX": 224,
+							"__worldY": 816
+						},
+						{
+							"__identifier": "position",
+							"__grid": [30,56],
+							"__pivot": [0,0],
+							"__tags": ["positions"],
+							"__tile": null,
+							"__smartColor": "#19AD51",
+							"iid": "ce9c41e0-73f0-11ef-a7df-931372fe8f10",
+							"width": 16,
+							"height": 16,
+							"defUid": 22,
+							"px": [480,896],
+							"fieldInstances": [{ "__identifier": "name", "__type": "String", "__value": "coal_pickup", "__tile": null, "defUid": 23, "realEditorValues": [{
+								"id": "V_String",
+								"params": ["coal_pickup"]
+							}] }],
+							"__worldX": 480,
+							"__worldY": 896
+						},
+						{
+							"__identifier": "position",
+							"__grid": [10,52],
+							"__pivot": [0,0],
+							"__tags": ["positions"],
+							"__tile": null,
+							"__smartColor": "#19AD51",
+							"iid": "d6d44ab0-73f0-11ef-a7df-19424df1bf03",
+							"width": 16,
+							"height": 16,
+							"defUid": 22,
+							"px": [160,832],
+							"fieldInstances": [{ "__identifier": "name", "__type": "String", "__value": "coal_dropoff", "__tile": null, "defUid": 23, "realEditorValues": [{
+								"id": "V_String",
+								"params": ["coal_dropoff"]
+							}] }],
+							"__worldX": 160,
+							"__worldY": 832
 						}
 					]
 				},
@@ -4238,7 +4333,7 @@
 						},
 						{
 							"__identifier": "markis",
-							"__grid": [16,57],
+							"__grid": [15,47],
 							"__pivot": [0,0],
 							"__tags": ["mobs"],
 							"__tile": { "tilesetUid": 4, "x": 32, "y": 0, "w": 16, "h": 16 },
@@ -4247,10 +4342,13 @@
 							"width": 16,
 							"height": 16,
 							"defUid": 67,
-							"px": [256,912],
-							"fieldInstances": [],
-							"__worldX": 256,
-							"__worldY": 912
+							"px": [240,752],
+							"fieldInstances": [{ "__identifier": "args", "__type": "String", "__value": "{\"coal_pickup\", \"coal_dropoff\"}", "__tile": null, "defUid": 69, "realEditorValues": [{
+								"id": "V_String",
+								"params": ["{\"coal_pickup\", \"coal_dropoff\"}"]
+							}] }],
+							"__worldX": 240,
+							"__worldY": 752
 						}
 					]
 				},
