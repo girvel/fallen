@@ -35,13 +35,9 @@ return function(positions, entities)
     ),
 
     initialize = function(self)
-      self.been_to_latrine = false
-      self.tolerates_latrine = nil
-
       self.entities.neighbour:rotate("up")
       decorations.lie(self.entities.neighbour, self.entities.upper_bunk)
 
-      self.dreamers_talked_to = {}
       self.old_hp = Fun.range(4)
         :map(function(i) return self.entities["engineer_" .. i].hp end)
         :totable()
@@ -53,5 +49,9 @@ return function(positions, entities)
 
       State:refresh(self.entities.mirage_block, interactive.detector(true))
     end,
+
+    been_to_latrine = false,
+    tolerates_latrine = nil,
+    dreamers_talked_to = {},
   })
 end

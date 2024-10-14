@@ -57,17 +57,25 @@ return function()
         return rails.entities.markis.interacted_by == State.player
       end,
 
+      furry_recognized = nil,
+
       run = function(self, rails)
-        self.enabled = false
+        rails.entities.markis.interacted_by = nil
 
-        api.line(rails.entities.markis, "")
-        api.narration("")
+        api.line(rails.entities.markis, "Пропустите-с, несу уголь в кош-тельную")
 
-        rails.furry_recognized = api.ability_check("nature", 18)
-        if rails.furry_recognized then
-          api.narration("", {check = {"nature", true}})
-        else
-          api.narration("", {check = {"nature", false}})
+        if rails.furry_recognized == nil then
+          api.line(State.player, "(Это… Кот?)")
+
+          self.furry_recognized = api.ability_check("nature", 18)
+          if self.furry_recognized then
+            api.narration(
+              "Он представитель расы зверолюдей с западного континента; их аномальная природа влияет на эмбрион в момент созревания, в результате дети рождаются с чертами разных зверей.",
+              {check = {"nature", true}}
+            )
+          else
+            api.narration("Определенно. Кот.", {check = {"nature", false}})
+          end
         end
       end,
     },
