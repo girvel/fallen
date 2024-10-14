@@ -48,6 +48,28 @@ return function()
         item.give(State.player, State:add(items.pole()))
         api.center_camera()
       end,
-    }
+    },
+
+    {
+      name = "Markis dialogue",
+      enabled = true,
+      start_predicate = function(self, rails, dt)
+        return rails.entities.markis.interacted_by == State.player
+      end,
+
+      run = function(self, rails)
+        self.enabled = false
+
+        api.line(rails.entities.markis, "")
+        api.narration("")
+
+        rails.furry_recognized = api.ability_check("nature", 18)
+        if rails.furry_recognized then
+          api.narration("", {check = {"nature", true}})
+        else
+          api.narration("", {check = {"nature", false}})
+        end
+      end,
+    },
   }
 end
