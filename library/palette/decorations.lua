@@ -43,6 +43,7 @@ decorations.lie = function(entity, bed)
   level.move(entity, bed.position)
   entity:animate("lying")
   entity:animation_set_paused(true)
+  entity.perspective_flag = true
 end
 
 return decorations
