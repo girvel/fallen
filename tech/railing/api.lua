@@ -22,10 +22,10 @@ api.narration = function(text, params)
   while State.mode:get() ~= State.mode.free do coroutine.yield() end
 end
 
-api.line = function(entity, text)
+api.line = function(entity, text, params)
   api.narration([[<span color="%s">%s</span><span>: %s</span>]] % {
     Colors.to_hex(entity.sprite.color), Entity.name(entity), text
-  }, {source = entity})
+  }, Table.extend({source = entity}, params))
 end
 
 api.wait_seconds = function(s)
