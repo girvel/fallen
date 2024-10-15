@@ -51,7 +51,7 @@ return function()
     },
 
     {
-      name = "Markis dialogue",
+      name = "Markiss dialogue",
       enabled = true,
       start_predicate = function(self, rails, dt)
         return rails.entities.markiss.interacted_by == State.player
