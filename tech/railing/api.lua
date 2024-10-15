@@ -60,15 +60,11 @@ end
 api.options = function(options, remove_picked)
   State.gui.dialogue:options_present(options)
   while State.mode:get() ~= State.mode.free do coroutine.yield() end
-  local converted_i = State.gui.dialogue.selected_option_i
+  local index = State.gui.dialogue.option_indices_map[State.gui.dialogue.selected_option_i]
   if remove_picked then
-    options.removed = options.removed or {}
-    converted_i = convert(converted_i, options.removed)
-    table.remove(options, State.gui.dialogue.selected_option_i)
-    table.insert(options.removed, converted_i)
-    table.sort(options.removed)
+    options[index] = nil
   end
-  return converted_i
+  return index
 end
 
 api.notification = function(text, is_order)

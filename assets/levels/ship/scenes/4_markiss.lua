@@ -83,6 +83,7 @@ return function()
           end
         end
 
+        self.top_level_options[99] = "*уйти*"
         while true do
           local chosen_option_1 = api.options(self.top_level_options, true)
 
@@ -266,7 +267,7 @@ return function()
                 api.line(rails.entities.markiss, "До встречи, начальник-с!")
               end
             end  -- (2)
-          else -- chosen_option_1 == 3
+          elseif chosen_option_1 == 3 then
             api.line(rails.entities.markiss, "Я-то? Сначала-с беру угля, да побольше, в хранилище")
             api.line(rails.entities.markiss, "Потом несу-тащу его в кош-тельную")
             api.line(rails.entities.markiss, "Эта работа требует большой воли и мастерства-с")
@@ -277,6 +278,8 @@ return function()
             api.line(rails.entities.markiss, "Оно когда-нибудь закончится?")
             -- TODO horror SFX
             api.line(rails.entities.markiss, "Но потом-с ты берёшь ещё одну порцию угля и снова всё хорошо.")
+          else  -- if chosen_option_1 == 99
+            break
           end  -- (1)
         end  -- main dialogue loop
       end,

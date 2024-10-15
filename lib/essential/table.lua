@@ -131,4 +131,13 @@ tablex.pairs = function(t)
   return pairs(t)
 end
 
+tablex.pack = function(...)
+  local n = select("#", ...)
+  local result = {}
+  for i = 1, n do
+    result[i] = select(i, ...)
+  end
+  return result
+end
+
 return tablex

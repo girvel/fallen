@@ -9,6 +9,7 @@ return Module("state.gui.dialogue", function()
     _entities = nil,
     selected_option_i = nil,
     options = nil,
+    option_indices_map = nil,
 
     show = function(self, line, source)
       local portrait = -Query(source).portrait
@@ -51,9 +52,20 @@ return Module("state.gui.dialogue", function()
     end,
 
     options_present = function(self, options)
-      assert(#options > 0, "Trying to present empty options list")
+      assert(next(options), "Trying to present empty options list")
+
       self.selected_option_i = 1
-      self.options = options
+      self.options = {}
+      self.option_indices_map = {}
+
+      local sorted_pairs = Fun.pairs(options):map(Table.pack):totable()
+      table.sort(sorted_pairs, function(a, b) return a[1] < b[1] end)
+      for i, pair in ipairs(sorted_pairs) do
+        local index, option = unpack(pair)
+        self.options[i] = option
+        self.option_indices_map[i] = index
+      end
+
       self:options_refresh()
     end,
 
