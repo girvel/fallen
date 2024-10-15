@@ -50,7 +50,7 @@ return function()
       end,
     },
 
-    {
+    markiss = {
       name = "Markiss dialogue",
       enabled = true,
       start_predicate = function(self, rails, dt)
@@ -63,6 +63,7 @@ return function()
         "Ты - Кот.",
         "Ты не похож на остальных рабочих.",
         "Расскажи подробнее, чем ты занимаешься?",
+        -- "Не видел здесь полуорка? Такой зелёный и здоровый"
       },
 
       run = function(self, rails)
@@ -278,6 +279,13 @@ return function()
             api.line(rails.entities.markiss, "Оно когда-нибудь закончится?")
             -- TODO horror SFX
             api.line(rails.entities.markiss, "Но потом-с ты берёшь ещё одну порцию угля и снова всё хорошо.")
+          elseif chosen_option_1 == 4 then
+            api.line(rails.entities.markiss, "Бегал такой-дурной, да! Аж до потолка- подпрыгивал")
+            api.line(rails.entities.markiss, "А потом я отвернулся на секундочку-с, а его и след простыл")
+            api.line(rails.entities.markiss, "Есть такая порода-с людей, что невидимостью особой владеют")
+            api.line(rails.entities.markiss, "Такие ещё-с работать очень не любят")
+            api.line(rails.entities.markiss, "Не то что я!")
+            api.narration("Кот уверенно указывает на себя большим пальцем.")
           else  -- if chosen_option_1 == 99
             break
           end  -- (1)

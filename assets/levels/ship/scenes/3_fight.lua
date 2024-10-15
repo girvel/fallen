@@ -231,6 +231,7 @@ return function()
         self.enabled = false
         api.wait_seconds(0.5)
         State:remove(rails.entities.engineer_3)
+        rails.scenes.markiss.top_level_options[4] = "Не видел здесь полуорка? Такой зелёный и здоровый"
       end,
     },
 
