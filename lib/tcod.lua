@@ -25,6 +25,16 @@ ffi.cdef([[
   bool TCOD_map_is_transparent(struct TCOD_Map *map, int x, int y);
   bool TCOD_map_is_walkable(struct TCOD_Map *map, int x, int y);
   bool TCOD_map_is_in_fov(struct TCOD_Map *map, int x, int y);
+
+  // struct TCOD_Dijkstra *TCOD_dijkstra_new(struct TCOD_Map *map, float diagonalCost);
+  // void TCOD_dijkstra_delete(TCOD_Dijkstra *dijkstra);
+
+  struct TCOD_Path *TCOD_path_new_using_map(TCOD_Map *map, float diagonalCost);
+  void TCOD_path_delete(struct TCOD_Path *path);
+
+  bool TCOD_path_compute(TCOD_Path *path, int ox, int oy, int dx, int dy);
+  int TCOD_path_size(TCOD_Path *path);
+  void TCOD_path_get(TCOD_Path *path, int index, int *x, int *y);
 ]])
 
 local result = Common.load_c_library("libtcod")
