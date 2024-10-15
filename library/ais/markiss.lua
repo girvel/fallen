@@ -2,9 +2,9 @@ local ai = require("tech.ai")
 local api = ai.api
 
 
-local markis, module_mt, static = Module("library.ais.markis")
+local markiss, module_mt, static = Module("library.ais.markiss")
 
-markis.mode = Enum {
+markiss.mode = Enum {
   looping = {},
   paused = {},
 }
@@ -15,7 +15,7 @@ module_mt.__call = function(_, travel_points)
   return {
     _points = nil,
 
-    _mode = markis.mode.looping(),
+    _mode = markiss.mode.looping(),
 
     _next_point_i = 1,
     _path = nil,
@@ -56,7 +56,7 @@ module_mt.__call = function(_, travel_points)
         if self._path_i >= #self._path then
           self._path = nil
           Log.trace("PAUSED")
-          self._mode = markis.mode.paused()
+          self._mode = markiss.mode.paused()
           return
         end
 
@@ -70,11 +70,11 @@ module_mt.__call = function(_, travel_points)
       paused = function(entity)
         if Common.period(1, entity.ai._pause_id) then
           Log.trace("LOOPING")
-          entity.ai._mode = markis.mode.looping()
+          entity.ai._mode = markiss.mode.looping()
         end
       end,
     }
   }
 end
 
-return markis
+return markiss

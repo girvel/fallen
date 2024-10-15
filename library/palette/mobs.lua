@@ -1,4 +1,4 @@
-local markis_ai = require("library.ais.markis")
+local markiss_ai = require("library.ais.markiss")
 local class = require("mech.class")
 local body_parts = require("library.body_parts")
 local fighter = require("mech.classes.fighter")
@@ -107,7 +107,7 @@ mobs.cook = function()
   )
 end
 
-mobs.markis = function(travel_points)
+mobs.markiss = function(travel_points)
   return Table.extend(
     humanoid {
       name = "Кот",
@@ -118,7 +118,7 @@ mobs.markis = function(travel_points)
       },
       max_hp = 15,
       base_abilities = abilities(10, 10, 10, 10, 10, 10),
-      ai = markis_ai(travel_points),
+      ai = markiss_ai(travel_points),
     },
     interactive.detector(true)
   )
