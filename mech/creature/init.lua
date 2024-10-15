@@ -110,6 +110,8 @@ creature._methods = static {
       ))
     end
 
+    assert(abilities.skill_bases[name], "%s is not a skill nor an ability" % name)
+
     return self:get_effect(
       "modify_skill_score",
       self:get_modifier(abilities.skill_bases[name]),

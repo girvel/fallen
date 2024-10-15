@@ -51,7 +51,7 @@ return Module("state.gui.dialogue", function()
     end,
 
     options_present = function(self, options)
-      assert(#options > 0)
+      assert(#options > 0, "Trying to present empty options list")
       self.selected_option_i = 1
       self.options = options
       self:options_refresh()

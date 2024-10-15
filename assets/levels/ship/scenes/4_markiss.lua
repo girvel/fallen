@@ -159,10 +159,10 @@ return function()
                 api.narration("Кот игриво показывает на свой левый глаз.")
                 api.line(rails.entities.markiss, "Сам посмотри")
 
-                if api.ability_check("wisdom", 14) then
-                  api.line(State.player, "Не буду я в твои глаза смотреть, есть дела поважнее.", {check = {"wisdom", true}})
+                if api.ability_check("wis", 14) then
+                  api.line(State.player, "Не буду я в твои глаза смотреть, есть дела поважнее.", {check = {"wis", true}})
                 else
-                  api.narration("Это существо - твой хороший друг.", {check = {"wisdom", false}})
+                  api.narration("Это существо - твой хороший друг.", {check = {"wis", false}})
                   api.narration("Были ли у тебя друзья ранее? Неважно.")
                   api.narration("Он станет первым.")
                   api.line(rails.entities.markiss, "Мы одной сути, друг-с")
@@ -175,7 +175,7 @@ return function()
                 end
               end
 
-            else
+            else  -- chosen_option_2 == 2
               local success, check
               if chosen_option_2 == 2 then
                 success = self._furry_recognized or api.ability_check("religion", 10)
