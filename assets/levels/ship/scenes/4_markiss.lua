@@ -62,6 +62,7 @@ return function()
       top_level_options = {
         "Ты - Кот.",
         "Ты не похож на остальных рабочих.",
+        "Расскажи подробнее, чем ты занимаешься?",
       },
 
       run = function(self, rails)
@@ -265,6 +266,17 @@ return function()
                 api.line(rails.entities.markiss, "До встречи, начальник-с!")
               end
             end  -- (2)
+          else -- chosen_option_1 == 3
+            api.line(rails.entities.markiss, "Я-то? Сначала-с беру угля, да побольше, в хранилище")
+            api.line(rails.entities.markiss, "Потом несу-тащу его в кош-тельную")
+            api.line(rails.entities.markiss, "Эта работа требует большой воли и мастерства-с")
+            api.line(rails.entities.markiss, "Иногда, можно не туда-с свернуть или забыть взять уголь")
+            api.line(rails.entities.markiss, "Бывает, думаешь, как разойтись с другим рабочим-очим или, вот, мысль приходит.")
+            -- TODO horror SFX
+            api.line(rails.entities.markiss, "Зачем вообще всё это нужно.")
+            api.line(rails.entities.markiss, "Оно когда-нибудь закончится?")
+            -- TODO horror SFX
+            api.line(rails.entities.markiss, "Но потом-с ты берёшь ещё одну порцию угля и снова всё хорошо.")
           end  -- (1)
         end  -- main dialogue loop
       end,
