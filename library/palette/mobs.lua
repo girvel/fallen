@@ -1,3 +1,4 @@
+local sprite = require("tech.sprite")
 local markiss_ai = require("library.ais.markiss")
 local class = require("mech.class")
 local body_parts = require("library.body_parts")
@@ -112,6 +113,7 @@ mobs.markiss = function(travel_points)
     humanoid {
       name = "Кот",
       race = races.furry,
+      portrait = sprite.image("assets/sprites/portraits/markiss.png"),
       direction = "right",
       inventory = {
         head = body_parts.furry_head(),

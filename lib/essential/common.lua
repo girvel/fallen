@@ -157,4 +157,8 @@ common.load_c_library = function(name)
   end
 end
 
+common.bool = function(x)
+  return not not x
+end
+
 return common
