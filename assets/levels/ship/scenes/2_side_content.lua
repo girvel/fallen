@@ -106,7 +106,7 @@ return function()
 
       run = function(self, rails)
         rails.entities.colored_pipe.interacted_by = nil
-        State.player.in_cutscene = true
+        State.player.ai.in_cutscene = true
 
         api.narration("Эта труба звучит как-то по-иному.")
 

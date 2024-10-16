@@ -61,7 +61,7 @@ acting.system = static(Tiny.processingSystem({
     if observe then
       Debug.pcall(observe, entity, dt)
     end
-    if not entity.ai.run then return end
+    if not entity.ai.run or entity.ai.in_cutscene then return end
 
     if not State.combat then
       return self:_process_outside_combat(entity, dt)

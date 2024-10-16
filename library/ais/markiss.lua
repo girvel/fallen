@@ -15,10 +15,11 @@ module_mt.__call = function(_, travel_points)
   assert(#travel_points > 1)
 
   return {
+    point_i = 1,
+
     _mode = markiss.mode.looping(),
 
     _travel_points = nil,
-    _point_i = 1,
     _last_path = nil,
     _next_path_i = 1,
 
@@ -43,13 +44,13 @@ module_mt.__call = function(_, travel_points)
         if not self._last_path then
           self._last_path = tcod
             .snapshot()
-            :find_path(entity.position, self._travel_points[self._point_i])
+            :find_path(entity.position, self._travel_points[self.point_i])
         end
 
         if self._next_path_i > #self._last_path then
           self._last_path = nil
           self._next_path_i = 1
-          self._point_i = (self._point_i + 1 - 1) % #self._travel_points + 1
+          self.point_i = Math.loopmod(self.point_i + 1, #self._travel_points)
           self._mode = markiss.mode.paused(math.random() + 3)
           return
         end

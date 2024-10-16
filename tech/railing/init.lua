@@ -18,16 +18,12 @@ railing._methods.update = static .. function(self, dt)
       table.insert(self._active_coroutines, {
         coroutine = coroutine.create(function()
           Log.info("Scene `" .. scene.name .. "` starts")
-          local ais = Fun.iter(characters)
-            :map(function(name, character)
-              local result = character.ai
-              character.ai = {}
-              return name, result
-            end)
-            :tomap()
+          for _, character in pairs(characters) do
+            Query(character).ai.in_cutscene = true
+          end
           Debug.call(scene.run, scene, self, characters)
-          for name, ai in pairs(ais) do
-            characters[name].ai = ai
+          for _, character in pairs(characters) do
+            Query(character).ai.in_cutscene = nil
           end
           Log.info("Scene `" .. scene.name .. "` ends")
         end),

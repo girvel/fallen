@@ -34,14 +34,13 @@ module_mt.__call = function(_)
     end,
 
     ai = {
-      run = function(self)
-        if self.in_cutscene then return end
-        local result = Fun.iter(self.actions)
-          :map(function(f) return self:act(f) end)
+      run = function(entity)
+        local result = Fun.iter(entity.actions)
+          :map(function(f) return entity:act(f) end)
           :filter(function(v) return v == combat.TURN_END_SIGNAL end)
           :nth(1)
 
-        self.actions = {}
+        entity.actions = {}
         return result
       end,
 

@@ -77,7 +77,10 @@ return function()
         self._interaction_i = self._interaction_i + 1
 
         if self._interaction_i == 1 then
-          api.line(c.markiss, "Пропустите-с, несу уголь в кош-тельную")
+          api.line(c.markiss, c.markiss.ai.point_i == 1
+            and "Пропустите-с, направляюсь от кош-тельной за углём"
+            or "Пропустите-с, несу уголь в кош-тельную"
+          )
           api.line(State.player, "(Это… Кот?)")
 
           self._furry_recognized = api.ability_check("nature", 18)

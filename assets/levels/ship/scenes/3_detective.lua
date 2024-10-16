@@ -43,7 +43,7 @@ return function()
         self.enabled = false
         rails.entities.leaking_valve.paused = true
         api.center_camera()
-        State.player.in_cutscene = true
+        State.player.ai.in_cutscene = true
 
         api.narration("Резкий запах мазута, керосина и ржавчины заставляет зажмуриться.")
         api.narration("Помещение забито трубами и приборами непонятного назначения.")
