@@ -14,7 +14,7 @@ return function()
       enabled = false,
       start_predicate = function(self, rails, dt) return true end,
 
-      run = function(self, rails, dt)
+      run = function(self, rails)
         rails:remove_scene("checkpoint_2")
         api.checkpoint_base()
         level.move(State.player, rails.positions.checkpoint_2)
@@ -30,7 +30,7 @@ return function()
         return (State.player.position - rails.positions.player_room_exit):abs() > 7
       end,
 
-      run = function(self, rails, dt)
+      run = function(self, rails)
         self.enabled = false
         api.notification("Отправляйся в тренировочную комнату вниз по коридору.", true)
         api.update_quest({warmup = 2})
@@ -44,7 +44,7 @@ return function()
         return State.player.position == rails.positions.officer_room_enter
       end,
 
-      run = function(self, rails, dt)
+      run = function(self, rails)
         self.enabled = false
         if (State.gui.wiki.quest_states.warmup or 0) >= 3 then return end
         if not State.player.inventory.main_hand then
@@ -62,7 +62,7 @@ return function()
         return State.player.inventory.main_hand
       end,
 
-      run = function(self, rails, dt)
+      run = function(self, rails)
         self.enabled = false
         local old_hp = rails.entities.mannequin.hp
 
@@ -103,7 +103,7 @@ return function()
         return rails.entities.mirage_block.interacted_by == State.player
       end,
 
-      run = function(self, rails, dt)
+      run = function(self, rails)
         rails.scenes.warmup.enabled = false
         rails.entities.mirage_block.interacted_by = nil
 
@@ -181,7 +181,7 @@ return function()
         return rails.entities.bird_food.interacted_by == State.player
       end,
 
-      run = function(self, rails, dt)
+      run = function(self, rails)
         rails.entities.bird_food.interacted_by = nil
 
         api.narration("В ящике лежит небольшое ведёрко.")
@@ -205,7 +205,7 @@ return function()
         return rails.entities.bird_cage.interacted_by == State.player
       end,
 
-      run = function(self, rails, dt)
+      run = function(self, rails)
         rails.entities.bird_cage.interacted_by = nil
 
         api.narration("Это птичья клетка")
@@ -254,7 +254,7 @@ return function()
         return (State.player.position - rails.entities.possessed.position):abs() < 5
       end,
 
-      run = function(self, rails, dt)
+      run = function(self, rails)
         self.enabled = false
 
         api.narration("На стуле бледный мужчина с диким взглядом зубами — нет — пастью разрывает иволгу.")
@@ -273,7 +273,7 @@ return function()
         return rails.entities.possessed.hp <= 0
       end,
 
-      run = function(self, rails, dt)
+      run = function(self, rails)
         self.enabled = false
 
         api.narration("Он мертв")
@@ -315,7 +315,7 @@ return function()
         return rails.entities.bird_cage.interacted_by == State.player
       end,
 
-      run = function(self, rails, dt)
+      run = function(self, rails)
         self.enabled = false
         rails.entities.bird_cage.interacted_by = nil
         rails.entities.bird_cage.interact = nil

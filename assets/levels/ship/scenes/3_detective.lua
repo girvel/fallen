@@ -16,7 +16,7 @@ return function()
         return true
       end,
 
-      run = function(self, rails, dt)
+      run = function(self, rails)
         self.enabled = false
         api.checkpoint_base()
 
@@ -39,7 +39,7 @@ return function()
         return State.player.position == rails.positions.exit
       end,
 
-      run = function(self, rails, dt)
+      run = function(self, rails)
         self.enabled = false
         rails.entities.leaking_valve.paused = true
         api.center_camera()
@@ -69,7 +69,7 @@ return function()
         return State.player.position == rails.positions.detective_notification_activation
       end,
 
-      run = function(self, rails, dt)
+      run = function(self, rails)
         self.enabled = false
         api.notification("вычисли и устрани диверсанта", true)
         api.update_quest({detective = 2})
@@ -82,7 +82,7 @@ return function()
         return not State:exists(rails.entities.device_panel)
       end,
 
-      run = function(self, rails, dt)
+      run = function(self, rails)
         self.enabled = false
         rails.entities.engineer_3:rotate("down")
         api.wait_seconds(0.5)
@@ -94,7 +94,7 @@ return function()
       enabled = true,
       start_predicate = function(self, _, dt) return Common.relative_period(30, dt, self) end,
 
-      run = function(self, rails, dt)
+      run = function(self, rails)
         if not State:exists(rails.entities.engineer_2)
           or rails.entities.engineer_2.position ~= rails.positions.engineer_2
         then
@@ -114,7 +114,7 @@ return function()
           and State:exists(rails.entities.engineer_1)
       end,
 
-      run = function(self, rails, dt)
+      run = function(self, rails)
         api.message.temporal(Random.choice({
           "УКС " .. math.random(15, 27) / 10,
           "ДО " .. math.random(40, 80),
@@ -131,7 +131,7 @@ return function()
         return rails.entities.engineer_1.interacted_by == State.player
       end,
 
-      run = function(self, rails, dt)
+      run = function(self, rails)
         rails.entities.engineer_1.interacted_by = nil
 
         State.player.in_cutscene = true
@@ -173,7 +173,7 @@ return function()
         return rails.entities.engineer_2.interacted_by == State.player
       end,
 
-      run = function(self, rails, dt)
+      run = function(self, rails)
         rails.entities.engineer_2.interacted_by = nil
         local old_direction = rails.entities.engineer_2.direction
         api.rotate_to_player(rails.entities.engineer_2)
@@ -220,7 +220,7 @@ return function()
         return rails.entities.engineer_3.interacted_by == State.player
       end,
 
-      run = function(self, rails, dt)
+      run = function(self, rails)
         rails.entities.engineer_3.interacted_by = nil
 
         State.player.in_cutscene = true
@@ -262,7 +262,7 @@ return function()
         return rails.entities.engineer_4.interacted_by == State.player
       end,
 
-      run = function(self, rails, dt)
+      run = function(self, rails)
         rails.entities.engineer_4.interacted_by = nil
         local old_direction = rails.entities.engineer_4.direction
         api.rotate_to_player(rails.entities.engineer_4)
@@ -320,7 +320,7 @@ return function()
     talked_to_everybody = {
       name = "Player talked to all dreamers",
       enabled = true,
-      start_predicate = function(self, rails)
+      start_predicate = function(self, rails, dt)
         return Fun.range(4)
           :filter(function(i) return State:exists(rails.entities["engineer_" .. i]) end)
           :all(function(i) return rails.dreamers_talked_to[i] end)

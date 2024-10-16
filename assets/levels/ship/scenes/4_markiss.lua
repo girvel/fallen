@@ -31,7 +31,7 @@ return function()
         return true
       end,
 
-      run = function(self, rails, dt)
+      run = function(self, rails)
         self.enabled = false
         api.checkpoint_base()
 
@@ -57,6 +57,10 @@ return function()
         return rails.entities.markiss.interacted_by == State.player
       end,
 
+      characters = {
+        markiss = {},
+      },
+
       -- extended from other scenes
       top_level_options = {
         "Ты - Кот.",
@@ -68,12 +72,12 @@ return function()
       _furry_recognized = nil,
       _interaction_i = 0,
 
-      run = function(self, rails)
-        rails.entities.markiss.interacted_by = nil
+      run = function(self, rails, c)
+        c.markiss.interacted_by = nil
         self._interaction_i = self._interaction_i + 1
 
         if self._interaction_i == 1 then
-          api.line(rails.entities.markiss, "Пропустите-с, несу уголь в кош-тельную")
+          api.line(c.markiss, "Пропустите-с, несу уголь в кош-тельную")
           api.line(State.player, "(Это… Кот?)")
 
           self._furry_recognized = api.ability_check("nature", 18)
@@ -137,7 +141,7 @@ return function()
           }
 
           for _, line in ipairs(OPENING_LINES[math.min(self._interaction_i, #OPENING_LINES)]) do
-            api.line(rails.entities.markiss, line)
+            api.line(c.markiss, line)
           end
         end
 
@@ -146,7 +150,7 @@ return function()
           local chosen_option_1 = api.options(self.top_level_options, true)
 
           if chosen_option_1 == 1 then
-            api.line(rails.entities.markiss, "Действительно, друг? А я думаю, почему-c так хочется охотиться на мышей")
+            api.line(c.markiss, "Действительно, друг? А я думаю, почему-c так хочется охотиться на мышей")
 
             local chosen_option_2 = api.options({
               "Ты мне — не друг!",
@@ -154,9 +158,9 @@ return function()
             })
 
             if chosen_option_2 == 1 then
-              api.line(rails.entities.markiss, "Ошибаешься, друг. Все мы связаны общими делами-с. Все заперты в одной кле-точ-ке.")
+              api.line(c.markiss, "Ошибаешься, друг. Все мы связаны общими делами-с. Все заперты в одной кле-точ-ке.")
             else
-              api.line(rails.entities.markiss, "Потому что ты мой друг-с. Мы связаны общим делом. Сидим в одной клеточке.")
+              api.line(c.markiss, "Потому что ты мой друг-с. Мы связаны общим делом. Сидим в одной клеточке.")
             end
 
             local chosen_option_3 = api.options({
@@ -165,9 +169,9 @@ return function()
             })
 
             if chosen_option_3 == 1 then
-              api.line(rails.entities.markiss, "Хорошо, друг.")
+              api.line(c.markiss, "Хорошо, друг.")
             else
-              api.line(rails.entities.markiss, "Ты спрашиваешь, хоть и знаешь? Это почти как молчать, если не знаешь.")
+              api.line(c.markiss, "Ты спрашиваешь, хоть и знаешь? Это почти как молчать, если не знаешь.")
 
               local chosen_option_4 = api.options({
                 "[Убеждение] *убедить его рассказать больше*",
@@ -179,23 +183,23 @@ return function()
                   api.line(State.player, "(Такая речь запутает многих, но не меня. Поиграем по твоим правилам, кот)", {check = {"persuasion", true}})
                   api.line(State.player, "Конечно. Друг, кле-точ-ка, общее дело. А, не напомнишь, где ключик или дверка у этой клеточки?")
                   api.narration("Кот серьёзно задумывается, даже перестаёт дымить.")
-                  api.line(rails.entities.markiss, "Мне кажется, все двери в твоей голове. А ключи стоит искать в сердце")
+                  api.line(c.markiss, "Мне кажется, все двери в твоей голове. А ключи стоит искать в сердце")
                   api.narration("Ты определенно переоценил свой уровень адаптации к абстрактной беседе.")
                 else
                   api.narration("Он явно не понял с первого раза, нужно повторить вопрос несколько раз.", {check = {"persuasion", false}})
                   api.line(State.player, "Что за клеточка? Что за общее дело? Почему ты кот? О чем ты говоришь?")
                   api.narration("Кот лениво выдыхает дым.")
-                  api.line(rails.entities.markiss, "Су-е-та…")
+                  api.line(c.markiss, "Су-е-та…")
                   api.narration("Терминальный случай, тут ответа не добиться.")
                 end
               else
-                api.line(rails.entities.markiss, "Клеточка не исчезнет, даже если закрыть глаза")
+                api.line(c.markiss, "Клеточка не исчезнет, даже если закрыть глаза")
                 api.narration("Этот разговор начинает сводить тебя с ума, лучше сделать перерыв.")
               end
             end
 
           elseif chosen_option_1 == 2 then
-            api.line(rails.entities.markiss, "Разве-с? Я чем-то выделяюсь, помимо ушек и шерсти-с?")
+            api.line(c.markiss, "Разве-с? Я чем-то выделяюсь, помимо ушек и шерсти-с?")
 
             local chosen_option_2 = api.options({
               "Если так подумать, то ничем...",
@@ -204,7 +208,7 @@ return function()
             })
 
             if chosen_option_2 == 1 then
-              api.line(rails.entities.markiss, "Мудрая мыслишка, все мы разной породы, но суть внутри одна-с")
+              api.line(c.markiss, "Мудрая мыслишка, все мы разной породы, но суть внутри одна-с")
 
               local chosen_option_3 = api.options({
                 "Меня начал утомлять этот разговор. Ты же не вызовешь никаких проблем тут?",
@@ -212,12 +216,12 @@ return function()
               })
 
               if chosen_option_3 == 1 then
-                api.line(rails.entities.markiss, "Никаких проблем-с, начальник!")
+                api.line(c.markiss, "Никаких проблем-с, начальник!")
               else
-                api.line(rails.entities.markiss, "Как скажешь, начальник!")
-                api.line(rails.entities.markiss, "Но вот мне так не кажется, а я в корень смотрю, глаз намётан")
+                api.line(c.markiss, "Как скажешь, начальник!")
+                api.line(c.markiss, "Но вот мне так не кажется, а я в корень смотрю, глаз намётан")
                 api.narration("Кот игриво показывает на свой левый глаз.")
-                api.line(rails.entities.markiss, "Сам посмотри")
+                api.line(c.markiss, "Сам посмотри")
 
                 if api.ability_check("wis", 14) then
                   api.line(State.player, "Не буду я в твои глаза смотреть, есть дела поважнее.", {check = {"wis", true}})
@@ -225,11 +229,11 @@ return function()
                   api.narration("Это существо - твой хороший друг.", {check = {"wis", false}})
                   api.narration("Были ли у тебя друзья ранее? Неважно.")
                   api.narration("Он станет первым.")
-                  api.line(rails.entities.markiss, "Мы одной сути, друг-с")
+                  api.line(c.markiss, "Мы одной сути, друг-с")
                   api.narration("Внезапно он выпускает клубок густого дыма тебе в лицо.")
                   api.narration("Наваждение проходит.")
                   api.line(State.player, "Что за черт?! Как ты это сделал?")
-                  api.line(rails.entities.markiss, "Магия-с, друг. Магия-с.")
+                  api.line(c.markiss, "Магия-с, друг. Магия-с.")
                   api.narration("В голову приходит осознание - ты не сможешь ему навредить. Никак.")
                   api.narration("Придётся жить в этом проклятом мире.")
                 end
@@ -252,12 +256,12 @@ return function()
                 api.narration("Он таскает листочки и веточки с муравьями-рабочими.")
                 api.line(State.player, "Зачем тебе всё это? Ты не один из них.")
                 api.narration("Кот от удивления громко кашляет, глотая сигарету.")
-                api.line(rails.entities.markiss, "Это-с. Черт-с. Ахх-с.")
+                api.line(c.markiss, "Это-с. Черт-с. Ахх-с.")
                 api.narration("Наконец он восстанавливает дыхание и достаёт новую сигарету.")
-                api.line(rails.entities.markiss, "Это, черт, я не ожидал-с таки услышать, начальник!")
-                api.line(rails.entities.markiss, "Я своего рода исследователь, токмо без лицензии-с")
-                api.line(rails.entities.markiss, "Исследую-с куда глаза глядят")
-                api.line(rails.entities.markiss, "Так и здесь оказался-с, и вот исследую-с!")
+                api.line(c.markiss, "Это, черт, я не ожидал-с таки услышать, начальник!")
+                api.line(c.markiss, "Я своего рода исследователь, токмо без лицензии-с")
+                api.line(c.markiss, "Исследую-с куда глаза глядят")
+                api.line(c.markiss, "Так и здесь оказался-с, и вот исследую-с!")
 
                 local options = {
                   "Может, наисследовал что полезное?",
@@ -269,25 +273,25 @@ return function()
                   local chosen_option_3 = api.options(options, true)
 
                   if chosen_option_3 == 1 then
-                    api.line(rails.entities.markiss, "Да! И рад поделиться-с, начальник!")
-                    api.line(rails.entities.markiss, "Двери-с тут кое-где хлипкие, кто сильный ударит, токмо так развалятся!")
+                    api.line(c.markiss, "Да! И рад поделиться-с, начальник!")
+                    api.line(c.markiss, "Двери-с тут кое-где хлипкие, кто сильный ударит, токмо так развалятся!")
                     api.line(State.player, "А ты пробовал?")
-                    api.line(rails.entities.markiss, "Нет. У меня лапки")
+                    api.line(c.markiss, "Нет. У меня лапки")
                   elseif chosen_option_3 == 2 then
-                    api.line(rails.entities.markiss, "Выход, начальник?")
-                    api.line(rails.entities.markiss, "Выход есть всегда, иногда даже не один")
-                    api.line(rails.entities.markiss, "У нас на родине есть примета.")
-                    api.line(rails.entities.markiss, "Если потерялся, если стоишь не перепутье")
-                    api.line(rails.entities.markiss, "Не иди прямо — там-с смерть тебя дожидается")
-                    api.line(rails.entities.markiss, "А назад идти резона-с нет  — так снова на перепутье окажешься")
-                    api.line(rails.entities.markiss, "И... Как же там дальше было-с")
-                    api.line(rails.entities.markiss, "Пойдёшь направо — точно что-то про жену...")
-                    api.line(rails.entities.markiss, "Налево — что-то про коня, хотя-с логичнее было бы про мужа...")
-                    api.line(rails.entities.markiss, "Про что мы говорили?")
+                    api.line(c.markiss, "Выход, начальник?")
+                    api.line(c.markiss, "Выход есть всегда, иногда даже не один")
+                    api.line(c.markiss, "У нас на родине есть примета.")
+                    api.line(c.markiss, "Если потерялся, если стоишь не перепутье")
+                    api.line(c.markiss, "Не иди прямо — там-с смерть тебя дожидается")
+                    api.line(c.markiss, "А назад идти резона-с нет  — так снова на перепутье окажешься")
+                    api.line(c.markiss, "И... Как же там дальше было-с")
+                    api.line(c.markiss, "Пойдёшь направо — точно что-то про жену...")
+                    api.line(c.markiss, "Налево — что-то про коня, хотя-с логичнее было бы про мужа...")
+                    api.line(c.markiss, "Про что мы говорили?")
                     api.line(State.player, "Про выход")
-                    api.line(rails.entities.markiss, "Не знаю я выхода, начальник! Ситуация безвыходная!")
-                    api.line(rails.entities.markiss, "Хотя как говорится, выйдешь из клетки — окажешься в клетке побольше.")
-                    api.line(rails.entities.markiss, "А этом случае и двери, и стенки клетки теряют всякий смысл.")
+                    api.line(c.markiss, "Не знаю я выхода, начальник! Ситуация безвыходная!")
+                    api.line(c.markiss, "Хотя как говорится, выйдешь из клетки — окажешься в клетке побольше.")
+                    api.line(c.markiss, "А этом случае и двери, и стенки клетки теряют всякий смысл.")
 
                     local chosen_option_4 = api.options({
                       "Может, я сошёл с ума от общения с тобой, но в этом и правда что-то есть.",
@@ -295,15 +299,15 @@ return function()
                     })
 
                     if chosen_option_4 == 1 then
-                      api.line(rails.entities.markiss, "Спасибо, э, как я там тебя называл?")
+                      api.line(c.markiss, "Спасибо, э, как я там тебя называл?")
                       api.line(State.player, "Начальник, хотя зовут меня — %s" % State.player.inner_name)
-                      api.line(rails.entities.markiss, "Не подходит тебе это имя, своё поищи")
+                      api.line(c.markiss, "Не подходит тебе это имя, своё поищи")
                       api.line(State.player, "А имя должно как-то подходить? Вот допустим твоё?")
-                      api.line(rails.entities.markiss, "Я - Маркисс")
-                      rails.entities.markiss.name = "Маркисс"
+                      api.line(c.markiss, "Я - Маркисс")
+                      c.markiss.name = "Маркисс"
                       api.line(State.player, "Вопросов больше не имею")
                     else  -- chosen_option_4 == 2
-                      api.line(rails.entities.markiss, "Не все! Я один такой-сякой")
+                      api.line(c.markiss, "Не все! Я один такой-сякой")
                     end
                   else  -- chosen_option_3 == 3
                     break
@@ -322,26 +326,26 @@ return function()
 
                 api.narration("Без сомнений - перед тобой один из Теневых котов.")
                 api.line(State.player, "Понятно, я, пожалуй, пойду")
-                api.line(rails.entities.markiss, "До встречи, начальник-с!")
+                api.line(c.markiss, "До встречи, начальник-с!")
               end
             end  -- (2)
           elseif chosen_option_1 == 3 then
-            api.line(rails.entities.markiss, "Я-то? Сначала-с беру угля, да побольше, в хранилище")
-            api.line(rails.entities.markiss, "Потом несу-тащу его в кош-тельную")
-            api.line(rails.entities.markiss, "Эта работа требует большой воли и мастерства-с")
-            api.line(rails.entities.markiss, "Иногда, можно не туда-с свернуть или забыть взять уголь")
-            api.line(rails.entities.markiss, "Бывает, думаешь, как разойтись с другим рабочим-очим или, вот, мысль приходит.")
+            api.line(c.markiss, "Я-то? Сначала-с беру угля, да побольше, в хранилище")
+            api.line(c.markiss, "Потом несу-тащу его в кош-тельную")
+            api.line(c.markiss, "Эта работа требует большой воли и мастерства-с")
+            api.line(c.markiss, "Иногда, можно не туда-с свернуть или забыть взять уголь")
+            api.line(c.markiss, "Бывает, думаешь, как разойтись с другим рабочим-очим или, вот, мысль приходит.")
             -- TODO horror SFX
-            api.line(rails.entities.markiss, "Зачем вообще всё это нужно.")
-            api.line(rails.entities.markiss, "Оно когда-нибудь закончится?")
+            api.line(c.markiss, "Зачем вообще всё это нужно.")
+            api.line(c.markiss, "Оно когда-нибудь закончится?")
             -- TODO horror SFX
-            api.line(rails.entities.markiss, "Но потом-с ты берёшь ещё одну порцию угля и снова всё хорошо.")
+            api.line(c.markiss, "Но потом-с ты берёшь ещё одну порцию угля и снова всё хорошо.")
           elseif chosen_option_1 == 4 then
-            api.line(rails.entities.markiss, "Бегал такой-дурной, да! Аж до потолка- подпрыгивал")
-            api.line(rails.entities.markiss, "А потом я отвернулся на секундочку-с, а его и след простыл")
-            api.line(rails.entities.markiss, "Есть такая порода-с людей, что невидимостью особой владеют")
-            api.line(rails.entities.markiss, "Такие ещё-с работать очень не любят")
-            api.line(rails.entities.markiss, "Не то что я!")
+            api.line(c.markiss, "Бегал такой-дурной, да! Аж до потолка- подпрыгивал")
+            api.line(c.markiss, "А потом я отвернулся на секундочку-с, а его и след простыл")
+            api.line(c.markiss, "Есть такая порода-с людей, что невидимостью особой владеют")
+            api.line(c.markiss, "Такие ещё-с работать очень не любят")
+            api.line(c.markiss, "Не то что я!")
             api.narration("Кот уверенно указывает на себя большим пальцем.")
           else  -- if chosen_option_1 == 99
             break

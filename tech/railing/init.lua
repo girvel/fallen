@@ -5,24 +5,38 @@ railing.api = require("tech.railing.api")
 railing._methods = static {}
 
 railing._methods.update = static .. function(self, dt)
+  for _, scene in pairs(self.scenes) do
+    local characters = Fun.pairs(scene.characters or {})
+      :map(function(name, params) return name, self.entities[name] end)
+      :tomap()
+
+    if scene.enabled
+      and (not self:is_running(scene) or scene.multiple_instances_flag)
+      and scene:start_predicate(self, dt)
+      and Fun.pairs(characters):all(function(_, c) return State:exists(c) end)
+    then
+      table.insert(self._active_coroutines, {
+        coroutine = coroutine.create(function()
+          Log.info("Scene `" .. scene.name .. "` starts")
+          local ais = Fun.iter(characters)
+            :map(function(name, character)
+              local result = character.ai
+              character.ai = {}
+              return name, result
+            end)
+            :tomap()
+          Debug.call(scene.run, scene, self, characters)
+          for name, ai in pairs(ais) do
+            characters[name].ai = ai
+          end
+          Log.info("Scene `" .. scene.name .. "` ends")
+        end),
+        base_scene = scene,
+      })
+    end
+  end
+
   self._active_coroutines = Fun.iter(self._active_coroutines)
-    :chain(Fun.iter(pairs(self.scenes))
-      :filter(function(s)
-        return s.enabled
-          and (not self:is_running(s) or s.multiple_instances_flag)
-          and s:start_predicate(self, dt)
-      end)
-      :map(function(s)
-        return {
-          coroutine = coroutine.create(function()
-            Log.info("Scene `" .. s.name .. "` starts")
-            Debug.call(s.run, s, self, dt)
-            Log.info("Scene `" .. s.name .. "` ends")
-          end),
-          base_scene = s,
-        }
-      end)
-    )
     :filter(function(c)
       Common.resume_logged(c.coroutine, dt)
       return coroutine.status(c.coroutine) ~= "dead"

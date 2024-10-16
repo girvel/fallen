@@ -70,13 +70,11 @@ if tcod_c then
 
   snapshot_methods.is_visible = function(self, position)
     assert(State.grids.solids:can_fit(position))
-
     return tcod_c.TCOD_map_is_in_fov(self._map, position[1] - 1, position[2] - 1)
   end
 
   snapshot_methods.is_transparent = function(self, position)
     assert(State.grids.solids:can_fit(position))
-
     return tcod_c.TCOD_map_is_transparent(self._map, position[1] - 1, position[2] - 1)
   end
 

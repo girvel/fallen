@@ -10,7 +10,7 @@ return function()
     player_attacks_half_orc = {
       name = "Player attacks half-orc",
       enabled = true,
-      start_predicate = function(self, rails)
+      start_predicate = function(self, rails, dt)
         return State:check_aggression(State.player, rails.entities.engineer_3)
       end,
       run = function(self, rails)
@@ -33,7 +33,7 @@ return function()
         return rails.entities.engineer_3.will_beg and rails.entities.engineer_3.hp <= rails.old_hp[3] / 2
       end,
 
-      run = function(self, rails, dt)
+      run = function(self, rails)
         self.enabled = false
         rails.entities.engineer_3.will_beg = false
         rails.entities.engineer_3.ai.mode = general_ai.modes.skip_turn()
@@ -48,7 +48,7 @@ return function()
         return not hostility.are_hostile(State.player, rails.entities.engineer_3)
       end,
 
-      run = function(self, rails, dt)
+      run = function(self, rails)
         self.enabled = false
         rails.scenes.player_attacks_half_orc.enabled = true
         rails.entities.engineer_3.portrait = sprite.image("assets/sprites/portraits/half_orc.png")
@@ -160,7 +160,7 @@ return function()
       enabled = true,
       start_predicate = function(self, rails, dt) return rails.entities.engineer_3.hp <= 0 end,
 
-      run = function(self, rails, dt)
+      run = function(self, rails)
         self.enabled = false
         api.notification("Задача выполнена", true)
         api.update_quest({detective = quest.COMPLETED})
@@ -176,7 +176,7 @@ return function()
         end)
       end,
 
-      run = function(self, rails, dt)
+      run = function(self, rails)
         self.enabled = false
         rails.scenes.first_shouts.enabled = false
         rails.scenes.second_rotates_valve.enabled = false
@@ -211,7 +211,7 @@ return function()
         return State.player.hp > 0 and not State.combat
       end,
 
-      run = function(self, rails, dt)
+      run = function(self, rails)
         self.enabled = false
         api.notification("Задача выполнена неудовлетворительно", true)
         api.discover_wiki({fought_dreamers = true})
@@ -227,7 +227,7 @@ return function()
           and rails.entities.engineer_3.position == rails.positions.exit
       end,
 
-      run = function(self, rails, dt)
+      run = function(self, rails)
         self.enabled = false
         api.wait_seconds(0.5)
         State:remove(rails.entities.engineer_3)
@@ -243,7 +243,7 @@ return function()
           and (State.player.position - rails.positions.exit):abs() > 20
       end,
 
-      run = function(self, rails, dt)
+      run = function(self, rails)
         self.enabled = false
         State:remove(rails.entities.engineer_3)
         api.notification("Задача выполнена неудовлетворительно", true)
@@ -259,7 +259,7 @@ return function()
           and State.player.position == rails.positions.detective_exit_warning
       end,
 
-      run = function(self, rails, dt)
+      run = function(self, rails)
         self.enabled = false
         api.notification("Не стоит покидать комнату, диверсант может сбежать", false)
       end,

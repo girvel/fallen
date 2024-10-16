@@ -10,7 +10,7 @@ return function()
       enabled = true,
       start_predicate = function(self, rails, dt) return true end,
 
-      run = function(self, rails, dt)
+      run = function(self, rails)
         self.enabled = false
 
         State.player:rotate("up")
@@ -75,7 +75,7 @@ return function()
       enabled = true,
       start_predicate = function(self, rails, dt) return State.player.class end,
 
-      run = function(self, rails, dt)
+      run = function(self, rails)
         self.enabled = false
         local comments = {
           {
@@ -130,7 +130,7 @@ return function()
         return not State.gui.text_input.active
       end,
 
-      run = function(self, rails, dt)
+      run = function(self, rails)
         self.enabled = false
         State.player.in_cutscene = true
 
@@ -173,7 +173,7 @@ return function()
           and State:exists(rails.entities.note)
       end,
 
-      run = function(self, rails, dt)
+      run = function(self, rails)
         self.enabled = false
         State.player.in_cutscene = true
         api.line(State.player, "Возможно, следует вернуться к той записке на столе")
@@ -189,7 +189,7 @@ return function()
         return rails.entities.note.interacted_by == State.player
       end,
 
-      run = function(self, rails, dt)
+      run = function(self, rails)
         self.enabled = false
         State.gui.hint.override = "Нажмите [K] чтобы открыть кодекс"
         while Table.last(State.gui.wiki.history) ~= "codex" and not Common.period(10, self) do
@@ -207,7 +207,7 @@ return function()
         return self.triggered or Common.relative_period(45, dt, self)
       end,
 
-      run = function(self, rails, dt)
+      run = function(self, rails)
         self.triggered = false
         api.message.temporal(Random.choice({
           "Хрр...",

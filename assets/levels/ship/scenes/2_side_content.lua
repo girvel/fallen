@@ -18,7 +18,7 @@ return function()
         return State.player.position == rails.positions.leaky_vent_check
       end,
 
-      run = function(self, rails, dt)
+      run = function(self, rails)
         self.enabled = false
         api.ability_check_message("investigation", 10,
           "Темные пятна на стенах и потолке могут указывать на проблемы с вентиляцией и серьезные утечки воды.",
@@ -34,7 +34,7 @@ return function()
         return State.player.position == rails.positions.beds_check
       end,
 
-      run = function(self, rails, dt)
+      run = function(self, rails)
         self.enabled = false
         api.message.positional("Кровати плохо заправлены, будто это делали в одно движение.")
       end,
@@ -47,7 +47,7 @@ return function()
         return State.player.position == rails.positions.world_map_message
       end,
 
-      run = function(self, rails, dt)
+      run = function(self, rails)
         self.enabled = false
         api.message.positional("На стене висит старая мировая карта. Тяжело различить хоть какой-то текст или даже очертания границ.")
       end,
@@ -60,7 +60,7 @@ return function()
         return State.player.position == rails.positions.scratched_table_message
       end,
 
-      run = function(self, rails, dt)
+      run = function(self, rails)
         self.enabled = false
         State.player:rotate("up")
         api.ability_check_message("investigation", 10,
@@ -77,7 +77,7 @@ return function()
         return State.player.position == rails.positions.empty_dorm_message
       end,
 
-      run = function(self, rails, dt)
+      run = function(self, rails)
         self.enabled = false
         api.message.positional("Толстый слой пыли, отсутствие матраса и постельного белья. В этой комнате никто не живёт, очень давно.")
       end,
@@ -90,7 +90,7 @@ return function()
         return State.player.position == rails.positions.sign_message
       end,
 
-      run = function(self, rails, dt)
+      run = function(self, rails)
         self.enabled = false
         State.player:rotate("up")
         api.message.positional("Старый выцветший указатель. Налево - столовая, направо - кают-компания.")
@@ -104,7 +104,7 @@ return function()
         return rails.entities.colored_pipe.interacted_by == State.player
       end,
 
-      run = function(self, rails, dt)
+      run = function(self, rails)
         rails.entities.colored_pipe.interacted_by = nil
         State.player.in_cutscene = true
 
@@ -141,7 +141,7 @@ return function()
         return State.player.position == rails.positions.mouse_check
       end,
 
-      run = function(self, rails, dt)
+      run = function(self, rails)
         self.enabled = false
         State.player:rotate("up")
         api.narration("Здесь повесилась мышь. Забавно.")
@@ -159,7 +159,7 @@ return function()
         return State.player.position == rails.positions.exit_latrine
       end,
 
-      run = function(self, rails, dt)
+      run = function(self, rails)
         self.enabled = false
         api.narration("Неописуемая вонь бьёт по твоим ноздрям.")
         api.narration("Как будто фекальный дьявол начал великую тошнотворную войну, а это его омерзительный оплот.")
@@ -174,7 +174,7 @@ return function()
         return State.player.position == rails.positions.enter_latrine
       end,
 
-      run = function(self, rails, dt)
+      run = function(self, rails)
         self.enabled = false
         rails.tolerates_latrine = api.saving_throw("con", 14)
         if rails.tolerates_latrine then
@@ -201,7 +201,7 @@ return function()
           and State.player.position == rails.positions.enter_latrine
       end,
 
-      run = function(self, rails, dt)
+      run = function(self, rails)
         if rails.tolerates_latrine then
           rails.last_player_fov = State.player.fov_radius
           State.player.fov_radius = 1
@@ -221,7 +221,7 @@ return function()
           and State.player.position == rails.positions.exit_latrine
       end,
 
-      run = function(self, rails, dt)
+      run = function(self, rails)
         if rails.tolerates_latrine then
           State.player.fov_radius = rails.last_player_fov
           return
@@ -258,7 +258,7 @@ return function()
         return rails.tolerates_latrine and State.player.position == rails.positions.dirty_magazine
       end,
 
-      run = function(self, rails, dt)
+      run = function(self, rails)
         self.enabled = false
         api.narration("На обложке цветной газеты красуется очень реалистичное изображение накачанных мужчин.")
         api.narration("Их физическая форма впечатляет, но они зачем-то оделись в нелепые тесные костюмы.")
@@ -276,7 +276,7 @@ return function()
         return (State.player.position - rails.positions.kitchen_bucket):abs() == 1
       end,
 
-      run = function(self, rails, dt)
+      run = function(self, rails)
         self.enabled = false
         api.narration("Десятки вскрытых металлических банок грудой навалены в мусорное ведро.")
         api.narration("Внутренняя поверхность каждой полностью вычищена, крысам ничего не достанется.")
@@ -297,7 +297,7 @@ return function()
         return rails.entities.cook.interacted_by == State.player
       end,
 
-      run = function(self, rails, dt)
+      run = function(self, rails)
         self.enabled = false
         rails.entities.cook.interact = nil
 
@@ -342,7 +342,7 @@ return function()
           or rails.entities.dining_room_door_2.is_open
       end,
 
-      run = function(self, rails, dt)
+      run = function(self, rails)
         self.enabled = false
         State:add(fx("assets/sprites/fx/disappearing_dude", "fx", rails.positions.possessed_image))
         sound.play("assets/sounds/creepy", .1)

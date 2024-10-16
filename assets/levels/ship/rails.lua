@@ -26,7 +26,7 @@ return function(positions, entities)
             return true
           end,
 
-          run = function(self, rails, dt)
+          run = function(self, rails)
             rails:remove_scene("checkpoint_0")
             level.move(State.player, rails.positions.checkpoint_0)
           end,
