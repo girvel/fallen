@@ -1,89 +1,89 @@
-local module = {}
+local vector = {}
 local module_mt = {}
-setmetatable(module, module_mt)
+setmetatable(vector, module_mt)
 
 local vector_methods = {}
-local vector_mt = {__index = vector_methods}
+vector.mt = {__index = vector_methods}
 
 module_mt.__call = function(_, base_object)
   assert(
     #base_object == 2 and Fun.iter(pairs(base_object)):length() == 2,
     "Vector base should be a list of length 2"
   )
-  return setmetatable(base_object, vector_mt)
+  return setmetatable(base_object, vector.mt)
 end
 
-module.zero = module({0, 0})
-module.one = module({1, 1})
-module.up = module({0, -1})
-module.down = module({0, 1})
-module.left = module({-1, 0})
-module.right = module({1, 0})
+vector.zero = vector({0, 0})
+vector.one = vector({1, 1})
+vector.up = vector({0, -1})
+vector.down = vector({0, 1})
+vector.left = vector({-1, 0})
+vector.right = vector({1, 0})
 
-module.direction_names = {"up", "left", "down", "right"}
-module.directions = {module.up, module.left, module.down, module.right}
-module.extended_directions = {
-  module.up, module.left, module.down, module.right,
-  module({1, 1}), module({1, -1}), module({-1, -1}), module({-1, 1})
+vector.direction_names = {"up", "left", "down", "right"}
+vector.directions = {vector.up, vector.left, vector.down, vector.right}
+vector.extended_directions = {
+  vector.up, vector.left, vector.down, vector.right,
+  vector({1, 1}), vector({1, -1}), vector({-1, -1}), vector({-1, 1})
 }
 
-module.name_from_direction = function(v)
-  if v == module.up then return "up" end
-  if v == module.down then return "down" end
-  if v == module.left then return "left" end
-  if v == module.right then return "right" end
+vector.name_from_direction = function(v)
+  if v == vector.up then return "up" end
+  if v == vector.down then return "down" end
+  if v == vector.left then return "left" end
+  if v == vector.right then return "right" end
 end
 
-module.use = function(f, ...)
+vector.use = function(f, ...)
   local zip = Fun.zip(...)
-  return module({f(zip:nth(1)), f(zip:nth(2))})
+  return vector({f(zip:nth(1)), f(zip:nth(2))})
 end
 
-vector_mt.__eq = function(self, other)
+vector.mt.__eq = function(self, other)
   return #other == 2 and self[1] == other[1] and self[2] == other[2]
 end
 
-vector_mt.__add = function(self, other)
-  return module({self[1] + other[1], self[2] + other[2]})
+vector.mt.__add = function(self, other)
+  return vector({self[1] + other[1], self[2] + other[2]})
 end
 
-vector_mt.__sub = function(self, other)
-  return module({self[1] - other[1], self[2] - other[2]})
+vector.mt.__sub = function(self, other)
+  return vector({self[1] - other[1], self[2] - other[2]})
 end
 
-vector_mt.__mul = function(self, other)
-  return module({self[1] * other, self[2] * other})
+vector.mt.__mul = function(self, other)
+  return vector({self[1] * other, self[2] * other})
 end
 
-vector_mt.__div = function(self, other)
-  return module({self[1] / other, self[2] / other})
+vector.mt.__div = function(self, other)
+  return vector({self[1] / other, self[2] / other})
 end
 
-vector_mt.__unm = function(self)
-  return module({-self[1], -self[2]})
+vector.mt.__unm = function(self)
+  return vector({-self[1], -self[2]})
 end
 
-vector_mt.__le = function(self, other)
+vector.mt.__le = function(self, other)
   return self[1] <= other[1] and self[2] <= other[2]
 end
 
-vector_mt.__lt = function(self, other)
+vector.mt.__lt = function(self, other)
   return self[1] < other[1] and self[2] < other[2]
 end
 
-vector_mt.__ge = function(self, other)
+vector.mt.__ge = function(self, other)
   return other <= self
 end
 
-vector_mt.__gt = function(self, other)
+vector.mt.__gt = function(self, other)
   return other < self
 end
 
-vector_mt.__tostring = function(self)
+vector.mt.__tostring = function(self)
   return "{" .. tostring(self[1]) .. "; " .. tostring(self[2]) .. "}"
 end
 
-vector_mt.__serialize = function(self)
+vector.mt.__serialize = function(self)
   local x, y = unpack(self)
   return function()
     local _type = require("lib.types.vector")
@@ -92,11 +92,11 @@ vector_mt.__serialize = function(self)
 end
 
 vector_methods.ceil = function(self)
-  return module({math.ceil(self[1]), math.ceil(self[2])})
+  return vector({math.ceil(self[1]), math.ceil(self[2])})
 end
 
 vector_methods.map = function(self, f)
-  return module({f(self[1]), f(self[2])})
+  return vector({f(self[1]), f(self[2])})
 end
 
 vector_methods.abs = function(self)
@@ -105,9 +105,9 @@ end
 
 vector_methods.normalized = function(self)
   if math.abs(self[1]) > math.abs(self[2]) then
-    return module({Math.sign(self[1]), 0})
+    return vector({Math.sign(self[1]), 0})
   elseif self[2] ~= 0 then
-    return module({0, Math.sign(self[2])})
+    return vector({0, Math.sign(self[2])})
   else
     error("Can not normalize Vector.zero")
   end
@@ -118,4 +118,4 @@ vector_methods.fully_normalized = function(self)
   return self / self:abs()
 end
 
-return module
+return vector

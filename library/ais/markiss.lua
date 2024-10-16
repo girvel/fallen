@@ -26,12 +26,12 @@ module_mt.__call = function(_, travel_points)
       end
 
       local target = self._travel_points[1]
-      if entity.position == target then
-        return
-      end
-
       if not self._last_path then
         self._last_path = tcod.snapshot():find_path(entity.position, target)
+      end
+
+      if self._next_path_i > #self._last_path then
+        return
       end
 
       if not api.move(entity, self._last_path[self._next_path_i] - entity.position) then

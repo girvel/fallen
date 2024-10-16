@@ -121,6 +121,10 @@ grid._grid_mt.__index = function(self, v)
   local method = grid._grid_methods[v]
   if method then return method end
 
+  assert(
+    getmetatable(v) == Vector.mt,
+    "Attempt to index grid with %s which is neither vector nor a method name" % {v}
+  )
   assert(self:can_fit(v))
   return self._inner_array[self:_get_inner_index(unpack(v))]
 end
