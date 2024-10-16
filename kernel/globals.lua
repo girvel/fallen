@@ -32,7 +32,6 @@ return function()
   Html = require("lib.html")
   Dump = require("lib.dump")
   Dump.require_path = "lib.dump"
-  Tcod = require("lib.tcod")
 
   require("lib.tiny_dump_patch")()
 end

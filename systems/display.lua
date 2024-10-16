@@ -1,5 +1,6 @@
 local animated = require("tech.animated")
 local level = require("state.level")
+local tcod = require("tech.tcod")
 
 
 local _timer = {
@@ -41,8 +42,6 @@ display.system = static(Tiny.sortedProcessingSystem({
   filter = function(self, e) return e.position and e.sprite and e.view and e.view ~= "scene" end,
   base_callback = "draw",
 
-  _fov_map = nil,
-
   compare = function(self, first, second)
     if first.view ~= second.view then
       local iterator = Fun.iter(State.gui.views_order):enumerate()
@@ -76,34 +75,19 @@ display.system = static(Tiny.sortedProcessingSystem({
     local finish = Vector.use(Math.median, Vector.one, _finish, State.grids.solids.size)
 
     -- mask --
-    local solids = State.grids.solids
-    if not self._fov_map then
-      self._fov_map = Tcod.TCOD_map_new(unpack(solids.size))
-    end
-
-    for x = start[1], finish[1] do
-      for y = start[2], finish[2] do
-        local e = solids:safe_get(Vector({x, y}))
-        Tcod.TCOD_map_set_properties(
-          self._fov_map, x - 1, y - 1, Common.bool(not e or e.transparent_flag), not e
-        )
-      end
-    end
+    local snapshot = tcod.snapshot()
 
     if State.player.fov_radius == 0 then
       self:process(State.player)
       return
     end
 
-    local px, py = unpack(State.player.position - Vector.one)
-    Tcod.TCOD_map_compute_fov(
-      self._fov_map, px, py, State.player.fov_radius, true, Tcod.FOV_PERMISSIVE_8
-    )
+    snapshot:refresh_fov()
 
     for x = start[1], finish[1] do
       for y = start[2], finish[2] do
         local p = Vector({x, y})
-        if Tcod.TCOD_map_is_in_fov(self._fov_map, x - 1, y - 1)
+        if snapshot:is_visible(p)
           and not State.grids.tiles:safe_get(p) then
             self:_process_image_sprite(
               State.background_dummy,
@@ -118,12 +102,13 @@ display.system = static(Tiny.sortedProcessingSystem({
       local grid = State.grids[layer]
       for x = start[1], finish[1] do
         for y = start[2], finish[2] do
-          if Tcod.TCOD_map_is_in_fov(self._fov_map, x - 1, y - 1) then
+          local p = Vector {x, y}
+          if snapshot:is_visible(p) then
             local cell = grid:fast_get(x, y)
             if not level.GRID_COMPLEX_LAYERS[layer] then cell = {cell} end
             for _, e in ipairs(cell) do
               local is_hidden_by_perspective = (
-                not Tcod.TCOD_map_is_transparent(self._fov_map, x - 1, y - 1)
+                not snapshot:is_transparent(p)
                 and e.perspective_flag
                 and e.position[2] > State.player.position[2]
               )

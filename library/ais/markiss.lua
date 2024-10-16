@@ -15,6 +15,7 @@ module_mt.__call = function(_, travel_points)
     _next_path_i = 1,
 
     run = ai.async(function(entity, dt)
+      do return end  -- TODO! RM
       if State.combat then return end
 
       local ffi = require("ffi")
