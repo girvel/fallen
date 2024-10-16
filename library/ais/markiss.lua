@@ -21,17 +21,17 @@ module_mt.__call = function(_, travel_points)
     _last_path = nil,
     _next_path_i = 1,
 
+    initialize = function(entity)
+      local self = entity.ai
+
+      self._travel_points = Fun.iter(travel_points)
+        :map(function(p) return assert(State.rails.positions[p]) end)
+        :totable()
+    end,
+
     run = ai.async(function(entity, dt)
       if State.combat then return end
       local self = entity.ai
-
-      -- TODO ai.initialize
-      if not self._travel_points then
-        self._travel_points = Fun.iter(travel_points)
-          :map(function(p) return assert(State.rails.positions[p]) end)
-          :totable()
-      end
-
       return self._modal_behaviours[self._mode.codename](entity)
     end, true),
 
@@ -61,7 +61,7 @@ module_mt.__call = function(_, travel_points)
         local self = entity.ai
         railing.api.wait_seconds(self._mode.duration)
         self._mode = markiss.mode.looping()
-      end
+      end,
     },
   }
 end

@@ -27,6 +27,10 @@ acting.system = static(Tiny.processingSystem({
   filter = Tiny.requireAll("ai"),
   base_callback = "update",
 
+  onAdd = function(self, entity)
+    return -Query(entity.ai).initialize(entity)
+  end,
+
   preProcess = function()
     State.aggression_log = State._next_aggression_log
     State._next_aggression_log = {}
