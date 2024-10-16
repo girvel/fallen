@@ -18,14 +18,24 @@ api.narration = function(text, params)
       params.check[2] and "успех" or "провал"
     } .. text
   end
-  State.gui.dialogue:show(text, params.source)
+  State.gui.dialogue:show(text)
   while State.mode:get() ~= State.mode.free do coroutine.yield() end
 end
 
 api.line = function(entity, text, params)
-  api.narration([[<span color="%s">%s</span><span>: %s</span>]] % {
+  params = params or {}
+  if params.check then
+    text = '<span color="%s">[%s - %s] </span>' % {
+      params.check[2] and Colors.hex.green or Colors.hex.red,
+      translation.skill[params.check[1]] or translation.abilities[params.check[1]],
+      params.check[2] and "успех" or "провал"
+    } .. text
+  end
+  text = '<span color="%s">%s</span>: %s' % {
     Colors.to_hex(entity.sprite.color), Entity.name(entity), text
-  }, Table.extend({source = entity}, params))
+  }
+  State.gui.dialogue:show(text, entity.portrait)
+  while State.mode:get() ~= State.mode.free do coroutine.yield() end
 end
 
 api.wait_seconds = function(s)

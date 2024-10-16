@@ -11,8 +11,7 @@ return Module("state.gui.dialogue", function()
     options = nil,
     option_indices_map = nil,
 
-    show = function(self, line, source)
-      local portrait = -Query(source).portrait
+    show = function(self, line, portrait)
       self._entities = State:add_multiple(Table.concat(
         texting.generate(
           texting.parse("<pre>%s</pre>" % line), State.gui.wiki.styles,  -- TODO move styles?
