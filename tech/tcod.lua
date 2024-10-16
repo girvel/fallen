@@ -95,6 +95,24 @@ if tcod_c then
   snapshot_methods.is_transparent = function(self, position)
     return tcod_c.TCOD_map_is_transparent(self._map, position[1] - 1, position[2] - 1)
   end
+
+  snapshot_methods.find_path = function(self, origin, destination)
+    local raw_path = tcod_c.TCOD_path_new_using_map(self._map, 0)
+    local ox, oy = unpack(origin - Vector.one)
+    local dx, dy = unpack(destination - Vector.one)
+    tcod_c.TCOD_path_compute(raw_path, ox, oy, dx, dy)
+
+    local result = {}
+    for i = 0, tcod_c.TCOD_path_size(raw_path) - 1 do
+      local xp = ffi.new("int[1]")
+      local yp = ffi.new("int[1]")
+      tcod_c.TCOD_path_get(raw_path, i, xp, yp)
+      table.insert(result, Vector {xp[0], yp[0]} + Vector.one)
+    end
+    tcod_c.TCOD_path_delete(raw_path)
+
+    return result
+  end
 end
 
 -- TODO! fov fallback
