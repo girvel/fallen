@@ -128,7 +128,7 @@ return function()
             {
               "Я пока-с не придумал награду",
               "Но придумаю к нашей следующей встрече, в другом месте",
-              "Не терпится увидеть, это другое место",
+              "Не терпится увидеть это другое место",
             },
             {
               "И вновь привет, мой добрый друг!",
@@ -137,7 +137,7 @@ return function()
           }
 
           for _, line in ipairs(OPENING_LINES[math.min(self._interaction_i, #OPENING_LINES)]) do
-            api.line(rails.entities.markis, line)
+            api.line(rails.entities.markiss, line)
           end
         end
 
