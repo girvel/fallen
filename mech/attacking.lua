@@ -24,7 +24,7 @@ attacking.attack = function(entity, target, attack_roll, damage_roll)
     return false
   end
 
-  if attack < ac and not is_nat then
+  if target.invincible or attack < ac and not is_nat then
     State:add(gui.floating_damage("-", target.position))
     return false
   end

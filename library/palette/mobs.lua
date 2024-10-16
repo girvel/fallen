@@ -121,6 +121,7 @@ mobs.markiss = function(travel_points)
       max_hp = 15,
       base_abilities = abilities(10, 10, 10, 10, 10, 10),
       ai = markiss_ai(travel_points),
+      invincible = true,
     },
     interactive.detector(true)
   )
