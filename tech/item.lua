@@ -68,7 +68,7 @@ module.give = function(entity, this_item)
 end
 
 module.mixin = function()
-  return setmetatable(Table.extend(
+  return Table.extend(
     interactive(function(self, other)
       local old_position = self.position
       State.grids[self.layer][self.position] = nil
@@ -86,23 +86,23 @@ module.mixin = function()
       layer = "items",
       view = "scene",
       direction = "right",
-    }
-  ), {
-    __tostring = function(self)
-      local postfix = ""
-      if self.damage_roll then
-        local damage_roll = self.tags.versatile
-          and D(self.damage_roll.dice[1].sides_n + 2)
-          or self.damage_roll
 
-        postfix = postfix .. " (%s%s)" % {
-          damage_roll,
-          (self.bonus or 0) ~= 0 and "%+i" % self.bonus or ""
-        }
-      end
-      return Entity.name(self) .. postfix
-    end
-  })
+      to_display = function(self)
+        local postfix = ""
+        if self.damage_roll then
+          local damage_roll = self.tags.versatile
+            and D(self.damage_roll.dice[1].sides_n + 2)
+            or self.damage_roll
+
+          postfix = postfix .. " (%s%s)" % {
+            damage_roll,
+            (self.bonus or 0) ~= 0 and "%+i" % self.bonus or ""
+          }
+        end
+        return Entity.name(self) .. postfix
+      end,
+    }
+  )
 end
 
 return module

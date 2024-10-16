@@ -152,4 +152,17 @@ module.yellow_gloves = function()
   )
 end
 
+module.coal = function()
+  return Table.extend(
+    item.mixin(),
+    animated("assets/sprites/animations/coal", "atlas"),
+    {
+      direction = "right",
+      name = "Уголь",
+      codename = "coal",
+      slot = "underhand",
+    }
+  )
+end
+
 return module

@@ -104,12 +104,12 @@ return Module("state.gui.sidebar", function()
 
       local main_weapon = -Query(State.player).inventory.main_hand
       if main_weapon then
-        append("Оружие: %s\n\n" % tostring(main_weapon))
+        append("Оружие: %s\n\n" % main_weapon:to_display())
       end
 
       local second_weapon = -Query(State.player).inventory.other_hand
       if second_weapon then
-        append("Второе оружие: %s\n\n" % tostring(second_weapon))
+        append("Второе оружие: %s\n\n" % second_weapon:to_display())
       end
 
       local max = Table.extend({},

@@ -2796,7 +2796,7 @@
 						},
 						{
 							"__identifier": "position",
-							"__grid": [14,51],
+							"__grid": [30,49],
 							"__pivot": [0,0],
 							"__tags": ["positions"],
 							"__tile": null,
@@ -2805,13 +2805,13 @@
 							"width": 16,
 							"height": 16,
 							"defUid": 22,
-							"px": [224,816],
+							"px": [480,784],
 							"fieldInstances": [{ "__identifier": "name", "__type": "String", "__value": "checkpoint_4", "__tile": null, "defUid": 23, "realEditorValues": [{
 								"id": "V_String",
 								"params": ["checkpoint_4"]
 							}] }],
-							"__worldX": 224,
-							"__worldY": 816
+							"__worldX": 480,
+							"__worldY": 784
 						},
 						{
 							"__identifier": "position",
@@ -4350,7 +4350,7 @@
 						},
 						{
 							"__identifier": "markiss",
-							"__grid": [15,47],
+							"__grid": [32,54],
 							"__pivot": [0,0],
 							"__tags": ["mobs"],
 							"__tile": { "tilesetUid": 4, "x": 32, "y": 0, "w": 16, "h": 16 },
@@ -4359,7 +4359,7 @@
 							"width": 16,
 							"height": 16,
 							"defUid": 67,
-							"px": [240,752],
+							"px": [512,864],
 							"fieldInstances": [
 								{ "__identifier": "args", "__type": "String", "__value": "{\"coal_pickup\", \"coal_dropoff\"}", "__tile": null, "defUid": 69, "realEditorValues": [{
 									"id": "V_String",
@@ -4370,8 +4370,8 @@
 									"params": ["markiss"]
 								}] }
 							],
-							"__worldX": 240,
-							"__worldY": 752
+							"__worldX": 512,
+							"__worldY": 864
 						}
 					]
 				},

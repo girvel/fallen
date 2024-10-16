@@ -208,6 +208,7 @@ display.system = static(Tiny.sortedProcessingSystem({
       display_slot("head")
       display_slot("hurt")
       display_slot("gloves")
+      display_slot("underhand")
       if not is_main_hand_in_background then display_slot("main_hand") end
       if not is_other_hand_in_background then display_slot("other_hand") end
     end

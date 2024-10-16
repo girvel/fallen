@@ -1,6 +1,8 @@
+local item = require("tech.item")
 local tcod = require("tech.tcod")
 local ai = require("tech.ai")
 local railing = require("tech.railing")
+local items   = require("library.palette.items")
 local api = ai.api
 
 
@@ -12,7 +14,7 @@ markiss.mode = Enum {
 }
 
 module_mt.__call = function(_, travel_points)
-  assert(#travel_points > 1)
+  assert(#travel_points == 2)
 
   return {
     point_i = 1,
@@ -50,8 +52,15 @@ module_mt.__call = function(_, travel_points)
         if self._next_path_i > #self._last_path then
           self._last_path = nil
           self._next_path_i = 1
-          self.point_i = Math.loopmod(self.point_i + 1, #self._travel_points)
           self._mode = markiss.mode.paused(math.random() + 3)
+
+          self.point_i = Math.loopmod(self.point_i + 1, #self._travel_points)
+          if self.point_i == 2 then
+            item.give(entity, State:add(items.coal()))
+          else
+            State:remove(entity.inventory.hands)
+            entity.inventory.hands = nil
+          end
           return
         end
 
