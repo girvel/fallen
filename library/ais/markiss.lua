@@ -18,6 +18,7 @@ module_mt.__call = function(_, travel_points)
     _mode = markiss.mode.looping(),
 
     _travel_points = nil,
+    _point_i = 1,
     _last_path = nil,
     _next_path_i = 1,
 
@@ -40,11 +41,16 @@ module_mt.__call = function(_, travel_points)
         local self = entity.ai
 
         if not self._last_path then
-          self._last_path = tcod.snapshot():find_path(entity.position, self._travel_points[1])
-          Log.trace(entity.position, self._last_path)
+          self._last_path = tcod
+            .snapshot()
+            :find_path(entity.position, self._travel_points[self._point_i])
         end
 
         if self._next_path_i > #self._last_path then
+          self._last_path = nil
+          self._next_path_i = 1
+          self._point_i = (self._point_i + 1 - 1) % #self._travel_points + 1
+          self._mode = markiss.mode.paused(math.random() + 3)
           return
         end
 
@@ -57,7 +63,7 @@ module_mt.__call = function(_, travel_points)
         self._next_path_i = self._next_path_i + 1
 
         if Random.chance(.05) then
-          self._mode = markiss.mode.paused(math.random(1, 5))
+          self._mode = markiss.mode.paused(math.random() * 2)
         end
       end,
 

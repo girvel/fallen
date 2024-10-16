@@ -3603,25 +3603,6 @@
 						},
 						{
 							"__identifier": "door",
-							"__grid": [12,52],
-							"__pivot": [0,0],
-							"__tags": ["live"],
-							"__tile": { "tilesetUid": 11, "x": 0, "y": 0, "w": 16, "h": 16 },
-							"__smartColor": "#BE4A2F",
-							"iid": "14f60b20-4ce0-11ef-896a-9556b8b40051",
-							"width": 16,
-							"height": 16,
-							"defUid": 12,
-							"px": [192,832],
-							"fieldInstances": [
-								{ "__identifier": "args", "__type": "String", "__value": null, "__tile": null, "defUid": 45, "realEditorValues": [] },
-								{ "__identifier": "rails_name", "__type": "String", "__value": null, "__tile": null, "defUid": 47, "realEditorValues": [] }
-							],
-							"__worldX": 192,
-							"__worldY": 832
-						},
-						{
-							"__identifier": "door",
 							"__grid": [21,68],
 							"__pivot": [0,0],
 							"__tags": ["live"],
