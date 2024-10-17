@@ -4361,10 +4361,7 @@
 							"defUid": 67,
 							"px": [512,864],
 							"fieldInstances": [
-								{ "__identifier": "args", "__type": "String", "__value": "{\"coal_pickup\", \"coal_dropoff\"}", "__tile": null, "defUid": 69, "realEditorValues": [{
-									"id": "V_String",
-									"params": ["{\"coal_pickup\", \"coal_dropoff\"}"]
-								}] },
+								{ "__identifier": "args", "__type": "String", "__value": null, "__tile": null, "defUid": 69, "realEditorValues": [null] },
 								{ "__identifier": "rails_name", "__type": "String", "__value": "markiss", "__tile": null, "defUid": 70, "realEditorValues": [{
 									"id": "V_String",
 									"params": ["markiss"]

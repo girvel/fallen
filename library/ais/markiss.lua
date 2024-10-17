@@ -13,9 +13,9 @@ markiss.mode = Enum {
   looping = {},
 }
 
-module_mt.__call = function(_, travel_points)
-  assert(#travel_points == 2)
+local travel_points = {"coal_pickup", "coal_dropoff"}
 
+module_mt.__call = function(_)
   return {
     point_i = 1,
 

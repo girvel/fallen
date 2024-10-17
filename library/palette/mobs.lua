@@ -108,7 +108,7 @@ mobs.cook = function()
   )
 end
 
-mobs.markiss = function(travel_points)
+mobs.markiss = function()
   return Table.extend(
     humanoid {
       name = "Кот",
@@ -120,7 +120,7 @@ mobs.markiss = function(travel_points)
       },
       max_hp = 15,
       base_abilities = abilities(10, 10, 10, 10, 10, 10),
-      ai = markiss_ai(travel_points),
+      ai = markiss_ai(),
       invincible = true,
     },
     interactive.detector(true)
