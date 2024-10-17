@@ -103,7 +103,12 @@ local primitives = {
 
 handle_primitive = function(x, cache)
   local xtype = type(x)
-  assert(primitives[xtype], ("dump does not support type %q of %s"):format(xtype, table.concat(stack, ".")))
+  if not primitives[xtype] then
+    table.insert(warnings, ("dump does not support type %q of %s"):format(
+      xtype, table.concat(stack, ".")
+    ))
+    return "nil"
+  end
 
   if xtype == "table" or xtype == "function" then
     local cache_i = cache[x]

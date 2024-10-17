@@ -130,7 +130,7 @@ return function()
           rails.entities.colored_pipe.interact = nil
         end
 
-        State.player.in_cutscene = false
+        State.player.ai.in_cutscene = false
       end,
     },
 
@@ -228,7 +228,7 @@ return function()
         end
 
         if not rails.been_to_latrine then
-          State.player.in_cutscene = true
+          State.player.ai.in_cutscene = true
           State:set_shader()
 
           api.narration("Ты не можешь контролировать свой желудок...")
@@ -242,7 +242,7 @@ return function()
           api.narration("Но ужасное состояние никуда не уходит.")
 
           rails.been_to_latrine = true
-          State.player.in_cutscene = false
+          State.player.ai.in_cutscene = false
           State:set_shader(shaders.latrine)
         end
 

@@ -151,7 +151,7 @@ return function()
             break
           end
         end
-        State.player.in_cutscene = false
+        State.player.ai.in_cutscene = false
       end,
     },
 

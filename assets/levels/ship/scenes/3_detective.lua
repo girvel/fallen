@@ -58,7 +58,7 @@ return function()
         rails.entities.leaking_valve.paused = false
         pipes.burst_with_steam(rails.entities.leaking_valve)
         api.narration("Мощный поток горячего пара от ближайшей трубы прерывает твои мысли")
-        State.player.in_cutscene = false
+        State.player.ai.in_cutscene = false
         api.autosave()
       end,
     },
@@ -134,7 +134,7 @@ return function()
       run = function(self, rails)
         rails.entities.engineer_1.interacted_by = nil
 
-        State.player.in_cutscene = true
+        State.player.ai.in_cutscene = true
         api.narration("Когда ты подходишь ближе, измазанный сажей полуэльф всё так же не оборачивается.")
         api.narration("Его глаза, не отрываясь, смотрят прямо на приборы.")
         api.narration("Полуповисшая рука мертвой хваткой сжимает газовый ключ.")
@@ -163,7 +163,7 @@ return function()
           end
         end
         rails.dreamers_talked_to[1] = true
-        State.player.in_cutscene = false
+        State.player.ai.in_cutscene = false
       end,
     },
     {
@@ -179,7 +179,7 @@ return function()
         api.rotate_to_player(rails.entities.engineer_2)
         rails.entities.engineer_2:animate()
 
-        State.player.in_cutscene = true
+        State.player.ai.in_cutscene = true
         api.narration("Уродливый полурослик с перевязанным лицом делает один оборот массивного красного вентиля.")
         api.narration("А спустя 10 секунд - ещё один.")
         api.narration("И снова.")
@@ -210,7 +210,7 @@ return function()
         end
         rails.dreamers_talked_to[2] = true
         rails.entities.engineer_2:rotate(old_direction)
-        State.player.in_cutscene = false
+        State.player.ai.in_cutscene = false
       end,
     },
     {
@@ -223,7 +223,7 @@ return function()
       run = function(self, rails)
         rails.entities.engineer_3.interacted_by = nil
 
-        State.player.in_cutscene = true
+        State.player.ai.in_cutscene = true
         api.narration("Сутулый полуорк в ярко-жёлтых огнеупорных перчатках работает с незнакомым тебе устройством.")
         api.narration("Панель с множеством непонятных кнопок, рычагов и приборов серьёзно повреждена.")
         api.narration("Сталь вмята в нескольких местах, будто от сильных ударов, а счётчики скачут, как бесы на сковородке.")
@@ -252,7 +252,7 @@ return function()
           end
         end
         rails.dreamers_talked_to[3] = true
-        State.player.in_cutscene = false
+        State.player.ai.in_cutscene = false
       end,
     },
     engineer_4_normal_dialogue = {
@@ -268,7 +268,7 @@ return function()
         api.rotate_to_player(rails.entities.engineer_4)
         rails.entities.engineer_4:animate()
 
-        State.player.in_cutscene = true
+        State.player.ai.in_cutscene = true
         api.narration("Дварфийка покрытыми волдырями руками засовывает вглубь небольшой печи очередную порцию чего-то, похожего на чёрную смолу.")
         api.narration("Ты замечаешь, что её пальцы совсем не могут двигаться.")
         api.narration("Она слегка оборачивается при твоем приближении, продолжая работать.")
@@ -313,7 +313,7 @@ return function()
         end
         rails.entities.engineer_4:rotate(old_direction)
         rails.dreamers_talked_to[4] = true
-        State.player.in_cutscene = false
+        State.player.ai.in_cutscene = false
       end,
     },
 
