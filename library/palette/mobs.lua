@@ -1,3 +1,4 @@
+local hauler_ai = require("library.ais.hauler")
 local sprite = require("tech.sprite")
 local markiss_ai = require("library.ais.markiss")
 local class = require("mech.class")
@@ -114,7 +115,6 @@ mobs.markiss = function()
       name = "Кот",
       race = races.furry,
       portrait = sprite.image("assets/sprites/portraits/markiss.png"),
-      direction = "right",
       inventory = {
         head = body_parts.furry_head(),
       },
@@ -125,6 +125,16 @@ mobs.markiss = function()
     },
     interactive.detector(true)
   )
+end
+
+mobs.hauler = function()
+  return humanoid {
+    name = "...",
+    race = Random.choice(dreamer_races),
+    max_hp = 15,
+    base_abilities = abilities(10, 10, 10, 10, 10, 10),
+    ai = hauler_ai(),
+  }
 end
 
 mobs.dreamer = function()

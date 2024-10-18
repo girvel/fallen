@@ -11,7 +11,7 @@
 	"iid": "1bd1ae20-4ce0-11ef-896a-fbdee15fad32",
 	"jsonVersion": "1.5.3",
 	"appBuildId": 473703,
-	"nextUid": 71,
+	"nextUid": 72,
 	"identifierStyle": "Free",
 	"toc": [],
 	"worldLayout": "Free",
@@ -1661,6 +1661,41 @@
 					"tilesetUid": null
 				}
 			]
+		},
+		{
+			"identifier": "hauler",
+			"uid": 71,
+			"tags": ["mobs"],
+			"exportToToc": false,
+			"allowOutOfBounds": false,
+			"doc": null,
+			"width": 16,
+			"height": 16,
+			"resizableX": false,
+			"resizableY": false,
+			"minWidth": null,
+			"maxWidth": null,
+			"minHeight": null,
+			"maxHeight": null,
+			"keepAspectRatio": false,
+			"tileOpacity": 1,
+			"fillOpacity": 0.08,
+			"lineOpacity": 0,
+			"hollow": false,
+			"color": "#C0CBDC",
+			"renderMode": "Tile",
+			"showName": true,
+			"tilesetId": 4,
+			"tileRenderMode": "FitInside",
+			"tileRect": { "tilesetUid": 4, "x": 32, "y": 0, "w": 16, "h": 16 },
+			"uiTileRect": null,
+			"nineSliceBorders": [],
+			"maxCount": 0,
+			"limitScope": "PerLevel",
+			"limitBehavior": "MoveLastOne",
+			"pivotX": 0,
+			"pivotY": 0,
+			"fieldDefs": []
 		}
 	], "tilesets": [
 		{
@@ -4369,6 +4404,22 @@
 							],
 							"__worldX": 512,
 							"__worldY": 864
+						},
+						{
+							"__identifier": "hauler",
+							"__grid": [31,51],
+							"__pivot": [0,0],
+							"__tags": ["mobs"],
+							"__tile": { "tilesetUid": 4, "x": 32, "y": 0, "w": 16, "h": 16 },
+							"__smartColor": "#C0CBDC",
+							"iid": "b62f5f70-73f0-11ef-a2ee-bdb677479ddf",
+							"width": 16,
+							"height": 16,
+							"defUid": 71,
+							"px": [496,816],
+							"fieldInstances": [],
+							"__worldX": 496,
+							"__worldY": 816
 						}
 					]
 				},

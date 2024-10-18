@@ -126,7 +126,7 @@ else
     return Common.bool(not e or e.transparent_flag)
   end
 
-  snapshot_methods.find_path = function()
+  snapshot_methods.find_path = function(self, origin, destination)
     return {}
   end
 end

@@ -1,3 +1,4 @@
+local tcod = require("tech.tcod")
 local actions = require("mech.creature.actions")
 
 
@@ -35,7 +36,7 @@ ai.api.move = function(entity, direction)
 end
 
 ai.api.travel = function(entity, destination)
-  Log.debug("Moving to " .. tostring(destination))
+  -- Log.debug("%s moving to %s" % {Entity.name(entity), destination})
   if entity.position == destination then return end
   local path = State.grids.solids:find_path(entity.position, destination, 25)
   if #path == 0 then return end
@@ -57,6 +58,25 @@ ai.api.travel = function(entity, destination)
       coroutine.yield()
       if ai.api.move(entity, position - entity.position) then break end
     end
+  end
+end
+
+ai.api.tcod_travel = function(entity, destination)
+  -- Log.debug("%s moving to %s" % {Entity.name(entity), destination})
+  if entity.position == destination then return end
+  local path = tcod.snapshot():find_path(entity.position, destination)
+
+  for _, position in ipairs(path) do
+    if entity.resources.movement <= 0 then
+      if entity.resources.actions > 0 then
+        entity:act(actions.dash)
+      else
+        break
+      end
+    end
+
+    coroutine.yield()
+    if not ai.api.move(entity, position - entity.position) then break end
   end
 end
 
