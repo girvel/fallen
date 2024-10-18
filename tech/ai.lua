@@ -7,7 +7,7 @@ ai.api = static {}
 
 local coroutine_cache = {}
 
-ai.async = function(fun, works_outside_of_combat)
+ai.async = function(fun, works_outside_of_combat)  -- TODO remove last argument
   return Dump.ignore_upvalue_size .. function(self, entity, dt)
     -- TODO support WORLD_TURN (which is 1 frame only btw)
     if
@@ -16,14 +16,14 @@ ai.async = function(fun, works_outside_of_combat)
     then return end
 
     while Common.relative_period(.25, dt, ai.async, entity) do
-      coroutine_cache[entity] = coroutine_cache[entity] or coroutine.create(function(...)
+      coroutine_cache[fun] = coroutine_cache[fun] or coroutine.create(function(...)
         return Debug.call(fun, ...)
       end)
 
-      Common.resume_logged(coroutine_cache[entity], self, entity, dt)
+      Common.resume_logged(coroutine_cache[fun], self, entity, dt)
 
-      if coroutine.status(coroutine_cache[entity]) == "dead" then
-        coroutine_cache[entity] = nil
+      if coroutine.status(coroutine_cache[fun]) == "dead" then
+        coroutine_cache[fun] = nil
         return entity:act(actions.finish_turn)
       end
     end

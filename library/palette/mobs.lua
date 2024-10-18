@@ -1,6 +1,5 @@
 local hauler_ai = require("library.ais.hauler")
 local sprite = require("tech.sprite")
-local markiss_ai = require("library.ais.markiss")
 local class = require("mech.class")
 local body_parts = require("library.body_parts")
 local fighter = require("mech.classes.fighter")
@@ -120,7 +119,7 @@ mobs.markiss = function()
       },
       max_hp = 15,
       base_abilities = abilities(10, 10, 10, 10, 10, 10),
-      ai = markiss_ai(),
+      ai = hauler_ai(),
       invincible = true,
     },
     interactive.detector(true)

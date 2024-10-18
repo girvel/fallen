@@ -19,11 +19,11 @@ module.steam = function(direction)
       direction = direction,
 
       harmed_entities = {},
-      ai = {run = function(self, dt)
-        local target = State.grids.solids[self.position + Vector[self.direction]]
-        if target and target.hp and not self.harmed_entities[target] then
+      ai = {run = function(self, entity, dt)
+        local target = State.grids.solids[entity.position + Vector[entity.direction]]
+        if target and target.hp and not entity.harmed_entities[target] then
           attacking.attack_save(target, "dex", 15, D.roll({}, 1))
-          self.harmed_entities[target] = true
+          entity.harmed_entities[target] = true
         end
       end},
     }

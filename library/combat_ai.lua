@@ -9,7 +9,7 @@ local combat_ai, module_mt, static = Module("library.combat_ai")
 module_mt.__call = function()
   return {
     -- TODO optimize
-    run = ai.async(function(entity, dt)
+    run = ai.async(function(self, entity, dt)
       if not api.in_combat(entity) then return end
 
       api.travel(entity, State.player.position)
