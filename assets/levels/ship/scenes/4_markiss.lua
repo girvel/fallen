@@ -356,5 +356,41 @@ return function()
         end  -- main dialogue loop
       end,
     },
+
+    markiss_attacked = {
+      name = "Markiss attacked",
+      enabled = true,
+
+      characters = {
+        markiss = {},
+      },
+
+      start_predicate = function(self, rails, dt, c)
+        return State:check_aggression(State.player, c.markiss)
+      end,
+
+      _counter = 0,
+      _line_entities = {},
+
+      run = function(self, rails, c)
+        local lines = {
+          "Ух, было-с близко",
+          "Ты действительно-с хочешь поранить кота?",
+          "Ай больно-больно! Хотя нет — не больно",
+          "Это всё внутренние ограничения; расслабься, соберись с духом",
+          "Не получилось? Очень жаль.",
+          "Почти попадание! Не бросай попытки-с, совершенствуйся",
+          "На следующий раз точно получится",
+        }
+
+        self._counter = self._counter + 1
+        if State:exists(self._line_entities[1]) then
+          State:remove_multiple(self._line_entities)
+        end
+        self._line_entities = api.message.temporal(
+          lines[math.min(#lines, self._counter)], {source = c.markiss}
+        )
+      end,
+    },
   }
 end

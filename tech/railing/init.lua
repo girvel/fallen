@@ -12,8 +12,8 @@ railing._methods.update = static .. function(self, dt)
 
     if scene.enabled
       and (not self:is_running(scene) or scene.multiple_instances_flag)
-      and scene:start_predicate(self, dt)
       and Fun.pairs(characters):all(function(_, c) return State:exists(c) end)
+      and scene:start_predicate(self, dt, characters)
     then
       table.insert(self._active_coroutines, {
         coroutine = coroutine.create(function()
