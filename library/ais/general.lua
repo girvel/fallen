@@ -21,46 +21,46 @@ module_mt.__call = function(_, works_outside_of_combat)
     was_attacked_by = {},
 
     -- TODO optimize
-    run = ai.async(function(self, dt)
+    run = ai.async(function(self, entity, dt)
       if
-        not api.in_combat(self)
-        and self.ai.mode.enum_variant ~= general_ai.modes.run_away_to
+        not api.in_combat(entity)
+        and self.mode.enum_variant ~= general_ai.modes.run_away_to
       then return end
 
-      Log.debug("--- %s ---" % Entity.name(self))
+      Log.debug("--- %s ---" % Entity.name(entity))
 
-      local was_attacked_by = self.ai.was_attacked_by
-      self.ai.was_attacked_by = {}
+      local was_attacked_by = self.was_attacked_by
+      self.was_attacked_by = {}
 
-      if self.ai.look_for_aggression then
-        self.ai.look_for_aggression = false
+      if self.look_for_aggression then
+        self.look_for_aggression = false
         if Fun.iter(was_attacked_by):all(function(e) return e ~= State.player end) then
-          hostility.make_friendly(self.faction)
+          hostility.make_friendly(entity.faction)
           return
         end
       end
 
-      local mode_type = self.ai.mode.enum_variant
+      local mode_type = self.mode.enum_variant
       if mode_type == general_ai.modes.skip_turn then
-        railing.api.message.temporal("Стой! Остановись, мужик!!! Не бей меня!", {source = self})
-        self.ai.mode = general_ai.modes.normal()
-        self.ai.look_for_aggression = true
+        railing.api.message.temporal("Стой! Остановись, мужик!!! Не бей меня!", {source = entity})
+        self.mode = general_ai.modes.normal()
+        self.look_for_aggression = true
         return
       end
 
       if mode_type == general_ai.modes.run_away_to then
-        api.travel(self, self.ai.mode:unpack())
+        api.travel(entity, self.mode:unpack())
         return
       end
 
-      api.travel(self, State.player.position)
+      api.travel(entity, State.player.position)
 
-      local direction = State.player.position - self.position
+      local direction = State.player.position - entity.position
       if direction:abs() == 1 then
         Log.debug("Attempt at attacking the player")
-        self:rotate(Vector.name_from_direction(direction))
-        while self:act(actions.hand_attack) do
-          while not self.animation.current.codename:starts_with("idle") do
+        entity:rotate(Vector.name_from_direction(direction))
+        while entity:act(actions.hand_attack) do
+          while not entity.animation.current.codename:starts_with("idle") do
             coroutine.yield()
           end
         end

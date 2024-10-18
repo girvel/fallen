@@ -18,8 +18,7 @@ module_mt.__call = function(_)
   return {
     point_i = 1,
 
-    run = ai.async(function(entity)
-      local self = entity.ai
+    run = ai.async(function(self, entity)
       if entity.position == hauler.get_point(self.point_i) then
         railing.api.wait_seconds(3)
         self.point_i = 3 - self.point_i

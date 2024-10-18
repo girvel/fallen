@@ -5,26 +5,26 @@ local actions = require("mech.creature.actions")
 local ai, _, static = Module("tech.ai")
 ai.api = static {}
 
+local coroutine_cache = {}
+
 ai.async = function(fun, works_outside_of_combat)
-  return Dump.ignore_upvalue_size .. function(self, dt)
+  return Dump.ignore_upvalue_size .. function(self, entity, dt)
     -- TODO support WORLD_TURN (which is 1 frame only btw)
     if
       not works_outside_of_combat
-      and not Table.contains(-Query(State.combat).list or {}, self)
+      and not Table.contains(-Query(State.combat).list or {}, entity)
     then return end
 
-    while Common.relative_period(.25, dt, self) do
-      if not self._ai_coroutine then
-        self._ai_coroutine = coroutine.create(function(...)
-          return Debug.call(fun, ...)
-        end)
-      end
+    while Common.relative_period(.25, dt, ai.async, entity) do
+      coroutine_cache[entity] = coroutine_cache[entity] or coroutine.create(function(...)
+        return Debug.call(fun, ...)
+      end)
 
-      Common.resume_logged(self._ai_coroutine, self, dt)
+      Common.resume_logged(coroutine_cache[entity], self, entity, dt)
 
-      if coroutine.status(self._ai_coroutine) == "dead" then
-        self._ai_coroutine = nil
-        return self:act(actions.finish_turn)
+      if coroutine.status(coroutine_cache[entity]) == "dead" then
+        coroutine_cache[entity] = nil
+        return entity:act(actions.finish_turn)
       end
     end
   end

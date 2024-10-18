@@ -34,7 +34,7 @@ module_mt.__call = function(_)
     end,
 
     ai = {
-      run = function(entity)
+      run = function(self, entity)
         local result = Fun.iter(entity.actions)
           :map(function(f) return entity:act(f) end)
           :filter(function(v) return v == combat.TURN_END_SIGNAL end)

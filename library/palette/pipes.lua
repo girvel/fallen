@@ -30,21 +30,21 @@ factoring.extend(pipes, "leaking_left_down", {
   sound_loop = hissing_sound,
   paused = false,
 
-  ai = {run = function(self, dt)
-    self.overflow_counter = self.overflow_counter + dt
+  ai = {run = function(self, entity, dt)
+    entity.overflow_counter = entity.overflow_counter + dt
 
-    if self.overflow_counter >= 60 then
-      sound.play({self.sound_loop}, self.position)
-      if Common.relative_period(1, dt, self, "steam") then
-        pipes.burst_with_steam(self)
+    if entity.overflow_counter >= 60 then
+      sound.play({entity.sound_loop}, entity.position)
+      if Common.relative_period(1, dt, entity, "steam") then
+        pipes.burst_with_steam(entity)
       end
       return
     end
-    self.sound_loop.source:stop()
+    entity.sound_loop.source:stop()
 
-    if Common.relative_period(self.trigger_seconds, dt, self, "steam") then
-      self.trigger_seconds = 8 + math.random() * 4
-      pipes.burst_with_steam(self)
+    if Common.relative_period(entity.trigger_seconds, dt, entity, "steam") then
+      entity.trigger_seconds = 8 + math.random() * 4
+      pipes.burst_with_steam(entity)
     end
   end},
 })

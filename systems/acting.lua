@@ -1,7 +1,6 @@
 local combat = require("tech.combat")
 local fx = require("tech.fx")
 local animated = require("tech.animated")
-local item = require("tech.item")
 local sound = require("tech.sound")
 local hostility = require("mech.hostility")
 
@@ -97,7 +96,7 @@ acting.system = static(Tiny.processingSystem({
   end,
 
   _process_outside_combat = function(self, entity, dt)
-    Debug.pcall(entity.ai.run, entity, dt)
+    Debug.pcall(entity.ai.run, entity.ai, entity, dt)
     if -Query(entity.animation).current.codename:starts_with("idle") then
       Table.extend(entity.resources, -Query(entity):get_resources("move"))
     else
@@ -125,7 +124,7 @@ acting.system = static(Tiny.processingSystem({
       Log.warn("%s's turn timed out" % Entity.name(State.combat:get_current()))
     end
 
-    local ok, signal = Debug.pcall(entity.ai.run, entity, dt)
+    local ok, signal = Debug.pcall(entity.ai.run, entity.ai, entity, dt)
     if
       not ok
       or signal == combat.TURN_END_SIGNAL and not is_world_turn

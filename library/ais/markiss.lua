@@ -23,16 +23,13 @@ module_mt.__call = function(_)
     _last_path = nil,
     _next_path_i = 1,
 
-    run = ai.async(function(entity, dt)
+    run = ai.async(function(self, entity)
       if State.combat then return end
-      local self = entity.ai
-      return self._modal_behaviours[self._mode.codename](entity)
+      return self._modal_behaviours[self._mode.codename](self, entity)
     end, true),
 
     _modal_behaviours = {
-      looping = function(entity)
-        local self = entity.ai
-
+      looping = function(self, entity)
         if not self._last_path then
           self._last_path = tcod
             .snapshot()
@@ -67,8 +64,7 @@ module_mt.__call = function(_)
         end
       end,
 
-      paused = function(entity)
-        local self = entity.ai
+      paused = function(self, entity)
         railing.api.wait_seconds(self._mode.duration)
         self._mode = markiss.mode.looping()
       end,
