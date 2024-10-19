@@ -11,7 +11,7 @@
 	"iid": "1bd1ae20-4ce0-11ef-896a-fbdee15fad32",
 	"jsonVersion": "1.5.3",
 	"appBuildId": 473703,
-	"nextUid": 73,
+	"nextUid": 74,
 	"identifierStyle": "Free",
 	"toc": [],
 	"worldLayout": "Free",
@@ -730,6 +730,43 @@
 					"editorLinkStyle": "StraightArrow",
 					"editorDisplayColor": null,
 					"editorAlwaysShow": false,
+					"editorShowInWorld": true,
+					"editorCutLongValues": true,
+					"editorTextSuffix": null,
+					"editorTextPrefix": null,
+					"useForSmartColor": false,
+					"exportToToc": false,
+					"searchable": false,
+					"min": null,
+					"max": null,
+					"regex": null,
+					"acceptFileTypes": null,
+					"defaultOverride": null,
+					"textLanguageMode": null,
+					"symmetricalRef": false,
+					"autoChainRef": true,
+					"allowOutOfLevelRef": true,
+					"allowedRefs": "OnlySame",
+					"allowedRefsEntityUid": null,
+					"allowedRefTags": [],
+					"tilesetUid": null
+				},
+				{
+					"identifier": "args",
+					"doc": null,
+					"__type": "String",
+					"uid": 73,
+					"type": "F_String",
+					"isArray": false,
+					"canBeNull": false,
+					"arrayMinLength": null,
+					"arrayMaxLength": null,
+					"editorDisplayMode": "ValueOnly",
+					"editorDisplayScale": 1,
+					"editorDisplayPos": "Above",
+					"editorLinkStyle": "StraightArrow",
+					"editorDisplayColor": null,
+					"editorAlwaysShow": true,
 					"editorShowInWorld": true,
 					"editorCutLongValues": true,
 					"editorTextSuffix": null,
@@ -1688,41 +1725,6 @@
 			"tilesetId": 4,
 			"tileRenderMode": "FitInside",
 			"tileRect": { "tilesetUid": 4, "x": 32, "y": 0, "w": 16, "h": 16 },
-			"uiTileRect": null,
-			"nineSliceBorders": [],
-			"maxCount": 0,
-			"limitScope": "PerLevel",
-			"limitBehavior": "MoveLastOne",
-			"pivotX": 0,
-			"pivotY": 0,
-			"fieldDefs": []
-		},
-		{
-			"identifier": "dreamer_team_1",
-			"uid": 72,
-			"tags": ["mobs"],
-			"exportToToc": false,
-			"allowOutOfBounds": false,
-			"doc": null,
-			"width": 16,
-			"height": 16,
-			"resizableX": false,
-			"resizableY": false,
-			"minWidth": null,
-			"maxWidth": null,
-			"minHeight": null,
-			"maxHeight": null,
-			"keepAspectRatio": false,
-			"tileOpacity": 1,
-			"fillOpacity": 0.08,
-			"lineOpacity": 0,
-			"hollow": false,
-			"color": "#8B9BB4",
-			"renderMode": "Tile",
-			"showName": true,
-			"tilesetId": 4,
-			"tileRenderMode": "FitInside",
-			"tileRect": { "tilesetUid": 4, "x": 16, "y": 0, "w": 16, "h": 16 },
 			"uiTileRect": null,
 			"nineSliceBorders": [],
 			"maxCount": 0,
@@ -4260,10 +4262,13 @@
 							"height": 16,
 							"defUid": 24,
 							"px": [320,1232],
-							"fieldInstances": [{ "__identifier": "rails_name", "__type": "String", "__value": "neighbour", "__tile": null, "defUid": 27, "realEditorValues": [{
-								"id": "V_String",
-								"params": ["neighbour"]
-							}] }],
+							"fieldInstances": [
+								{ "__identifier": "rails_name", "__type": "String", "__value": "neighbour", "__tile": null, "defUid": 27, "realEditorValues": [{
+									"id": "V_String",
+									"params": ["neighbour"]
+								}] },
+								{ "__identifier": "args", "__type": "String", "__value": "", "__tile": null, "defUid": 73, "realEditorValues": [] }
+							],
 							"__worldX": 320,
 							"__worldY": 1232
 						},
@@ -4457,54 +4462,6 @@
 							"__worldY": 816
 						},
 						{
-							"__identifier": "dreamer_team_1",
-							"__grid": [23,42],
-							"__pivot": [0,0],
-							"__tags": ["mobs"],
-							"__tile": { "tilesetUid": 4, "x": 16, "y": 0, "w": 16, "h": 16 },
-							"__smartColor": "#8B9BB4",
-							"iid": "65c8df80-73f0-11ef-a2ee-d99c1eff4585",
-							"width": 16,
-							"height": 16,
-							"defUid": 72,
-							"px": [368,672],
-							"fieldInstances": [],
-							"__worldX": 368,
-							"__worldY": 672
-						},
-						{
-							"__identifier": "dreamer_team_1",
-							"__grid": [19,44],
-							"__pivot": [0,0],
-							"__tags": ["mobs"],
-							"__tile": { "tilesetUid": 4, "x": 16, "y": 0, "w": 16, "h": 16 },
-							"__smartColor": "#8B9BB4",
-							"iid": "664d78d0-73f0-11ef-a2ee-7b1c2a8569b5",
-							"width": 16,
-							"height": 16,
-							"defUid": 72,
-							"px": [304,704],
-							"fieldInstances": [],
-							"__worldX": 304,
-							"__worldY": 704
-						},
-						{
-							"__identifier": "dreamer_team_1",
-							"__grid": [26,44],
-							"__pivot": [0,0],
-							"__tags": ["mobs"],
-							"__tile": { "tilesetUid": 4, "x": 16, "y": 0, "w": 16, "h": 16 },
-							"__smartColor": "#8B9BB4",
-							"iid": "67bbaed0-73f0-11ef-a2ee-f969d8a39c0e",
-							"width": 16,
-							"height": 16,
-							"defUid": 72,
-							"px": [416,704],
-							"fieldInstances": [],
-							"__worldX": 416,
-							"__worldY": 704
-						},
-						{
 							"__identifier": "hauler",
 							"__grid": [24,39],
 							"__pivot": [0,0],
@@ -4535,6 +4492,138 @@
 							"fieldInstances": [],
 							"__worldX": 224,
 							"__worldY": 736
+						},
+						{
+							"__identifier": "dreamer",
+							"__grid": [26,42],
+							"__pivot": [0,0],
+							"__tags": ["mobs"],
+							"__tile": { "tilesetUid": 4, "x": 48, "y": 0, "w": 16, "h": 16 },
+							"__smartColor": "#D77643",
+							"iid": "96fa2fd0-73f0-11ef-a2ee-6baaa29a4e78",
+							"width": 16,
+							"height": 16,
+							"defUid": 24,
+							"px": [416,672],
+							"fieldInstances": [
+								{ "__identifier": "rails_name", "__type": "String", "__value": null, "__tile": null, "defUid": 27, "realEditorValues": [] },
+								{ "__identifier": "args", "__type": "String", "__value": "1", "__tile": null, "defUid": 73, "realEditorValues": [{
+									"id": "V_String",
+									"params": ["1"]
+								}] }
+							],
+							"__worldX": 416,
+							"__worldY": 672
+						},
+						{
+							"__identifier": "dreamer",
+							"__grid": [22,42],
+							"__pivot": [0,0],
+							"__tags": ["mobs"],
+							"__tile": { "tilesetUid": 4, "x": 48, "y": 0, "w": 16, "h": 16 },
+							"__smartColor": "#D77643",
+							"iid": "a3b0bbe0-73f0-11ef-a2ee-77f7c0c0c958",
+							"width": 16,
+							"height": 16,
+							"defUid": 24,
+							"px": [352,672],
+							"fieldInstances": [
+								{ "__identifier": "rails_name", "__type": "String", "__value": null, "__tile": null, "defUid": 27, "realEditorValues": [] },
+								{ "__identifier": "args", "__type": "String", "__value": "1", "__tile": null, "defUid": 73, "realEditorValues": [{
+									"id": "V_String",
+									"params": ["1"]
+								}] }
+							],
+							"__worldX": 352,
+							"__worldY": 672
+						},
+						{
+							"__identifier": "dreamer",
+							"__grid": [19,44],
+							"__pivot": [0,0],
+							"__tags": ["mobs"],
+							"__tile": { "tilesetUid": 4, "x": 48, "y": 0, "w": 16, "h": 16 },
+							"__smartColor": "#D77643",
+							"iid": "a76ed550-73f0-11ef-a2ee-1d9a69cf53d3",
+							"width": 16,
+							"height": 16,
+							"defUid": 24,
+							"px": [304,704],
+							"fieldInstances": [
+								{ "__identifier": "rails_name", "__type": "String", "__value": null, "__tile": null, "defUid": 27, "realEditorValues": [] },
+								{ "__identifier": "args", "__type": "String", "__value": "1", "__tile": null, "defUid": 73, "realEditorValues": [{
+									"id": "V_String",
+									"params": ["1"]
+								}] }
+							],
+							"__worldX": 304,
+							"__worldY": 704
+						},
+						{
+							"__identifier": "dreamer",
+							"__grid": [29,44],
+							"__pivot": [0,0],
+							"__tags": ["mobs"],
+							"__tile": { "tilesetUid": 4, "x": 48, "y": 0, "w": 16, "h": 16 },
+							"__smartColor": "#D77643",
+							"iid": "ac0d63b0-73f0-11ef-a2ee-a1c056549547",
+							"width": 16,
+							"height": 16,
+							"defUid": 24,
+							"px": [464,704],
+							"fieldInstances": [
+								{ "__identifier": "rails_name", "__type": "String", "__value": null, "__tile": null, "defUid": 27, "realEditorValues": [] },
+								{ "__identifier": "args", "__type": "String", "__value": "2", "__tile": null, "defUid": 73, "realEditorValues": [{
+									"id": "V_String",
+									"params": ["2"]
+								}] }
+							],
+							"__worldX": 464,
+							"__worldY": 704
+						},
+						{
+							"__identifier": "dreamer",
+							"__grid": [26,44],
+							"__pivot": [0,0],
+							"__tags": ["mobs"],
+							"__tile": { "tilesetUid": 4, "x": 48, "y": 0, "w": 16, "h": 16 },
+							"__smartColor": "#D77643",
+							"iid": "b3174cc0-73f0-11ef-a2ee-61f156a70839",
+							"width": 16,
+							"height": 16,
+							"defUid": 24,
+							"px": [416,704],
+							"fieldInstances": [
+								{ "__identifier": "rails_name", "__type": "String", "__value": null, "__tile": null, "defUid": 27, "realEditorValues": [] },
+								{ "__identifier": "args", "__type": "String", "__value": "2", "__tile": null, "defUid": 73, "realEditorValues": [{
+									"id": "V_String",
+									"params": ["2"]
+								}] }
+							],
+							"__worldX": 416,
+							"__worldY": 704
+						},
+						{
+							"__identifier": "dreamer",
+							"__grid": [24,41],
+							"__pivot": [0,0],
+							"__tags": ["mobs"],
+							"__tile": { "tilesetUid": 4, "x": 48, "y": 0, "w": 16, "h": 16 },
+							"__smartColor": "#D77643",
+							"iid": "b4a23280-73f0-11ef-a2ee-29bb8b2c30d3",
+							"width": 16,
+							"height": 16,
+							"defUid": 24,
+							"px": [384,656],
+							"fieldInstances": [
+								{ "__identifier": "rails_name", "__type": "String", "__value": null, "__tile": null, "defUid": 27, "realEditorValues": [] },
+								{ "__identifier": "args", "__type": "String", "__value": "2", "__tile": null, "defUid": 73, "realEditorValues": [{
+									"id": "V_String",
+									"params": ["2"]
+								}] }
+							],
+							"__worldX": 384,
+							"__worldY": 656
 						}
 					]
 				},

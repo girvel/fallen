@@ -91,12 +91,14 @@ layer_handlers = {
           "return " .. (-Query(get_field(instance, "args")).__value or "")
         ))
 
-        local result = Table.extend(
-          layer_palette[get_identifier(instance)](get_args()),
-          {
-            position = Vector(instance.__grid) + Vector.one,
-          }
+        local factory = assert(
+          layer_palette[get_identifier(instance)],
+          "Entity factory %s is not defined for layer %s" % {get_identifier(instance), layer_id}
         )
+
+        local result = Table.extend(factory(get_args()), {
+          position = Vector(instance.__grid) + Vector.one,
+        })
 
         local rails_name = -Query(get_field(instance, "rails_name")).__value:lower()
           or -Query(to_capture)[layer_id][result.position]

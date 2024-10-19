@@ -136,20 +136,15 @@ mobs.hauler = function()
   }
 end
 
-mobs.dreamer = function()
+mobs.dreamer = function(team_i)
   return humanoid({
     name = "...",
     race = Random.choice(dreamer_races),
     max_hp = 15,
     base_abilities = abilities(12, 10, 10, 10, 10, 10),
-    ai = combat_ai(),
+    ai = team_i and combat_ai(),
+    faction = team_i and ("dreamers_" .. team_i),
   })
-end
-
-for i = 1, 1 do
-  mobs["dreamer_team_" .. i] = function()
-    return Table.extend(mobs.dreamer(), {faction = "dreamers_" .. i})
-  end
 end
 
 mobs.combat_dreamer = function()

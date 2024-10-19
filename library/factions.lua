@@ -13,7 +13,7 @@ return Module("library.factions", function()
   set_faction(result, "monster", {player = true})
   set_faction(result, "combat_dreamers")
 
-  for i = 1, 1 do
+  for i = 1, 2 do
     set_faction(result, "dreamers_" .. i)
   end
   return result
