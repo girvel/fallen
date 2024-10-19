@@ -140,11 +140,16 @@ mobs.dreamer = function()
   return humanoid({
     name = "...",
     race = Random.choice(dreamer_races),
-    direction = "up",
-    inventory = {},
     max_hp = 15,
-    base_abilities = abilities(10, 10, 10, 10, 10, 10),
+    base_abilities = abilities(12, 10, 10, 10, 10, 10),
+    ai = combat_ai(),
   })
+end
+
+for i = 1, 1 do
+  mobs["dreamer_team_" .. i] = function()
+    return Table.extend(mobs.dreamer(), {faction = "dreamers_" .. i})
+  end
 end
 
 mobs.combat_dreamer = function()

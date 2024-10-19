@@ -10,7 +10,9 @@ module_mt.__call = function()
   return {
     -- TODO optimize
     run = ai.async(function(self, entity, dt)
-      if not api.in_combat(entity) then return end
+      if not api.in_combat(entity) or not hostility.are_hostile(entity, State.player) then
+        return
+      end
 
       api.travel(entity, State.player.position)
       api.try_attacking(entity, State.player)

@@ -25,7 +25,7 @@ end
 actions.get_melee_damage_roll = function(entity, slot)
   local weapon = entity.inventory[slot]
   if not weapon then
-    return D.roll({}, entity:get_modifier("str"))
+    return D.roll({}, entity:get_modifier("str") + 1)
   end
 
   local roll
