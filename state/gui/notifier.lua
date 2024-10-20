@@ -51,7 +51,7 @@ module_mt.__call = function(_)
           to.display_time = from.display_time
 
           if i == 1 then
-            if Table.shallow_same(to.sprite.text[1], COLOR.ORDER) then
+            if Colors.equal(to.sprite.text[1], COLOR.ORDER) then
               to.sprite.text[1] = COLOR.OLD_ORDER
             else
               to.sprite.text[1] = COLOR.OLD_NOTIFICATION

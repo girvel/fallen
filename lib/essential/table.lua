@@ -1,8 +1,12 @@
 local tablex = {}
 
---- Copies all fields into the base
+--- Copies all fields into the base mutating first argument
 -- Modifies first argument, copying all the fields via pairs of the following arguments in order
 -- from left to right.
+--- @param base table table to be changed
+--- @param extension table table to copy fields from
+--- @param ... table following extensions
+--- @return table base the base table
 tablex.extend = function(base, extension, ...)
   if extension == nil then return base end
   for k, v in tablex.pairs(extension) do
@@ -14,6 +18,10 @@ end
 --- Concatenates lists into the base
 -- Modifies first argument, copying all the fields via ipairs of the following arguments in order
 -- from left to right
+--- @param base table table to be changed
+--- @param extension table table to copy fields from
+--- @param ... table following extensions
+--- @return table base the base table
 tablex.concat = function(base, extension, ...)
   if extension == nil then return base end
   for _, v in ipairs(extension) do
@@ -23,8 +31,12 @@ tablex.concat = function(base, extension, ...)
 end
 
 --- Concatenates and extends into the base
--- Modifies first argument, first concatenating everything via ipairs, then copying all the
--- key-value data, both in order from left to right
+-- Modifies first argument, concatenating integer fields and copying all the key-value data, both 
+-- in order from left to right
+--- @param base table table to be changed
+--- @param extension table table to copy fields from
+--- @param ... table following extensions
+--- @return table base the base table
 tablex.join = function(base, extension, ...)
   if extension == nil then return base end
   local length = #base
@@ -38,6 +50,7 @@ tablex.join = function(base, extension, ...)
   return tablex.join(base, ...)
 end
 
+--- Copies all fields to the base, 
 tablex.merge = function(base, extension, ...)
   if extension == nil then return base end
   for k, v in pairs(extension) do
