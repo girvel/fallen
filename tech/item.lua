@@ -24,6 +24,11 @@ module.drop = function(parent, slot)
   return true
 end
 
+--- Put item in the entity's inventory. 
+--- Drops the item if entity can't take the item; contains logic for taking weapons.
+--- @param entity {inventory: table} entity to receive the item
+--- @param this_item table item to give
+--- @return boolean success did item make it to the entity's inventory
 module.give = function(entity, this_item)
   local slot
   local is_free
@@ -64,7 +69,7 @@ module.give = function(entity, this_item)
     this_item:animate()
   end
 
-  return is_free
+  return Common.bool(is_free)
 end
 
 module.mixin = function()

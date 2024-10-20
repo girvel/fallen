@@ -136,15 +136,20 @@ mobs.hauler = function()
   }
 end
 
-mobs.dreamer = function(team_i)
-  return humanoid({
-    name = "...",
-    race = Random.choice(dreamer_races),
-    max_hp = 15,
-    base_abilities = abilities(12, 10, 10, 10, 10, 10),
-    ai = team_i and combat_ai(),
-    faction = team_i and ("dreamers_" .. team_i),
-  })
+mobs.dreamer = function(params)
+  params = params or {}
+  return Table.extend(
+    humanoid({
+      name = "...",
+      race = params.race and races[params.race] or Random.choice(dreamer_races),
+      max_hp = 15,
+      hp = params.hurt and 6 or nil,
+      base_abilities = abilities(12, 10, 10, 10, 10, 10),
+      ai = params.faction and combat_ai(),
+      faction = params.faction,
+    }),
+    params.interactive and interactive.detector(true) or nil
+  )
 end
 
 mobs.combat_dreamer = function()

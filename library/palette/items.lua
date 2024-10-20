@@ -22,6 +22,23 @@ module.knife = function()
   )
 end
 
+module.razor = function()
+  return Table.extend(
+    item.mixin(),
+    animated("assets/sprites/animations/razor", "atlas"),
+    {
+      name = "опасная бритва",
+      damage_roll = D(4),
+      bonus = 0,
+      tags = {
+        finesse = true,
+        light = true,
+      },
+      slot = "hands",
+    }
+  )
+end
+
 module.dagger = function()
   return Table.extend(
     item.mixin(),

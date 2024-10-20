@@ -4506,10 +4506,13 @@
 							"defUid": 24,
 							"px": [416,672],
 							"fieldInstances": [
-								{ "__identifier": "rails_name", "__type": "String", "__value": null, "__tile": null, "defUid": 27, "realEditorValues": [] },
-								{ "__identifier": "args", "__type": "String", "__value": "1", "__tile": null, "defUid": 73, "realEditorValues": [{
+								{ "__identifier": "rails_name", "__type": "String", "__value": "dorm_halfling", "__tile": null, "defUid": 27, "realEditorValues": [{
 									"id": "V_String",
-									"params": ["1"]
+									"params": ["dorm_halfling"]
+								}] },
+								{ "__identifier": "args", "__type": "String", "__value": "{faction = \"dreamers_1\", hurt = true, race = \"halfling\", interactive = true}", "__tile": null, "defUid": 73, "realEditorValues": [{
+									"id": "V_String",
+									"params": ["{faction = \"dreamers_1\", hurt = true, race = \"halfling\", interactive = true}"]
 								}] }
 							],
 							"__worldX": 416,
@@ -4529,9 +4532,9 @@
 							"px": [352,672],
 							"fieldInstances": [
 								{ "__identifier": "rails_name", "__type": "String", "__value": null, "__tile": null, "defUid": 27, "realEditorValues": [] },
-								{ "__identifier": "args", "__type": "String", "__value": "1", "__tile": null, "defUid": 73, "realEditorValues": [{
+								{ "__identifier": "args", "__type": "String", "__value": "{faction = \"dreamers_2\"}", "__tile": null, "defUid": 73, "realEditorValues": [{
 									"id": "V_String",
-									"params": ["1"]
+									"params": ["{faction = \"dreamers_2\"}"]
 								}] }
 							],
 							"__worldX": 352,
@@ -4551,9 +4554,9 @@
 							"px": [304,704],
 							"fieldInstances": [
 								{ "__identifier": "rails_name", "__type": "String", "__value": null, "__tile": null, "defUid": 27, "realEditorValues": [] },
-								{ "__identifier": "args", "__type": "String", "__value": "1", "__tile": null, "defUid": 73, "realEditorValues": [{
+								{ "__identifier": "args", "__type": "String", "__value": "{faction = \"dreamers_2\"}", "__tile": null, "defUid": 73, "realEditorValues": [{
 									"id": "V_String",
-									"params": ["1"]
+									"params": ["{faction = \"dreamers_2\"}"]
 								}] }
 							],
 							"__worldX": 304,
@@ -4573,9 +4576,9 @@
 							"px": [464,704],
 							"fieldInstances": [
 								{ "__identifier": "rails_name", "__type": "String", "__value": null, "__tile": null, "defUid": 27, "realEditorValues": [] },
-								{ "__identifier": "args", "__type": "String", "__value": "2", "__tile": null, "defUid": 73, "realEditorValues": [{
+								{ "__identifier": "args", "__type": "String", "__value": "{faction = \"dreamers_2\"}", "__tile": null, "defUid": 73, "realEditorValues": [{
 									"id": "V_String",
-									"params": ["2"]
+									"params": ["{faction = \"dreamers_2\"}"]
 								}] }
 							],
 							"__worldX": 464,
@@ -4594,10 +4597,13 @@
 							"defUid": 24,
 							"px": [416,704],
 							"fieldInstances": [
-								{ "__identifier": "rails_name", "__type": "String", "__value": null, "__tile": null, "defUid": 27, "realEditorValues": [] },
-								{ "__identifier": "args", "__type": "String", "__value": "2", "__tile": null, "defUid": 73, "realEditorValues": [{
+								{ "__identifier": "rails_name", "__type": "String", "__value": "dorm_woman", "__tile": null, "defUid": 27, "realEditorValues": [{
 									"id": "V_String",
-									"params": ["2"]
+									"params": ["dorm_woman"]
+								}] },
+								{ "__identifier": "args", "__type": "String", "__value": "{faction = \"dreamers_1\", race = \"human\"}", "__tile": null, "defUid": 73, "realEditorValues": [{
+									"id": "V_String",
+									"params": ["{faction = \"dreamers_1\", race = \"human\"}"]
 								}] }
 							],
 							"__worldX": 416,
@@ -4616,14 +4622,42 @@
 							"defUid": 24,
 							"px": [384,656],
 							"fieldInstances": [
-								{ "__identifier": "rails_name", "__type": "String", "__value": null, "__tile": null, "defUid": 27, "realEditorValues": [] },
-								{ "__identifier": "args", "__type": "String", "__value": "2", "__tile": null, "defUid": 73, "realEditorValues": [{
+								{ "__identifier": "rails_name", "__type": "String", "__value": "dorm_grunt", "__tile": null, "defUid": 27, "realEditorValues": [{
 									"id": "V_String",
-									"params": ["2"]
+									"params": ["dorm_grunt"]
+								}] },
+								{ "__identifier": "args", "__type": "String", "__value": "{faction = \"dreamers_1\"}", "__tile": null, "defUid": 73, "realEditorValues": [{
+									"id": "V_String",
+									"params": ["{faction = \"dreamers_1\"}"]
 								}] }
 							],
 							"__worldX": 384,
 							"__worldY": 656
+						},
+						{
+							"__identifier": "dreamer",
+							"__grid": [25,44],
+							"__pivot": [0,0],
+							"__tags": ["mobs"],
+							"__tile": { "tilesetUid": 4, "x": 48, "y": 0, "w": 16, "h": 16 },
+							"__smartColor": "#D77643",
+							"iid": "f3280940-73f0-11ef-a2ee-2fd2334bef16",
+							"width": 16,
+							"height": 16,
+							"defUid": 24,
+							"px": [400,704],
+							"fieldInstances": [
+								{ "__identifier": "rails_name", "__type": "String", "__value": "dorm_beard", "__tile": null, "defUid": 27, "realEditorValues": [{
+									"id": "V_String",
+									"params": ["dorm_beard"]
+								}] },
+								{ "__identifier": "args", "__type": "String", "__value": "{faction = \"dreamers_1\"}", "__tile": null, "defUid": 73, "realEditorValues": [{
+									"id": "V_String",
+									"params": ["{faction = \"dreamers_1\"}"]
+								}] }
+							],
+							"__worldX": 400,
+							"__worldY": 704
 						}
 					]
 				},
