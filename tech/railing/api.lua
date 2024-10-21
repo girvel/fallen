@@ -219,4 +219,16 @@ api.rotate_to_player = function(entity)
   ))
 end
 
+api.blackout = function()
+  State.gui:trigger_blackout(0.5, 0.5)
+  while math.abs(State.gui.blackout_k - 1) > 0.05 do
+    coroutine.yield()
+  end
+  return function()
+    while State.gui.blackout_k ~= 0 do
+      coroutine.yield()
+    end
+  end
+end
+
 return api

@@ -4,7 +4,7 @@ local factoring = require("tech.factoring")
 local on_solids, module_mt, static = Module("library.palette.on_solids")
 
 local use_perspective = Common.set({
-  "mirror", "airway", "map", "sign", "cauldron", "upper_bunk",
+  "mirror", "airway", "map", "sign", "cauldron", "upper_bunk", "blood",
 })
 
 factoring.from_atlas(on_solids, "assets/sprites/atlases/on_solids.png",

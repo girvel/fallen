@@ -5,6 +5,11 @@ local module, _, static = Module("tech.item")
 
 module.DROPPING_SLOTS = {"main_hand", "other_hand", "gloves", 1}
 
+--- @alias has_inventory {inventory: table}
+
+--- @param parent has_inventory
+--- @param slot string | integer
+--- @return boolean
 module.drop = function(parent, slot)
   local drop_position = Fun.chain({Vector.zero}, Vector.directions)
     :map(function(d) return parent.position + d end)
@@ -26,7 +31,7 @@ end
 
 --- Put item in the entity's inventory. 
 --- Drops the item if entity can't take the item; contains logic for taking weapons.
---- @param entity {inventory: table} entity to receive the item
+--- @param entity has_inventory entity to receive the item
 --- @param this_item table item to give
 --- @return boolean success did item make it to the entity's inventory
 module.give = function(entity, this_item)
