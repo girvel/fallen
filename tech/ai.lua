@@ -64,7 +64,11 @@ end
 ai.api.tcod_travel = function(entity, destination)
   -- Log.debug("%s moving to %s" % {Entity.name(entity), destination})
   if entity.position == destination then return end
-  local path = tcod.snapshot():find_path(entity.position, destination)
+  local path
+  for _, d in ipairs(Table.concat({Vector.zero}, Vector.extended_directions)) do
+    path = tcod.snapshot():find_path(entity.position, destination + d)
+    if #path > 0 then break end
+  end
 
   for _, position in ipairs(path) do
     if entity.resources.movement <= 0 then
@@ -76,6 +80,7 @@ ai.api.tcod_travel = function(entity, destination)
     end
 
     coroutine.yield()
+    if Random.chance(.1) then coroutine.yield() end
     if not ai.api.move(entity, position - entity.position) then break end
   end
 end
