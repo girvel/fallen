@@ -23,6 +23,9 @@ return function()
 
           api.discover_wiki({colleague_note = true})
           api.update_quest({warmup = 3})
+
+          api.wait_seconds(1)
+          State.gui:trigger_blackout(0.35, 1)
         end,
       },
     },

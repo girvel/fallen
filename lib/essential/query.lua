@@ -1,12 +1,10 @@
-local module_mt = {}
-local query = setmetatable({}, module_mt)
+local query
 
 local qlength = function(self)
   return query(self._query_subject ~= nil and #self._query_subject or nil)
 end
 
--- TODO ugly, rewrite
-module_mt.__call = function(_, subject)
+query = function(subject)
   return setmetatable({
     _query_subject = subject,
   }, {

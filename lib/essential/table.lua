@@ -50,7 +50,12 @@ tablex.join = function(base, extension, ...)
   return tablex.join(base, ...)
 end
 
---- Copies all fields to the base, 
+--- Copies all fields to the base, merging them with existing tables recursively and mutating 
+--- first argument
+--- @param base table table to be changed
+--- @param extension table table to copy fields from
+--- @param ... table following extensions
+--- @return table base the base table
 tablex.merge = function(base, extension, ...)
   if extension == nil then return base end
   for k, v in pairs(extension) do

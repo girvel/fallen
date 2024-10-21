@@ -6,7 +6,11 @@ local item = require("tech.item")
 local attacking, _, static = Module("mech.attacking")
 
 --- Attacks with given attack/damage rolls
+--- @param entity table entity doing the attacking
+--- @param target {hp: number, position: table, invincible: boolean?} attacked entity
+--- @param attack_roll table
 attacking.attack = function(entity, target, attack_roll, damage_roll)
+  -- TODO entity is here for logging purposes only; advantage_flag should probably be used in an action. entity argument should probably be removed.
   if entity.advantage_flag then  -- TODO RM with conditions
     attack_roll = attack_roll:extended {advantage = true}
   end

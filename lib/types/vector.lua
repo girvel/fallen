@@ -1,3 +1,9 @@
+---@class Vector
+---@field [1] number
+---@field [2] number
+---@operator add(Vector): Vector
+
+
 local vector = {}
 local module_mt = {}
 setmetatable(vector, module_mt)
@@ -5,6 +11,7 @@ setmetatable(vector, module_mt)
 local vector_methods = {}
 vector.mt = {__index = vector_methods}
 
+---@return Vector
 module_mt.__call = function(_, base_object)
   assert(
     #base_object == 2 and Fun.iter(pairs(base_object)):length() == 2,
