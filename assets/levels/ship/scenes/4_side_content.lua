@@ -20,6 +20,7 @@ return function()
         dorm_woman = {},
         dorm_beard = {},
         dorm_grunt = {},
+        player = {},
       },
 
       start_predicate = function(self, rails, dt, c)
