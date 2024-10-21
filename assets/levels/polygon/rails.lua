@@ -12,11 +12,16 @@ return function(positions, entities)
       {
         name = "Checkpoint",
         enabled = true,
+
+        characters = {
+          lyer = {},
+        },
+
         start_predicate = function(self, rails, dt)
           return true
         end,
 
-        run = function(self, rails)
+        run = function(self, rails, c)
           self.enabled = false
 
           api.checkpoint_base()
@@ -27,7 +32,8 @@ return function(positions, entities)
           api.discover_wiki({colleague_note = true})
           api.update_quest({warmup = 3})
 
-          decorations.lie(rails.entities.lyer, rails.positions.lower_bunk, "lower")
+          -- decorations.lie(rails.entities.lyer, rails.positions.lower_bunk, "lower")
+          api.line(c.lyer, "Oh hi Mark")
         end,
       },
     },

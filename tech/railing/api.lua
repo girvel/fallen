@@ -1,4 +1,3 @@
-local experience = require("mech.experience")
 local quest = require("tech.quest")
 local texting = require("tech.texting")
 local fx = require("tech.fx")
@@ -35,6 +34,7 @@ api.line = function(entity, text, params)
     Colors.to_hex(entity.sprite.color), Entity.name(entity), text
   }
   State.gui.dialogue:show(text, entity.portrait)
+  State:add(fx("assets/sprites/fx/turn_starts", "fx_under", entity.position))
   while State.mode:get() ~= State.mode.free do coroutine.yield() end
 end
 
