@@ -14,6 +14,7 @@ return function(positions, entities)
         enabled = true,
 
         characters = {
+          player = {},
           lyer = {},
         },
 
@@ -33,6 +34,7 @@ return function(positions, entities)
           api.update_quest({warmup = 3})
 
           -- decorations.lie(rails.entities.lyer, rails.positions.lower_bunk, "lower")
+          api.wait_seconds(1)
           api.line(c.lyer, "Oh hi Mark")
         end,
       },

@@ -7,7 +7,10 @@ railing._methods = static {}
 railing._methods.update = static .. function(self, dt)
   for _, scene in pairs(self.scenes) do
     local characters = Fun.pairs(scene.characters or {})
-      :map(function(name, params) return name, self.entities[name] end)
+      :map(function(name, params)
+        if name == "player" then return name, State.player end
+        return name, self.entities[name]
+      end)
       :tomap()
 
     if scene.enabled
