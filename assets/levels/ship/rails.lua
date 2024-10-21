@@ -2,6 +2,7 @@ local interactive = require("tech.interactive")
 local level = require("state.level")
 local railing = require("tech.railing")
 local decorations = require("library.palette.decorations")
+local items       = require("library.palette.items")
 local api = railing.api
 
 
@@ -49,6 +50,9 @@ return function(positions, entities)
       self.entities.engineer_1:animation_set_paused(true)
 
       State:refresh(self.entities.mirage_block, interactive.detector(true))
+
+      self.entities.razor = State:add(items.razor())
+      self.entities.dorm_halfling.inventory[1] = self.entities.razor
     end,
 
     been_to_latrine = false,
