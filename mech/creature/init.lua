@@ -2,6 +2,7 @@ local animated = require("tech.animated")
 local actions = require("mech.creature.actions")
 local abilities = require("mech.abilities")
 local sound = require("tech.sound")
+local on_tiles = require("library.palette.on_tiles")
 
 
 local creature, module_mt, static = Module("mech.creature")
@@ -138,6 +139,11 @@ module_mt.__call = function(_, animation_pack, object)
     },
 
     perks = {},
+
+    on_death = function(self)
+      if State.grids.items[self.position] then return end
+      State:add(on_tiles.blood(), {position = self.position})
+    end,
   }, creature._methods, object)
 
   result.hp = result.hp or result:get_max_hp()
