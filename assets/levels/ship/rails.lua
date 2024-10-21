@@ -37,7 +37,7 @@ return function(positions, entities)
 
     initialize = function(self)
       self.entities.neighbour:rotate("up")
-      decorations.lie(self.entities.neighbour, self.entities.upper_bunk)
+      decorations.lie(self.entities.neighbour, self.entities.upper_bunk.position, "upper")
 
       self.old_hp = Fun.range(4)
         :map(function(i) return self.entities["engineer_" .. i].hp end)

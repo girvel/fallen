@@ -38,10 +38,17 @@ factoring.extend(decorations, "device_panel", {
   end,
 })
 
-decorations.lie = function(entity, bed)
+local elevations = {"upper", "lower"}
+
+--- @param entity {animate: function, animation_set_paused: function, perspective_flag: boolean?}
+--- @param bed_position Vector
+--- @param bed_elevation "upper" | "lower"
+decorations.lie = function(entity, bed_position, bed_elevation)
+  assert(Table.contains(elevations, bed_elevation))
+
   level.change_layer(entity, "on_solids2")
-  level.move(entity, bed.position)
-  entity:animate("lying")
+  level.move(entity, bed_position)
+  entity:animate("lying_" .. bed_elevation)
   entity:animation_set_paused(true)
   entity.perspective_flag = true
 end

@@ -77,7 +77,6 @@ module_mt.__call = function(_)
         self[k]:update(dt)
       end
 
-      Log.trace(self._blackout_speed, self._blackout_resting_time, self.blackout_k)
       if self._blackout_speed ~= 0 then
         if self._blackout_speed > 0 and self.blackout_k == 1 then
           self._blackout_resting_time = math.max(0, self._blackout_resting_time - dt)

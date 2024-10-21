@@ -1,10 +1,13 @@
+local decorations = require("library.palette.decorations")
 local experience = require("mech.experience")
 local railing = require("tech.railing")
 local api = railing.api
 
 
-return function()
-  return railing({
+return function(positions, entities)
+  return railing {
+    positions = positions,
+    entities = entities,
     scenes = {
       {
         name = "Checkpoint",
@@ -24,8 +27,7 @@ return function()
           api.discover_wiki({colleague_note = true})
           api.update_quest({warmup = 3})
 
-          api.wait_seconds(1)
-          State.gui:trigger_blackout(0.35, 1)
+          decorations.lie(rails.entities.lyer, rails.positions.lower_bunk, "lower")
         end,
       },
     },
@@ -33,5 +35,5 @@ return function()
     initialize = function(self)
       
     end,
-  })
+  }
 end
