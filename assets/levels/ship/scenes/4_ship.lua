@@ -4,9 +4,7 @@ local attacking = require("mech.attacking")
 local item = require("tech.item")
 local actions = require("mech.creature.actions")
 local api = require("tech.railing").api
-local items = require("library.palette.items")
 local decorations = require("library.palette.decorations")
-local on_tiles    = require("library.palette.on_tiles")
 
 
 return function()
@@ -128,6 +126,28 @@ return function()
             break
           end
         end
+      end,
+    },
+
+    guard_1_rotates = {
+      name = "Guard #1 rotates",
+      enabled = true,
+
+      characters = {
+        guard_1 = {},
+      },
+
+      _start_predicate_pid = {},
+      start_predicate = function(self, rails, dt, c)
+        return Common.relative_period(8, dt, self._start_predicate_pid)
+      end,
+
+      run = function(self, rails, c)
+        self.enabled = false
+        c.guard_1:rotate("down")
+        api.wait_seconds(1)
+        c.guard_1:rotate("left")
+        self.enabled = true
       end,
     },
   }

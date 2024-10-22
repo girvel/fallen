@@ -19,7 +19,7 @@ return function(positions, entities)
       require("assets.levels.ship.scenes.3_fight")(),
       require("assets.levels.ship.scenes.3_dwarf")(),
       require("assets.levels.ship.scenes.4_markiss")(),
-      require("assets.levels.ship.scenes.4_side_content")(),
+      require("assets.levels.ship.scenes.4_ship")(),
       {
         checkpoint_0 = {
           name = "Checkpoint -- captain's deck",
@@ -50,6 +50,7 @@ return function(positions, entities)
       self.entities.engineer_1:animation_set_paused(true)
 
       State:refresh(self.entities.mirage_block, interactive.detector(true))
+      State:refresh(self.entities.alcohol_crate, interactive.detector())
 
       self.entities.razor = State:add(items.razor())
       self.entities.dorm_halfling.inventory[1] = self.entities.razor

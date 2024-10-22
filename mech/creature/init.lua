@@ -148,6 +148,10 @@ module_mt.__call = function(_, animation_pack, object)
 
   result.hp = result.hp or result:get_max_hp()
   result:rotate(result.direction)
+
+  if object.debug_flag then
+    Log.trace(result.direction)
+  end
   result.resources = result.resources or get_all_resources(result)
   result:level_up({})
 

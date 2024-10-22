@@ -152,11 +152,13 @@ mobs.dreamer = function(params)
   )
 end
 
-mobs.combat_dreamer = function()
-  return humanoid({
+mobs.combat_dreamer = function(params)
+  params = params or {}
+  return humanoid {
+    debug_flag = true,
     name = "...",
     race = Random.choice(dreamer_races),
-    direction = Random.choice(Vector.direction_names),
+    direction = params.direction or Random.choice(Vector.direction_names),
     faction = "combat_dreamers",
 
     ai = combat_ai(),
@@ -169,7 +171,7 @@ mobs.combat_dreamer = function()
       other_hand = items.spiked_shield(),
     },
     perks = {fighter.styles.two_weapon_fighting},
-  })
+  }
 end
 
 mobs.phantom_knight = function()
