@@ -1,23 +1,11 @@
 local combat = require("tech.combat")
 local fx = require("tech.fx")
-local animated = require("tech.animated")
 local sound = require("tech.sound")
 local hostility = require("mech.hostility")
+local cue = require("tech.cue")
 
 
 local your_move_sound = sound.multiple("assets/sounds/your_move1", 0.5)
-
-local blood_factory = function()
-  return Table.extend(
-    animated("assets/sprites/animations/hurt", "atlas"),
-    {
-      direction = "right",
-      name = "Кровь",
-      codename = "blood",
-      slot = "hurt",
-    }
-  )
-end
 
 local acting, _, static = Module("systems.acting")
 
@@ -77,22 +65,7 @@ acting.system = static(Tiny.processingSystem({
 
   _refresh_blood = function(self, entity)
     if not entity.hp then return end
-    if entity.hp <= entity:get_max_hp() / 2 then
-      if not entity.inventory.hurt then
-        local blood = State:add(blood_factory())
-        State:add_dependency(entity, blood)
-        blood.direction = entity.direction
-        blood:animate(entity.animation.current.codename)
-        blood:animation_set_paused(entity.animation.paused)
-        -- TODO abstract this away as picking up an item?
-        entity.inventory.hurt = blood
-      end
-    else
-      if entity.inventory.hurt then
-        State:remove(entity.inventory.hurt)
-        entity.inventory.hurt = nil
-      end
-    end
+    cue.set(entity, "hurt", entity.hp <= entity:get_max_hp() / 2)
   end,
 
   _process_outside_combat = function(self, entity, dt)

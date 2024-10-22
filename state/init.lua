@@ -54,15 +54,24 @@ module_mt.__call = function(_, systems)
       if not entity.boring_flag then
         Log.debug("State:remove(%s)" % Entity.name(entity))
       end
+
       self.world:remove(entity)
       self.entities[entity] = nil
+
       if entity.position and entity.layer then
         level.remove(entity)
       end
+
+      for slot, item in pairs(entity.inventory or {}) do
+        self:remove(item)
+      end
+
       if self.combat then
         self.combat:remove(entity)
       end
+
       Query(entity):on_remove()
+
       Fun.iter(self.dependencies[entity] or {})
         :each(function(e) return self:remove(e) end)
       return entity

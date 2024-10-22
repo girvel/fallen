@@ -57,7 +57,7 @@ return function()
             api.narration("Она бы сошла за хорошее оружие, только вот безопасно изъять её будет тяжело.")
             options[3] = "[Медицина] *Аккуратно изъять бритву*"
           elseif chosen_option == 3 then
-            if api.ability_check("medicine", 12) then  -- TODO! RM
+            if api.ability_check("medicine", 12) then
               api.narration("Аккуратно изъять бритву в текущей ситуации невозможно.", {check = {"medicine", true}})
               api.narration("По-крайней мере, в одиночку.")
               api.line(State.player, "Эй, прекратите стоять столбом! Положить его на кровать животом вниз! Принести чистую воду!")
