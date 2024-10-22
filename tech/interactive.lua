@@ -49,7 +49,7 @@ module_mt.__call = function(_, callback, params)
   }
 end
 
---- @param disable_highlight boolean
+--- @param disable_highlight boolean?
 --- @return table
 module.detector = function(disable_highlight)
   return module(function(self, other)

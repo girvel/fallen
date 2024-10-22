@@ -50,7 +50,7 @@ return function(positions, entities)
       self.entities.engineer_1:animation_set_paused(true)
 
       State:refresh(self.entities.mirage_block, interactive.detector(true))
-      State:refresh(self.entities.alcohol_crate, interactive.detector())
+      State:refresh(self.entities.alcohol_crate, interactive.detector(), {name = "ящик"})
 
       self.entities.razor = State:add(items.razor())
       self.entities.dorm_halfling.inventory[1] = self.entities.razor
@@ -59,5 +59,6 @@ return function(positions, entities)
     been_to_latrine = false,
     tolerates_latrine = nil,
     dreamers_talked_to = {},
+    bottles_taken = 0,
   })
 end

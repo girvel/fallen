@@ -194,6 +194,7 @@ local quest_stage = function(k, v)
   return tasks[v] or tostring(v)
 end
 
+--- @param changes table<string, integer>
 api.update_quest = function(changes)
   local states = State.gui.wiki.quest_states
   for k, v in pairs(changes) do
@@ -205,6 +206,12 @@ api.update_quest = function(changes)
     Log.info("Quest %s: %s -> %s" % {k, states[k], v})
     states[k] = v
   end
+end
+
+--- @param name string quest's identifier
+--- @return integer
+api.get_quest = function(name)
+  return State.gui.wiki.quest_states[name] or 0
 end
 
 api.checkpoint_base = function()

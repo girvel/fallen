@@ -139,15 +139,138 @@ return function()
 
       _start_predicate_pid = {},
       start_predicate = function(self, rails, dt, c)
-        return Common.relative_period(8, dt, self._start_predicate_pid)
+        return (
+          not State.combat
+          and not rails:is_running("stealing_alcohol")
+          and Common.relative_period(8, dt, self._start_predicate_pid)
+        )
       end,
 
       run = function(self, rails, c)
         self.enabled = false
         c.guard_1:rotate("down")
-        api.wait_seconds(1)
+
+        local t = love.timer.getTime()
+        while love.timer.getTime() - t < 1 or rails:is_running("stealing_alcohol") do
+          coroutine.yield()
+        end
+
         c.guard_1:rotate("left")
         self.enabled = true
+      end,
+    },
+
+    stealing_alcohol = {
+      name = "Player tries to steal alcohol from the storage room",
+      enabled = true,
+
+      characters = {
+        player = {},
+        alcohol_crate = {},
+        guard_1 = {},
+      },
+
+      start_predicate = function(self, rails, dt, c)
+        return c.alcohol_crate.interacted_by == c.player and not State.combat
+      end,
+
+      _caught_n = 0,
+
+      run = function(self, rails, c)
+        c.alcohol_crate.interacted_by = nil
+
+        if c.guard_1.direction == "left" then
+          self._caught_n = self._caught_n + 1
+          api.line(c.guard_1, ({
+            "Тебе не положено это брать.",
+            "Последнее предупреждение. Eщё раз — последует наказание.",
+            "Наказание за воровство — смерть.",
+          })[self._caught_n])
+          if self._caught_n == 3 then
+            hostility.make_hostile("combat_dreamers")
+          end
+          return
+        end
+
+        api.narration("В ящике полным-полно съестных припасов различной ценности.")
+        api.narration("Основная масса — старые консервы в невзрачных упаковках, но присутствуют и относительно свежие овощи и даже вполне сносное мясо.")
+        api.narration("В центре композиции лежит единственный алкогольный напиток: бутылка дешёвого рома “Русалкино молоко”.")
+        api.narration("Бутылка сияет, как бриллиант в короне, а русалка на этикетке так и завлекает на грех.")
+        api.narration("Когда охранник ненадолго отворачивается, ты понимаешь, что мог бы незаметно забрать бутылку.")
+
+        if api.get_quest("alcohol") == 0 then
+          api.line(c.player, "(Мне она ни к чему, разве что испытать риск ради риска)")
+          api.narration("Кажется, это называют клептоманией.")
+        else
+          api.line(c.player, "(Хоть мне это и не по душе, я мог бы незаметно её забрать)")
+          api.line(c.player, "(Если бы только была возможность куда-то увести этого охранника…)")
+        end
+
+        local chosen_option = api.options({
+          "*Уйти, воровство для слабых*",
+          "[Харизма] *Взять в открытую, ведь ты не вор*",
+          "[Внимание] *Не украсть, а аккуратно забрать*",
+        })
+
+        if chosen_option == 1 then
+          api.narration("Ты оставляешь бутылку грустить в компании скучной еды.")
+          api.narration("Но ты всегда сможешь её навестить.")
+          return
+        end
+
+        self.enabled = false
+        if chosen_option == 2 then
+          if api.ability_check("cha", 18) then
+            api.narration("Ты медленно берёшь бутылку, не слушая комментарии охранника на фоне.", {check = {"cha", true}})
+            c.guard_1:rotate("left")
+            api.line(c.guard_1, "Эй, верни на место!")
+            api.narration("Но ты не уходишь с ней, а всего лишь рассматриваешь на месте: оцениваешь этикетку, внимательно читаешь состав, проводишь пальцем вдоль фигуры русалки.")
+            api.narration("Оглядываясь в сторону охранника, указываешь ему на мелкий шрифт...")
+            api.narration("Затем слегка потряхиваешь бутылку с деловым видом.")
+            api.line(c.player, "Теперь всё понятно, доложу начальству в ближайший срок.")
+            api.line(c.player, "Конечно, в письменном виде.")
+            api.narration("С этими словами ты аккуратно заматываешь бутылку в газету, найденную в соседнем ящике, ставишь подпись в блокноте.")
+            c.guard_1:rotate("down")
+            api.narration("Оглядываешься, охранник уже потерял к тебе интерес.")
+            api.line(c.player, "(Вот теперь можно идти)")
+            api.narration("Бутылка при тебе. И нет, ты не понимаешь, как у тебя это получилось.")
+
+            rails.bottles_taken = rails.bottles_taken + 1
+            c.alcohol_crate.interact = nil
+            return
+          end
+
+          api.narration("Ты аккуратно берёшь бутылку, делаешь шаг в сторону выхода, и...", {check = {"cha", false}})
+        else  -- chosen_option == 3
+          if api.ability_check("perception", 12) then
+            api.line(c.player, "(Стоит немного подготовиться)", {check = {"perception", true}})
+            api.narration("Охранники ведут себя циклично, как по вызубренной инструкции — кажется, даже чихают по таймеру.")
+            api.narration("Ты подсчитываешь момент, когда они не смотрят;")
+            api.narration("Пяткой откатываешь валяющийся на полу помидор — было бы глупо на него случайно наступить;")
+            api.narration("Аккуратно берёшь бутылку, — охранник только начинает поворачиваться, — делаешь шаг в сторону двери...")
+            api.narration("И бодрой походкой победителя выходишь из кладовой.")
+
+            rails.bottles_taken = rails.bottles_taken + 1
+            c.alcohol_crate.interact = nil
+            return
+          end
+
+          api.narration("Ты аккуратно берёшь бутылку, делаешь шаг в сторону выхода, и...", {check = {"perception", false}})
+        end
+
+        api.narration("Наступаешь на валяющийся помидор.")
+
+        c.guard_1:rotate("left")
+        if State:exists(rails.entities.guard_2) then
+          rails.entities.guard_2:rotate("left")
+        end
+
+        api.narration("Оба охранника вмиг поворачиваются в твою сторону.")
+        api.narration("Они хватаются за дубинки.")
+        api.line(c.guard_1, "За кражу и порчу собственности полагается наказание.")
+        api.line(c.player, "Через твой труп.")
+
+        hostility.make_hostile("combat_dreamers")
       end,
     },
   }
