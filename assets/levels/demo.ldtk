@@ -4705,9 +4705,9 @@
 									"id": "V_String",
 									"params": ["dorm_halfling"]
 								}] },
-								{ "__identifier": "args", "__type": "String", "__value": "{faction = \"dreamers_1\", hurt = true, race = \"halfling\", interactive = true}", "__tile": null, "defUid": 73, "realEditorValues": [{
+								{ "__identifier": "args", "__type": "String", "__value": "{faction = \"dreamers_1\", blood = true, race = \"halfling\", interactive = true}", "__tile": null, "defUid": 73, "realEditorValues": [{
 									"id": "V_String",
-									"params": ["{faction = \"dreamers_1\", hurt = true, race = \"halfling\", interactive = true}"]
+									"params": ["{faction = \"dreamers_1\", blood = true, race = \"halfling\", interactive = true}"]
 								}] }
 							],
 							"__worldX": 416,

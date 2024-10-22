@@ -6,14 +6,14 @@ local item = require("tech.item")
 local cues, module_mt, static = Module("tech.cue")
 
 local factories = {
-  hurt = function()
+  blood = function()
     return Table.extend(
-      animated("assets/sprites/animations/hurt", "atlas"),
+      animated("assets/sprites/animations/blood", "atlas"),
       {
         direction = "right",
         name = "Кровь",
         codename = "blood",
-        slot = "hurt",
+        slot = "blood",
       }
     )
   end,

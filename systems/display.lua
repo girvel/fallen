@@ -206,7 +206,7 @@ display.system = static(Tiny.sortedProcessingSystem({
 
     if entity.inventory then
       display_slot("head")
-      display_slot("hurt")
+      display_slot("blood")
       display_slot("gloves")
       display_slot("underhand")
       if not is_main_hand_in_background then display_slot("main_hand") end

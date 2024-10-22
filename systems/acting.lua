@@ -65,7 +65,7 @@ acting.system = static(Tiny.processingSystem({
 
   _refresh_blood = function(self, entity)
     if not entity.hp then return end
-    cue.set(entity, "hurt", entity.hp <= entity:get_max_hp() / 2)
+    cue.set(entity, "blood", entity.hp <= entity:get_max_hp() / 2)
   end,
 
   _process_outside_combat = function(self, entity, dt)
