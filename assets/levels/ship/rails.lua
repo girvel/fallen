@@ -3,6 +3,7 @@ local level = require("state.level")
 local railing = require("tech.railing")
 local decorations = require("library.palette.decorations")
 local items       = require("library.palette.items")
+local cue         = require("tech.cue")
 local api = railing.api
 
 
@@ -51,6 +52,7 @@ return function(positions, entities)
 
       State:refresh(self.entities.mirage_block, interactive.detector(true))
       State:refresh(self.entities.alcohol_crate, interactive.detector(), {name = "ящик"})
+      cue.set(self.entities.alcohol_crate, "highlight", true)
 
       self.entities.razor = State:add(items.razor())
       self.entities.dorm_halfling.inventory[1] = self.entities.razor

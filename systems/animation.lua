@@ -13,6 +13,7 @@ animation.system = static(Tiny.processingSystem({
     local rate = FPS * (entity.animation_rate or 1)
     this_animation.frame = this_animation.frame + dt * rate
 
+    -- TODO a lot of unnecessary calls
     if not this_animation.current
       or math.floor(this_animation.frame) > #this_animation.current
     then

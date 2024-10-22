@@ -87,13 +87,14 @@ for _, prefix in ipairs({"", "black_"}) do
         end
 
         self:open()
-      end, {highlighted = args.highlighted}),
+      end, {highlight = args.highlight}),
       {
         codename = prefix .. "door",
         layer = "solids",
         view = "scene",
         name = "дверь",
         is_open = false,
+
         open = Dump.ignore_upvalue_size .. function(self)
           if self.is_open then return end
           self:animate("open"):next(function(_)
@@ -104,6 +105,7 @@ for _, prefix in ipairs({"", "black_"}) do
             self.interact = nil
           end)
         end,
+
         close = Dump.ignore_upvalue_size .. function(self)
           if not self.is_open then return end
           self.animation.pack = closed_door_pack

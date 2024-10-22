@@ -1,4 +1,4 @@
-local gui = require("tech.gui")
+local cue = require("tech.cue")
 
 
 local module, module_mt, static = Module("tech.interactive")
@@ -16,22 +16,23 @@ end
 
 module_mt.__call = function(_, callback, params)
   params = params or {}
+
   return {
     was_interacted_with = false,
+    size = Vector.one,
+
     on_add = function(self)
       if params.highlight then
-        self._highlight = State:add(gui.highlight(), {position = self.position})
-        State:add_dependency(self, self._highlight)
+        cue.set(self, "highlight", true)
       end
     end,
+
     interact = Dump.ignore_upvalue_size .. function(self, other)
       self.was_interacted_with = true
-      if self._highlight then
-        State:remove(self._highlight)
-        self._highlight = nil
-      end
+      cue.set(self, "highlight", false)
       callback(self, other)
     end,
+
     on_click = function(self)
       local d = self.position - State.player.position
       if d:abs() > 1 then return end
@@ -42,10 +43,9 @@ module_mt.__call = function(_, callback, params)
           if d:abs() == 0 then return end
           State.player:rotate(Vector.name_from_direction(d))
         end,
-        action = actions.interact
+        action = actions.interact,
       })
     end,
-    size = Vector.one,
   }
 end
 

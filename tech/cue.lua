@@ -3,17 +3,28 @@ local item = require("tech.item")
 
 
 --- Setting/removing visual on-entity cues such as highlights or blood.
-local cues, module_mt, static = Module("tech.cue")
+local cue, module_mt, static = Module("tech.cue")
 
-local factories = {
+cue.factories = {
   blood = function()
     return Table.extend(
       animated("assets/sprites/animations/blood", "atlas"),
       {
-        direction = "right",
         name = "Кровь",
         codename = "blood",
         slot = "blood",
+      }
+    )
+  end,
+
+  highlight = function()
+    return Table.extend(
+      animated("assets/sprites/animations/highlight"),
+      {
+        name = "Хайлайт",
+        codename = "highlight",
+        slot = "highlight",
+        animated_independently_flag = true,
       }
     )
   end,
@@ -22,16 +33,17 @@ local factories = {
 --- Sets whether given cue should be or not be displayed
 --- @param entity has_inventory
 --- @param slot string
---- @param value boolean?
+--- @param value boolean
 --- @return nil
-cues.set = function(entity, slot, value)
+cue.set = function(entity, slot, value)
+  if not entity.inventory then entity.inventory = {} end
   if Common.bool(value) == Common.bool(entity.inventory[slot]) then return end
   if value then
-    item.give(entity, State:add(factories[slot]()))
+    item.give(entity, State:add(cue.factories[slot]()))
   else
     State:remove(entity.inventory[slot])
     entity.inventory[slot] = nil
   end
 end
 
-return cues
+return cue

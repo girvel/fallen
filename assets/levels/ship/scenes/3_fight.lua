@@ -3,6 +3,7 @@ local api = require("tech.railing").api
 local general_ai = require("library.ais.general")
 local sprite = require("tech.sprite")
 local hostility = require("mech.hostility")
+local cue = require("tech.cue")
 
 
 return function()
@@ -192,10 +193,7 @@ return function()
 
         for _, e in pairs(engineers) do
           e.interact = nil
-          if e._highlight then
-            State:remove(e._highlight)
-            e._highlight = nil
-          end
+          cue.set(e, "highlight", false)
         end
 
         rails.entities.engineer_3.ai.mode = general_ai.modes.run_away_to(rails.positions.exit)

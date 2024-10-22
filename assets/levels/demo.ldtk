@@ -3424,7 +3424,10 @@
 							"defUid": 12,
 							"px": [256,1200],
 							"fieldInstances": [
-								{ "__identifier": "args", "__type": "String", "__value": null, "__tile": null, "defUid": 45, "realEditorValues": [] },
+								{ "__identifier": "args", "__type": "String", "__value": "{highlight = true}", "__tile": null, "defUid": 45, "realEditorValues": [{
+									"id": "V_String",
+									"params": ["{highlight = true}"]
+								}] },
 								{ "__identifier": "rails_name", "__type": "String", "__value": null, "__tile": null, "defUid": 47, "realEditorValues": [] }
 							],
 							"__worldX": 256,

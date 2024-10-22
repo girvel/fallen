@@ -1,6 +1,3 @@
-local interactive = require("tech.interactive")
-
-
 local module, _, static = Module("tech.item")
 
 module.DROPPING_SLOTS = {"main_hand", "other_hand", "gloves", 1}
@@ -72,13 +69,15 @@ module.give = function(entity, this_item)
 
     this_item.direction = entity.direction
     this_item:animate()
-    this_item:animation_set_paused(entity.animation.paused)
+    this_item:animation_set_paused(-Query(entity.animation).paused)
   end
 
   return Common.bool(is_free)
 end
 
 module.mixin = function()
+  local interactive = require("tech.interactive")
+
   return Table.extend(
     interactive(function(self, other)
       local old_position = self.position

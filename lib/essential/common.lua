@@ -66,7 +66,7 @@ common.resume_logged = function(coroutine_, ...)
   local t = love.timer.getTime()
   local success, message = coroutine.resume(coroutine_, ...)
   t = love.timer.getTime() - t
-  if t > 0.25 then
+  if t > 0.1 then
     Log.warn("Coroutine lags\n" .. debug.traceback())
   end
 

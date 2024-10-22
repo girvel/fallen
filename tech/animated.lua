@@ -28,7 +28,9 @@ local animation_methods = {
     self:animation_refresh()
 
     for _, it in pairs(self.inventory or {}) do
-      Query(it):animate(animation_name)
+      if not it.animated_independently_flag then
+        Query(it):animate(animation_name)
+      end
     end
 
     self.animation._on_end = Promise()
@@ -43,7 +45,9 @@ local animation_methods = {
   animation_set_paused = function(self, value)
     self.animation.paused = value
     for _, it in pairs(self.inventory or {}) do
-      Query(it.animation).paused = value
+      if not it.animated_independently_flag then
+        Query(it.animation).paused = value
+      end
     end
   end,
 }

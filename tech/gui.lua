@@ -30,11 +30,6 @@ gui.text = function(text, font_size, position)
   }
 end
 
--- TODO figure out highlight behaviour structure
-gui.highlight = function()
-  return Table.extend(animated("assets/sprites/animations/highlight"), {layer = "fx", view = "scene"})
-end
-
 gui.hp_bar = function()
   return Table.extend(
     animated("assets/sprites/hp_bar"),
