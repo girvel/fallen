@@ -15,7 +15,7 @@ ai.async = function(fun, works_outside_of_combat)  -- TODO remove last argument
       and not Table.contains(-Query(State.combat).list or {}, entity)
     then return end
 
-    while Common.relative_period(.25, dt, ai.async, entity) do
+    if Common.period(.25, ai.async, entity) then
       coroutine_cache[fun] = coroutine_cache[fun] or coroutine.create(function(...)
         return Debug.call(fun, ...)
       end)

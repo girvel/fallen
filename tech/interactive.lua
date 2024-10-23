@@ -49,13 +49,13 @@ module_mt.__call = function(_, callback, params)
   }
 end
 
---- @param disable_highlight boolean?
+--- @param enable_highlight boolean?
 --- @return table
-module.detector = function(disable_highlight)
+module.detector = function(enable_highlight)
   return module(function(self, other)
     self.interacted_by = other
     Log.debug("%s interacts with %s" % {Entity.name(other), Entity.name(self)})
-  end, {highlight = not disable_highlight})
+  end, {highlight = enable_highlight})
 end
 
 return module

@@ -84,7 +84,10 @@ local engineer_mixins = {
 }
 
 mobs.engineer = function(i)
-  return humanoid(Table.extend(engineer_mixins[i], interactive.detector()))
+  return humanoid(Table.extend(
+    engineer_mixins[i],
+    interactive.detector(true)
+  ))
 end
 
 local dreamer_races = {races.dwarf, races.human, races.half_elf, races.half_orc, races.halfling}
@@ -104,7 +107,7 @@ end
 mobs.cook = function()
   return Table.extend(
     mobs.old_dreamer(),
-    interactive.detector(true)
+    interactive.detector()
   )
 end
 
@@ -122,7 +125,7 @@ mobs.markiss = function()
       ai = hauler_ai(),
       invincible = true,
     },
-    interactive.detector(true)
+    interactive.detector()
   )
 end
 
@@ -148,7 +151,7 @@ mobs.dreamer = function(params)
       ai = params.faction and combat_ai(),
       faction = params.faction,
     }),
-    params.interactive and interactive.detector(true) or nil
+    params.interactive and interactive.detector() or nil
   )
 end
 

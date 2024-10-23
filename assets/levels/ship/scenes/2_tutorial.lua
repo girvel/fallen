@@ -1,3 +1,4 @@
+local cue = require("tech.cue")
 local experience = require("mech.experience")
 local sound = require("tech.sound")
 local quest = require("tech.quest")
@@ -299,7 +300,8 @@ return function()
             end
           elseif o == 2 then
             rails.scenes.return_bird_remains.enabled = true
-            Table.extend(rails.entities.bird_cage, interactive.detector(true))
+            Table.extend(rails.entities.bird_cage, interactive.detector())
+            cue.set(rails.entities.bird_cage, "", true)
           else
             api.autosave()
             break
