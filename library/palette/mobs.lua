@@ -174,8 +174,6 @@ mobs.combat_dreamer = function(params)
       other_hand = items.spiked_shield(),
     },
     perks = {fighter.styles.two_weapon_fighting},
-
-    on_death = Fn(),  -- disabling blood marks
   }
 end
 
@@ -189,6 +187,8 @@ mobs.phantom_knight = function()
     base_abilities = abilities(0, 14, 0, 0, 0, 0),
     faction = "monster",
     initiative_bonus = -30,
+
+    on_death = Fn(),  -- disabling blood marks
   })
 end
 

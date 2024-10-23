@@ -229,10 +229,12 @@ display.system = static(Tiny.sortedProcessingSystem({
       love.graphics.setColor(Colors.absolute_white())
     end
 
+    -- This is fine to be hardcoded
     if State.gui.show_fps then
       love.graphics.print("FPS: %.2f" % (1 / love.timer.getAverageDelta()), default_font, 5, 5)
     end
 
+    -- TODO probably all this bullshit should be handled through entities
     local mode = State.mode:get()
     if mode == State.mode.text_input then return State.gui.text_input:display() end
     if mode == State.mode.death then return self:_display_death_message() end
