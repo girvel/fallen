@@ -20,9 +20,7 @@ return function()
         api.make_hostile("half_orc", rails.entities)
         rails.entities.engineer_3.interact = nil
         rails.entities.engineer_3.ai.mode = general_ai.modes.normal
-        if rails.entities.engineer_3._highlight then
-          State:remove(rails.entities.engineer_3._highlight)
-        end
+        cue.set(rails.entities.engineer_3, "highlight", false)
         State:start_combat({State.player, rails.entities.engineer_3})
       end,
     },
