@@ -40,6 +40,7 @@ return function()
         rails.scenes.player_leaves_his_room.enabled = false
         rails.scenes.open_left_megadoor.enabled = true
         rails.entities.detective_door.locked = false
+        rails.entities.storage_room_door:open()
 
         State.player.experience = experience.for_level[3]
         State.gui.creator:refresh()

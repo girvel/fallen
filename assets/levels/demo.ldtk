@@ -2748,25 +2748,6 @@
 						},
 						{
 							"__identifier": "position",
-							"__grid": [39,89],
-							"__pivot": [0,0],
-							"__tags": ["positions"],
-							"__tile": null,
-							"__smartColor": "#19AD51",
-							"iid": "95733c00-4ce0-11ef-896a-f99d7cfd9867",
-							"width": 16,
-							"height": 16,
-							"defUid": 22,
-							"px": [624,1424],
-							"fieldInstances": [{ "__identifier": "name", "__type": "String", "__value": "minmax_fight_save", "__tile": null, "defUid": 23, "realEditorValues": [{
-								"id": "V_String",
-								"params": ["minmax_fight_save"]
-							}] }],
-							"__worldX": 624,
-							"__worldY": 1424
-						},
-						{
-							"__identifier": "position",
 							"__grid": [18,75],
 							"__pivot": [0,0],
 							"__tags": ["positions"],
@@ -3117,6 +3098,25 @@
 							],
 							"__worldX": 512,
 							"__worldY": 1344
+						},
+						{
+							"__identifier": "position",
+							"__grid": [39,91],
+							"__pivot": [0,0],
+							"__tags": ["positions"],
+							"__tile": null,
+							"__smartColor": "#19AD51",
+							"iid": "16f7e750-73f0-11ef-a3bc-99b6e9619168",
+							"width": 16,
+							"height": 16,
+							"defUid": 22,
+							"px": [624,1456],
+							"fieldInstances": [{ "__identifier": "name", "__type": "String", "__value": "storage_room_exit", "__tile": null, "defUid": 23, "realEditorValues": [{
+								"id": "V_String",
+								"params": ["storage_room_exit"]
+							}] }],
+							"__worldX": 624,
+							"__worldY": 1456
 						}
 					]
 				},
@@ -3946,7 +3946,10 @@
 							"px": [624,1440],
 							"fieldInstances": [
 								{ "__identifier": "args", "__type": "String", "__value": null, "__tile": null, "defUid": 45, "realEditorValues": [] },
-								{ "__identifier": "rails_name", "__type": "String", "__value": null, "__tile": null, "defUid": 47, "realEditorValues": [] }
+								{ "__identifier": "rails_name", "__type": "String", "__value": "storage_room_door", "__tile": null, "defUid": 47, "realEditorValues": [{
+									"id": "V_String",
+									"params": ["storage_room_door"]
+								}] }
 							],
 							"__worldX": 624,
 							"__worldY": 1440

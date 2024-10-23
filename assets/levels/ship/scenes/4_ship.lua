@@ -1,3 +1,4 @@
+local ai = require("tech.ai")
 local level = require("state.level")
 local hostility = require("mech.hostility")
 local attacking = require("mech.attacking")
@@ -247,7 +248,20 @@ return function()
             api.narration("Охранники ведут себя циклично, как по вызубренной инструкции — кажется, даже чихают по таймеру.")
             api.narration("Ты подсчитываешь момент, когда они не смотрят;")
             api.narration("Пяткой откатываешь валяющийся на полу помидор — было бы глупо на него случайно наступить;")
+
+            c.player:rotate("down")
+            c.player:act(actions.move)
             api.narration("Аккуратно берёшь бутылку, — охранник только начинает поворачиваться, — делаешь шаг в сторону двери...")
+
+            local travel_coroutine = coroutine.create(Fn.curry(ai.api.tcod_travel,
+              c.player, rails.positions.storage_room_exit
+            ))
+
+            while coroutine.status(travel_coroutine) ~= "dead" do
+              Common.resume_logged(travel_coroutine)
+              api.wait_seconds(.25)
+            end
+
             api.narration("И бодрой походкой победителя выходишь из кладовой.")
 
             rails.bottles_taken = rails.bottles_taken + 1

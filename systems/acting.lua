@@ -48,7 +48,7 @@ acting.system = static(Tiny.processingSystem({
     if observe then
       Debug.pcall(observe, entity, dt)
     end
-    if not entity.ai.run or entity.ai.in_cutscene then return end
+    if not entity.ai.run then return end
 
     if not State.combat then
       return self:_process_outside_combat(entity, dt)
@@ -69,7 +69,7 @@ acting.system = static(Tiny.processingSystem({
   end,
 
   _process_outside_combat = function(self, entity, dt)
-    Debug.pcall(entity.ai.run, entity.ai, entity, dt)
+    if not entity.ai.in_cutscene then Debug.pcall(entity.ai.run, entity.ai, entity, dt) end
     if -Query(entity.animation).current.codename:starts_with("idle") then
       Table.extend(entity.resources, -Query(entity):get_resources("move"))
     else
