@@ -123,7 +123,13 @@ display.system = static(Tiny.sortedProcessingSystem({
   end,
 
   process = function(self, entity)
-    if not State.mode:get().displayed_views[entity.view] then return end
+    if
+      not State.mode:get().displayed_views[entity.view]
+      or State.gui.sidebar._hidden
+        and Table.contains({"sidebar", "sidebar_text", "sidebar_background"}, entity.view)
+    then
+      return
+    end
 
     local current_view = State.gui.views[entity.view]
     local offset_position = current_view:apply(animated.get_render_position(entity))
@@ -262,6 +268,7 @@ display.system = static(Tiny.sortedProcessingSystem({
   end,
 
   _display_text_info = function(self)
+    if State.gui.sidebar._hidden then return end
     love.graphics.printf(
       State.gui.sidebar:get_text(), default_font,
       love.graphics.getWidth() - State.gui.sidebar.W, 300,

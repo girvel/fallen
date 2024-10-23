@@ -14,7 +14,7 @@ return function()
         self.enabled = false
 
         State.player:rotate("up")
-        State.gui.disable_ui = true
+        State.gui.sidebar:hide()
         local old_fov = State.player.fov_radius
         State.player.fov_radius = 0
         State.player.ai.in_cutscene = true
@@ -28,7 +28,7 @@ return function()
         api.narration("... не на ви деть")
         api.narration("... тебя <hate>ненавидеть</hate>")
 
-        State.gui.disable_ui = false
+        State.gui.sidebar:show()
 
         api.narration("Эти слова повторял <hate>Я</hate>?")
         api.narration("Или они были для <hate>Меня</hate>?")

@@ -27,6 +27,8 @@ return Module("state.gui.sidebar", function()
     ACTION_GRID_W = 5,
     W = 320,
 
+    _hidden = false,
+
     -- TODO REF move notification to a separate module
     update = function(self, dt)
       self:_update_hp_bar()
@@ -63,25 +65,39 @@ return Module("state.gui.sidebar", function()
       self:refresh_action_grid()
     end,
 
+    hide = function(self)
+      self._hidden = true
+      State:remove_multiple(self.action_entities)
+      self.action_entities = {}
+    end,
+
+    show = function(self)
+      self._hidden = false
+      self:refresh_action_grid()
+    end,
+
     refresh_action_grid = function(self)
+      if self._hidden then return end
+
       State:remove_multiple(self.action_entities)
       local player_actions = State.player.potential_actions
-      self.action_entities = State:add_multiple(OrderedMap.iter(State.hotkeys[State.mode:get().codename])
-        :filter(function(key, data)
-          return data.codename
-            and not -Query(data):hidden()
-            and (not data.action or Table.contains(player_actions, data.action))
-        end)
-        :enumerate()
-        :map(function(i, key, data)
-          local frame = gui.action_frame(i)
-          return {
-            gui.action_icon(data, i, frame),
-            frame,
-            gui.action_hotkey(key, i),
-          }
-        end)
-        :reduce(Table.concat, {})
+      self.action_entities = State:add_multiple(
+        OrderedMap.iter(State.hotkeys[State.mode:get().codename])
+          :filter(function(key, data)
+            return data.codename
+              and not -Query(data):hidden()
+              and (not data.action or Table.contains(player_actions, data.action))
+          end)
+          :enumerate()
+          :map(function(i, key, data)
+            local frame = gui.action_frame(i)
+            return {
+              gui.action_icon(data, i, frame),
+              frame,
+              gui.action_hotkey(key, i),
+            }
+          end)
+          :reduce(Table.concat, {})
       )
     end,
 

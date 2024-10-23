@@ -26,7 +26,6 @@ module_mt.__call = function(_)
     TEXT_MAX_SIZE = Vector({1000, 800}),
     font_size = 12,
     show_fps = nil,  -- set from main.lua
-    disable_ui = false,
     pressed_scancodes = {},
 
     styles = {
