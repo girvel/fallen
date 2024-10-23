@@ -174,6 +174,8 @@ mobs.combat_dreamer = function(params)
       other_hand = items.spiked_shield(),
     },
     perks = {fighter.styles.two_weapon_fighting},
+
+    on_death = Fn(),  -- disabling blood marks
   }
 end
 

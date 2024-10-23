@@ -36,10 +36,12 @@ cue.factories = {
 --- @param value boolean
 --- @return nil
 cue.set = function(entity, slot, value)
+  local factory = assert(cue.factories[slot], "Slot %q is not supported" % {slot})
+
   if not entity.inventory then entity.inventory = {} end
   if Common.bool(value) == Common.bool(entity.inventory[slot]) then return end
   if value then
-    item.give(entity, State:add(cue.factories[slot]()))
+    item.give(entity, State:add(factory()))
   else
     State:remove(entity.inventory[slot])
     entity.inventory[slot] = nil

@@ -1,3 +1,4 @@
+local on_tiles = require("library.palette.on_tiles")
 local cue = require("tech.cue")
 local experience = require("mech.experience")
 local sound = require("tech.sound")
@@ -239,6 +240,7 @@ return function()
         rails.entities.possessed = State:add(mobs.possessed(), {
           position = rails.positions.possessed_spawn
         })
+        State:add(on_tiles.blood(), {position = rails.positions.possessed_spawn})
 
         api.notification("Направляйся к комнате с черной дверью.", true)
 
@@ -301,7 +303,7 @@ return function()
           elseif o == 2 then
             rails.scenes.return_bird_remains.enabled = true
             Table.extend(rails.entities.bird_cage, interactive.detector())
-            cue.set(rails.entities.bird_cage, "", true)
+            cue.set(rails.entities.bird_cage, "highlight", true)
           else
             api.autosave()
             break
