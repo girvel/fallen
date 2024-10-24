@@ -8,7 +8,7 @@ local h = function(level)
   return function(node, children, styles)
     return Table.concat(
       {
-        Table.extend({content = "# "},
+        Table.extend({content = "#" * level .. " "},
         styles["h%s" % level] or {},  -- TODO allow nil arguments in the middle?
         styles["h%s_prefix" % level])
       },

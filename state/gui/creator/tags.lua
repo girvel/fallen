@@ -22,6 +22,10 @@ local button_char = {
 }
 
 tags.button = function(index, dx)
+  if State.gui.creator:is_readonly() then
+    return Html.span {" "}
+  end
+
   return Html.span {
     button_char[dx],
     on_click = function()

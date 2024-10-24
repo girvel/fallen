@@ -7,11 +7,14 @@ local forms = require("state.gui.creator.forms")
 local texting = require("tech.texting")
 
 
+--- @overload fun(gui: state_gui): creator
 local init, module_mt, static = Module("state.gui.creator.init")
 
 module_mt.__call = function(_, gui)
-  return {
-    scroll = 0,
+  --- @class creator
+  --- @field scroll integer
+  local result = {
+    scroll = 0,  -- for some reason LSP does not see it so it is marked w/ @field
     size = Vector.zero,
 
     is_active = function(self)
@@ -30,7 +33,11 @@ module_mt.__call = function(_, gui)
       end
 
       local page = Html.pre {
-        "   ", Html.h1 {"Редактор персонажа"},
+        "   ", Html.h1 {
+          self:is_readonly()
+            and "Персонаж"
+            or Html.span {color = Colors.green(), "Повышение уровня"},
+        },
         forms.abilities(),
         forms.race(),
         forms.class(),
@@ -132,6 +139,8 @@ module_mt.__call = function(_, gui)
     _movement_functions = {},
     _current_selection_index = 1,
   }
+
+  return result
 end
 
 return init

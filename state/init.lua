@@ -4,9 +4,15 @@ local abilities = require("mech.abilities")
 local sprite = require("tech.sprite")
 
 
+--- @overload fun(systems: table[]): state
 local module, module_mt, static = Module("state")
 
 module_mt.__call = function(_, systems)
+  --- @class state
+  --- @field profiler any
+  --- @field factions table<string, table>
+  --- @field shader any
+  --- @field fast_scenes boolean
 	local result = {
     -- grids
     -- rails
@@ -18,10 +24,6 @@ module_mt.__call = function(_, systems)
 
     aggression_log = {},
     _next_aggression_log = {},
-
-    factions = nil,
-
-    shader = nil,
 
     set_shader = function(self, shader)
       Query(self.shader):deactivate()
