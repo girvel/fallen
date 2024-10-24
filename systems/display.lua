@@ -265,8 +265,9 @@ display.system = static(Tiny.sortedProcessingSystem({
     local heading_font = love.graphics.newFont("assets/fonts/joystix.monospace-regular.otf", 72)
     local subheading_font = love.graphics.newFont("assets/fonts/joystix.monospace-regular.otf", 24)
     draw_centered("Game over", heading_font, 0, 0)
-    draw_centered("[Enter] чтобы начать с последнего сохранения", subheading_font, 0, 80)
-    draw_centered("[R] чтобы начать игру заново", subheading_font, 0, 110)
+    draw_centered("[Enter] — начать с последнего сохранения", subheading_font, 0, 80)
+    draw_centered("[R] — начать игру заново", subheading_font, 0, 110)
+    draw_centered("[Ctrl + D] — завершить игру", subheading_font, 0, 140)
   end,
 
   _display_text_info = function(self)
