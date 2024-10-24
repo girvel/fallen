@@ -1,7 +1,14 @@
 local htmlparser = require("lib.vendor.htmlparser")
 
 
+--- @class html_api
 local html_api = {}
+
+--- @alias tag_dsl fun(t: table<integer | string, any>): html_tag
+
+--- Library for generation, storage and parsing HTML.
+--- @class html_module: { [string]: tag_dsl }
+--- @overload fun(): html_api
 local html = setmetatable({}, {
   __call = Fn(html_api),
   __index = function(_, item)
@@ -33,20 +40,35 @@ local html = setmetatable({}, {
   end,
 })
 
+--- @alias html_content string | html_tag
+
+--- @class html_tag_base
+--- @field name string
+--- @field attributes table<string, any>
+--- @field content html_content[]
+
+--- @class html_tag: html_tag_base
 local tag_methods = {}
+
 local tag_mt = {__index = tag_methods}
 
+--- @overload fun(t: html_tag_base): html_tag
 html_api.tag = Type .. function(_, t)
   assert(t.name and t.attributes and t.content)
   return setmetatable(t, tag_mt)
 end
 
+--- Find first direct child of given name
+--- @param name string tag name
+--- @return html_tag?
 tag_methods.find_by_name = function(self, name)
   return Fun.iter(self.content)
     :filter(function(e) return -Query(e).name == name end)
     :nth(1)
 end
 
+--- Get title of the page (presuming being called on <html> tag)
+--- @return string?
 tag_methods.get_title = function(self)
   local tag = -Query(self):find_by_name("head"):find_by_name("title")
   if not tag then return nil end
@@ -69,6 +91,9 @@ end
 
 local visit_node
 
+--- @param html_string string
+--- @param attribute_factories table<string, fun(value: string): any>?
+--- @return html_tag
 html_api.parse = function(html_string, attribute_factories)
   local root = htmlparser.parse(html_string)
   return visit_node(root, attribute_factories or {})
@@ -124,6 +149,8 @@ end
 
 local build_cell
 
+--- @param matrix (string | html_tag)[][]
+--- @return html_tag
 html_api.build_table = function(matrix)
   return html.table(Fun.iter(matrix)
     :map(function(row)
