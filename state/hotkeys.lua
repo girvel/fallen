@@ -58,12 +58,10 @@ return Module("state.hotkeys", function(modes)
 
   local attack_description = function(slot)
     return function(self)
-      return Html(function()
-        return stats {
-          "Атака: ", actions.get_melee_attack_roll(State.player, slot), br(),
-          "Урон: ", actions.get_melee_damage_roll(State.player, slot),
-        }
-      end)
+      return Html.stats {
+        "Атака: ", actions.get_melee_attack_roll(State.player, slot), Html.br {},
+        "Урон: ", actions.get_melee_damage_roll(State.player, slot),
+      }
     end
   end
 
@@ -82,11 +80,9 @@ return Module("state.hotkeys", function(modes)
   })
 
   local healing_description = function(self)
-    return Html(function()
-      return stats {
-        "Восстанавливает ", self.action:get_healing_roll(State.player), " здоровья"
-      }
-    end)
+    return Html.stats {
+      "Восстанавливает ", self.action:get_healing_roll(State.player), " здоровья"
+    }
   end
 
   define_hotkey(hotkeys, {"free", "combat"}, {"3"}, {
@@ -101,11 +97,9 @@ return Module("state.hotkeys", function(modes)
     codename = "action_surge",
     action = fighter.action_surge.action,
     get_description = function(self)
-      return Html(function()
-        return stats {
-          "+1 действие на один ход",
-        }
-      end)
+      return Html.stats {
+        "+1 действие на один ход",
+      }
     end
   })
 
@@ -114,11 +108,9 @@ return Module("state.hotkeys", function(modes)
     codename = "fighting_spirit",
     action = fighter.fighting_spirit.action,
     get_description = function(self)
-      return Html(function(self)
-        return stats {
-          "преимущество до конца хода",
-        }
-      end)
+      return Html.stats {
+        "преимущество до конца хода",
+      }
     end
   })
 
@@ -133,11 +125,9 @@ return Module("state.hotkeys", function(modes)
     codename = "dash",
     action = actions.dash,
     get_description = function(self)
-      return Html(function()
-        return stats {
-          "+", self.action:get_movement_bonus(State.player), " к скорости движения",
-        }
-      end)
+      return Html.stats {
+        "+", self.action:get_movement_bonus(State.player), " к скорости движения",
+      }
     end,
   })
 
@@ -146,9 +136,7 @@ return Module("state.hotkeys", function(modes)
     codename = "disengage",
     action = actions.disengage,
     get_description = function(self)
-      return Html(function()
-        return stats {"Не провоцировать атаки при движении"}
-      end)
+      return Html.stats {"Не провоцировать атаки при движении"}
     end
   })
 
