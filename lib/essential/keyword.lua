@@ -3,6 +3,7 @@ local keyword = function(_, f)
   return setmetatable({}, {
     __call = function(...) return f(...) end,
     __concat = function(...) return f(...) end,
+    __unique = true,
   })
 end
 

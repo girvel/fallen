@@ -1,6 +1,10 @@
 local kernel = {}
 
 kernel.initialize = function()
+  -- error handler should be the first
+  local old_errorhandler = love.errorhandler
+  love.errorhandler = require("kernel.callbacks.errorhandler")
+
   require("kernel.globals")()
 
   love._custom = {
@@ -30,11 +34,11 @@ kernel.initialize = function()
     save = function(filepath)
       love._custom.save = filepath
     end,
+
+    old_errorhandler = old_errorhandler,
   }
 
   love.run = require("kernel.callbacks.run")
-  love.custom.old_errorhandler = love.errorhandler
-  love.errorhandler = require("kernel.callbacks.errorhandler")
 end
 
 return kernel
