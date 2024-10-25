@@ -199,12 +199,14 @@ api.update_quest = function(changes)
   local states = State.gui.wiki.quest_states
   for k, v in pairs(changes) do
     if not Table.contains(quest.SPECIAL_STAGES, v) and (states[k] or 0) > v then
-      error("Attempt to degrade quest %s from stage %s (%s) to stage %s (%s)" % {
-        k, states[k], quest_stage(k, states[k]), v, quest_stage(k, v),
-      }, 2)
+      goto continue
+      -- error("Attempt to degrade quest %s from stage %s (%s) to stage %s (%s)" % {
+      --   k, states[k], quest_stage(k, states[k]), v, quest_stage(k, v),
+      -- }, 2)
     end
     Log.info("Quest %s: %s -> %s" % {k, states[k], v})
     states[k] = v
+    ::continue::
   end
 end
 
