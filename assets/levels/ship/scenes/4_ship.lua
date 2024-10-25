@@ -13,6 +13,25 @@ local items = require("library.palette.items")
 
 return function()
   return {
+    {
+      name = "Start parasites quest",
+      enabled = true,
+      start_predicate = function(self, rails, dt)
+        return api.get_quest("detective") > 2
+      end,
+
+      run = function(self, rails)
+        self.enabled = false
+
+        api.wait_seconds(30)
+        api.notification("Иди в рубку", true)
+        api.wait_seconds(1)
+        api.notification("Вверх по коридору", true)
+        api.wait_seconds(1)
+        api.update_quest({parasites = 1})
+      end,
+    },
+
     open_left_megadoor = {
       name = "Open left megadoor",
       enabled = false,
@@ -45,7 +64,6 @@ return function()
         rails.scenes.player_leaves_his_room.enabled = false
         rails.scenes.open_left_megadoor.enabled = true
         rails.entities.detective_door.locked = false
-        rails.entities.storage_room_door:open()
 
         State.player.experience = experience.for_level[3]
         State.gui.creator:refresh()

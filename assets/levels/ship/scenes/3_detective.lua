@@ -30,6 +30,8 @@ return function()
 
         item.give(State.player, State:add(items.pole()))
         api.center_camera()
+
+        rails.scenes.open_left_megadoor.enabled = true
       end,
     },
     {

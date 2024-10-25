@@ -12,6 +12,7 @@ experience.get_progression = function(holder, level)
 end
 
 experience.get_proficiency_modifier = function(level)
+  if not level then return 2 end
   return 1 + math.ceil(level / 4)
 end
 

@@ -24,5 +24,12 @@ return Module("library.quests", {
     tasks = {
       "!!!",
     },
+  },
+
+  parasites = {
+    header = "Паразиты",
+    tasks = {
+      "Пойти в рубку, она должна быть вверх по коридору",
+    },
   }
 })
