@@ -240,14 +240,14 @@ return Module("state.hotkeys", function(modes)
   define_hotkey(hotkeys, {"death"}, {"enter", "e"}, {
     name = "начать с последнего сохранения",
     pre_action = function()
-      love.custom.load("last.fallen_save")
+      love.custom.plan_load("last.fallen_save")
     end,
   })
 
   define_hotkey(hotkeys, {"death"}, {"r"}, {
     name = "начать заново",
     pre_action = function()
-      love.custom.load("start.fallen_save")
+      love.custom.plan_load("start.fallen_save")
     end,
   })
 
@@ -321,7 +321,7 @@ return Module("state.hotkeys", function(modes)
   define_hotkey(hotkeys, Table.deep_copy(modes), {"Ctrl+r"}, {
     name = "начать заново",
     pre_action = function()
-      love.custom.load("start.fallen_save")
+      love.custom.plan_load("start.fallen_save")
     end,
   })
 
@@ -329,7 +329,7 @@ return Module("state.hotkeys", function(modes)
     define_hotkey(hotkeys, Table.deep_copy(modes), {"Ctrl+s"}, {
       name = "загрузить сохранение",
       pre_action = function()
-        love.custom.load("last.fallen_save")
+        love.custom.plan_load("last.fallen_save")
       end
     })
   end

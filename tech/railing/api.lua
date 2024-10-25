@@ -185,7 +185,7 @@ end
 
 api.autosave = function()
   Log.info("Autosave")
-  love.custom.save("last.fallen_save")
+  love.custom.plan_save("last.fallen_save")
   api.notification("Игра сохранена")
 end
 

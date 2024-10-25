@@ -7,6 +7,7 @@ kernel.initialize = function()
 
   require("kernel.globals")()
 
+  --- Fallen's custom kernel-level data
   love._custom = {
     active_time = 0,
     frames_total = 0,
@@ -20,18 +21,27 @@ kernel.initialize = function()
     },
   }
 
+  --- Fallen's custom kernel-level logic
   love.custom = {
+    --- @return number
     get_rate = function() return love._custom.key_repetition.rate end,
 
+    --- @param key any
+    --- @param value number
+    --- @return nil
     set_key_rate = function(key, value)
       love._custom.key_repetition.specific_rates[key] = value
     end,
 
-    load = function(filepath)
+    --- @param filepath string
+    --- @return nil
+    plan_load = function(filepath)
       love._custom.load = filepath
     end,
 
-    save = function(filepath)
+    --- @param filepath string
+    --- @return nil
+    plan_save = function(filepath)
       love._custom.save = filepath
     end,
 

@@ -38,6 +38,9 @@ query_mt = {
   end,
 }
 
+--- Monad for nil-conditional indexing
+--- Allows for queries like `-Query(some_table).field.subfield`
+--- @see test_query
 --- @param value any
 --- @return Query
 query = function(value)

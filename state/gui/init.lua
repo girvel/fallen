@@ -24,10 +24,10 @@ local PORTRAIT_SPACE = Vector({360, 190})
 
 module_mt.__call = function(_)
   --- @class state_gui
+  --- @field show_fps boolean?
   local result = {
     TEXT_MAX_SIZE = Vector({1000, 800}),
     font_size = 12,
-    show_fps = nil,  -- set from main.lua
     pressed_scancodes = {},
 
     styles = {
