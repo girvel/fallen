@@ -21,16 +21,20 @@ query = function(subject)
 
     __newindex = function(self, index, value)
       if index == "_query_subject" then rawset(self, "_query_subject", value) end
-      local subject_type = type(self._query_subject)
-      if not (subject_type == "string" or subject_type == "table") then return end
+      if type(self._query_subject) ~= "table" then return end
       self._query_subject[index] = value
     end,
 
     __call = function(self, head, ...)
-      if (type(head) == "table" or type(head) == "string") and head._query_subject then
+      if type(head) == "table" and head._query_subject then
         head = head._query_subject
       end
-      return query(self._query_subject ~= nil and self._query_subject(head, ...) or nil)
+      if type(self._query_subject) == "function"
+        or -query(getmetatable(self._query_subject)).__call
+      then
+        return query(self._query_subject(head, ...))
+      end
+      return query(nil)
     end,
 
     __unm = function(self)

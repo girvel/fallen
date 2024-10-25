@@ -75,7 +75,6 @@ return function(module_path, module_value)
 
   local static = get_static_keyword(module_path)
   module_value = static(module_value)
-  print(require("lib.vendor.inspect")(module_value))
   make_table_static(module_value, module_path, {})
   walk_table(module_value, module_path, {}, 0)
   return module_value, getmetatable(module_value), static
