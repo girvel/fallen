@@ -1,3 +1,4 @@
+local item = require("tech.item")
 local interactive = require("tech.interactive")
 local level = require("state.level")
 local railing = require("tech.railing")
@@ -56,6 +57,14 @@ return function(positions, entities)
 
       self.entities.razor = State:add(items.razor())
       self.entities.dorm_halfling.inventory[1] = self.entities.razor
+
+      self.entities.captain_door_note.interact = nil
+      State:refresh(self.entities.captain_door, interactive.detector(), {name = "шлюз"})
+
+      State:remove(self.entities.guard_2.inventory.other_hand)
+      self.entities.guard_2.inventory.other_hand = nil
+      self.entities.captain_door_valve = State:add(items.large_valve())
+      item.give(self.entities.guard_2, self.entities.captain_door_valve)
     end,
 
     been_to_latrine = false,

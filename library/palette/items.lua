@@ -107,7 +107,7 @@ end
 module.spiked_shield = function()
   return Table.extend(
     item.mixin(),
-    animated(animation_packs.shield),
+    animated("assets/sprites/animations/shield", "atlas"),
     {
       direction = "right",
       name = "шипастый щит",
@@ -116,6 +116,21 @@ module.spiked_shield = function()
       tags = {
         light = true
       },
+      slot = "other_hand",
+    }
+  )
+end
+
+module.large_valve = function()
+  return Table.extend(
+    item.mixin(),
+    animated("assets/sprites/animations/large_valve", "atlas"),
+    {
+      direction = "right",
+      name = "большой вентиль",
+      damage_roll = D(2),
+      bonus = 0,
+      tags = {},
       slot = "other_hand",
     }
   )

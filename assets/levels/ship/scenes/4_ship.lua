@@ -6,10 +6,56 @@ local item = require("tech.item")
 local actions = require("mech.creature.actions")
 local api = require("tech.railing").api
 local decorations = require("library.palette.decorations")
+local experience = require("mech.experience")
+local quest = require("tech.quest")
+local items = require("library.palette.items")
 
 
 return function()
   return {
+    open_left_megadoor = {
+      name = "Open left megadoor",
+      enabled = false,
+      start_predicate = function(self, rails, dt)
+        return true
+      end,
+
+      run = function(self, rails)
+        self.enabled = false
+
+        rails.entities.megadoor11:open()
+        rails.entities.megadoor12:open()
+        rails.entities.megadoor13:open()
+      end,
+    },
+
+    checkpoint_4 = {
+      name = "Checkpoint (4)",
+      enabled = false,
+      start_predicate = function(self, rails, dt)
+        return true
+      end,
+
+      run = function(self, rails)
+        self.enabled = false
+        api.checkpoint_base()
+
+        level.move(State.player, rails.positions.checkpoint_4)
+        api.update_quest({warmup = quest.COMPLETED})
+        rails.scenes.player_leaves_his_room.enabled = false
+        rails.scenes.open_left_megadoor.enabled = true
+        rails.entities.detective_door.locked = false
+        rails.entities.storage_room_door:open()
+
+        State.player.experience = experience.for_level[3]
+        State.gui.creator:refresh()
+        State.gui.creator:submit()
+
+        item.give(State.player, State:add(items.pole()))
+        api.center_camera()
+      end,
+    },
+
     {
       name = "Dorm razor scene",
       enabled = true,
@@ -332,7 +378,9 @@ return function()
         c.guard_2.interacted_by = nil
 
         api.narration("Крепкий мужчина в военной форме одним глазом пристально смотрит на тебя, вторым на вход.")
-        api.narration("В одной руке он сжимает дубинку, другой — держит крупный стальной вентиль.")
+        if c.guard_2.inventory.other_hand == self.entities.captain_door_valve then
+          api.narration("В одной руке он сжимает дубинку, другой — держит крупный стальной вентиль.")
+        end
 
         self._options[5] = "*Уйти*"
 
@@ -366,6 +414,26 @@ return function()
             break
           end
         end
+      end,
+    },
+
+    {
+      name = "Interacting with the door",
+      enabled = true,
+
+      characters = {
+        player = {},
+        captain_door = {},
+      },
+
+      start_predicate = function(self, rails, dt, c)
+        return c.captain_door.interacted_by == c.player
+      end,
+
+      run = function(self, rails, c)
+        self.enabled = false
+
+        
       end,
     },
   }

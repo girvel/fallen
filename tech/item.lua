@@ -64,15 +64,15 @@ module.give = function(entity, this_item)
     slot = this_item.slot
   end
 
-  if is_free then
-    entity.inventory[slot] = this_item
+  if not is_free then return false end
 
-    this_item.direction = entity.direction
-    this_item:animate()
-    this_item:animation_set_paused(-Query(entity.animation).paused)
-  end
+  entity.inventory[slot] = this_item
 
-  return Common.bool(is_free)
+  this_item.direction = entity.direction
+  this_item:animate()
+  this_item:animation_set_paused(-Query(entity.animation).paused)
+
+  return true
 end
 
 module.mixin = function()

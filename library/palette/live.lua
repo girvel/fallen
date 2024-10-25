@@ -35,6 +35,7 @@ live.valve = function(leaking_pipe_name)
 end
 
 live.note = function(codex_update)
+  codex_update = codex_update or {}
   return Table.extend(
     interactive(function(self, other)
       self.interacted_by = other
