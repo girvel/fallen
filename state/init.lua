@@ -9,6 +9,7 @@ local module, module_mt, static = Module("state")
 
 module_mt.__call = function(_, systems)
   --- @class state
+  --- @field player player
   --- @field profiler any
   --- @field factions table<string, table>
   --- @field shader any

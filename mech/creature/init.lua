@@ -15,7 +15,8 @@ local get_all_resources = function(e)
   )
 end
 
-creature._methods = static {
+--- @class creature_methods
+local creature_methods = {
   get_effect = function(self, name, value, ...)
     local args = {...}
     return Fun.iter(self.perks)
@@ -52,6 +53,8 @@ creature._methods = static {
     return self:get_effect("modify_actions", Table.extend({}, actions.list))
   end,
 
+  --- @param self creature
+  --- @return integer
   get_max_hp = function(self)
     if not self.class then return self.max_hp end
     local con_bonus = self:get_modifier("con")
@@ -123,7 +126,9 @@ creature._methods = static {
 
 module_mt.__call = function(_, animation_pack, object)
   assert(object.max_hp or object.class, "Creature should either have max_hp or class")
-  local result = Table.extend(animated(animation_pack), {
+
+  --- @class creature_base
+  local base = {
     creature_flag = true,
 
     sprite = {},
@@ -144,7 +149,15 @@ module_mt.__call = function(_, animation_pack, object)
       if State.grids.items[self.position] then return end
       State:add(on_tiles.blood(), {position = self.position})
     end,
-  }, creature._methods, object)
+  }
+
+  --- @class creature: creature_methods, creature_base
+  local result = Table.extend(
+    animated(animation_pack),
+    base,
+    creature_methods,
+    object
+  )
 
   result.hp = result.hp or result:get_max_hp()
   result:rotate(result.direction)

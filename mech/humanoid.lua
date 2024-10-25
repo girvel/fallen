@@ -2,6 +2,7 @@ local creature = require("mech.creature")
 local animated = require("tech.animated")
 
 
+--- @overload fun(base: {race: table}): creature
 local humanoid, module_mt, static = Module("mech.humanoid")
 
 
