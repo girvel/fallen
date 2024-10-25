@@ -157,24 +157,27 @@ end
 
 mobs.combat_dreamer = function(params)
   params = params or {}
-  return humanoid {
-    debug_flag = true,
-    name = "...",
-    race = Random.choice(dreamer_races),
-    direction = params.direction or Random.choice(Vector.direction_names),
-    faction = "combat_dreamers",
+  return Table.extend(
+    humanoid {
+      debug_flag = true,
+      name = "...",
+      race = Random.choice(dreamer_races),
+      direction = params.direction or Random.choice(Vector.direction_names),
+      faction = "combat_dreamers",
 
-    ai = combat_ai(),
+      ai = combat_ai(),
 
-    armor_class = 16,
-    max_hp = 32,
-    base_abilities = abilities(15, 10, 14, 7, 12, 7),
-    inventory = {
-      main_hand = items.mace(),
-      other_hand = items.spiked_shield(),
+      armor_class = 16,
+      max_hp = 32,
+      base_abilities = abilities(15, 10, 14, 7, 12, 7),
+      inventory = {
+        main_hand = items.mace(),
+        other_hand = items.spiked_shield(),
+      },
+      perks = {fighter.styles.two_weapon_fighting},
     },
-    perks = {fighter.styles.two_weapon_fighting},
-  }
+    interactive.detector()
+  )
 end
 
 mobs.phantom_knight = function()

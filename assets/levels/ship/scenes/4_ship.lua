@@ -287,5 +287,86 @@ return function()
         hostility.make_hostile("combat_dreamers")
       end,
     },
+
+    {
+      name = "Talking to the first guard",
+      enabled = true,
+
+      characters = {
+        guard_1 = {},
+        player = {},
+      },
+
+      start_predicate = function(self, rails, dt, c)
+        return c.guard_1.interacted_by == c.player
+      end,
+
+      run = function(self, rails, c)
+        c.guard_1.interacted_by = nil
+
+        api.line(c.guard_1, "Я на посту, говори с моим собратом.")
+      end,
+    },
+
+    {
+      name = "Talking to the second guard",
+      enabled = true,
+
+      characters = {
+        guard_2 = {},
+        player = {},
+      },
+
+      start_predicate = function(self, rails, dt, c)
+        return c.guard_2.interacted_by == c.player
+      end,
+
+      _options = {
+        "*осмотреть его форму*",
+        -- [2]
+        -- [3]
+        -- [4]
+      },
+
+      run = function(self, rails, c)
+        c.guard_2.interacted_by = nil
+
+        api.narration("Крепкий мужчина в военной форме одним глазом пристально смотрит на тебя, вторым на вход.")
+        api.narration("В одной руке он сжимает дубинку, другой — держит крупный стальной вентиль.")
+
+        self._options[5] = "*Уйти*"
+
+        while true do
+          local chosen_option = api.options(self._options, true)
+
+          if chosen_option == 1 then
+            api.narration("Он одет так же, как и ты — старая военная форма без опознавательных знаков.")
+
+            if api.ability_check("history", 8) then
+              api.narration("Стандартная военно-морская форма солдат Трансанской Республики, от рядового до младшего офицера.", {check = {"history", true}})
+              api.narration("Её тоннами шили во времена Мировой Войны, а сейчас продают за бесценок.")
+              api.narration("Форма традиционно располагает  погонами, нашивками и прочими памятными знаками, символизирующими родство с определенной частью Республики.")
+              api.narration("Но на вашей форме лишь неотстирываемая многолетняя пыль.")
+            else
+              api.narration("Ты разглядываешь форму, пытаешься найти в ней что-то знакомое.", {check = {"history", true}})
+              -- TODO SFX
+              api.narration("Укороченные рукава, множество нашивных кармашков, бронзовые пуговицы...")
+              api.narration("Бежевые ботинки цвета хаки... Дубинка...")
+              -- TODO disable SFX
+              api.narration("Абсолютно никаких ассоциаций. Ничего из этого тебе не знакомо.")
+              api.line(c.player, "(Мне показалось, я что-то узнал)")
+              api.narration("Тебе показалось. Не думай об этом.")
+            end
+
+          -- TODO! finish this
+          -- elseif chosen_option == 2 then
+          --   api.
+
+          else -- chosen_option == 5
+            break
+          end
+        end
+      end,
+    },
   }
 end
