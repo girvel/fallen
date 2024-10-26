@@ -65,6 +65,8 @@ return function(positions, entities)
       self.entities.guard_2.inventory.other_hand = nil
       self.entities.captain_door_valve = State:add(items.large_valve())
       item.give(self.entities.guard_2, self.entities.captain_door_valve)
+
+      self.entities.gas_key = self.entities.engineer_1.inventory.main_hand
     end,
 
     been_to_latrine = false,

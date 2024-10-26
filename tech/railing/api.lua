@@ -8,6 +8,8 @@ local translation = require("tech.translation")
 
 local api, module_mt, static = Module("tech.railing.api")
 
+--- @param text string
+--- @param params {check: [ability|skill, boolean]}?
 api.narration = function(text, params)
   params = params or {}
   if params.check then

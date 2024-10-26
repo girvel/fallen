@@ -4,6 +4,8 @@ local animation_packs = require("library.animation_packs")
 local races = require("mech.races")
 
 
+--- @class player: creature, player_base
+
 --- @overload fun(): player
 local player, module_mt, static = Module("state.player")
 
@@ -82,8 +84,6 @@ module_mt.__call = function(_)
       end,
     },
   }
-
-  --- @class player: creature, player_base
 
   return humanoid(player_base)
 end

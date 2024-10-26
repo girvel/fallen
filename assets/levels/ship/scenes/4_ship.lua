@@ -448,10 +448,70 @@ return function()
         return c.captain_door.interacted_by == c.player
       end,
 
+      _options = {
+        [2] = "[Атлетика] *провернуть движущий механизм руками*",
+      },
+
       run = function(self, rails, c)
         self.enabled = false
 
-        
+        if State:exists(rails.entities.captain_door_note) then
+          api.narration("Кто-то скрутил с двери вентиль и прикрепил рядом записку:")
+          State:remove(rails.entities.captain_door_note)
+          api.narration("“Для допуска обратитесь в офицерскую кладовую.”")
+        else
+          api.narration("Кто-то скрутил с двери вентиль.")
+        end
+
+        self._options[1] = "*уйти*"
+
+        local inventory = c.player.inventory.main_hand
+        local gas_key = rails.entities.gas_key
+        if inventory.main_hand == gas_key or inventory.other_hand == gas_key then
+          self._options[4] = "*Использовать газовый ключ как рычаг*"
+        end
+
+        while true do
+          local chosen_option_1 = api.options(self._options, true)
+
+          if chosen_option_1 == 1 then
+            break
+          elseif chosen_option_1 == 2 then
+            if api.ability_check("athletics", 18) then
+              api.narration("Такой трюк без инструментов тянет на небольшое чудо.", {check = {"athletics", 18}})
+              api.narration("После нескольких безуспешных попыток, ты продвинулся лишь на треть оборота, но ладони уже покрылись ссадинами.")
+              api.narration("Ты чувствуешь, в тебе есть сила закончить это испытание, но заплатить придётся здоровьем.")
+
+              local chosen_option_2 = api.options({
+                "*Отказаться от этой затеи*",
+                "*Упорно продолжать*",
+              })
+
+              if chosen_option_2 == 1 then
+                api.narration("Верное решение; свою силу ты уже доказал.")
+                api.narration("Ты найдешь другой способ.")
+              else
+                local lines = {
+                  "Не щадя своего тела, затирая мозоли в кровь, ты заканчиваешь первый оборот.",
+                  "Может, твоя кровь стала смазкой в механизме.",
+                  "А может, вселенная вознаграждает упорных.",
+                  "Но остальные обороты даются легко — разумеется, по твоим меркам.",
+                  "Проход открыт, и ты чувствуешь себя сильным, как Железный Джерри.",
+                }
+
+                for _, line in ipairs(lines) do
+                  attacking.damage(c.player, 1)
+                  api.narration(line)
+                end
+              end
+            else
+              api.narration("Не стоило и пытаться, без инструментов это обычному человеку не под силу.", {check = {"athletics", false}})
+              api.narration("Придётся найти вентиль или инструмент, способный провернуть механизм.")
+            end
+          elseif chosen_option_1 == 3 then
+          else
+          end
+        end
       end,
     },
   }

@@ -54,10 +54,11 @@ attacking.attack_save = function(target, ability, save_dc, damage_roll)
   return true
 end
 
---- Gives fixed damage, handles hp, death and SFX
+--- Inflict fixed damage; handles hp, death and FX
 --- @param target {hp: number}
 --- @param damage number
---- @param is_critical boolean whether to display damage as critical
+--- @param is_critical boolean? whether to display damage as critical
+--- @return nil
 attacking.damage = function(target, damage, is_critical)
   damage = math.max(0, damage)
   Log.info("damage: " .. damage)
