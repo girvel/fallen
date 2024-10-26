@@ -5,6 +5,20 @@ local sound = require("tech.sound")
 local on_tiles = require("library.palette.on_tiles")
 
 
+--- @class creature: creature_methods
+--- @field creature_flag true
+--- @field resources table<string, integer>
+--- @field hp integer
+--- @field sprite table
+--- @field base_abilities table
+--- @field direction string
+--- @field inventory table
+--- @field layer string
+--- @field view string
+--- @field sounds table<string, table>
+--- @field perks table[]
+
+--- @overload fun(animation_pack: string|table, object: table): creature
 local creature, module_mt, static = Module("mech.creature")
 
 local get_all_resources = function(e)
@@ -122,19 +136,22 @@ local creature_methods = {
       name
     )
   end,
+
+  on_death = function(self)
+    if State.grids.items[self.position] then return end
+    State:add(on_tiles.blood(), {position = self.position})
+  end,
 }
 
 module_mt.__call = function(_, animation_pack, object)
   assert(object.max_hp or object.class, "Creature should either have max_hp or class")
 
-  --- @class creature_base
   local base = {
     creature_flag = true,
 
     sprite = {},
     base_abilities = abilities(10, 10, 10, 10, 10, 10),
     direction = "right",
-    proficiency_bonus = 2,
     inventory = {},
     layer = "solids",
     view = "scene",
@@ -144,14 +161,9 @@ module_mt.__call = function(_, animation_pack, object)
     },
 
     perks = {},
-
-    on_death = function(self)
-      if State.grids.items[self.position] then return end
-      State:add(on_tiles.blood(), {position = self.position})
-    end,
   }
 
-  --- @class creature: creature_methods, creature_base
+  --- @type creature
   local result = Table.extend(
     animated(animation_pack),
     base,

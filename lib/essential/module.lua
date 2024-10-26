@@ -64,6 +64,9 @@ local get_static_keyword = function(module_path)
   return setmetatable({}, {__call = f, __concat = f})
 end
 
+--- @param module_path string
+--- @param module_value table?
+--- @return table, table, fun(t: table): table
 return function(module_path, module_value)
   module_value = module_value or {}
   assert(type(module_path) == "string", "Path to the module should be a string")

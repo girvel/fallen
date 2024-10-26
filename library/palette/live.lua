@@ -139,4 +139,56 @@ live.mannequin = function()
   }
 end
 
+for i = 1, 3 do
+  live["megadoor" .. i] = function()
+    local result = Table.extend(
+      animated("assets/sprites/animations/megadoor%s/closed" % {i}),
+      {
+        layer = "solids",
+        view = "scene",
+        name = "огромная дверь",
+        codename = "megadoor" .. i,
+
+        _is_open = false,
+        open = function(self)
+          if self._is_open then return end
+          self._is_open = true
+          self.interact = nil
+
+          self:animate("open"):next(function()
+            self.animation.pack = animated.load_pack(
+              "assets/sprites/animations/megadoor%s/open" % {i}
+            )
+            level.change_layer(self, "on_solids")
+          end)
+        end,
+      }
+    )
+
+    if i == 3 then
+      Table.extend(
+        result,
+        interactive(function(self)
+          if self.locked then
+            if not State:exists(self._popup[1]) then
+              self._popup = railing.api.message.positional("Закрыто.", {source = self})
+            end
+            return
+          end
+
+          for d = 0, 2 do
+            State.grids.solids[self.position + Vector.left * d]:open()
+          end
+        end),
+        {
+          locked = true,
+          _popup = {},
+        }
+      )
+    end
+
+    return result
+  end
+end
+
 return live

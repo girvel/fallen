@@ -1,3 +1,4 @@
+local experience = require("mech.experience")
 local action = require("tech.action")
 local level = require("state.level")
 local attacking = require("mech.attacking")
@@ -12,7 +13,9 @@ local actions, _, static = Module("mech.creature.actions")
 
 -- TODO unify with creature methods?
 actions.get_melee_attack_roll = function(entity, slot)
-  local roll = D(20) + entity.proficiency_bonus + abilities.get_melee_modifier(entity, slot)
+  local roll = D(20)
+    + experience.get_proficiency_modifier(entity.level)
+    + abilities.get_melee_modifier(entity, slot)
 
   local weapon = entity.inventory[slot]
   if weapon then
