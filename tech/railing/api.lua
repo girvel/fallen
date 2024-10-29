@@ -6,10 +6,15 @@ local abilities = require("mech.abilities")
 local translation = require("tech.translation")
 
 
+--- API for scripting (a.k.a. railing)
+--- Partially asynchronous, intended to be called from inside the scene
 local api, module_mt, static = Module("tech.railing.api")
 
+--- Display narration at the bottom of the screen
+--- @async
 --- @param text string
 --- @param params {check: [ability|skill, boolean]}?
+--- @return nil
 api.narration = function(text, params)
   params = params or {}
   if params.check then
@@ -23,6 +28,14 @@ api.narration = function(text, params)
   while State.mode:get() ~= State.mode.free do coroutine.yield() end
 end
 
+--- @alias talker {position: vector, sprite_offset: vector?, sprite: {color: color}, portrait: love.Image}
+
+--- Display entity's line at the bottom of the screen
+--- @async
+--- @param entity talker
+--- @param text string
+--- @param params {check: [ability|skill, boolean]}?
+--- @return nil
 api.line = function(entity, text, params)
   params = params or {}
   if params.check then
@@ -43,18 +56,28 @@ api.line = function(entity, text, params)
   while State.mode:get() ~= State.mode.free do coroutine.yield() end
 end
 
+--- Wait for s seconds
+--- @async
+--- @param s number
+--- @return nil
 api.wait_seconds = function(s)
   if State.fast_scenes then return end
   local t = love.timer.getTime()
   while love.timer.getTime() - t < s do coroutine.yield() end
 end
 
+--- Wait while f returns true
+--- @async
+--- @param f fun(): boolean?
+--- @return nil
 api.wait_while = function(f)
   while f() do
     coroutine.yield()
   end
 end
 
+--- Center camera on player
+--- @return nil
 api.center_camera = function()
   Fun.iter({"scene", "scene_fx"}):each(function(view)
     State.gui.views[view].offset = (
@@ -64,14 +87,11 @@ api.center_camera = function()
   end)
 end
 
-local convert = function(index, removed_indices)
-  for _, removed_index in ipairs(removed_indices) do
-    if index < removed_index then break end
-    index = index + 1
-  end
-  return index
-end
-
+--- Give player multiple options to pick
+--- @async
+--- @param options {[integer]: string}
+--- @param remove_picked boolean? when true mutates the `options` table, setting the picked option to nil
+--- @return integer # index of the picked option
 api.options = function(options, remove_picked)
   State.gui.dialogue:options_present(options)
   while State.mode:get() ~= State.mode.free do coroutine.yield() end
@@ -82,10 +102,17 @@ api.options = function(options, remove_picked)
   return index
 end
 
+--- Display notification
+--- @param text string
+--- @param is_order boolean? when true order FX are displayed, notification FX otherwise
+--- @return nil
 api.notification = function(text, is_order)
   State.gui.notifier:push(text, is_order)
 end
 
+--- Update wiki.codex, discovering new wiki pages; notifies player
+--- @param page_table {[string]: any}
+--- @return nil
 api.discover_wiki = function(page_table)
   for k, v in pairs(page_table) do
     State.gui.wiki.codex[k] = v
@@ -93,6 +120,11 @@ api.discover_wiki = function(page_table)
   api.notification("Кодекс обновлён")  -- TODO mention page name
 end
 
+--- Make faction hostile towards player
+--- @deprecated
+--- @param faction string
+--- @param entities table[] rails.entities
+--- @return nil
 api.make_hostile = function(faction, entities)
   Fun.pairs(entities)
     :filter(function(_, e) return e.faction == faction end)
@@ -102,10 +134,16 @@ api.make_hostile = function(faction, entities)
   hostility.make_hostile(faction)
 end
 
+--- @param ability ability|skill
+--- @param dc integer check's difficulty class
+--- @return boolean
 api.ability_check = function(ability, dc)
   return abilities.check(State.player, ability, dc)
 end
 
+--- @param ability ability
+--- @param dc integer saving throw's difficulty class
+--- @return boolean
 api.saving_throw = function(ability, dc)
   local success = abilities.saving_throw(State.player, ability, dc)
 
@@ -117,6 +155,11 @@ api.saving_throw = function(ability, dc)
   return success
 end
 
+--- @param ability ability
+--- @param dc integer check's difficulty class
+--- @param content_success string
+--- @param content_failure string
+--- @return boolean
 api.ability_check_message = function(ability, dc, content_success, content_failure)
   local success = abilities.check(State.player, ability, dc)
 
@@ -148,6 +191,10 @@ local message = function(content, params)
   )
 end
 
+--- Display message until player moves + some time
+--- @param content string
+--- @param params {life_time: number?, source: {position: vector, sprite_offset: vector?}}
+--- @return table[]
 api.message.positional = function(content, params)
   local entities = message(content, params)
   local life_time = -Query(params).life_time or 5
@@ -172,6 +219,10 @@ end
 
 local SLOW_READING_SPEED = 10
 
+--- Display message for reaction time + slow reading time
+--- @param content string
+--- @param params {life_time: number?, source: {position: vector, sprite_offset: vector?}}
+--- @return table[]
 api.message.temporal = function(content, params)
   local entities = message(content, params)
   local life_time = -Query(params).life_time
@@ -189,6 +240,7 @@ api.message.temporal = function(content, params)
   return entities
 end
 
+--- @return nil
 api.autosave = function()
   Log.info("Autosave")
   love.custom.plan_save("last.fallen_save")
@@ -200,7 +252,9 @@ local quest_stage = function(k, v)
   return tasks[v] or tostring(v)
 end
 
---- @param changes table<string, integer>
+--- Can not regress quest progress
+--- @param changes table<string, integer> changes to quest progress in format quest: stage
+--- @return nil
 api.update_quest = function(changes)
   local states = State.gui.wiki.quest_states
   for k, v in pairs(changes) do
@@ -216,24 +270,33 @@ api.update_quest = function(changes)
   end
 end
 
---- @param name string quest's identifier
+--- Get current state of quest w/ given codename
+--- @param codename string quest's identifier
 --- @return integer
-api.get_quest = function(name)
-  return State.gui.wiki.quest_states[name] or 0
+api.get_quest = function(codename)
+  return State.gui.wiki.quest_states[codename] or 0
 end
 
+--- Base call for checkpoints
+--- @return nil
 api.checkpoint_base = function()
   State.gui.creator._ability_points = 0
   State.gui.creator._mixin.base_abilities = abilities(15, 15, 15, 8, 8, 8)
   State.gui.creator._choices.race = 2
 end
 
+--- Rotate given entity towards player
+--- @param entity table
+--- @return nil
 api.rotate_to_player = function(entity)
   entity:rotate(Vector.name_from_direction(
     (State.player.position - entity.position):normalized()
   ))
 end
 
+--- Trigger fade in/fade out sequence, wait until the screen is fully black
+--- @async
+--- @return fun(): nil # function to wait until the screen is clear again
 api.blackout = function()
   State.gui:trigger_blackout(0.5, 0.5)
   while math.abs(State.gui.blackout_k - 1) > 0.05 do

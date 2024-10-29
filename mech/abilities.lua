@@ -3,7 +3,8 @@ local sound = require("tech.sound")
 
 local abilities, module_mt, static = Module("mech.abilities")
 
---- @enum ability
+--- @alias ability "str" | "dex" | "con" | "int" | "wis" | "cha"
+
 abilities.list = {
   "str", "dex", "con",
   "int", "wis", "cha",
