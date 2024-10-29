@@ -4,13 +4,17 @@ local animation_packs = require("library.animation_packs")
 local races = require("mech.races")
 
 
---- @class player: creature, player_base
+--- @class player: creature
+--- @field player_flag true
+--- @field name string
+--- @field level integer
+--- @field experience integer
+--- @field fov_radius integer
 
 --- @overload fun(): player
 local player, module_mt, static = Module("state.player")
 
 module_mt.__call = function(_)
-  --- @class player_base
   local player_base = {
     player_flag = true,
     name = "протагонист",

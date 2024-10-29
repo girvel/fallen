@@ -67,6 +67,9 @@ end
 
 -- public function
 
+--- @generic T: function
+--- @param f T
+--- @return T
 function memoize.memoize(f, cache)
   cache = cache or {}
 
@@ -91,4 +94,4 @@ end
 
 setmetatable(memoize, { __call = function(_, ...) return memoize.memoize(...) end })
 
-return memoize
+return memoize.memoize

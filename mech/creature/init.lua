@@ -17,6 +17,7 @@ local on_tiles = require("library.palette.on_tiles")
 --- @field view string
 --- @field sounds table<string, table>
 --- @field perks table[]
+--- @field race table
 
 --- @overload fun(animation_pack: string|table, object: table): creature
 local creature, module_mt, static = Module("mech.creature")

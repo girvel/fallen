@@ -65,8 +65,7 @@ local get_static_keyword = function(module_path)
 end
 
 --- @param module_path string
---- @param module_value table?
---- @return table, table, fun(t: table): table
+--- @param module_value table|function?
 return function(module_path, module_value)
   module_value = module_value or {}
   assert(type(module_path) == "string", "Path to the module should be a string")
@@ -76,9 +75,12 @@ return function(module_path, module_value)
     ("Module should be either table or function, got %s instead"):format(value_type)
   )
 
-  local static = get_static_keyword(module_path)
-  module_value = static(module_value)
-  make_table_static(module_value, module_path, {})
-  walk_table(module_value, module_path, {}, 0)
-  return module_value, getmetatable(module_value), static
+  --- @module 'lib.identity_annotation'
+  local static = get_static_keyword(module_path) --[[@as function]]
+
+  local module_result = static(module_value) --[[@as table]]
+  make_table_static(module_result, module_path, {})
+  walk_table(module_result, module_path, {}, 0)
+
+  return module_result, getmetatable(module_result), static
 end

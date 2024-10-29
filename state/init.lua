@@ -32,7 +32,9 @@ module_mt.__call = function(_, systems)
       love.graphics.setShader(-Query(shader).love_shader)
     end,
 
+    --- Modifies entity
     --- @generic T: table
+    --- @param self state
     --- @param entity T
     --- @param ... table extensions
     --- @return T
@@ -51,12 +53,20 @@ module_mt.__call = function(_, systems)
       return entity
     end,
 
+    --- @generic T: table[]
+    --- @param self state
+    --- @param list T
+    --- @return T
     add_multiple = function(self, list)
       return Fun.iter(list)
         :map(function(e) return self:add(e) end)
         :totable()
     end,
 
+    --- @generic T: table
+    --- @param self state
+    --- @param entity T
+    --- @return T
     remove = function(self, entity)
       if not entity.boring_flag then
         Log.debug("State:remove(%s)" % Entity.name(entity))
@@ -84,16 +94,30 @@ module_mt.__call = function(_, systems)
       return entity
     end,
 
+    --- @generic T: table[]
+    --- @param self state
+    --- @param list T
+    --- @return T
     remove_multiple = function(self, list)
       return Fun.iter(list)
         :map(function(e) return self:remove(e) end)
         :totable()
     end,
 
+    --- Modifies entity
+    --- @generic T: table
+    --- @param self state
+    --- @param entity T
+    --- @param ... table extensions
+    --- @return T
     refresh = function(self, entity, ...)
       self.world:add(Table.extend(entity, ...))
+      return entity
     end,
 
+    --- @param self state
+    --- @param entity table
+    --- @return boolean
     exists = function(self, entity)
       return self.entities[entity]
     end,

@@ -111,7 +111,7 @@ return Module("state.gui.wiki", function(gui)
               state_n = math.huge
             end
 
-            return Html.span {
+            return Html.p {
               Html.h2 {
                 Html.span {
                   color = state_n > #this_quest.tasks

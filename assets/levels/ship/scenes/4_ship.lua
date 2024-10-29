@@ -14,7 +14,7 @@ local live  = require("library.palette.live")
 
 return function()
   return {
-    {
+    parasites_start = {
       name = "Start parasites quest",
       enabled = true,
       start_predicate = function(self, rails, dt)
@@ -72,6 +72,7 @@ return function()
 
         item.give(State.player, State:add(items.pole()))
         api.center_camera()
+        rails.has_valve = true
       end,
     },
 
@@ -546,6 +547,25 @@ return function()
             break
           end
         end
+      end,
+    },
+
+    {
+      name = "Algenus orders pulling the lever",
+      enabled = true,
+
+      start_predicate = function(self, rails, dt, c)
+        return not State:exists(rails.entities.captain_door)
+          or rails.entities.captain_door.layer ~= "solids"
+      end,
+
+      run = function(self, rails, c)
+        self.enabled = false
+        rails.scenes.parasites_start.enabled = false
+
+        api.notification("Разблокируй желтый рычаг на правой панели.", true)
+        api.wait_seconds(3)
+        api.update_quest({parasites = 2})
       end,
     },
   }

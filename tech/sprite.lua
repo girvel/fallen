@@ -24,8 +24,8 @@ sprite.text_mt = static {
   end
 }
 
--- TODO FFI
 sprite.image = Memoize(function(base, paint_color, anchors)
+  -- TODO FFI
   if type(base) == "string" then
     base = love.image.newImageData(base)
   end
@@ -57,7 +57,7 @@ sprite.image = Memoize(function(base, paint_color, anchors)
   end
 
   return setmetatable({
-    image = love.graphics.newImage(base),
+    image = love.graphics.newImage(base  --[[@as love.ImageData]]),
     data = base,
     color = main_color,
     anchors = anchors,

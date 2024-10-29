@@ -1,3 +1,10 @@
+--- @class scene: {[string]: any}
+--- @field name string
+--- @field enabled boolean
+--- @field characters {[string]: table}?
+--- @field start_predicate fun(scene, table, number, table): boolean?
+--- @field run fun(scene, table, table): any
+
 local railing, module_mt, static = Module("tech.railing")
 
 railing.api = require("tech.railing.api")
@@ -43,7 +50,7 @@ railing._methods.update = static .. function(self, dt)
     :totable()
 end
 
-railing._methods.run_task = static .. function(self, task)
+railing._methods.run_task = function(self, task)
   local result = {
     name = "Some task",
     enabled = true,
