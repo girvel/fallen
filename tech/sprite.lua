@@ -24,12 +24,22 @@ sprite.text_mt = static {
   end
 }
 
+--- @class sprite_image
+--- @field image love.Image
+--- @field data love.ImageData
+--- @field color color
+--- @field anchors {[anchor]: vector}
+
+--- @param base string|love.ImageData
+--- @param paint_color color?
+--- @param anchors {[anchor]: vector}?
+--- @return sprite_image
 sprite.image = Memoize(function(base, paint_color, anchors)
   -- TODO FFI
   if type(base) == "string" then
     base = love.image.newImageData(base)
   end
-  base = base:clone()
+  base = base:clone() --[[@as love.ImageData]]
 
   local main_color = paint_color or Colors.get(base)
   if paint_color or not anchors then
@@ -75,6 +85,9 @@ local atlas = function(path)
   return canvas
 end
 
+--- @param path string
+--- @param index integer
+--- @return sprite_image
 sprite.from_atlas = Memoize(function(path, index)
   if not _atlases_cache[path] then
     _atlases_cache[path] = atlas(path)
@@ -89,6 +102,9 @@ sprite.from_atlas = Memoize(function(path, index)
   return sprite.image(image_data)
 end)
 
+--- @param path string
+--- @param index integer
+--- @return vector
 sprite.get_atlas_position = function(path, index)
   if not _atlases_cache[path] then
     _atlases_cache[path] = atlas(path)
@@ -101,6 +117,8 @@ end
 
 local font_cache = {}
 
+--- @param size integer
+--- @return love.Font
 sprite.get_font = function(size)
   if not font_cache[size] then
     font_cache[size] = love.graphics.newFont("assets/fonts/joystix.monospace-regular.otf", size)
@@ -108,6 +126,13 @@ sprite.get_font = function(size)
   return font_cache[size]
 end
 
+--- @class sprite_text
+--- @field text string | [color, string]
+--- @field font love.Font
+
+--- @param text string|[color, string]
+--- @param size integer
+--- @return sprite_text
 sprite.text = function(text, size)
   return setmetatable({
     text = text,
@@ -115,5 +140,7 @@ sprite.text = function(text, size)
     _size = size,
   }, sprite.text_mt)
 end
+
+--- @alias sprite sprite_image | sprite_text
 
 return sprite

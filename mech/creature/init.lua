@@ -9,9 +9,9 @@ local on_tiles = require("library.palette.on_tiles")
 --- @field creature_flag true
 --- @field resources table<string, integer>
 --- @field hp integer
---- @field sprite table
+--- @field sprite sprite_image
 --- @field base_abilities table
---- @field direction string
+--- @field direction direction_name
 --- @field inventory table
 --- @field layer string
 --- @field view string
@@ -139,7 +139,7 @@ local creature_methods = {
   end,
 
   on_death = function(self)
-    if State.grids.items[self.position] then return end
+    if not self.position or State.grids.items[self.position] then return end
     State:add(on_tiles.blood(), {position = self.position})
   end,
 }

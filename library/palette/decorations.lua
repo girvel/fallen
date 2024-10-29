@@ -41,7 +41,7 @@ factoring.extend(decorations, "device_panel", {
 local elevations = {"upper", "lower"}
 
 --- @param entity {animate: function, animation_set_paused: function, perspective_flag: boolean?}
---- @param bed_position Vector
+--- @param bed_position vector
 --- @param bed_elevation "upper" | "lower"
 decorations.lie = function(entity, bed_position, bed_elevation)
   assert(Table.contains(elevations, bed_elevation))

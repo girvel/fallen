@@ -1,19 +1,27 @@
+--- @alias color [number, number, number, number?]
+
+--- @class __colors: {[string]: fun(): color}
 local colors, module_mt, static = Module("lib.colors")
 
+--- @param str string
+--- @return color
 colors.from_hex = function(str)
   return Fun.range(#str / 2)
     :map(function(i) return tonumber(str:sub(i * 2 - 1, i * 2), 16) / 255 end)
     :totable()
 end
 
+--- @param color color
+--- @return string
 colors.to_hex = function(color)
   return Fun.iter(color)
     :map(function(v) return "%x" % (v * 255) end)
     :reduce(Fun.op.concat, "")
 end
 
+--- @param image_data love.ImageData
+--- @return color
 colors.get = function(image_data)
-  local color_ns = {}
   for x = 0, image_data:getWidth() - 1 do
     for y = 0, image_data:getHeight() - 1 do
       local color = {image_data:getPixel(x, y)}
@@ -26,8 +34,13 @@ colors.get = function(image_data)
       end
     end
   end
+
+  error("Trying to get the color of an empty sprite")
 end
 
+--- @param a color
+--- @param b color
+--- @return boolean
 colors.equal = function(a, b)
   for i = 1, 4 do
     if math.abs((a[i] or 1) - (b[i] or 1)) > 1 / 256 then
@@ -37,6 +50,7 @@ colors.equal = function(a, b)
   return true
 end
 
+--- @enum (key) color_name
 colors.hex = static {
   absolute_white = "ffffff",
   absolute_black = "000000",
@@ -59,13 +73,17 @@ for k, v in pairs(colors.hex) do
   end
 end
 
-colors.anchor = {}
-for k, v in pairs({
+--- @enum (key) anchor
+colors.anchor_hex = {
   parent = "ff0000",
   main_hand = "fb0000",
   other_hand = "f70000",
   head = "f30000",
-}) do
+}
+
+--- @type {[anchor]: fun(): color}
+colors.anchor = {}
+for k, v in pairs(colors.anchor_hex) do
   -- TODO try to refactor this using immutable colors?
   colors.anchor[k] = function()
     return colors.from_hex(v)
