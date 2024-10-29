@@ -1,5 +1,22 @@
 local sound, module_mt, static = Module("tech.sound")
 
+--[[ 
+Future API sketch:
+  1. Play sound(s)
+  2. Loop them
+  3. Stop them
+  4. Store them
+  5. Position them
+
+Maybe something along the lines of:
+  local s = sounds(path)
+    :set_looping(true)
+    :set_placing(Vector {12, 42}, "large")
+    :play()
+  ...
+  s:stop()
+]]
+
 sound.methods = static {
   clone = function(self)
     return sound(self._path, self.source:getVolume())

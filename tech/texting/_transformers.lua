@@ -52,7 +52,8 @@ transformers.map.hate = function(node, children, styles)
   return Table.concat(
     Fun.iter(children)
       :map(function(child)
-        local result = Table.extend(child, styles.hate, {
+        Table.extend(child, styles.hate)
+        Table.extend(child, {
           on_update = function(self, dt)
             if self.delay > 0 then
               self.delay = self.delay - dt
@@ -64,9 +65,10 @@ transformers.map.hate = function(node, children, styles)
               color[4] = color[4] + dt / self.appearance_time
             end
           end,
+          delay = child.delay + (node.attributes.offset or 0) * child.appearance_time,
         })
-        result.color[4] = 0
-        return result
+        child.color[4] = 0
+        return child
       end)
       :totable()
   )

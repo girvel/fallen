@@ -34,6 +34,7 @@ return function(positions, entities)
           run = function(self, rails)
             rails:remove_scene("checkpoint_0")
             level.move(State.player, rails.positions.checkpoint_0)
+            rails.entities.captain_door:open()
           end,
         },
       }
@@ -76,5 +77,6 @@ return function(positions, entities)
     bottles_taken = 0,
     has_valve = false,
     met_son_mary = false,
+    resists_son_mary = false,
   })
 end
