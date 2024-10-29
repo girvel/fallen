@@ -23,13 +23,16 @@ ldtk.load = function(world_filepath, level_id, params)
     :map(function(l) return get_identifier(l), Grid(size) end)
     :tomap()
 
+  local should_be_captured = {}
+
   local positions = {}
   for _, instance in ipairs(positions_layer.entityInstances) do
     if get_identifier(instance) == "entity_capture" then
+      local name = get_field(instance, "rails_name").__value:lower()
       to_capture
         [get_field(instance, "layer").__value:lower()]
-        [Vector(instance.__grid) + Vector.one]
-        = get_field(instance, "rails_name").__value:lower()
+        [Vector(instance.__grid) + Vector.one] = name
+      table.insert(should_be_captured, name)
     else
       positions[instance.fieldInstances[1].__value:lower()] = Vector(instance.__grid) + Vector.one
     end
@@ -42,6 +45,17 @@ ldtk.load = function(world_filepath, level_id, params)
       return layer_handlers[layer.__type:lower()](layer, palette, captured_entities, to_capture)
     end)
     :reduce(Table.concat, {})
+
+  do
+    local were_not_captured = Fun.iter(should_be_captured)
+      :filter(function(name) return not captured_entities[name] end)
+      :totable()
+
+    assert(
+      #were_not_captured == 0,
+      "Entity captures %s did not catch anything" % {table.concat(were_not_captured, ", ")}
+    )
+  end
 
   return {
     size = size,

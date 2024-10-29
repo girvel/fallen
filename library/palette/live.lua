@@ -139,15 +139,17 @@ live.mannequin = function()
   }
 end
 
+for _, postfix in ipairs {"", "c"} do
 for i = 1, 3 do
-  live["megadoor" .. i] = function()
+  local codename = "megadoor%s%s" % {i, postfix}
+  live[codename] = function()
     local result = Table.extend(
-      animated("assets/sprites/animations/megadoor%s/closed" % {i}),
+      animated("assets/sprites/animations/%s/closed" % {codename}),
       {
         layer = "solids",
         view = "scene",
         name = "огромная дверь",
-        codename = "megadoor" .. i,
+        codename = codename,
 
         _is_open = false,
         open = function(self)
@@ -157,7 +159,7 @@ for i = 1, 3 do
 
           self:animate("open"):next(function()
             self.animation.pack = animated.load_pack(
-              "assets/sprites/animations/megadoor%s/open" % {i}
+              "assets/sprites/animations/%s/open" % {codename}
             )
             level.change_layer(self, "on_solids")
           end)
@@ -181,7 +183,7 @@ for i = 1, 3 do
           end
         end),
         {
-          locked = true,
+          locked = false,
           _popup = {},
         }
       )
@@ -189,6 +191,7 @@ for i = 1, 3 do
 
     return result
   end
+end
 end
 
 return live

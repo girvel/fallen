@@ -307,7 +307,7 @@ return function()
 
           api.narration("Ты аккуратно берёшь бутылку, делаешь шаг в сторону выхода, и...", {check = {"cha", false}})
         else  -- chosen_option == 3
-          if api.ability_check("perception", 12) then
+          if true or api.ability_check("perception", 12) then
             api.line(c.player, "(Стоит немного подготовиться)", {check = {"perception", true}})
             api.narration("Охранники ведут себя циклично, как по вызубренной инструкции — кажется, даже чихают по таймеру.")
             api.narration("Ты подсчитываешь момент, когда они не смотрят;")

@@ -59,7 +59,6 @@ return function(positions, entities)
       self.entities.dorm_halfling.inventory[1] = self.entities.razor
 
       self.entities.captain_door_note.interact = nil
-      State:refresh(self.entities.captain_door, interactive.detector(), {name = "шлюз"})
 
       State:remove(self.entities.guard_2.inventory.other_hand)
       self.entities.guard_2.inventory.other_hand = nil
