@@ -29,6 +29,7 @@ module_mt.__call = function(_)
     TEXT_MAX_SIZE = Vector({1000, 800}),
     font_size = 12,
     pressed_scancodes = {},
+    _prev_camera_position = Vector.zero,
 
     styles = {
       default = {
@@ -56,8 +57,9 @@ module_mt.__call = function(_)
 
     _update_views = function(self)
       for key, f in pairs(self.views_offset_functions) do
-        State.gui.views[key].offset = f()
+        self.views[key].offset = f()
       end
+      self._prev_camera_position = self.views.scene.offset
     end,
 
     initialize = function(self)
@@ -147,7 +149,7 @@ gui.offsets.scene = static .. function()
   local player_position = animated.get_render_position(State.player) * scene_k
   --local grid_size = State.grids.solids.size * scene_k
 
-  local prev = State.gui.views.scene_fx.offset
+  local prev = State.gui._prev_camera_position
   local target = -Vector.use(Math.median,
     --Vector.zero,
     player_position - window_size + border_size,

@@ -22,4 +22,6 @@ factoring.from_atlas(on_solids, "assets/sprites/atlases/on_solids.png",
   }
 )
 
+factoring.extend(on_solids, "son_mary", {sprite_offset = Vector.up * 0.5})
+
 return on_solids

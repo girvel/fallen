@@ -116,7 +116,7 @@ module_mt.__call = function(_, systems)
     end,
 
     --- @param self state
-    --- @param entity table
+    --- @param entity table?
     --- @return boolean
     exists = function(self, entity)
       return self.entities[entity]

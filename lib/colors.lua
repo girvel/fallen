@@ -35,7 +35,7 @@ colors.get = function(image_data)
     end
   end
 
-  error("Trying to get the color of an empty sprite")
+  return Colors.white()
 end
 
 --- @param a color

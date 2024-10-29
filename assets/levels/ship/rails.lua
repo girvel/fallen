@@ -22,6 +22,7 @@ return function(positions, entities)
       require("assets.levels.ship.scenes.3_dwarf")(),
       require("assets.levels.ship.scenes.4_markiss")(),
       require("assets.levels.ship.scenes.4_ship")(),
+      require("assets.levels.ship.scenes.4_son_mary")(),
       {
         checkpoint_0 = {
           name = "Checkpoint -- captain's deck",
@@ -74,5 +75,6 @@ return function(positions, entities)
     dreamers_talked_to = {},
     bottles_taken = 0,
     has_valve = false,
+    met_son_mary = false,
   })
 end

@@ -36,7 +36,10 @@ api.line = function(entity, text, params)
     Colors.to_hex(entity.sprite.color), Entity.name(entity), text
   }
   State.gui.dialogue:show(text, entity.portrait)
-  State:add(fx("assets/sprites/fx/turn_starts", "fx_under", entity.position))
+  State:add(fx(
+    "assets/sprites/fx/turn_starts", "fx_under",
+    entity.position + (entity.sprite_offset or Vector.zero)
+  ))
   while State.mode:get() ~= State.mode.free do coroutine.yield() end
 end
 
@@ -137,6 +140,7 @@ local message = function(content, params)
   params = params or {}
   local offset = Vector({0.5, not params.source and -1 or 0})
   params.source = params.source or State.player
+  offset = offset + (params.source.sprite_offset or Vector.zero)
 
   return texting.popup(
     (params.source.position + offset) * State.gui.views.scene:get_multiplier(),
