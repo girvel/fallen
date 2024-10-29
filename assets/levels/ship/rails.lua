@@ -73,5 +73,6 @@ return function(positions, entities)
     tolerates_latrine = nil,
     dreamers_talked_to = {},
     bottles_taken = 0,
+    has_valve = false,
   })
 end

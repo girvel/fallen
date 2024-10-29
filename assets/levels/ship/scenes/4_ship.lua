@@ -70,8 +70,7 @@ return function()
         State.gui.creator:refresh()
         State.gui.creator:submit()
 
-        --item.give(State.player, State:add(items.pole()))
-        item.give(State.player, rails.entities.gas_key)
+        item.give(State.player, State:add(items.pole()))
         api.center_camera()
       end,
     },
@@ -438,7 +437,7 @@ return function()
     },
 
     {
-      name = "Interacting with the door",
+      name = "Interacting with the captain megadoor",
       enabled = true,
 
       characters = {
@@ -467,6 +466,10 @@ return function()
         end
 
         self._options[1] = "*уйти*"
+
+        if rails.has_valve then
+          self._options[3] = "*Вернуть вентиль на законное место*"
+        end
 
         local inventory = c.player.inventory
         local gas_key = rails.entities.gas_key
@@ -518,13 +521,22 @@ return function()
               api.narration("Придётся найти вентиль или инструмент, способный провернуть механизм.")
             end
           elseif chosen_option_1 == 3 then
-            -- for i = 1, 3 do
-            --   State:remove(State.grids.solids[c.captain_door.position + Vector.left * (i - 1)])
-            --   State:add(live["megadoor%sc" % {4 - i}])
-            --   coroutine.yield()
-            -- end
+            rails.has_valve = false
 
-            -- api.narration("test!")  -- TODO! RM
+            for i = 1, 3 do
+              local position = c.captain_door.position + Vector.left * (i - 1)
+              State:remove(State.grids.solids[position])
+              local e = State:add(live["megadoor%s" % {4 - i}](), {position = position})
+              if i == 1 then
+                e.locked = false
+              end
+              coroutine.yield()
+            end
+
+            api.narration("Ты надёжно закрепляешь вентиль на движущий механизм.")
+            api.narration("Выглядит складно, лаконично, так, будто и не снимали.")
+            api.narration("Наконец, ты можешь открыть злосчастную дверь.")
+            break
           else  -- chosen_option_1 == 4
             api.narration("С этим бы справился и ребёнок.")
             api.narration("Десяток секунд пыхтения; попытки вспомнить, в какую сторону нужно крутить.")

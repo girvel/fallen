@@ -32,6 +32,10 @@ module_mt.__call = function(_, systems)
       love.graphics.setShader(-Query(shader).love_shader)
     end,
 
+    --- @generic T: table
+    --- @param entity T
+    --- @param ... table extensions
+    --- @return T
     add = function(self, entity, ...)
       Table.extend(entity, ...)
       self.world:add(entity)
