@@ -20,9 +20,9 @@ return Module("library.quests", {
   },
 
   alcohol = {
-    header = "???",
+    header = "Йо-хо-хо",
     tasks = {
-      "!!!",
+      "Принести алкоголь этой грёбаной голове в рубке.",
     },
   },
 
