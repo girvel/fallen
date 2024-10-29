@@ -192,8 +192,8 @@ local message = function(content, params)
 end
 
 --- Display message until player moves + some time
---- @param content string
---- @param params {life_time: number?, source: {position: vector, sprite_offset: vector?}}
+--- @param content html_content
+--- @param params {life_time: number?, source: {position: vector, sprite_offset: vector?}}?
 --- @return table[]
 api.message.positional = function(content, params)
   local entities = message(content, params)
@@ -220,8 +220,8 @@ end
 local SLOW_READING_SPEED = 10
 
 --- Display message for reaction time + slow reading time
---- @param content string
---- @param params {life_time: number?, source: {position: vector, sprite_offset: vector?}}
+--- @param content html_content
+--- @param params {life_time: number?, source: {position: vector, sprite_offset: vector?}}?
 --- @return table[]
 api.message.temporal = function(content, params)
   local entities = message(content, params)
