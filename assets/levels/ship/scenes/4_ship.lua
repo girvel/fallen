@@ -70,7 +70,8 @@ return function()
         State.gui.creator:refresh()
         State.gui.creator:submit()
 
-        item.give(State.player, State:add(items.pole()))
+        --item.give(State.player, State:add(items.pole()))
+        item.give(State.player, rails.entities.gas_key)
         api.center_camera()
       end,
     },
@@ -467,7 +468,7 @@ return function()
 
         self._options[1] = "*уйти*"
 
-        local inventory = c.player.inventory.main_hand
+        local inventory = c.player.inventory
         local gas_key = rails.entities.gas_key
         if inventory.main_hand == gas_key or inventory.other_hand == gas_key then
           self._options[4] = "*Использовать газовый ключ как рычаг*"
@@ -524,7 +525,13 @@ return function()
             -- end
 
             -- api.narration("test!")  -- TODO! RM
-          else
+          else  -- chosen_option_1 == 4
+            api.narration("С этим бы справился и ребёнок.")
+            api.narration("Десяток секунд пыхтения; попытки вспомнить, в какую сторону нужно крутить.")
+            c.captain_door:open()
+            api.narration("Звук твоей внеочередной победы.")
+            api.narration("Газовый ключ способен открыть тебе множество дверей.")
+            break
           end
         end
       end,
