@@ -152,7 +152,7 @@ for i = 1, 3 do
         codename = codename,
 
         _is_open = false,
-        open = function(self)
+        _open = function(self)
           if self._is_open then return end
           self._is_open = true
           self.interact = nil
@@ -170,7 +170,9 @@ for i = 1, 3 do
     if i == 3 then
       Table.extend(
         result,
-        interactive(function(self)
+        interactive(function(self, other)
+          self.interacted_by = other
+
           if self.locked then
             if not State:exists(self._popup[1]) then
               self._popup = railing.api.message.positional("Закрыто.", {source = self})
@@ -178,13 +180,16 @@ for i = 1, 3 do
             return
           end
 
-          for d = 0, 2 do
-            State.grids.solids[self.position + Vector.left * d]:open()
-          end
+          self:open()
         end),
         {
-          locked = false,
+          locked = true,
           _popup = {},
+          open = function(self)
+            for d = 0, 2 do
+              State.grids.solids[self.position + Vector.left * d]:_open()
+            end
+          end
         }
       )
     end

@@ -59,6 +59,7 @@ return function(positions, entities)
       self.entities.dorm_halfling.inventory[1] = self.entities.razor
 
       self.entities.captain_door_note.interact = nil
+      cue.set(self.entities.captain_door_note, "highlight", false)
 
       State:remove(self.entities.guard_2.inventory.other_hand)
       self.entities.guard_2.inventory.other_hand = nil

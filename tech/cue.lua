@@ -5,6 +5,7 @@ local item = require("tech.item")
 --- Setting/removing visual on-entity cues such as highlights or blood.
 local cue, module_mt, static = Module("tech.cue")
 
+--- @enum (key) cue_slot
 cue.factories = {
   blood = function()
     return Table.extend(
@@ -32,7 +33,7 @@ cue.factories = {
 
 --- Sets whether given cue should be or not be displayed
 --- @param entity has_inventory
---- @param slot string
+--- @param slot cue_slot
 --- @param value boolean
 --- @return nil
 cue.set = function(entity, slot, value)

@@ -9,6 +9,7 @@ local decorations = require("library.palette.decorations")
 local experience = require("mech.experience")
 local quest = require("tech.quest")
 local items = require("library.palette.items")
+local live  = require("library.palette.live")
 
 
 return function()
@@ -453,11 +454,12 @@ return function()
       },
 
       run = function(self, rails, c)
-        self.enabled = false
+        c.captain_door.interacted_by = nil
 
         if State:exists(rails.entities.captain_door_note) then
           api.narration("Кто-то скрутил с двери вентиль и прикрепил рядом записку:")
           State:remove(rails.entities.captain_door_note)
+          coroutine.yield()
           api.narration("“Для допуска обратитесь в офицерскую кладовую.”")
         else
           api.narration("Кто-то скрутил с двери вентиль.")
@@ -471,6 +473,8 @@ return function()
           self._options[4] = "*Использовать газовый ключ как рычаг*"
         end
 
+        State:remove_multiple(c.captain_door._popup)
+
         while true do
           local chosen_option_1 = api.options(self._options, true)
 
@@ -478,7 +482,7 @@ return function()
             break
           elseif chosen_option_1 == 2 then
             if api.ability_check("athletics", 18) then
-              api.narration("Такой трюк без инструментов тянет на небольшое чудо.", {check = {"athletics", 18}})
+              api.narration("Такой трюк без инструментов тянет на небольшое чудо.", {check = {"athletics", true}})
               api.narration("После нескольких безуспешных попыток, ты продвинулся лишь на треть оборота, но ладони уже покрылись ссадинами.")
               api.narration("Ты чувствуешь, в тебе есть сила закончить это испытание, но заплатить придётся здоровьем.")
 
@@ -496,19 +500,30 @@ return function()
                   "Может, твоя кровь стала смазкой в механизме.",
                   "А может, вселенная вознаграждает упорных.",
                   "Но остальные обороты даются легко — разумеется, по твоим меркам.",
-                  "Проход открыт, и ты чувствуешь себя сильным, как Железный Джерри.",
                 }
 
+                attacking.damage(c.player, 1)
                 for _, line in ipairs(lines) do
-                  attacking.damage(c.player, 1)
                   api.narration(line)
+                  attacking.damage(c.player, 1)
                 end
+
+                c.captain_door:open()
+                api.narration("Проход открыт, и ты чувствуешь себя сильным, как Железный Джерри.")
+                break
               end
             else
               api.narration("Не стоило и пытаться, без инструментов это обычному человеку не под силу.", {check = {"athletics", false}})
               api.narration("Придётся найти вентиль или инструмент, способный провернуть механизм.")
             end
           elseif chosen_option_1 == 3 then
+            -- for i = 1, 3 do
+            --   State:remove(State.grids.solids[c.captain_door.position + Vector.left * (i - 1)])
+            --   State:add(live["megadoor%sc" % {4 - i}])
+            --   coroutine.yield()
+            -- end
+
+            -- api.narration("test!")  -- TODO! RM
           else
           end
         end
