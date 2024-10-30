@@ -8,20 +8,10 @@ local tcod = require("tech.tcod")
 --- @param color color
 --- @return nil
 local display_rectangle = function(position, size, color)
-  -- local stashed_shader
-  -- if State.shader then
-  --   stashed_shader = State.shader
-  --   State:set_shader()
-  -- end
-
   love.graphics.setColor(color)
   local x, y = unpack(position)
   love.graphics.rectangle("fill", x, y, unpack(size))
   love.graphics.setColor(Colors.absolute_white())
-
-  -- if stashed_shader then
-  --   State:set_shader(stashed_shader)
-  -- end
 end
 
 local default_font = love.graphics.newFont("assets/fonts/joystix.monospace-regular.otf", 12)
@@ -29,6 +19,11 @@ default_font:setLineHeight(1.2)
 
 local hint_font = love.graphics.newFont("assets/fonts/joystix.monospace-regular.otf", 16)
 
+
+--- @class displayable: entity
+--- @field position vector
+--- @field sprite sprite
+--- @field view string
 
 local display, _, static = Module("systems.display")
 
@@ -121,6 +116,7 @@ display.system = static(Tiny.sortedProcessingSystem({
     Query(self.shader):deactivate()
   end,
 
+  --- @param entity displayable
   process = function(self, entity)
     if
       not State.mode:get().displayed_views[entity.view]
@@ -133,10 +129,8 @@ display.system = static(Tiny.sortedProcessingSystem({
     local current_view = State.gui.views[entity.view]
     local offset_position = current_view:apply(animated.get_render_position(entity))
 
-    local old_shader
     if entity.shader then
-      old_shader = State.shader
-      State:set_shader(entity.shader)
+      love.graphics.setShader(entity.shader.love_shader)
     end
 
     if entity.sprite.text then
@@ -154,7 +148,7 @@ display.system = static(Tiny.sortedProcessingSystem({
     end
 
     if entity.shader then
-      State:set_shader(old_shader)
+      love.graphics.setShader(State.shader)
     end
   end,
 

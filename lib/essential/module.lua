@@ -75,7 +75,7 @@ return function(module_path, module_value)
     ("Module should be either table or function, got %s instead"):format(value_type)
   )
 
-  --- @module 'lib.identity_annotation'
+  --- @module 'docs.definitions.identity'
   local static = get_static_keyword(module_path) --[[@as function]]
 
   local module_result = static(module_value) --[[@as table]]

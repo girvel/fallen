@@ -141,6 +141,9 @@ sprite.text = function(text, size)
   }, sprite.text_mt)
 end
 
---- @alias sprite sprite_image | sprite_text
+--- @class sprite_rect
+--- @field rect_color color
+
+--- @alias sprite sprite_image | sprite_text | sprite_rect
 
 return sprite

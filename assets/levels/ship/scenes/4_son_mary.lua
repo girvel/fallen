@@ -133,12 +133,12 @@ return function()
             State.grids.solids[rails.entities.son_mary.position],
           }))
 
-          api.narration("Он слишком силён, ты можешь лишь терпеть, пока он копается в твоей голове.")
-          api.narration("Ощущение, будто расковыряли давно зажившую рану.")
           local heartbeat = sound("assets/sounds/heartbeat.mp3", 1)
           heartbeat.source:setLooping(true)
           sound.play({heartbeat})
-          heartbeat.source:play()
+
+          api.narration("Он слишком силён, ты можешь лишь терпеть, пока он копается в твоей голове.")
+          api.narration("Ощущение, будто расковыряли давно зажившую рану.")
           api.narration("Оно заканчится не скоро.")
           api.narration("——————")
           api.narration("————")

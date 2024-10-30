@@ -1,15 +1,9 @@
 {
-	"workspace": {
-		"library": [
-			"~/Applications/lsp/lua-language-server/meta/3rd/love2d",
-            "${3rd}/love2d/library"
-		]
-	},
     "runtime.special": {
         "love.filesystem.load": "loadfile"
     },
     "diagnostics.neededFileStatus": {
-        "undefined-field": "None!"
+        // "undefined-field": "None!"
         // "undefined-global": "None!"
     },
     "diagnostics": {
