@@ -155,7 +155,7 @@ api.saving_throw = function(ability, dc)
   return success
 end
 
---- @param ability ability
+--- @param ability ability|skill
 --- @param dc integer check's difficulty class
 --- @param content_success string
 --- @param content_failure string
@@ -245,11 +245,6 @@ api.autosave = function()
   Log.info("Autosave")
   love.custom.plan_save("last.fallen_save")
   api.notification("Игра сохранена")
-end
-
-local quest_stage = function(k, v)
-  local tasks = State.gui.wiki.quests[k].tasks
-  return tasks[v] or tostring(v)
 end
 
 --- Can not regress quest progress

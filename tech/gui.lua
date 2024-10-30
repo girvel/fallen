@@ -144,8 +144,6 @@ gui.action_icon = function(hotkey_data, index, frame)
         -Query(self.hotkey_data):get_description() or
         -Query(self.hotkey_data.action):get_description()
 
-      Log.trace(description)
-
       if not header and not description then return end
       return Html.span {
         header and Html.h1 {header} or "",

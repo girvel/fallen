@@ -3,37 +3,32 @@ local level = require("state.level")
 local tcod = require("tech.tcod")
 
 
-local _timer = {
-  t = nil,
-  te = nil,
-  data = {},
-  start = function(self)
-    self.t = love.timer.getTime()
-  end,
-  step = function(self, name)
-    local t = love.timer.getTime()
-    self.data[name] = self.data[name] or {}
-    table.insert(self.data[name], t - self.t)
-    if #self.data[name] >= 20 then
-      --Log.debug("%s: %.2f ms" % {name, 1000 * Math.average(self.data[name])})
-      self.data[name] = {}
-    end
-    self.t = love.timer.getTime()
-  end,
-  start_exclude = function(self)
-    self.te = love.timer.getTime()
-  end,
-  stop_exclude = function(self)
-    self.t = self.t + love.timer.getTime() - self.te
-    self.te = nil
-  end,
-}
+--- @param position vector_base
+--- @param size vector_base
+--- @param color color
+--- @return nil
+local display_rectangle = function(position, size, color)
+  -- local stashed_shader
+  -- if State.shader then
+  --   stashed_shader = State.shader
+  --   State:set_shader()
+  -- end
 
+  love.graphics.setColor(color)
+  local x, y = unpack(position)
+  love.graphics.rectangle("fill", x, y, unpack(size))
+  love.graphics.setColor(Colors.absolute_white())
+
+  -- if stashed_shader then
+  --   State:set_shader(stashed_shader)
+  -- end
+end
 
 local default_font = love.graphics.newFont("assets/fonts/joystix.monospace-regular.otf", 12)
 default_font:setLineHeight(1.2)
 
 local hint_font = love.graphics.newFont("assets/fonts/joystix.monospace-regular.otf", 16)
+
 
 local display, _, static = Module("systems.display")
 
@@ -65,6 +60,7 @@ display.system = static(Tiny.sortedProcessingSystem({
 
   process_grid = function(self)
     if not State.mode:get().displayed_views.scene then return end
+    love.graphics.setShader(-Query(State.shader).love_shader)
 
     -- borders --
     local view = State.gui.views.scene
@@ -120,6 +116,9 @@ display.system = static(Tiny.sortedProcessingSystem({
         end
       end
     end
+
+    love.graphics.setShader()
+    Query(self.shader):deactivate()
   end,
 
   process = function(self, entity)
@@ -145,10 +144,11 @@ display.system = static(Tiny.sortedProcessingSystem({
     elseif entity.sprite.image then
       self:_process_image_sprite(entity, offset_position, current_view.scale)
     elseif entity.sprite.rect_color then
-      local x, y = unpack(offset_position)
-      love.graphics.setColor(entity.sprite.rect_color)
-      love.graphics.rectangle("fill", x, y, unpack(entity.size * current_view:get_multiplier()))
-      love.graphics.setColor(Colors.absolute_white())
+      display_rectangle(
+        offset_position,
+        entity.size * current_view:get_multiplier(),
+        entity.sprite.rect_color
+      )
     else
       -- error("Wrong sprite format of %s:\n%s" % {Entity.name(entity), Inspect(entity.sprite)})
     end
@@ -159,7 +159,6 @@ display.system = static(Tiny.sortedProcessingSystem({
   end,
 
   _process_text_sprite = function(self, entity, offset_position)
-    if State.shader then return end
     love.graphics.print(entity.sprite.text, entity.sprite.font, unpack(offset_position))
 
     if entity.link_flag then
@@ -223,10 +222,11 @@ display.system = static(Tiny.sortedProcessingSystem({
 
   postProcess = function(self)
     if State.gui.blackout_k > 0 then
-      local w, h = love.graphics.getDimensions()
-      love.graphics.setColor(0, 0, 0, State.gui.blackout_k)
-      love.graphics.rectangle("fill", 0, 0, w, h)
-      love.graphics.setColor(Colors.absolute_white())
+      display_rectangle(
+        Vector.zero,
+        {love.graphics.getDimensions()},
+        {0, 0, 0, State.gui.blackout_k}
+      )
     end
 
     -- This is fine to be hardcoded
@@ -284,9 +284,12 @@ display.system = static(Tiny.sortedProcessingSystem({
     local x = (love.graphics.getWidth() - hint_font:getWidth(content)) / 2
     local y = love.graphics.getHeight() - hint_font:getHeight() - 50
 
-    love.graphics.setColor(Colors.black())
-    love.graphics.rectangle("fill", x, y, hint_font:getWidth(content), hint_font:getHeight())
-    love.graphics.setColor(Colors.absolute_white())
+    display_rectangle(
+      {x, y},
+      {hint_font:getWidth(content), hint_font:getHeight()},
+      Colors.black()
+    )
+
     love.graphics.print({Colors.gray(), content}, hint_font, x, y)
   end,
 }))

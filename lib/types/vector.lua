@@ -1,3 +1,5 @@
+--- @alias vector_base [number, number]
+
 local module_mt = {}
 --- @overload fun(base_object: [number, number]): vector
 local vector = setmetatable({}, module_mt)

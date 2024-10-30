@@ -1,5 +1,6 @@
 local sound = require("tech.sound")
 local api = require("tech.railing.api")
+local shaders = require("tech.shaders")
 
 
 return function()
@@ -115,14 +116,23 @@ return function()
         api.narration("Он шепчет слова на мёртвом языке; твои мысли, память, душа вмиг обнажаются пред его взором.")
 
         if api.saving_throw("wis", 18) then
+          -- TODO shader here
           api.line(c.player, "<hate>НЕТ</hate>")
           api.line(c.player, "<hate>ЭТО МОЯ ГОЛОВА</hate>")
-          api.line(c.player, "<hate>УХОДИ ИЗ НЕЁ</hate>")
+          api.line(c.player, "<hate>ПРОЧЬ</hate>")
+          -- TODO end shader here
           api.narration("Невероятным усилием воли ты обрываешь эту связь.")
           api.narration("Душа теперь твоя. И только твоя.")
+          State:set_shader()
           api.line(c.son_mary, "Всё равно я успел узнать всё, что мне нужно")
           rails.resists_son_mary = true
         else
+          State:set_shader(shaders.charmed({
+            rails.entities.son_mary,
+            rails.entities.son_mary_upper,
+            State.grids.solids[rails.entities.son_mary.position],
+          }))
+
           api.narration("Он слишком силён, ты можешь лишь терпеть, пока он копается в твоей голове.")
           api.narration("Ощущение, будто расковыряли давно зажившую рану.")
           local heartbeat = sound("assets/sounds/heartbeat.mp3", 1)
@@ -144,6 +154,7 @@ return function()
           api.narration("—")
           heartbeat.source:stop()
           api.narration("Он отпускает тебя.")
+          State:set_shader()
           api.narration("Пообещай, что больше это не повторится.")
         end
 
@@ -183,16 +194,15 @@ return function()
           api.narration("Так что это не побег.")
           api.narration("Всего лишь временное отступление.")
           api.line(c.son_mary, "Беги-беги крошка-букашка, всё равно вернёшься")
-          api.line(c.son_mary, "И не забудь мою просьбу, если ещё планируешь отомстить")
+          api.line(c.son_mary, "И не забудь мою просьбу")
         elseif chosen_option == 2 then
           api.line(c.player, "(Сам себе не верю, когда говорю такое)")
           api.line(c.son_mary, "Я буду ждать.")
           api.line(c.player, "(Жди кусок дерьма, ты ещё за всё заплатишь)")
           api.line(c.player, "Скоро вернусь, не скучай.")
-          api.line(c.son_mary, "В моем возрасте атрофируется способность скучать, можешь не торопиться.")
+          api.line(c.son_mary, "В моем возрасте атрофируется способность скучать; можешь не торопиться.")
           api.line(c.player, "Старый мерзкий кусок дерьма.")
           api.line(c.player, "(Да, я определенно сказал это вслух)")
-          api.line(c.son_mary, "Кусок..? Ты сейчас серьёзно?")
           api.line(c.son_mary, "Обнищал я; раньше тянул на целую кучу.")
           api.line(c.son_mary, "Исполнишь просьбу — расскажу насколько большую.")
           api.line(c.player, "(Я правда собираюсь втягиваться в эту авантюру?)")

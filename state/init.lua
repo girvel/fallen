@@ -27,9 +27,7 @@ module_mt.__call = function(_, systems)
     _next_aggression_log = {},
 
     set_shader = function(self, shader)
-      Query(self.shader):deactivate()
       self.shader = shader
-      love.graphics.setShader(-Query(shader).love_shader)
     end,
 
     --- Modifies entity

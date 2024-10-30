@@ -10,6 +10,7 @@ local experience = require("mech.experience")
 local quest = require("tech.quest")
 local items = require("library.palette.items")
 local live  = require("library.palette.live")
+local shaders = require("tech.shaders")
 
 
 return function()

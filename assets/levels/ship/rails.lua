@@ -5,6 +5,7 @@ local railing = require("tech.railing")
 local decorations = require("library.palette.decorations")
 local items       = require("library.palette.items")
 local cue         = require("tech.cue")
+local shaders     = require("tech.shaders")
 local api = railing.api
 
 
