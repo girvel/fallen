@@ -34,7 +34,7 @@ return function()
     },
 
     son_mary_1 = {
-      name = "Talking to Son Mary the first time",
+      name = "Talking to Son Mary #1",
       enabled = true,
 
       characters = {
@@ -225,6 +225,36 @@ return function()
           api.wait_seconds(15)
           api.notification("Не слушай его, займись делом.", true)
         end)
+      end,
+    },
+
+    {
+      name = "Talking to Son Mary #2 without alcohol",
+      enabled = true,
+
+      characters = {
+        son_mary = {},
+      },
+
+      start_predicate = function(self, rails, dt, c)
+        return api.get_quest("alcohol") == 1
+          and c.son_mary.interacted_by == State.player
+      end,
+
+      _next_line = 1,
+
+      run = function(self, rails, c)
+        c.son_mary.interacted_by = nil
+
+        local LINES = {
+          "Нет алкоголя — нет разговора",
+          "Неужели так тяжело что-то найти?",
+          "Руки-ноги на месте, так используй их по назначению",
+        }
+
+        api.line(c.son_mary, LINES[self._next_line])
+        self._next_line = self._next_line + 1
+        self.enabled = not not LINES[self._next_line]
       end,
     },
   }
