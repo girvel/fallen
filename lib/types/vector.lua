@@ -69,10 +69,16 @@ vector.mt.__sub = function(self, other)
 end
 
 vector.mt.__mul = function(self, other)
+  if type(self) == "number" then
+    self, other = other, self
+  end
   return vector({self[1] * other, self[2] * other})
 end
 
 vector.mt.__div = function(self, other)
+  if type(self) == "number" then
+    self, other = other, self
+  end
   return vector({self[1] / other, self[2] / other})
 end
 

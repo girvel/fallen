@@ -93,19 +93,26 @@ end
 shaders.reflective = static {
   love_shader = love.graphics.newShader [[
     uniform bool reflects;
+    uniform Image reflection;
 
     vec4 effect(vec4 color, Image tex, vec2 texture_coords, vec2 screen_coords)
     {
       vec4 it = Texel(tex, texture_coords);
-      if (reflects && it.xyz == vec3(0.)) return vec4(1., 0., 0., 1.);
+      vec4 other;
+      if (reflects && it == vec4(0., 0., 1. / 255, 1.)) {
+        other = Texel(reflection, texture_coords);
+        if (other.a == 0.) return vec4(0., 0., 0., 1.);
+        return other;
+      }
       return it;
     }
   ]],
 
   _get_reflection_image_data = function(self, entity)
-    local reflection_direction = Vector.down * 2
+    -- TODO! parametrize
+    local reflection_vector = Vector.down * 2
 
-    local reflected = State.grids.solids:safe_get(entity.position + reflection_direction)
+    local reflected = State.grids.solids:safe_get(entity.position + reflection_vector)
     if not reflected or not reflected.animation then return end
 
     local codename = reflected.animation.current.codename
@@ -120,20 +127,25 @@ shaders.reflective = static {
 
     if not has_direction then return end
 
-    local animation = reflected.animation.pack["%s_%s" % {
-      codename,
-      -- TODO! wrong! parallel direction get turned around, orthogonal are kept the same
-      Vector.name_from_direction(-reflection_direction:normalized())
-    }]
+    local reflected_direction = Vector[reflected.direction]
+    local is_parallel = (reflection_vector[1] == 0) == (reflected_direction[1] == 0)
+    local reflection_direction_name = Vector.name_from_direction(
+      (is_parallel and -1 or 1) * reflected_direction
+    )
+
+    local animation = reflected.animation.pack["%s_%s" % {codename, reflection_direction_name}]
 
     local frame = animation[math.min(math.floor(reflected.animation.frame), #animation)]
     if not frame then return end
 
-    return frame.data
+    return frame.image
   end,
 
   preprocess = function(self, entity)
-    self.love_shader:send("reflects", self:_get_reflection_image_data(entity) ~= nil)
+    local image_data = self:_get_reflection_image_data(entity)
+    self.love_shader:send("reflects", image_data ~= nil)
+    if not image_data then return end
+    self.love_shader:send("reflection", image_data)
   end,
 }
 
