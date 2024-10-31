@@ -29,6 +29,9 @@ factoring.extend(on_solids, "son_mary2",
   interactive.detector()
 )
 
-factoring.extend(on_solids, "mirror", {shader = shaders.reflective})
+factoring.extend(on_solids, "mirror", {
+  shader = shaders.reflective,
+  reflection_vector = Vector.down * 2,
+})
 
 return on_solids

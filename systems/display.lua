@@ -151,7 +151,7 @@ display.system = static(Tiny.sortedProcessingSystem({
     end
 
     if entity.shader then
-      love.graphics.setShader(State.shader)
+      love.graphics.setShader(-Query(State.shader).love_shader)
     end
   end,
 

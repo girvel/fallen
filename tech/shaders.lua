@@ -109,10 +109,9 @@ shaders.reflective = static {
   ]],
 
   _get_reflection_image_data = function(self, entity)
-    -- TODO! parametrize
-    local reflection_vector = Vector.down * 2
+    assert(entity.reflection_vector, "reflective shader requires `.reflection_vector` field")
 
-    local reflected = State.grids.solids:safe_get(entity.position + reflection_vector)
+    local reflected = State.grids.solids:safe_get(entity.position + entity.reflection_vector)
     if not reflected or not reflected.animation then return end
 
     local codename = reflected.animation.current.codename
@@ -128,7 +127,7 @@ shaders.reflective = static {
     if not has_direction then return end
 
     local reflected_direction = Vector[reflected.direction]
-    local is_parallel = (reflection_vector[1] == 0) == (reflected_direction[1] == 0)
+    local is_parallel = (entity.reflection_vector[1] == 0) == (reflected_direction[1] == 0)
     local reflection_direction_name = Vector.name_from_direction(
       (is_parallel and -1 or 1) * reflected_direction
     )

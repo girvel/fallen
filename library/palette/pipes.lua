@@ -4,22 +4,53 @@ local animated = require("tech.animated")
 local library_fx = require("library.fx")
 local interactive = require("tech.interactive")
 local factoring = require("tech.factoring")
+local shaders   = require("tech.shaders")
 
 
 local pipes, pipes_mt, static = Module("library.palette.pipes")
 
-factoring.from_atlas(pipes, "assets/sprites/atlases/pipes.png", {
-  layer = "solids",
-  view = "scene",
-  transparent_flag = true,
-}, {
-  "horizontal", "horizontal_braced", "vertical", "vertical_braced",
-  "left_back", "forward_left", "right_forward", "back_right",
-  "left_down", "forward_down", "right_down", "back_down",
-  "T_up", "T_left", "T_down", "T_right",
-  "x", false, false, false,
-  "colored", "leaking_left_down",
-})
+local reflection_vectors = {
+  horizontal = Vector.up,
+  horizontal_braced = Vector.up,
+  vertical = Vector.left,
+  vertical_braced = Vector.left,
+  left_back = Vector.up,
+  forward_left = Vector.up,
+  right_forward = Vector.left,
+  back_right = Vector.up,
+  left_down = Vector.up,
+  forward_down = Vector.left,
+  right_down = Vector.up,
+  back_down = Vector.left,
+  T_up = Vector.up,
+  T_left = Vector.left,
+  T_down = Vector.left,
+  T_right = Vector.up,
+  x = Vector.up,
+  colored = Vector.left,
+  leaking_left_down = Vector.up,
+}
+
+factoring.from_atlas(
+  pipes, "assets/sprites/atlases/pipes.png",
+  function(name)
+    return {
+      layer = "solids",
+      view = "scene",
+      transparent_flag = true,
+      reflection_vector = reflection_vectors[name],
+      shader = reflection_vectors[name] and shaders.reflective,  -- TODO remove and
+    }
+  end,
+  {
+    "horizontal", "horizontal_braced", "vertical", "vertical_braced",
+    "left_back", "forward_left", "right_forward", "back_right",
+    "left_down", "forward_down", "right_down", "back_down",
+    "T_up", "T_left", "T_down", "T_right",
+    "x", false, false, false,
+    "colored", "leaking_left_down",
+  }
+)
 
 local hissing_sound = sound("assets/sounds/steam_hissing_loop.wav", 1)
 hissing_sound.source:setLooping(true)
