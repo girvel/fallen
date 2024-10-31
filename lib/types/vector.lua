@@ -39,6 +39,8 @@ vector.extended_directions = {
   vector({1, 1}), vector({1, -1}), vector({-1, -1}), vector({-1, 1})
 }
 
+--- @param v vector
+--- @return string?
 vector.name_from_direction = function(v)
   if v == vector.up then return "up" end
   if v == vector.down then return "down" end

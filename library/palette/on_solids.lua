@@ -1,5 +1,6 @@
 local interactive = require("tech.interactive")
 local factoring = require("tech.factoring")
+local shaders   = require("tech.shaders")
 
 
 local on_solids, module_mt, static = Module("library.palette.on_solids")
@@ -27,5 +28,7 @@ factoring.extend(on_solids, "son_mary2",
   {sprite_offset = Vector.up * 0.5, name = "Голова в банке"},
   interactive.detector()
 )
+
+factoring.extend(on_solids, "mirror", {shader = shaders.reflective})
 
 return on_solids

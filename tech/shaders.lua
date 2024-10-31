@@ -2,7 +2,7 @@ local shaders, _, static = Module("tech.shaders")
 
 --- @class shader
 --- @field love_shader love.Shader
---- @field preprocess? fun(self: shader, entity: table): nil
+--- @field preprocess? fun(self: shader, entity: entity): nil
 --- @field deactivate? fun(self: shader): nil
 
 --- @type shader
@@ -88,5 +88,53 @@ shaders.charmed = function(by)
     end,
   }
 end
+
+--- @type shader
+shaders.reflective = static {
+  love_shader = love.graphics.newShader [[
+    uniform bool reflects;
+
+    vec4 effect(vec4 color, Image tex, vec2 texture_coords, vec2 screen_coords)
+    {
+      vec4 it = Texel(tex, texture_coords);
+      if (reflects && it.xyz == vec3(0.)) return vec4(1., 0., 0., 1.);
+      return it;
+    }
+  ]],
+
+  _get_reflection_image_data = function(self, entity)
+    local reflection_direction = Vector.down * 2
+
+    local reflected = State.grids.solids:safe_get(entity.position + reflection_direction)
+    if not reflected or not reflected.animation then return end
+
+    local codename = reflected.animation.current.codename
+    local has_direction = false
+    for _, direction_name in ipairs(Vector.direction_names) do
+      if codename:ends_with(direction_name) then
+        codename = codename:sub(1, #codename - #direction_name - 1)
+        has_direction = true
+        break
+      end
+    end
+
+    if not has_direction then return end
+
+    local animation = reflected.animation.pack["%s_%s" % {
+      codename,
+      -- TODO! wrong! parallel direction get turned around, orthogonal are kept the same
+      Vector.name_from_direction(-reflection_direction:normalized())
+    }]
+
+    local frame = animation[math.min(math.floor(reflected.animation.frame), #animation)]
+    if not frame then return end
+
+    return frame.data
+  end,
+
+  preprocess = function(self, entity)
+    self.love_shader:send("reflects", self:_get_reflection_image_data(entity) ~= nil)
+  end,
+}
 
 return shaders

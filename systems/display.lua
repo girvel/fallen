@@ -131,6 +131,9 @@ display.system = static(Tiny.sortedProcessingSystem({
 
     if entity.shader then
       love.graphics.setShader(entity.shader.love_shader)
+      Query(entity.shader):preprocess(entity)
+    else
+      Query(State.shader):preprocess(entity)
     end
 
     if entity.sprite.text then
@@ -196,7 +199,6 @@ display.system = static(Tiny.sortedProcessingSystem({
     end
 
     local x, y = unpack(offset_position)
-    Query(State.shader):preprocess(entity)
     if entity.sprite.quad then
       love.graphics.draw(entity.sprite.image, entity.sprite.quad, x, y, 0, scale)
     else

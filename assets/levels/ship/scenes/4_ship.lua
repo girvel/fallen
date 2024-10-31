@@ -427,7 +427,6 @@ return function()
               api.narration("Тебе показалось. Не думай об этом.")
             end
 
-          -- TODO! finish this
           -- elseif chosen_option == 2 then
           --   api.
 
