@@ -2,6 +2,7 @@ local sprite = require("tech.sprite")
 local sound = require("tech.sound")
 local factoring = require("tech.factoring")
 local level = require("state.level")
+local shaders = require("tech.shaders")
 
 
 local decorations, module_mt, static = Module("library.palette.decorations")
@@ -17,7 +18,7 @@ factoring.from_atlas(decorations, decorations_atlas, {
   false, "chamber_pot", "bucket", false, "countertop", "oven", "kitchen_sink", "countertop",
   "table_up", "mirage_block", "stool", "sofa", "countertop_left", "bed", "sink", "countertop",
   "table_ver", "transparent_wall", "low_wall", "scratched_table", "countertop", "countertop", "empty_bed", "countertop",
-  "table_down", "cage", "device_panel_v", "device_panel_v", "countertop", "cabinet", "cabinet", "countertop",
+  "table_down", "cage", "device_panel_v1", "device_panel_v2", "countertop", "cabinet", "cabinet", "countertop",
   "cabinet", "cabinet", "cabinet", "cabinet", "sofa", "sofa", "stand", false,
   "low_wall", "low_wall", "low_wall", "low_wall", false, false, false, false,
   "low_wall", "low_wall", "low_wall", "low_wall", false, false, false, false,
@@ -36,6 +37,21 @@ factoring.extend(decorations, "device_panel", {
   on_remove = function(self)
     State:add(decorations.device_panel_broken(), {position = self.position})
   end,
+})
+
+factoring.extend(decorations, "bucket", {
+  shader = shaders.reflective,
+  reflection_vector = Vector.left,
+})
+
+factoring.extend(decorations, "device_panel", {
+  shader = shaders.reflective,
+  reflection_vector = Vector.down,
+})
+
+factoring.extend(decorations, "device_panel_v2", {
+  shader = shaders.reflective,
+  reflection_vector = Vector.down,
 })
 
 local elevations = {"upper", "lower"}

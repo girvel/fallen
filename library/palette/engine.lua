@@ -1,4 +1,5 @@
 local factoring = require("tech.factoring")
+local shaders   = require("tech.shaders")
 
 
 local engine, module_mt, static = Module("library.palette.engine")
@@ -20,6 +21,15 @@ factoring.from_atlas(engine, "assets/sprites/engine2.png", function(_, position)
     mixin.perspective_flag = true
   else
     mixin.transparent_flag = true
+  end
+
+  if Table.contains({
+    Vector {3, 7},
+    Vector {4, 7},
+    Vector {5, 7},
+  }, position) then
+    mixin.shader = shaders.reflective
+    mixin.reflection_vector = Vector.down
   end
 
   return mixin
