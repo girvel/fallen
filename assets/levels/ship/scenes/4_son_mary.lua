@@ -123,15 +123,15 @@ return function()
           -- TODO end shader here
           api.narration("Невероятным усилием воли ты обрываешь эту связь.")
           api.narration("Душа теперь твоя. И только твоя.")
-          State:set_shader()
+          State.shader = nil
           api.line(c.son_mary, "Всё равно я успел узнать всё, что мне нужно")
           rails.resists_son_mary = true
         else
-          State:set_shader(shaders.charmed({
+          State.shader = shaders.charmed({
             rails.entities.son_mary,
             rails.entities.son_mary_upper,
             State.grids.solids[rails.entities.son_mary.position],
-          }))
+          })
 
           local heartbeat = sound("assets/sounds/heartbeat.mp3", 1)
           heartbeat.source:setLooping(true)
@@ -154,7 +154,7 @@ return function()
           api.narration("—")
           heartbeat.source:stop()
           api.narration("Он отпускает тебя.")
-          State:set_shader()
+          State.shader = nil
           api.narration("Пообещай, что больше это не повторится.")
         end
 

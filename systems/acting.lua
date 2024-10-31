@@ -19,7 +19,7 @@ acting.system = static(Tiny.processingSystem({
   end,
 
   preProcess = function()
-    State.aggression_log = State._next_aggression_log
+    State._aggression_log = State._next_aggression_log
     State._next_aggression_log = {}
     if State.combat then
       local combatants = State.combat:iter_entities_only():totable()

@@ -1,5 +1,7 @@
 local level, _, static = Module("state.level")
 
+--- @alias layer "under_tiles"|"tiles"|"items"|"fx_under"|"solids"|"on_solids"|"on_solids2"|"fx"
+
 level.GRID_LAYERS = {
   "under_tiles", "tiles",
   "items", "fx_under", "solids", "on_solids", "on_solids2", "fx"

@@ -206,7 +206,7 @@ return function()
           rails.last_player_fov = State.player.fov_radius
           State.player.fov_radius = 1
         else
-          State:set_shader(shaders.latrine)
+          State.shader = shaders.latrine
           rails:stop_scene("exit_latrine")
         end
       end,
@@ -229,7 +229,7 @@ return function()
 
         if not rails.been_to_latrine then
           State.player.ai.in_cutscene = true
-          State:set_shader()
+          State.shader = nil
 
           api.narration("Ты не можешь контролировать свой желудок...")
           api.narration("И выпускаешь его содержимое наружу.")
@@ -243,11 +243,11 @@ return function()
 
           rails.been_to_latrine = true
           State.player.ai.in_cutscene = false
-          State:set_shader(shaders.latrine)
+          State.shader = shaders.latrine
         end
 
         api.wait_seconds(10)
-        State:set_shader()
+        State.shader = nil
       end,
     },
 

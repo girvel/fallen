@@ -1,6 +1,7 @@
 local query, query_mt
 
 --- @class Query: { [string]: Query | any }
+--- @operator call: Query
 --- @operator unm: any
 
 query_mt = {

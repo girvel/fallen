@@ -112,7 +112,7 @@ describe("Global serialization logic", function()
     end
 
     test("mob", mobs[1]())
-    test("world", State.world)
+    test("world", State._world)
     test("state", State)
 
     Log.info(

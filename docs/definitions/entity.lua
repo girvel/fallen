@@ -8,9 +8,14 @@
 --- @field position? vector in-game position in relation to `.view`
 --- @field size? vector size (in `.view`)
 --- @field view? string coordinate system's index in `State.gui.views`
+--- @field layer? layer layer in `State.grids`
 ---
---- @field sprite sprite
+--- @field sprite? sprite
 --- @field shader? shader shader used specifically for this entity; surpasses State's shader
+---
+--- @field inventory? {[string]: table} single-item displayable inventory slots
+---
+--- @field boring_flag? true disable logging `State:remove`
 local entity = {}
 
 -- TODO should be joined w/ lib.entity as tech.entity?

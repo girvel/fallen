@@ -104,7 +104,7 @@ ai.api.in_combat = function(entity)
 end
 
 ai.api.aggregate_aggression = function(t, entity)
-  return Table.concat(t, Fun.iter(State.aggression_log)
+  return Table.concat(t, Fun.iter(State._aggression_log)
     :filter(function(pair) return pair[2] == entity end)
     :map(function(pair) return pair[1] end)
     :totable())

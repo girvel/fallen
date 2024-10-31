@@ -46,11 +46,11 @@ return function()
         api.narration("Отчего они не видят <hate>красный</hate> цвет.")
 
         State.player.fov_radius = old_fov
-        State:set_shader(shaders.black_and_white)
+        State.shader = shaders.black_and_white
         api.wait_seconds(0.2)
-        State:set_shader(shaders.black_and_white_and_red)
+        State.shader = shaders.black_and_white_and_red
         api.wait_seconds(0.5)
-        State:set_shader()
+        State.shader = nil
 
         api.narration("Руки инстинктивно отскакивают от потока ледяной воды")
         api.narration("Перед тобой мутное зеркало и видавший лучшую жизнь умывальник")

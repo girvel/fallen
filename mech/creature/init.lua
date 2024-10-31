@@ -5,7 +5,18 @@ local sound = require("tech.sound")
 local on_tiles = require("library.palette.on_tiles")
 
 
---- @class creature: creature_methods
+--- @overload fun(animation_pack: string|table, object: table): creature
+local creature, module_mt, static = Module("mech.creature")
+
+local get_all_resources = function(e)
+  return Table.extend(OrderedMap {},
+    e:get_resources("move"),
+    e:get_resources("short"),
+    e:get_resources("long")
+  )
+end
+
+--- @class creature: entity
 --- @field creature_flag true
 --- @field resources table<string, integer>
 --- @field hp integer
@@ -18,19 +29,6 @@ local on_tiles = require("library.palette.on_tiles")
 --- @field sounds table<string, table>
 --- @field perks table[]
 --- @field race table
-
---- @overload fun(animation_pack: string|table, object: table): creature
-local creature, module_mt, static = Module("mech.creature")
-
-local get_all_resources = function(e)
-  return Table.extend(OrderedMap {},
-    e:get_resources("move"),
-    e:get_resources("short"),
-    e:get_resources("long")
-  )
-end
-
---- @class creature_methods
 local creature_methods = {
   get_effect = function(self, name, value, ...)
     local args = {...}

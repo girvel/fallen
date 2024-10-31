@@ -41,7 +41,7 @@ love.load = function(args)
     game_save.read("last.fallen_save")
   else
     State = state(systems)
-    State:set_shader()
+    State.shader = nil
     State:load_level("assets/levels/" .. args.level)
 
     State.gui.wiki.quests = quests
@@ -92,10 +92,10 @@ for callback_name, _ in pairs(
   end, {})
 ) do
   love[callback_name] = function(...)
-    Debug.pcall(State.world.update, State.world, function(_, entity)
+    Debug.pcall(State._world.update, State._world, function(_, entity)
       return entity.base_callback == callback_name
     end, ...)
-    State.world:refresh()
+    State._world:refresh()
   end
 end
 
