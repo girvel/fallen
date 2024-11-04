@@ -117,7 +117,7 @@ return function()
         then
           if api.ability_check("sleight_of_hand", 12) then
             api.narration("Ты аккуратно заводишь пальцы за звенящий участок трубы и достаешь застрявший острый предмет.", {check = {"sleight_of_hand", true}})
-            item.drop(State.player, "main_hand")
+            -- item.drop(State.player, "main_hand")
             item.give(State.player, State:add(items.knife()))
             api.narration("Это пыльный наточенный нож, кто-то из прошлого спрятал его здесь.")
             api.narration("Зачем?")

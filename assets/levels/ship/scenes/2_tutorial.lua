@@ -93,6 +93,7 @@ return function()
           end
         end
 
+        api.wait_seconds(3)
         api.notification("Запусти блок миража, чтобы перейти к демонстрации", true)
         api.update_quest({warmup = 5})
       end,
