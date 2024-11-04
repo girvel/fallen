@@ -4,7 +4,7 @@ local ai = require("tech.ai")
 local api = ai.api
 
 
-local combat_ai, module_mt, static = Module("library.combat_ai")
+local combat_ai, module_mt, static = Module("librarys.ais.combat")
 
 module_mt.__call = function()
   return {
