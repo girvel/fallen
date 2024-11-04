@@ -256,7 +256,7 @@ return function()
             "Наказание за воровство — смерть.",
           })[self._caught_n])
           if self._caught_n == 3 then
-            hostility.make_hostile("combat_dreamers")
+            hostility.make_hostile("guards")
           end
           return
         end
@@ -352,7 +352,7 @@ return function()
         api.line(c.guard_1, "За кражу и порчу собственности полагается наказание.")
         api.line(c.player, "Через твой труп.")
 
-        hostility.make_hostile("combat_dreamers")
+        hostility.make_hostile("guards")
       end,
     },
 
@@ -506,7 +506,7 @@ return function()
                 api.line(c.player, "ОТДАВАЙ ВЕНТИЛЬ ТВАРЬ")
                 api.narration("Ты видишь как вены на лице охранника раздуваются, наполняясь чистой яростью.")
                 api.line(c.guard_2, "Прими наказание за грубость со смирением!")
-                hostility.make_hostile("combat_dreamers")
+                hostility.make_hostile("guards")
               end
             end
             break
