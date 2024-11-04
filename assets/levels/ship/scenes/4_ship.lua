@@ -305,6 +305,7 @@ return function()
             api.narration("Бутылка при тебе. И нет, ты не понимаешь, как у тебя это получилось.")
 
             rails.bottles_taken = rails.bottles_taken + 1
+            rails.source_of_first_alcohol = rails.source_of_first_alcohol or "storage_room"
             c.alcohol_crate.interact = nil
             return
           end
@@ -333,6 +334,7 @@ return function()
             api.narration("И бодрой походкой победителя выходишь из кладовой.")
 
             rails.bottles_taken = rails.bottles_taken + 1
+            rails.source_of_first_alcohol = rails.source_of_first_alcohol or "storage_room"
             c.alcohol_crate.interact = nil
             return
           end
@@ -409,7 +411,6 @@ return function()
           api.narration("В одной руке он сжимает дубинку, другой — держит крупный стальной вентиль.")
         end
 
-        -- TODO! should not be repeated
         if not State:exists(rails.entities.captain_door_note)
           and not rails.has_valve
         then

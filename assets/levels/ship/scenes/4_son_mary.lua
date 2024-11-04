@@ -34,7 +34,7 @@ return function()
     },
 
     son_mary_1 = {
-      name = "Talking to Son Mary #1",
+      name = "Son Mary: meeting",
       enabled = true,
 
       characters = {
@@ -229,7 +229,7 @@ return function()
     },
 
     {
-      name = "Talking to Son Mary #2 without alcohol",
+      name = "Son Mary: first alcohol",
       enabled = true,
 
       characters = {
@@ -241,20 +241,179 @@ return function()
           and c.son_mary.interacted_by == State.player
       end,
 
-      _next_line = 1,
+      _next_piss_off_line = 1,
+      _seen_intro = false,
 
       run = function(self, rails, c)
         c.son_mary.interacted_by = nil
 
-        local LINES = {
-          "Нет алкоголя — нет разговора",
-          "Неужели так тяжело что-то найти?",
-          "Руки-ноги на месте, так используй их по назначению",
+        if rails.bottles_taken == 0 then
+          local LINES = {
+            "Нет алкоголя — нет разговора",
+            "Неужели так тяжело что-то найти?",
+            "Руки-ноги на месте, так используй их по назначению",
+          }
+
+          if self._next_piss_off_line > #LINES then return end
+
+          api.line(c.son_mary, LINES[self._next_piss_off_line])
+          self._next_piss_off_line = self._next_piss_off_line + 1
+          return
+        end
+
+        if not self._seen_intro then
+          self._seen_intro = true
+          api.narration("")
+          api.narration("")
+          api.narration("")
+          api.narration("")
+          api.notification("", false)
+          api.line(c.player, "")
+          api.line(c.son_mary, "")
+        end
+
+        if api.options({
+          "",
+          "",
+        }) == 2 then
+          api.narration("")
+          api.line(c.player, "")
+          api.line(c.son_mary, "")
+          return
+        end
+
+        api.narration("")
+        api.narration("")
+        -- TODO! music
+        api.narration("")
+        api.narration("")
+        api.narration("")
+        api.narration("")
+        -- TODO! spawn steam
+        api.narration("")
+        api.narration("")
+        -- TODO! disable music
+        api.line(c.son_mary, "")
+        api.narration("")
+        api.line(c.son_mary, "")
+        api.line(c.son_mary, "")
+        api.line(c.son_mary, "")
+        api.line(c.player, "")
+        api.line(c.son_mary, "")
+        api.narration("")
+
+        if api.ability_check("insight", 12) then
+          api.narration("", {check = {"insight", true}})
+        else
+          api.narration("", {check = {"insight", false}})
+        end
+
+        local options = {
+          "",
+          "",
+          "",
         }
 
-        api.line(c.son_mary, LINES[self._next_line])
-        self._next_line = self._next_line + 1
-        self.enabled = not not LINES[self._next_line]
+        while true do
+          local chosen_option = api.options(options, true)
+
+          if chosen_option == 1 then
+            api.line(c.son_mary, "")
+            if options[3] then
+              api.line(c.son_mary, "")
+              api.narration("")
+              api.line(c.player, "")
+              api.line(c.son_mary, "")
+              api.line(c.son_mary, "")
+            else
+              api.line(c.son_mary, "")
+              api.line(c.player, "")
+              api.line(c.son_mary, "")
+              api.line(c.player, "")
+            end
+            break
+
+          elseif chosen_option == 2 then
+            if rails.source_of_first_alcohol == "storage_room" then
+              api.line(c.son_mary, "")
+            else
+              api.line(c.son_mary, "")
+              api.line(c.son_mary, "")
+            end
+            api.line(c.son_mary, "")
+
+          elseif chosen_option == 3 then
+            api.notification("", true)
+            api.line(c.son_mary, "")
+            api.line(c.player, "")
+            api.narration("")
+            api.line(c.son_mary, "")
+            api.line(c.son_mary, "")
+            api.line(c.son_mary, "")
+            api.line(c.son_mary, "")
+            -- TODO! creepy picture
+            api.line(c.son_mary, "")
+            api.line(c.son_mary, "")
+            api.line(c.son_mary, "")
+            api.line(c.son_mary, "")
+            api.line(c.son_mary, "")
+            -- TODO! creepy picture off
+            api.line(c.son_mary, "")
+            api.line(c.son_mary, "")
+
+          elseif chosen_option == 4 then
+            api.narration("")
+            api.line(c.son_mary, "")
+            api.line(c.son_mary, "")
+
+            if api.options({
+              "",
+              "",
+            }) == 2 then
+              api.line(c.son_mary, "")
+              break
+            end
+
+            api.narration("")
+            -- TODO! soft shaders
+            api.narration("")
+            api.narration("")
+            api.narration("")
+            api.notification("", true)
+            api.narration("")
+            -- TODO! hard shaders here or a bit later
+            api.line(c.son_mary, "")
+            api.line(c.son_mary, "")
+            api.line(c.son_mary, "")
+            api.narration("")
+            api.narration("")
+            api.narration("")
+            api.narration("")
+            -- TODO! creepy picture
+            api.line(c.son_mary, "")
+            -- TODO! stop shaders/music/FX
+            api.narration("")
+            api.narration("")
+            api.narration("")
+            api.line(c.son_mary, "")
+            api.line(c.son_mary, "")
+            -- TODO! freedom speech
+            -- rails.scenes.son_mary_freedom:run(rails, c)
+            error(404)
+
+          elseif chosen_option == 5 then
+            api.narration("")
+            api.line(c.player, "()")
+            api.line(c.player, "()")
+            api.line(c.player, "()")
+            break
+
+          else  -- chosen_option == 6
+            -- rails.scenes.son_mary_alcohol_2:main(rails, c)
+            error(404)
+          end
+        end
+        api.update_quest({alcohol = 2})
       end,
     },
   }

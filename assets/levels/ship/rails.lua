@@ -80,6 +80,7 @@ return function(positions, entities)
     has_valve = false,
     met_son_mary = false,
     resists_son_mary = false,
+    source_of_first_alcohol = false,
 
     give_valve_to_player = function(self)
       self.has_valve = true
