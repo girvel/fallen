@@ -29,6 +29,7 @@ end
 --- @field sounds table<string, table>
 --- @field perks table[]
 --- @field race table
+--- @field last_initiative? number value of the last initiative roll
 local creature_methods = {
   get_effect = function(self, name, value, ...)
     local args = {...}

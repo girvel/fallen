@@ -257,6 +257,7 @@ return function()
         State.player.ai.in_cutscene = false
       end,
     },
+
     engineer_4_normal_dialogue = {
       name = "Talking to the fourth",
       enabled = true,

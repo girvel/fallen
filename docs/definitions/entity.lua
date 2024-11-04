@@ -16,6 +16,9 @@
 --- @field inventory? {[string]: table} single-item displayable inventory slots
 ---
 --- @field boring_flag? true disable logging `State:remove`
+--- @field creature_flag? true entity was created as mech.creature
+---
+--- @field last_initiative? number value of the last initiative roll
 local entity = {}
 
 -- TODO should be joined w/ lib.entity as tech.entity?

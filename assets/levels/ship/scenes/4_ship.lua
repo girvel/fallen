@@ -73,7 +73,8 @@ return function()
 
         item.give(State.player, State:add(items.pole()))
         api.center_camera()
-        rails.has_valve = true
+        State:remove(rails.entities.captain_door_note)
+        api.update_quest({parasites = 1})
       end,
     },
 
@@ -395,12 +396,42 @@ return function()
         -- [4]
       },
 
+      _can_activate = {
+        [2] = true,
+        [3] = true,
+      },
+
       run = function(self, rails, c)
         c.guard_2.interacted_by = nil
 
         api.narration("Крепкий мужчина в военной форме одним глазом пристально смотрит на тебя, вторым на вход.")
-        if c.guard_2.inventory.other_hand == self.entities.captain_door_valve then
+        if c.guard_2.inventory.other_hand == rails.entities.captain_door_valve then
           api.narration("В одной руке он сжимает дубинку, другой — держит крупный стальной вентиль.")
+        end
+
+        -- TODO! should not be repeated
+        if not State:exists(rails.entities.captain_door_note)
+          and not rails.has_valve
+        then
+          if api.get_quest("parasites") == 1 then
+            if self._can_activate[2] then
+              self._options[2] = "Я за вентилем — мне нужно попасть в рубку"
+              self._can_activate[2] = false
+            end
+          else
+            if self._can_activate[3] then
+              self._options[3] = "Я за вентилем."
+              self._can_activate[3] = false
+            end
+          end
+        else
+          self._options[2] = nil
+          self._options[3] = nil
+        end
+
+        if self._can_activate[4] and Table.contains({1, 2}, api.get_quest("alcohol")) then
+          self._can_activate[4] = false
+          self._options[4] = "Не знаешь, где можно найти алкоголь?"
         end
 
         self._options[5] = "*Уйти*"
@@ -427,8 +458,61 @@ return function()
               api.narration("Тебе показалось. Не думай об этом.")
             end
 
-          -- elseif chosen_option == 2 then
-          --   api.
+          elseif chosen_option == 2 then
+            api.narration("Спящий без раздумий протягивает  увесистый вентиль.")
+            api.line(c.guard_2, "Держи, удачи в зачистке, будет тяжело...")
+            rails:give_valve_to_player()
+            if api.ability_check("insight", 12) then
+              api.narration("Ты замечаешь, что он хочет сказать что-то ещё.", {check = {"insight", true}})
+              api.line(c.player, "Закончи свою мысль.")
+              api.line(c.guard_2, "Будет тяжело — возвращайся и возьми в помощь моего напарника.")
+              api.line(c.guard_2, "(Стоит запомнить)")
+            else
+              api.line(c.player, "(Тяжело?! Да за кого он меня принимает?!)", {check = {"insight", false}})
+              api.narration("Ты надменно оборачиваешься, готовясь уходить.")
+            end
+            break
+
+          elseif chosen_option == 3 then
+            api.line(c.guard_2, "Не положено, вентиль будет у меня, пока не поступит иной приказ вышестоящего.")
+            api.narration("Он указывает пальцем на свой лоб, будто приказ придёт точно в него.")
+            api.narration("Пока ты выбираешь слова, он с силой давит пяткой пробегающего таракана; превосходная скорость реакции для такого громилы.")
+            api.narration("По неизвестной причине, тебя начинает наполнять гнев.")
+
+            if api.options({
+              "[Запугивание] *Заставить его отдать вентиль*",
+              "*Отступить; гнев — оружие слабых*",
+            }) == 1 then
+              api.line(c.player, "(Что он себе позволяет?)")
+              api.line(c.player, "(Моё желание идти, куда я захочу, не остановит какой-то выскочка)")
+              api.narration("Резким движением ты пододвигаешь своё лицо вплотную к нему; в отражении глаз замечаешь кошмарный оскал.")
+
+              if api.ability_check("intimidation", 12) then
+                api.line(c.player, "Я. ЗДЕСЬ. ВЫШЕСТОЯЩИЙ.", {check = {"intimidation", true}})
+                api.narration("Он даже бровью не шелохнул, но тебя уже не остановить.")
+                api.line(c.player, "ОТДАЙ. МНЕ. ВЕНТИЛЬ.")
+                api.line(c.player, "ЧЕРТОВ ВЕНТИЛЬ, ОТ ГРЁБАНОЙ КОМНАТЫ, КОТОРУЮ ТЫ ЗАПЕР БЕЗ СПРОСА")
+                api.line(c.player, "ВЕЧНО ВСЁ ПРИХОДИТСЯ ДЕЛАТЬ ЗА ТАКИХ БЕЗМОЗГЛЫХ КУКОЛ КАК ТЫ")
+                api.narration("Не страх, но сомнение появилось на его лице.")
+                api.narration("Время сбавить градус. Ты возвращаешься на приемлемое расстояние и протягиваешь ладонь в ожидании.")
+                api.line(c.player, "Я - вышестоящий, ты должен отдать его мне.")
+                api.narration("Несколько раз моргнув, он протягивает тебе невероятно холодный вентиль.")
+                api.narration("Похоже, ты перегрелся пока кричал.")
+                api.narration("Но вентиль у тебя; ты добился своего.")
+                rails:give_valve_to_player()
+              else
+                api.line(c.player, "Я В РОТ ИМЕЛ ТВОЕГО ВЫШЕСТОЯЩЕГО", {check = {"intimidation", false}})
+                api.notification("...", true)
+                api.line(c.player, "ОТДАВАЙ ВЕНТИЛЬ ТВАРЬ")
+                api.narration("Ты видишь как вены на лице охранника раздуваются, наполняясь чистой яростью.")
+                api.line(c.guard_2, "Прими наказание за грубость со смирением!")
+                hostility.make_hostile("combat_dreamers")
+              end
+            end
+            break
+
+          elseif chosen_option == 4 then
+            api.line(c.guard_2, "Если ищешь спирт, посмотри в медицинском отсеке.")
 
           else -- chosen_option == 5
             break
@@ -563,6 +647,7 @@ return function()
         self.enabled = false
         rails.scenes.parasites_start.enabled = false
 
+        api.wait_seconds(8)
         api.notification("Разблокируй желтый рычаг на правой панели.", true)
         api.wait_seconds(3)
         api.update_quest({parasites = 2})

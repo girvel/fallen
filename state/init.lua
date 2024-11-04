@@ -179,12 +179,12 @@ local state_base = {
         current_i = State.combat.current_i
     end
 
-    local initiative = Fun.iter(list)
-      :map(function(e) return e, abilities.initiative_roll(e):roll() end)
-      :tomap()
+    for _, e in ipairs(list) do
+      e.last_initiative = abilities.initiative_roll(e):roll()
+    end
 
     Table.concat(list, -Query(State.combat):iter_entities_only():totable())
-    table.sort(list, function(a, b) return initiative[a] > initiative[b] end)
+    table.sort(list, function(a, b) return a.last_initiative > b.last_initiative end)
 
     self.combat = combat(list)
     self.combat.current_i = current_i

@@ -63,6 +63,7 @@ return function(positions, entities)
 
       self.entities.captain_door_note.interact = nil
       cue.set(self.entities.captain_door_note, "highlight", false)
+      cue.set(self.entities.captain_door, "highlight", true)
 
       State:remove(self.entities.guard_2.inventory.other_hand)
       self.entities.guard_2.inventory.other_hand = nil
@@ -79,5 +80,11 @@ return function(positions, entities)
     has_valve = false,
     met_son_mary = false,
     resists_son_mary = false,
+
+    give_valve_to_player = function(self)
+      self.has_valve = true
+      State:remove(self.entities.captain_door_valve)
+      self.entities.guard_2.inventory.other_hand = nil
+    end,
   })
 end
