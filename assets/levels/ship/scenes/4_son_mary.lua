@@ -18,7 +18,7 @@ return function()
 
       start_predicate = function(self, rails, dt, c)
         return not State:exists(self.popup[1])
-          and not rails:is_running("son_mary_1")
+          and not rails:is_running("son_mary_meeting")
           and (c.son_mary.position - State.player.position):abs() <= 3
       end,
 
@@ -33,7 +33,7 @@ return function()
       end,
     },
 
-    son_mary_1 = {
+    son_mary_meeting = {
       name = "Son Mary: meeting",
       enabled = true,
 
@@ -87,7 +87,6 @@ return function()
 
         self.enabled = false
         rails.scenes.son_mary_curses.enabled = false
-        rails.met_son_mary = true
 
         if chosen_option == 1 then
           api.line(c.son_mary, "У тебя проблемы со слухом? Могу повторить.")
@@ -234,6 +233,7 @@ return function()
 
       characters = {
         son_mary = {},
+        player = {},
       },
 
       start_predicate = function(self, rails, dt, c)
@@ -263,149 +263,164 @@ return function()
 
         if not self._seen_intro then
           self._seen_intro = true
-          api.narration("")
-          api.narration("")
-          api.narration("")
-          api.narration("")
-          api.notification("", false)
-          api.line(c.player, "")
-          api.line(c.son_mary, "")
+          api.narration("Пиратская морда смотрит на сосуд в твоих руках.")
+          api.narration("Тебя раздирает желание вылить его содержимое на пол.")
+          api.narration("Но вряд ли ты это пойдёт тебе на пользу.")
+          api.narration("Подобное ребячество не в твоей природе, не в твоём духе.")
+          api.notification("Ты чувствуешь, что капитан — ублюдок и убийца; ты не хочешь с ним связываться.", true)
+          api.wait_seconds(1)
+          api.line(c.player, "Я не ослышался? Капитан?")
+          api.line(c.son_mary, "...ублюдок и убийца, заливай быстрее.")
         end
 
         if api.options({
-          "",
-          "",
+          "*Залить напиток Капитану*",
+          "*Уйти*",
         }) == 2 then
-          api.narration("")
-          api.line(c.player, "")
-          api.line(c.son_mary, "")
+          api.narration("Может, внутренний голос прав?")
+          api.line(c.player, "Что-то здесь не так, я не буду исполнять твои приказы.")
+          api.line(c.son_mary, "Падаль! Идиот! Возвращайся когда отрастишь себе что-то на месте мозгов.")
           return
         end
 
-        api.narration("")
-        api.narration("")
-        -- TODO! music
-        api.narration("")
-        api.narration("")
-        api.narration("")
-        api.narration("")
-        -- TODO! spawn steam
-        api.narration("")
-        api.narration("")
-        -- TODO! disable music
-        api.line(c.son_mary, "")
-        api.narration("")
-        api.line(c.son_mary, "")
-        api.line(c.son_mary, "")
-        api.line(c.son_mary, "")
-        api.line(c.player, "")
-        api.line(c.son_mary, "")
-        api.narration("")
+        rails.bottles_taken = rails.bottles_taken - 1
+        api.narration("Одна из труб примечательна; её дальний конец присоединен к центральной системе, а ближайший закрыт клапаном.")
+        api.narration("Несомненно, это то, что тебе нужно; ты вскрываешь клапан и заливаешь напиток.")
+        -- TODO FX music, animation
+        api.narration("Жидкость медленно вливается в один из промежуточных сосудов.")
+        api.narration("Она начинает быстро распространяться по всем трубам, будто моровое поветрие.")
+        api.narration("Вода в центральном сосуде приобретает мутный цвет, пузырьки вокруг головы вихрятся в пьяном танце.")
+        api.narration("Капитан в это время широко открывает рот, словно кит, пожирающий планктон.")
+        -- TODO FX spawn steam
+        api.narration("Внезапно усилившееся давление пробивает множество клапанов, мир вокруг захватывает тряска и жар.")
+        api.narration("Кажется вот-вот здесь всё взлетит на воздух — пора бежать.")
+        -- TODO FX disable music
+        api.line(c.son_mary, "ОТСТАВИТЬ БУНТ!")
+        api.narration("Вмиг вся система затихает, приходит в порядок.")
+        api.line(c.son_mary, "Хо-ро-шо. Теперь всё под контролем, наконец-то.")
+        api.line(c.son_mary, "Осталось последнее дело.")
+        api.line(c.son_mary, "Раздобудь-ка ещё пойла, и мы сможем наконец обсудить наш план.")
+        api.line(c.player, "Какого черта? Ещё?!")
+        api.line(c.son_mary, "Не останавливаться же на полпути, а?")
+        api.narration("Он тебе… Подмигнул?")
 
         if api.ability_check("insight", 12) then
-          api.narration("", {check = {"insight", true}})
+          api.narration("Во взгляде заговорческий план, и он не видит его исполнение без тебя.", {check = {"insight", true}})
         else
-          api.narration("", {check = {"insight", false}})
+          api.narration("Подобная неподконтрольная мимика — явный признак алкогольной интоксикации.", {check = {"insight", false}})
         end
 
         local options = {
-          "",
-          "",
-          "",
+          "Хорошо, найду, но это последняя подобная просьба.",
+          "Где я тебе ещё найду? Этот-то раздобыл с великим трудом",
+          "Это перебор, больше ты от меня ничего не добьёшься",
+          "*Молча уйти, хватит с тебя этого дерьма*",
         }
+
+        if rails.bottles_taken > 0 then
+          options[6] = "*Молча показать вторую бутылку*"
+        end
 
         while true do
           local chosen_option = api.options(options, true)
+          if chosen_option ~= 4 and options[4] then
+            options[4] = nil
+            options[5] = "*Уйти*"
+          end
 
           if chosen_option == 1 then
-            api.line(c.son_mary, "")
+            api.line(c.son_mary, "Ты не пожалеешь о своем выборе")
             if options[3] then
-              api.line(c.son_mary, "")
-              api.narration("")
-              api.line(c.player, "")
-              api.line(c.son_mary, "")
-              api.line(c.son_mary, "")
+              api.line(c.son_mary, "И,.. Благодарю, что не стал спорить. Это важная часть плана.")
+              api.narration("Он произнёс слова благодарности так странно, непривычно.")
+              api.line(c.player, "Твоё первое в жизни спасибо?")
+              api.line(c.son_mary, "Когда окружают идиоты, на вежливость времени не остаётся.")
+              api.line(c.son_mary, "Не заставляй меня брать слова назад")
             else
-              api.line(c.son_mary, "")
-              api.line(c.player, "")
-              api.line(c.son_mary, "")
-              api.line(c.player, "")
+              api.line(c.son_mary, "Я ведь видел твоё сердце, почуял что рабство для тебя худшее из зол.")
+              api.line(c.player, "Заткнись.")
+              api.line(c.son_mary, "Раз увидел правду, уже не сможешь смотреть на иллюзию как раньше. Так и с рабством, парень.")
+              api.line(c.player, "Замолчи, я уже жалею, что согласился.")
             end
             break
 
           elseif chosen_option == 2 then
             if rails.source_of_first_alcohol == "storage_room" then
-              api.line(c.son_mary, "")
+              api.line(c.son_mary, "Хм, если не боишься ослепнуть, поищи спирт в медотсеке; это недалеко — в правом блоке")
             else
-              api.line(c.son_mary, "")
-              api.line(c.son_mary, "")
+              api.line(c.son_mary, "Хм, может в одной из кладовых что завалялось?")
+              api.line(c.son_mary, "Странно, что ты принёс мне чертов спирт, но там не проверил.")
             end
-            api.line(c.son_mary, "")
+            api.line(c.son_mary, "В любом случае, для тебя не будет ничего сложного.")
 
           elseif chosen_option == 3 then
-            api.notification("", true)
-            api.line(c.son_mary, "")
-            api.line(c.player, "")
-            api.narration("")
-            api.line(c.son_mary, "")
-            api.line(c.son_mary, "")
-            api.line(c.son_mary, "")
-            api.line(c.son_mary, "")
-            -- TODO! creepy picture
-            api.line(c.son_mary, "")
-            api.line(c.son_mary, "")
-            api.line(c.son_mary, "")
-            api.line(c.son_mary, "")
-            api.line(c.son_mary, "")
-            -- TODO! creepy picture off
-            api.line(c.son_mary, "")
-            api.line(c.son_mary, "")
+            api.notification("Ты чувствуешь облегчение от правильного решения.", true)
+            api.line(c.son_mary, "Держу пари, за такое решение хозяин погладит тебя по головке, а может даже насыпет корма больше обычного")
+            api.line(c.player, "Заткнись. У меня нет никакого хозяина.")
+            api.narration("Вмиг его лицо теряет привычную ухмылку. Становится нейтральным, почти пустым.")
+            -- TODO FX music
+            api.line(c.son_mary, "Знаешь, ведь некоторым нравится быть рабом.")
+            api.line(c.son_mary, "Не нужно принимать сложных решений. Никакой ответственности.")
+            api.line(c.son_mary, "Жизнь по расписанию снижает стресс, а похвала хозяина...")
+            api.line(c.son_mary, " — поверь мне, для раба это высшее наслаждение; ни один свободный не сможет испытать подобное.")
+            -- TODO FX creepy picture
+            api.line(c.son_mary, "Так приятно слышать, что")
+            api.line(c.son_mary, 'Так приятно слышать, что <span color="e64e4b">задание</span>')
+            api.line(c.son_mary, 'Так приятно слышать, что <span color="e64e4b">задание</span> <span color="e64e4b">выполнено</span>')
+            api.line(c.son_mary, 'Так приятно слышать, что <span color="e64e4b">задание</span> <span color="e64e4b">выполнено</span> <span color="e64e4b">успешно</span>')
+            api.line(c.son_mary, "А может, тебе нравится определённость? Когда на место работы указывают пальцем?")
+            api.line(c.son_mary, "Когда всё разжуют и преподнесут в формальном виде: кто враг, кто друг; где зло, а где добро.")
+            api.line(c.son_mary, "Я знаю, как выглядит последняя стадия такого существования.")
+            api.line(c.son_mary, "Ты будешь ЧУВСТВОВАТЬ только по приказу.")
+            -- TODO FX creepy picture off
+            api.line(c.son_mary, "Выбор за тобой, парень.")
+            api.line(c.son_mary, "Выбор за тобой.")
 
           elseif chosen_option == 4 then
-            api.narration("")
-            api.line(c.son_mary, "")
-            api.line(c.son_mary, "")
+            api.narration("Когда ты делаешь несколько шагов, в голове доносится шёпот капитана.")
+            api.line(c.son_mary, "Хорошо, будь по-твоему, манипулятор, есть один способ.")
+            api.line(c.son_mary, "Он тебе очень понравится.")
 
             if api.options({
-              "",
-              "",
+              "Делай что должен.",
+              "Больше ты в мою голову не залезешь",
             }) == 2 then
-              api.line(c.son_mary, "")
+              api.line(c.son_mary, "Тогда я буду ждать.")
               break
             end
 
-            api.narration("")
-            -- TODO! soft shaders
-            api.narration("")
-            api.narration("")
-            api.narration("")
-            api.notification("", true)
-            api.narration("")
-            -- TODO! hard shaders here or a bit later
-            api.line(c.son_mary, "")
-            api.line(c.son_mary, "")
-            api.line(c.son_mary, "")
-            api.narration("")
-            api.narration("")
-            api.narration("")
-            api.narration("")
-            -- TODO! creepy picture
-            api.line(c.son_mary, "")
-            -- TODO! stop shaders/music/FX
-            api.narration("")
-            api.narration("")
-            api.narration("")
-            api.line(c.son_mary, "")
-            api.line(c.son_mary, "")
-            -- TODO! freedom speech
+            api.narration("Ты поворачиваешься к нему, ожидаешь чего угодно кроме...")
+            -- TODO FX soft shaders
+            api.narration("...покорности?")
+            api.narration("Взгляд обволакивает, затягивает к тёмные глубины.")
+            api.narration("Здесь ты лишь маленький планктон; у тебя нет воли, вся твоя суть в подчинении стихии.")
+            api.notification("Что происходит? Это как вообще возможно?", true)
+            api.narration("Ты расслабляешься, разум погружаешься в густую и горячую ванну из инородных мыслей.")
+            -- TODO FX hard shaders here or a bit later
+            api.line(c.son_mary, "ПОДЧИНИСЬ. МНЕ.")
+            api.line(c.son_mary, "ТЕПЕРЬ. Я. ТВОЙ. ХОЗЯИН.")
+            api.line(c.son_mary, "И НЕ БЫТЬ НИКОМУ ХОЗЯИНОМ, КРОМЕ МЕНЯ.")
+            api.narration("Ощущение бархатных безболезненных оков сменяется тяжестью стальных кандалов.")
+            api.narration("Перед тобой самое могущественное существо во вселенной, даже смерть не является для него помехой.")
+            api.narration("Ты готов пресмыкаться перед ним, целовать землю по которой он идёт, убить любого кто хочет причинить ему вред.")
+            api.narration("Даже себя. Если он попросит.")
+            -- TODO FX creepy picture
+            api.line(c.son_mary, "ОТСТАВИТЬ!")
+            -- TODO FX stop shaders/music/FX
+            api.narration("Наваждение уходит, как дурной сон, ты чувствуешь себя...")
+            api.narration("Свободно?")
+            api.narration("Сложно сказать, когда ты чувствовал это в последний раз.")
+            api.line(c.son_mary, "Сейчас мне не нужны рабы.")
+            api.line(c.son_mary, "И теперь мы можем поговорить по-настоящему.")
+            -- TODO FX freedom speech
             -- rails.scenes.son_mary_freedom:run(rails, c)
             error(404)
 
           elseif chosen_option == 5 then
-            api.narration("")
-            api.line(c.player, "()")
-            api.line(c.player, "()")
-            api.line(c.player, "()")
+            api.narration("Когда ты делаешь несколько шагов, в голове доносится шёпот капитана.")
+            api.line(c.player, "(Ты не отказался напрямую, а значит — испытываешь сомнения.)")
+            api.line(c.player, "(Это нормально для прямоходящих, осторожность делает нас сильнее.)")
+            api.line(c.player, "(Как передумаешь — возвращайся с добычей.)")
             break
 
           else  -- chosen_option == 6

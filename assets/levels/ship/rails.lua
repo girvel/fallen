@@ -36,6 +36,12 @@ return function(positions, entities)
             rails:remove_scene("checkpoint_0")
             level.move(State.player, rails.positions.checkpoint_0)
             rails.entities.captain_door:open()
+
+            rails.scenes.son_mary_meeting.enabled = false
+            rails.scenes.son_mary_curses.enabled = false
+            api.update_quest({alcohol = 1})
+            rails.bottles_taken = 1
+            rails.source_of_first_alcohol = "storage"
           end,
         },
       }
@@ -78,7 +84,6 @@ return function(positions, entities)
     dreamers_talked_to = {},
     bottles_taken = 0,
     has_valve = false,
-    met_son_mary = false,
     resists_son_mary = false,
     source_of_first_alcohol = false,
 
