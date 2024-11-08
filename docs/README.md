@@ -5,6 +5,7 @@ This is an index page of Fallen's documentation.
 - [Code conventions](/docs/conventions.md)
 - [Overview of cool internal stuff](/docs/cool_stuff.md)
 - [Project's file structure](/docs/file_structure.md)
+- [Features (RU)](/docs/features.md) (list of game features for PR stuff)
 
 ## Module documentation:
 

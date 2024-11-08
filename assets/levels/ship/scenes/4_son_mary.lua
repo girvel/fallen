@@ -424,12 +424,146 @@ return function()
             break
 
           else  -- chosen_option == 6
-            -- rails.scenes.son_mary_alcohol_2:main(rails, c)
-            error(404)
+            rails.scenes.son_mary_alcohol_2:main(rails, c, true)
           end
         end
         api.update_quest({alcohol = 2})
       end,
+    },
+
+    son_mary_alcohol_2 = {
+      name = "Son Mary: second alcohol",
+      enabled = true,
+
+      characters = {
+        son_mary = {},
+        player = {},
+      },
+
+      start_predicate = function(self, rails, dt, c)
+        return c.son_mary.interacted_by == c.player
+          and api.get_quest("alcohol") == 2
+      end,
+
+      _first_time = true,
+
+      run = function(self, rails, c)
+        c.son_mary.interacted_by = nil
+
+        if self._first_time then
+          self._first_time = false
+          rails:run_task(function()
+            for _, line in ipairs {
+              "1",  -- TODO!
+              "2",
+              "3",
+            } do
+              api.wait_seconds(3)
+              api.notification(line, true)
+            end
+          end)
+
+          api.narration("")
+          api.narration("")
+          api.line(c.player, "")
+        end
+
+        if api.options({
+          "",
+          "",
+        }) == 1 then
+          return
+        end
+
+        self.enabled = false
+        self:main(rails, c, false)
+      end,
+
+      main = function(self, rails, c, transitioned_from_previous_scene)
+        if transitioned_from_previous_scene then
+          api.line(c.player, "")
+        else
+          api.line(c.player, "")
+        end
+
+        api.line(c.player, "")
+
+        if rails.bottles_taken > 1 then
+          api.line(c.player, "")
+          -- TODO achievement
+        end
+
+        api.line(c.son_mary, "")
+        api.line(c.player, "")
+        api.line(c.son_mary, "")
+        api.line(c.son_mary, "")
+        api.line(c.player, "")
+        api.line(c.son_mary, "")
+        api.narration("")
+        api.narration("")
+        api.narration("")
+        api.narration("")
+        api.narration("")
+        api.narration("")
+        api.narration("")
+        api.line(c.player, "")
+        api.line(c.son_mary, "")
+        api.line(c.son_mary, "")
+
+        rails:run_task(function()
+          api.narration("Тотальная дегенеративность.")
+          api.wait_seconds(3)
+          api.narration("Печальная утрата жизнеспособного индивида.")
+        end)
+
+        api.line(c.son_mary, "")
+        api.line(c.player, "")
+        api.narration("")
+
+        if api.ability_check("con", 15) then
+          -- TODO FX a sound here
+          api.narration("", {check = {"con", true}})
+          api.narration("")
+          api.narration("")
+          api.line(c.player, "")
+          api.narration("")
+          api.narration("")
+          api.line(c.player, "")
+          api.line(c.player, "")
+          api.narration("")
+          api.narration("")
+          api.narration("")
+          api.line(c.player, "")
+          api.narration("")
+          api.narration("")
+          api.narration("")
+          api.line(c.player, "")
+          api.line(c.son_mary, "")
+          api.line(c.player, "")
+          api.line(c.son_mary, "")
+
+          return rails.scenes.son_mary_freedom:main(rails, c)
+        end
+
+        -- TODO! fail all angel quests & disable all angel cutscenes
+        -- TODO! rront leaves
+
+        api.narration("")
+        api.narration("")
+        api.narration("")
+        api.narration("")
+        api.narration("")
+        api.narration("")
+        api.narration("")
+        api.line(c.player, "")
+        api.line(c.player, "")
+        api.line(c.player, "")
+        api.narration("")
+        api.narration("")
+        api.narration("")
+
+        -- TODO! 
+      end
     },
   }
 end
