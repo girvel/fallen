@@ -247,7 +247,7 @@ api.autosave = function()
   api.notification("Игра сохранена")
 end
 
---- Can not regress quest progress
+--- Can not regress quests
 --- @param changes table<string, integer> changes to quest progress in format quest: stage
 --- @return nil
 api.update_quest = function(changes)
@@ -291,6 +291,7 @@ end
 
 --- Trigger fade in/fade out sequence, wait until the screen is fully black
 --- @async
+--- @nodiscard
 --- @return fun(): nil # function to wait until the screen is clear again
 api.blackout = function()
   State.gui:trigger_blackout(0.5, 0.5)

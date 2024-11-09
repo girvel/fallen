@@ -34,7 +34,7 @@ return function()
         rails.scenes.open_left_megadoor.enabled = true
       end,
     },
-    {
+    detective_intro = {
       name = "Player enters the detective room",
       enabled = true,
       start_predicate = function(self, rails, dt)
@@ -64,7 +64,7 @@ return function()
         api.autosave()
       end,
     },
-    {
+    detective_notification = {
       name = "Player gets notification after entering detective room",
       enabled = true,
       start_predicate = function(self, rails, dt)

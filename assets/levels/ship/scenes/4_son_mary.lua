@@ -1,3 +1,4 @@
+local quest = require("tech.quest")
 local sound = require("tech.sound")
 local api = require("tech.railing.api")
 local shaders = require("tech.shaders")
@@ -533,9 +534,21 @@ return function()
           return rails.scenes.son_mary_freedom:main(rails, c)
         end
 
-        -- TODO! fail all angel quests & disable all angel cutscenes
-        -- TODO! rront leaves
-        -- TODO! blackout
+        api.update_quest({detective = quest.FAILED, parasites = quest.FAILED})
+        local blackout_end = api.blackout()
+
+        for _, name in ipairs({
+          "detective_intro",
+          "detective_notification",
+        }) do
+          rails.scenes[name].enabled = false
+        end
+
+        for _, i in ipairs({1, 2, 4}) do
+          rails.entities["engineer_" .. i].interact = nil
+        end
+
+        State:remove(rails.entities.engineer_3)
 
         api.narration("Конец для всех в мире неизменен.")
         api.narration("Темнота, занавес.")
@@ -552,7 +565,7 @@ return function()
         api.narration("Возможности открыть слипшиеся веки?")
         api.narration("Ты открываешь глаза.")
 
-        -- TODO! unblackout
+        blackout_end()
         -- TODO! set up Markiss scene, disable markiss ai
         c.markiss = rails.entities.markiss;
 

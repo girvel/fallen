@@ -157,7 +157,9 @@ return function()
     {
       name = "Half orc was killed",
       enabled = true,
-      start_predicate = function(self, rails, dt) return rails.entities.engineer_3.hp <= 0 end,
+      start_predicate = function(self, rails, dt)
+        return api.get_quest("detective") == 2 and rails.entities.engineer_3.hp <= 0
+        end,
 
       run = function(self, rails)
         self.enabled = false
