@@ -289,19 +289,23 @@ api.rotate_to_player = function(entity)
   ))
 end
 
---- Trigger fade in/fade out sequence, wait until the screen is fully black
+--- Trigger fade out sequence & wait for it
 --- @async
---- @nodiscard
---- @return fun(): nil # function to wait until the screen is clear again
-api.blackout = function()
-  State.gui:trigger_blackout(0.5, 0.5)
+--- @return nil
+api.fade_out = function()
+  State.gui:trigger_blackout(0.5)
   while math.abs(State.gui.blackout_k - 1) > 0.05 do
     coroutine.yield()
   end
-  return function()
-    while State.gui.blackout_k ~= 0 do
-      coroutine.yield()
-    end
+end
+
+--- Trigger fade in sequence & wait for it
+--- @async
+--- @return nil
+api.fade_in = function()
+  State.gui:trigger_blackout(-0.5)
+  while math.abs(State.gui.blackout_k) > 0.05 do
+    coroutine.yield()
   end
 end
 

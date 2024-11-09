@@ -131,7 +131,7 @@ return function()
               api.narration("По-крайней мере, в одиночку.")
               api.line(State.player, "Эй, прекратите стоять столбом! Положить его на кровать животом вниз! Принести чистую воду!")
 
-              local blackout_end = api.blackout()
+              api.fade_out()
 
               local moved_characters = {"dorm_grunt", "dorm_woman", "dorm_beard"}
               local old_positions = {}
@@ -148,7 +148,7 @@ return function()
               c.dorm_halfling.hp = c.dorm_halfling:get_max_hp() - 3
               level.move(State.player, rails.positions.dorm_player)
 
-              blackout_end()
+              api.fade_in()
 
               api.narration("Рабочие медленно начинают исполнять твои приказы.")
               api.line(State.player, "Бородатый — промывай раны!")
@@ -162,7 +162,7 @@ return function()
               c.dorm_woman:act(actions.move)
               c.dorm_grunt:act(actions.move)
 
-              blackout_end = api.blackout()
+              api.fade_out()
 
               for ch, p in pairs(old_positions) do
                 level.move(ch, p)
@@ -170,7 +170,7 @@ return function()
               item.drop(c.dorm_halfling, 1)
               level.move(rails.entities.razor, rails.positions.razor_drop)
 
-              blackout_end()
+              api.fade_in()
 
               api.narration("Далее всё проходит как в тумане.")
               api.narration("Секунду назад ты стоял около пускающего слюни полумертвого существа...")

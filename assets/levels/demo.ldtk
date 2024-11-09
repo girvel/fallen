@@ -3453,6 +3453,44 @@
 							],
 							"__worldX": 448,
 							"__worldY": 320
+						},
+						{
+							"__identifier": "position",
+							"__grid": [43,37],
+							"__pivot": [0,0],
+							"__tags": ["positions"],
+							"__tile": null,
+							"__smartColor": "#19AD51",
+							"iid": "cf180cb0-9b00-11ef-94aa-d187ba9a710f",
+							"width": 16,
+							"height": 16,
+							"defUid": 22,
+							"px": [688,592],
+							"fieldInstances": [{ "__identifier": "name", "__type": "String", "__value": "hungover_markiss", "__tile": null, "defUid": 23, "realEditorValues": [{
+								"id": "V_String",
+								"params": ["hungover_markiss"]
+							}] }],
+							"__worldX": 688,
+							"__worldY": 592
+						},
+						{
+							"__identifier": "position",
+							"__grid": [42,37],
+							"__pivot": [0,0],
+							"__tags": ["positions"],
+							"__tile": null,
+							"__smartColor": "#19AD51",
+							"iid": "d89566c0-9b00-11ef-94aa-9b3d1a404f76",
+							"width": 16,
+							"height": 16,
+							"defUid": 22,
+							"px": [672,592],
+							"fieldInstances": [{ "__identifier": "name", "__type": "String", "__value": "hungover_player", "__tile": null, "defUid": 23, "realEditorValues": [{
+								"id": "V_String",
+								"params": ["hungover_player"]
+							}] }],
+							"__worldX": 672,
+							"__worldY": 592
 						}
 					]
 				},

@@ -1,3 +1,4 @@
+local level = require("state.level")
 local quest = require("tech.quest")
 local sound = require("tech.sound")
 local api = require("tech.railing.api")
@@ -535,7 +536,7 @@ return function()
         end
 
         api.update_quest({detective = quest.FAILED, parasites = quest.FAILED})
-        local blackout_end = api.blackout()
+        api.fade_out()
 
         for _, name in ipairs({
           "detective_intro",
@@ -565,9 +566,11 @@ return function()
         api.narration("Возможности открыть слипшиеся веки?")
         api.narration("Ты открываешь глаза.")
 
-        blackout_end()
-        -- TODO! set up Markiss scene, disable markiss ai
         c.markiss = rails.entities.markiss;
+        c.markiss.ai.in_cutscene = true
+        level.move(c.markiss, rails.positions.hungover_markiss)
+        level.move(c.player, rails.positions.hungover_player)
+        api.fade_in()
 
         api.line(c.markiss, "Друг, тебя разве не учили, что пьянка-с до добра не доведёт?")
         api.narration("Он сочувствующе смотрит, продолжаю гладить голову. Боль внутри неё не позволяет дать осмысленную реакцию.")
@@ -588,7 +591,7 @@ return function()
         api.line(c.markiss, "Пойду я в кош-тельную, уголь таскать.")
         api.line(c.markiss, "Насиделся с тобой бедовым.")
 
-        -- TODO! free markiss
+        c.markiss.ai.in_cutscene = false
         api.narration("Он уходит, оставляя тебя с больной головой и кошмарной вонью изо рта.")
         api.narration("Жаль, что твои первые свободные секунды прошли настолько сумбурно.")
         api.narration("С другой стороны, дети тоже рождаются не в самых приятных обстоятельствах.")

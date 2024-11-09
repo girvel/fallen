@@ -78,28 +78,17 @@ module_mt.__call = function(_)
       end
 
       if self._blackout_speed ~= 0 then
-        if self._blackout_speed > 0 and self.blackout_k == 1 then
-          self._blackout_resting_time = math.max(0, self._blackout_resting_time - dt)
-          if self._blackout_resting_time == 0 then
-            self._blackout_speed = -self._blackout_speed
-          end
-        elseif self._blackout_speed < 0 and self.blackout_k == 0 then
-          self._blackout_speed = 0
-        else
-          self.blackout_k = Math.median(0, 1, self.blackout_k
-            + dt * self._blackout_speed
-          )
-        end
+        self.blackout_k = Math.median(0, 1, self.blackout_k
+          + dt * self._blackout_speed
+        )
       end
     end,
 
     _blackout_speed = 0,
-    _blackout_resting_time = 0,
     blackout_k = 0,
 
-    trigger_blackout = function(self, active_time, resting_time)
-      self._blackout_speed = 2 / active_time
-      self._blackout_resting_time = resting_time or 0
+    trigger_blackout = function(self, time)
+      self._blackout_speed = 2 / time
     end,
   }
 
