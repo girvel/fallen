@@ -217,14 +217,6 @@ display.system = static(Tiny.sortedProcessingSystem({
   end,
 
   postProcess = function(self)
-    if State.gui.blackout_k > 0 then
-      display_rectangle(
-        Vector.zero,
-        {love.graphics.getDimensions()},
-        {0, 0, 0, State.gui.blackout_k}
-      )
-    end
-
     -- This is fine to be hardcoded
     if State.gui.show_fps then
       love.graphics.print("FPS: %.2f" % (1 / love.timer.getAverageDelta()), default_font, 5, 5)

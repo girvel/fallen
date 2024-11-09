@@ -66,6 +66,13 @@ module_mt.__call = function(_)
       }) do
         self[k]:initialize()
       end
+
+      self.blackout_entity = State:add({
+        position = Vector.zero,
+        view = "blackout",
+        size = Vector {love.graphics.getDimensions()},
+        sprite = {rect_color = {0, 0, 0, 0}},
+      })
     end,
 
     update = function(self, dt)
@@ -78,23 +85,28 @@ module_mt.__call = function(_)
       end
 
       if self._blackout_speed ~= 0 then
-        self.blackout_k = Math.median(0, 1, self.blackout_k
-          + dt * self._blackout_speed
-        )
+        self.blackout_entity.sprite.rect_color = {
+          0, 0, 0,
+          Math.median(
+            0, 1,
+            self.blackout_entity.sprite.rect_color[4] + dt * self._blackout_speed
+          )
+        }
       end
     end,
 
     _blackout_speed = 0,
-    blackout_k = 0,
+    blackout_entity = nil,
 
     trigger_blackout = function(self, time)
-      self._blackout_speed = 2 / time
+      self._blackout_speed = 1 / time
     end,
   }
 
   result.views, result.views_order, result.views_offset_functions = produce_views({
     {"scene", 4, 16, gui.offsets.scene},
     {"scene_fx", 1, 1, gui.offsets.scene},
+    {"blackout", 1, 1, nil},
     {"sidebar_background", 2, 1, gui.offsets.sidebar},
     {"actions", 3, 1, gui.offsets.actions},
     {"action_keys", 3, 1, gui.offsets.actions},

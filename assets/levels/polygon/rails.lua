@@ -28,13 +28,15 @@ return function(positions, entities)
           api.checkpoint_base()
           State.player.experience = experience.for_level[2]
           State.gui.creator:refresh()
+          State.gui.creator:submit()
 
           api.discover_wiki({colleague_note = true})
           api.update_quest({warmup = 3})
 
           -- decorations.lie(rails.entities.lyer, rails.positions.lower_bunk, "lower")
-          api.wait_seconds(1)
-          api.line(c.lyer, "Oh hi Mark")
+          api.fade_out()
+          api.narration("...")
+          api.fade_in()
         end,
       },
     },

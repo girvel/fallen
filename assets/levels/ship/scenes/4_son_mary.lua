@@ -431,6 +431,7 @@ return function()
             return rails.scenes.son_mary_alcohol_2:main(rails, c, true)
           end
         end
+
         api.update_quest({alcohol = 2})
       end,
     },

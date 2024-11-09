@@ -289,24 +289,22 @@ api.rotate_to_player = function(entity)
   ))
 end
 
+local FADE_DURATION = 0.5
+
 --- Trigger fade out sequence & wait for it
 --- @async
 --- @return nil
 api.fade_out = function()
-  State.gui:trigger_blackout(0.5)
-  while math.abs(State.gui.blackout_k - 1) > 0.05 do
-    coroutine.yield()
-  end
+  State.gui:trigger_blackout(FADE_DURATION)
+  api.wait_seconds(FADE_DURATION)
 end
 
 --- Trigger fade in sequence & wait for it
 --- @async
 --- @return nil
 api.fade_in = function()
-  State.gui:trigger_blackout(-0.5)
-  while math.abs(State.gui.blackout_k) > 0.05 do
-    coroutine.yield()
-  end
+  State.gui:trigger_blackout(-FADE_DURATION)
+  api.wait_seconds(FADE_DURATION)
 end
 
 return api
