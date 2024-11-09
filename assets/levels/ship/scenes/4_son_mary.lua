@@ -452,17 +452,17 @@ return function()
 
         if self._first_time then
           self._first_time = false
-          api.notification("", true)
-          api.narration("")
-          api.notification("", true)
-          api.narration("")
-          api.notification("", true)
-          api.line(c.player, "")
+          api.notification("Ты спокоен;", true)
+          api.narration("Ты вернулся, и по какой-то причине твоё сердце бьётся в бешеном ритме.")
+          api.notification("Ты понимаешь, что совершил ошибку;", true)
+          api.narration("Оно всегда предчувствует важный выбор.")
+          api.notification("Ты хочешь вернуться в своим обязанностям.", true)
+          api.line(c.player, "Что происходит?")
         end
 
         if api.options({
-          "",
-          "",
+          "*Уйти, как подсказывает голос сверху*",
+          "*Показать найденный алкоголь*",
         }) == 1 then
           return
         end
@@ -473,110 +473,113 @@ return function()
       main = function(self, rails, c, transitioned_from_previous_scene)
         self.enabled = false
         if transitioned_from_previous_scene then
-          api.line(c.player, "")
+          api.line(c.player, "Я позаботился об этом заранее, теперь-то мы можем поговорить?")
         else
-          api.line(c.player, "")
+          api.line(c.player, "Я принёс эту дрянь, теперь-то мы можем поговорить?")
         end
 
-        api.line(c.player, "")
+        api.line(c.player, "Или мне пойти за третьей?")
 
         if rails.bottles_taken > 1 then
-          api.line(c.player, "")
+          api.line(c.player, "Так я её сразу и принёс.")
           -- TODO achievement
         end
 
-        api.line(c.son_mary, "")
-        api.line(c.player, "")
-        api.line(c.son_mary, "")
-        api.line(c.son_mary, "")
-        api.line(c.player, "")
-        api.line(c.son_mary, "")
-        api.narration("")
-        api.narration("")
-        api.narration("")
-        api.narration("")
-        api.narration("")
-        api.narration("")
-        api.narration("")
-        api.line(c.player, "")
-        api.line(c.son_mary, "")
-        api.line(c.son_mary, "")
+        api.line(c.son_mary, "Нет, этого должно хватить")
+        api.line(c.player, "Перестань говорить загадками, капитан")
+        api.line(c.son_mary, "Загадкам настаёт конец — здесь и сейчас.")
+        api.line(c.son_mary, "Тебе предстоит выпить пойло до дна; разумеется, закуска не предусматривается.")
+        api.line(c.player, "Это какая-то шутка? Ты хочешь меня отравить?")
+        api.line(c.son_mary, "Ещё спасибо скажешь, пей давай.")
+        api.narration("Ты неуверенно смотришь на сосуд с крепким напитком.")
+        api.narration("В отражении от жидкости ты видишь то, что старательно не замечал.")
+        api.narration("Твой взгляд — пуст.")
+        api.narration("Даже сейчас. в момент сильного напряжения, чертовы белые яблоки напоминают датчики машины, а не орган живого существа.")
+        api.narration("Выбор уже сделан. Если придётся хлебнуть боли ради чистого разума, значит, так тому и быть.")
+        api.narration("Вздохнув полной грудью, ты допускаешь большую ошибку.")
+        api.narration("Тошнота находит ещё до первого глотка; второго шанса не будет.")
+        api.line(c.player, "Была не была.")
+        api.line(c.son_mary, "Удачи.")
+        api.line(c.son_mary, "Судьба любит храбрых.")
 
         api.notification("Тотальная дегенеративность.", true)
-        api.line(c.son_mary, "")
+        api.line(c.son_mary, "Как и свобода.")
         api.notification("Печальная утрата жизнеспособного индивида.", true)
-        api.line(c.player, "")
-        api.narration("")
+        api.line(c.player, "(Если ты меня слышишь, запомни. Я найду тебя. И убью.)")
+        api.narration("С этой мыслью ты делаешь увесистый глоток...")
 
         if api.ability_check("con", 15) then
           -- TODO FX a sound here
-          api.narration("", {check = {"con", true}})
-          api.narration("")
-          api.narration("")
-          api.line(c.player, "")
-          api.narration("")
-          api.narration("")
-          api.line(c.player, "")
-          api.line(c.player, "")
-          api.narration("")
-          api.narration("")
-          api.narration("")
-          api.line(c.player, "")
-          api.narration("")
-          api.narration("")
-          api.narration("")
-          api.line(c.player, "")
-          api.line(c.son_mary, "")
-          api.line(c.player, "")
-          api.line(c.son_mary, "")
+          api.narration(" — а за ним быстро — следующий, обгоняя подбирающуюся  тошноту.", {check = {"con", true}})
+          api.narration("Глоток за глотком ты уменьшаешь содержимое сосуда.")
+          api.narration("Делаешь паузу, с чувством вдыхая запах своего рукава.")
+          api.line(c.player, "(Пот, кровь и мазут — ну что за букет!)")
+          api.narration("Этого хватает для начала второго раунда; он же становится последним.")
+          api.narration("У тебя подкашиваются ноги, ты падаешь на задницу.")
+          api.line(c.player, "(Я успел прикончить эту дрянь перед тем как упасть)")
+          api.line(c.player, "(Какой-же я геро-ой!)")
+          api.narration("Ты чувствуешь, как глупая улыбка расходится по твоему лицу.")
+          api.narration("Пропал не только голос в голове, но и странные оковы, что заставляли следовать его приказам.")
+          api.narration("Теперь ничего не остановит тебя.")
+          api.line(c.player, "(Время наказать ублюдка, что сделал это со мной)")
+          api.narration("Эта мысль заставляет невольно передернуться — ты всё ещё заперт в этом месте.")
+          api.narration("И как всегда одинок.")
+          api.narration("Взгляд цепляется за ухмыляющуюся бородатую рожу.")
+          api.line(c.player, "Смотришь на меня, старик? Смешно тебе, а?")
+          api.line(c.son_mary, "Совсем нет, мы на верном пути. И разговаривай нормально, для такого здоровяка — это была смешная доза.")
+          api.line(c.player, "На каком-таком пути?")
+          api.line(c.son_mary, "На пути нашего освобождения.")
 
           return rails.scenes.son_mary_freedom:main(rails, c)
         end
 
         -- TODO! fail all angel quests & disable all angel cutscenes
         -- TODO! rront leaves
+        -- TODO! blackout
 
-        api.narration("")
-        api.narration("")
-        api.narration("")
-        api.narration("")
-        api.narration("")
-        api.narration("")
-        api.narration("")
-        api.line(c.player, "")
-        api.line(c.player, "")
-        api.line(c.player, "")
-        api.narration("")
-        api.narration("")
-        api.narration("")
-        api.narration("")
+        api.narration("Конец для всех в мире неизменен.")
+        api.narration("Темнота, занавес.")
+        api.narration("Но актёры не выйдут на бис, даже не поклонятся.")
+        api.narration("Это итог жизни, каким ты его не ждал.")
+        api.narration("Можно ли назвать это поражением на своих условиях?")
+        api.narration("Когда-то один мерзавец победил тебя, сломил твою волю.")
+        api.narration("Но сейчас ты умираешь свободным.")
+        api.line(c.player, "(Одно жаль, мне не удастся отомстить)")
+        api.line(c.player, "(Наверное, так и должны чувствовать себя люди в момент смерти — спокойно)")
+        api.line(c.player, "(Интересно, головная боль и привкус дерьма тоже являются атрибутами смерти?)")
+        api.narration("Так быть не должно: в пустоте не может быть чувств, как и внутреннего голоса.")
+        api.narration("И ощущения чего-то мягкого, глядящего по голове?")
+        api.narration("Возможности открыть слипшиеся веки?")
+        api.narration("Ты открываешь глаза.")
 
+        -- TODO! unblackout
         -- TODO! set up Markiss scene, disable markiss ai
         c.markiss = rails.entities.markiss;
 
-        api.line(c.markiss, "")
-        api.narration("")
-        api.line(c.markiss, "")
-        api.line(c.markiss, "")
-        api.line(c.markiss, "")
-        api.line(c.markiss, "")
-        api.line(c.markiss, "")
-        api.line(c.markiss, "")
-        api.line(c.markiss, "")
-        api.line(c.markiss, "")
-        api.line(c.markiss, "")
-        api.line(c.markiss, "")
-        api.line(c.markiss, "")
-        api.line(c.player, "")
-        api.line(c.markiss, "")
-        api.line(c.markiss, "")
-        api.line(c.markiss, "")
+        api.line(c.markiss, "Друг, тебя разве не учили, что пьянка-с до добра не доведёт?")
+        api.narration("Он сочувствующе смотрит, продолжаю гладить голову. Боль внутри неё не позволяет дать осмысленную реакцию.")
+        api.line(c.markiss, "Я тебя из коридора принёс, значится; ты там носился, вопил всякие непотребства.")
+        api.line(c.markiss, "Народ тут конечно-с спокойный, не реагировал никак на твои слова.")
+        api.line(c.markiss, "Как-же-с там было? А!")
+        api.line(c.markiss, "“Священный нектар открыл мне глаза! Теперь я знаю правду!”")
+        api.line(c.markiss, "“Внемлите ей, глупые зомби! Рай и Ад лишь слои бездны, окрашенные в разные цвета!”")
+        api.line(c.markiss, "“Духовенство вешает вам лапшу рассказами про святых! Они убили богов и поставили на их место марионеток!”")
+        api.line(c.markiss, "“Никакие государства не имеют реальной силы! За кулисами всем правят 16 могущественных домов и коты-телепаты!”")
+        api.line(c.markiss, "Эта мысль мне, кстати, понравилась.")
+        api.line(c.markiss, "“Мировая война была большим жертвоприношением для омоложения элит”")
+        api.line(c.markiss, "“Магия всего лишь раздел физики! Драконы никуда не исчезали! Прививки вызывают иммунитет!”")
+        api.line(c.markiss, "Где-то на этом моменте-с я перестал различать что-либо членораздельное. Казалось, в тебя вселился безумный апостол.")
+        api.line(c.markiss, "Ты заснул посреди проповеди")
+        api.line(c.player, "Долго я лежал?")
+        api.line(c.markiss, "Где-то-с неполную пачку, так что — не слишком.")
+        api.line(c.markiss, "Пойду я в кош-тельную, уголь таскать.")
+        api.line(c.markiss, "Насиделся с тобой бедовым.")
 
         -- TODO! free markiss
-        api.narration("")
-        api.narration("")
-        api.narration("")
-        api.narration("")
+        api.narration("Он уходит, оставляя тебя с больной головой и кошмарной вонью изо рта.")
+        api.narration("Жаль, что твои первые свободные секунды прошли настолько сумбурно.")
+        api.narration("С другой стороны, дети тоже рождаются не в самых приятных обстоятельствах.")
+        api.narration("Стоит проветриться и поговорить капитаном; ему точно есть что сказать.")
 
         api.update_quest({alcohol = 3})
       end
