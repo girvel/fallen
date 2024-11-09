@@ -159,7 +159,9 @@ return function()
           api.narration("Пообещай, что больше это не повторится.")
         end
 
-        api.line(c.player, '<hate>Я.</hate> <hate offset="2">Убью.</hate> <hate offset="4">Тебя.</hate>')
+        api.line(c.player, '<span color="e64e4b">Я.</span> ')
+        api.line(c.player, '<span color="e64e4b">Я.</span> <span color="e64e4b">Убью.</span> ')
+        api.line(c.player, '<span color="e64e4b">Я.</span> <span color="e64e4b">Убью.</span> <span color="e64e4b">Тебя.</span> ')
         api.line(c.son_mary, "Знал бы ты, как часто я это слышу")
         api.narration("Он разряжается отвратительным булькающим хохотом.")
         api.narration("Тебя переполняет желание прикончить эту тварь, но его не получается собрать в импульс — в действие.")
@@ -420,13 +422,13 @@ return function()
 
           elseif chosen_option == 5 then
             api.narration("Когда ты делаешь несколько шагов, в голове доносится шёпот капитана.")
-            api.line(c.player, "(Ты не отказался напрямую, а значит — испытываешь сомнения.)")
-            api.line(c.player, "(Это нормально для прямоходящих, осторожность делает нас сильнее.)")
-            api.line(c.player, "(Как передумаешь — возвращайся с добычей.)")
+            api.line(c.son_mary, "(Ты не отказался напрямую, а значит — испытываешь сомнения.)")
+            api.line(c.son_mary, "(Это нормально для прямоходящих, осторожность делает нас сильнее.)")
+            api.line(c.son_mary, "(Как передумаешь — возвращайся с добычей.)")
             break
 
           else  -- chosen_option == 6
-            rails.scenes.son_mary_alcohol_2:main(rails, c, true)
+            return rails.scenes.son_mary_alcohol_2:main(rails, c, true)
           end
         end
         api.update_quest({alcohol = 2})
@@ -572,6 +574,7 @@ return function()
         level.move(c.player, rails.positions.hungover_player)
         api.fade_in()
 
+        api.center_camera()
         api.line(c.markiss, "Друг, тебя разве не учили, что пьянка-с до добра не доведёт?")
         api.narration("Он сочувствующе смотрит, продолжаю гладить голову. Боль внутри неё не позволяет дать осмысленную реакцию.")
         api.line(c.markiss, "Я тебя из коридора принёс, значится; ты там носился, вопил всякие непотребства.")
