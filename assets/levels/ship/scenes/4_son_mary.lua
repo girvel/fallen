@@ -622,88 +622,88 @@ return function()
       run = function(self, rails, c)
         self.enabled = false
 
-        api.narration("")
+        api.narration("Он старается делать вид, будто не слышал твоей пьяной проповеди; ты тоже не горишь желанием поднимать эту тему.")
         self:main(rails, c)
       end,
 
       main = function(self, rails, c)
         self.enabled = false
 
-        api.narration("")
-        api.line(c.son_mary, "")
-        api.line(c.son_mary, "")
-        api.line(c.son_mary, "")
-        api.line(c.son_mary, "")
-        api.line(c.son_mary, "")
-        api.line(c.son_mary, "")
-        api.line(c.son_mary, "")
-        api.line(c.son_mary, "")
-        api.line(c.son_mary, "")
-        api.line(c.son_mary, "")
-        api.line(c.son_mary, "")
-        api.line(c.son_mary, "")
-        api.line(c.son_mary, "")
-        api.line(c.son_mary, "")
-        api.line(c.son_mary, "")
-        api.line(c.son_mary, "")
-        api.line(c.son_mary, "")
-        api.line(c.son_mary, "")
-        api.line(c.son_mary, "")
-        api.line(c.son_mary, "")
-        api.line(c.son_mary, "")
-        api.line(c.son_mary, "")
-        api.line(c.son_mary, "")
+        api.narration("Капитан откашливается, пузырьки расходятся по стеклянной колбе.")
+        api.line(c.son_mary, "Итак, теперь мы стали напарниками поневоле, мне стоит представиться.")
+        api.line(c.son_mary, "Я — Сон Мари. Народное прозвище — легендарный капитан с дальних островов.")
+        api.line(c.son_mary, "Длинное и незвучное, правда? Зато даёт исчерпывающую информацию.")
+        api.line(c.son_mary, "Всякой черни на архипелагах известно: Сон Мари грабит суда, убивает людей и портит девок.")
+        api.line(c.son_mary, "Разумеется, всё это брехня, девки мне осточертели столетия назад")
+        api.line(c.son_mary, "А насчёт остального... Как видишь, сейчас я не в состоянии достойно заниматься своим ремеслом")
+        api.line(c.son_mary, "Несколько лет назад мой корабль потерпел крушение в войне со стихией")
+        api.line(c.son_mary, "Я никогда не был тем, кто держится за вещи, хоть в наше время лишь пара мастеров смогут повторить мой")
+        api.line(c.son_mary, "Большинство верфей теперь ваяют бездушные машины, внутри которых не слышно плача чаек")
+        api.line(c.son_mary, "И не поймешь что плывешь по морю, а? Или как сейчас говорят — идёшь.")
+        api.line(c.son_mary, "Полнейшая деградация, ходят тупоголовые курицы по загону, а корабль плывёт по волнам — как лебедь.")
+        api.line(c.son_mary, "Кхм, я отвлекся...")
+        api.line(c.son_mary, "Самой большой потерей был не корабль, а моя команда")
+        api.line(c.son_mary, "Это были настоящие профи, морские волки")
+        api.line(c.son_mary, "Ладно, не время душу изливать по мёртвым; самое страшное было потом")
+        api.line(c.son_mary, "Меня поймали враги, коих я всегда имел немало; сам понимаешь, живу долго, а обида часто переходит по наследству.")
+        api.line(c.son_mary, "Им было мало убить, они хотели чтобы я вечно страдал в самом немощном состоянии из возможных")
+        api.line(c.son_mary, "Но их погубила собственная жадность: нашёлся клиент, которому срочно нужен был капитан высшего ранга")
+        api.line(c.son_mary, "Этим клиентом был наш тюремщик, наш общий враг.")
+        api.line(c.son_mary, "Он ждёт, что мы приплывём в его порт, где, держу пари, нас уже готовятся встречать")
+        api.line(c.son_mary, "Морской чёрт им в помощь!")
+        api.line(c.son_mary, "Мы пустим этот чёртово ведро по МОЕМУ курсу, отсечём все планы ублюдка-тюремщика")
+        api.line(c.son_mary, "Ну! Не молчи же! Ответь! Ты со мной?")
 
         local chosen_option = api.options({
-          "",
-          "",
-          "",
-          "",
+          "Не думаю, что мне по пути с таким как ты",
+          "Даже к дьяволу в семью, лишь бы выбраться отсюда",
+          "Мне нужно это обдумать, вдруг есть другой выход",
+          "Сперва обсуждение — потом решение, будем ли мы двигаться по <hate>моему</hate> курсу",
         })
 
         if chosen_option == 1 then
-          api.line(c.son_mary, "")
-          api.line(c.son_mary, "")
-          api.line(c.son_mary, "")
-          api.line(c.son_mary, "")
+          api.line(c.son_mary, "Мы не свадьбу обсуждаем, а побег, перестань изображать из себя ангелочка")
+          api.line(c.son_mary, "Я с первого взгляда понял, что ты убийца")
+          api.line(c.son_mary, "Поверь мне, я в таких вещах разбираюсь")
+          api.line(c.son_mary, "И пока ты обиженно не ушёл, чтобы потом снова приползти, ответь на такой вопрос...")
         elseif chosen_option == 2 then
-          api.line(c.son_mary, "")
-          api.line(c.son_mary, "")
-          api.line(c.son_mary, "")
+          api.line(c.son_mary, "Профессиональный подход, но от брака откажусь")
+          api.line(c.son_mary, "Я слишком стар для этого дерьма")
+          api.line(c.son_mary, "И раз уж ты согласился — есть вопрос...")
         elseif chosen_option == 3 then
-          api.line(c.son_mary, "")
-          api.line(c.son_mary, "")
-          api.line(c.son_mary, "")
-          api.line(c.son_mary, "")
+          api.line(c.son_mary, "Думай сколько угодно, но тебя убьют, как только мы доплывём")
+          api.line(c.son_mary, "А меня упакуют и заказной бандеролью вернут отправителю")
+          api.line(c.son_mary, "Нет уж, решай быстрее, напарник")
+          api.line(c.son_mary, "И ответь на такой вопрос...")
         else
-          api.line(c.son_mary, "")
-          api.line(c.son_mary, "")
-          api.line(c.son_mary, "")
+          api.line(c.son_mary, "О, начинаешь перетягивать одеяло?")
+          api.line(c.son_mary, "Зря, злодейский лидер из тебя не ахти, ты больше походишь на трагического антигероя")
+          api.line(c.son_mary, "А к обсуждению я готов прямо сейчас, вот только ответь на вопрос...")
         end
 
-        api.narration("")
+        api.narration("У тебя есть имя? Как к тебе обращаться?")
 
         while c.son_mary.player_name == nil do
           chosen_option = api.options({
-            "",
+            "Что? Мне без разницы, называй как хочешь.",
             '"%s"' % c.player.real_name,
-            "",
+            "*придумать кодовое имя*",
           })
 
           if chosen_option == 1 then
-            api.line(c.son_mary, "")
-            c.son_mary.player_name = ""
+            api.line(c.son_mary, "Хорошо, будешь — Гаспар; хорошее имя для надежного союзника")
+            c.son_mary.player_name = "Гаспар"
           elseif chosen_option == 2 then
-            api.line(c.son_mary, "" % c.player.real_name)
+            api.line(c.son_mary, "%s? Не подходит тебе это имя, но как скажешь." % c.player.real_name)
           else
             local name = api.request_text()
-            if name == "" then
-              api.line(c.son_mary, "")
+            if name == "сон мари" then
+              api.line(c.son_mary, "Сон Мари? Хорошо, будь по твоему.")
               -- TODO FX scary face?
-              api.line(c.son_mary, "")
-              api.line(c.son_mary, "")
+              api.line(c.son_mary, "Такого ответа ты ждал, а?")
+              api.line(c.son_mary, "Ещё раз. Имя.")
             else
-              api.line(c.son_mary, "" % {name, name, name})
+              api.line(c.son_mary, "%s? Ты это на ходу придумал? Ну %s, так %s, не мне же так называться." % {name, name, name})
               c.son_mary.player_name = name
             end
           end
