@@ -19,6 +19,7 @@ module_mt.__call = function(_)
   local player_base = {
     player_flag = true,
     name = "протагонист",
+    real_name = "Амфериций",
     level = 0,
     experience = -1,
     max_hp = 1,

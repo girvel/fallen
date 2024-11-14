@@ -1,3 +1,4 @@
+local actions = require("mech.creature.actions")
 local level = require("state.level")
 local quest = require("tech.quest")
 local sound = require("tech.sound")
@@ -381,6 +382,8 @@ return function()
             api.line(c.son_mary, "Выбор за тобой.")
 
           elseif chosen_option == 4 then
+            c.player:rotate("down")
+            c.player:act(actions.move)
             api.narration("Когда ты делаешь несколько шагов, в голове доносится шёпот капитана.")
             api.line(c.son_mary, "Хорошо, будь по-твоему, манипулятор, есть один способ.")
             api.line(c.son_mary, "Он тебе очень понравится.")
@@ -393,6 +396,7 @@ return function()
               break
             end
 
+            c.player:rotate("up")
             api.narration("Ты поворачиваешься к нему, ожидаешь чего угодно кроме...")
             -- TODO FX soft shaders
             api.narration("...покорности?")
@@ -517,6 +521,7 @@ return function()
         for _, name in ipairs({
           "detective_intro",
           "detective_notification",
+          "parasites_start",
         }) do
           rails.scenes[name].enabled = false
         end
@@ -527,7 +532,7 @@ return function()
 
         State:remove(rails.entities.engineer_3)
 
-        if api.ability_check("con", 15) then
+        if api.ability_check("con", 15) or true then  -- TODO! RM
           -- TODO FX a sound here
           api.narration(" — а за ним быстро — следующий, обгоняя подбирающуюся  тошноту.", {check = {"con", true}})
           api.narration("Глоток за глотком ты уменьшаешь содержимое сосуда.")
@@ -628,6 +633,7 @@ return function()
 
       main = function(self, rails, c)
         self.enabled = false
+        api.update_quest({alcohol = quest.COMPLETED})
 
         api.narration("Капитан откашливается, пузырьки расходятся по стеклянной колбе.")
         api.line(c.son_mary, "Итак, теперь мы стали напарниками поневоле, мне стоит представиться.")
@@ -681,7 +687,7 @@ return function()
           api.line(c.son_mary, "А к обсуждению я готов прямо сейчас, вот только ответь на вопрос...")
         end
 
-        api.narration("У тебя есть имя? Как к тебе обращаться?")
+        api.line(c.son_mary, "У тебя есть имя? Как к тебе обращаться?")
 
         while c.son_mary.player_name == nil do
           chosen_option = api.options({
@@ -695,6 +701,7 @@ return function()
             c.son_mary.player_name = "Гаспар"
           elseif chosen_option == 2 then
             api.line(c.son_mary, "%s? Не подходит тебе это имя, но как скажешь." % c.player.real_name)
+            c.son_mary.player_name = c.player.real_name
           else
             local name = api.request_text()
             if name == "сон мари" then
@@ -708,6 +715,8 @@ return function()
             end
           end
         end
+
+        return rails.scenes.son_mary_ally:run(rails, c)
       end,
     },
   }
