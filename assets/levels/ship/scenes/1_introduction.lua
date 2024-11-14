@@ -117,26 +117,6 @@ return function()
         api.line(State.player, comments[2][sorted_abilities[5][1]])
         api.line(State.player, comments[3][sorted_abilities[1][1]])
         api.line(State.player, "Как меня зовут?")
-        State.player.ai.in_cutscene = false
-        rails.scenes.after_naming.enabled = true
-        State.gui.text_input.active = true
-      end,
-    },
-
-    after_naming = {
-      name = "After player chose his name",
-      enabled = false,
-      start_predicate = function(self, rails, dt)
-        return not State.gui.text_input.active
-      end,
-
-      run = function(self, rails)
-        self.enabled = false
-        State.player.ai.in_cutscene = true
-
-        local name = State.gui.text_input.text:strip():utf_lower()
-        State.player.real_name = name
-        State.gui.text_input.text = ""
 
         local easter_eggs = {
           ["алгенус"] = "Точно нет, это имя совершенно ко мне не относится; не хочу иметь с этим именем что-то общее.",
@@ -146,12 +126,14 @@ return function()
           ["маркисс"] = "Я что, похож на кота? Нет, другое.",
         }
 
-        if easter_eggs[name] then
+        local name
+        while true do
+          name = api.request_text()
+          if not easter_eggs[name] then break end
           api.line(State.player, easter_eggs[name])
-          self.enabled = true
           State.gui.text_input.active = true
-          return
         end
+        State.player.real_name = name
 
         api.line(State.player, "Хм, не очень подходит; впрочем, имя не выбирают")
 

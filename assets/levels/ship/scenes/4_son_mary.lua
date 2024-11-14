@@ -696,8 +696,7 @@ return function()
           elseif chosen_option == 2 then
             api.line(c.son_mary, "" % c.player.real_name)
           else
-            -- TODO! choosing the name
-            local name  -- = ...
+            local name = api.request_text()
             if name == "" then
               api.line(c.son_mary, "")
               -- TODO FX scary face?

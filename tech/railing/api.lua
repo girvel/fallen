@@ -307,4 +307,15 @@ api.fade_in = function()
   api.wait_seconds(FADE_DURATION)
 end
 
+--- Ask player to input text
+--- @async
+--- @return string text lowercase text stripped of spaces
+api.request_text = function()
+  State.gui.text_input.active = true
+  while State.gui.text_input.active do coroutine.yield() end
+  local result = State.gui.text_input.text:strip():utf_lower()
+  State.gui.text_input.text = ""
+  return result
+end
+
 return api
