@@ -15,6 +15,8 @@
 ---
 --- @field inventory? {[string]: table} single-item displayable inventory slots
 ---
+--- @field ai? ai
+---
 --- @field boring_flag? true disable logging `State:remove`
 --- @field creature_flag? true entity was created as mech.creature
 ---

@@ -416,9 +416,8 @@ return function()
             api.narration("Сложно сказать, когда ты чувствовал это в последний раз.")
             api.line(c.son_mary, "Сейчас мне не нужны рабы.")
             api.line(c.son_mary, "И теперь мы можем поговорить по-настоящему.")
-            -- TODO FX freedom speech
-            -- rails.scenes.son_mary_freedom:run(rails, c)
-            error(404)
+
+            return rails.scenes.son_mary_freedom:main(rails, c)
 
           elseif chosen_option == 5 then
             api.narration("Когда ты делаешь несколько шагов, в голове доносится шёпот капитана.")
@@ -513,6 +512,21 @@ return function()
         api.line(c.player, "(Если ты меня слышишь, запомни. Я найду тебя. И убью.)")
         api.narration("С этой мыслью ты делаешь увесистый глоток...")
 
+        api.update_quest({detective = quest.FAILED, parasites = quest.FAILED})
+
+        for _, name in ipairs({
+          "detective_intro",
+          "detective_notification",
+        }) do
+          rails.scenes[name].enabled = false
+        end
+
+        for _, i in ipairs({1, 2, 4}) do
+          rails.entities["engineer_" .. i].interact = nil
+        end
+
+        State:remove(rails.entities.engineer_3)
+
         if api.ability_check("con", 15) then
           -- TODO FX a sound here
           api.narration(" — а за ним быстро — следующий, обгоняя подбирающуюся  тошноту.", {check = {"con", true}})
@@ -538,21 +552,7 @@ return function()
           return rails.scenes.son_mary_freedom:main(rails, c)
         end
 
-        api.update_quest({detective = quest.FAILED, parasites = quest.FAILED})
         api.fade_out()
-
-        for _, name in ipairs({
-          "detective_intro",
-          "detective_notification",
-        }) do
-          rails.scenes[name].enabled = false
-        end
-
-        for _, i in ipairs({1, 2, 4}) do
-          rails.entities["engineer_" .. i].interact = nil
-        end
-
-        State:remove(rails.entities.engineer_3)
 
         api.narration("Конец для всех в мире неизменен.")
         api.narration("Темнота, занавес.")
@@ -603,6 +603,113 @@ return function()
 
         api.update_quest({alcohol = 3})
       end
+    },
+
+    son_mary_freedom = {
+      name = "Son Mary: freedom",
+      enabled = true,
+
+      characters = {
+        son_mary = {},
+        player = {},
+      },
+
+      start_predicate = function(self, rails, dt, c)
+        return api.get_quest("alcohol") == 3
+          and c.son_mary.interacted_by == c.player
+      end,
+
+      run = function(self, rails, c)
+        self.enabled = false
+
+        api.narration("")
+        self:main(rails, c)
+      end,
+
+      main = function(self, rails, c)
+        self.enabled = false
+
+        api.narration("")
+        api.line(c.son_mary, "")
+        api.line(c.son_mary, "")
+        api.line(c.son_mary, "")
+        api.line(c.son_mary, "")
+        api.line(c.son_mary, "")
+        api.line(c.son_mary, "")
+        api.line(c.son_mary, "")
+        api.line(c.son_mary, "")
+        api.line(c.son_mary, "")
+        api.line(c.son_mary, "")
+        api.line(c.son_mary, "")
+        api.line(c.son_mary, "")
+        api.line(c.son_mary, "")
+        api.line(c.son_mary, "")
+        api.line(c.son_mary, "")
+        api.line(c.son_mary, "")
+        api.line(c.son_mary, "")
+        api.line(c.son_mary, "")
+        api.line(c.son_mary, "")
+        api.line(c.son_mary, "")
+        api.line(c.son_mary, "")
+        api.line(c.son_mary, "")
+        api.line(c.son_mary, "")
+
+        local chosen_option = api.options({
+          "",
+          "",
+          "",
+          "",
+        })
+
+        if chosen_option == 1 then
+          api.line(c.son_mary, "")
+          api.line(c.son_mary, "")
+          api.line(c.son_mary, "")
+          api.line(c.son_mary, "")
+        elseif chosen_option == 2 then
+          api.line(c.son_mary, "")
+          api.line(c.son_mary, "")
+          api.line(c.son_mary, "")
+        elseif chosen_option == 3 then
+          api.line(c.son_mary, "")
+          api.line(c.son_mary, "")
+          api.line(c.son_mary, "")
+          api.line(c.son_mary, "")
+        else
+          api.line(c.son_mary, "")
+          api.line(c.son_mary, "")
+          api.line(c.son_mary, "")
+        end
+
+        api.narration("")
+
+        while c.son_mary.player_name == nil do
+          chosen_option = api.options({
+            "",
+            '"%s"' % c.player.real_name,
+            "",
+          })
+
+          if chosen_option == 1 then
+            api.line(c.son_mary, "")
+            c.son_mary.player_name = ""
+          elseif chosen_option == 2 then
+            api.line(c.son_mary, "" % c.player.real_name)
+          else
+            -- TODO! choosing the name
+            local name  -- = ...
+            if name == "" then
+              api.line(c.son_mary, "")
+              -- TODO FX scary face?
+              api.line(c.son_mary, "")
+              api.line(c.son_mary, "")
+            else
+              api.line(c.son_mary, "" % {name, name, name})
+              c.son_mary.player_name = name
+            end
+          end
+        end
+      end,
     },
   }
 end

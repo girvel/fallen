@@ -135,6 +135,7 @@ return function()
         State.player.ai.in_cutscene = true
 
         local name = State.gui.text_input.text:strip():utf_lower()
+        State.player.real_name = name
         State.gui.text_input.text = ""
 
         local easter_eggs = {

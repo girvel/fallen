@@ -5,6 +5,10 @@ local hostility = require("mech.hostility")
 local cue = require("tech.cue")
 
 
+--- @class ai
+--- @field run? fun(self: ai, entity: entity, dt: number)
+--- @field in_cutscene boolean?
+
 local your_move_sound = sound.multiple("assets/sounds/your_move1", 0.5)
 
 local acting, _, static = Module("systems.acting")
@@ -70,11 +74,13 @@ acting.system = static(Tiny.processingSystem({
 
   _process_outside_combat = function(self, entity, dt)
     if not entity.ai.in_cutscene then Debug.pcall(entity.ai.run, entity.ai, entity, dt) end
+    local rest_type
     if -Query(entity.animation).current.codename:starts_with("idle") then
-      Table.extend(entity.resources, -Query(entity):get_resources("move"))
+      rest_type = "move"
     else
-      Table.extend(entity.resources, -Query(entity):get_resources("free"))
+      rest_type = "free"
     end
+    Table.extend(entity.resources, -Query(entity):get_resources(rest_type))
   end,
 
   _process_inside_combat = function(self, entity, dt)

@@ -10,6 +10,7 @@ local races = require("mech.races")
 --- @field level integer
 --- @field experience integer
 --- @field fov_radius integer
+--- @field real_name string?
 
 --- @overload fun(): player
 local player, module_mt, static = Module("state.player")
