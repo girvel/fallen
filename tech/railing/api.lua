@@ -1,3 +1,4 @@
+local gui = require("state.gui")
 local quest = require("tech.quest")
 local texting = require("tech.texting")
 local fx = require("tech.fx")
@@ -79,12 +80,11 @@ end
 --- Center camera on player
 --- @return nil
 api.center_camera = function()
+  local value = gui.offsets.scene_steeply()
   Fun.iter({"scene", "scene_fx"}):each(function(view)
-    State.gui.views[view].offset = (
-      - State.player.position * State.gui.views.scene:get_multiplier()
-      + Vector({love.graphics.getDimensions()}) / 2
-    )
+    State.gui.views[view].offset = value
   end)
+  State.gui._prev_camera_position = value
 end
 
 --- Give player multiple options to pick

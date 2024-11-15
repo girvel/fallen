@@ -2,10 +2,6 @@
     "runtime.special": {
         "love.filesystem.load": "loadfile"
     },
-    "diagnostics.neededFileStatus": {
-        // "undefined-field": "None!"
-        // "undefined-global": "None!"
-    },
     "diagnostics": {
         "globals": [
             "describe", "it",

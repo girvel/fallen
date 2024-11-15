@@ -140,7 +140,7 @@ end
 
 gui.offsets = static {}
 
-gui.offsets.scene = static .. function()
+gui.offsets.scene_steeply = static(function()
   local scene_k = State.gui.views.scene:get_multiplier()
   local window_size = Vector({love.graphics.getDimensions()})
   local border_size = (window_size / 2 - Vector.one * scene_k):map(math.floor)
@@ -148,14 +148,18 @@ gui.offsets.scene = static .. function()
   --local grid_size = State.grids.solids.size * scene_k
 
   local prev = State.gui._prev_camera_position
-  local target = -Vector.use(Math.median,
+  return -Vector.use(Math.median,
     --Vector.zero,
     player_position - window_size + border_size,
     -prev,
     player_position - border_size
     --grid_size - window_size
   )
+end)
 
+gui.offsets.scene = static .. function()
+  local target = gui.offsets.scene_steeply()
+  local prev = State.gui._prev_camera_position
   local d = target - prev
   local length = d:abs()
   return prev + (d:fully_normalized() * Math.median(3, length / 20, length)):map(math.floor)
