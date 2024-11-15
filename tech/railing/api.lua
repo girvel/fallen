@@ -240,11 +240,21 @@ api.message.temporal = function(content, params)
   return entities
 end
 
+--- Should only be called at the end of cutscenes, as it frees player's movement early
 --- @return nil
 api.autosave = function()
   Log.info("Autosave")
+  State.player.ai.in_cutscene = false
   love.custom.plan_save("last.fallen_save")
   api.notification("Игра сохранена")
+end
+
+--- Save the beginning point of the game
+--- @return nil
+api.base_save = function()
+  Log.info("Base save")
+  State.player.ai.in_cutscene = false
+  love.custom.plan_save("start.fallen_save")
 end
 
 --- Can not regress quests

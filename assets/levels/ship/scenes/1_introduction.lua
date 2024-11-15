@@ -11,7 +11,12 @@ return function()
       start_predicate = function(self, rails, dt) return true end,
 
       run = function(self, rails)
+        api.base_save()
+        coroutine.yield()
+
         self.enabled = false
+
+        coroutine.yield()
 
         State.player:rotate("up")
         State.gui.sidebar:hide()

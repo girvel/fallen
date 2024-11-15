@@ -81,8 +81,6 @@ love.load = function(args)
   end
 
   Log.info("Game is loaded")
-
-  love.custom.plan_save("start.fallen_save")
 end
 
 for callback_name, _ in pairs(
