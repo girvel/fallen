@@ -39,14 +39,15 @@ common.relative_period = function(period, dt, ...)
 end
 
 common.period = function(period, ...)
+  local now = love.timer.getTime()
   local identifier = {...}
   local start_time = common.get_by_path(common._periods, identifier)
   if not start_time then
-    start_time = love.timer.getTime()
+    start_time = now
     common.set_by_path(common._periods, identifier, start_time)
   end
-  if love.timer.getTime() - start_time > period then
-    common.set_by_path(common._periods, identifier, start_time + period)
+  if now - start_time > period then
+    common.set_by_path(common._periods, identifier, now)
     return true
   end
   return false
