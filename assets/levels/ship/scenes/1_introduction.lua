@@ -28,8 +28,6 @@ return function()
         api.narration("... не на ви деть")
         api.narration("... тебя <hate>ненавидеть</hate>")
 
-        State.gui.sidebar:show()
-
         api.narration("Эти слова повторял <hate>Я</hate>?")
         api.narration("Или они были для <hate>Меня</hate>?")
 
@@ -77,6 +75,8 @@ return function()
 
       run = function(self, rails)
         self.enabled = false
+
+        State.gui.sidebar:show()
         local comments = {
           {
             str = "Чувствую, горы могу свернуть",

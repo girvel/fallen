@@ -128,23 +128,32 @@ return Module("state.gui.sidebar", function()
         append("Второе оружие: %s\n\n" % second_weapon:to_display())
       end
 
-      local max = Table.extend({},
-        State.player:get_resources("move"),
-        State.player:get_resources("short"),
-        State.player:get_resources("long")
-      )
-
+      local shown_resources, max_resources
       do
+        local move = State.player:get_resources("move")
+        local short = State.player:get_resources("short")
+        local long = State.player:get_resources("long")
+
+        shown_resources = Table.extend({}, short, long)
+        if State.mode:get() == State.mode.combat then
+          Table.extend(shown_resources, move)
+        end
+
+        max_resources = Table.extend({}, move, short, long)
+      end
+
+      if next(shown_resources) then
         local table_render = Common.build_table(
           {"", ""},
           OrderedMap.iter(State.player.resources)
+            :filter(function(k) return shown_resources[k] end)
             :map(function(k, v)
               return {
                 translation.resources[k] or k,
                 (value_translations[v] or tostring(v))
-                  .. (max[k] == nil
+                  .. (max_resources[k] == nil
                     and ""
-                    or "/" .. (value_translations[max[k]] or tostring(max[k])))
+                    or "/" .. (value_translations[max_resources[k]] or tostring(max_resources[k])))
               }
             end)
             :totable()
@@ -157,6 +166,7 @@ return Module("state.gui.sidebar", function()
 
         local i = 3
         for k, v in Table.pairs(State.player.resources) do
+          if not shown_resources[k] then goto continue end
           local color = Colors.white()
           if highlighted[k] then
             if highlighted[k] > v then
@@ -170,6 +180,7 @@ return Module("state.gui.sidebar", function()
             "\n" .. table_render[i],
           })
           i = i + 1
+          ::continue::
         end
       end
 
