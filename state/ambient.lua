@@ -14,11 +14,13 @@ ambient._base = static {
     love.audio.setPosition(x, y, 0)
     if self.disabled then return end
     local current_track = self.current_music
-    if -Query(current_track).source:isPlaying() then return end
+    if current_track and current_track.source:isPlaying() then return end
     while #self.music > 1 and self.current_music == current_track do
       self.current_music = Random.choice(self.music)
     end
-    sound.play({self.current_music})
+    Log.trace("play", self.current_music)
+    love.audio.play(self.current_music.source)
+    Log.trace(self.current_music.source:isPlaying())
   end,
 }
 

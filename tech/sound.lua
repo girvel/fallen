@@ -7,9 +7,10 @@ Future API sketch:
   3. Stop them
   4. Store them
   5. Position them
+  6. Clone them
 
 Maybe something along the lines of:
-  local s = sounds(path)
+  local s = sound_pack(path)
     :set_looping(true)
     :set_placing(Vector {12, 42}, "large")
     :play()

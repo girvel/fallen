@@ -65,7 +65,7 @@ love.load = function(args)
   if not args.disable_ambient then
     local engine = sound("assets/sounds/ship_engine.mp3", 1)
     engine.source:setLooping(true)
-    sound.play({engine}, Vector({12, 64}), "large")
+    sound.play({engine}, Vector({12, 64}), "medium")
   end
 
   if args.resolution then
