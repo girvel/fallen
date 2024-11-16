@@ -17,7 +17,7 @@ factoring.from_atlas(tiles, "assets/sprites/atlases/tiles.png",
   } end,
   {
     "walkway", "planks", "steel_barred", "steel_barred_damaged",
-    "steel_floor", "steel_damaged", "steel_floor_dirty",
+    "steel_floor", "steel_damaged",
   }
 )
 

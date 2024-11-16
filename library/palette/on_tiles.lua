@@ -7,7 +7,7 @@ factoring.from_atlas(on_tiles, "assets/sprites/atlases/on_tiles.png", {
   view = "scene",
   layer = "items",
 }, {
-  "toilet", "magazine", "blood",
+  "toilet", "magazine", "blood", "dirt",
 })
 
 return on_tiles

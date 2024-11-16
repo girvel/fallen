@@ -79,7 +79,6 @@ return function()
 
     -- should go last to capture at least 1 tick
     if love._custom.save then
-      State.player.ai.in_cutscene = false  -- kind of a hack, but still
       game_save.write(love._custom.save)
       love._custom.save = nil
     end

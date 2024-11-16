@@ -82,7 +82,12 @@ layer_handlers = {
     local layer_palette = palette[layer_id]
     return Fun.iter(layer.gridTiles)
       :map(function(instance)
-        local result = Table.extend(layer_palette[instance.t + 1](), {
+        local factory = assert(
+          layer_palette[instance.t + 1],
+          "Entity factory %s is not defined for layer %s" % {instance.t, layer_id}
+        )
+
+        local result = Table.extend(factory(), {
           position = Vector(instance.px) / constants.CELL_DISPLAY_SIZE + Vector.one,
         })
         local rails_name = -Query(to_capture)[layer_id][result.position]
