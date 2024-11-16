@@ -81,7 +81,7 @@ local creature_methods = {
   end,
 
   rotate = function(self, direction_name)
-    Fun.iter(self.inventory or {}):chain({self = self}):each(function(slot, item)
+    Fun.pairs(self.inventory or {}):chain({self = self}):each(function(slot, item)
       if item.direction == direction_name then return end
       item.direction = direction_name
       Query(item):animate()

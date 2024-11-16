@@ -15,6 +15,8 @@ local races = require("mech.races")
 --- @overload fun(): player
 local player, module_mt, static = Module("state.player")
 
+player.DEFAULT_FOV = 15
+
 module_mt.__call = function(_)
   local player_base = {
     player_flag = true,
@@ -25,7 +27,7 @@ module_mt.__call = function(_)
     max_hp = 1,
     direction = "right",
     faction = "player",
-    fov_radius = 15,
+    fov_radius = player.DEFAULT_FOV,
     race = races.human,
 
     immortal = true,

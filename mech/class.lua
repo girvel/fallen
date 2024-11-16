@@ -90,6 +90,7 @@ class.hit_dice = static {
   hidden = true,
 
   action = static .. action {
+    codename = "hit_dice",
     get_healing_roll = function(self, entity)
       return D(entity.class.hp_die) + entity:get_modifier("con")
     end,
@@ -102,6 +103,7 @@ class.hit_dice = static {
     _run = function(self, entity)
       healing.heal(entity, self:get_healing_roll(entity):roll())
     end,
+    _get_description = action.descriptions.healing,
   },
 
   modify_resources = function(self, entity, base, rest_type)

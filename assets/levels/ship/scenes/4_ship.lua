@@ -11,6 +11,7 @@ local quest = require("tech.quest")
 local items = require("library.palette.items")
 local live  = require("library.palette.live")
 local shaders = require("tech.shaders")
+local player  = require("state.player")
 
 
 return function()
@@ -654,6 +655,32 @@ return function()
         api.notification("Разблокируй желтый рычаг на правой панели.", true)
         api.wait_seconds(3)
         api.update_quest({parasites = 2})
+      end,
+    },
+
+    {
+      name = "Change of FOV radius for water view",
+      enabled = true,
+      start_predicate = function(self, rails, dt)
+        return State.player.position[2] == rails.positions.water_fov_border_enter[2]
+          and State.player.fov_radius ~= 30
+      end,
+
+      run = function(self, rails)
+        State.player.fov_radius = 30
+      end,
+    },
+
+    {
+      name = "Change of FOV radius back after water view",
+      enabled = true,
+      start_predicate = function(self, rails, dt)
+        return State.player.position[2] == rails.positions.water_fov_border_exit[2]
+          and State.player.fov_radius ~= player.DEFAULT_FOV
+      end,
+
+      run = function(self, rails)
+        State.player.fov_radius = player.DEFAULT_FOV
       end,
     },
   }

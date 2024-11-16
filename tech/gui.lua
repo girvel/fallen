@@ -142,7 +142,7 @@ gui.action_icon = function(hotkey_data, index, frame)
       local header = self.hotkey_data.name
       local description =
         -Query(self.hotkey_data):get_description() or
-        -Query(self.hotkey_data.action):get_description()
+        -Query(self.hotkey_data.action):get_description(State.player)
 
       if not header and not description then return end
       return Html.span {
