@@ -78,6 +78,8 @@ return function()
         api.update_quest({parasites = 1})
         rails.has_valve = true
         rails.bottles_taken = 3
+
+        State.player.hp = 1
       end,
     },
 

@@ -246,7 +246,7 @@ display.system = static(Tiny.sortedProcessingSystem({
       State.player,
       (Vector({love.graphics.getDimensions()})
       - Vector({State.player.sprite.image:getDimensions()}) * scale) / 2
-      + Vector.up * 400,
+      + Vector.up * 200,
       scale
     )
 
