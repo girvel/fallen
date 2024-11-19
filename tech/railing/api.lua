@@ -71,6 +71,7 @@ end
 --- @async
 --- @param f fun(): boolean?
 --- @return nil
+--- @deprecated
 api.wait_while = function(f)
   while f() do
     coroutine.yield()

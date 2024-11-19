@@ -14,7 +14,7 @@ end
 --- @class sound
 --- @field source love.Source
 --- @field _path string
-local sound_methods = static {
+local sound_methods = {
   --- Creates a fully independent copy of the sound
   --- @param self sound
   --- @return sound
@@ -100,15 +100,9 @@ sound.multiple_cached = Memoize(sound.multiple)
 
 --- @enum (key) sound_size
 sound.sizes = {
-  small = {
-    1, 10,
-  },
-  medium = {
-    7, 20,
-  },
-  large = {
-    15, 30,
-  },
+  small = {1, 10},
+  medium = {7, 20},
+  large = {15, 30},
 }
 
 --- @deprecated

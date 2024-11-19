@@ -19,7 +19,6 @@ local mobs, _, static = Module("library.palette.mobs")
 
 mobs.player = player
 
-
 local dreamer_engineer_mixin = {
   max_hp = 22,
   base_abilities = abilities(16, 14, 12, 8, 8, 8),

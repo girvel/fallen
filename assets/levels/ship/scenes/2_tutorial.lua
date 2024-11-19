@@ -1,3 +1,4 @@
+local fx = require("tech.fx")
 local on_tiles = require("library.palette.on_tiles")
 local cue = require("tech.cue")
 local experience = require("mech.experience")
@@ -22,6 +23,7 @@ return function()
         level.move(State.player, rails.positions.checkpoint_2)
         State.player.experience = experience.for_level[2]
         State.gui.creator:refresh()
+        State.gui.creator:submit()
       end,
     },
 
@@ -102,13 +104,19 @@ return function()
     {
       name = "Phantom fight",
       enabled = true,
-      start_predicate = function(self, rails, dt)
-        return rails.entities.mirage_block.interacted_by == State.player
+
+      characters = {
+        mirage_block = {},
+        player = {},
+      },
+
+      start_predicate = function(self, rails, dt, c)
+        return c.mirage_block.interacted_by == State.player
       end,
 
-      run = function(self, rails)
+      run = function(self, rails, c)
         rails.scenes.warmup.enabled = false
-        rails.entities.mirage_block.interacted_by = nil
+        c.mirage_block.interacted_by = nil
 
         api.narration("Это небольшой, размером с тумбочку, черно-желтый куб; на его верхней грани размещено стекло.")
         api.narration("В нижней части стекла расположены три кнопки: два треугольника, смотрящие в разные стороны, и круг.")
@@ -128,11 +136,18 @@ return function()
             api.narration("После нажатия, пергамент исчезает в глубине блока, а потом снова всплывает с противоположной стороны")
           elseif o == 2 then
             self.enabled = false
-            rails.entities.mirage_block.interact = nil
+            c.mirage_block.interact = nil
+
             api.narration("Блок громко жужжит, после чего выпускает из левой грани множество световых лучей.")
             api.narration("В конце комнаты свет формирует призрачную фигуру рыцаря.")
 
+            State:add(fx(
+              "assets/sprites/fx/mirage_spawn", "fx_under", rails.positions.officer_room_enter
+            ))
+            api.wait_seconds(0.5)
+            sound("assets/sounds/phantom_appearing.mp3"):play()
             e = State:add(mobs.phantom_knight(), {position = rails.positions.officer_room_enter})
+
             if api.ability_check("arcana", 10) then
               api.narration("Это обыкновенная иллюзия, она не может причинять вряд.", {check = {"arcana", true}})
               api.narration("Должно быть, машина создает фантом на основе схемы.")
@@ -160,15 +175,15 @@ return function()
         end
 
         if State.combat then
-          api.wait_while(function() return State.combat:get_current() == State.player end)
-          api.wait_while(function() return State.combat:get_current() ~= State.player end)
+          while State.combat:get_current() == State.player do coroutine.yield() end
+          while State.combat:get_current() ~= State.player do coroutine.yield() end
           State:remove_multiple(popup)
           api.message.temporal("Это всего лишь иллюзия.")
           api.wait_seconds(2)
           api.notification("Добей иллюзию", true)
         end
 
-        api.wait_while(function() return State.combat end)
+        while State.combat do coroutine.yield() end
         api.notification("Покорми птицу в клетке", true)
         api.update_quest({warmup = 6})
 

@@ -1,6 +1,11 @@
 local animated = require("tech.animated")
 
 
+--- Create an entity from animation that exists as long as the animation is playing
+--- @param pack string | table
+--- @param layer layer
+--- @param position vector
+--- @return entity
 return function(pack, layer, position)
   local result = Table.extend(
     animated(pack),
@@ -16,5 +21,6 @@ return function(pack, layer, position)
   result:animate():next(function()
     State:remove(result)
   end)
+
   return result
 end
