@@ -55,7 +55,7 @@ display.system = static(Tiny.sortedProcessingSystem({
   end,
 
   process_grid = function(self)
-    --line_profiler.start()
+    line_profiler.start()
     if not State.mode:get().displayed_views.scene then return end
     love.graphics.setShader(-Query(State.shader).love_shader)
 
@@ -81,15 +81,17 @@ display.system = static(Tiny.sortedProcessingSystem({
 
     for x = start[1], finish[1] do
       for y = start[2], finish[2] do
-        if snapshot:is_visible_unsafe(x, y)
-          and not State.grids.tiles:fast_get(x, y) then
-            local x1, y1 = State.gui.views.scene:apply_scalar(x, y)
-            self:_process_image_sprite(
-              State.background_dummy,
-              x1, y1,
-              State.gui.views.scene.scale
-            )
+        if not snapshot:is_visible_unsafe(x, y) or State.grids.tiles:fast_get(x, y) then
+          goto continue
         end
+
+        local x1, y1 = State.gui.views.scene:apply_scalar(x, y)
+        self:_process_image_sprite(
+          State.background_dummy,
+          x1, y1,
+          State.gui.views.scene.scale
+        )
+        ::continue::
       end
     end
 
@@ -97,28 +99,30 @@ display.system = static(Tiny.sortedProcessingSystem({
       local grid = State.grids[layer]
       for x = start[1], finish[1] do
         for y = start[2], finish[2] do
-          local p = Vector {x, y}
-          if snapshot:is_visible_unsafe(x, y) then
-            local cell = grid:fast_get(x, y)
-            if not level.GRID_COMPLEX_LAYERS[layer] then cell = {cell} end
-            for _, e in ipairs(cell) do
-              local is_hidden_by_perspective = (
-                not snapshot:is_transparent(p)
-                and e.perspective_flag
-                and e.position[2] > State.player.position[2]
-              )
-              if e and not is_hidden_by_perspective then
-                self:process(e)
-              end
+          if not snapshot:is_visible_unsafe(x, y) then goto continue end
+
+          local cell = grid:fast_get(x, y)
+          if not cell then goto continue end
+
+          if not level.GRID_COMPLEX_LAYERS[layer] then cell = {cell} end
+          for _, e in ipairs(cell) do
+            local is_hidden_by_perspective = (
+              not snapshot:is_transparent_unsafe(x, y)
+              and e.perspective_flag
+              and e.position[2] > State.player.position[2]
+            )
+            if not is_hidden_by_perspective then
+              self:process(e)
             end
           end
+          ::continue::
         end
       end
     end
 
     love.graphics.setShader()
     Query(self.shader):deactivate()
-    --line_profiler.stop()
+    line_profiler.stop()
   end,
 
   --- @param entity displayable

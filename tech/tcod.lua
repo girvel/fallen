@@ -79,11 +79,11 @@ if tcod_c then
     return tcod_c.TCOD_map_is_in_fov(self._map, x - 1, y - 1)
   end
 
-  --- @param position vector
+  --- @param x integer
+  --- @param y integer
   --- @return boolean
-  snapshot_methods.is_transparent = function(self, position)
-    assert(State.grids.solids:can_fit(position))
-    return tcod_c.TCOD_map_is_transparent(self._map, position[1] - 1, position[2] - 1)
+  snapshot_methods.is_transparent_unsafe = function(self, x, y)
+    return tcod_c.TCOD_map_is_transparent(self._map, x - 1, y - 1)
   end
 
   --- @param origin vector
