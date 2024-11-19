@@ -55,7 +55,6 @@ display.system = static(Tiny.sortedProcessingSystem({
   end,
 
   process_grid = function(self)
-    line_profiler.start()
     if not State.mode:get().displayed_views.scene then return end
     love.graphics.setShader(-Query(State.shader).love_shader)
 
@@ -122,7 +121,6 @@ display.system = static(Tiny.sortedProcessingSystem({
 
     love.graphics.setShader()
     Query(self.shader):deactivate()
-    line_profiler.stop()
   end,
 
   --- @param entity displayable

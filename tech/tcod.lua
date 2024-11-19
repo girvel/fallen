@@ -15,6 +15,7 @@ ffi.cdef([[
   } TCOD_fov_algorithm_t;
 
   struct TCOD_Map *TCOD_map_new(int width, int height);
+  void TCOD_map_clear(struct TCOD_Map *map, bool transparent, bool walkable);
 
   void TCOD_map_set_properties(
     struct TCOD_Map *map, int x, int y, bool is_transparent, bool is_walkable
@@ -48,8 +49,34 @@ local tcod_c = Common.load_c_library("libtcod")
 local snapshot_methods = {}
 
 if tcod_c then
+  -- TODO! symmetrical fallback methods
+
+  --- To be called on empty grid
+  tcod.observer = function(grid)
+    local map = tcod_c.TCOD_map_new(unpack(grid.size))
+    tcod_c.TCOD_map_clear(map, true, false)
+    local snapshot = setmetatable({_map = map}, {__index = snapshot_methods})
+    return setmetatable({
+      _tcod__snapshot = snapshot,
+      _tcod__grid = grid,
+    }, {
+      __index = grid,
+      __newindex = function(self, index, value)
+        grid[index] = value
+        local x, y = unpack(index)
+        tcod_c.TCOD_map_set_properties(
+          rawget(self, "_tcod__snapshot")._map,
+          x - 1, y - 1,
+          Common.bool(not value or value.transparent_flag), not value
+        )
+      end,
+    })
+  end
+
   --- @return snapshot
   tcod.snapshot = function()
+    do return rawget(State.grids.solids, "_tcod__snapshot") end
+    -- TODO! RM rest
     local w, h = unpack(State.grids.solids.size)
     local map = tcod_c.TCOD_map_new(w, h)
     for x = 1, w do

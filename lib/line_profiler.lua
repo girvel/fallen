@@ -34,6 +34,7 @@ end
 --- @return string
 --- @deprecated
 line_profiler.report = function()
+  if not start_line or not stop_line then return "" end
   local sum = 0
   for i, value in pairs(time_spent) do
     if i > 0 then

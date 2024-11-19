@@ -2,6 +2,7 @@ local level = require("state.level")
 local combat = require("tech.combat")
 local abilities = require("mech.abilities")
 local sprite = require("tech.sprite")
+local tcod   = require("tech.tcod")
 
 
 --- @overload fun(systems: table[]): state
@@ -147,6 +148,8 @@ local state_base = {
         )
       end)
       :tomap()
+
+    self.grids.solids = tcod.observer(self.grids.solids)
 
     for _, entity in ipairs(level_data.entities) do
       local e = self:add(entity)
