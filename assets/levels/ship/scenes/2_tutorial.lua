@@ -24,6 +24,7 @@ return function()
         State.player.experience = experience.for_level[2]
         State.gui.creator:refresh()
         State.gui.creator:submit()
+        api.center_camera()
       end,
     },
 

@@ -55,7 +55,7 @@ display.system = static(Tiny.sortedProcessingSystem({
   end,
 
   process_grid = function(self)
-    line_profiler.start()
+    --line_profiler.start()
     if not State.mode:get().displayed_views.scene then return end
     love.graphics.setShader(-Query(State.shader).love_shader)
 
@@ -81,12 +81,12 @@ display.system = static(Tiny.sortedProcessingSystem({
 
     for x = start[1], finish[1] do
       for y = start[2], finish[2] do
-        local p = Vector({x, y})
-        if snapshot:is_visible(p)
-          and not State.grids.tiles:safe_get(p) then
+        if snapshot:is_visible_unsafe(x, y)
+          and not State.grids.tiles:fast_get(x, y) then
+            local x1, y1 = State.gui.views.scene:apply_scalar(x, y)
             self:_process_image_sprite(
               State.background_dummy,
-              State.gui.views.scene:apply(p),
+              x1, y1,
               State.gui.views.scene.scale
             )
         end
@@ -98,7 +98,7 @@ display.system = static(Tiny.sortedProcessingSystem({
       for x = start[1], finish[1] do
         for y = start[2], finish[2] do
           local p = Vector {x, y}
-          if snapshot:is_visible(p) then
+          if snapshot:is_visible_unsafe(x, y) then
             local cell = grid:fast_get(x, y)
             if not level.GRID_COMPLEX_LAYERS[layer] then cell = {cell} end
             for _, e in ipairs(cell) do
@@ -118,7 +118,7 @@ display.system = static(Tiny.sortedProcessingSystem({
 
     love.graphics.setShader()
     Query(self.shader):deactivate()
-    line_profiler.stop()
+    --line_profiler.stop()
   end,
 
   --- @param entity displayable
@@ -144,7 +144,8 @@ display.system = static(Tiny.sortedProcessingSystem({
     if entity.sprite.text then
       self:_process_text_sprite(entity, offset_position)
     elseif entity.sprite.image then
-      self:_process_image_sprite(entity, offset_position, current_view.scale)
+      local x, y = unpack(offset_position)
+      self:_process_image_sprite(entity, x, y, current_view.scale)
     elseif entity.sprite.rect_color then
       display_rectangle(
         offset_position,
@@ -178,21 +179,19 @@ display.system = static(Tiny.sortedProcessingSystem({
     end
   end,
 
-  _process_image_sprite = function(self, entity, offset_position, scale)
+  _process_image_sprite = function(self, entity, x, y --[[for optimization]], scale)
     local display_slot = function(slot)
       local item_sprite = -Query(entity.inventory)[slot].sprite
       if not item_sprite then return end
 
-      local anchor_offset
       local entity_anchor = -Query(entity.sprite).anchors[slot]
       local item_anchor = -Query(item_sprite).anchors.parent
       if item_anchor and entity_anchor then
-        anchor_offset = (entity_anchor - item_anchor) * scale
-      else
-        anchor_offset = Vector.zero
+        local offset = (entity_anchor - item_anchor) * scale
+        x = x + offset[1]
+        y = y + offset[2]
       end
-      local wx, wy = unpack(offset_position + anchor_offset)
-      love.graphics.draw(item_sprite.image, wx, wy, 0, scale)
+      love.graphics.draw(item_sprite.image, x, y, 0, scale)
     end
 
     local is_main_hand_in_background, is_other_hand_in_background
@@ -203,7 +202,6 @@ display.system = static(Tiny.sortedProcessingSystem({
       if is_other_hand_in_background then display_slot("other_hand") end
     end
 
-    local x, y = unpack(offset_position)
     if entity.sprite.quad then
       love.graphics.draw(entity.sprite.image, entity.sprite.quad, x, y, 0, scale)
     else
@@ -227,7 +225,8 @@ display.system = static(Tiny.sortedProcessingSystem({
       love.graphics.print("FPS: %.2f" % (1 / love.timer.getAverageDelta()), default_font, 5, 5)
     end
 
-    -- TODO probably all this bullshit should be handled through entities
+    -- TODO probably all this bullshit should be handled through entities, not hardcoded display
+    --   functions
     local mode = State.mode:get()
     if mode == State.mode.text_input then return State.gui.text_input:display() end
     if mode == State.mode.death then return self:_display_death_message() end
@@ -247,13 +246,10 @@ display.system = static(Tiny.sortedProcessingSystem({
     end
 
     local scale = 16
-    self:_process_image_sprite(
-      State.player,
-      (Vector({love.graphics.getDimensions()})
+    local x, y = unpack((Vector({love.graphics.getDimensions()})
       - Vector({State.player.sprite.image:getDimensions()}) * scale) / 2
-      + Vector.up * 200,
-      scale
-    )
+      + Vector.up * 200)
+    self:_process_image_sprite(State.player, x, y, scale)
 
     local heading_font = love.graphics.newFont("assets/fonts/joystix.monospace-regular.otf", 72)
     local subheading_font = love.graphics.newFont("assets/fonts/joystix.monospace-regular.otf", 24)

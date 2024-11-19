@@ -43,9 +43,12 @@ ffi.cdef([[
 local tcod_c = Common.load_c_library("libtcod")
 
 
+--- @class snapshot
+--- @field _map any
 local snapshot_methods = {}
 
 if tcod_c then
+  --- @return snapshot
   tcod.snapshot = function()
     local w, h = unpack(State.grids.solids.size)
     local map = tcod_c.TCOD_map_new(w, h)
@@ -61,6 +64,7 @@ if tcod_c then
     return setmetatable({_map = map}, {__index = snapshot_methods})
   end
 
+  --- @return nil
   snapshot_methods.refresh_fov = function(self)
     local px, py = unpack(State.player.position - Vector.one)
     tcod_c.TCOD_map_compute_fov(
@@ -68,16 +72,23 @@ if tcod_c then
     )
   end
 
-  snapshot_methods.is_visible = function(self, position)
-    assert(State.grids.solids:can_fit(position))
-    return tcod_c.TCOD_map_is_in_fov(self._map, position[1] - 1, position[2] - 1)
+  --- @param x integer
+  --- @param y integer
+  --- @return boolean
+  snapshot_methods.is_visible_unsafe = function(self, x, y)
+    return tcod_c.TCOD_map_is_in_fov(self._map, x - 1, y - 1)
   end
 
+  --- @param position vector
+  --- @return boolean
   snapshot_methods.is_transparent = function(self, position)
     assert(State.grids.solids:can_fit(position))
     return tcod_c.TCOD_map_is_transparent(self._map, position[1] - 1, position[2] - 1)
   end
 
+  --- @param origin vector
+  --- @param destination vector
+  --- @return vector[]
   snapshot_methods.find_path = function(self, origin, destination)
     assert(State.grids.solids:can_fit(origin))
     assert(State.grids.solids:can_fit(destination))
@@ -114,9 +125,8 @@ else
     self.player_position = State.player.position
   end
 
-  snapshot_methods.is_visible = function(self, position)
-    assert(State.grids.solids:can_fit(position))
-    assert(self.r and self.player_position)
+  snapshot_methods.is_visible_unsafe = function(self, x, y)
+    local position = Vector {x, y}
     return (position - self.player_position):abs() <= self.r
   end
 
