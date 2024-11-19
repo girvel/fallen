@@ -7,6 +7,8 @@ local prev_line_i = 0
 local prev_t = 0
 local target_file, start_line, stop_line
 
+line_profiler.time_function = os.clock
+
 --- @return nil
 --- @deprecated
 line_profiler.start = function()
@@ -15,7 +17,7 @@ line_profiler.start = function()
   start_line = info.currentline
   debug.sethook(function(_, new_line_i)
     if debug.getinfo(2, "S").source ~= target_file then return end
-    local now = love.timer.getTime()
+    local now = line_profiler.time_function()
     time_spent[prev_line_i] = (time_spent[prev_line_i] or 0) + now - prev_t
     prev_line_i = new_line_i
     prev_t = now

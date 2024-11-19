@@ -1,4 +1,5 @@
-local line_profiler = require "lib.line_profiler"
+local line_profiler = require("lib.line_profiler")
+line_profiler.time_function = love.timer.getTime
 love.graphics.setDefaultFilter("nearest", "nearest")
 require("kernel").initialize()
 
