@@ -190,12 +190,13 @@ display.system = static(Tiny.sortedProcessingSystem({
 
       local entity_anchor = -Query(entity.sprite).anchors[slot]
       local item_anchor = -Query(item_sprite).anchors.parent
+      local item_x, item_y = x, y
       if item_anchor and entity_anchor then
         local offset = (entity_anchor - item_anchor) * scale
-        x = x + offset[1]
-        y = y + offset[2]
+        item_x = item_x + offset[1]
+        item_y = item_y + offset[2]
       end
-      love.graphics.draw(item_sprite.image, x, y, 0, scale)
+      love.graphics.draw(item_sprite.image, item_x, item_y, 0, scale)
     end
 
     local is_main_hand_in_background, is_other_hand_in_background
