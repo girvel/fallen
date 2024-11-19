@@ -8,14 +8,21 @@ Future API sketch:
   4. Store them
   5. Position them
   6. Clone them
+  7. Cache them
+  8. Just play the sound in-place
 
-Maybe something along the lines of:
-  local s = sound_pack(path)
-    :set_looping(true)
-    :set_placing(Vector {12, 42}, "large")
-    :play()
-  ...
-  s:stop()
+Maybe it should be a very thin wrapper; API sketch:
+
+  sound(path, [volume])
+  some_sound:play([position, size])
+  some_sound:clone()
+  some_sound.source
+
+  sound.cached(path, [volume])
+  sound.multiple(path, [volume])
+  sound.multiple_cached(path, [volume])
+
+  @deprecated sound.play(...)
 ]]
 
 sound.methods = static {
