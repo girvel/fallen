@@ -14,7 +14,7 @@ module_mt.__call = function(_)
         return "[Enter] чтобы закончить редактирование"
       end
 
-      if not Table.contains({"free", "fight"}, State.mode:get().codename) then return "" end
+      if not Table.contains({State.mode.free, State.mode.fight}, State.mode:get()) then return "" end
 
       local interaction = interactive.get_for(State.player)
       if interaction then
