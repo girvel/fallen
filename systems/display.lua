@@ -1,6 +1,7 @@
 local animated = require("tech.animated")
 local level = require("state.level")
 local tcod = require("tech.tcod")
+local line_profiler = require("lib.line_profiler")
 
 
 --- @param position vector_base
@@ -54,13 +55,16 @@ display.system = static(Tiny.sortedProcessingSystem({
   end,
 
   process_grid = function(self)
+    line_profiler.start()
     if not State.mode:get().displayed_views.scene then return end
     love.graphics.setShader(-Query(State.shader).love_shader)
 
     -- borders --
     local view = State.gui.views.scene
     local _start = -(view.offset / view:get_multiplier()):map(math.floor)
-    local _finish = _start + (Vector({love.graphics.getDimensions()}) / view:get_multiplier()):map(math.ceil)
+    local _finish = _start + (
+      Vector({love.graphics.getDimensions()}) / view:get_multiplier()
+    ):map(math.ceil)
 
     local start = Vector.use(Math.median, Vector.one, _start - Vector.one, State.grids.solids.size)
     local finish = Vector.use(Math.median, Vector.one, _finish, State.grids.solids.size)
@@ -114,6 +118,7 @@ display.system = static(Tiny.sortedProcessingSystem({
 
     love.graphics.setShader()
     Query(self.shader):deactivate()
+    line_profiler.stop()
   end,
 
   --- @param entity displayable

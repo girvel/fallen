@@ -1,3 +1,4 @@
+local line_profiler = require "lib.line_profiler"
 love.graphics.setDefaultFilter("nearest", "nearest")
 require("kernel").initialize()
 
@@ -104,6 +105,7 @@ love.quit = function()
     State.profiler.stop()
     Log.info("===== PROFILE =====\n\n" .. State.profiler.report(100))
   end
+  Log.info(line_profiler.report())
 end
 
 Log.info("Finished setup")

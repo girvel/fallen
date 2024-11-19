@@ -79,9 +79,10 @@ local _atlases_cache = {}
 local atlas = function(path)
   local base_image = love.graphics.newImage(path)
   local canvas = love.graphics.newCanvas(base_image:getDimensions())
+  local old_canvas = love.graphics.getCanvas()
   love.graphics.setCanvas(canvas)
   love.graphics.draw(base_image)
-  love.graphics.setCanvas()
+  love.graphics.setCanvas(old_canvas)
   return canvas
 end
 
