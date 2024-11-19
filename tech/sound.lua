@@ -1,38 +1,60 @@
+--- Factory module for serializing sounds plus some convenience methods
+--- @overload fun(path: string, volume?: number): sound
 local sound, module_mt, static = Module("tech.sound")
 
---[[ 
-Future API sketch:
-  1. Play sound(s)
-  2. Loop them
-  3. Stop them
-  4. Store them
-  5. Position them
-  6. Clone them
-  7. Cache them
-  8. Just play the sound in-place
+module_mt.__call = function(_, path, volume)
+  local source = love.audio.newSource(path, "static")
+  if volume then source:setVolume(volume) end
+  return setmetatable({
+    source = source,
+    _path = path,
+  }, sound._mt)
+end
 
-Maybe it should be a very thin wrapper; API sketch:
-
-  sound(path, [volume])
-  some_sound:play([position, size])
-  some_sound:clone()
-  some_sound.source
-
-  sound.cached(path, [volume])
-  sound.multiple(path, [volume])
-  sound.multiple_cached(path, [volume])
-
-  @deprecated sound.play(...)
-]]
-
-sound.methods = static {
+--- @class sound
+--- @field source love.Source
+--- @field _path string
+local sound_methods = static {
+  --- Creates a fully independent copy of the sound
+  --- @param self sound
+  --- @return sound
   clone = function(self)
-    return sound(self._path, self.source:getVolume())
+    return setmetatable({
+      source = self.source:clone(),
+      _path = self._path,
+    }, sound._mt)
+  end,
+
+  --- @generic T: sound
+  --- @param self T
+  --- @param position vector
+  --- @param size? sound_size
+  --- @return T
+  place = function(self, position, size)
+    --- @cast self sound
+    local limits = assert(
+      sound.sizes[size or "small"],
+      "Incorrect sound size %s; sounds can be small, medium or large" % tostring(size)
+    )
+
+    self.source:setPosition(unpack(position))
+    self.source:setAttenuationDistances(unpack(limits))
+    self.source:setRolloff(2)
+    return self
+  end,
+
+  --- @generic T: sound
+  --- @param self T
+  --- @return T
+  play = function(self)
+    --- @cast self sound
+    self.source:play()
+    return self
   end,
 }
 
-sound.mt = static {
-  __index = sound.methods,
+sound._mt = static {
+  __index = sound_methods,
   __serialize = function(self)
     local path = self._path
     local volume = self.source:getVolume()
@@ -50,7 +72,7 @@ sound.mt = static {
       result.source:setLooping(looping or false)
       if result.source:getChannelCount() == 1 then
         result.source:setRelative(relative)
-        result.source:setPosition(x, y)
+        result.source:setPosition(x, y, 0)
         result.source:setRolloff(rolloff)
         result.source:setAttenuationDistances(ref, max)
       end
@@ -59,26 +81,25 @@ sound.mt = static {
   end,
 }
 
-sound.multiple = Memoize(function(path_beginning, volume)
+--- Load all sounds with full path starting with given prefix
+--- @param path_beginning string
+--- @param volume? number
+--- @return sound[]
+sound.multiple = function(path_beginning, volume)
   local _, _, directory = path_beginning:find("^(.*)/[^/]*$")
   return Fun.iter(love.filesystem.getDirectoryItems(directory))
     :map(function(filename) return directory .. "/" .. filename end)
     :filter(function(path) return path:starts_with(path_beginning) end)
     :map(function(path) return sound(path, volume or 1) end)
     :totable()
-end)
+end
 
+--- @type fun(path: string, volume?: number): sound
+sound.cached = Memoize(function(...) return module_mt.__call(nil, ...) end)
+sound.multiple_cached = Memoize(sound.multiple)
 
-module_mt.__call = Memoize(function(_, path, volume)
-  local source = love.audio.newSource(path, "static")
-  if volume then source:setVolume(volume) end
-  return setmetatable({
-    source = source,
-    _path = path,
-  }, sound.mt)
-end)
-
-sound.sizes = static .. {
+--- @enum (key) sound_size
+sound.sizes = {
   small = {
     1, 10,
   },
@@ -90,6 +111,7 @@ sound.sizes = static .. {
   },
 }
 
+--- @deprecated
 sound.play = function(head, ...)
   local sounds, volume, position, size
   if type(head) == "string" then

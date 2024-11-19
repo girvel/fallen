@@ -157,7 +157,7 @@ module_mt.__call = function(_, animation_pack, object)
     view = "scene",
 
     sounds = {
-      hit = sound.multiple("assets/sounds/hits_body", 0.3),
+      hit = sound.multiple_cached("assets/sounds/hits_body", 0.3),
     },
 
     perks = {},

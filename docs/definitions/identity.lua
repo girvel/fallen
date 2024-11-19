@@ -1,4 +1,3 @@
---- @class A
 --- @generic T
 --- @param x T
 --- @return T
