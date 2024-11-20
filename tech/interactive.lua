@@ -1,6 +1,7 @@
 local cue = require("tech.cue")
 
 
+--- @overload fun(callback: fun(self, other), params?: {highlight: boolean?}): table
 local module, module_mt, static = Module("tech.interactive")
 
 module.get_for = function(entity)

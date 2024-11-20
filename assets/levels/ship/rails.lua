@@ -61,7 +61,6 @@ return function(positions, entities)
       self.entities.engineer_1:animation_set_paused(true)
 
       State:refresh(self.entities.mirage_block, interactive.detector())
-      State:refresh(self.entities.alcohol_crate, interactive.detector(true), {name = "ящик"})
       cue.set(self.entities.alcohol_crate, "highlight", true)
 
       self.entities.razor = State:add(items.razor())

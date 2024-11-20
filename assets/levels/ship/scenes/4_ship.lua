@@ -310,17 +310,21 @@ return function()
 
             rails.bottles_taken = rails.bottles_taken + 1
             rails.source_of_first_alcohol = rails.source_of_first_alcohol or "storage_room"
-            c.alcohol_crate.interact = nil
+            c.alcohol_crate:open()
             return
           end
 
           api.narration("Ты аккуратно берёшь бутылку, делаешь шаг в сторону выхода, и...", {check = {"cha", false}})
         else  -- chosen_option == 3
-          if true or api.ability_check("perception", 12) then
+          if api.ability_check("perception", 12) or true --[[TODO!]] then
             api.line(c.player, "(Стоит немного подготовиться)", {check = {"perception", true}})
             api.narration("Охранники ведут себя циклично, как по вызубренной инструкции — кажется, даже чихают по таймеру.")
             api.narration("Ты подсчитываешь момент, когда они не смотрят;")
             api.narration("Пяткой откатываешь валяющийся на полу помидор — было бы глупо на него случайно наступить;")
+
+            rails.bottles_taken = rails.bottles_taken + 1
+            rails.source_of_first_alcohol = rails.source_of_first_alcohol or "storage_room"
+            c.alcohol_crate:open()
 
             c.player:rotate("down")
             c.player:act(actions.move)
@@ -336,10 +340,6 @@ return function()
             end
 
             api.narration("И бодрой походкой победителя выходишь из кладовой.")
-
-            rails.bottles_taken = rails.bottles_taken + 1
-            rails.source_of_first_alcohol = rails.source_of_first_alcohol or "storage_room"
-            c.alcohol_crate.interact = nil
             return
           end
 
