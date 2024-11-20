@@ -7,12 +7,13 @@ return function()
     markiss = {
       name = "Markiss dialogue",
       enabled = true,
-      start_predicate = function(self, rails, dt)
-        return rails.entities.markiss.interacted_by == State.player
+      start_predicate = function(self, rails, dt, c)
+        return c.markiss.interacted_by == c.player
       end,
 
       characters = {
         markiss = {},
+        player = {},
       },
 
       _top_level_options = {
@@ -46,7 +47,7 @@ return function()
             and "Пропустите-с, направляюсь от кош-тельной за углём"
             or "Пропустите-с, несу уголь в кош-тельную"
           )
-          api.line(State.player, "(Это… Кот?)")
+          api.line(c.player, "(Это… Кот?)")
 
           self._furry_recognized = api.ability_check("nature", 18)
           if self._furry_recognized then
@@ -148,14 +149,14 @@ return function()
 
               if chosen_option_4 == 1 then
                 if api.ability_check("persuasion", 12) then
-                  api.line(State.player, "(Такая речь запутает многих, но не меня. Поиграем по твоим правилам, кот)", {check = {"persuasion", true}})
-                  api.line(State.player, "Конечно. Друг, кле-точ-ка, общее дело. А, не напомнишь, где ключик или дверка у этой клеточки?")
+                  api.line(c.player, "(Такая речь запутает многих, но не меня. Поиграем по твоим правилам, кот)", {check = {"persuasion", true}})
+                  api.line(c.player, "Конечно. Друг, кле-точ-ка, общее дело. А, не напомнишь, где ключик или дверка у этой клеточки?")
                   api.narration("Кот серьёзно задумывается, даже перестаёт дымить.")
                   api.line(c.markiss, "Мне кажется, все двери в твоей голове. А ключи стоит искать в сердце")
                   api.narration("Ты определенно переоценил свой уровень адаптации к абстрактной беседе.")
                 else
                   api.narration("Он явно не понял с первого раза, нужно повторить вопрос несколько раз.", {check = {"persuasion", false}})
-                  api.line(State.player, "Что за клеточка? Что за общее дело? Почему ты кот? О чем ты говоришь?")
+                  api.line(c.player, "Что за клеточка? Что за общее дело? Почему ты кот? О чем ты говоришь?")
                   api.narration("Кот лениво выдыхает дым.")
                   api.line(c.markiss, "Су-е-та…")
                   api.narration("Терминальный случай, тут ответа не добиться.")
@@ -192,7 +193,7 @@ return function()
                 api.line(c.markiss, "Сам посмотри")
 
                 if api.ability_check("wis", 14) then
-                  api.line(State.player, "Не буду я в твои глаза смотреть, есть дела поважнее.", {check = {"wis", true}})
+                  api.line(c.player, "Не буду я в твои глаза смотреть, есть дела поважнее.", {check = {"wis", true}})
                 else
                   api.narration("Это существо - твой хороший друг.", {check = {"wis", false}})
                   api.narration("Были ли у тебя друзья ранее? Неважно.")
@@ -200,7 +201,7 @@ return function()
                   api.line(c.markiss, "Мы одной сути, друг-с")
                   api.narration("Внезапно он выпускает клубок густого дыма тебе в лицо.")
                   api.narration("Наваждение проходит.")
-                  api.line(State.player, "Что за черт?! Как ты это сделал?")
+                  api.line(c.player, "Что за черт?! Как ты это сделал?")
                   api.line(c.markiss, "Магия-с, друг. Магия-с.")
                   api.narration("В голову приходит осознание - ты не сможешь ему навредить. Никак.")
                   api.narration("Придётся жить в этом проклятом мире.")
@@ -222,7 +223,7 @@ return function()
               if success then
                 api.narration("Жук попал в муравейник. Но почему-то не разоряет его.", {check = {check, true}})
                 api.narration("Он таскает листочки и веточки с муравьями-рабочими.")
-                api.line(State.player, "Зачем тебе всё это? Ты не один из них.")
+                api.line(c.player, "Зачем тебе всё это? Ты не один из них.")
                 api.narration("Кот от удивления громко кашляет, глотая сигарету.")
                 api.line(c.markiss, "Это-с. Черт-с. Ахх-с.")
                 api.narration("Наконец он восстанавливает дыхание и достаёт новую сигарету.")
@@ -243,7 +244,7 @@ return function()
                   if chosen_option_3 == 1 then
                     api.line(c.markiss, "Да! И рад поделиться-с, начальник!")
                     api.line(c.markiss, "Двери-с тут кое-где хлипкие, кто сильный ударит, токмо так развалятся!")
-                    api.line(State.player, "А ты пробовал?")
+                    api.line(c.player, "А ты пробовал?")
                     api.line(c.markiss, "Нет. У меня лапки")
                   elseif chosen_option_3 == 2 then
                     api.line(c.markiss, "Выход, начальник?")
@@ -256,7 +257,7 @@ return function()
                     api.line(c.markiss, "Пойдёшь направо — точно что-то про жену...")
                     api.line(c.markiss, "Налево — что-то про коня, хотя-с логичнее было бы про мужа...")
                     api.line(c.markiss, "Про что мы говорили?")
-                    api.line(State.player, "Про выход")
+                    api.line(c.player, "Про выход")
                     api.line(c.markiss, "Не знаю я выхода, начальник! Ситуация безвыходная!")
                     api.line(c.markiss, "Хотя как говорится, выйдешь из клетки — окажешься в клетке побольше.")
                     api.line(c.markiss, "А этом случае и двери, и стенки клетки теряют всякий смысл.")
@@ -268,12 +269,12 @@ return function()
 
                     if chosen_option_4 == 1 then
                       api.line(c.markiss, "Спасибо, э, как я там тебя называл?")
-                      api.line(State.player, "Начальник, хотя зовут меня — %s" % State.player.inner_name)
+                      api.line(c.player, "Начальник, хотя зовут меня — %s" % c.player.inner_name)
                       api.line(c.markiss, "Не подходит тебе это имя, своё поищи")
-                      api.line(State.player, "А имя должно как-то подходить? Вот допустим твоё?")
+                      api.line(c.player, "А имя должно как-то подходить? Вот допустим твоё?")
                       api.line(c.markiss, "Я - Маркисс")
                       c.markiss.name = "Маркисс"
-                      api.line(State.player, "Вопросов больше не имею")
+                      api.line(c.player, "Вопросов больше не имею")
                     else  -- chosen_option_4 == 2
                       api.line(c.markiss, "Не все! Я один такой-сякой")
                     end
@@ -293,7 +294,7 @@ return function()
                 end
 
                 api.narration("Без сомнений - перед тобой один из Теневых котов.")
-                api.line(State.player, "Понятно, я, пожалуй, пойду")
+                api.line(c.player, "Понятно, я, пожалуй, пойду")
                 api.line(c.markiss, "До встречи, начальник-с!")
               end
             end  -- (2)
@@ -356,6 +357,7 @@ return function()
               api.line(c.player, "И где мне их найти?")
               api.line(c.markiss, "А ты шутник, братец!")
               api.line(c.markiss, "Знал бы я — сам нашёл.")
+              api.update_quest({sigi = 1})
             end
 
           elseif chosen_option_1 == 7 then

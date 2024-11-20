@@ -138,7 +138,7 @@ return function()
 
           local heartbeat = sound("assets/sounds/heartbeat.mp3", 1)
           heartbeat.source:setLooping(true)
-          sound.play({heartbeat})
+          heartbeat:play()
 
           api.narration("Он слишком силён, ты можешь лишь терпеть, пока он копается в твоей голове.")
           api.narration("Ощущение, будто расковыряли давно зажившую рану.")
@@ -535,7 +535,7 @@ return function()
 
         State:remove(rails.entities.engineer_3)
 
-        if api.ability_check("con", 15) then
+        if api.ability_check("con", 15) and false --[[TODO! RM]] then
           -- TODO FX a sound here
           api.narration(" — а за ним быстро — следующий, обгоняя подбирающуюся  тошноту.", {check = {"con", true}})
           api.narration("Глоток за глотком ты уменьшаешь содержимое сосуда.")

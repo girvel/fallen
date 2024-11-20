@@ -227,6 +227,7 @@ return function()
         self.enabled = false
         api.wait_seconds(0.5)
         rails:rront_runs_away()
+      self.scenes.markiss:activate_option(4)
       end,
     },
 
@@ -241,6 +242,7 @@ return function()
       run = function(self, rails)
         self.enabled = false
         rails:rront_runs_away()
+        self.scenes.markiss:activate_option(4)
       end,
     },
 

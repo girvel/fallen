@@ -98,7 +98,6 @@ return function(positions, entities)
       State:remove(self.entities.engineer_3)
       api.notification("Задача выполнена неудовлетворительно", true)
       api.update_quest({detective = quest.FAILED})
-      self.scenes.markiss:activate_option(4)
     end,
 
     notice_flask = function(self)

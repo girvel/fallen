@@ -3210,7 +3210,7 @@
 						},
 						{
 							"__identifier": "position",
-							"__grid": [26,75],
+							"__grid": [29,69],
 							"__pivot": [0,0],
 							"__tags": ["positions"],
 							"__tile": null,
@@ -3219,13 +3219,13 @@
 							"width": 16,
 							"height": 16,
 							"defUid": 22,
-							"px": [416,1200],
+							"px": [464,1104],
 							"fieldInstances": [{ "__identifier": "name", "__type": "String", "__value": "checkpoint_4", "__tile": null, "defUid": 23, "realEditorValues": [{
 								"id": "V_String",
 								"params": ["checkpoint_4"]
 							}] }],
-							"__worldX": 416,
-							"__worldY": 688
+							"__worldX": 464,
+							"__worldY": 592
 						},
 						{
 							"__identifier": "position",
