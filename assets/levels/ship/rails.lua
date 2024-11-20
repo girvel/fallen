@@ -1,3 +1,4 @@
+local quest = require("tech.quest")
 local item = require("tech.item")
 local interactive = require("tech.interactive")
 local level = require("state.level")
@@ -5,7 +6,6 @@ local railing = require("tech.railing")
 local decorations = require("library.palette.decorations")
 local items       = require("library.palette.items")
 local cue         = require("tech.cue")
-local shaders     = require("tech.shaders")
 local api = railing.api
 
 
@@ -91,6 +91,14 @@ return function(positions, entities)
       self.has_valve = true
       State:remove(self.entities.captain_door_valve)
       self.entities.guard_2.inventory.other_hand = nil
+    end,
+
+    -- maybe it can be coupled with quests into a state machine
+    rront_runs_away = function(self)
+      State:remove(self.entities.engineer_3)
+      api.notification("Задача выполнена неудовлетворительно", true)
+      api.update_quest({detective = quest.FAILED})
+      self.scenes.markiss:activate_option(4)
     end,
   })
 end

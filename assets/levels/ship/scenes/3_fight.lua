@@ -211,9 +211,7 @@ return function()
 
       run = function(self, rails)
         self.enabled = false
-        api.notification("Задача выполнена неудовлетворительно", true)
         api.discover_wiki({fought_dreamers = true})
-        api.update_quest({detective = quest.FAILED})
       end,
     },
 
@@ -228,7 +226,7 @@ return function()
       run = function(self, rails)
         self.enabled = false
         api.wait_seconds(0.5)
-        State:remove(rails.entities.engineer_3)
+        rails:rront_runs_away()
       end,
     },
 
@@ -242,9 +240,7 @@ return function()
 
       run = function(self, rails)
         self.enabled = false
-        State:remove(rails.entities.engineer_3)
-        api.notification("Задача выполнена неудовлетворительно", true)
-        api.update_quest({detective = quest.FAILED})
+        rails:rront_runs_away()
       end,
     },
 

@@ -53,14 +53,23 @@ if tcod_c then
 
   --- To be called on empty grid
   tcod.observer = function(grid)
-    local map = tcod_c.TCOD_map_new(unpack(grid.size))
-    tcod_c.TCOD_map_clear(map, true, false)
+    local w, h = unpack(grid.size)
+    local map = tcod_c.TCOD_map_new(w, h)
+    for x = 1, w do
+      for y = 1, h do
+        local e = grid:fast_get(x, y)
+        tcod_c.TCOD_map_set_properties(
+          map, x - 1, y - 1, Common.bool(not e or e.transparent_flag), not e
+        )
+      end
+    end
     local snapshot = setmetatable({_map = map}, {__index = snapshot_methods})
     return setmetatable({
       _tcod__snapshot = snapshot,
       _tcod__grid = grid,
     }, {
       __index = grid,
+
       __newindex = function(self, index, value)
         grid[index] = value
         local x, y = unpack(index)
@@ -69,6 +78,13 @@ if tcod_c then
           x - 1, y - 1,
           Common.bool(not value or value.transparent_flag), not value
         )
+      end,
+
+      __serialize = function(self)
+        local grid_copy = self._tcod__grid
+        return function()
+          return tcod.observer(grid_copy)
+        end
       end,
     })
   end

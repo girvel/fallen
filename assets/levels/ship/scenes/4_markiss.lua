@@ -14,13 +14,24 @@ return function()
         markiss = {},
       },
 
-      -- extended from other scenes
-      top_level_options = {
+      _top_level_options = {
         "Ты - Кот.",
         "Ты не похож на остальных рабочих.",
         "Расскажи подробнее, чем ты занимаешься?",
-        -- "Не видел здесь полуорка? Такой зелёный и здоровый"
       },
+
+      _inactive_options = {
+        [4] = "Не видел здесь полуорка? Такой зелёный и здоровый",
+        [5] = "Не знаешь чего полезного про Сон Мари?",
+        [6] = "",
+        [7] = "",
+        [8] = "",
+        [9] = "",
+      },
+
+      activate_option = function(self, i)
+        self._top_level_options[i] = assert(self._inactive_options[i])
+      end,
 
       _furry_recognized = nil,
       _interaction_i = 0,
@@ -101,9 +112,9 @@ return function()
           end
         end
 
-        self.top_level_options[99] = "*уйти*"
+        self._top_level_options[99] = "*уйти*"
         while true do
-          local chosen_option_1 = api.options(self.top_level_options, true)
+          local chosen_option_1 = api.options(self._top_level_options, true)
 
           if chosen_option_1 == 1 then
             api.line(c.markiss, "Действительно, друг? А я думаю, почему-c так хочется охотиться на мышей")

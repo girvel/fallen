@@ -516,7 +516,8 @@ return function()
         api.line(c.player, "(Если ты меня слышишь, запомни. Я найду тебя. И убью.)")
         api.narration("С этой мыслью ты делаешь увесистый глоток...")
 
-        api.update_quest({detective = quest.FAILED, parasites = quest.FAILED})
+        rails:rront_runs_away()
+        api.update_quest({parasites = quest.FAILED})
 
         for _, name in ipairs({
           "detective_intro",
