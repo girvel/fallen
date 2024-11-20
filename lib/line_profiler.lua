@@ -37,13 +37,13 @@ line_profiler.report = function()
   if not start_line or not stop_line then return "" end
   local sum = 0
   for i, value in pairs(time_spent) do
-    if i > 0 then
+    if i > start_line and i < stop_line then
       sum = sum + value
     end
   end
 
   local report = ""
-  for i = start_line, stop_line do
+  for i = start_line + 1, stop_line - 1 do
     local value = time_spent[i] or 0
     report = report .. ("%i\t%.2f s\t%.2f%%\n"):format(
       i, value, value / sum * 100

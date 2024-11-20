@@ -16,6 +16,7 @@ local get_all_resources = function(e)
   )
 end
 
+-- TODO figure this out; not the cleanest thing ever.
 --- @class creature: entity
 --- @field creature_flag true
 --- @field resources table<string, integer>

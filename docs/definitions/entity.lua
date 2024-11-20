@@ -13,6 +13,9 @@
 --- @field sprite? sprite
 --- @field shader? shader shader used specifically for this entity; surpasses State's shader
 ---
+--- @field hp? integer current amount of health points; hp <= 0 means death
+--- @field get_max_hp? fun(self: entity): integer calculate maximal possible amount of HP
+---
 --- @field inventory? {[string]: table} single-item displayable inventory slots
 ---
 --- @field ai? ai

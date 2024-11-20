@@ -7,6 +7,7 @@ local item = require("tech.item")
 local pipes = require("library.palette.pipes")
 local shaders = require("tech.shaders")
 local api = require("tech.railing").api
+local health = require("mech.health")
 
 
 return function()
@@ -235,7 +236,7 @@ return function()
           api.narration("И выпускаешь его содержимое наружу.")
         end
 
-        attacking.damage(State.player, 1)
+        health.damage(State.player, 1)
 
         if not rails.been_to_latrine then
           api.narration("В слезах и желчи, ты выбегаешь из фекального ада и клянешься никогда туда не возвращаться.")

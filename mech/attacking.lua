@@ -1,6 +1,6 @@
 local abilities = require("mech.abilities")
 local gui = require("tech.gui")
-local item = require("tech.item")
+local health = require("mech.health")
 
 
 local attacking, _, static = Module("mech.attacking")
@@ -38,7 +38,7 @@ attacking.attack = function(entity, target, attack_roll, damage_roll)
     damage_roll = damage_roll + D.roll(damage_roll.dice, 0)
   end
 
-  attacking.damage(target, damage_roll:roll(), is_critical)
+  health.damage(target, damage_roll:roll(), is_critical)
   return true
 end
 
@@ -50,42 +50,8 @@ attacking.attack_save = function(target, ability, save_dc, damage_roll)
     return false
   end
 
-  attacking.damage(target, damage_roll:roll())
+  health.damage(target, damage_roll:roll())
   return true
-end
-
---- Inflict fixed damage; handles hp, death and FX
---- @param target {hp: number}
---- @param damage number
---- @param is_critical boolean? whether to display damage as critical
---- @return nil
-attacking.damage = function(target, damage, is_critical)
-  damage = math.max(0, damage)
-  Log.info("damage: " .. damage)
-
-  if is_critical then
-    State:add(gui.floating_damage(damage .. "!", target.position))
-  else
-    State:add(gui.floating_damage(damage, target.position))
-  end
-
-  target.hp = target.hp - damage
-  if target.hp <= 0 then
-    Query(target):on_death()
-    if target.immortal then return end
-
-    if target.inventory then
-      for _, slot in ipairs(item.DROPPING_SLOTS) do
-        local this_item = target.inventory[slot]
-        if this_item and not this_item.disable_drop_flag then
-          item.drop(target, slot)
-        end
-      end
-    end
-
-    State:remove(target)
-    Log.info(Entity.name(target) .. " is killed")
-  end
 end
 
 return attacking

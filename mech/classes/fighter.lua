@@ -3,7 +3,7 @@ local action = require("tech.action")
 local class = require("mech.class")
 local abilities = require("mech.abilities")
 local fx = require("tech.fx")
-local healing = require("mech.healing")
+local health = require("mech.health")
 
 
 local fighter, module_mt, static = Module("mech.classes.fighter")
@@ -33,7 +33,7 @@ fighter.second_wind = static {
     _run = function(self, entity)
       State:add(fx("assets/sprites/fx/second_wind", "fx_under", entity.position))
       sound.play("assets/sounds/second_wind.mp3", .3, entity.position, "small")
-      healing.heal(entity, self:get_healing_roll(entity):roll())
+      health.heal(entity, self:get_healing_roll(entity):roll())
     end,
   },
 

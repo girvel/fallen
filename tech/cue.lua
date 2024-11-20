@@ -1,3 +1,4 @@
+local line_profiler = require("lib.line_profiler")
 local animated = require("tech.animated")
 local item = require("tech.item")
 

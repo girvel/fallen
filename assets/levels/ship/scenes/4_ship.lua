@@ -12,6 +12,7 @@ local items = require("library.palette.items")
 local live  = require("library.palette.live")
 local shaders = require("tech.shaders")
 local player  = require("state.player")
+local health  = require("mech.health")
 
 
 return function()
@@ -78,8 +79,6 @@ return function()
         api.update_quest({parasites = 1})
         rails.has_valve = true
         rails.bottles_taken = 3
-
-        State.player.hp = 1
       end,
     },
 
@@ -190,8 +189,8 @@ return function()
               api.narration("Рабочий в недоумении хватается за ручку инородного предмета. В тот же момент, полурослик падает ничком — он мертв.")
               Table.remove(c.dorm_halfling.inventory, rails.entities.razor)
               item.give(c.dorm_grunt, rails.entities.razor)
-              attacking.damage(c.dorm_grunt, 8, true)
-              attacking.damage(c.dorm_halfling, 10, true)
+              health.damage(c.dorm_grunt, 8, true)
+              health.damage(c.dorm_halfling, 10, true)
               api.narration("Толпа вмиг звереет, видимо, ошибочно посчитав тебя виновным в этой вакханалии.")
               hostility.make_hostile("dreamers_1")
             end
@@ -597,10 +596,10 @@ return function()
                   "Но остальные обороты даются легко — разумеется, по твоим меркам.",
                 }
 
-                attacking.damage(c.player, 1)
+                health.damage(c.player, 1)
                 for _, line in ipairs(lines) do
                   api.narration(line)
-                  attacking.damage(c.player, 1)
+                  health.damage(c.player, 1)
                 end
 
                 c.captain_door:open()

@@ -46,8 +46,6 @@ acting.system = static(Tiny.processingSystem({
   end,
 
   process = function(self, entity, dt)
-    self:_refresh_blood(entity)
-
     local observe = entity.ai.observe
     if observe then
       Debug.pcall(observe, entity, dt)
@@ -65,11 +63,6 @@ acting.system = static(Tiny.processingSystem({
     if -Query(State.combat):get_current() == combat.WORLD_TURN then
       self:_pass_turn()
     end
-  end,
-
-  _refresh_blood = function(self, entity)
-    if not entity.hp then return end
-    cue.set(entity, "blood", entity.hp <= entity:get_max_hp() / 2)
   end,
 
   _process_outside_combat = function(self, entity, dt)

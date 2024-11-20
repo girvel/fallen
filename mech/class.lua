@@ -2,7 +2,7 @@ local translation = require("tech.translation")
 local experience = require("mech.experience")
 local action = require("tech.action")
 local abilities = require("mech.abilities")
-local healing = require("mech.healing")
+local health = require("mech.health")
 
 
 local class, _, static = Module("mech.class")
@@ -101,7 +101,7 @@ class.hit_dice = static {
       return entity.hp < entity:get_max_hp()
     end,
     _run = function(self, entity)
-      healing.heal(entity, self:get_healing_roll(entity):roll())
+      health.heal(entity, self:get_healing_roll(entity):roll())
     end,
     _get_description = action.descriptions.healing,
   },
