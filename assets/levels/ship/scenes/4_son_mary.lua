@@ -535,7 +535,7 @@ return function()
 
         State:remove(rails.entities.engineer_3)
 
-        if api.ability_check("con", 15) and false --[[TODO! RM]] then
+        if api.ability_check("con", 15) then
           -- TODO FX a sound here
           api.narration(" — а за ним быстро — следующий, обгоняя подбирающуюся  тошноту.", {check = {"con", true}})
           api.narration("Глоток за глотком ты уменьшаешь содержимое сосуда.")

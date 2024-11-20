@@ -46,11 +46,12 @@ local tcod_c = Common.load_c_library("libtcod")
 
 --- @class snapshot
 --- @field _map any
+--- @field r integer
+--- @field px integer
+--- @field py integer
 local snapshot_methods = {}
 
 if tcod_c then
-  -- TODO! symmetrical fallback methods
-
   --- To be called on empty grid
   tcod.observer = function(grid)
     local w, h = unpack(grid.size)
@@ -92,19 +93,6 @@ if tcod_c then
   --- @return snapshot
   tcod.snapshot = function()
     do return rawget(State.grids.solids, "_tcod__snapshot") end
-    -- TODO! RM rest
-    local w, h = unpack(State.grids.solids.size)
-    local map = tcod_c.TCOD_map_new(w, h)
-    for x = 1, w do
-      for y = 1, h do
-        local e = State.grids.solids:fast_get(x, y)
-        tcod_c.TCOD_map_set_properties(
-          map, x - 1, y - 1, Common.bool(not e or e.transparent_flag), not e
-        )
-      end
-    end
-
-    return setmetatable({_map = map}, {__index = snapshot_methods})
   end
 
   --- @return nil
@@ -156,26 +144,25 @@ if tcod_c then
 else
   Log.error("Unable to locate libtcod library")
 
+  tcod.observer = function(grid)
+    return grid
+  end
+
   tcod.snapshot = function()
-    return setmetatable({
-      r = nil,
-      player_position = nil,
-    }, {__index = snapshot_methods})
+    return setmetatable({}, {__index = snapshot_methods})
   end
 
   snapshot_methods.refresh_fov = function(self)
-    self.r = State.player.fov_radius
-    self.player_position = State.player.position
+    self.r = math.floor(State.player.fov_radius * 2 / 3)
+    self.px, self.py = unpack(State.player.position)
   end
 
   snapshot_methods.is_visible_unsafe = function(self, x, y)
-    local position = Vector {x, y}
-    return (position - self.player_position):abs() <= self.r
+    return math.abs(self.px - x) <= self.r and math.abs(self.py - y) <= self.r
   end
 
-  snapshot_methods.is_transparent = function(self, position)
-    assert(State.grids.solids:can_fit(position))
-    local e = State.grids.solids:fast_get(unpack(position))
+  snapshot_methods.is_transparent_unsafe = function(self, x, y)
+    local e = State.grids.solids:fast_get(x, y)
     return Common.bool(not e or e.transparent_flag)
   end
 
