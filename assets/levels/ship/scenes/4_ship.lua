@@ -316,7 +316,7 @@ return function()
 
           api.narration("Ты аккуратно берёшь бутылку, делаешь шаг в сторону выхода, и...", {check = {"cha", false}})
         else  -- chosen_option == 3
-          if api.ability_check("perception", 12) or true --[[TODO!]] then
+          if api.ability_check("perception", 12) then
             api.line(c.player, "(Стоит немного подготовиться)", {check = {"perception", true}})
             api.narration("Охранники ведут себя циклично, как по вызубренной инструкции — кажется, даже чихают по таймеру.")
             api.narration("Ты подсчитываешь момент, когда они не смотрят;")
@@ -682,6 +682,27 @@ return function()
 
       run = function(self, rails)
         State.player.fov_radius = player.DEFAULT_FOV
+      end,
+    },
+
+    {
+      name = "Looting sigi",
+      enabled = true,
+
+      characters = {
+        player = {},
+        sigi_crate = {},
+      },
+
+      start_predicate = function(self, rails, dt, c)
+        return c.sigi_crate.interacted_by == c.player
+      end,
+
+      run = function(self, rails, c)
+        c.sigi_crate:open()
+        api.narration("Среди кучи барахла ты находишь видавшую жизнь пачку.")
+        api.narration("На этикетке изображена высокая полуорчиха в роскошном прогулочном платье, на фоне счастливые рабочие собирают табачные листья; высвецшим курсивом написано: “Дуушнарские, теперь в новом дизайне”")
+        rails:sigi_update("found")
       end,
     },
   }

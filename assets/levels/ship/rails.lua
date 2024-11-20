@@ -37,11 +37,11 @@ return function(positions, entities)
             level.move(State.player, rails.positions.checkpoint_0)
             rails.entities.captain_door:open()
 
-            rails.scenes.son_mary_meeting.enabled = false
-            rails.scenes.son_mary_curses.enabled = false
-            api.update_quest({alcohol = 1})
-            rails.bottles_taken = 1
-            rails.source_of_first_alcohol = "storage"
+            -- rails.scenes.son_mary_meeting.enabled = false
+            -- rails.scenes.son_mary_curses.enabled = false
+            -- api.update_quest({alcohol = 1})
+            -- rails.bottles_taken = 1
+            -- rails.source_of_first_alcohol = "storage"
           end,
         },
       }
@@ -93,6 +93,7 @@ return function(positions, entities)
     end,
 
     -- maybe it can be coupled with quests into a state machine
+    -- or at least all grouped somewhere
     rront_runs_away = function(self)
       State:remove(self.entities.engineer_3)
       api.notification("Задача выполнена неудовлетворительно", true)
@@ -104,6 +105,22 @@ return function(positions, entities)
       if State:exists(e) then
         cue.set(e, "highlight", true)
       end
-    end
+    end,
+
+    _sigi_found = false,
+
+    --- @param state "found" | "needed"
+    sigi_update = function(self, state)
+      if state == "found" then
+        self._sigi_found = true
+      else
+        api.update_quest({sigi = 1})
+      end
+
+      if self._sigi_found and api.get_quest("sigi") == 1 then
+        api.update_quest({sigi = 2})
+        self.scenes.markiss:activate_option(7)
+      end
+    end,
   })
 end

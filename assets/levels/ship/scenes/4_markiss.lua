@@ -1,3 +1,4 @@
+local quest = require("tech.quest")
 local cue = require("tech.cue")
 local api = require("tech.railing").api
 
@@ -335,10 +336,10 @@ return function()
 
             if api.options({
               "Знаешь что? Я устал! Сам найду, без всех этих игр, поручений и прочей дряни.",
-              "Не братец я тебе... Мне нужен ром. Расскажи, где его найти.",
+              "[Запугивание] Не братец я тебе... Мне нужен ром. Расскажи, где его найти.",
             }) == 1 then
               api.line(c.markiss, "Премного желаю-с удачи")
-            elseif api.ability_check("intimidation", 12) then
+            elseif api.ability_check("intimidation", 12) and false --[[TODO!]] then
               api.narration("Сам того не замечая, ты произносишь эти слова со скрипом зубов.", {check = {"intimidation", true}})
               api.narration("Лицо горит, брови безумно дергаются.")
               api.narration("А из ноздрей валит пар. Как же тебя всё достало!")
@@ -357,7 +358,7 @@ return function()
               api.line(c.player, "И где мне их найти?")
               api.line(c.markiss, "А ты шутник, братец!")
               api.line(c.markiss, "Знал бы я — сам нашёл.")
-              api.update_quest({sigi = 1})
+              rails:sigi_update("needed")
             end
 
           elseif chosen_option_1 == 7 then
@@ -370,6 +371,7 @@ return function()
             api.line(c.player, "А по шее?")
             api.line(c.markiss, "Но скажу — где ты сам его найдёшь! У одного из работяг, что шел в столовую, должна быть фляжка")
             api.line(c.markiss, "Там и будет твоё сокровище")
+            api.update_quest({sigi = quest.COMPLETED})
             rails:notice_flask()
 
           elseif chosen_option_1 == 8 then
