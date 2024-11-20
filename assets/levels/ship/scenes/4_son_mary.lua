@@ -90,6 +90,7 @@ return function()
 
         self.enabled = false
         rails.scenes.son_mary_curses.enabled = false
+        rails.scenes.markiss:activate_option(5)
 
         if chosen_option == 1 then
           api.line(c.son_mary, "У тебя проблемы со слухом? Могу повторить.")
@@ -225,8 +226,9 @@ return function()
         end
 
         api.update_quest({alcohol = 1})
+        rails.scenes.markiss:activate_option(6)
         rails:run_task(function()
-          api.wait_seconds(15)
+          api.wait_seconds(5)
           api.notification("Не слушай его, займись делом.", true)
         end)
       end,
@@ -559,6 +561,7 @@ return function()
         end
 
         api.fade_out()
+        rails.scenes.markiss:activate_option(9)
 
         api.narration("Конец для всех в мире неизменен.")
         api.narration("Темнота, занавес.")

@@ -1,3 +1,4 @@
+local cue = require("tech.cue")
 local api = require("tech.railing").api
 
 
@@ -296,6 +297,7 @@ return function()
                 api.line(c.markiss, "До встречи, начальник-с!")
               end
             end  -- (2)
+
           elseif chosen_option_1 == 3 then
             api.line(c.markiss, "Я-то? Сначала-с беру угля, да побольше, в хранилище")
             api.line(c.markiss, "Потом несу-тащу его в кош-тельную")
@@ -307,6 +309,7 @@ return function()
             api.line(c.markiss, "Оно когда-нибудь закончится?")
             -- TODO horror SFX
             api.line(c.markiss, "Но потом-с ты берёшь ещё одну порцию угля и снова всё хорошо.")
+
           elseif chosen_option_1 == 4 then
             api.line(c.markiss, "Бегал такой-дурной, да! Аж до потолка- подпрыгивал")
             api.line(c.markiss, "А потом я отвернулся на секундочку-с, а его и след простыл")
@@ -314,6 +317,79 @@ return function()
             api.line(c.markiss, "Такие ещё-с работать очень не любят")
             api.line(c.markiss, "Не то что я!")
             api.narration("Кот уверенно указывает на себя большим пальцем.")
+
+          elseif chosen_option_1 == 5 then
+            api.line(c.markiss, "")
+            api.line(c.markiss, "")
+            api.line(c.player, "")
+            api.line(c.markiss, "")
+            api.line(c.player, "")
+            api.line(c.markiss, "")
+            api.line(c.player, "")
+
+          elseif chosen_option_1 == 6 then
+            api.line(c.markiss, "")
+            api.line(c.markiss, "")
+            api.narration("")
+
+            if api.options({
+              "",
+              "",
+            }) == 1 then
+              api.line(c.markiss, "")
+            elseif api.ability_check("intimidation", 12) then
+              api.narration("")
+              api.narration("")
+              api.narration("")
+              api.line(c.markiss, "")
+              api.line(c.markiss, "")
+              api.line(c.markiss, "")
+              api.line(c.markiss, "")
+              api.line(c.player, "")
+              api.line(c.markiss, "")
+              rails:notice_flask()
+            else
+              api.line(c.markiss, "")
+              api.line(c.markiss, "")
+              api.line(c.markiss, "")
+              api.line(c.markiss, "")
+              api.line(c.player, "")
+              api.line(c.markiss, "")
+              api.line(c.markiss, "")
+            end
+
+          elseif chosen_option_1 == 7 then
+            api.narration("")
+            api.narration("")
+            api.narration("")
+            api.line(c.markiss, "")
+            api.line(c.player, "")
+            api.line(c.markiss, "")
+            api.line(c.player, "")
+            api.line(c.markiss, "")
+            api.line(c.markiss, "")
+            rails:notice_flask()
+
+          elseif chosen_option_1 == 8 then
+            api.line(c.markiss, "")
+            api.line(c.markiss, "")
+            api.line(c.markiss, "")
+            api.line(c.player, "")
+
+          elseif chosen_option_1 == 9 then
+            api.line(c.markiss, "")
+            api.line(c.player, "")
+            api.line(c.markiss, "")
+            api.line(c.markiss, "")
+            api.line(c.player, "")
+            api.line(c.markiss, "")
+            api.line(c.markiss, "")
+            api.line(c.markiss, "")
+            api.line(c.markiss, "")
+            api.line(c.player, "")
+            api.line(c.markiss, "")
+            api.line(c.player, "")
+
           else  -- if chosen_option_1 == 99
             break
           end  -- (1)
@@ -323,6 +399,7 @@ return function()
 
     markiss_attacked = {
       name = "Markiss attacked",
+
       enabled = true,
 
       characters = {

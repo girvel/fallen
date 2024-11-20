@@ -100,5 +100,12 @@ return function(positions, entities)
       api.update_quest({detective = quest.FAILED})
       self.scenes.markiss:activate_option(4)
     end,
+
+    notice_flask = function(self)
+      local e = self.entities.flask_dreamer
+      if State:exists(e) then
+        cue.set(e, "highlight", true)
+      end
+    end
   })
 end
