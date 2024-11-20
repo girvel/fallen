@@ -24,10 +24,10 @@ return function()
       _inactive_options = {
         [4] = "Не видел здесь полуорка? Такой зелёный и здоровый",
         [5] = "Не знаешь чего полезного про Сон Мари?",
-        [6] = "",
-        [7] = "",
-        [8] = "",
-        [9] = "",
+        [6] = "Не знаешь, где тут найти ром?",
+        [7] = "*отдать сигареты*",
+        [8] = "Мы на чертовом корабле! Ты знал об этом?",
+        [9] = "И все-таки, почему ты помог мне?",
       },
 
       activate_option = function(self, i)
@@ -319,76 +319,76 @@ return function()
             api.narration("Кот уверенно указывает на себя большим пальцем.")
 
           elseif chosen_option_1 == 5 then
-            api.line(c.markiss, "")
-            api.line(c.markiss, "")
-            api.line(c.player, "")
-            api.line(c.markiss, "")
-            api.line(c.player, "")
-            api.line(c.markiss, "")
-            api.line(c.player, "")
+            api.line(c.markiss, "Сон Мари-с? Скверный, он, скверный.")
+            api.line(c.markiss, "Имя слишком на моё похоже, я Маркисс, а он Мари-с")
+            api.line(c.player, "Совсем не похоже, он Сон Мари, а ты? Как, ещё раз?")
+            api.line(c.markiss, "Маркисс, а его имя лучше часто не произноси-с. К беде это.")
+            api.line(c.player, "Может хватит загадок? Почему к беде?")
+            api.line(c.markiss, "На Маркисс слишком похоже...")
+            api.line(c.player, "Пойду-ка я, лучше, чем полезным займусь.")
 
           elseif chosen_option_1 == 6 then
-            api.line(c.markiss, "")
-            api.line(c.markiss, "")
-            api.narration("")
+            api.line(c.markiss, "Я такие напитки не пью-с, братец, и тебе не советую")
+            api.line(c.markiss, "Пить - здоровью вредить.")
+            api.narration("Кот делает глубокую затяжку.")
 
             if api.options({
-              "",
-              "",
+              "Знаешь что? Я устал! Сам найду, без всех этих игр, поручений и прочей дряни.",
+              "Не братец я тебе... Мне нужен ром. Расскажи, где его найти.",
             }) == 1 then
-              api.line(c.markiss, "")
+              api.line(c.markiss, "Премного желаю-с удачи")
             elseif api.ability_check("intimidation", 12) then
-              api.narration("")
-              api.narration("")
-              api.narration("")
-              api.line(c.markiss, "")
-              api.line(c.markiss, "")
-              api.line(c.markiss, "")
-              api.line(c.markiss, "")
-              api.line(c.player, "")
-              api.line(c.markiss, "")
+              api.narration("Сам того не замечая, ты произносишь эти слова со скрипом зубов.", {check = {"intimidation", true}})
+              api.narration("Лицо горит, брови безумно дергаются.")
+              api.narration("А из ноздрей валит пар. Как же тебя всё достало!")
+              api.line(c.markiss, "Не кипятись, товарищ! Не знал, что настолько-с фляга свистит")
+              api.line(c.markiss, "О, фляга!")
+              api.line(c.markiss, "Я как раз видел флягу в кармане одного из рабочих")
+              api.line(c.markiss, "Там точно таится что-то согревающее")
+              api.line(c.player, "Как выглядел тот рабочий?")
+              api.line(c.markiss, "Голова дырявая у меня, товарищ, придется тебе самому поискать")
               rails:notice_flask()
             else
-              api.line(c.markiss, "")
-              api.line(c.markiss, "")
-              api.line(c.markiss, "")
-              api.line(c.markiss, "")
-              api.line(c.player, "")
-              api.line(c.markiss, "")
-              api.line(c.markiss, "")
+              api.line(c.markiss, "Совсем память плохая, братец!", {check = {"intimidation", false}})
+              api.line(c.markiss, "От этой соломы-ломы мысль хорошая не идёт")
+              api.line(c.markiss, "Найдёшь мне настоящих, Душнарских, пачку, а лучше две-с")
+              api.line(c.markiss, "Сам тебе этот Ром-с достану")
+              api.line(c.player, "И где мне их найти?")
+              api.line(c.markiss, "А ты шутник, братец!")
+              api.line(c.markiss, "Знал бы я — сам нашёл.")
             end
 
           elseif chosen_option_1 == 7 then
-            api.narration("")
-            api.narration("")
-            api.narration("")
-            api.line(c.markiss, "")
-            api.line(c.player, "")
-            api.line(c.markiss, "")
-            api.line(c.player, "")
-            api.line(c.markiss, "")
-            api.line(c.markiss, "")
+            api.narration("Он жадно хватает пачку, выплевывая предыдущую сигарету.")
+            api.narration("Когтем вскрывает хлипкую упаковку и достаёт сигарету, обернутую в плотный тёмный табачный лист.")
+            api.narration("Наконец, зажимает её пастью, поджигает и делает первую затяжку.")
+            api.line(c.markiss, "Ухх, такие больше не делают. Дуушнары теперь по высокому бизнесу, а ведь раньше-то лучше всех-всех народные вещи делали.")
+            api.line(c.player, "Ты кое-что обещал.")
+            api.line(c.markiss, "Не злись, братец, но ром тебе я не найду.")
+            api.line(c.player, "А по шее?")
+            api.line(c.markiss, "Но скажу — где ты сам его найдёшь! У одного из работяг, что шел в столовую, должна быть фляжка")
+            api.line(c.markiss, "Там и будет твоё сокровище")
             rails:notice_flask()
 
           elseif chosen_option_1 == 8 then
-            api.line(c.markiss, "")
-            api.line(c.markiss, "")
-            api.line(c.markiss, "")
-            api.line(c.player, "")
+            api.line(c.markiss, "На корабле? Хм, а мне обещали-с работу на ферме")
+            api.line(c.markiss, "И правда... Зачем столько угля на ферме...")
+            api.line(c.markiss, "Не свиньям-с же кушать")
+            api.line(c.player, "Зря я завел этот разговор")
 
           elseif chosen_option_1 == 9 then
-            api.line(c.markiss, "")
-            api.line(c.player, "")
-            api.line(c.markiss, "")
-            api.line(c.markiss, "")
-            api.line(c.player, "")
-            api.line(c.markiss, "")
-            api.line(c.markiss, "")
-            api.line(c.markiss, "")
-            api.line(c.markiss, "")
-            api.line(c.player, "")
-            api.line(c.markiss, "")
-            api.line(c.player, "")
+            api.line(c.markiss, "М-м? Помог?")
+            api.line(c.player, "Ты знаешь, о чём я говорю, ты отнёс меня в комнату и ждал, пока я приду в себя")
+            api.line(c.markiss, "Мне показалось, что мы ещё должны встретиться, в этой жизни или в следующей")
+            api.line(c.markiss, "Хотелось бы в этой. Может, на том острове, куда мы плывём")
+            api.line(c.player, "Острове? Скажи всё, что про него знаешь!")
+            api.line(c.markiss, "Ничего, как и ты! Остров, как остров")
+            api.line(c.markiss, "Религиозные культы и могущественные дома, делящие любовь народа, будто куски пирога")
+            api.line(c.markiss, "Люди, что грызут друг другу глотки за богатство и власть")
+            api.line(c.markiss, "Всё как в остальном мире")
+            api.line(c.player, "И правда. Мир не меняется")
+            api.line(c.markiss, "Мир не меняется, но можно поменяться самому, а?")
+            api.line(c.player, "Не будем торопить события.")
 
           else  -- if chosen_option_1 == 99
             break
