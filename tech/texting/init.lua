@@ -61,7 +61,7 @@ texting.popup = function(position, relation, view, content, styles, width)
     position - Vector.one * MARGIN,
     view .. "_background",
     size + Vector.one * 2 * MARGIN,
-    Colors.black()
+    Colors.black
   ))
 
   return entities

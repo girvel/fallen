@@ -33,12 +33,12 @@ tags.button = function(index, dx)
       State.gui.creator:refresh()
     end,
     on_hover = function(self)
-      self.sprite.text[1] = Colors.green()
+      self.sprite.text[1] = Colors.green
     end,
     on_hover_end = function(self)
-      self.sprite.text[1] = Colors.dark_red()
+      self.sprite.text[1] = Colors.dark_red
     end,
-    color = Colors.dark_red(),
+    color = Colors.dark_red,
   }
 end
 

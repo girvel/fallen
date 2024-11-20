@@ -47,7 +47,7 @@ sprite.image = Memoize(function(base, paint_color, anchors)
     base:mapPixel(function(x, y, r, g, b, a)
       local anchor_name = Fun.iter(Colors.anchor)
         :filter(function(name, this_anchor)
-          return Colors.equal(this_anchor(), {r, g, b})
+          return Colors.equal(this_anchor, {r, g, b})
         end)
         :nth(1)
 

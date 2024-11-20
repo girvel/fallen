@@ -31,24 +31,24 @@ module_mt.__call = function(_)
     styles = {
       default = {
         font_size = 12,
-        color = Colors.white(),
+        color = Colors.white,
       },
       a = {
         color = Colors.from_hex("3f5d92"),
       },
       hate = {
-        color = Colors.red(),
+        color = Colors.red,
         delay = 0.1,
         appearance_time = .4,
       },
       h1_prefix = {
-        color = Colors.dark_red(),
+        color = Colors.dark_red,
       },
       h2_prefix = {
-        color = Colors.dark_red(),
+        color = Colors.dark_red,
       },
       b = {
-        color = Colors.dark_yellow(),
+        color = Colors.dark_yellow,
       }
     },
 

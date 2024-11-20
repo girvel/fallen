@@ -12,7 +12,7 @@ local display_rectangle = function(position, size, color)
   love.graphics.setColor(color)
   local x, y = unpack(position)
   love.graphics.rectangle("fill", x, y, unpack(size))
-  love.graphics.setColor(Colors.absolute_white())
+  love.graphics.setColor(Colors.absolute_white)
 end
 
 local default_font = love.graphics.newFont("assets/fonts/joystix.monospace-regular.otf", 12)
@@ -177,7 +177,7 @@ display.system = static(Tiny.sortedProcessingSystem({
         love.graphics.setColor(entity.sprite.text[1])
       end
       love.graphics.line(start[1], start[2], unpack(finish))
-      love.graphics.setColor(Colors.absolute_white())
+      love.graphics.setColor(Colors.absolute_white)
     end
   end,
 
@@ -279,10 +279,10 @@ display.system = static(Tiny.sortedProcessingSystem({
     display_rectangle(
       {x, y},
       {hint_font:getWidth(content), hint_font:getHeight()},
-      Colors.black()
+      Colors.black
     )
 
-    love.graphics.print({Colors.gray(), content}, hint_font, x, y)
+    love.graphics.print({Colors.gray, content}, hint_font, x, y)
   end,
 }))
 

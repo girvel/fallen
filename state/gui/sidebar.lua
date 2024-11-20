@@ -6,8 +6,8 @@ local actions = require("mech.creature.actions")
 
 
 local COLOR = {
-  INACTIVE = Colors.gray(),
-  HOSTILE = Colors.red(),
+  INACTIVE = Colors.gray,
+  HOSTILE = Colors.red,
 }
 
 local value_translations = {
@@ -167,12 +167,12 @@ return Module("state.gui.sidebar", function()
         local i = 3
         for k, v in Table.pairs(State.player.resources) do
           if not shown_resources[k] then goto continue end
-          local color = Colors.white()
+          local color = Colors.white
           if highlighted[k] then
             if highlighted[k] > v then
-              color = Colors.red()
+              color = Colors.red
             else
-              color = Colors.light_green()
+              color = Colors.light_green
             end
           end
           append({
@@ -190,7 +190,7 @@ return Module("state.gui.sidebar", function()
           State.combat:iter_entities_only()
             :map(function(e)
               return {
-                hostility.are_hostile(State.player, e) and COLOR.HOSTILE or Colors.white(),
+                hostility.are_hostile(State.player, e) and COLOR.HOSTILE or Colors.white,
                 "\n%s %s" % {
                   State.combat:get_current() == e and "x" or "-",
                   Entity.name(e),

@@ -66,7 +66,7 @@ forms.abilities = function()
     Html.p {
       "   Свободные очки: ",
       Html.span {
-        color = creator._ability_points == 0 and Colors.white() or Colors.red(),
+        color = creator._ability_points == 0 and Colors.white or Colors.red,
         creator._ability_points,
       },
     },
@@ -93,7 +93,7 @@ progression_form = function(progression_table)
       :enumerate()
       :map(function(i, perks)
         return Html.span {
-          color = i == mixin.level and Colors.green() or nil,
+          color = i == mixin.level and Colors.green or nil,
           Fun.iter(perks)
             :filter(function(p) return not p.hidden end)
             :map(perk_form)

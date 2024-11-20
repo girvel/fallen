@@ -36,7 +36,7 @@ module_mt.__call = function(_, gui)
         "   ", Html.h1 {
           self:is_readonly()
             and "Персонаж"
-            or Html.span {color = Colors.green(), "Повышение уровня"},
+            or Html.span {color = Colors.green, "Повышение уровня"},
         },
         forms.abilities(),
         forms.race(),

@@ -1,6 +1,5 @@
 --- @alias color [number, number, number, number?]
 
---- @class __colors: {[string]: fun(): color}
 local colors, module_mt, static = Module("lib.colors")
 
 --- @param str string
@@ -28,14 +27,14 @@ colors.get = function(image_data)
       if (color[1] > 0 or color[2] > 0 or color[3] > 0)
         and color[4] > 0
         and Fun.iter(colors.anchor)
-          :all(function(_, a) return not colors.equal(color, a()) end)
+          :all(function(_, a) return not colors.equal(color, a) end)
       then
         return color
       end
     end
   end
 
-  return Colors.white()
+  return Colors.white
 end
 
 --- @param a color
@@ -68,9 +67,7 @@ colors.hex = static {
 }
 
 for k, v in pairs(colors.hex) do
-  colors[k] = function()
-    return colors.from_hex(v)
-  end
+  colors[k] = colors.from_hex(v)
 end
 
 --- @enum (key) anchor
@@ -81,13 +78,10 @@ colors.anchor_hex = {
   head = "f30000",
 }
 
---- @type {[anchor]: fun(): color}
+--- @type {[anchor]: color}
 colors.anchor = {}
 for k, v in pairs(colors.anchor_hex) do
-  -- TODO try to refactor this using immutable colors?
-  colors.anchor[k] = function()
-    return colors.from_hex(v)
-  end
+  colors.anchor[k] = colors.from_hex(v)
 end
 
 return colors

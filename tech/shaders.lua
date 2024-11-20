@@ -32,10 +32,10 @@ shaders.black_and_white_and_red = static {
     }
   ]]),
   preprocess = function(self, entity)
-    love.graphics.setColor(entity.creature_flag and Colors.red() or Colors.white())
+    love.graphics.setColor(entity.creature_flag and Colors.red or Colors.white)
   end,
   deactivate = function(self)
-    love.graphics.setColor(Colors.absolute_white())
+    love.graphics.setColor(Colors.absolute_white)
   end,
 }
 

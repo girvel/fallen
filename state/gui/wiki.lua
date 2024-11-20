@@ -102,7 +102,7 @@ return Module("state.gui.wiki", function(gui)
           :map(function(name, this_quest)
             local state_n = self.quest_states[name]
             local status = ""
-            local status_color = Colors.gray()
+            local status_color = Colors.gray
             if state_n == quest.COMPLETED then
               status = " - завершено"
               state_n = math.huge
@@ -116,7 +116,7 @@ return Module("state.gui.wiki", function(gui)
                 Html.span {
                   color = state_n > #this_quest.tasks
                     and Colors.from_hex("8b7c99")
-                    or Colors.white(),
+                    or Colors.white,
                   this_quest.header,
                 },
                 Html.span {
@@ -130,7 +130,7 @@ return Module("state.gui.wiki", function(gui)
                 :map(function(i, task)
                   return Html.span {
                     color = i == state_n
-                      and Colors.white()
+                      and Colors.white
                       or Colors.from_hex("8b7c99"),
                     Html.li {task},
                   }

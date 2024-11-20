@@ -149,7 +149,7 @@ api.saving_throw = function(ability, dc)
   local success = abilities.saving_throw(State.player, ability, dc)
 
   api.message.temporal(Html.span {
-    color = success and Colors.green() or Colors.red(),
+    color = success and Colors.green or Colors.red,
     "[%s - %s]" % {translation.abilities[ability]:upper(), success and "успех" or "провал"},
   })
 
@@ -166,7 +166,7 @@ api.ability_check_message = function(ability, dc, content_success, content_failu
 
   api.message.positional(Html.span {
     Html.span {
-      color = success and Colors.green() or Colors.red(),
+      color = success and Colors.green or Colors.red,
       "[%s - %s]" % {
         (translation.abilities[ability] or translation.skill[ability]):upper(),
         success and "успех" or "провал",

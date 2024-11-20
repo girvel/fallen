@@ -15,7 +15,7 @@ local health, module_mt, static = Module("mech.health")
 health.heal = function(target, amount)
   health.set_hp(target, math.min(target:get_max_hp(), target.hp + amount))
   if target.position then
-    State:add(gui.floating_damage("+" .. amount, target.position, Colors.light_green()))
+    State:add(gui.floating_damage("+" .. amount, target.position, Colors.light_green))
   end
 end
 

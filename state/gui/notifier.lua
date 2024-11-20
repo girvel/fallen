@@ -5,10 +5,10 @@ local sound = require("tech.sound")
 local notifier, module_mt, static = Module("state.gui.notifier")
 
 local COLOR = {
-  ORDER = Colors.yellow(),
-  NOTIFICATION = Colors.white(),
-  OLD_ORDER = Colors.dark_yellow(),
-  OLD_NOTIFICATION = Colors.gray(),
+  ORDER = Colors.yellow,
+  NOTIFICATION = Colors.white,
+  OLD_ORDER = Colors.dark_yellow,
+  OLD_NOTIFICATION = Colors.gray,
 }
 
 module_mt.__call = function(_)
