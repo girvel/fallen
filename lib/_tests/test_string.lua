@@ -1,9 +1,9 @@
-describe("lib.essential.string", function()
+describe("lib.string", function()
   _G.unpack = table.unpack
 
   local mt = {__index = {}}
   local stringx = setmetatable({}, mt)
-  require("lib.essential.string").inject(mt)
+  require("lib.string").inject(mt)
 
   describe("utf_sub", function()
     it("performs UTF8-compatible substring", function()

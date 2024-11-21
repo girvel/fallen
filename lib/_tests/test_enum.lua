@@ -1,4 +1,4 @@
-local enum = require("lib.types.enum")
+local enum = require("lib.enum")
 
 describe("Enum module", function()
   _G.unpack = table.unpack

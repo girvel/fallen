@@ -1,7 +1,7 @@
 describe("Colors", function()
   _G.unpack = table.unpack
-  _G.Module = require("lib.essential.module")
-  _G.Table = require("lib.essential.table")
+  _G.Module = require("lib.module")
+  _G.Table = require("lib.table")
   _G.Fun = require("vendor.fun")
   local colors = require("lib.colors")
 

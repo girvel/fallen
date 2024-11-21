@@ -1,4 +1,4 @@
-local promise, module_mt, static = Module("lib.types.promise")
+local promise, module_mt, static = Module("lib.promise")
 
 local promise_methods = {}
 local promise_mt = {__index = promise_methods}

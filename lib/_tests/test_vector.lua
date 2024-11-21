@@ -2,7 +2,7 @@ describe("Vector library", function()
   _G.unpack = table.unpack
   _G.Fun = require("vendor.fun")
 
-  local vector = require("lib.types.vector")
+  local vector = require("lib.vector")
 
   describe("Vector.use", function()
     it("Uses function separately on xs and ys and builds vector from the result", function()

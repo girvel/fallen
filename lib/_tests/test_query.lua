@@ -1,5 +1,5 @@
 describe("Query monad", function()
-  local query = require("lib.essential.query")
+  local query = require("lib.query")
 
   it("can perform nil-conditional indexing", function()
     local t = {

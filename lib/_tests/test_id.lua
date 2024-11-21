@@ -1,5 +1,5 @@
 describe("Id", function()
-  local id = require("lib.types.id")
+  local id = require("lib.id")
 
   it("is unique", function()
     assert.not_equal(id "123", id "123")

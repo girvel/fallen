@@ -3,7 +3,7 @@ describe("Ordered map", function()
   _G.Fun = require("vendor.fun")
 
 
-  local ordered_map = require("lib.types.ordered_map")
+  local ordered_map = require("lib.ordered_map")
 
   it("works", function()
     local t = ordered_map({a = 1})

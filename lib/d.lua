@@ -1,4 +1,4 @@
-local module, module_mt, static = Module("lib.types.d")
+local module, module_mt, static = Module("lib.d")
 
 local d_methods = static {}
 module.d_mt = static {__index = d_methods}

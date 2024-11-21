@@ -143,7 +143,7 @@ end
 
 tablex.pairs = function(t)
   assert(type(t) == "table")
-  local ordered_map = require("lib.types.ordered_map")
+  local ordered_map = require("lib.ordered_map")
   if ordered_map.is(t) then return ordered_map.pairs(t) end
   -- TODO handle this in Lua 5.3 style w/ __pairs & __ipairs
   return pairs(t)

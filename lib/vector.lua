@@ -109,7 +109,7 @@ end
 vector.mt.__serialize = function(self)
   local x, y = unpack(self)
   return function()
-    local _type = require("lib.types.vector")
+    local _type = require("lib.vector")
     return _type({x, y})
   end
 end
