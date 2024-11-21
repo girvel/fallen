@@ -246,10 +246,10 @@ return function()
       run = function(self, rails)
         rails.entities.bird_cage.interacted_by = nil
 
-        api.narration("Это птичья клетка")
-        api.narration("Без птицы")
-        api.narration("Хотя здесь есть много помёта")
-        api.narration("И немного перьев")
+        api.narration("Это птичья клетка.")
+        api.narration("Без птицы.")
+        api.narration("Хотя здесь есть много помёта.")
+        api.narration("И немного перьев.")
 
         local options = {
           "*уйти*",
@@ -315,10 +315,10 @@ return function()
       run = function(self, rails)
         self.enabled = false
 
-        api.narration("Он мертв")
-        api.narration("Демон это заслужил")
-        api.narration("Прекрасная птица мертва")
-        api.narration("Она этой участи не заслужила")
+        api.narration("Он мертв.")
+        api.narration("Демон это заслужил.")
+        api.narration("Прекрасная птица мертва.")
+        api.narration("Она этой участи не заслужила.")
 
         local options = {
           "[Медицина] *Осмотреть труп*",

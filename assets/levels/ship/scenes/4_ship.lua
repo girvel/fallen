@@ -81,6 +81,7 @@ return function()
         rails.bottles_taken = 3
 
         health.set_hp(State.player, 20)
+        -- TODO! RM THE COMMENT ITSELF
       end,
     },
 
