@@ -18,7 +18,7 @@ return function()
       },
 
       _top_level_options = {
-        "Ты - Кот.",
+        "Ты — Кот.",
         "Ты не похож на остальных рабочих.",
         "Расскажи подробнее, чем ты занимаешься?",
       },
@@ -64,7 +64,7 @@ return function()
           local OPENING_LINES = {
             {},
             {
-              "Здесь то - холодно, то - жарко",
+              "Здесь то — холодно, то — жарко",
               "Совсем как на моей родине",
             },
             {
@@ -77,7 +77,7 @@ return function()
             },
             {
               "Для хорошей лепёшки нужны лишь мука, вода и соль",
-              "Для хорошей жизни - и того меньше",
+              "Для хорошей жизни — и того меньше",
             },
             {
               "Интересно, куда ведёт эта дорога?",
@@ -196,7 +196,7 @@ return function()
                 if api.ability_check("wis", 14) then
                   api.line(c.player, "Не буду я в твои глаза смотреть, есть дела поважнее.", {check = {"wis", true}})
                 else
-                  api.narration("Это существо - твой хороший друг.", {check = {"wis", false}})
+                  api.narration("Это существо — твой хороший друг.", {check = {"wis", false}})
                   api.narration("Были ли у тебя друзья ранее? Неважно.")
                   api.narration("Он станет первым.")
                   api.line(c.markiss, "Мы одной сути, друг-с")
@@ -204,7 +204,7 @@ return function()
                   api.narration("Наваждение проходит.")
                   api.line(c.player, "Что за черт?! Как ты это сделал?")
                   api.line(c.markiss, "Магия-с, друг. Магия-с.")
-                  api.narration("В голову приходит осознание - ты не сможешь ему навредить. Никак.")
+                  api.narration("В голову приходит осознание — ты не сможешь ему навредить. Никак.")
                   api.narration("Придётся жить в этом проклятом мире.")
                 end
               end
@@ -265,7 +265,7 @@ return function()
 
                     local chosen_option_4 = api.options({
                       "Может, я сошёл с ума от общения с тобой, но в этом и правда что-то есть.",
-                      "Если на твоей родине все такие дурные - мне вас очень жаль.",
+                      "Если на твоей родине все такие дурные — мне вас очень жаль.",
                     })
 
                     if chosen_option_4 == 1 then
@@ -273,7 +273,7 @@ return function()
                       api.line(c.player, "Начальник, хотя зовут меня — %s" % c.player.inner_name)
                       api.line(c.markiss, "Не подходит тебе это имя, своё поищи")
                       api.line(c.player, "А имя должно как-то подходить? Вот допустим твоё?")
-                      api.line(c.markiss, "Я - Маркисс")
+                      api.line(c.markiss, "Я — Маркисс")
                       c.markiss.name = "Маркисс"
                       api.line(c.player, "Вопросов больше не имею")
                     else  -- chosen_option_4 == 2
@@ -294,7 +294,7 @@ return function()
                   api.narration("И неважно, что их истребили 600 лет назад.", {check = {"nature", true}})
                 end
 
-                api.narration("Без сомнений - перед тобой один из Теневых котов.")
+                api.narration("Без сомнений — перед тобой один из Теневых котов.")
                 api.line(c.player, "Понятно, я, пожалуй, пойду")
                 api.line(c.markiss, "До встречи, начальник-с!")
               end
@@ -331,7 +331,7 @@ return function()
 
           elseif chosen_option_1 == 6 then
             api.line(c.markiss, "Я такие напитки не пью-с, братец, и тебе не советую")
-            api.line(c.markiss, "Пить - здоровью вредить.")
+            api.line(c.markiss, "Пить — здоровью вредить.")
             api.narration("Кот делает глубокую затяжку.")
 
             if api.options({

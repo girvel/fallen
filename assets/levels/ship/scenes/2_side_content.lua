@@ -94,7 +94,7 @@ return function()
       run = function(self, rails)
         self.enabled = false
         State.player:rotate("up")
-        api.message.positional("Старый выцветший указатель. Налево - столовая, направо - кают-компания.")
+        api.message.positional("Старый выцветший указатель. Налево — столовая, направо — кают-компания.")
       end,
     },
 
@@ -304,7 +304,7 @@ return function()
 
         api.narration("С недюжим усердием широкоплечий старик перемешивает рагу в гигантской кастрюле.")
         api.narration("Запах тысячи специй мгновенно забивает рецепторы.")
-        api.narration("Сладкое, острое, соленое, доброе, цветное - в этом вареве есть всё.")
+        api.narration("Сладкое, острое, соленое, доброе, цветное — в этом вареве есть всё.")
 
         rails.entities.cook:rotate("right")
         api.narration("Старик оборачивается, замечая твой взгляд.")

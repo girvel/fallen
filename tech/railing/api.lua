@@ -19,7 +19,7 @@ local api, module_mt, static = Module("tech.railing.api")
 api.narration = function(text, params)
   params = params or {}
   if params.check then
-    text = '<span color="%s">[%s - %s] </span>' % {
+    text = '<span color="%s">[%s — %s] </span>' % {
       params.check[2] and Colors.hex.green or Colors.hex.red,
       translation.skill[params.check[1]] or translation.abilities[params.check[1]],
       params.check[2] and "успех" or "провал"

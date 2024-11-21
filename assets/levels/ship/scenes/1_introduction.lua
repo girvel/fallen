@@ -60,7 +60,7 @@ return function()
         api.narration("Стены спаяны из металлических листов, от них эхом отражается любой звук")
         rails.scenes.snoring.enabled = true
         rails.scenes.snoring.triggered = true
-        api.narration("Один из звуков - храп с верхней кровати.")
+        api.narration("Один из звуков — храп с верхней кровати.")
         api.narration("Почему-то он не раздражает, кажется родным.")
 
         api.line(State.player, "Передо мной зеркало")

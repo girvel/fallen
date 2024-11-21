@@ -76,7 +76,7 @@ return function()
           if picked_option == 1 then
             api.line(rails.entities.engineer_3, "Я..?")
             api.line(rails.entities.engineer_3, "Меня зовут Рронт. С двумя Р...")
-            api.line(rails.entities.engineer_3, "Фамилия - Бобински")
+            api.line(rails.entities.engineer_3, "Фамилия — Бобински")
             api.line(rails.entities.engineer_3, "Получается Рронт Бобински, да")
 
             local picked_suboption = api.options({
