@@ -123,7 +123,7 @@ grid._grid_mt.__index = function(self, v)
 
   assert(
     getmetatable(v) == Vector.mt,
-    "Attempt to index grid with %s which is neither vector nor a method name" % {v}
+    ("Attempt to index grid with %s which is neither vector nor a method name"):format(v)
   )
   assert(self:can_fit(v))
   return self._inner_array[self:_get_inner_index(unpack(v))]

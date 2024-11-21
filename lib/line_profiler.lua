@@ -7,10 +7,10 @@ local prev_line_i = 0
 local prev_t = 0
 local target_file, start_line, stop_line
 
+--- @type fun(): number
 line_profiler.time_function = os.clock
 
 --- @return nil
---- @deprecated
 line_profiler.start = function()
   local info = debug.getinfo(2, "Sl")
   target_file = info.source
@@ -25,14 +25,12 @@ line_profiler.start = function()
 end
 
 --- @return nil
---- @deprecated
 line_profiler.stop = function()
   stop_line = debug.getinfo(2, "l").currentline
   debug.sethook()
 end
 
 --- @return string
---- @deprecated
 line_profiler.report = function()
   if not start_line or not stop_line then return "" end
   local sum = 0
