@@ -60,7 +60,7 @@ return function()
         api.narration("Стены спаяны из металлических листов, от них эхом отражается любой звук")
         rails.scenes.snoring.enabled = true
         rails.scenes.snoring.triggered = true
-        api.narration("Один из звуков — храп с верхней кровати.")
+        api.narration("Один из звуков — храп с верхней койки.")
         api.narration("Почему-то он не раздражает, кажется родным.")
 
         api.line(State.player, "Передо мной зеркало")
@@ -171,7 +171,7 @@ return function()
     },
 
     {
-      name = "Player reads the note",
+      name = "Player picks up the note",
       enabled = true,
       start_predicate = function(self, rails, dt)
         return rails.entities.note.interacted_by == State.player
@@ -181,6 +181,24 @@ return function()
         self.enabled = false
         State.gui.hint.override = "Нажмите [K] чтобы открыть кодекс"
         while Table.last(State.gui.wiki.history) ~= "codex" and not Common.period(10, self) do
+          coroutine.yield()
+        end
+        State.gui.hint.override = nil
+      end,
+    },
+
+    {
+      name = "Player reads the note",
+      enabled = true,
+      start_predicate = function(self, rails, dt)
+        return api.get_quest("warmup") == 1
+      end,
+
+      run = function(self, rails)
+        self.enabled = false
+
+        State.gui.hint.override = "Нажмите [J] чтобы открыть журнал"
+        while Table.last(State.gui.wiki.history) ~= "journal" and not Common.period(10, self) do
           coroutine.yield()
         end
         State.gui.hint.override = nil
