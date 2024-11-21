@@ -48,10 +48,10 @@ return function()
         if is_rront_alive then
           api.line(rails.entities.engineer_4, "Ты спас его.")
           api.line(rails.entities.engineer_4, "Хотя должен был убить.")
-          api.line(rails.entities.engineer_4, "Перчатки что были на нём…")
+          api.line(rails.entities.engineer_4, "Перчатки что были на нём...")
           api.line(rails.entities.engineer_4, "Я отдала их, потому что он чувствовал боль.")
         else
-          api.line(rails.entities.engineer_4, "Эти перчатки…")
+          api.line(rails.entities.engineer_4, "Эти перчатки...")
           api.line(rails.entities.engineer_4, "Я отдала их, потому что он чувствовал боль.")
         end
 
@@ -104,7 +104,7 @@ return function()
           api.narration("Солнце у дварфов символизирует бога Торрга, вечно борющегося с тьмой — как в виде кошмарных подземных созданий, так и в дварфийских сердцах.", {check = {"religion", true}})
           api.narration("Он давно мертв, как и тьма, с которой он боролся.")
           api.narration("Амулет — осколок былой веры, не более чем ценность для любителей древности.")
-          api.narration("Но найти его в таком месте… Кто-то мог бы увидеть в этом чудо.")
+          api.narration("Но найти его в таком месте... Кто-то мог бы увидеть в этом чудо.")
         else
           api.narration("Всего лишь безделушка; она не имеет фактической ценности.", {check = {"religion", false}})
           api.narration("Но символ солнца почему-то вызывает у тебя уверенность.")

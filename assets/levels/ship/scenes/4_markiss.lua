@@ -48,7 +48,7 @@ return function()
             and "Пропустите-с, направляюсь от кош-тельной за углём"
             or "Пропустите-с, несу уголь в кош-тельную"
           )
-          api.line(c.player, "(Это… Кот?)")
+          api.line(c.player, "(Это... Кот?)")
 
           self._furry_recognized = api.ability_check("nature", 18)
           if self._furry_recognized then
@@ -159,7 +159,7 @@ return function()
                   api.narration("Он явно не понял с первого раза, нужно повторить вопрос несколько раз.", {check = {"persuasion", false}})
                   api.line(c.player, "Что за клеточка? Что за общее дело? Почему ты кот? О чем ты говоришь?")
                   api.narration("Кот лениво выдыхает дым.")
-                  api.line(c.markiss, "Су-е-та…")
+                  api.line(c.markiss, "Су-е-та...")
                   api.narration("Терминальный случай, тут ответа не добиться.")
                 end
               else
