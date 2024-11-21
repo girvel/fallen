@@ -16,4 +16,9 @@ love .
 
 ## Documentation
 
-See [/docs/README.md](/docs/README.md). Just started to write it, most of it is missing.
+See [/docs/README.md](/docs/README.md) and in-code annotations. Just started to write it, most of it is missing.
+
+## Links
+
+- [VK (RU)](https://vk.com/st_celest)
+- [Telegram (RU)](https://t.me/stcelest)
