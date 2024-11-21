@@ -53,10 +53,29 @@ return function()
         self.enabled = false
         if (State.gui.wiki.quest_states.warmup or 0) >= 3 then return end
         if not State.player.inventory.main_hand then
-          api.notification("Найди себе подходящее оружие", true)
+          api.notification("Найди подходящее оружие", true)
           api.update_quest({warmup = 3})
         end
         rails.scenes.warmup.enabled = true
+      end,
+    },
+
+    {
+      name = "Hint near the mannequin",
+      enabled = true,
+
+      characters = {
+        mannequin = {},
+      },
+
+      start_predicate = function(self, rails, dt, c)
+        return (State.player.position - c.mannequin.position):abs() == 1
+      end,
+
+      run = function(self, rails, c)
+        State.gui.hint.override = "Нажмите [1] чтобы атаковать"
+        while self:start_predicate(rails, nil, c) do coroutine.yield() end
+        State.gui.hint.override = nil
       end,
     },
 
@@ -89,7 +108,7 @@ return function()
                 api.notification(remark, true)
                 break
               elseif not miss_remarked then
-                api.notification("Целься лучше, в настоящем бою они будут ещё и двигаться", true)
+                api.notification("Целься лучше", true)
                 miss_remarked = true
               end
             end
@@ -134,7 +153,7 @@ return function()
         while true do
           local o = api.options(options)
           if o == 1 then
-            api.narration("После нажатия, пергамент исчезает в глубине блока, а потом снова всплывает с противоположной стороны")
+            api.narration("После нажатия, пергамент исчезает в глубине блока, а потом снова всплывает с противоположной стороны.")
           elseif o == 2 then
             self.enabled = false
             c.mirage_block.interact = nil

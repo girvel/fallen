@@ -3554,6 +3554,31 @@
 							],
 							"__worldX": 672,
 							"__worldY": 464
+						},
+						{
+							"__identifier": "entity_capture",
+							"__grid": [19,133],
+							"__pivot": [0,0],
+							"__tags": ["positions"],
+							"__tile": null,
+							"__smartColor": "#EAD4AA",
+							"iid": "53027620-9b00-11ef-96bf-0f7792e9d415",
+							"width": 16,
+							"height": 16,
+							"defUid": 28,
+							"px": [304,2128],
+							"fieldInstances": [
+								{ "__identifier": "layer", "__type": "LocalEnum.layer", "__value": "on_solids", "__tile": null, "defUid": 30, "realEditorValues": [{
+									"id": "V_String",
+									"params": ["on_solids"]
+								}] },
+								{ "__identifier": "rails_name", "__type": "String", "__value": "soup_cauldron", "__tile": null, "defUid": 31, "realEditorValues": [{
+									"id": "V_String",
+									"params": ["soup_cauldron"]
+								}] }
+							],
+							"__worldX": 304,
+							"__worldY": 1616
 						}
 					]
 				},

@@ -13,7 +13,11 @@ local health, module_mt, static = Module("mech.health")
 --- @param amount integer
 --- @return nil
 health.heal = function(target, amount)
-  health.set_hp(target, math.min(target:get_max_hp(), target.hp + amount))
+  local value = target.hp + amount
+  if target.get_max_hp then
+    value = math.min(target:get_max_hp(), value)
+  end
+  health.set_hp(target, value)
   if target.position then
     State:add(gui.floating_damage("+" .. amount, target.position, Colors.light_green))
   end
@@ -58,8 +62,12 @@ end
 --- @param value integer
 --- @return nil
 health.set_hp = function(target, value)
+  value = math.max(0, value)
+
   target.hp = value
-  cue.set(target, "blood", target.hp <= target:get_max_hp() / 2)
+  if target.get_max_hp then
+    cue.set(target, "blood", target.hp <= target:get_max_hp() / 2)
+  end
 end
 
 return health

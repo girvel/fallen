@@ -50,7 +50,7 @@ return function()
 
       run = function(self, rails)
         self.enabled = false
-        api.message.positional("На стене висит старая мировая карта. Тяжело различить хоть какой-то текст или даже очертания границ.")
+        api.message.positional("На стене висит старая мировая карта; тяжело различить хоть какой-то текст или даже очертания границ.")
       end,
     },
 
@@ -94,7 +94,7 @@ return function()
       run = function(self, rails)
         self.enabled = false
         State.player:rotate("up")
-        api.message.positional("Старый выцветший указатель. Налево — столовая, направо — кают-компания.")
+        api.message.positional("Старый выцветший указатель. Налево — “столовая”, направо “-к*ю*-*омп*н*я”.")
       end,
     },
 
@@ -147,7 +147,7 @@ return function()
         State.player:rotate("up")
         api.narration("Здесь повесилась мышь. Забавно.")
         api.ability_check_message("nature", 14,
-          "Животные ощущают наш мир лучше, чем люди. Мышь, должно быть, предчувствовала что-то ужасное. Может мне тоже начать бояться?",
+          "Животные ощущают наш мир лучше, чем люди. Мышь, должно быть, предчувствовала что-то ужасное. Может, мне тоже начать бояться?",
           "У меня нет объяснений этому явлению."
         )
       end,
@@ -240,7 +240,7 @@ return function()
 
         if not rails.been_to_latrine then
           api.narration("В слезах и желчи, ты выбегаешь из фекального ада и клянешься никогда туда не возвращаться.")
-          api.narration("Но ужасное состояние никуда не уходит.")
+          api.narration("Но ужасное состояние не уходит.")
 
           rails.been_to_latrine = true
           State.player.ai.in_cutscene = false
@@ -264,7 +264,7 @@ return function()
         api.narration("На обложке цветной газеты красуется очень реалистичное изображение накачанных мужчин.")
         api.narration("Их физическая форма впечатляет, но они зачем-то оделись в нелепые тесные костюмы.")
         api.ability_check_message("religion", 8,
-          "Закрепленное белое нечто за спинами мужчин очень уж напоминает крылья. А эти подвязки... Да эти атлеты без сомнений изображают ангелов! Мда уж, безвкусица.",
+          "Закрепленное белое нечто за спинами мужчин очень уж напоминает крылья. А эти подвязки... Да эти атлеты без сомнений изображают ангелов! М-да, безвкусица.",
           "Интересно, через какие тренировки прошли эти атлеты? Такое упорство внушает уважение!"
         )
       end,
@@ -302,12 +302,12 @@ return function()
         self.enabled = false
         rails.entities.cook.interact = nil
 
-        api.narration("С недюжим усердием широкоплечий старик перемешивает рагу в гигантской кастрюле.")
-        api.narration("Запах тысячи специй мгновенно забивает рецепторы.")
+        api.narration("С недюжим усердием коренастый старик перемешивает рагу в казане.")
+        api.narration("Запах тысячи специй мигом забивает рецепторы.")
         api.narration("Сладкое, острое, соленое, доброе, цветное — в этом вареве есть всё.")
 
         rails.entities.cook:rotate("right")
-        api.narration("Старик оборачивается, замечая твой взгляд.")
+        api.narration("Старик оборачивается, замечая твой взгляд:")
         api.line(rails.entities.cook, "Ещё не готово, подходи к обеду")
 
         if api.ability_check("cha", 14) then
@@ -335,6 +335,28 @@ return function()
       end,
     },
 
+    {
+      name = "Interacting with cauldron after the old guy is dead",
+      enabled = true,
+
+      characters = {
+        soup_cauldron = {},
+      },
+
+      _popup = {},
+
+      start_predicate = function(self, rails, dt, c)
+        return c.soup_cauldron.interacted_by == State.player
+      end,
+
+      run = function(self, rails, c)
+        c.soup_cauldron.interacted_by = nil
+        if not State:exists(self._popup[1]) then
+          self._popup = api.message.temporal("Кажется, у меня пропал аппетит", {source = c.soup_cauldron})
+        end
+      end,
+    },
+
     sees_possessed = {
       name = "14. Disappearing dude",
       enabled = true,
@@ -347,6 +369,28 @@ return function()
         self.enabled = false
         State:add(fx("assets/sprites/fx/disappearing_dude", "fx", rails.positions.possessed_image))
         sound.play("assets/sounds/creepy", .1)
+      end,
+    },
+
+    {
+      name = "Player gets damaged",
+      enabled = true,
+      start_predicate = function(self, rails, dt)
+        return State.player.hp < State.player:get_max_hp()
+          and State.mode:get() == State.mode.free
+          and not State.player.ai.in_cutscene
+      end,
+
+      run = function(self, rails)
+        self.enabled = false
+
+        Log.trace(1)
+        State.gui.hint.override = "Нажмите [H] чтобы перевязать раны"
+        local old_hp = State.player.hp
+        while not Common.period(15, self) and State.player.hp == old_hp do
+          coroutine.yield()
+        end
+        State.gui.hint.override = nil
       end,
     },
   }

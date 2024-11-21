@@ -223,7 +223,7 @@ local SLOW_READING_SPEED = 10
 --- Display message for reaction time + slow reading time
 --- @param content html_content
 --- @param params {life_time: number?, source: {position: vector, sprite_offset: vector?}}?
---- @return table[]
+--- @return entity[]
 api.message.temporal = function(content, params)
   local entities = message(content, params)
   local life_time = -Query(params).life_time

@@ -76,6 +76,8 @@ return function(positions, entities)
       item.give(self.entities.guard_2, self.entities.captain_door_valve)
 
       self.entities.gas_key = self.entities.engineer_1.inventory.main_hand
+
+      State:refresh(self.entities.soup_cauldron, interactive.detector(), {name = "кастрюля"})
     end,
 
     been_to_latrine = false,
