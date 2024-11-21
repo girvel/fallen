@@ -1,7 +1,7 @@
 describe("Grid library", function()
   _G.unpack = table.unpack
   _G.Table = require("lib.essential.table")
-  _G.Fun = require("lib.vendor.fun")
+  _G.Fun = require("vendor.fun")
   _G.Vector = require("lib.types.vector")
   _G.Module = require("lib.essential.module")
 

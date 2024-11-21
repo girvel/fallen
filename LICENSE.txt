@@ -1,6 +1,6 @@
 Copyright Nikita Dobrynin, Sergei Khabarov. All rights reserved.
 
-Fallen is licensed under MIT No Attribution License, except for 3rd party libraries in /lib/vendor/ or /vendor/ folders, that are licensed separately, and art in assets/sprites/portraits, which is licensed under CC BY-NC 4.0 license.
+Fallen is licensed under MIT No Attribution License, except for 3rd party libraries in /vendor/ folder, that are licensed separately, and art in assets/sprites/portraits, which is licensed under CC BY-NC 4.0 license.
 
 Fallen's license follows:
 

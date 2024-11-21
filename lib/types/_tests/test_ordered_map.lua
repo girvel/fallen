@@ -1,6 +1,6 @@
 describe("Ordered map", function()
   _G.unpack = unpack or table.unpack
-  _G.Fun = require("lib.vendor.fun")
+  _G.Fun = require("vendor.fun")
 
 
   local ordered_map = require("lib.types.ordered_map")

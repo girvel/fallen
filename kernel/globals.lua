@@ -1,10 +1,10 @@
 return function()
-  Log = require("lib.vendor.log")
-  Fun = require("lib.vendor.fun")
-  Tiny = require("lib.vendor.tiny")
-  Inspect = require("lib.vendor.inspect")
-  Memoize = require("lib.vendor.memoize")
-  Json = require("lib.vendor.json")
+  Log = require("vendor.log")
+  Fun = require("vendor.fun")
+  Tiny = require("vendor.tiny")
+  Inspect = require("vendor.inspect")
+  Memoize = require("vendor.memoize")
+  Json = require("vendor.json")
 
   Log.info("Starting basic LOVE setup")
 

@@ -2,7 +2,7 @@
 -- https://github.com/bjornbytes/lust
 -- MIT LICENSE
 
-local inspect = require("lib.vendor.inspect")
+local inspect = require("vendor.inspect")
 
 local lust = {}
 lust.level = 0

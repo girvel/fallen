@@ -3,7 +3,7 @@ describe("Html generator", function()
   _G.Fn = require("lib.essential.fn")
   _G.Keyword = require("lib.essential.keyword")
   _G.Type = require("lib.essential.type")
-  _G.Fun = require("lib.vendor.fun")
+  _G.Fun = require("vendor.fun")
   _G.Query = require("lib.essential.query")
 
   local html = require("lib.html")

@@ -2,7 +2,7 @@ describe("Colors", function()
   _G.unpack = table.unpack
   _G.Module = require("lib.essential.module")
   _G.Table = require("lib.essential.table")
-  _G.Fun = require("lib.vendor.fun")
+  _G.Fun = require("vendor.fun")
   local colors = require("lib.colors")
 
   describe(".equal(a, b)", function()

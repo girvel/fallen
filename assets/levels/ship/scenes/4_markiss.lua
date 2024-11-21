@@ -339,7 +339,7 @@ return function()
               "[Запугивание] Не братец я тебе... Мне нужен ром. Расскажи, где его найти.",
             }) == 1 then
               api.line(c.markiss, "Премного желаю-с удачи")
-            elseif api.ability_check("intimidation", 12) and false --[[TODO!]] then
+            elseif api.ability_check("intimidation", 12) then
               api.narration("Сам того не замечая, ты произносишь эти слова со скрипом зубов.", {check = {"intimidation", true}})
               api.narration("Лицо горит, брови безумно дергаются.")
               api.narration("А из ноздрей валит пар. Как же тебя всё достало!")

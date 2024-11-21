@@ -1,6 +1,6 @@
 describe("Vector library", function()
   _G.unpack = table.unpack
-  _G.Fun = require("lib.vendor.fun")
+  _G.Fun = require("vendor.fun")
 
   local vector = require("lib.types.vector")
 

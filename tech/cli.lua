@@ -1,4 +1,4 @@
-local argparse = require("lib.vendor.argparse")
+local argparse = require("vendor.argparse")
 
 return {
   parse = function(args)

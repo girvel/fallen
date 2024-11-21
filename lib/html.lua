@@ -1,4 +1,4 @@
-local htmlparser = require("lib.vendor.htmlparser")
+local htmlparser = require("vendor.htmlparser")
 
 
 --- @class html_api

@@ -148,8 +148,8 @@ end
 
 common.load_c_library = function(name)
   for _, path in ipairs({
-    "lib/vendor/" .. name,
-    love.filesystem.getSource() .. "/lib/vendor/" .. name,
+    "vendor/" .. name,
+    love.filesystem.getSource() .. "/vendor/" .. name,
     love.filesystem.getSourceBaseDirectory() .. "/" .. name,
   }) do
     local ok, result = pcall(ffi.load, path)

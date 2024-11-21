@@ -1,4 +1,4 @@
-local log = require("lib.vendor.log")
+local log = require("vendor.log")
 
 
 local direction_order = {
