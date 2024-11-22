@@ -21,8 +21,11 @@ module_mt.__call = function()
         )
       end
     end, true),
-    observe = function(self, dt)
-      api.aggregate_aggression(self.ai._was_attacked_by, self)
+    observe = function(entity, dt)
+      api.aggregate_aggression(entity.ai._was_attacked_by, entity)
+      if State:check_aggression(State.player, entity) then
+        entity.interact = nil
+      end
     end
   }
 end
