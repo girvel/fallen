@@ -1,3 +1,4 @@
+local constants = require("tech.constants")
 local animated = require("tech.animated")
 local level = require("state.level")
 local tcod = require("tech.tcod")
@@ -54,6 +55,11 @@ display.system = static(Tiny.sortedProcessingSystem({
     self:process_grid()
   end,
 
+  _background_tile_canvas = love.graphics.newCanvas(
+    constants.CELL_DISPLAY_SIZE,
+    constants.CELL_DISPLAY_SIZE
+  ),
+
   process_grid = function(self)
     if not State.mode:get().displayed_views.scene then return end
     love.graphics.setShader(-Query(State.shader).love_shader)
@@ -78,6 +84,23 @@ display.system = static(Tiny.sortedProcessingSystem({
 
     snapshot:refresh_fov()
 
+    -- background tile prep --
+    do
+      local bg = State.background
+      local old_canvas = love.graphics.getCanvas()
+      love.graphics.setCanvas(self._background_tile_canvas)
+      love.graphics.draw(bg.sprite.image, unpack(bg._offset))
+      for _, delta in ipairs(Vector.extended_directions) do
+        love.graphics.draw(bg.sprite.image, unpack(
+          bg._offset + delta * constants.CELL_DISPLAY_SIZE
+        ))
+      end
+      love.graphics.setCanvas(old_canvas)
+    end
+
+    local background_tile = {sprite = {image = self._background_tile_canvas}}
+
+    -- background --
     for x = start[1], finish[1] do
       for y = start[2], finish[2] do
         -- TODO! RM
@@ -87,7 +110,7 @@ display.system = static(Tiny.sortedProcessingSystem({
 
         local x1, y1 = State.gui.views.scene:apply_scalar(x, y)
         self:_process_image_sprite(
-          State.background_dummy,
+          background_tile,
           x1, y1,
           State.gui.views.scene.scale
         )
@@ -95,6 +118,7 @@ display.system = static(Tiny.sortedProcessingSystem({
       end
     end
 
+    -- grid --
     for _, layer in ipairs(level.GRID_LAYERS) do
       local grid = State.grids[layer]
       for x = start[1], finish[1] do

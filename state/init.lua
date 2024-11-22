@@ -4,6 +4,7 @@ local combat = require("tech.combat")
 local abilities = require("mech.abilities")
 local sprite = require("tech.sprite")
 local tcod   = require("tech.tcod")
+local constants = require("tech.constants")
 
 
 --- @overload fun(systems: table[]): state
@@ -16,7 +17,7 @@ local state, module_mt, static = Module("state")
 --- @field shader shader?
 --- @field profiler table
 --- @field rails table
---- @field background_dummy {sprite: sprite}
+--- @field background any
 ---
 --- @field combat table?
 --- @field gui table
@@ -166,7 +167,17 @@ local state_base = {
     Query(self.rails):initialize(self)
 
     self.gui:initialize()
-    self.background_dummy = State:add(animated("assets/sprites/animations/water"))
+    self.background = State:add(
+      animated("assets/sprites/animations/water"),
+      {
+        _offset = Vector.zero,
+        _velocity = Vector.down * 16 / 3,
+        ai = {observe = function(entity, dt)
+          entity._offset = (entity._offset + entity._velocity * dt)
+            :map(function(it) return Math.loopmod(it, constants.CELL_DISPLAY_SIZE) end)
+        end},
+      }
+    )
   end,
 
   --- @param self state
