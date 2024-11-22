@@ -92,6 +92,7 @@ return function(positions, entities)
       self.has_valve = true
       State:remove(self.entities.captain_door_valve)
       self.entities.guard_2.inventory.other_hand = nil
+      cue.set(self.entities.captain_door, "highlight", true)
     end,
 
     -- maybe it can be coupled with quests into a state machine
