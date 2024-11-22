@@ -386,7 +386,11 @@ return function()
 
         State.gui.hint.override = "Нажмите [H] чтобы перевязать раны"
         local old_hp = State.player.hp
-        while not Common.period(15, self) and State.player.hp == old_hp do
+        while
+          not Common.period(15, self)
+          and State.player.hp == old_hp
+          and self:start_predicate(rails, nil)
+        do
           coroutine.yield()
         end
         State.gui.hint.override = nil

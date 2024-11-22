@@ -16,7 +16,7 @@ module_mt.__call = function(_)
 
       if
         State.player.ai.in_cutscene
-        or not Table.contains({State.mode.free, State.mode.fight}, State.mode:get())
+        or not Table.contains({State.mode.free, State.mode.combat}, State.mode:get())
       then return "" end
 
       local interaction = interactive.get_for(State.player)
