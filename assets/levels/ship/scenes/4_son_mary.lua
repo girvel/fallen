@@ -182,7 +182,10 @@ return function()
         api.line(c.son_mary, "Очень хочется промочить горло. Достань мне ром. Или ещё какую крепкую дрянь.")
         api.line(c.son_mary, "Хороший градус прочищает разум")
 
-        if api.ability_check("insight", 13) then
+        if
+          api.ability_check("insight", 13)
+          or rails.resists_son_mary and api.ability_check("insight", 13)
+        then
           api.line(c.player, "(Он тоже слышит голос. Хочет сказать больше, но не может)", {check = {"insight", true}})
         else
           api.line(c.player, "(Почему он обернулся? Может, увидел кого?)", {check = {"insight", false}})
@@ -311,7 +314,10 @@ return function()
         api.line(c.son_mary, "Не останавливаться же на полпути, а?")
         api.narration("Он тебе... Подмигнул?")
 
-        if api.ability_check("insight", 12) then
+        if
+          api.ability_check("insight", 12)
+          or rails.resists_son_mary and api.ability_check("insight", 12)
+        then
           api.narration("Во взгляде заговорческий план, и он не видит его исполнение без тебя.", {check = {"insight", true}})
         else
           api.narration("Подобная неподконтрольная мимика — явный признак алкогольной интоксикации.", {check = {"insight", false}})
