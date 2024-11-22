@@ -81,6 +81,7 @@ module.load_pack = function(folder_path)
   local result = {}
   for _, file_name in ipairs(love.filesystem.getDirectoryItems(folder_path)) do
     local i = file_name:find("%.png$")
+    if not i then goto continue end
     local frame_number = tonumber(file_name:sub(i - 2, i - 1))
     local animation_name
     if frame_number then
@@ -96,6 +97,7 @@ module.load_pack = function(folder_path)
 
     local image_data = love.image.newImageData(folder_path .. "/" .. file_name)
     result[animation_name][frame_number] = sprite.image(image_data)
+    ::continue::
   end
   return result
 end

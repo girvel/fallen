@@ -1,3 +1,4 @@
+local animated = require("tech.animated")
 local level = require("state.level")
 local combat = require("tech.combat")
 local abilities = require("mech.abilities")
@@ -165,9 +166,7 @@ local state_base = {
     Query(self.rails):initialize(self)
 
     self.gui:initialize()
-    self.background_dummy = State:add({
-      sprite = sprite.image("assets/sprites/water_sketch_02.png"),
-    })
+    self.background_dummy = State:add(animated("assets/sprites/animations/water"))
   end,
 
   --- @param self state
