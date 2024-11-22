@@ -206,7 +206,6 @@ local wave_function = function(direction_name)
         view = "scene",
         layer = "on_tiles",
         codename = "wave_" .. direction_name,
-        debug_flag = true,
         on_add = function(self)
           self.animation_rate = State.water_speed / constants.DEFAULT_ANIMATION_FPS
         end,

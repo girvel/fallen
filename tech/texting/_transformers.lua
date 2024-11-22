@@ -62,12 +62,12 @@ transformers.map.hate = function(node, children, styles)
 
             local color = self.sprite.text[1]
             if color[4] < 1 then
-              color[4] = color[4] + dt / self.appearance_time
+              self.sprite.text[1] = {color[1], color[2], color[3], color[4] + dt / self.appearance_time}
             end
           end,
           delay = child.delay + (node.attributes.offset or 0) * child.appearance_time,
         })
-        child.color[4] = 0
+        child.color = {child.color[1], child.color[2], child.color[3], 0}
         return child
       end)
       :totable()

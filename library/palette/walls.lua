@@ -1,5 +1,4 @@
 local factoring = require("tech.factoring")
-local on_solids = require("library.palette.on_solids")
 
 
 local walls, module_mt, static = Module("library.palette.walls")
@@ -13,14 +12,5 @@ factoring.from_atlas(walls, "assets/sprites/atlases/walls.png", {
   false, false, false, false, "steel", "steel", false, false,
   false, false, false, false, "steel", "steel",
 })
-
-for i = 1, 3 do
-  factoring.extend(walls, "megadoor" .. i, {
-    open = function(self)
-      State:remove(self)
-      State:add(on_solids["megadoor%s_open" % i](), {position = self.position})
-    end,
-  })
-end
 
 return walls
