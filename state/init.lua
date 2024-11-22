@@ -17,7 +17,8 @@ local state, module_mt, static = Module("state")
 --- @field shader shader?
 --- @field profiler table
 --- @field rails table
---- @field background any
+--- @field background table
+--- @field water_speed number
 ---
 --- @field combat table?
 --- @field gui table
@@ -140,6 +141,7 @@ local state_base = {
   load_level = function(self, path)
     local level_data = require(path).load()
 
+    self.water_speed = level_data.water_speed
     self.grids = Fun.iter(level.GRID_LAYERS)
       :map(function(layer)
         return layer, Grid(
@@ -171,10 +173,9 @@ local state_base = {
       animated("assets/sprites/animations/water"),
       {
         _offset = Vector.zero,
-        _velocity = Vector.down * 16 / 3,
         ai = {observe = function(entity, dt)
-          entity._offset = (entity._offset + entity._velocity * dt)
-            :map(function(it) return Math.loopmod(it, constants.CELL_DISPLAY_SIZE) end)
+          entity._offset = (entity._offset + Vector.down * State.water_speed * dt)
+            :map(function(it) return it % constants.CELL_DISPLAY_SIZE end)
         end},
       }
     )

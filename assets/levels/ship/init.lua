@@ -3,6 +3,6 @@ return {
     require("tech.ldtk").load,
     "assets/levels/demo.ldtk",
     "ship",
-    {rails = "assets.levels.ship.rails"}
+    {rails = "assets.levels.ship.rails", water_speed = 20}
   )
 }

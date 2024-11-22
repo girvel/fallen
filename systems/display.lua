@@ -89,10 +89,11 @@ display.system = static(Tiny.sortedProcessingSystem({
       local bg = State.background
       local old_canvas = love.graphics.getCanvas()
       love.graphics.setCanvas(self._background_tile_canvas)
-      love.graphics.draw(bg.sprite.image, unpack(bg._offset))
+      local offset = bg._offset:map(math.floor)
+      love.graphics.draw(bg.sprite.image, unpack(offset))
       for _, delta in ipairs(Vector.extended_directions) do
         love.graphics.draw(bg.sprite.image, unpack(
-          bg._offset + delta * constants.CELL_DISPLAY_SIZE
+          offset + delta * constants.CELL_DISPLAY_SIZE
         ))
       end
       love.graphics.setCanvas(old_canvas)

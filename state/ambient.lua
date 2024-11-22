@@ -18,9 +18,7 @@ ambient._base = static {
     while #self.music > 1 and self.current_music == current_track do
       self.current_music = Random.choice(self.music)
     end
-    Log.trace("play", self.current_music)
     love.audio.play(self.current_music.source)
-    Log.trace(self.current_music.source:isPlaying())
   end,
 }
 

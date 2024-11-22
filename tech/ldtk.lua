@@ -63,6 +63,7 @@ ldtk.load = function(world_filepath, level_id, params)
     rails = params.rails
       and require(params.rails)(positions, captured_entities)
       or nil,
+    water_speed = params.water_speed,
   }
 end
 

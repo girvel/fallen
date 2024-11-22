@@ -384,7 +384,6 @@ return function()
       run = function(self, rails)
         self.enabled = false
 
-        Log.trace(1)
         State.gui.hint.override = "Нажмите [H] чтобы перевязать раны"
         local old_hp = State.player.hp
         while not Common.period(15, self) and State.player.hp == old_hp do

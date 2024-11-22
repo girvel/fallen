@@ -1,6 +1,7 @@
 local animated = require("tech.animated")
 local animation_packs = require("library.animation_packs")
 local item = require("tech.item")
+local constants = require("tech.constants")
 
 
 local module, _, static = Module("library.palette.items")
@@ -197,26 +198,24 @@ module.coal = function()
   )
 end
 
-module.wave_right = function()
-  return Table.extend(
-    animated("assets/sprites/animations/wave_right"),
-    {
-      view = "scene",
-      layer = "on_tiles",
-      codename = "wave_right",
-    }
-  )
+local wave_function = function(direction_name)
+  return function()
+    return Table.extend(
+      animated("assets/sprites/animations/wave_" .. direction_name),
+      {
+        view = "scene",
+        layer = "on_tiles",
+        codename = "wave_" .. direction_name,
+        debug_flag = true,
+        on_add = function(self)
+          self.animation_rate = State.water_speed / constants.DEFAULT_ANIMATION_FPS
+        end,
+      }
+    )
+  end
 end
 
-module.wave_left = function()
-  return Table.extend(
-    animated("assets/sprites/animations/wave_left"),
-    {
-      view = "scene",
-      layer = "on_tiles",
-      codename = "wave_left",
-    }
-  )
-end
+module.wave_right = wave_function("right")
+module.wave_left = wave_function("left")
 
 return module

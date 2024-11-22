@@ -2565,7 +2565,7 @@
 			"enumTags": [],
 			"customData": [],
 			"savedSelections": [],
-			"cachedPixelData": { "opaqueTiles": "00", "averageColors": "00000000" }
+			"cachedPixelData": { "opaqueTiles": "00", "averageColors": "269b569b" }
 		}
 	], "enums": [{ "identifier": "layer", "uid": 29, "values": [
 		{ "id": "on_solids", "tileRect": null, "color": 16705377 },

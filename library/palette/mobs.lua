@@ -158,7 +158,6 @@ mobs.combat_dreamer = function(params)
   params = params or {}
   return Table.extend(
     humanoid {
-      debug_flag = true,
       name = "...",
       race = Random.choice(dreamer_races),
       direction = params.direction or Random.choice(Vector.direction_names),

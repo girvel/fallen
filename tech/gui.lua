@@ -136,7 +136,6 @@ local icon_indexes = Fun.iter({
 gui.action_icon = function(hotkey_data, index, frame)
   index = index - 1
   return {
-    debug_flag = true,
     hotkey_data = hotkey_data,
     get_tooltip = function(self)
       local header = self.hotkey_data.name

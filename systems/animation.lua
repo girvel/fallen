@@ -1,4 +1,5 @@
-local FPS = 6
+local constants = require("tech.constants")
+
 
 local animation, _, static = Module("systems.animation")
 
@@ -7,15 +8,14 @@ animation.system = static(Tiny.processingSystem({
   base_callback = "update",
   filter = Tiny.requireAll("animation"),
   process = function(_, entity, dt)
-    local this_animation = entity.animation
-    if this_animation.paused then return end
+    if entity.animation.paused then return end
 
-    local rate = FPS * (entity.animation_rate or 1)
-    this_animation.frame = this_animation.frame + dt * rate
+    entity.animation.frame = entity.animation.frame
+      + dt * constants.DEFAULT_ANIMATION_FPS * (entity.animation_rate or 1)
 
     -- TODO a lot of unnecessary calls
-    if not this_animation.current
-      or math.floor(this_animation.frame) > #this_animation.current
+    if not entity.animation.current
+      or math.floor(entity.animation.frame) > #entity.animation.current
     then
       entity:animate("idle")
     end
