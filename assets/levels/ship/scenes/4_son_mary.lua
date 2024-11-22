@@ -561,7 +561,7 @@ return function()
         end
 
         api.fade_out()
-        rails.scenes.markiss:activate_option(9)
+        -- rails.scenes.markiss:activate_option(8)
 
         api.narration("Конец для всех в мире неизменен.")
         api.narration("Темнота, занавес.")
