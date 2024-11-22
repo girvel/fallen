@@ -10,7 +10,7 @@ factoring.from_atlas(walls, "assets/sprites/atlases/walls.png", {
 }, {
   "steel", "steel", "steel", "steel", "steel", "steel", false, false,
   false, false, "steel", "steel", "steel", "steel", false, false,
-  "megadoor1", "megadoor2", "megadoor3", "megadoor3c", "steel", "steel", false, false,
+  false, false, false, false, "steel", "steel", false, false,
   false, false, false, false, "steel", "steel",
 })
 
