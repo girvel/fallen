@@ -46,9 +46,7 @@ return function()
       run = function(self, rails)
         self.enabled = false
 
-        rails.entities.megadoor11:open()
-        rails.entities.megadoor12:open()
-        rails.entities.megadoor13:open()
+        rails.entities.megadoor_1:open()
       end,
     },
 
@@ -81,7 +79,6 @@ return function()
         rails.bottles_taken = 3
 
         health.set_hp(State.player, 20)
-        -- TODO! RM THE COMMENT ITSELF
       end,
     },
 

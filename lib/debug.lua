@@ -148,6 +148,7 @@ end
 debugx.handle_error = function(msg)
   debugx.extend_error({level = 2})
   _stack.error_message = msg
+  love.graphics.setCanvas()
   return debugx.shell
 end
 
