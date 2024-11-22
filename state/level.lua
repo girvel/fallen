@@ -3,7 +3,7 @@ local level, _, static = Module("state.level")
 --- @alias layer "under_tiles"|"tiles"|"items"|"fx_under"|"solids"|"on_solids"|"on_solids2"|"fx"
 
 level.GRID_LAYERS = {
-  "under_tiles", "tiles",
+  "under_tiles", "tiles", "on_tiles",
   "items", "fx_under", "solids", "on_solids", "on_solids2", "fx"
 }
 level.GRID_COMPLEX_LAYERS = {fx_under = true, fx = true}
@@ -30,7 +30,7 @@ level.change_layer = function(entity, new_layer)
 end
 
 level.put = function(entity)
-  local grid = State.grids[entity.layer]
+  local grid = assert(State.grids[entity.layer], "Invalid layer %s" % entity.layer)
 
   if level.GRID_COMPLEX_LAYERS[entity.layer] then
     table.insert(grid[entity.position], entity)

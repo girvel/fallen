@@ -80,6 +80,7 @@ display.system = static(Tiny.sortedProcessingSystem({
 
     for x = start[1], finish[1] do
       for y = start[2], finish[2] do
+        -- TODO! RM
         if not snapshot:is_visible_unsafe(x, y) or State.grids.tiles:fast_get(x, y) then
           goto continue
         end

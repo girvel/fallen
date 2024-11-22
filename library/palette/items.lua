@@ -197,4 +197,26 @@ module.coal = function()
   )
 end
 
+module.wave_right = function()
+  return Table.extend(
+    animated("assets/sprites/animations/wave_right"),
+    {
+      view = "scene",
+      layer = "on_tiles",
+      codename = "wave_right",
+    }
+  )
+end
+
+module.wave_left = function()
+  return Table.extend(
+    animated("assets/sprites/animations/wave_left"),
+    {
+      view = "scene",
+      layer = "on_tiles",
+      codename = "wave_left",
+    }
+  )
+end
+
 return module
