@@ -40,6 +40,7 @@ return function()
 
       run = function(self, rails, c)
         c.markiss.interacted_by = nil
+        api.rotate_to_player(c.markiss)
         self._interaction_i = self._interaction_i + 1
 
         if self._interaction_i == 1 then
