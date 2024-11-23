@@ -235,7 +235,7 @@ return function()
       name = "Player leaves detective zone",
       enabled = true,
       start_predicate = function(self, rails, dt)
-        return State.gui.wiki.quest_states.detective == 2
+        return api.get_quest("detective") == 2
           and (State.player.position - rails.positions.exit):abs() > 20
       end,
 

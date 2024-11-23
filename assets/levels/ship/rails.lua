@@ -6,6 +6,7 @@ local railing = require("tech.railing")
 local decorations = require("library.palette.decorations")
 local items       = require("library.palette.items")
 local cue         = require("tech.cue")
+local sound       = require("tech.sound")
 local api = railing.api
 
 
@@ -36,6 +37,7 @@ return function(positions, entities)
             rails:remove_scene("checkpoint_0")
             level.move(State.player, rails.positions.checkpoint_0)
             rails.entities.captain_door:open()
+            rails.scenes.open_left_megadoor.enabled = true
 
             -- rails.scenes.son_mary_meeting.enabled = false
             -- rails.scenes.son_mary_curses.enabled = false
@@ -47,7 +49,25 @@ return function(positions, entities)
       }
     ),
 
+    _sounds = {},
+
     initialize = function(self)
+      -- sounds --
+      if not State.ambient.disabled then
+        self._sounds = {
+          sound("assets/sounds/ship_engine.mp3", 1)
+            :set_looping(true)
+            :place(self.positions.engine_sound, "medium")
+            :play(),
+
+          sound("assets/sounds/bow_wave.mp3", .7)
+            :set_looping(true)
+            :place(self.positions.bow_wave_sound, "medium")
+            :play(),
+        }
+      end
+
+      -- entities --
       self.entities.neighbour:rotate("up")
       decorations.lie(self.entities.neighbour, self.entities.upper_bunk.position, "upper")
 

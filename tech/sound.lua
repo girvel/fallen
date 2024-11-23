@@ -55,6 +55,16 @@ local sound_methods = {
     self.source:play()
     return self
   end,
+
+  --- @generic T: sound
+  --- @param self T
+  --- @param value boolean
+  --- @return T
+  set_looping = function(self, value)
+    --- @cast self sound
+    self.source:setLooping(value)
+    return self
+  end,
 }
 
 sound._mt = static {
@@ -128,6 +138,7 @@ sound.play = function(head, ...)
       "Incorrect sound size %s; sounds can be small, medium or large" % tostring(size)
     )
 
+    this_sound.source:setRelative(false)
     this_sound.source:setPosition(unpack(position))
     this_sound.source:setAttenuationDistances(unpack(limits))
     this_sound.source:setRolloff(2)

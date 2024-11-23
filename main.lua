@@ -1,6 +1,7 @@
 local line_profiler = require("lib.line_profiler")
 line_profiler.time_function = love.timer.getTime
 love.graphics.setDefaultFilter("nearest", "nearest")
+love.audio.setDistanceModel("exponent")
 require("kernel").initialize()
 
 
@@ -54,14 +55,6 @@ love.load = function(args)
 
   for _, scene in ipairs(args.disable_scenes) do
     Query(State.rails.scenes[scene]).enabled = false
-  end
-
-  love.audio.stop()
-  love.audio.setDistanceModel("exponent")
-  if not args.disable_ambient then
-    local engine = sound("assets/sounds/ship_engine.mp3", 1)
-    engine.source:setLooping(true)
-    sound.play({engine}, Vector({12, 64}), "medium")
   end
 
   if args.resolution then

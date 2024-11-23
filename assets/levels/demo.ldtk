@@ -3637,6 +3637,44 @@
 							],
 							"__worldX": 304,
 							"__worldY": 1616
+						},
+						{
+							"__identifier": "position",
+							"__grid": [12,96],
+							"__pivot": [0,0],
+							"__tags": ["positions"],
+							"__tile": null,
+							"__smartColor": "#19AD51",
+							"iid": "c63630d0-9b00-11ef-96bf-45864237b90a",
+							"width": 16,
+							"height": 16,
+							"defUid": 22,
+							"px": [192,1536],
+							"fieldInstances": [{ "__identifier": "name", "__type": "String", "__value": "engine_sound", "__tile": null, "defUid": 23, "realEditorValues": [{
+								"id": "V_String",
+								"params": ["engine_sound"]
+							}] }],
+							"__worldX": 192,
+							"__worldY": 1024
+						},
+						{
+							"__identifier": "position",
+							"__grid": [28,21],
+							"__pivot": [0,0],
+							"__tags": ["positions"],
+							"__tile": null,
+							"__smartColor": "#19AD51",
+							"iid": "ccb69e90-9b00-11ef-96bf-3171a20b9cd9",
+							"width": 16,
+							"height": 16,
+							"defUid": 22,
+							"px": [448,336],
+							"fieldInstances": [{ "__identifier": "name", "__type": "String", "__value": "bow_wave_sound", "__tile": null, "defUid": 23, "realEditorValues": [{
+								"id": "V_String",
+								"params": ["bow_wave_sound"]
+							}] }],
+							"__worldX": 448,
+							"__worldY": -176
 						}
 					]
 				},
