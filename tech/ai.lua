@@ -38,7 +38,7 @@ end
 ai.api.travel = function(entity, destination)
   -- Log.debug("%s moving to %s" % {Entity.name(entity), destination})
   if entity.position == destination then return end
-  local path = State.grids.solids:find_path(entity.position, destination, 25)
+  local path = State.grids.solids:find_path(entity.position, destination, 10)
   if #path == 0 then return end
   if State.grids.solids[path[#path]] then table.remove(path) end
 
