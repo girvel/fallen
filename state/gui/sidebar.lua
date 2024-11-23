@@ -128,6 +128,26 @@ return Module("state.gui.sidebar", function()
         append("Второе оружие: %s\n\n" % second_weapon:to_display())
       end
 
+      do
+        local bag = {}
+        if State.rails.bottles_taken > 0 then
+          table.insert(bag, {"Бутылки с алкоголем", tostring(State.rails.bottles_taken)})
+        end
+        if State.rails.has_valve then
+          table.insert(bag, {"Вентиль", "1"})
+        end
+        if State.rails.has_sigi then
+          table.insert(bag, {"Сигареты", "1"})
+        end
+
+        if #bag > 0 then
+          append(Common.build_table(
+            {"Сумка", ""},
+            bag
+          ) .. "\n\n")
+        end
+      end
+
       local shown_resources, max_resources
       do
         local move = State.player:get_resources("move")

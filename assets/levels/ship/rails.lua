@@ -107,6 +107,7 @@ return function(positions, entities)
     has_valve = false,
     resists_son_mary = false,
     source_of_first_alcohol = false,
+    has_sigi = false,
 
     give_valve_to_player = function(self)
       self.has_valve = true
@@ -130,17 +131,15 @@ return function(positions, entities)
       end
     end,
 
-    _sigi_found = false,
-
     --- @param state "found" | "needed"
     sigi_update = function(self, state)
       if state == "found" then
-        self._sigi_found = true
+        self.has_sigi = true
       else
         api.update_quest({sigi = 1})
       end
 
-      if self._sigi_found and api.get_quest("sigi") == 1 then
+      if self.has_sigi and api.get_quest("sigi") == 1 then
         api.update_quest({sigi = 2})
         self.scenes.markiss:activate_option(7)
       end
