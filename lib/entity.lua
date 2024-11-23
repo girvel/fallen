@@ -27,10 +27,16 @@
 
 local entityx = {}
 
+--- Check is given position over the entity's hitbox
+--- @param position vector
+--- @param entity entity
+--- @return boolean
 entityx.is_over = function(position, entity)
   return position >= entity.position and position < entity.position + entity.size
 end
 
+--- @param entity entity
+--- @return boolean
 entityx.name = function(entity)
   return -Query(entity).name or -Query(entity).codename or "???"
 end

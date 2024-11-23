@@ -1,8 +1,6 @@
 describe("Html generator", function()
   _G.unpack = table.unpack
   _G.Fn = require("lib.fn")
-  _G.Keyword = require("lib.keyword")
-  _G.Type = require("lib.type")
   _G.Fun = require("vendor.fun")
   _G.Query = require("lib.query")
 

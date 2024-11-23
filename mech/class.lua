@@ -7,8 +7,9 @@ local health = require("mech.health")
 
 local class, _, static = Module("mech.class")
 
-class.choice = static .. Type .. function(_, t)
+class.choice = static .. function(t)
   assert(t.options)
+  t.__type = class.choice
   return t
 end
 

@@ -48,13 +48,16 @@ local html = setmetatable({}, {
 --- @field content html_content[]
 
 --- @class html_tag: html_tag_base
+--- @field __type function
 local tag_methods = {}
 
 local tag_mt = {__index = tag_methods}
 
 --- @overload fun(t: html_tag_base): html_tag
-html_api.tag = Type .. function(_, t)
+html_api.tag = function(t)
+  --- @cast t html_tag
   assert(t.name and t.attributes and t.content)
+  t.__type = html_api.tag
   return setmetatable(t, tag_mt)
 end
 

@@ -11,6 +11,8 @@ end
 
 fn.identity = function(...) return ... end
 
+--- @param f function
+--- @return function
 fn.curry = function(f, ...)
   local curried_args = {...}
   return function(...)

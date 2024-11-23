@@ -17,8 +17,6 @@ return function()
   Random = require("lib.random")
   Entity = require("lib.entity")
   Fn = require("lib.fn")
-  Keyword = require("lib.keyword")
-  Type = require("lib.type")
   Module = require("lib.module")
 
   Enum = require("lib.enum")
