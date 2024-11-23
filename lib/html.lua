@@ -1,8 +1,15 @@
 local htmlparser = require("vendor.htmlparser")
 
 
+local module_mt = {}
 --- @class html_api
-local html_api = {}
+local html_api = setmetatable({}, module_mt)
+
+module_mt.__serialize = function()
+  return function()
+    return require("lib.html")
+  end
+end
 
 --- @alias tag_dsl fun(t: table<integer | string, any>): html_tag
 

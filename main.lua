@@ -19,12 +19,6 @@ local systems = require("systems")
 love.load = function(args)
   args = cli.parse(args)
 
-  if not args.debug then
-    love.errorhandler = love.custom.old_errorhandler
-  else
-    jit.off()
-  end
-
   Log.info("Command line arguments:", args)
   Log.level = args.debug and "trace" or "debug"
   Debug.debug_mode = args.debug
