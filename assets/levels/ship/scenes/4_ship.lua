@@ -149,7 +149,7 @@ return function()
               end
               decorations.lie(c.dorm_halfling, rails.positions.dorm_bed, "lower")
               c.dorm_halfling.ai = {}
-              c.dorm_halfling.hp = c.dorm_halfling:get_max_hp() - 3
+              health.set_hp(c.dorm_halfling, c.dorm_halfling:get_max_hp() - 3)
               level.move(State.player, rails.positions.dorm_player)
 
               api.fade_in()

@@ -317,7 +317,7 @@ return function()
 
           -- TODO as temporary effect
           local d = math.max(1, State.player:get_modifier("con"))
-          State.player.hp = State.player.hp + d
+          health.set_hp(State.player, State.player.hp + d)
           State:add(gui.floating_damage("+" .. d, State.player.position, Colors.green))
 
           rails.entities.cook:rotate("up")
