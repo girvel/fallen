@@ -25,7 +25,7 @@ return Module("state.gui.dialogue", function()
 
     skip = function(self)
       if not self._entities then return end
-      sound.play(sounds.click)
+      Random.choice(sounds.click):play()
       State:remove_multiple(self._entities)
       self._entities = nil
     end,

@@ -5,6 +5,9 @@ local sound, module_mt, static = Module("tech.sound")
 module_mt.__call = function(_, path, volume)
   local source = love.audio.newSource(path, "static")
   if volume then source:setVolume(volume) end
+  if source:getChannelCount() == 1 then
+    source:setRelative(true)
+  end
   return setmetatable({
     source = source,
     _path = path,
@@ -37,6 +40,7 @@ local sound_methods = {
       "Incorrect sound size %s; sounds can be small, medium or large" % tostring(size)
     )
 
+    self.source:setRelative(false)
     self.source:setPosition(unpack(position))
     self.source:setAttenuationDistances(unpack(limits))
     self.source:setRolloff(2)
