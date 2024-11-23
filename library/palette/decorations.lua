@@ -22,7 +22,7 @@ factoring.from_atlas(decorations, decorations_atlas, {
   "table_down", "cage", "device_panel_v1", "device_panel_v2", "countertop", "cabinet", "cabinet", "countertop",
   "cabinet", "cabinet", "cabinet", "cabinet", "sofa", "sofa", "stand", false,
   "low_wall", "low_wall", "low_wall", "low_wall", "coal", "coal", "coal", "coal",
-  "low_wall", "low_wall", "low_wall", "low_wall", "locker", "cabinet", false, false,
+  "low_wall", "low_wall", "low_wall", "low_wall", "locker", "cabinet", "helm", false,
   false, false, "low_wall", "low_wall", false, false, false, false,
   false, false, "low_wall", "low_wall", false, false, false, false,
 })

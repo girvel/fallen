@@ -1,6 +1,6 @@
 local interactive = require("tech.interactive")
 local factoring = require("tech.factoring")
-local shaders   = require("tech.shaders")
+local shaders = require("tech.shaders")
 
 
 local on_solids, module_mt, static = Module("library.palette.on_solids")
@@ -18,7 +18,7 @@ factoring.from_atlas(on_solids, "assets/sprites/atlases/on_solids.png",
   {
     "mirror", "dirt", "airway", "map", "sign", "window", "upper_bunk", "cauldron",
     "vines", "vines", "vines", "vines", "vines", "son_mary1", "blood", "cauldron",
-    false, "vines", "vines", "vines", "vines", "son_mary2", false, false,
+    false, "vines", "vines", "vines", "vines", "son_mary2", "helm", false,
     "megadoor1_open", "megadoor2_open", "megadoor3_open", "vines", "vines", false, false, false,
     false, false, false, "vines", "vines", false, false, false,
   }
