@@ -7,6 +7,8 @@ ambient._base = static {
   music = static .. {
     sound("assets/sounds/music/doom.mp3", 0.1),
     sound("assets/sounds/music/drone_ambience.mp3", 0.5),
+    sound("assets/sounds/music/drone_1.mp3", 0.3),
+    sound("assets/sounds/music/drone_2.mp3", 0.1),
   },
 
   update = static .. function(self)
