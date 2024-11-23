@@ -1,5 +1,6 @@
 local animated = require("tech.animated")
 local view = require("tech.view")
+local constants = require("tech.constants")
 
 
 local gui, module_mt, static = Module("state.gui")
@@ -23,7 +24,6 @@ local PORTRAIT_SPACE = Vector({360, 190})
 
 module_mt.__call = function(_)
   local result = {
-    TEXT_MAX_SIZE = Vector({1000, 800}),
     font_size = 12,
     pressed_scancodes = {},
     _prev_camera_position = Vector.zero,
@@ -168,7 +168,7 @@ end
 gui.offsets.dialogue = static .. function()
   local window_w = love.graphics.getWidth()
   local window_h = love.graphics.getHeight()
-  local dialogue_w = math.min(window_w - 15, State.gui.TEXT_MAX_SIZE[1] + PORTRAIT_SPACE[1])
+  local dialogue_w = math.min(window_w - 15, constants.TEXT_MAX_SIZE[1] + PORTRAIT_SPACE[1])
 
   return Vector({math.ceil((window_w - dialogue_w) / 2 + PORTRAIT_SPACE[1]), window_h - 115})
 end
@@ -179,13 +179,13 @@ end
 
 gui.offsets.full_screen_text = static .. function()
   local w, h = love.graphics.getDimensions()
-  local sx, sy = unpack(State.gui.TEXT_MAX_SIZE)
+  local sx, sy = unpack(constants.TEXT_MAX_SIZE)
   return (Vector({math.max(30, w - sx), math.max(30, h - sy)}) / 2):ceil()
 end
 
 gui.offsets.creator_text = static .. function()
   local w, h = love.graphics.getDimensions()
-  local tw, th = unpack(State.gui.TEXT_MAX_SIZE)
+  local tw, th = unpack(constants.TEXT_MAX_SIZE)
   local marginx = math.ceil(math.max(30, w - tw) / 2)
   local marginy = math.ceil(math.max(30, h - th) / 2)
   return Vector {

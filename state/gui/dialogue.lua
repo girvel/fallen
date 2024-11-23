@@ -1,7 +1,7 @@
-local sound = require("tech.sound")
 local sounds = require("tech.sounds")
 local texting = require("tech.texting")
 local gui = require("tech.gui")
+local constants = require("tech.constants")
 
 
 return Module("state.gui.dialogue", function()
@@ -15,7 +15,10 @@ return Module("state.gui.dialogue", function()
       self._entities = State:add_multiple(Table.concat(
         texting.generate(
           texting.parse("<pre>%s</pre>" % line), State.gui.wiki.styles,  -- TODO move styles?
-          math.min(love.graphics.getWidth() - 40, State.gui.TEXT_MAX_SIZE[1]),
+          math.min(
+            love.graphics.getWidth() - 40 - State.gui.views.dialogue_text.offset[1],
+            constants.TEXT_MAX_SIZE[1]
+          ),
           "dialogue_text", {}
         ),
         {gui.dialogue_background()},

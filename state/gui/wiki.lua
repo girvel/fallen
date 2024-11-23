@@ -1,6 +1,7 @@
 local sound = require("tech.sound")
 local quest = require("tech.quest")
 local texting = require("tech.texting")
+local constants = require("tech.constants")
 
 
 local load_wiki = function(path)
@@ -158,7 +159,7 @@ return Module("state.gui.wiki", function(gui)
       }
 
       self.text_entities = State:add_multiple(texting.generate(
-        page, self.styles, State.gui.TEXT_MAX_SIZE[1], "wiki", args
+        page, self.styles, constants.TEXT_MAX_SIZE[1], "wiki", args
       ))
     end,
 

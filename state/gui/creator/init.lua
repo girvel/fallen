@@ -5,6 +5,7 @@ local experience = require("mech.experience")
 local fighter = require("mech.classes.fighter")
 local forms = require("state.gui.creator.forms")
 local texting = require("tech.texting")
+local constants = require("tech.constants")
 
 
 --- @overload fun(gui: state_gui): creator
@@ -45,7 +46,7 @@ module_mt.__call = function(_, gui)
 
       self._text_entities = State:add_multiple(texting.generate(
         page, self._styles,
-        math.min(love.graphics.getWidth() - 40, State.gui.TEXT_MAX_SIZE[1]),
+        math.min(love.graphics.getWidth() - 40, constants.TEXT_MAX_SIZE[1]),
         "creator_text",
         {}
       ))
