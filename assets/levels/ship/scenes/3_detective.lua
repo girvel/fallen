@@ -97,11 +97,13 @@ return function()
     second_rotates_valve = {
       name = "Second rotates the valve",
       enabled = true,
-      start_predicate = function(self, _, dt) return Common.relative_period(30, dt, self) end,
+      start_predicate = function(self, rails, dt)
+        return not rails:is_running("detective_intro") and Common.relative_period(30, dt, self)
+      end,
 
       run = function(self, rails)
         if not State:exists(rails.entities.engineer_2)
-          or rails.entities.engineer_2.position ~= rails.positions.engineer_2
+          or rails.entities.engineer_detective_2.position ~= rails.positions.engineer_2
         then
           self.enabled = false
           return

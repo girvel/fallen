@@ -62,6 +62,7 @@ factoring.extend(pipes, "leaking_left_down", {
   paused = false,
 
   ai = {run = function(self, entity, dt)
+    if entity.paused then return end
     entity.overflow_counter = entity.overflow_counter + dt
 
     if entity.overflow_counter >= 60 then
