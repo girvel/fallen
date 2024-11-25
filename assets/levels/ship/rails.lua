@@ -108,6 +108,8 @@ return function(positions, entities)
     resists_son_mary = false,
     source_of_first_alcohol = false,
     has_sigi = false,
+    seen_water = false,
+    met_son_mary = false,
 
     give_valve_to_player = function(self)
       self.has_valve = true
@@ -143,6 +145,12 @@ return function(positions, entities)
         api.update_quest({sigi = 2})
         self.scenes.markiss:activate_option(7)
       end
+    end,
+
+    lunch_starts = function(self)
+      self.scenes.cauldron_before.enabled = false
+      self.scenes.cauldron_after.enabled = true
+      cue.set(self.entities.soup_cauldron, "highlight", true)
     end,
   })
 end

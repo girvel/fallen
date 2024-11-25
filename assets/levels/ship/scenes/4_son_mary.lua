@@ -91,6 +91,7 @@ return function()
         self.enabled = false
         rails.scenes.son_mary_curses.enabled = false
         rails.scenes.markiss:activate_option(5)
+        rails.met_son_mary = true
 
         if chosen_option == 1 then
           api.line(c.son_mary, "У тебя проблемы со слухом? Могу повторить.")

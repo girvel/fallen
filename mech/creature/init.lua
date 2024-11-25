@@ -142,6 +142,10 @@ local creature_methods = {
     if not self.position or State.grids.items[self.position] then return end
     State:add(on_tiles.blood(), {position = self.position})
   end,
+
+  rest = function(self, rest_type)
+    Table.extend(self.resources, self:get_resources(rest_type))
+  end,
 }
 
 module_mt.__call = function(_, animation_pack, object)

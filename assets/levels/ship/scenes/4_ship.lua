@@ -705,5 +705,168 @@ return function()
         rails:sigi_update("found")
       end,
     },
+
+    cauldron_after = {
+      name = "Interacting with the cauldron at lunch",
+      enabled = true,
+
+      characters = {
+        soup_cauldron = {},
+        player = {},
+        player_room_door = {},
+        son_mary = {},
+      },
+
+      start_predicate = function(self, rails, dt, c)
+        return c.soup_cauldron.interacted_by == c.player
+      end,
+
+      _first_time = true,
+
+      run = function(self, rails, c)
+        c.soup_cauldron.interacted_by = nil
+
+        if self._first_time then
+          self._first_time = false
+          api.narration("")
+          api.narration("")
+          api.narration("")
+        end
+
+        if api.options({
+          "",
+          "",
+        }) == 2 then
+          api.narration("")
+          api.narration("")
+        end
+
+        api.narration("")
+        api.line(c.player, "")
+        api.line(c.player, "")
+
+        local options_1 = {
+          "",
+          "",
+        }
+
+        if rails.seen_water then
+          options_1[3] = ""
+        end
+
+        local chosen_option_1 = api.options(options_1)
+
+        if chosen_option_1 == 1 then
+          api.narration("")
+          api.narration("")
+          api.narration("")
+          api.narration("")
+          api.line(c.player, "")
+        elseif chosen_option_1 == 2 then
+          api.fade_out()
+          level.move(c.player, rails.positions.player_room_eating)
+          c.player_room_door:close()
+          api.fade_in()
+
+          api.narration("")
+          api.narration("")
+          api.narration("")
+          api.narration("")
+          api.narration("")
+          api.narration("")
+          api.narration("")
+          api.narration("")
+          api.line(c.player, "")
+        else  -- chosen_option == 3
+          api.fade_out()
+          level.move(c.player, rails.positions.captain_deck_eating)
+          c.player:rotate("up")
+          api.fade_in()
+
+          -- TODO! music
+
+          api.narration("")
+          api.narration("")
+          api.narration("")
+          api.line(c.player, "")
+          api.line(c.player, "")
+          api.narration("")
+          api.narration("")
+          api.line(c.player, "")
+          api.line(c.player, "")
+          api.narration("")
+          api.line(c.player, "")
+          -- TODO! animate attack, sound
+          api.narration("")
+          api.narration("")
+          api.narration("")
+          api.line(c.son_mary, "")
+          api.narration("")
+
+          local options_2 = {
+            [1] = "",
+            [3] = "",
+          }
+
+          if rails.met_son_mary then
+            options_2[2] = ""
+          end
+
+          local chosen_option_2 = api.options(options_2)
+
+          if chosen_option_2 == 1 then
+            api.narration("")
+            api.fade_out()
+            api.narration("")
+            -- TODO! music
+            api.narration("")
+            api.narration("")
+            api.narration("")
+            api.narration("")
+            api.narration("")
+            -- TODO! horror sound, hate music?
+            api.narration("<hate></hate>")
+            api.narration("")
+            api.narration("")
+            api.narration("")
+            api.narration("")
+            api.line(c.player, "")
+          elseif chosen_option_2 == 2 then
+            api.line(c.player, "")
+            api.line(c.player, "")
+            api.line(c.son_mary, "")
+            api.line(c.son_mary, "")
+            api.line(c.son_mary, "")
+            api.line(c.son_mary, "")
+            api.line(c.player, "")
+            api.line(c.son_mary, "")
+            api.line(c.son_mary, "")
+            api.line(c.player, "")
+            api.line(c.son_mary, "")
+            api.line(c.son_mary, "")
+            api.line(c.son_mary, "")
+            api.line(c.son_mary, "")
+            api.line(c.son_mary, "")
+            api.line(c.son_mary, "")
+            api.line(c.son_mary, "")
+            api.narration("")
+            api.line(c.son_mary, "")
+            api.line(c.son_mary, "")
+            api.line(c.player, "")
+            api.line(c.son_mary, "")
+          else  -- chosen_option_2 == 3
+            api.line(c.player, "")
+            api.line(c.son_mary, "")
+            api.narration("")
+            api.line(c.player, "")
+            api.narration("")
+            api.line(c.player, "")
+          end
+        end
+
+        c.player:rest("long")
+        self.enabled = false
+      end,
+    },
   }
 end

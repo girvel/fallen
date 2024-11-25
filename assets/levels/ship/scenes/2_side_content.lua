@@ -335,7 +335,7 @@ return function()
       end,
     },
 
-    {
+    cauldron_before = {
       name = "Interacting with cauldron after the old guy is dead",
       enabled = true,
 

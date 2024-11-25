@@ -38,7 +38,7 @@ acting.system = static(Tiny.processingSystem({
             :totable(), ", ")
         )
         Fun.iter(combatants):each(function(e)
-          Table.extend(e.resources, -Query(e):get_resources("short") or {})
+          Query(e):rest("short")
         end)
         State.combat = nil
       end
@@ -73,7 +73,7 @@ acting.system = static(Tiny.processingSystem({
     else
       rest_type = "free"
     end
-    Table.extend(entity.resources, -Query(entity):get_resources(rest_type))
+    Query(entity):rest(rest_type)
   end,
 
   _process_inside_combat = function(self, entity, dt)
@@ -109,7 +109,7 @@ acting.system = static(Tiny.processingSystem({
   _pass_turn = function(self)
     local current = State.combat:get_current()
     Common.reset_period(self, current)
-    Table.extend(current.resources, -Query(current):get_resources("move") or {})
+    Query(current):rest("move")
     current.disengaged_flag = nil  -- TODO redo as condition
     current.advantage_flag = nil  -- TODO redo as condition
     State.combat:move_to_next()
