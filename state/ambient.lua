@@ -1,34 +1,54 @@
 local sound = require("tech.sound")
 
 
+--- @overload fun(): state_ambient
 local ambient, module_mt, static = Module("state.ambient")
 
-ambient._base = static {
-  music = static .. {
+--- @class state_ambient
+--- @field disabled boolean
+--- @field _paused boolean
+--- @field _current_music sound
+local base = {
+  music = {
     sound("assets/sounds/music/doom.mp3", 0.1),
     sound("assets/sounds/music/drone_ambience.mp3", 0.5),
     sound("assets/sounds/music/drone_1.mp3", 0.3),
     sound("assets/sounds/music/drone_2.mp3", 0.1),
   },
 
-  update = static .. function(self)
+  --- @param self state_ambient
+  --- @return nil
+  update = function(self)
+    if self.disabled or self._paused then return end
     local x, y = unpack(-Query(State.player).position or -Vector.one * math.huge)
     love.audio.setPosition(x, y, 0)
-    if self.disabled then return end
-    local current_track = self.current_music
-    if current_track and current_track.source:isPlaying() then return end
-    while #self.music > 1 and self.current_music == current_track do
-      self.current_music = Random.choice(self.music)
+    local last_track = self._current_music
+    if last_track and last_track.source:isPlaying() then return end
+    while #self.music > 1 and self._current_music == last_track do
+      self._current_music = Random.choice(self.music)
     end
-    love.audio.play(self.current_music.source)
+    self._current_music:play()
+  end,
+
+  --- @param self state_ambient
+  --- @param value boolean
+  --- @return nil
+  set_paused = function(self, value)
+    self._paused = value
+    if value then
+      self._current_music:stop()
+    else
+      self._current_music:play()
+    end
   end,
 }
 
 module_mt.__call = function(_)
   return Table.extend({
-    current_music = nil,
     disabled = false,
-  }, ambient._base)
+    _paused = false,
+    _current_music = nil,
+  }, base)
 end
 
 return ambient

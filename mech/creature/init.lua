@@ -3,6 +3,7 @@ local actions = require("mech.creature.actions")
 local abilities = require("mech.abilities")
 local sound = require("tech.sound")
 local on_tiles = require("library.palette.on_tiles")
+local health   = require("mech.health")
 
 
 --- @overload fun(animation_pack: string|table, object: table): creature
@@ -145,6 +146,10 @@ local creature_methods = {
 
   rest = function(self, rest_type)
     Table.extend(self.resources, self:get_resources(rest_type))
+
+    if rest_type == "long" then
+      health.set_hp(self, math.max(self.hp, self:get_max_hp()))
+    end
   end,
 }
 

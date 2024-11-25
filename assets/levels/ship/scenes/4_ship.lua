@@ -13,6 +13,7 @@ local live  = require("library.palette.live")
 local shaders = require("tech.shaders")
 local player  = require("state.player")
 local health  = require("mech.health")
+local sound   = require("tech.sound")
 
 
 return function()
@@ -79,6 +80,9 @@ return function()
         rails.bottles_taken = 3
 
         health.set_hp(State.player, 20)
+        rails:start_lunch()
+        rails.seen_water = true
+        rails.met_son_mary = true
       end,
     },
 
@@ -669,6 +673,7 @@ return function()
 
       run = function(self, rails)
         State.player.fov_radius = 30
+        rails.seen_water = true
       end,
     },
 
@@ -739,6 +744,7 @@ return function()
         }) == 2 then
           api.narration("Желудок гудит на тебя, протестуя и обвиняя в предательстве.")
           api.narration("Может, он и прав — будет грустно умереть, пропустив такую трапезу.")
+          return
         end
 
         api.narration("Ты зачерпываешь густой суп до самых краев; внутри тяжелой миски сплелись первое и второе, напиток и десерт.")
@@ -781,9 +787,12 @@ return function()
           api.fade_out()
           level.move(c.player, rails.positions.captain_deck_eating)
           c.player:rotate("up")
+          api.center_camera()
+          api.wait_seconds(1)
           api.fade_in()
 
-          -- TODO! music
+          State.ambient:set_paused(true)
+          local ambient = sound("assets/sounds/eating_at_bridge.mp3", .1):set_looping(true):play()
 
           api.narration("Усевшись в позе лотоса, поместив миску в свободное пространство между ног, ты уже несколько минут сосредоточенно всматриваешься в пространство за стеклом.")
           api.narration("Иногда ты вспоминаешь про изначальную цель, делаешь небольшой глоток супа...")
@@ -796,11 +805,14 @@ return function()
           api.line(c.player, "(Так глупо не уметь сопротивляться своей природе)")
           api.narration("А так ли нужно сопротивляться? Эта сила и делает тебя собой.")
           api.line(c.player, "Да к чёрту всё!")
-          -- TODO! animate attack, sound
+
+          c.player:animate("main_hand_attack")
+          sound("assets/sounds/hitting_window.mp3", .9):play()
+
           api.narration("Ты не старался, да? Сделал это просто от отчаянья?")
           api.narration("Ещё и суп разлил; впрочем, ты успел наесться.")
           api.narration("Из немого ступора тебя выводит крик.")
-          api.line(c.son_mary, '<span color="e64e4b">КАКОГО ДЬЯВОЛА ТЫ ЗДЕСЬ ШУМИШЬ?<span>')
+          api.line(c.son_mary, '<span color="e64e4b">КАКОГО ДЬЯВОЛА ТЫ ЗДЕСЬ ШУМИШЬ?</span>')
           api.narration("Отвечать не обязательно, у нас впереди много важных дел.")
 
           local options_2 = {
@@ -812,21 +824,29 @@ return function()
             options_2[2] = "*Поговорить с Сон Мари*"
           end
 
+          ambient:stop()
           local chosen_option_2 = api.options(options_2)
 
           if chosen_option_2 == 1 then
             api.narration("Мир не исчезнет, если ты выделишь немного времени на отдых.")
+
+            local heaven_ambient = sound("assets/sounds/heaven_ambient.mp3", .1):set_looping(true):play()
             api.fade_out()
+
             api.narration("Ты смыкаешь глаза, оставляешь кричащую голову на корабле...")
-            -- TODO! music
             api.narration("Погружаешься в далекое место, в мир, что остался лишь в твоей голове.")
             api.narration("Тут не холодно и не жарко, приятно пахнет, поют птицы.")
             api.narration("Не издают страшные кричащие звуки, нет — по-настоящему поют.")
             api.narration("По миру ходят гигантские фигуры, напоминающие ожившие горы; они никогда на тебя не наступят, не причинят вреда.")
             api.narration("И даже вода в случайной луже тут кристально прозрачная и на вкус как липовый мёд.")
-            -- TODO! horror sound, hate music?
+
+            heaven_ambient:stop()
+            sound("assets/sounds/eating_at_bridge_hate.mp3", .4):play()
+
             api.narration("Ты <hate>ненавидишь</hate> это место.")
+
             api.fade_in()
+
             api.narration("Ты просыпаешься в поту, с диким сердцебиением.")
             api.narration("Мир возвращает привычные холодные краски.")
             api.narration("Спёртый металлический  воздух, что ты бешено вдыхаешь — почему им так приятно дышать?")
@@ -865,6 +885,7 @@ return function()
         end
 
         c.player:rest("long")
+        State.ambient:set_paused(false)
         self.enabled = false
       end,
     },

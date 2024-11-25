@@ -58,6 +58,15 @@ local sound_methods = {
 
   --- @generic T: sound
   --- @param self T
+  --- @return T
+  stop = function(self)
+    --- @cast self sound
+    self.source:stop()
+    return self
+  end,
+
+  --- @generic T: sound
+  --- @param self T
   --- @param value boolean
   --- @return T
   set_looping = function(self, value)

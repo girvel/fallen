@@ -124,7 +124,7 @@ return function(positions, entities)
       State:remove(self.entities.engineer_3)
       api.notification("Задача выполнена неудовлетворительно", true)
       api.update_quest({detective = quest.FAILED})
-      self:lunch_starts()
+      self:start_lunch()
     end,
 
     notice_flask = function(self)
@@ -148,10 +148,13 @@ return function(positions, entities)
       end
     end,
 
-    lunch_starts = function(self)
+    start_lunch = function(self)
       self.scenes.cauldron_before.enabled = false
       self.scenes.cauldron_after.enabled = true
       cue.set(self.entities.soup_cauldron, "highlight", true)
+      if State:exists(self.entities.cook) then
+        level.move(self.entities.cook, self.positions.cook_chilling)
+      end
     end,
   })
 end

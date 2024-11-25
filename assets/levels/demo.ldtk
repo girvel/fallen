@@ -3249,7 +3249,7 @@
 						},
 						{
 							"__identifier": "position",
-							"__grid": [28,129],
+							"__grid": [28,131],
 							"__pivot": [0,0],
 							"__tags": ["positions"],
 							"__tile": null,
@@ -3258,13 +3258,13 @@
 							"width": 16,
 							"height": 16,
 							"defUid": 22,
-							"px": [448,2064],
+							"px": [448,2096],
 							"fieldInstances": [{ "__identifier": "name", "__type": "String", "__value": "checkpoint_4", "__tile": null, "defUid": 23, "realEditorValues": [{
 								"id": "V_String",
 								"params": ["checkpoint_4"]
 							}] }],
 							"__worldX": 448,
-							"__worldY": 1552
+							"__worldY": 1584
 						},
 						{
 							"__identifier": "position",
@@ -3694,6 +3694,25 @@
 							}] }],
 							"__worldX": 448,
 							"__worldY": 96
+						},
+						{
+							"__identifier": "position",
+							"__grid": [10,120],
+							"__pivot": [0,0],
+							"__tags": ["positions"],
+							"__tile": null,
+							"__smartColor": "#19AD51",
+							"iid": "45ec7700-9b00-11ef-9f3e-afe6d90e2b2f",
+							"width": 16,
+							"height": 16,
+							"defUid": 22,
+							"px": [160,1920],
+							"fieldInstances": [{ "__identifier": "name", "__type": "String", "__value": "cook_chilling", "__tile": null, "defUid": 23, "realEditorValues": [{
+								"id": "V_String",
+								"params": ["cook_chilling"]
+							}] }],
+							"__worldX": 160,
+							"__worldY": 1408
 						}
 					]
 				},

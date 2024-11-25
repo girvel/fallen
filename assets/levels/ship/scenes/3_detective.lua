@@ -110,7 +110,7 @@ return function()
 
       run = function(self, rails)
         if not State:exists(rails.entities.engineer_2)
-          or rails.entities.engineer_detective_2.position ~= rails.positions.engineer_2
+          or rails.entities.engineer_2.position ~= rails.positions.engineer_2
         then
           self.enabled = false
           return

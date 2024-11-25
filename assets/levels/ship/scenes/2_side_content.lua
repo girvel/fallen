@@ -1,3 +1,4 @@
+local quest = require("tech.quest")
 local sound = require("tech.sound")
 local fx = require("tech.fx")
 local gui = require("tech.gui")
@@ -295,7 +296,8 @@ return function()
       name = "13. Strange soup",
       enabled = true,
       start_predicate = function(self, rails, dt)
-        return rails.entities.cook.interacted_by == State.player
+        return not Table.contains(quest.SPECIAL_STAGES, api.get_quest("detective"))
+          and rails.entities.cook.interacted_by == State.player
       end,
 
       run = function(self, rails)

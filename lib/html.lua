@@ -130,6 +130,9 @@ visit_node = function(node, attribute_factories, preserve_whitespace)
 
   for _, element in ipairs(node.nodes) do
     i, j = raw_content:find(element:gettext(), 1, true)
+    if not i then
+      error("Wrong HTML format")
+    end
     if i > 1 then
       table.insert(content, prepare_text(raw_content:sub(1, i - 1)))
     end
