@@ -124,6 +124,7 @@ return function(positions, entities)
       State:remove(self.entities.engineer_3)
       api.notification("Задача выполнена неудовлетворительно", true)
       api.update_quest({detective = quest.FAILED})
+      self:lunch_starts()
     end,
 
     notice_flask = function(self)

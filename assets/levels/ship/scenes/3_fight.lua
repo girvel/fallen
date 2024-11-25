@@ -159,12 +159,13 @@ return function()
       enabled = true,
       start_predicate = function(self, rails, dt)
         return api.get_quest("detective") == 2 and rails.entities.engineer_3.hp <= 0
-        end,
+      end,
 
       run = function(self, rails)
         self.enabled = false
         api.notification("Задача выполнена", true)
         api.update_quest({detective = quest.COMPLETED})
+        self:lunch_starts()
       end,
     },
 

@@ -728,55 +728,55 @@ return function()
 
         if self._first_time then
           self._first_time = false
-          api.narration("")
-          api.narration("")
-          api.narration("")
+          api.narration("Несмотря на кошмарную обстановку вокруг, ароматное варево манит тебя, словно свет откровения.")
+          api.narration("Ты был голодным и уставшим, но это поправимо.")
+          api.narration("Миска ароматного супа затянет все раны — и душевные, и телесные.")
         end
 
         if api.options({
-          "",
-          "",
+          "*Зачерпнуть полную тарелку*",
+          "*Оставить трапезу на потом*",
         }) == 2 then
-          api.narration("")
-          api.narration("")
+          api.narration("Желудок гудит на тебя, протестуя и обвиняя в предательстве.")
+          api.narration("Может, он и прав — будет грустно умереть, пропустив такую трапезу.")
         end
 
-        api.narration("")
-        api.line(c.player, "")
-        api.line(c.player, "")
+        api.narration("Ты зачерпываешь густой суп до самых краев; внутри тяжелой миски сплелись первое и второе, напиток и десерт.")
+        api.line(c.player, "(Это место не походит на приятную трапезную)")
+        api.line(c.player, "(Можно поесть побыстрее или найти более спокойную локацию)")
 
         local options_1 = {
-          "",
-          "",
+          "*Быстро разобраться с едой*",
+          "*Поесть в своей комнате*",
         }
 
         if rails.seen_water then
-          options_1[3] = ""
+          options_1[3] = "*Поесть с видом на океан*"
         end
 
         local chosen_option_1 = api.options(options_1)
 
         if chosen_option_1 == 1 then
-          api.narration("")
-          api.narration("")
-          api.narration("")
-          api.narration("")
-          api.line(c.player, "")
+          api.narration("В конце концов, это всего лишь топливо.")
+          api.narration("Ты опрокидываешь тарелку, заполняя рот порцией сочнейшего супа.")
+          api.narration("Затем ещё, и ещё раз.")
+          api.narration("И вот ты перед своим отражением — на самом дне миски.")
+          api.line(c.player, "(Я начинаю привыкать к этой физиономии)")
         elseif chosen_option_1 == 2 then
           api.fade_out()
           level.move(c.player, rails.positions.player_room_eating)
           c.player_room_door:close()
           api.fade_in()
 
-          api.narration("")
-          api.narration("")
-          api.narration("")
-          api.narration("")
-          api.narration("")
-          api.narration("")
-          api.narration("")
-          api.narration("")
-          api.line(c.player, "")
+          api.narration("Здесь спокойнее, чем снаружи; тишину перебивает лишь негромкий храп.")
+          api.narration("За приемом пищи в таких условиях не могут не прийти разные странные мысли.")
+          api.narration("Зачем ты здесь?")
+          api.narration("Как отсюда выбраться?")
+          api.narration("Чей голос поселился в моей голове?")
+          api.narration("Можно ли кому-то доверять?")
+          api.narration("С каждой минутой вопросов становится всё больше, но это не может продолжаться вечно.")
+          api.narration("В твоих силах дать ответ на большинство из них.")
+          api.line(c.player, "(Как минимум вопрос с едой я закрыл)")
         else  -- chosen_option == 3
           api.fade_out()
           level.move(c.player, rails.positions.captain_deck_eating)
@@ -785,82 +785,82 @@ return function()
 
           -- TODO! music
 
-          api.narration("")
-          api.narration("")
-          api.narration("")
-          api.line(c.player, "")
-          api.line(c.player, "")
-          api.narration("")
-          api.narration("")
-          api.line(c.player, "")
-          api.line(c.player, "")
-          api.narration("")
-          api.line(c.player, "")
+          api.narration("Усевшись в позе лотоса, поместив миску в свободное пространство между ног, ты уже несколько минут сосредоточенно всматриваешься в пространство за стеклом.")
+          api.narration("Иногда ты вспоминаешь про изначальную цель, делаешь небольшой глоток супа...")
+          api.narration("Лишь для того, чтобы вновь вернуться к просмотру завораживающей картины.")
+          api.line(c.player, "(Такая тонкая граница между мной и миром)")
+          api.line(c.player, "(Это же чертов спрессованный песок, почему мне не под силу его разбить?)")
+          api.narration("И чего бы ты этим добился? Даже если бы смог добраться до водной глади...")
+          api.narration("Одиночество посреди океана ничем не лучше твоей текущей участи.")
+          api.line(c.player, "(Я ненавижу границы; чувствую себя быком, перед которым машут красной тряпкой)")
+          api.line(c.player, "(Так глупо не уметь сопротивляться своей природе)")
+          api.narration("А так ли нужно сопротивляться? Эта сила и делает тебя собой.")
+          api.line(c.player, "Да к чёрту всё!")
           -- TODO! animate attack, sound
-          api.narration("")
-          api.narration("")
-          api.narration("")
-          api.line(c.son_mary, "")
-          api.narration("")
+          api.narration("Ты не старался, да? Сделал это просто от отчаянья?")
+          api.narration("Ещё и суп разлил; впрочем, ты успел наесться.")
+          api.narration("Из немого ступора тебя выводит крик.")
+          api.line(c.son_mary, '<span color="e64e4b">КАКОГО ДЬЯВОЛА ТЫ ЗДЕСЬ ШУМИШЬ?<span>')
+          api.narration("Отвечать не обязательно, у нас впереди много важных дел.")
 
           local options_2 = {
-            [1] = "",
-            [3] = "",
+            [1] = "*Посидеть ещё немного*",
+            [3] = "*Оставить это место*",
           }
 
           if rails.met_son_mary then
-            options_2[2] = ""
+            options_2[2] = "*Поговорить с Сон Мари*"
           end
 
           local chosen_option_2 = api.options(options_2)
 
           if chosen_option_2 == 1 then
-            api.narration("")
+            api.narration("Мир не исчезнет, если ты выделишь немного времени на отдых.")
             api.fade_out()
-            api.narration("")
+            api.narration("Ты смыкаешь глаза, оставляешь кричащую голову на корабле...")
             -- TODO! music
-            api.narration("")
-            api.narration("")
-            api.narration("")
-            api.narration("")
-            api.narration("")
+            api.narration("Погружаешься в далекое место, в мир, что остался лишь в твоей голове.")
+            api.narration("Тут не холодно и не жарко, приятно пахнет, поют птицы.")
+            api.narration("Не издают страшные кричащие звуки, нет — по-настоящему поют.")
+            api.narration("По миру ходят гигантские фигуры, напоминающие ожившие горы; они никогда на тебя не наступят, не причинят вреда.")
+            api.narration("И даже вода в случайной луже тут кристально прозрачная и на вкус как липовый мёд.")
             -- TODO! horror sound, hate music?
-            api.narration("<hate></hate>")
-            api.narration("")
-            api.narration("")
-            api.narration("")
-            api.narration("")
-            api.line(c.player, "")
+            api.narration("Ты <hate>ненавидишь</hate> это место.")
+            api.fade_in()
+            api.narration("Ты просыпаешься в поту, с диким сердцебиением.")
+            api.narration("Мир возвращает привычные холодные краски.")
+            api.narration("Спёртый металлический  воздух, что ты бешено вдыхаешь — почему им так приятно дышать?")
+            api.narration("Голова, видимо устав на тебя ругаться, смотрит куда-то в сторону входа.")
+            api.line(c.player, "(Хорошо, что того мира больше нет)")
           elseif chosen_option_2 == 2 then
-            api.line(c.player, "")
-            api.line(c.player, "")
-            api.line(c.son_mary, "")
-            api.line(c.son_mary, "")
-            api.line(c.son_mary, "")
-            api.line(c.son_mary, "")
-            api.line(c.player, "")
-            api.line(c.son_mary, "")
-            api.line(c.son_mary, "")
-            api.line(c.player, "")
-            api.line(c.son_mary, "")
-            api.line(c.son_mary, "")
-            api.line(c.son_mary, "")
-            api.line(c.son_mary, "")
-            api.line(c.son_mary, "")
-            api.line(c.son_mary, "")
-            api.line(c.son_mary, "")
-            api.narration("")
-            api.line(c.son_mary, "")
-            api.line(c.son_mary, "")
-            api.line(c.player, "")
-            api.line(c.son_mary, "")
+            api.line(c.player, "Выпустил пар.")
+            api.line(c.player, "Ты не представляешь, как меня всё достало.")
+            api.line(c.son_mary, "Дерьмовый день, да?")
+            api.line(c.son_mary, "Иди прирежь кого-нибудь — всегда так делаю.")
+            api.line(c.son_mary, "Ну, делал.")
+            api.line(c.player, "Сейчас не в состоянии?")
+            api.line(c.son_mary, "Пока. Не в состоянии.")
+            api.line(c.son_mary, "История тут вспомнилась недавняя, лет 20 назад, кажется, было...")
+            api.line(c.player, "Мне не интересно.")
+            api.line(c.son_mary, "Послушай, тебе понравится.")
+            api.line(c.son_mary, "Свадьба была у меня тогда; нашёл я одну весьма интересную особу.")
+            api.line(c.son_mary, "Похитилась она как-то случайно в процессе одного из налётов.")
+            api.line(c.son_mary, "Что-то было в ней такое, гхм, страшное.")
+            api.line(c.son_mary, "Будто даже не боялась меня; изображала раболепие, но хи-и-итро так при этом поглядывала.")
+            api.line(c.son_mary, "На корабле командовать стала ещё до свадьбы, меня это даже поначалу забавляло.")
+            api.line(c.son_mary, "И как я только на эту чертову церемонию согласился... В мои года уже не поддаются на бабьи чары.")
+            api.narration("Ты не можешь скрыть подобравшуюся ухмылку: таких сентиментов ты от мрачного пирата не ожидал.")
+            api.line(c.son_mary, "Я выкинул её за борт сразу после свадьбы.")
+            api.line(c.son_mary, "Только там этой мурене и место.")
+            api.line(c.player, "И какова мораль этой басни?")
+            api.line(c.son_mary, "Если кто-то пытается тобой водить — кидай его за борт.")
           else  -- chosen_option_2 == 3
-            api.line(c.player, "")
-            api.line(c.son_mary, "")
-            api.narration("")
-            api.line(c.player, "")
-            api.narration("")
-            api.line(c.player, "")
+            api.line(c.player, "Не буду перед тобой отчитываться. Я ухожу.")
+            api.line(c.son_mary, "Наверное считаешь себя самым несчастным, брошенным всем миром вечным одиноким волком? К сожалению, не могу предложить успокаивающие объятия.")
+            api.narration("Не отвечай, так будет казаться, что он сказал это самому себе.")
+            api.line(c.player, "(О, да, ему лучше подходит)")
+            api.narration("Но... Может он в чем-то прав? Раньше ты не был таким чувствительным. Слишком человечно для тебя.")
+            api.line(c.player, "(Самое время перестать говорить с самим собой)")
           end
         end
 
