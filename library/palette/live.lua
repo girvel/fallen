@@ -8,9 +8,6 @@ local pipes   = require("library.palette.pipes")
 
 
 
---- @class live: { [string]: fun(...): table }
---- @field door fun(args: {highlight: boolean?}): table
---- @field black_door fun(args: {highlight: boolean?}): table
 local live, _, static = Module("library.palette.live")
 
 local valve_rotating_sounds = sound.multiple("assets/sounds/valve_rotate", 0.05)

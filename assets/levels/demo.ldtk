@@ -2679,9 +2679,9 @@
 							"height": 16,
 							"defUid": 22,
 							"px": [352,1408],
-							"fieldInstances": [{ "__identifier": "name", "__type": "String", "__value": "exit", "__tile": null, "defUid": 23, "realEditorValues": [{
+							"fieldInstances": [{ "__identifier": "name", "__type": "String", "__value": "detective_exit", "__tile": null, "defUid": 23, "realEditorValues": [{
 								"id": "V_String",
-								"params": ["exit"]
+								"params": ["detective_exit"]
 							}] }],
 							"__worldX": 352,
 							"__worldY": 896
@@ -2704,25 +2704,6 @@
 							}] }],
 							"__worldX": 320,
 							"__worldY": 848
-						},
-						{
-							"__identifier": "position",
-							"__grid": [23,88],
-							"__pivot": [0,0],
-							"__tags": ["positions"],
-							"__tile": null,
-							"__smartColor": "#19AD51",
-							"iid": "c29b36b0-4ce0-11ef-896a-e7077fecbe95",
-							"width": 16,
-							"height": 16,
-							"defUid": 22,
-							"px": [368,1408],
-							"fieldInstances": [{ "__identifier": "name", "__type": "String", "__value": "detective_notification_activation", "__tile": null, "defUid": 23, "realEditorValues": [{
-								"id": "V_String",
-								"params": ["detective_notification_activation"]
-							}] }],
-							"__worldX": 368,
-							"__worldY": 896
 						},
 						{
 							"__identifier": "position",

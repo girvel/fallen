@@ -34,41 +34,12 @@ return function()
         rails.scenes.open_left_megadoor.enabled = true
       end,
     },
-    detective_intro = {
-      name = "Player enters the detective room",
-      enabled = true,
-      start_predicate = function(self, rails, dt)
-        return State.player.position == rails.positions.exit
-      end,
 
-      run = function(self, rails)
-        self.enabled = false
-        rails.entities.leaking_valve.paused = true
-        api.center_camera()
-        State.player.ai.in_cutscene = true
-
-        api.narration("Резкий запах мазута, керосина и ржавчины заставляет зажмуриться.")
-        api.narration("Помещение забито трубами и приборами непонятного назначения.")
-        api.narration("Три фигуры в защитных спецовках резко оборачиваются в твою сторону и так же быстро возвращаются к работе.")
-        api.narration("А вот ближайший к тебе рабочий — полуэльф, похоже не замечает твоего присутствия")
-        api.narration("Он лишь пялится на непонятные устройства и раз в несколько секунд выкрикивает странный набор звуков и чисел.")
-        api.line(State.player, "(Диверсант — один из четырёх рабочих)")
-        api.line(State.player, "(Я смогу вычислить его из показаний остальных)")
-        api.line(State.player, "(Надо начать с допроса)")
-        api.line(State.player, "(Надеюсь, они видели или слышали что-то необычное)")
-
-        rails.entities.leaking_valve.paused = false
-        pipes.burst_with_steam(rails.entities.leaking_valve)
-        api.narration("Мощный поток горячего пара от ближайшей трубы прерывает твои мысли")
-        State.player.ai.in_cutscene = false
-        api.autosave()
-      end,
-    },
     detective_notification = {
       name = "Player gets notification after entering detective room",
       enabled = true,
       start_predicate = function(self, rails, dt)
-        return State.player.position == rails.positions.detective_notification_activation
+        return rails.entities.detective_door.is_open
       end,
 
       run = function(self, rails)
@@ -77,6 +48,37 @@ return function()
         api.update_quest({detective = 2})
       end,
     },
+
+    detective_intro = {
+      name = "Player enters the detective room",
+      enabled = true,
+      start_predicate = function(self, rails, dt)
+        return State.player.position == rails.positions.detective_exit
+      end,
+
+      run = function(self, rails)
+        self.enabled = false
+        rails.entities.leaking_valve.paused = true
+        State.player.ai.in_cutscene = true
+
+        api.narration("Мазут, ржавчина, керосин — резкое сочетание бьёт по ноздрям и глазам.")
+        api.narration("Помещение забито трубами и чужеродными приборами.")
+        api.narration("Фигуры в защитных робах резко оборачиваются в твою сторону и так же быстро возвращаются к работе.")
+        api.narration("Все, кроме полуэльфа.")
+        api.narration("Остроухий не обращает внимания на твоё вторжение.")
+        api.narration("Он лишь пялится на непонятные устройства и раз в несколько секунд выкрикивает странный набор букв и цифр.")
+        api.line(State.player, "(Дверь была наглухо заперта, диверсант не мог выйти)")
+        api.line(State.player, "(А если здесь есть диверсант — должна быть диверсия)")
+        api.line(State.player, "(Допрос прояснит ситуацию; лжецы всегда ошибаются, а непричастный не будет врать)")
+
+        rails.entities.leaking_valve.paused = false
+        pipes.burst_with_steam(rails.entities.leaking_valve)
+        api.narration("Мощный поток горячего пара прерывает твои мысли.")
+        State.player.ai.in_cutscene = false
+        api.autosave()
+      end,
+    },
+
     {
       name = "Experiment",
       enabled = true,
@@ -91,6 +93,7 @@ return function()
         rails.entities.engineer_3:rotate("up")
       end,
     },
+
     second_rotates_valve = {
       name = "Second rotates the valve",
       enabled = true,
@@ -108,6 +111,7 @@ return function()
         rails.entities.engineer_2:act(actions.interact)
       end,
     },
+
     first_shouts = {
       name = "Lead engineer shouts",
       enabled = true,
@@ -126,6 +130,7 @@ return function()
         }), {source = rails.entities.engineer_1})
       end,
     },
+
     {
       name = "Talking to the first",
       enabled = true,
@@ -137,9 +142,9 @@ return function()
         rails.entities.engineer_1.interacted_by = nil
 
         State.player.ai.in_cutscene = true
-        api.narration("Когда ты подходишь ближе, измазанный сажей полуэльф всё так же не оборачивается.")
+        api.narration("Когда ты подходишь ближе, полуэльф всё так же не оборачивается.")
         api.narration("Его глаза, не отрываясь, смотрят прямо на приборы.")
-        api.narration("Полуповисшая рука мертвой хваткой сжимает газовый ключ.")
+        api.narration("Повисшая рука мертвой хваткой сжимает газовый ключ.")
         while true do
           local picked_option = api.options({
             "Какую работу ты выполняешь?",
@@ -149,7 +154,7 @@ return function()
           })
           if picked_option == 1 then
             api.line(rails.entities.engineer_1, "Главный инженер")
-            api.line(rails.entities.engineer_1, "Моя работа — наблюдать за приборами")
+            api.line(rails.entities.engineer_1, "Моя работа — наблюдать за приборами, оповещать инженеров об их состояниях")
             api.line(rails.entities.engineer_1, "В данный момент слежу за показателями давления")
           elseif picked_option == 2 then
             api.line(rails.entities.engineer_1, "Наблюдать могу только оборудование")
@@ -168,6 +173,7 @@ return function()
         State.player.ai.in_cutscene = false
       end,
     },
+
     {
       name = "Talking to the second",
       enabled = true,
@@ -182,7 +188,7 @@ return function()
         rails.entities.engineer_2:animate()
 
         State.player.ai.in_cutscene = true
-        api.narration("Уродливый полурослик с перевязанным лицом делает один оборот массивного красного вентиля.")
+        api.narration("Кривой полурослик делает один оборот массивного красного вентиля.")
         api.narration("А спустя 10 секунд — ещё один.")
         api.narration("И снова.")
         api.narration("Похоже, свежие ожоги от пара не стимулируют его остановиться.")
@@ -215,6 +221,7 @@ return function()
         State.player.ai.in_cutscene = false
       end,
     },
+
     {
       name = "Talking to the third",
       enabled = true,
@@ -272,9 +279,9 @@ return function()
         rails.entities.engineer_4:animate()
 
         State.player.ai.in_cutscene = true
-        api.narration("Дварфийка покрытыми волдырями руками засовывает вглубь небольшой печи очередную порцию чего-то, похожего на чёрную смолу.")
+        api.narration("Дварфийка покрытыми волдырями руками засовывает вглубь небольшой печи очередную порцию чёрной вязкой смолы.")
         api.narration("Ты замечаешь, что её пальцы совсем не могут двигаться.")
-        api.narration("Она слегка оборачивается при твоем приближении, продолжая работать.")
+        api.narration("При твоем приближении она слегка оборачивается, не прекращая работать")
 
         while true do
           local options = {

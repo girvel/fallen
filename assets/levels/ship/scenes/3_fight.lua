@@ -140,7 +140,7 @@ return function()
               api.make_hostile("half_orc", rails.entities)
               State:start_combat({State.player, rails.entities.engineer_3})
             else
-              rails.entities.engineer_3.ai.mode = general_ai.modes.run_away_to(rails.positions.exit)
+              rails.entities.engineer_3.ai.mode = general_ai.modes.run_away_to(rails.positions.detective_exit)
               rails.scenes.player_attacks_half_orc.enabled = true
 
               rails.scenes.engineer_4_normal_dialogue.enabled = false
@@ -196,7 +196,7 @@ return function()
           cue.set(e, "highlight", false)
         end
 
-        rails.entities.engineer_3.ai.mode = general_ai.modes.run_away_to(rails.positions.exit)
+        rails.entities.engineer_3.ai.mode = general_ai.modes.run_away_to(rails.positions.detective_exit)
 
         api.notification("Это была ошибка", true)
       end,
@@ -219,8 +219,8 @@ return function()
       name = "Half-orc runs away",
       enabled = true,
       start_predicate = function(self, rails, dt)
-        return rails.entities.engineer_3.ai.mode == general_ai.modes.run_away_to(rails.positions.exit)
-          and rails.entities.engineer_3.position == rails.positions.exit
+        return rails.entities.engineer_3.ai.mode == general_ai.modes.run_away_to(rails.positions.detective_exit)
+          and rails.entities.engineer_3.position == rails.positions.detective_exit
       end,
 
       run = function(self, rails)
@@ -236,7 +236,7 @@ return function()
       enabled = true,
       start_predicate = function(self, rails, dt)
         return api.get_quest("detective") == 2
-          and (State.player.position - rails.positions.exit):abs() > 20
+          and (State.player.position - rails.positions.detective_exit):abs() > 20
       end,
 
       run = function(self, rails)
@@ -250,8 +250,9 @@ return function()
       name = "Player tries to leave detective zone",
       enabled = true,
       start_predicate = function(self, rails, dt)
-        return State.gui.wiki.quest_states.detective == 2
-          and State.player.position == rails.positions.detective_exit_warning
+        local exit = rails.positions.detective_exit_warning
+        return api.get_quest("detective") == 2
+          and Table.contains({exit + Vector.down, exit + Vector.left}, State.player.position)
       end,
 
       run = function(self, rails)
