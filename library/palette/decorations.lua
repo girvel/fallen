@@ -8,15 +8,14 @@ local shaders = require("tech.shaders")
 
 local decorations, module_mt, static = Module("library.palette.decorations")
 
-local decorations_atlas = "assets/sprites/atlases/decorations.png"
-factoring.from_atlas(decorations, decorations_atlas, {
+factoring.from_atlas(decorations, "assets/sprites/atlases/decorations.png", {
   view = "scene",
   layer = "solids",
   transparent_flag = true,
 }, {
   "device_panel", "device_panel_broken", "furnace", "table", "locker_open", "locker_damaged", "cabinet_open", "cabinet_damaged",
   "lower_bunk", "crate", "crate_open", "chest", "chest_open", "table_left", "table_hor", "table_right",
-  false, "chamber_pot", "bucket", false, "countertop", "oven", "kitchen_sink", "countertop",
+  false, "chamber_pot", "bucket", "bucketd", "countertop", "oven", "kitchen_sink", "countertop",
   "table_up", "mirage_block", "stool", "sofa", "countertop_left", "bed", "sink", "countertop",
   "table_ver", "transparent_wall", "low_wall", "scratched_table", "countertop", "countertop", "empty_bed", "countertop",
   "table_down", "cage", "device_panel_v1", "device_panel_v2", "countertop", "cabinet", "cabinet", "countertop",
@@ -37,6 +36,16 @@ factoring.extend(decorations, "device_panel", {
   },
   on_remove = function(self)
     State:add(decorations.device_panel_broken(), {position = self.position})
+  end,
+})
+
+factoring.extend(decorations, "bucket", {
+  hp = 1,
+  sounds = {
+    hit = sound.multiple("assets/sounds/bucket"),
+  },
+  on_remove = function(self)
+    State:add(decorations.bucketd(), {position = self.position})
   end,
 })
 
