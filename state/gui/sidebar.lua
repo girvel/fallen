@@ -128,7 +128,8 @@ return Module("state.gui.sidebar", function()
         append("Второе оружие: %s\n\n" % second_weapon:to_display())
       end
 
-      do
+      -- TODO move the bag out of rails, temporary hack for now to use polygon level
+      if State.rails.bottles_taken then
         local bag = {}
         if State.rails.bottles_taken > 0 then
           table.insert(bag, {"Бутылки с алкоголем", tostring(State.rails.bottles_taken)})

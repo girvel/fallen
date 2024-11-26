@@ -141,7 +141,11 @@ local state_base = {
   load_level = function(self, path)
     local level_data = require(path).load()
 
-    self.water_speed = level_data.water_speed
+    self.water_speed = assert(
+      level_data.water_speed,
+      "water_speed for level %q is undefined" % path
+    )
+
     self.grids = Fun.iter(level.GRID_LAYERS)
       :map(function(layer)
         return layer, Grid(
