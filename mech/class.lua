@@ -3,6 +3,7 @@ local experience = require("mech.experience")
 local action = require("tech.action")
 local abilities = require("mech.abilities")
 local health = require("mech.health")
+local sound  = require("tech.sound")
 
 
 local class, _, static = Module("mech.class")
@@ -102,6 +103,7 @@ class.hit_dice = static {
       return entity.hp < entity:get_max_hp()
     end,
     _run = function(self, entity)
+      sound("assets/sounds/hit_dice.mp3", .3):place(entity.position):play()
       health.heal(entity, self:get_healing_roll(entity):roll())
     end,
     _get_description = action.descriptions.healing,
