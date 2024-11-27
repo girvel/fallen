@@ -730,5 +730,184 @@ return function()
         return rails.scenes.son_mary_ally:run(rails, c)
       end,
     },
+
+    {
+      name = "Son Mary: ally",
+      enabled = true,
+
+      characters = {
+        son_mary = {},
+        player = {},
+      },
+
+      start_predicate = function(self, rails, dt, c)
+        return api.get_quest("alcohol") == quest.COMPLETED and c.son_mary.interacted_by == c.player
+      end,
+
+      _options = {
+        past = {
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+        },
+      },
+
+      run = function(self, rails, c)
+        self.enabled = false
+
+        api.narration("")
+        api.line(c.son_mary, "")
+
+        while true do
+          local chosen_option_1 = api.options({
+            "",
+            "",
+            "",
+            "",
+            "",
+          })
+
+          if chosen_option_1 == 1 then
+            break
+
+          elseif chosen_option_1 == 2 then
+            while true do
+              local chosen_option_2 = api.options(self._options.past)
+              
+              if chosen_option_2 == 1 then
+                self._options.past[1] = nil
+                api.line(c.son_mary, "")
+                api.line(c.player, "")
+                api.line(c.son_mary, "")
+                api.line(c.son_mary, "")
+                api.line(c.son_mary, "")
+                api.line(c.player, "")
+                api.line(c.son_mary, "")
+                api.line(c.son_mary, "")
+                api.line(c.player, "")
+                api.line(c.son_mary, "")
+                api.line(c.son_mary, "")
+                api.line(c.son_mary, "")
+                api.line(c.son_mary, "")
+                api.line(c.son_mary, "")
+                api.line(c.son_mary, "")
+                api.narration("")
+                api.line(c.son_mary, "")
+                api.line(c.son_mary, "")
+                api.line(c.son_mary, "")
+                api.line(c.son_mary, "")
+                api.line(c.son_mary, "")
+
+                if api.ability_check("insight", 14)
+                  or rails.resists_son_mary and api.ability_check("insight", 14)
+                then
+                  api.line(c.player, "", {check = {"insight", true}})
+                  api.narration("")
+                  api.line(c.son_mary, "")
+                  api.line(c.son_mary, "")
+                  api.line(c.son_mary, "")
+                  api.line(c.son_mary, "")
+                  api.line(c.player, "")
+                  api.line(c.son_mary, "")
+                else
+                  api.line(c.player, "", {check = {"insight", false}})
+                  api.line(c.son_mary, "")
+                  api.line(c.son_mary, "")
+                end
+
+              elseif chosen_option_2 == 2 then
+                api.line(c.son_mary, "")
+                api.line(c.player, "")
+                api.line(c.son_mary, "")
+                api.line(c.son_mary, "")
+                api.line(c.son_mary, "")
+                api.line(c.son_mary, "")
+                api.line(c.player, "")
+                api.line(c.son_mary, "")
+
+              elseif chosen_option_2 == 3 then
+                api.line(c.son_mary, "")
+                api.line(c.player, "")
+                api.line(c.son_mary, "")
+                api.line(c.son_mary, "")
+                api.line(c.son_mary, "")
+                api.line(c.player, "")
+                api.line(c.son_mary, "")
+                api.line(c.son_mary, "")
+
+              elseif chosen_option_2 == 4 then
+                api.line(c.son_mary, "")
+                api.line(c.player, "")
+                api.line(c.son_mary, "")
+                api.narration("")
+                api.line(c.son_mary, "")
+
+              elseif chosen_option_2 == 5 then
+                api.line(c.son_mary, "")
+                -- TODO FX creepy face
+                api.line(c.son_mary, "")
+                api.line(c.son_mary, "")
+                api.line(c.son_mary, "")
+                -- TODO FX stop creepy face
+                api.line(c.son_mary, "")
+                api.line(c.player, "")
+                api.line(c.son_mary, "")
+                api.line(c.son_mary, "")
+                api.line(c.son_mary, "")
+                api.line(c.son_mary, "")
+                api.line(c.son_mary, "")
+                
+                -- local line = ""
+                -- rails:run_task(function()
+                --   api.wait_seconds(.5)
+                --   if then end
+                -- end)
+                -- TODO! skipped line
+
+                api.line(c.player, "")
+                api.narration("")
+                api.line(c.son_mary, "")
+                api.line(c.son_mary, "")
+                api.line(c.son_mary, "")
+                api.line(c.son_mary, "")
+                api.line(c.son_mary, "")
+                api.narration("")
+
+              else  -- chosen_option_2 == 6
+                api.line(c.son_mary, "")
+
+              end
+            end
+
+          elseif chosen_option_1 == 3 then
+            api.line(c.son_mary, "")
+            api.line(c.son_mary, "")
+            api.line(c.son_mary, "")
+            api.line(c.son_mary, "")
+            api.line(c.son_mary, "")
+            api.line(c.son_mary, "")
+            api.line(c.son_mary, "")
+            api.line(c.son_mary, "")
+            api.line(c.son_mary, "")
+            api.line(c.son_mary, "")
+            api.line(c.son_mary, "")
+            api.line(c.player, "")
+            api.line(c.son_mary, "")
+            api.line(c.player, "")
+            api.line(c.player, "")
+            api.line(c.son_mary, "")
+
+          elseif chosen_option_1 == 4 then
+            while true do
+              
+            end
+
+          end
+        end
+      end,
+    },
   }
 end
