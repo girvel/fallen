@@ -98,6 +98,8 @@ return function(positions, entities)
       self.entities.gas_key = self.entities.engineer_1.inventory.main_hand
 
       State:refresh(self.entities.soup_cauldron, interactive.detector(), {name = "кастрюля"})
+
+      self.entities.son_mary.sprite.color = Colors.from_hex("df529e")
     end,
 
     been_to_latrine = false,

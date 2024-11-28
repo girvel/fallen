@@ -23,6 +23,7 @@ return function()
         return not State:exists(self.popup[1])
           and not rails:is_running("son_mary_meeting")
           and (c.son_mary.position - State.player.position):abs() <= 3
+          and api.get_quest("alcohol") == 0
       end,
 
       run = function(self, rails, c)
@@ -47,6 +48,7 @@ return function()
 
       start_predicate = function(self, rails, dt, c)
         return c.son_mary.interacted_by == c.player
+          and api.get_quest("alcohol") == 0
       end,
 
       _first_time = true,
@@ -777,11 +779,11 @@ return function()
       },
 
       activate_people_option = function(self, option)
-        self._options.people = assert(self._inactive_people_options[option])
+        self._options.people[option] = assert(self._inactive_people_options[option])
       end,
 
       run = function(self, rails, c)
-        self.enabled = false
+        c.son_mary.interacted_by = nil
 
         api.narration("Сон Мари глухо кашляет, создавая водоворот из пузырей.")
         api.line(c.son_mary, "Ну что %s, собираешься что-то обсудить?" % {c.son_mary.player_name})

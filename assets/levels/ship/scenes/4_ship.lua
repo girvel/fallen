@@ -75,14 +75,15 @@ return function()
         item.give(State.player, State:add(items.pole()))
         api.center_camera()
         State:remove(rails.entities.captain_door_note)
-        api.update_quest({parasites = 1})
+        api.update_quest({parasites = 1, alcohol = quest.COMPLETED})
         rails.has_valve = true
-        rails.bottles_taken = 3
+        --rails.bottles_taken = 3
 
         health.set_hp(State.player, 20)
         rails:start_lunch()
         rails.seen_water = true
         rails.met_son_mary = true
+        rails.entities.son_mary.player_name = "Гаспар"
       end,
     },
 
