@@ -889,12 +889,17 @@ return function()
                 api.line(c.son_mary, "И когти морского черта, что забирают меня в вечные объятия")
                 api.line(c.son_mary, "Знакомо ли тебе чувство времени в вечности? Ощущение сознания в чужом разуме? Боль и <hate>ненависть</hate> в отсутствие тела?")
 
-                -- local line = "Знакомо"
-                -- rails:run_task(function()
-                --   api.wait_seconds(.5)
-                --   if then end
-                -- end)
-                -- TODO! skipped line
+                do
+                  State.gui.dialogue:show("Знакомо")
+                  local line_entity_sample = State.gui.dialogue._entities[1]
+                  rails:run_task(function()
+                    api.wait_seconds(.5)
+                    if State:exists(line_entity_sample) then
+                      State.gui.dialogue:skip()
+                    end
+                  end)
+                  while State.mode:get() ~= State.mode.free do coroutine.yield() end
+                end
 
                 api.line(c.player, "Незнакомо.")
                 api.narration("На несколько секунд тишина охватывает помещение.")
