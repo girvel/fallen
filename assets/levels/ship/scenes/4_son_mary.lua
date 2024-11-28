@@ -731,7 +731,7 @@ return function()
       end,
     },
 
-    {
+    son_mary_ally = {
       name = "Son Mary: ally",
       enabled = true,
 
@@ -799,7 +799,7 @@ return function()
           elseif chosen_option_1 == 2 then
             while true do
               local chosen_option_2 = api.options(self._options.past)
-              
+
               if chosen_option_2 == 1 then
                 self._options.past[1] = nil
                 api.line(c.son_mary, "")
@@ -882,7 +882,7 @@ return function()
                 api.line(c.son_mary, "")
                 api.line(c.son_mary, "")
                 api.line(c.son_mary, "")
-                
+
                 -- local line = ""
                 -- rails:run_task(function()
                 --   api.wait_seconds(.5)

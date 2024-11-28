@@ -44,6 +44,8 @@ return function()
         self._interaction_i = self._interaction_i + 1
 
         if self._interaction_i == 1 then
+          rails.scenes.son_mary_ally:activate_people_option(1)
+
           api.line(c.markiss, c.markiss.ai.point_i == 1
             and "Пропустите-с, направляюсь от кош-тельной за углём"
             or "Пропустите-с, несу уголь в кош-тельную"

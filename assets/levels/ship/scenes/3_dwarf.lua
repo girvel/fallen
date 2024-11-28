@@ -30,6 +30,7 @@ return function()
       run = function(self, rails)
         self.enabled = false
         rails.scenes.dwarf_signals_talking.enabled = false
+        rails.scenes.son_mary_ally:activate_people_option(5)
         --rails.entities.engineer_3.portrait = sprite.image("assets/sprites/portraits/dwarf.png")
 
         local is_rront_alive = rails.entities.engineer_3.hp > 0

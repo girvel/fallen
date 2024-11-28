@@ -125,6 +125,7 @@ return function(positions, entities)
       api.notification("Задача выполнена неудовлетворительно", true)
       api.update_quest({detective = quest.FAILED})
       self:start_lunch()
+      self.scenes.son_mary_ally:activate_people_option(3)
     end,
 
     notice_flask = function(self)
