@@ -21,7 +21,7 @@ local state, module_mt, static = Module("state")
 --- @field water_speed number
 ---
 --- @field combat table?
---- @field gui table
+--- @field gui state_gui
 --- @field hotkeys table
 --- @field ambient state_ambient
 --- @field mode table

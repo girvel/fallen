@@ -5,6 +5,9 @@ local constants = require("tech.constants")
 
 local gui, module_mt, static = Module("state.gui")
 
+--- @class state_gui: {[string]: any}
+--- @field dialogue state_gui_dialogue
+
 local produce_views = function(matrix)
   local views = {}
   local views_order = {}

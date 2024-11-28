@@ -29,7 +29,7 @@ api.narration = function(text, params)
   while State.mode:get() ~= State.mode.free do coroutine.yield() end
 end
 
---- @alias talker {position: vector, sprite_offset: vector?, sprite: {color: color}, portrait: love.Image}
+--- @alias talker {position: vector, sprite_offset: vector?, sprite: {color: color}, portrait: sprite_image}
 
 --- Display entity's line at the bottom of the screen
 --- @async
