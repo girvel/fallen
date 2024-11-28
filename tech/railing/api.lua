@@ -276,7 +276,7 @@ api.update_quest = function(changes)
   end
 end
 
---- Get current state of quest w/ given codename
+--- Get current stage of quest w/ given codename
 --- @param codename string quest's identifier
 --- @return integer
 api.get_quest = function(codename)
