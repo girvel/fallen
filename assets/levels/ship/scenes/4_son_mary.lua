@@ -753,7 +753,30 @@ return function()
           "",
           "",
         },
+        place = {
+          "",
+          "",
+          "",
+          "",
+          "",
+        },
+        people = {
+          [2] = "",
+          [6] = "",
+        },
       },
+
+      _inactive_people_options = {
+        "",
+        nil,
+        "",
+        "",
+        "",
+      },
+
+      activate_people_option = function(self, option)
+        self._options.people = assert(self._inactive_people_options[option])
+      end,
 
       run = function(self, rails, c)
         self.enabled = false
@@ -878,7 +901,7 @@ return function()
 
               else  -- chosen_option_2 == 6
                 api.line(c.son_mary, "")
-
+                break
               end
             end
 
@@ -902,9 +925,125 @@ return function()
 
           elseif chosen_option_1 == 4 then
             while true do
-              
+              local chosen_option_2 = api.options(self._options.place)
+              if chosen_option_2 == 1 then
+                api.line(c.son_mary, "")
+                api.line(c.son_mary, "")
+                api.line(c.son_mary, "")
+                api.line(c.son_mary, "")
+                api.line(c.son_mary, "")
+                api.line(c.son_mary, "")
+                api.line(c.player, "")
+
+              elseif chosen_option_2 == 2 then
+                api.line(c.son_mary, "")
+                api.line(c.player, "")
+                api.line(c.son_mary, "")
+                api.line(c.son_mary, "")
+                api.line(c.son_mary, "")
+                api.line(c.son_mary, "")
+
+              elseif chosen_option_2 == 3 then
+                api.line(c.son_mary, "")
+                api.line(c.son_mary, "")
+                api.line(c.son_mary, "")
+                api.line(c.son_mary, "")
+                api.line(c.son_mary, "")
+
+              elseif chosen_option_2 == 4 then
+                self._options.place[4] = nil
+                if api.ability_check("investigation", 13) then
+                  api.narration("", {check = {"investigation", true}})
+                  api.line(c.player, "")
+                  api.line(c.son_mary, "")
+                  api.line(c.player, "")
+                  api.line(c.son_mary, "")
+                  api.line(c.player, "")
+                  api.line(c.son_mary, "")
+                  api.line(c.player, "")
+                  api.line(c.player, "")
+                  api.line(c.son_mary, "")
+                  api.line(c.son_mary, "")
+                  api.line(c.son_mary, "")
+                  api.line(c.son_mary, "")
+                  api.line(c.player, "")
+                  api.line(c.son_mary, "")
+                  api.narration("")
+                  api.line(c.son_mary, "")
+                  api.line(c.player, "")
+                  api.line(c.son_mary, "")
+                else
+                  api.narration("", {check = {"investigation", false}})
+                  api.line(c.player, "")
+                  api.line(c.son_mary, "")
+                  api.line(c.son_mary, "")
+                  api.line(c.son_mary, "")
+                end
+
+              else
+                api.line(c.son_mary, "")
+                break
+              end
             end
 
+          else  -- chosen_option_1 == 5
+            while true do
+              local chosen_option_2 = api.options(self._options.people)
+
+              if chosen_option_2 == 1 then
+                api.line(c.son_mary, "")
+                api.line(c.son_mary, "")
+                api.line(c.son_mary, "")
+                api.line(c.son_mary, "")
+                api.line(c.player, "")
+                api.line(c.son_mary, "")
+
+              elseif chosen_option_2 == 2 then
+                api.line(c.son_mary, "")
+                api.line(c.son_mary, "")
+                api.line(c.son_mary, "")
+                api.line(c.son_mary, "")
+                api.line(c.son_mary, "")
+                api.line(c.son_mary, "")
+                api.line(c.son_mary, "")
+                api.line(c.son_mary, "")
+                api.line(c.son_mary, "")
+
+              elseif chosen_option_2 == 3 then
+                api.line(c.son_mary, "")
+                api.line(c.player, "")
+                api.line(c.player, "")
+                api.line(c.son_mary, "")
+                api.line(c.son_mary, "")
+                api.line(c.player, "")
+                api.line(c.son_mary, "")
+                api.line(c.player, "")
+
+              elseif chosen_option_2 == 4 then
+                -- requires Eve
+
+              elseif chosen_option_2 == 5 then
+                api.line(c.son_mary, "")
+                api.line(c.player, "")
+                api.line(c.player, "")
+                api.line(c.son_mary, "")
+                api.line(c.player, "")
+                api.line(c.player, "")
+                api.line(c.player, "")
+                api.line(c.son_mary, "")
+                api.narration("")
+                api.line(c.son_mary, "")
+                api.line(c.son_mary, "")
+                api.line(c.son_mary, "")
+                api.line(c.son_mary, "")
+                api.narration("")
+                api.line(c.player, "")
+
+              else
+                api.line(c.son_mary, "")
+                break
+              end
+            end
           end
         end
       end,
