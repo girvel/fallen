@@ -80,6 +80,8 @@ return function()
         --rails.bottles_taken = 3
 
         health.set_hp(State.player, 20)
+        rails:spawn_possessed()
+        coroutine.yield()
         rails:start_lunch()
         rails.seen_water = true
         rails.met_son_mary = true

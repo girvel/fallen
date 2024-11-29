@@ -267,16 +267,7 @@ return function()
 
         api.update_quest({warmup = quest.COMPLETED, detective = 1})
         rails.entities.detective_door.locked = false
-
-        rails.entities.dining_room_door_1:close()
-        rails.entities.dining_room_door_2:close()
-        rails.scenes.sees_possessed.enabled = false
-        rails.scenes.sees_possessed_again.enabled = true
-        rails.scenes.kills_possessed.enabled = true
-        rails.entities.possessed = State:add(mobs.possessed(), {
-          position = rails.positions.possessed_spawn
-        })
-        State:add(on_tiles.blood(), {position = rails.positions.possessed_spawn})
+        rails:spawn_possessed()
 
         api.notification("Направляйся к комнате с черной дверью.", true)
 
@@ -289,19 +280,25 @@ return function()
     sees_possessed_again = {
       name = "Player sees possessed again",
       enabled = false,
-      start_predicate = function(self, rails, dt)
-        return (State.player.position - rails.entities.possessed.position):abs() < 5
+
+      characters = {
+        possessed = {},
+        player = {},
+      },
+
+      start_predicate = function(self, rails, dt, c)
+        return (c.player.position - c.possessed.position):abs() < 5
       end,
 
-      run = function(self, rails)
+      run = function(self, rails, c)
         self.enabled = false
 
         api.narration("На стуле бледный мужчина с диким взглядом зубами — нет — пастью разрывает иволгу.")
         api.narration("Его одежда разорвана; всё вокруг покрыто кровью и перьями прекрасной птицы.")
-        sound.play("assets/sounds/possessed_turns_around.mp3", .15)
+        sound("assets/sounds/possessed_turns_around.mp3", .15):play()
         api.narration("Внезапно демон в человеческом обличье замечает тебя.")
 
-        State:start_combat({State.player, rails.entities.possessed})
+        State:start_combat({c.player, c.possessed})
       end,
     },
 

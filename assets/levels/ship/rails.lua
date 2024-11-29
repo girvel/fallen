@@ -1,3 +1,5 @@
+local on_tiles = require("library.palette.on_tiles")
+local mobs = require("library.palette.mobs")
 local health = require("mech.health")
 local quest = require("tech.quest")
 local item = require("tech.item")
@@ -115,6 +117,18 @@ return function(positions, entities)
     seen_water = false,
     met_son_mary = false,
 
+    spawn_possessed = function(self)
+      self.entities.dining_room_door_1:close()
+      self.entities.dining_room_door_2:close()
+      self.scenes.sees_possessed.enabled = false
+      self.scenes.sees_possessed_again.enabled = true
+      self.scenes.kills_possessed.enabled = true
+      self.entities.possessed = State:add(mobs.possessed(), {
+        position = self.positions.possessed_spawn
+      })
+      State:add(on_tiles.blood(), {position = self.positions.possessed_spawn})
+    end,
+
     give_valve_to_player = function(self)
       self.has_valve = true
       State:remove(self.entities.captain_door_valve)
@@ -162,8 +176,10 @@ return function(positions, entities)
         level.move(self.entities.cook, self.positions.cook_chilling)
       end
 
-      if State:exists(self.entities.possessed) then
-        health.set_hp(self.entities.possessed, 0)
+      self.scenes.kills_possessed.enabled = false
+      local there_was_combat = State:exists(self.entities.possessed)
+      if there_was_combat then
+        health.damage(self.entities.possessed, 1000)
       end
 
       local possessed_position = -Query(self.entities.possessed).position
@@ -175,8 +191,25 @@ return function(positions, entities)
         possessed_position = self.positions.possessed_spawn
       end
 
-      for v in iteration.expanding_rhombus() do
-        v = v + possessed_position
+      local killer_counter = 0
+      for d in iteration.expanding_rhombus() do
+        if d == Vector.zero then goto continue end
+        local v = d + possessed_position
+        if State.grids.solids:safe_get(v) then goto continue end
+
+        killer_counter = killer_counter + 1
+        if killer_counter == 3 and there_was_combat then
+          State:add(on_tiles.blood(), {position = v})
+          break
+        end
+
+        self.entities["canteen_killer_" .. killer_counter] = State:add(
+          mobs.dreamer({faction = "canteen_killers"}),
+          {position = v, direction = Vector.name_from_direction(d:normalized())}
+        )
+
+        if killer_counter == 3 and not there_was_combat then break end
+        ::continue::
       end
     end,
   })

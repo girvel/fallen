@@ -12,7 +12,7 @@ local state, module_mt, static = Module("state")
 
 --- @class state
 --- @field player player
---- @field grids table<layer, table>
+--- @field grids table<layer, grid>
 --- @field factions table<string, table>
 --- @field shader shader?
 --- @field profiler table

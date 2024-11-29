@@ -39,7 +39,7 @@ local grid_methods = {
 
   --- @param self grid
   --- @param v vector
-  --- @param default any
+  --- @param default? any
   --- @return any
   safe_get = function(self, v, default)
     if not self:can_fit(v) then return default end
