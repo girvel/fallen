@@ -140,6 +140,7 @@ local grid_methods = {
   --- @return vector?
   find_free_position = function(self, start, max_radius)
     -- TODO OPT can be optimized replacing safe_get with fast_get + min/max
+    -- TODO! RM
     if self[start] == nil then return end
 
     max_radius = math.min(

@@ -19,7 +19,7 @@ return function(positions, entities)
         },
 
         start_predicate = function(self, rails, dt)
-          return true
+          return false
         end,
 
         run = function(self, rails, c)

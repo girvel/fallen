@@ -1,3 +1,4 @@
+local iteration = require "tech.iteration"
 local module, _, static = Module("tech.item")
 
 module.DROPPING_SLOTS = {"main_hand", "other_hand", "gloves", 1}

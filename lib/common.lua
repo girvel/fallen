@@ -65,7 +65,7 @@ end
 
 common.resume_logged = function(coroutine_, ...)
   local t = love.timer.getTime()
-  local success, message = coroutine.resume(coroutine_, ...)
+  local success, result = coroutine.resume(coroutine_, ...)
   t = love.timer.getTime() - t
   if t > 0.1 then
     Log.warn("Coroutine lags\n" .. debug.traceback())
@@ -75,10 +75,12 @@ common.resume_logged = function(coroutine_, ...)
     if Debug.debug_mode then
       Log.info("Debug error in coroutine")
       Debug.extend_error()
-      error(message)
+      error(result)
     end
-    Log.error("Coroutine error: %s\n%s" % {message, debug.traceback(coroutine_)})
+    Log.error("Coroutine error: %s\n%s" % {result, debug.traceback(coroutine_)})
   end
+
+  return result
 end
 
 common.number_type = function(number)

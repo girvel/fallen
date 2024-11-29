@@ -8,6 +8,7 @@ local decorations = require("library.palette.decorations")
 local items       = require("library.palette.items")
 local cue         = require("tech.cue")
 local sound       = require("tech.sound")
+local iteration   = require("tech.iteration")
 local api = railing.api
 
 
@@ -174,7 +175,9 @@ return function(positions, entities)
         possessed_position = self.positions.possessed_spawn
       end
 
-      self.entities.killer_1 = 
+      for v in iteration.expanding_rhombus() do
+        v = v + possessed_position
+      end
     end,
   })
 end
