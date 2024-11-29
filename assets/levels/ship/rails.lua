@@ -1,3 +1,4 @@
+local health = require("mech.health")
 local quest = require("tech.quest")
 local item = require("tech.item")
 local interactive = require("tech.interactive")
@@ -123,6 +124,7 @@ return function(positions, entities)
     -- maybe it can be coupled with quests into a state machine
     -- or at least all grouped somewhere
     rront_runs_away = function(self)
+      if not State:exists(self.entities.rront) then return end
       State:remove(self.entities.engineer_3)
       api.notification("Задача выполнена неудовлетворительно", true)
       api.update_quest({detective = quest.FAILED})
@@ -158,6 +160,21 @@ return function(positions, entities)
       if State:exists(self.entities.cook) then
         level.move(self.entities.cook, self.positions.cook_chilling)
       end
+
+      if State:exists(self.entities.possessed) then
+        health.set_hp(self.entities.possessed, 0)
+      end
+
+      local possessed_position = -Query(self.entities.possessed).position
+
+      if
+        not possessed_position
+        or (possessed_position - self.positions.possessed_spawn):abs() > 10
+      then
+        possessed_position = self.positions.possessed_spawn
+      end
+
+      self.entities.killer_1 = 
     end,
   })
 end

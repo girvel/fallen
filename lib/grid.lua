@@ -135,6 +135,49 @@ local grid_methods = {
   end,
 
   --- @param self grid
+  --- @param start vector
+  --- @param max_radius integer
+  --- @return vector?
+  find_free_position = function(self, start, max_radius)
+    -- TODO OPT can be optimized replacing safe_get with fast_get + min/max
+    if self[start] == nil then return end
+
+    max_radius = math.min(
+      max_radius or math.huge,
+      math.max(
+        start[1] - 1,
+        start[2] - 1,
+        self.size[1] - start[1],
+        self.size[2] - start[2]
+      ) * 2
+    )
+
+    for r = 1, max_radius do
+      for x = 0, r - 1 do
+        local v = Vector {x, x - r} + start
+        if not self:safe_get(v, true) then return v end
+      end
+
+      for x = r, 1, -1 do
+        local v = Vector {x, r - x} + start
+        if not self:safe_get(v, true) then return v end
+      end
+
+      for x = 0, 1 - r, -1 do
+        local v = Vector {x, x + r} + start
+        if not self:safe_get(v, true) then return v end
+      end
+
+      for x = -r, 1 do
+        local v = Vector {x, -r - x} + start
+        if not self:safe_get(v, true) then return v end
+      end
+    end
+
+    return nil
+  end,
+
+  --- @param self grid
   --- @param x integer
   --- @param y integer
   --- @return integer

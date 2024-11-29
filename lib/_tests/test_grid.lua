@@ -73,4 +73,36 @@ describe("Grid library", function()
       assert.is_true(#path < this_grid.size[1])
     end)
   end)
+
+  describe("find_free_position", function()
+    it("finds the closest nil", function()
+      local this_grid = grid.from_matrix({
+        {nil, nil, 111},
+        {111, 111, 111},
+        {111, 111, 111},
+      }, vector({3, 3}))
+
+      assert.equal(vector({2, 1}), this_grid:find_free_position(vector({2, 2})))
+    end)
+
+    it("does not clash with grid borders", function()
+      local this_grid = grid.from_matrix({
+        {nil, nil, 111},
+        {111, 111, 111},
+        {111, 111, 111},
+      }, vector({3, 3}))
+
+      assert.equal(vector({2, 1}), this_grid:find_free_position(vector({3, 3})))
+    end)
+
+    it("can accept max radius value", function()
+      local this_grid = grid.from_matrix({
+        {nil, nil, 111},
+        {111, 111, 111},
+        {111, 111, 111},
+      }, vector({3, 3}))
+
+      assert.equal(nil, this_grid:find_free_position(vector {3, 3}, 2))
+    end)
+  end)
 end)

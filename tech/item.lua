@@ -2,7 +2,7 @@ local module, _, static = Module("tech.item")
 
 module.DROPPING_SLOTS = {"main_hand", "other_hand", "gloves", 1}
 
---- @alias has_inventory {inventory: table<string, table>}
+--- @alias has_inventory {inventory: table<string, table>, position: vector}
 
 --- @param parent has_inventory
 --- @param slot string | integer
@@ -15,7 +15,7 @@ module.drop = function(parent, slot)
         and not State.grids.items[v]
     end)
     :nth(1)
-  if not drop_position then return end
+  if not drop_position then return false end
 
   local item = parent.inventory[slot]
   if not item then return true end
