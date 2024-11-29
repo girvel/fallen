@@ -1,4 +1,5 @@
 #!/bin/env zsh
+
 excessive_total=$(cat **/*.lua | wc -l)
 vendor=$(cat vendor/**/*.lua | wc -l)
 total=$((excessive_total - vendor))

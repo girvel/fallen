@@ -6,7 +6,7 @@ local animated = require("tech.animated")
 local humanoid, module_mt, static = Module("mech.humanoid")
 
 
-humanoid._base_pack = static .. animated.load_atlas_pack("assets/sprites/animations/humanoid")
+humanoid._base_pack = static(animated.load_atlas_pack("assets/sprites/animations/humanoid"))
 local pack_by_race = Memoize(function(race)
   return animated.colored_pack(humanoid._base_pack, race.skin_color)
 end)

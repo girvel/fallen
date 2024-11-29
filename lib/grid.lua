@@ -1,9 +1,7 @@
 --- indexing starts from 1
-
-
-local grid, module_mt, static = Module("lib.grid")
-
-grid._grid_mt = static {}
+--- @overload fun(size: vector, factory?: fun(i: integer): any): grid
+local grid,
+module_mt, static = Module("lib.grid")
 
 module_mt.__call = function(_, size, factory)
   assert(size)
@@ -15,6 +13,9 @@ module_mt.__call = function(_, size, factory)
   }, grid._grid_mt)
 end
 
+--- @param matrix any[][]
+--- @param size vector
+--- @return grid
 grid.from_matrix = function(matrix, size)
   local result = grid(size)
   for x = 1, size[1] do
@@ -25,24 +26,45 @@ grid.from_matrix = function(matrix, size)
   return result
 end
 
-grid._grid_methods = {
+--- @class grid
+--- @field size vector
+--- @field _inner_array any[]
+local grid_methods = {
+  --- @param self grid
+  --- @param v vector
+  --- @return boolean
   can_fit = function(self, v)
     return Vector.zero < v and self.size >= v
   end,
 
+  --- @param self grid
+  --- @param v vector
+  --- @param default any
+  --- @return any
   safe_get = function(self, v, default)
     if not self:can_fit(v) then return default end
     return self[v]
   end,
 
+  --- @param self grid
+  --- @param x integer
+  --- @param y integer
+  --- @return any
   fast_get = function(self, x, y)
     return self._inner_array[self:_get_inner_index(x, y)]
   end,
 
+  --- @param self grid
+  --- @return any
   iter = function(self)
     return Fun.iter(pairs(self._inner_array))
   end,
 
+  --- @param self grid
+  --- @param start vector
+  --- @param finish vector
+  --- @param max_distance? integer
+  --- @return vector[]
   find_path = function(self, start, finish, max_distance)
     if start == finish then return {} end
 
@@ -112,26 +134,32 @@ grid._grid_methods = {
     end
   end,
 
+  --- @param self grid
+  --- @param x integer
+  --- @param y integer
+  --- @return integer
   _get_inner_index = function(self, x, y)
     return x + (y - 1) * self.size[1]
   end,
 }
 
-grid._grid_mt.__index = function(self, v)
-  local method = grid._grid_methods[v]
-  if method then return method end
+grid._grid_mt = static {
+  __index = function(self, v)
+    local method = grid_methods[v]
+    if method then return method end
 
-  assert(
-    getmetatable(v) == Vector.mt,
-    ("Attempt to index grid with %s which is neither vector nor a method name"):format(v)
-  )
-  assert(self:can_fit(v))
-  return self._inner_array[self:_get_inner_index(unpack(v))]
-end
+    assert(
+      getmetatable(v) == Vector.mt,
+      ("Attempt to index grid with %s which is neither vector nor a method name"):format(v)
+    )
+    assert(self:can_fit(v))
+    return self._inner_array[self:_get_inner_index(unpack(v))]
+  end,
 
-grid._grid_mt.__newindex = function(self, v, value)
-  assert(self:can_fit(v), tostring(v) .. " does not fit into grid size " .. tostring(self.size))
-  self._inner_array[self:_get_inner_index(unpack(v))] = value
-end
+  __newindex = function(self, v, value)
+    assert(self:can_fit(v), tostring(v) .. " does not fit into grid size " .. tostring(self.size))
+    self._inner_array[self:_get_inner_index(unpack(v))] = value
+  end,
+}
 
 return grid
