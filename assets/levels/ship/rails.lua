@@ -169,6 +169,7 @@ return function(positions, entities)
     end,
 
     start_lunch = function(self)
+      -- cauldron shenanigans --
       self.scenes.cauldron_before.enabled = false
       self.scenes.cauldron_after.enabled = true
       cue.set(self.entities.soup_cauldron, "highlight", true)
@@ -176,6 +177,7 @@ return function(positions, entities)
         level.move(self.entities.cook, self.positions.cook_chilling)
       end
 
+      -- canteen killers --
       self.scenes.kills_possessed.enabled = false
       local there_was_combat = State:exists(self.entities.possessed)
       if there_was_combat then
@@ -210,6 +212,35 @@ return function(positions, entities)
 
         if killer_counter == 3 and not there_was_combat then break end
         ::continue::
+      end
+
+      -- canteen dreamers --
+      for i = 1, 3 do
+        local p = self.positions["canteen_dreamer_spawn_" .. i]
+        for d in iteration.expanding_rhombus() do
+          if not State.grids.solids:safe_get(p + d) then
+            State:add(
+              mobs.dreamer({faction = "canteen_dreamers"}),
+              {position = p + d}
+            )
+            break
+          end
+        end
+      end
+
+      -- flask dreamer --
+      for d in iteration.expanding_rhombus() do
+        local v = self.positions.canteen_dreamer_spawn_flask + d
+        if not State.grids.solids:safe_get(v) then
+          self.entities.canteen_dreamer_flask = State:add(
+            mobs.dreamer({faction = "canteen_dreamers"}),
+            {
+              position = v,
+              inventory = {right_pocket = items.flask()},
+            }
+          )
+          break
+        end
       end
     end,
   })

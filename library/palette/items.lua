@@ -105,38 +105,6 @@ module.mace = function()
   )
 end
 
-module.spiked_shield = function()
-  return Table.extend(
-    item.mixin(),
-    animated("assets/sprites/animations/shield", "atlas"),
-    {
-      direction = "right",
-      name = "шипастый щит",
-      damage_roll = D(6),
-      bonus = 0,
-      tags = {
-        light = true
-      },
-      slot = "other_hand",
-    }
-  )
-end
-
-module.large_valve = function()
-  return Table.extend(
-    item.mixin(),
-    animated("assets/sprites/animations/large_valve", "atlas"),
-    {
-      direction = "right",
-      name = "большой вентиль",
-      damage_roll = D(2),
-      bonus = 0,
-      tags = {},
-      slot = "other_hand",
-    }
-  )
-end
-
 module.greatsword = function()
   return Table.extend(
     item.mixin(),
@@ -216,5 +184,49 @@ end
 
 module.wave_right = wave_function("right")
 module.wave_left = wave_function("left")
+
+module.spiked_shield = function()
+  return Table.extend(
+    item.mixin(),
+    animated("assets/sprites/animations/shield", "atlas"),
+    {
+      direction = "right",
+      name = "шипастый щит",
+      damage_roll = D(6),
+      bonus = 0,
+      tags = {
+        light = true
+      },
+      slot = "other_hand",
+    }
+  )
+end
+
+module.large_valve = function()
+  return Table.extend(
+    item.mixin(),
+    animated("assets/sprites/animations/large_valve", "atlas"),
+    {
+      direction = "right",
+      name = "большой вентиль",
+      damage_roll = D(2),
+      bonus = 0,
+      tags = {},
+      slot = "other_hand",
+    }
+  )
+end
+
+module.flask = function()
+  return Table.extend(
+    item.mixin(),
+    animated("assets/sprites/animations/flask", "atlas"),
+    {
+      direction = "right",
+      name = "фляга",
+      slot = "right_pocket",
+    }
+  )
+end
 
 return module

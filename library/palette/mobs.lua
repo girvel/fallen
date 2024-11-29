@@ -149,6 +149,7 @@ mobs.dreamer = function(params)
       base_abilities = abilities(12, 10, 10, 10, 10, 10),
       ai = params.faction and combat_ai(),
       faction = params.faction,
+      inventory = params.inventory,
     }),
     params.interactive and interactive.detector() or nil
   )

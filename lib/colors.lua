@@ -76,6 +76,7 @@ colors.anchor_hex = {
   main_hand = "fb0000",
   other_hand = "f70000",
   head = "f30000",
+  right_pocket = "ef0000",
 }
 
 --- @type {[anchor]: color}
