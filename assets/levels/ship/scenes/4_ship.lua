@@ -1310,5 +1310,23 @@ return function()
         health.damage(State.player, 1)
       end,
     },
+
+    {
+      name = "Looking at the engine",
+      enabled = true,
+      start_predicate = function(self, rails, dt)
+        return State.player.position >= rails.positions.engine_message_start
+          and State.player.position <= rails.positions.engine_message_finish
+      end,
+
+      run = function(self, rails)
+        self.enabled = false
+
+        api.ability_check_message("history", 16,
+          "Такие монструозные двигатели никогда не имели серийного производства, а из-за сложности повторной сборки их не могли перевозить. Это помещение было костяком, поверх которого построили все остальные.",
+          "Рычащая машина напоминает космическое чудовище, переваривающее молодую, едва родившуюся звезду. Это... завораживает."
+        )
+      end,
+    },
   }
 end

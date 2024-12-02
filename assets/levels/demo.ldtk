@@ -4070,6 +4070,44 @@
 							}] }],
 							"__worldX": 192,
 							"__worldY": 1040
+						},
+						{
+							"__identifier": "position",
+							"__grid": [9,92],
+							"__pivot": [0,0],
+							"__tags": ["positions"],
+							"__tile": null,
+							"__smartColor": "#19AD51",
+							"iid": "e6c3c010-9b00-11ef-ba27-4382ec4ccbc7",
+							"width": 16,
+							"height": 16,
+							"defUid": 22,
+							"px": [144,1472],
+							"fieldInstances": [{ "__identifier": "name", "__type": "String", "__value": "engine_message_start", "__tile": null, "defUid": 23, "realEditorValues": [{
+								"id": "V_String",
+								"params": ["engine_message_start"]
+							}] }],
+							"__worldX": 144,
+							"__worldY": 960
+						},
+						{
+							"__identifier": "position",
+							"__grid": [16,100],
+							"__pivot": [0,0],
+							"__tags": ["positions"],
+							"__tile": null,
+							"__smartColor": "#19AD51",
+							"iid": "eb7adf80-9b00-11ef-ba27-8b903901ad2e",
+							"width": 16,
+							"height": 16,
+							"defUid": 22,
+							"px": [256,1600],
+							"fieldInstances": [{ "__identifier": "name", "__type": "String", "__value": "engine_message_finish", "__tile": null, "defUid": 23, "realEditorValues": [{
+								"id": "V_String",
+								"params": ["engine_message_finish"]
+							}] }],
+							"__worldX": 256,
+							"__worldY": 1088
 						}
 					]
 				},
