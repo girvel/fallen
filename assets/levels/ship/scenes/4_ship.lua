@@ -82,6 +82,7 @@ return function()
         health.set_hp(State.player, 20)
         rails:spawn_possessed()
         coroutine.yield()
+        health.damage(rails.entities.possessed, 1000)
         rails:start_lunch()
         rails.seen_water = true
         rails.met_son_mary = true
@@ -890,6 +891,85 @@ return function()
         c.player:rest("long")
         State.ambient:set_paused(false)
         self.enabled = false
+      end,
+    },
+
+    {
+      name = "Dreamers discuss possessed",
+      enabled = true,
+
+      characters = {
+        canteen_killer_1 = {},
+        canteen_killer_2 = {},
+        player = {},
+      },
+
+      start_predicate = function(self, rails, dt, c)
+        return (State.player.position - c.canteen_killer_1.position):abs() <= 5
+      end,
+
+      run = function(self, rails, c)
+        self.enabled = false
+
+        State.ambient:set_paused(true)
+        local music = sound("assets/sounds/people_around_possessed_body.mp3", .5)
+          :set_looping(true)
+          :play()
+
+        local killers_lines
+        local canteen_killers = {c.canteen_killer_1, c.canteen_killer_2}
+        local did_player_kill_possessed = State:exists(rails.entities.canteen_killer_3)
+        if did_player_kill_possessed then
+          table.insert(canteen_killers, rails.entities.canteen_killer_3)
+          killers_lines = {
+            "он мертв",
+            "похоже, мертв",
+            "труп",
+            "умер мужик",
+            "тут много крови",
+            "он не живой",
+          }
+        else
+          killers_lines = {
+            "убит",
+            "справились",
+            "одного потеряли",
+            "устранён",
+            "я не ранен",
+            "угрозы более не представляет",
+          }
+        end
+
+        local talk_task = rails:run_task(function()
+          for i, line in ipairs(killers_lines) do
+            api.message.temporal(
+              line, {source = canteen_killers[Math.loopmod(i, #canteen_killers)]}
+            )
+            api.wait_seconds(3.5)
+          end
+        end)
+
+        if did_player_kill_possessed then
+          api.narration("Несколько спящих столпились вокруг трупа, который ты ранее здесь оставил.")
+          api.narration("В их лицах ни удивления, ни скорби, ни попыток как-то разобраться в ситуации.")
+          api.narration("Они лишь бормочут очевидные истины.")
+        elseif api.ability_check("investigation", 12) then
+          api.narration("Недавно здесь прошёл бой; кто-то атаковал спящих, а им пришлось защищаться.", {check = {"investigation", true}})
+          api.narration("Приглядевшись к кровавой бане, ты разглядываешь забитого нападавшего и предполагаемую жертву, которой голыми руками содрали лицо.")
+          api.narration("Ранее, проходя мимо комнаты, ты видел странную фигуру.")
+          api.narration("На месте жертвы легко мог оказаться ты.")
+        else
+          api.narration("Здесь произошло нечто вне рамок твоего понимания.", {check = {"investigation", false}})
+          api.narration("Двое спящих стоят посреди кровавой бани и что-то бормочут под нос.")
+          api.narration("Их кулаки покрыты кровью — вероятно, это они устроили побоище.")
+        end
+
+        rails:run_task(function()
+          while rails:is_running(talk_task) do coroutine.yield() end
+          music:set_looping(false)
+          while music.source:isPlaying() do coroutine.yield() end
+          State.ambient:set_paused(false)
+        end)
       end,
     },
   }

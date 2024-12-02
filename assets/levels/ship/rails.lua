@@ -179,8 +179,8 @@ return function(positions, entities)
 
       -- canteen killers --
       self.scenes.kills_possessed.enabled = false
-      local there_was_combat = State:exists(self.entities.possessed)
-      if there_was_combat then
+      local was_there_combat = State:exists(self.entities.possessed)
+      if was_there_combat then
         health.damage(self.entities.possessed, 1000)
       end
 
@@ -200,17 +200,17 @@ return function(positions, entities)
         if State.grids.solids:safe_get(v) then goto continue end
 
         killer_counter = killer_counter + 1
-        if killer_counter == 3 and there_was_combat then
+        if killer_counter == 3 and was_there_combat then
           State:add(on_tiles.blood(), {position = v})
           break
         end
 
         self.entities["canteen_killer_" .. killer_counter] = State:add(
           mobs.dreamer({faction = "canteen_killers"}),
-          {position = v, direction = Vector.name_from_direction(d:normalized())}
+          {position = v, direction = Vector.name_from_direction(-d:normalized())}
         )
 
-        if killer_counter == 3 and not there_was_combat then break end
+        if killer_counter == 3 and not was_there_combat then break end
         ::continue::
       end
 
@@ -221,7 +221,7 @@ return function(positions, entities)
           if not State.grids.solids:safe_get(p + d) then
             State:add(
               mobs.dreamer({faction = "canteen_dreamers"}),
-              {position = p + d}
+              {position = p + d, direction = "left"}
             )
             break
           end

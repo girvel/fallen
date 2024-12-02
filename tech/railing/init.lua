@@ -16,7 +16,7 @@ railing._methods.update = static .. function(self, dt)
     local characters = Fun.pairs(scene.characters or {})
       :map(function(name, params)
         if name == "player" then return name, State.player end
-        return name, self.entities[name]
+        return name, self.entities[name] or false
       end)
       :tomap()
 
@@ -72,14 +72,14 @@ railing._methods.remove_scene = static .. function(self, k)
   Log.info("Removed scene " .. k)
 end
 
-railing._methods.stop_scene = static .. function(self, k)
+railing._methods.stop_scene = function(self, k)
   self._active_coroutines = Fun.iter(self._active_coroutines)
     :filter(function(c) return c.base_scene ~= self.scenes[k] end)
     :totable()
   Log.info("Stopped scene " .. k)
 end
 
-railing._methods.is_running = static .. function(self, scene)
+railing._methods.is_running = function(self, scene)
   if type(scene) == "string" then scene = self.scenes[scene] end
   return Fun.iter(self._active_coroutines)
     :any(function(c) return c.base_scene == scene end)
