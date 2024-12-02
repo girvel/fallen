@@ -154,7 +154,12 @@ local creature_methods = {
 }
 
 module_mt.__call = function(_, animation_pack, object)
+  -- TODO is this assert up-to-date?
   assert(object.max_hp or object.class, "Creature should either have max_hp or class")
+
+  if type(animation_pack) == "string" then
+    animation_pack = animated.load_atlas_pack(animation_pack)
+  end
 
   local base = {
     creature_flag = true,

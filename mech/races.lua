@@ -95,4 +95,9 @@ races.furry = static {
   progression_table = {},
 }
 
+races.bat = static {
+  codename = "bat",
+  movement_speed = 8,
+}
+
 return races

@@ -1,3 +1,4 @@
+local creature = require("mech.creature")
 local hauler_ai = require("library.ais.hauler")
 local sprite = require("tech.sprite")
 local class = require("mech.class")
@@ -211,6 +212,16 @@ mobs.possessed = function()
       disable_drop_flag = true,
     }},
     initiative_bonus = 10,
+  })
+end
+
+mobs.bat = function()
+  return creature("assets/sprites/animations/bat", {
+    codename = "bat",
+    name = "летучая мышь",
+    max_hp = 3,
+    faction = "monster",
+    race = races.bat,
   })
 end
 
