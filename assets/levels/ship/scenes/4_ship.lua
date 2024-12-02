@@ -1002,5 +1002,160 @@ return function()
         api.narration("Из заднего кармана рабочего торчит металлическая фляга, на ней гравировка: “Первый глоток для здоровья, второй для веселья...”. Продолжение не разглядеть.", {check = {"perception", true}})
       end,
     },
+
+    {
+      name = "Stealing the flask",
+      enabled = true,
+
+      characters = {
+        canteen_dreamer_flask = {},
+        player = {},
+      },
+
+      start_predicate = function(self, rails, dt, c)
+        return c.canteen_dreamer_flask.interacted_by == c.player
+      end,
+
+      _options = {
+        "[Ловкость рук] ",
+        "",
+      },
+
+      _disadvantage = false,
+
+      run = function(self, rails, c)
+        c.canteen_dreamer_flask.interacted_by = nil
+
+        api.narration("Нужная тебе фляга здесь, в заднем кармане рабочего, только протяни руку.")
+        api.narration("Но ведь это... Воровство?")
+        api.narration("Может есть другой способ?")
+
+        self._options[99] = ""
+
+        while true do
+          local chosen_option = api.options(self._options, true)
+
+          if chosen_option == 1 then
+            if
+              api.ability_check("sleight_of_hand", 14)
+              and (not self._disadvantage or api.ability_check("sleight_of_hand", 14))
+            then
+              api.narration("", {check = {"sleight_of_hand", true}})
+              api.narration("")
+              api.narration("")
+              self:_good_ending(rails, c)
+            else
+              api.narration("", {check = {"sleight_of_hand", false}})
+              api.narration("")
+              api.narration("")
+              api.narration("")
+              api.narration("")
+              api.line(c.canteen_dreamer_flask, "")
+              self:_bad_ending(rails, c)
+            end
+            self.enabled = false
+            break
+
+          elseif chosen_option == 2 then
+            api.narration("")
+            api.line(c.canteen_dreamer_flask, "")
+
+            if api.options({
+              "",
+              "",
+            }) == 1 then
+              api.narration("")
+              api.narration("")
+              sound("assets/sounds/manipulating_flask_dreamer.mp3", .1):play()
+              api.line(c.canteen_dreamer_flask, "")
+              api.line(c.canteen_dreamer_flask, "")
+              api.narration("")
+              api.narration("")
+
+              if api.options({
+                "[Убеждение] ",
+                "",
+              }) == 2 then
+                api.line(c.canteen_dreamer_flask, "")
+                break
+              end
+
+              if api.ability_check("persuasion", 12) then
+                api.narration("", {check = {"persuasion", true}})
+                api.narration("")
+                api.line(c.player, "")
+                api.line(c.player, "")
+                api.narration("")
+                api.line(c.canteen_dreamer_flask, "")
+                api.narration("")
+                api.narration("")
+                self:_good_ending()
+              else
+                api.narration("", {check = {"persuasion", false}})
+                api.narration("")
+                api.narration("")
+                api.line(c.canteen_dreamer_flask, "")
+                self:_bad_ending()
+              end
+
+            else  -- 22
+              api.narration("")
+              api.narration("")
+              api.line(c.canteen_dreamer_flask, "")
+              api.line(c.canteen_dreamer_flask, "")
+              api.narration("")
+              api.narration("")
+
+              if api.options({
+                "[Расследование] ",
+                ""
+              }) == 2 then
+                api.line(c.canteen_dreamer_flask, "")
+                break
+              end
+
+              if api.ability_check("investigation", 12) then
+                api.narration("", {check = {"investigation", true}})
+                api.narration("")
+                api.narration("")
+                api.line(c.player, "")
+                api.line(c.player, "")
+                api.line(c.canteen_dreamer_flask, "")
+                api.narration("")
+                api.narration("")
+                api.narration("")
+                api.narration("")
+                self:_good_ending()
+              else
+                api.narration("", {check = {"investigation", false}})
+                api.narration("")
+                api.narration("")
+                api.line(c.canteen_dreamer_flask, "")
+                self:_bad_ending()
+              end
+            end
+            break
+
+          else  -- chosen_option_1 == 3
+            break
+          end
+        end
+      end,
+
+      _bad_ending = function(self, rails, c)
+        hostility.make_hostile(c.canteen_dreamer_flask.faction)
+        self.enabled = false
+        c.canteen_dreamer_flask.interact = nil
+      end,
+
+      _good_ending = function(self, rails, c)
+        State:remove(c.canteen_dreamer_flask.inventory.right_pocket)
+        c.canteen_dreamer_flask.inventory.right_pocket = nil
+        rails.bottles_taken = rails.bottles_taken + 1
+        rails.source_of_first_alcohol = rails.source_of_first_alcohol or "flask"
+        self.enabled = false
+        c.canteen_dreamer_flask.interact = nil
+      end,
+    },
   }
 end
