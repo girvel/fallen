@@ -1160,5 +1160,51 @@ return function()
         c.canteen_dreamer_flask.interact = nil
       end,
     },
+
+    {
+      name = "Captain deck message",
+      enabled = true,
+      start_predicate = function(self, rails, dt)
+        return (State.player.position - rails.positions.captain_deck_message):abs() <= 1
+      end,
+
+      run = function(self, rails)
+        self.enabled = false
+        api.ability_check_message("history", 12,
+          "Выгравированная надпись на незнакомом языке, в символах угадывается известный афоризм. Буквальный перевод — “Голова над всем телом”.",
+          "Выгравированную надпись невозможно прочитать — грязь не смывали несколько десятков лет."
+        )
+      end,
+    },
+
+    {
+      name = "Parasites message",
+      enabled = true,
+      start_predicate = function(self, rails, dt)
+        return (State.player.position - rails.positions.parasites_message):abs() <= 2
+      end,
+
+      run = function(self, rails)
+        self.enabled = false
+        api.ability_check_message("investigation", 10,
+          "Табличка: “Опасно! Риск нападения паразитов! Не приближаться!”\nОна висит здесь очень давно. Неужели проблема настолько серьезная?",
+          "Табличка: “Опасно! Риск нападения паразитов! Не приближаться!”"
+        )
+      end,
+    },
+
+    {
+      name = "Storage room message",
+      enabled = true,
+      start_predicate = function(self, rails, dt)
+        return (State.player.position - rails.positions.storage_room_message):abs() <= 2
+      end,
+
+      run = function(self, rails)
+        self.enabled = false
+
+        api.message.positional("Яркая надпись маркером у двери: “Произведение допуска к кладовой осуществляется только доверенному персоналу”. Не очень осмысленно.", {source = {position = rails.positions.storage_room_message}})
+      end,
+    },
   }
 end

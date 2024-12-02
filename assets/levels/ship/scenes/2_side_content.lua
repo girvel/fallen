@@ -89,13 +89,12 @@ return function()
       name = "7. Sign",
       enabled = true,
       start_predicate = function(self, rails, dt)
-        return State.player.position == rails.positions.sign_message
+        return (State.player.position - rails.positions.sign_message):abs() <= 2
       end,
 
       run = function(self, rails)
         self.enabled = false
-        State.player:rotate("up")
-        api.message.positional("Старый выцветший указатель. Налево — “столовая”, направо “-к*ю*-*омп*н*я”.")
+        api.message.positional("Старый выцветший указатель. Налево — “столовая”, направо “-к*ю*-*омп*н*я”.", {source = {position = rails.positions.sign_message}})
       end,
     },
 

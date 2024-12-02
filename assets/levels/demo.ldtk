@@ -2450,7 +2450,7 @@
 			"savedSelections": [],
 			"cachedPixelData": {
 				"opaqueTiles": "0000000000000000000000000000000000000000000000000000000000000000",
-				"averageColors": "58aa432346686743358a387a7466253445782578257805781578254728455745000025782578357835784557184500000000000000003578357800000000000000000000000015781578000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000"
+				"averageColors": "58aa432346686743358a387a7466253445782578257805781578254728455745000025782578357835784557184526b70000000000003578357800000000000000000000000015781578000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000"
 			}
 		},
 		{
@@ -2625,7 +2625,7 @@
 					"entityInstances": [
 						{
 							"__identifier": "position",
-							"__grid": [27,123],
+							"__grid": [27,122],
 							"__pivot": [0,0],
 							"__tags": ["positions"],
 							"__tile": null,
@@ -2634,13 +2634,13 @@
 							"width": 16,
 							"height": 16,
 							"defUid": 22,
-							"px": [432,1968],
+							"px": [432,1952],
 							"fieldInstances": [{ "__identifier": "name", "__type": "String", "__value": "sign_message", "__tile": null, "defUid": 23, "realEditorValues": [{
 								"id": "V_String",
 								"params": ["sign_message"]
 							}] }],
 							"__worldX": 432,
-							"__worldY": 1456
+							"__worldY": 1440
 						},
 						{
 							"__identifier": "entity_capture",
@@ -3249,7 +3249,7 @@
 						},
 						{
 							"__identifier": "position",
-							"__grid": [28,129],
+							"__grid": [42,71],
 							"__pivot": [0,0],
 							"__tags": ["positions"],
 							"__tile": null,
@@ -3258,13 +3258,13 @@
 							"width": 16,
 							"height": 16,
 							"defUid": 22,
-							"px": [448,2064],
+							"px": [672,1136],
 							"fieldInstances": [{ "__identifier": "name", "__type": "String", "__value": "checkpoint_4", "__tile": null, "defUid": 23, "realEditorValues": [{
 								"id": "V_String",
 								"params": ["checkpoint_4"]
 							}] }],
-							"__worldX": 448,
-							"__worldY": 1552
+							"__worldX": 672,
+							"__worldY": 624
 						},
 						{
 							"__identifier": "position",
@@ -3789,6 +3789,63 @@
 							}] }],
 							"__worldX": 320,
 							"__worldY": 1568
+						},
+						{
+							"__identifier": "position",
+							"__grid": [26,68],
+							"__pivot": [0,0],
+							"__tags": ["positions"],
+							"__tile": null,
+							"__smartColor": "#19AD51",
+							"iid": "2c921af0-9b00-11ef-ba27-79ec801bd0fd",
+							"width": 16,
+							"height": 16,
+							"defUid": 22,
+							"px": [416,1088],
+							"fieldInstances": [{ "__identifier": "name", "__type": "String", "__value": "captain_deck_message", "__tile": null, "defUid": 23, "realEditorValues": [{
+								"id": "V_String",
+								"params": ["captain_deck_message"]
+							}] }],
+							"__worldX": 416,
+							"__worldY": 576
+						},
+						{
+							"__identifier": "position",
+							"__grid": [38,122],
+							"__pivot": [0,0],
+							"__tags": ["positions"],
+							"__tile": null,
+							"__smartColor": "#19AD51",
+							"iid": "37375330-9b00-11ef-ba27-0b720ab588bb",
+							"width": 16,
+							"height": 16,
+							"defUid": 22,
+							"px": [608,1952],
+							"fieldInstances": [{ "__identifier": "name", "__type": "String", "__value": "storage_room_message", "__tile": null, "defUid": 23, "realEditorValues": [{
+								"id": "V_String",
+								"params": ["storage_room_message"]
+							}] }],
+							"__worldX": 608,
+							"__worldY": 1440
+						},
+						{
+							"__identifier": "position",
+							"__grid": [40,72],
+							"__pivot": [0,0],
+							"__tags": ["positions"],
+							"__tile": null,
+							"__smartColor": "#19AD51",
+							"iid": "3c6e02e0-9b00-11ef-ba27-23ea2f3c4af3",
+							"width": 16,
+							"height": 16,
+							"defUid": 22,
+							"px": [640,1152],
+							"fieldInstances": [{ "__identifier": "name", "__type": "String", "__value": "parasites_message", "__tile": null, "defUid": 23, "realEditorValues": [{
+								"id": "V_String",
+								"params": ["parasites_message"]
+							}] }],
+							"__worldX": 640,
+							"__worldY": 640
 						}
 					]
 				},
@@ -3862,6 +3919,7 @@
 						{ "px": [320,1088], "src": [16,0], "f": 0, "t": 1, "d": [4372], "a": 1 },
 						{ "px": [352,1088], "src": [16,0], "f": 0, "t": 1, "d": [4374], "a": 1 },
 						{ "px": [384,1088], "src": [16,0], "f": 0, "t": 1, "d": [4376], "a": 1 },
+						{ "px": [416,1088], "src": [64,0], "f": 0, "t": 4, "d": [4378], "a": 1 },
 						{ "px": [496,1088], "src": [16,0], "f": 0, "t": 1, "d": [4383], "a": 1 },
 						{ "px": [512,1088], "src": [16,0], "f": 0, "t": 1, "d": [4384], "a": 1 },
 						{ "px": [528,1088], "src": [16,0], "f": 0, "t": 1, "d": [4385], "a": 1 },
@@ -3881,6 +3939,7 @@
 						{ "px": [416,1152], "src": [0,0], "f": 0, "t": 0, "d": [4634], "a": 1 },
 						{ "px": [432,1152], "src": [32,0], "f": 0, "t": 2, "d": [4635], "a": 1 },
 						{ "px": [464,1152], "src": [16,0], "f": 0, "t": 1, "d": [4637], "a": 1 },
+						{ "px": [640,1152], "src": [64,0], "f": 0, "t": 4, "d": [4648], "a": 1 },
 						{ "px": [768,1152], "src": [0,16], "f": 0, "t": 8, "d": [4656], "a": 1 },
 						{ "px": [144,1168], "src": [96,0], "f": 0, "t": 6, "d": [4681], "a": 1 },
 						{ "px": [480,1168], "src": [16,0], "f": 0, "t": 1, "d": [4702], "a": 1 },
@@ -4016,6 +4075,7 @@
 						{ "px": [144,1952], "src": [96,0], "f": 0, "t": 6, "d": [7817], "a": 1 },
 						{ "px": [160,1952], "src": [48,0], "f": 0, "t": 3, "d": [7818], "a": 1 },
 						{ "px": [432,1952], "src": [64,0], "f": 0, "t": 4, "d": [7835], "a": 1 },
+						{ "px": [608,1952], "src": [112,32], "f": 0, "t": 23, "d": [7846], "a": 1 },
 						{ "px": [752,1952], "src": [96,0], "f": 0, "t": 6, "d": [7855], "a": 1 },
 						{ "px": [768,1952], "src": [0,16], "f": 0, "t": 8, "d": [7856], "a": 1 },
 						{ "px": [176,1968], "src": [96,0], "f": 0, "t": 6, "d": [7883], "a": 1 },

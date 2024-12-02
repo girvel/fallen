@@ -5,8 +5,9 @@ local shaders = require("tech.shaders")
 
 local on_solids, module_mt, static = Module("library.palette.on_solids")
 
+-- sign does not need perspective because it is not always on top wall
 local use_perspective = Common.set({
-  "mirror", "airway", "map", "sign", "cauldron", "upper_bunk", "blood",
+  "mirror", "airway", "map", "cauldron", "upper_bunk", "blood",
 })
 
 factoring.from_atlas(on_solids, "assets/sprites/atlases/on_solids.png",
@@ -18,7 +19,7 @@ factoring.from_atlas(on_solids, "assets/sprites/atlases/on_solids.png",
   {
     "mirror", "dirt", "airway", "map", "sign", "window", "upper_bunk", "cauldron",
     "vines", "vines", "vines", "vines", "vines", "son_mary1", "blood", "cauldron",
-    false, "vines", "vines", "vines", "vines", "son_mary2", "helm", false,
+    false, "vines", "vines", "vines", "vines", "son_mary2", "helm", "inscription",
     "megadoor1_open", "megadoor2_open", "megadoor3_open", "vines", "vines", false, false, false,
     false, false, false, "vines", "vines", false, false, false,
   }
