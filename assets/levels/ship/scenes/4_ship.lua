@@ -668,7 +668,7 @@ return function()
       end,
     },
 
-    {
+    deck_fov_enter = {
       name = "Change of FOV radius for water view",
       enabled = true,
       start_predicate = function(self, rails, dt)
@@ -791,6 +791,7 @@ return function()
         else  -- chosen_option == 3
           api.fade_out()
           level.move(c.player, rails.positions.captain_deck_eating)
+          rails.scenes.deck_fov_enter:run()
           c.player:rotate("up")
           api.center_camera()
           api.wait_seconds(1)
@@ -1057,6 +1058,7 @@ return function()
             break
 
           elseif chosen_option == 2 then
+            self._disadvantage = true
             api.narration("Рабочий послушно оборачивается, его пустые глаза смотрят сквозь тебя.")
             api.line(c.canteen_dreamer_flask, "Да-а, я слушаю.")
 
@@ -1101,6 +1103,7 @@ return function()
             else  -- 22
               api.narration("Рабочий вздрагивает, будто ты попросил что-то неприличное.")
               api.narration("Он достаёт флягу из кармана, но не передаёт её, только крепко сжимает в руках")
+              sound("assets/sounds/manipulating_flask_dreamer.mp3", .1):play()
               api.line(c.canteen_dreamer_flask, "Но ведь... Это моё...")
               api.line(c.canteen_dreamer_flask, "Не отдам моё...")
               api.narration("Он дрожит, как забитый зверь.")
