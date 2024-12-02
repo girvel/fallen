@@ -79,7 +79,7 @@ return function()
         rails.has_valve = true
         --rails.bottles_taken = 3
 
-        rails:notice_flask()
+        --rails:notice_flask()
         health.set_hp(State.player, 20)
         rails:spawn_possessed()
         coroutine.yield()
@@ -913,7 +913,7 @@ return function()
         self.enabled = false
 
         State.ambient:set_paused(true)
-        local music = sound("assets/sounds/people_around_possessed_body.mp3", .5)
+        local music = sound("assets/sounds/people_around_possessed_body.mp3", .3)
           :set_looping(true)
           :play()
 
@@ -980,7 +980,7 @@ return function()
     },
 
     {
-      name = "",
+      name = "Noticing flask dreamer",
       enabled = true,
 
       characters = {
@@ -989,13 +989,17 @@ return function()
       },
 
       start_predicate = function(self, rails, dt, c)
-        return 
+        return (c.canteen_dreamer_flask.position - c.player.position):abs() <= 3
       end,
 
       run = function(self, rails, c)
         self.enabled = false
 
-        
+        if not rails.flask_noticed and not api.ability_check("perception", 12) then
+          return
+        end
+
+        api.narration("Из заднего кармана рабочего торчит металлическая фляга, на ней гравировка: “Первый глоток для здоровья, второй для веселья...”. Продолжение не разглядеть.", {check = {"perception", true}})
       end,
     },
   }

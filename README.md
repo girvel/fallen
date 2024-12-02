@@ -1,12 +1,12 @@
 # Fallen
 
-Mini-RPG/adventure written in Lua with LOVE2D.
-
 ![](assets/screenshots/main.png)
 
-## Download
+Mini-RPG/adventure written in Lua with LOVE2D.
 
-[Link](https://github.com/girvel/fallen/releases/latest). Fallen is in alpha stage, most of the content and some of the mechanics are not implemented yet.
+- [Download](https://github.com/girvel/fallen/releases/latest) (alpha)
+- [Documentation](/docs/README.md)
+- [
 
 ## Launching from source
 
