@@ -1017,8 +1017,8 @@ return function()
       end,
 
       _options = {
-        "[Ловкость рук] ",
-        "",
+        "[Ловкость рук] *Украсть фляжку*",
+        "Эй, обернись.",
       },
 
       _disadvantage = false,
@@ -1030,7 +1030,7 @@ return function()
         api.narration("Но ведь это... Воровство?")
         api.narration("Может есть другой способ?")
 
-        self._options[99] = ""
+        self._options[99] = "*Уйти*"
 
         while true do
           local chosen_option = api.options(self._options, true)
@@ -1040,98 +1040,98 @@ return function()
               api.ability_check("sleight_of_hand", 14)
               and (not self._disadvantage or api.ability_check("sleight_of_hand", 14))
             then
-              api.narration("", {check = {"sleight_of_hand", true}})
-              api.narration("")
-              api.narration("")
+              api.narration("Ты крадёшь, нет, аккуратно изымаешь фляжку из заднего кармана.", {check = {"sleight_of_hand", true}})
+              api.narration("Рабочий не замечает, как в твоих руках оказывается фляжка с выгравированной надписью.")
+              api.narration("“Первый глоток для здоровья, второй для веселья, третий для одуренья”")
               self:_good_ending(rails, c)
             else
-              api.narration("", {check = {"sleight_of_hand", false}})
-              api.narration("")
-              api.narration("")
-              api.narration("")
-              api.narration("")
-              api.line(c.canteen_dreamer_flask, "")
+              api.narration("Ты не вор.", {check = {"sleight_of_hand", false}})
+              api.narration("Воровать постыдно и низко.")
+              api.narration("А ты просто берёшь, что тебе позволено.")
+              api.narration("С этой мыслью, ты вытягиваешь флягу из штанов рабочего.")
+              api.narration("Он оборачивается, видит флягу в твоих руках.")
+              api.line(c.canteen_dreamer_flask, "Убью...")
               self:_bad_ending(rails, c)
             end
             self.enabled = false
             break
 
           elseif chosen_option == 2 then
-            api.narration("")
-            api.line(c.canteen_dreamer_flask, "")
+            api.narration("Рабочий послушно оборачивается, его пустые глаза смотрят сквозь тебя.")
+            api.line(c.canteen_dreamer_flask, "Да-а, я слушаю.")
 
             if api.options({
-              "",
-              "",
+              "Можешь передать мне фляжку?",
+              "Алкоголь запрещён. Отдавай флягу.",
             }) == 1 then
-              api.narration("")
-              api.narration("")
+              api.narration("Рабочий вздрагивает, будто ты попросил что-то неприличное.")
+              api.narration("Он достаёт флягу из кармана, но не передаёт её, только крепко сжимает в руках.")
               sound("assets/sounds/manipulating_flask_dreamer.mp3", .1):play()
-              api.line(c.canteen_dreamer_flask, "")
-              api.line(c.canteen_dreamer_flask, "")
-              api.narration("")
-              api.narration("")
+              api.line(c.canteen_dreamer_flask, "Но ведь... Это моё...")
+              api.line(c.canteen_dreamer_flask, "Не отдам моё...")
+              api.narration("Он дрожит, как забитый зверь.")
+              api.narration("Пока не поздно отступить.")
 
               if api.options({
-                "[Убеждение] ",
-                "",
+                "[Убеждение] *убедить его отдать фляжку*",
+                "Конечно твоё! Оставь себе, я уже ухожу.",
               }) == 2 then
-                api.line(c.canteen_dreamer_flask, "")
+                api.line(c.canteen_dreamer_flask, "Да. Моё. Любимое.")
                 break
               end
 
               if api.ability_check("persuasion", 12) then
-                api.narration("", {check = {"persuasion", true}})
-                api.narration("")
-                api.line(c.player, "")
-                api.line(c.player, "")
-                api.narration("")
-                api.line(c.canteen_dreamer_flask, "")
-                api.narration("")
-                api.narration("")
-                self:_good_ending()
+                api.narration("Он очень крепко держится за эту вещь. Она словно его часть.", {check = {"persuasion", true}})
+                api.narration("Нужные слова находятся сами собой.")
+                api.line(c.player, "Ценные вещи могут потеряться во время работы, я положу её в надежное место.")
+                api.line(c.player, "У меня она будет в целости и сохранности, обещаю.")
+                api.narration("Ты видишь, как он расслабляется; понимает, что ты лишь хочешь ему помочь.")
+                api.line(c.canteen_dreamer_flask, "Пожалуйста, только не повредите.")
+                api.narration("Фляжка у тебя, и без всякого воровства.")
+                api.narration("Может быть, ты даже её вернёшь.")
+                self:_good_ending(rails, c)
               else
-                api.narration("", {check = {"persuasion", false}})
-                api.narration("")
-                api.narration("")
-                api.line(c.canteen_dreamer_flask, "")
-                self:_bad_ending()
+                api.narration("Засмотрит грустными глазами до смерти?", {check = {"persuasion", false}})
+                api.narration("И что он сделает, если ты просто её заберёшь?")
+                api.narration("Ты без церемоний тянешься к фляге.")
+                api.line(c.canteen_dreamer_flask, "НЕЕТ! МОЁ! ЭТО МОЁ!")
+                self:_bad_ending(rails, c)
               end
 
             else  -- 22
-              api.narration("")
-              api.narration("")
-              api.line(c.canteen_dreamer_flask, "")
-              api.line(c.canteen_dreamer_flask, "")
-              api.narration("")
-              api.narration("")
+              api.narration("Рабочий вздрагивает, будто ты попросил что-то неприличное.")
+              api.narration("Он достаёт флягу из кармана, но не передаёт её, только крепко сжимает в руках")
+              api.line(c.canteen_dreamer_flask, "Но ведь... Это моё...")
+              api.line(c.canteen_dreamer_flask, "Не отдам моё...")
+              api.narration("Он дрожит, как забитый зверь.")
+              api.narration("Пока не поздно отступить.")
 
               if api.options({
-                "[Расследование] ",
-                ""
+                "[Расследование] *Придумать как изъять алкоголь*",
+                "Конечно твоё! Оставь себе, я уже ухожу."
               }) == 2 then
-                api.line(c.canteen_dreamer_flask, "")
+                api.line(c.canteen_dreamer_flask, "Да. Моё. Любимое.")
                 break
               end
 
               if api.ability_check("investigation", 12) then
-                api.narration("", {check = {"investigation", true}})
-                api.narration("")
-                api.narration("")
-                api.line(c.player, "")
-                api.line(c.player, "")
-                api.line(c.canteen_dreamer_flask, "")
-                api.narration("")
-                api.narration("")
-                api.narration("")
-                api.narration("")
-                self:_good_ending()
+                api.narration("Он очень крепко держится за эту вещь. Она словно его часть.", {check = {"investigation", true}})
+                api.narration("Нужные слова находятся сами собой.")
+                api.narration("Как и подходящая ёмкость под одним из столов.")
+                api.line(c.player, "Тогда выливай всё содержимое в эту бутылку, её я изыму.")
+                api.line(c.player, "Флягу оставишь себе.")
+                api.line(c.canteen_dreamer_flask, "Конечно, конечно! Сейчас.")
+                api.narration("Рабочий сразу расслабляется, понимая, что фляга останется при нём.")
+                api.narration("Он выливает жидкость до последней капли.")
+                api.narration("Она пахнет дубом, можжевеловыми ягодами и жжёным сахаром.")
+                api.narration("И даже не пришлось воровать.")
+                self:_good_ending(rails, c)
               else
-                api.narration("", {check = {"investigation", false}})
-                api.narration("")
-                api.narration("")
-                api.line(c.canteen_dreamer_flask, "")
-                self:_bad_ending()
+                api.narration("И что он сделает, если ты просто её заберёшь?", {check = {"investigation", false}})
+                api.narration("Засмотрит грустными глазами до смерти?")
+                api.narration("Ты без церемоний тянешься к фляге.")
+                api.line(c.canteen_dreamer_flask, "НЕЕТ! МОЁ! ЭТО МОЁ!")
+                self:_bad_ending(rails, c)
               end
             end
             break
