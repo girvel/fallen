@@ -3249,7 +3249,7 @@
 						},
 						{
 							"__identifier": "position",
-							"__grid": [37,117],
+							"__grid": [32,79],
 							"__pivot": [0,0],
 							"__tags": ["positions"],
 							"__tile": null,
@@ -3258,13 +3258,13 @@
 							"width": 16,
 							"height": 16,
 							"defUid": 22,
-							"px": [592,1872],
+							"px": [512,1264],
 							"fieldInstances": [{ "__identifier": "name", "__type": "String", "__value": "checkpoint_4", "__tile": null, "defUid": 23, "realEditorValues": [{
 								"id": "V_String",
 								"params": ["checkpoint_4"]
 							}] }],
-							"__worldX": 592,
-							"__worldY": 1360
+							"__worldX": 512,
+							"__worldY": 752
 						},
 						{
 							"__identifier": "position",
@@ -3921,6 +3921,44 @@
 							],
 							"__worldX": 608,
 							"__worldY": 1344
+						},
+						{
+							"__identifier": "position",
+							"__grid": [29,87],
+							"__pivot": [0,0],
+							"__tags": ["positions"],
+							"__tile": null,
+							"__smartColor": "#19AD51",
+							"iid": "98bf2660-9b00-11ef-ba27-47cf7a9886ee",
+							"width": 16,
+							"height": 16,
+							"defUid": 22,
+							"px": [464,1392],
+							"fieldInstances": [{ "__identifier": "name", "__type": "String", "__value": "coal_message_y", "__tile": null, "defUid": 23, "realEditorValues": [{
+								"id": "V_String",
+								"params": ["coal_message_y"]
+							}] }],
+							"__worldX": 464,
+							"__worldY": 880
+						},
+						{
+							"__identifier": "position",
+							"__grid": [29,91],
+							"__pivot": [0,0],
+							"__tags": ["positions"],
+							"__tile": null,
+							"__smartColor": "#19AD51",
+							"iid": "1ac2b050-9b00-11ef-ba27-6dc708e5af32",
+							"width": 16,
+							"height": 16,
+							"defUid": 22,
+							"px": [464,1456],
+							"fieldInstances": [{ "__identifier": "name", "__type": "String", "__value": "coal_message_source", "__tile": null, "defUid": 23, "realEditorValues": [{
+								"id": "V_String",
+								"params": ["coal_message_source"]
+							}] }],
+							"__worldX": 464,
+							"__worldY": 944
 						}
 					]
 				},

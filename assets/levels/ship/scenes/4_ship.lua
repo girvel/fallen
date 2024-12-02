@@ -1275,5 +1275,22 @@ return function()
         )
       end,
     },
+
+    {
+      name = "Coal message",
+      enabled = true,
+      start_predicate = function(self, rails, dt)
+        return (State.player.position - rails.positions.coal_message_y):abs() <= 3
+          and State.player.position[2] == rails.positions.coal_message_y[2]
+      end,
+
+      run = function(self, rails)
+        self.enabled = false
+        api.message.positional(
+          "Груда спрессованного угля впитывает любой случайный лучик света. Расплавится ли пол, если её зажечь целиком?",
+          {source = {position = rails.positions.coal_message_source}}
+        )
+      end,
+    },
   }
 end
