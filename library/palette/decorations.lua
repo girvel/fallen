@@ -91,5 +91,6 @@ end
 factoring.extend(decorations, "crate", opener("crate"), {name = "ящик"})
 factoring.extend(decorations, "locker", opener("locker"), {name = "шкафчик"})
 factoring.extend(decorations, "cabinet", opener("cabinet"), {name = "шкаф"})
+factoring.extend(decorations, "chest", opener("chest"), {name = "сундук"})
 
 return decorations

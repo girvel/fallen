@@ -1206,5 +1206,74 @@ return function()
         api.message.positional("Яркая надпись маркером у двери: “Произведение допуска к кладовой осуществляется только доверенному персоналу”. Не очень осмысленно.", {source = {position = rails.positions.storage_room_message}})
       end,
     },
+
+    {
+      name = "Looting storage container #1",
+      enabled = true,
+
+      characters = {
+        storage_container_1 = {},
+      },
+
+      start_predicate = function(self, rails, dt, c)
+        return c.storage_container_1.interacted_by == State.player
+      end,
+
+      run = function(self, rails, c)
+        self.enabled = false
+
+        c.storage_container_1:open()
+        api.message.temporal(
+          "Ящик наполнен сотнями комплектов постельного белья. Оно постирано и выглажено, но всё равно кажется липким.",
+          {source = c.storage_container_1}
+        )
+      end,
+    },
+
+    {
+      name = "Looting storage container #2",
+      enabled = true,
+
+      characters = {
+        storage_container_2 = {},
+      },
+
+      start_predicate = function(self, rails, dt, c)
+        return c.storage_container_2.interacted_by == State.player
+      end,
+
+      run = function(self, rails, c)
+        self.enabled = false
+
+        c.storage_container_2:open()
+        api.message.temporal(
+          "Несколько красочных жестяных банок от известных кондитерских брендов. За каждой закреплен ярлык: соль, перец, сахар, лимонная кислота.",
+          {source = c.storage_container_2}
+        )
+      end,
+    },
+
+    {
+      name = "Looting storage container #3",
+      enabled = true,
+
+      characters = {
+        storage_container_3 = {},
+      },
+
+      start_predicate = function(self, rails, dt, c)
+        return c.storage_container_3.interacted_by == State.player
+      end,
+
+      run = function(self, rails, c)
+        self.enabled = false
+
+        c.storage_container_3:open()
+        api.message.temporal(
+          "В ящике стопка старых газет, видимо, для хозяйственных нужд. Одна из них привлекает твоё внимание.",
+          {source = c.storage_container_3}
+        )
+      end,
+    },
   }
 end
