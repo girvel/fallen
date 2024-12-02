@@ -1,3 +1,4 @@
+local sprite = require("tech.sprite")
 local on_tiles = require("library.palette.on_tiles")
 local mobs = require("library.palette.mobs")
 local health = require("mech.health")
@@ -243,6 +244,7 @@ return function(positions, entities)
             {
               position = v,
               inventory = {right_pocket = items.flask()},
+              portrait = sprite.image("assets/sprites/portraits/half_elf.png"),
             }
           )
           break
