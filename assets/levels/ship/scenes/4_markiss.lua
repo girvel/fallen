@@ -1,5 +1,4 @@
 local quest = require("tech.quest")
-local cue = require("tech.cue")
 local api = require("tech.railing").api
 
 
@@ -371,8 +370,18 @@ return function()
             api.line(c.player, "Ты кое-что обещал.")
             api.line(c.markiss, "Не злись, братец, но ром тебе я не найду.")
             api.line(c.player, "А по шее?")
-            api.line(c.markiss, "Но скажу — где ты сам его найдёшь! У одного из работяг, что шел в столовую, должна быть фляжка")
-            api.line(c.markiss, "Там и будет твоё сокровище")
+
+            if rails.lunch_started then
+              api.line(c.markiss, "Но скажу — где ты сам его найдёшь! У одного из работяг, что шел в столовую, должна быть фляжка")
+              api.line(c.markiss, "Там и будет твоё сокровище")
+            else
+              api.line(c.markiss, "Но скажу — где ты сам его найдешь! Я видел фляжку у одного из работяг — ты сможешь найти его в столовой, когда начнется обед")
+              api.line(c.player, "И когда же он начнется?")
+              api.line(c.markiss, "Да ещё с час назад должен был! Верно проблемы какие-то за чёрными дверьми.")
+              api.line(c.player, "Это метафора?")
+              api.line(c.markiss, "Метафора, синекдоха, метонимия — всё это мне, неучёному коту, неизвестно.")
+              api.line(c.markiss, "Я всегда говорю-с напрямую")
+            end
             api.update_quest({sigi = quest.COMPLETED})
             rails:notice_flask()
 

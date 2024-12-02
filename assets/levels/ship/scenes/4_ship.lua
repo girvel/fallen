@@ -79,6 +79,7 @@ return function()
         rails.has_valve = true
         --rails.bottles_taken = 3
 
+        rails:notice_flask()
         health.set_hp(State.player, 20)
         rails:spawn_possessed()
         coroutine.yield()
@@ -965,11 +966,36 @@ return function()
         end
 
         rails:run_task(function()
-          while rails:is_running(talk_task) do coroutine.yield() end
+          while
+            rails:is_running(talk_task)
+            and (State.player.position - c.canteen_killer_1.position):abs() <= 15
+          do
+            coroutine.yield()
+          end
           music:set_looping(false)
           while music.source:isPlaying() do coroutine.yield() end
           State.ambient:set_paused(false)
         end)
+      end,
+    },
+
+    {
+      name = "",
+      enabled = true,
+
+      characters = {
+        canteen_dreamer_flask = {},
+        player = {},
+      },
+
+      start_predicate = function(self, rails, dt, c)
+        return 
+      end,
+
+      run = function(self, rails, c)
+        self.enabled = false
+
+        
       end,
     },
   }

@@ -116,6 +116,8 @@ return function(positions, entities)
     has_sigi = false,
     seen_water = false,
     met_son_mary = false,
+    flask_noticed = false,
+    lunch_started = false,
 
     spawn_possessed = function(self)
       self.entities.dining_room_door_1:close()
@@ -149,6 +151,7 @@ return function(positions, entities)
 
     notice_flask = function(self)
       local e = self.entities.flask_dreamer
+      self.flask_noticed = true
       if State:exists(e) then
         cue.set(e, "highlight", true)
       end
@@ -169,6 +172,8 @@ return function(positions, entities)
     end,
 
     start_lunch = function(self)
+      self.lunch_started = true
+
       -- cauldron shenanigans --
       self.scenes.cauldron_before.enabled = false
       self.scenes.cauldron_after.enabled = true
@@ -179,8 +184,8 @@ return function(positions, entities)
 
       -- canteen killers --
       self.scenes.kills_possessed.enabled = false
-      local was_there_combat = State:exists(self.entities.possessed)
-      if was_there_combat then
+      local did_dreamers_kill_possessed = State:exists(self.entities.possessed)
+      if did_dreamers_kill_possessed then
         health.damage(self.entities.possessed, 1000)
       end
 
@@ -200,7 +205,7 @@ return function(positions, entities)
         if State.grids.solids:safe_get(v) then goto continue end
 
         killer_counter = killer_counter + 1
-        if killer_counter == 3 and was_there_combat then
+        if killer_counter == 3 and did_dreamers_kill_possessed then
           State:add(on_tiles.blood(), {position = v})
           break
         end
@@ -210,7 +215,7 @@ return function(positions, entities)
           {position = v, direction = Vector.name_from_direction(-d:normalized())}
         )
 
-        if killer_counter == 3 and not was_there_combat then break end
+        if killer_counter == 3 and not did_dreamers_kill_possessed then break end
         ::continue::
       end
 
@@ -241,6 +246,10 @@ return function(positions, entities)
           )
           break
         end
+      end
+
+      if self.flask_noticed then
+        cue.set(self.entities.canteen_dreamer_flask, "highlight", true)
       end
     end,
   })
