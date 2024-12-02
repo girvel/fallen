@@ -156,6 +156,17 @@ mobs.dreamer = function(params)
   )
 end
 
+mobs.protected_dreamer = function()
+  local result = mobs.dreamer({
+    interactive = true,
+    inventory = {body = items.protective_robe()},
+    faction = "protected_dreamers",
+  })
+
+  result.armor_class = 17
+  return result
+end
+
 mobs.combat_dreamer = function(params)
   params = params or {}
   return Table.extend(

@@ -237,6 +237,7 @@ display.system = static(Tiny.sortedProcessingSystem({
     end
 
     if entity.inventory then
+      display_slot("body")
       display_slot("head")
       display_slot("blood")
       display_slot("right_pocket")

@@ -229,4 +229,12 @@ module.flask = function()
   )
 end
 
+module.protective_robe = function()
+  return Table.extend(
+    item.mixin(),
+    animated("assets/sprites/animations/protective_robe", "atlas"),
+    {slot = "body"}
+  )
+end
+
 return module

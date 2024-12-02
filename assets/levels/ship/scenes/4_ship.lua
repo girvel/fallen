@@ -1343,5 +1343,30 @@ return function()
         api.message.temporal("Пытаться его сломать бессмысленно; против такого монстра и оружие должно быть соответствующее.")
       end,
     },
+
+    {
+      name = "Interacting w/ guys in protective robes",
+      enabled = true,
+
+      characters = {
+        protected_1 = {},
+        protected_2 = {},
+        protected_3 = {},
+        player = {},
+      },
+
+      start_predicate = function(self, rails, dt, c)
+        return c.protected_1.interacted_by == c.player
+          or c.protected_2.interacted_by == c.player
+          or c.protected_3.interacted_by == c.player
+      end,
+
+      run = function(self, rails, c)
+        self.enabled = false
+
+        api.narration("Одетые в полноразмерные защитные костюмы фигуры не реагируют на попытки привлечь внимание.")
+        api.narration("Сквозь защитные стёкла не видно глаз; вероятно, твои они тоже не увидят.")
+      end,
+    },
   }
 end
