@@ -1328,5 +1328,20 @@ return function()
         )
       end,
     },
+
+    {
+      name = "Attacking the engine",
+      enabled = true,
+      start_predicate = function(self, rails, dt)
+        return Fun.iter(State._aggression_log)
+          :any(function(pair) return pair[1] == State.player and pair[2].engine_flag end)
+      end,
+
+      run = function(self, rails)
+        self.enabled = false
+
+        api.message.temporal("Пытаться его сломать бессмысленно; против такого монстра и оружие должно быть соответствующее.")
+      end,
+    },
   }
 end
