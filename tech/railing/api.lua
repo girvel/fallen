@@ -144,7 +144,7 @@ end
 
 --- @param ability ability
 --- @param dc integer saving throw's difficulty class
---- @return boolean
+--- @return boolean # whether saving throw was successful
 api.saving_throw = function(ability, dc)
   local success = abilities.saving_throw(State.player, ability, dc)
 

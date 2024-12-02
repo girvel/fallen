@@ -1,3 +1,4 @@
+local fx = require("tech.fx")
 local ai = require("tech.ai")
 local level = require("state.level")
 local hostility = require("mech.hostility")
@@ -1290,6 +1291,23 @@ return function()
           "Груда спрессованного угля впитывает любой случайный лучик света. Расплавится ли пол, если её зажечь целиком?",
           {source = {position = rails.positions.coal_message_source}}
         )
+      end,
+    },
+
+    {
+      name = "Engine energy damage",
+      enabled = true,
+
+      _activation_period = {},
+      start_predicate = function(self, rails, dt)
+        return State.player.position >= rails.positions.engine_damage_start
+          and State.player.position <= rails.positions.engine_damage_finish
+          and Common.relative_period(6, dt, self._activation_period)
+      end,
+
+      run = function(self, rails)
+        if api.saving_throw("con", 15) then return end
+        health.damage(State.player, 1)
       end,
     },
   }

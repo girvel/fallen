@@ -54,22 +54,23 @@ return function(positions, entities)
       }
     ),
 
-    _sounds = {},
-
     initialize = function(self)
       -- sounds --
       if not State.ambient.disabled then
-        self._sounds = {
-          sound("assets/sounds/ship_engine.mp3", 1)
-            :set_looping(true)
-            :place(self.positions.engine_sound, "medium")
-            :play(),
+        sound("assets/sounds/ship_engine.mp3", 1)
+          :set_looping(true)
+          :place(self.positions.engine_sound, "medium")
+          :play()
 
-          sound("assets/sounds/bow_wave.mp3", .7)
-            :set_looping(true)
-            :place(self.positions.bow_wave_sound, "medium")
-            :play(),
-        }
+        sound("assets/sounds/engine_electricity.mp3", .2)
+          :set_looping(true)
+          :place(self.positions.engine_electricity, "medium")
+          :play()
+
+        sound("assets/sounds/bow_wave.mp3", .7)
+          :set_looping(true)
+          :place(self.positions.bow_wave_sound, "medium")
+          :play()
       end
 
       -- entities --

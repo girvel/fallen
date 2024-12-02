@@ -71,7 +71,7 @@ end
 
 local ability_check_sound = {
   success = sound.multiple("assets/sounds/coin_toss", 1),
-  failure = sound.multiple("assets/sounds/check_failed", 0.3),
+  failure = sound.multiple("assets/sounds/check_failed", 1),
 }
 
 abilities.check = function(entity, name, dc)
@@ -102,11 +102,11 @@ abilities.saving_throw = function(entity, ability, dc)
   })
 
   local success = save >= dc
-  sound.play(
-    ability_check_sound[success and "success" or "failure"],
-    entity.position,
-    "small"
-  )
+  Random.choice(ability_check_sound[success and "success" or "failure"])
+    :clone()
+    :place(entity.position)
+    :play()
+
   return success
 end
 

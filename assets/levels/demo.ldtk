@@ -3303,7 +3303,7 @@
 						},
 						{
 							"__identifier": "position",
-							"__grid": [32,79],
+							"__grid": [16,103],
 							"__pivot": [0,0],
 							"__tags": ["positions"],
 							"__tile": null,
@@ -3312,13 +3312,13 @@
 							"width": 16,
 							"height": 16,
 							"defUid": 22,
-							"px": [512,1264],
+							"px": [256,1648],
 							"fieldInstances": [{ "__identifier": "name", "__type": "String", "__value": "checkpoint_4", "__tile": null, "defUid": 23, "realEditorValues": [{
 								"id": "V_String",
 								"params": ["checkpoint_4"]
 							}] }],
-							"__worldX": 512,
-							"__worldY": 752
+							"__worldX": 256,
+							"__worldY": 1136
 						},
 						{
 							"__identifier": "position",
@@ -4013,6 +4013,63 @@
 							}] }],
 							"__worldX": 464,
 							"__worldY": 944
+						},
+						{
+							"__identifier": "position",
+							"__grid": [10,94],
+							"__pivot": [0,0],
+							"__tags": ["positions"],
+							"__tile": null,
+							"__smartColor": "#19AD51",
+							"iid": "de66e370-9b00-11ef-ba27-c7f7f4a60611",
+							"width": 16,
+							"height": 16,
+							"defUid": 22,
+							"px": [160,1504],
+							"fieldInstances": [{ "__identifier": "name", "__type": "String", "__value": "engine_damage_start", "__tile": null, "defUid": 23, "realEditorValues": [{
+								"id": "V_String",
+								"params": ["engine_damage_start"]
+							}] }],
+							"__worldX": 160,
+							"__worldY": 992
+						},
+						{
+							"__identifier": "position",
+							"__grid": [15,99],
+							"__pivot": [0,0],
+							"__tags": ["positions"],
+							"__tile": null,
+							"__smartColor": "#19AD51",
+							"iid": "e3a163b0-9b00-11ef-ba27-cf222b54ec01",
+							"width": 16,
+							"height": 16,
+							"defUid": 22,
+							"px": [240,1584],
+							"fieldInstances": [{ "__identifier": "name", "__type": "String", "__value": "engine_damage_finish", "__tile": null, "defUid": 23, "realEditorValues": [{
+								"id": "V_String",
+								"params": ["engine_damage_finish"]
+							}] }],
+							"__worldX": 240,
+							"__worldY": 1072
+						},
+						{
+							"__identifier": "position",
+							"__grid": [12,97],
+							"__pivot": [0,0],
+							"__tags": ["positions"],
+							"__tile": null,
+							"__smartColor": "#19AD51",
+							"iid": "8159dd70-9b00-11ef-ba27-b7e7bc24154c",
+							"width": 16,
+							"height": 16,
+							"defUid": 22,
+							"px": [192,1552],
+							"fieldInstances": [{ "__identifier": "name", "__type": "String", "__value": "engine_electricity", "__tile": null, "defUid": 23, "realEditorValues": [{
+								"id": "V_String",
+								"params": ["engine_electricity"]
+							}] }],
+							"__worldX": 192,
+							"__worldY": 1040
 						}
 					]
 				},
