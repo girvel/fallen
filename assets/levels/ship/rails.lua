@@ -106,6 +106,9 @@ return function(positions, entities)
       State:refresh(self.entities.soup_cauldron, interactive.detector(), {name = "кастрюля"})
 
       self.entities.son_mary.sprite.color = Colors.from_hex("df529e")
+
+      decorations.lie(self.entities.sleeping_dreamer_1, self.positions.bed_1, "lower")
+      decorations.lie(self.entities.sleeping_dreamer_2, self.positions.bed_2, "upper")
     end,
 
     been_to_latrine = false,

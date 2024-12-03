@@ -145,8 +145,6 @@ ability_line = function(ability_name)
       0
     )
 
-  Log.trace(bonus)
-
   return {
     tags.anchor(index),
     translation.abilities[ability_name],
