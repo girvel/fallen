@@ -24,6 +24,8 @@
 --- @field creature_flag? true entity was created as mech.creature
 ---
 --- @field last_initiative? number value of the last initiative roll
+---
+--- @field faction? string the name of the faction used to check for hostility
 
 local entityx = {}
 

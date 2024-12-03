@@ -1,9 +1,11 @@
+local hostility = require("mech.hostility")
 local item = require("tech.item")
 local tcod = require("tech.tcod")
 local ai = require("tech.ai")
 local decorations = require("library.palette.decorations")
 local items       = require("library.palette.items")
 local railing     = require("tech.railing")
+local combat      = require("library.ais.combat")
 local api = ai.api
 
 
@@ -11,7 +13,7 @@ local janitor, module_mt, static = Module("library.ais.janitor")
 
 local TRAVEL_R = 8
 
-module_mt.__call = function(_)
+local peaceful_module = function()
   return {
     _current_line = 0,
     _lines = {
@@ -78,8 +80,12 @@ module_mt.__call = function(_)
             State:remove_multiple(self._popup)
           end
           self._popup = railing.api.message.temporal(self._lines[self._current_line], {source = entity})
-          -- TODO! make agressive here
           coroutine.yield()
+
+          if self._current_line == #self._lines then
+            hostility.make_hostile(entity.faction)
+            return
+          end
 
           current_bucket.on_remove = function()
             State:add(decorations.bucket(), {position = current_bucket.position})
@@ -100,6 +106,25 @@ module_mt.__call = function(_)
       item.give(entity, items.bucket())
       coroutine.yield()
     end, true),
+  }
+end
+
+module_mt.__call = function(_)
+  return {
+    _combat_module = combat(),
+    _peace_module = peaceful_module(),
+
+    run = function(self, entity, dt)
+      if hostility.are_hostile(entity, State.player) then
+        return self._combat_module:run(entity, dt)
+      else
+        return self._peace_module:run(entity, dt)
+      end
+    end,
+
+    observe = function(self, ...)
+      return self._combat_module:observe(...)
+    end,
   }
 end
 

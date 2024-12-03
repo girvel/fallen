@@ -8,7 +8,6 @@ local combat_ai, module_mt, static = Module("library.ais.combat")
 
 module_mt.__call = function()
   return {
-    -- TODO optimize
     run = ai.async(function(self, entity, dt)
       if not api.in_combat(entity) or not hostility.are_hostile(entity, State.player) then
         return
