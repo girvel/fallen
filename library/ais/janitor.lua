@@ -30,16 +30,34 @@ local peaceful_module = function()
       -- 1. go to a new place --
       do
         local path
-        while true do
+        for y = -TRAVEL_R, TRAVEL_R do
+          for x = -TRAVEL_R, TRAVEL_R do
+            local position = entity.position + Vector {x, y}
+            local blood = State.grids.on_tiles:safe_get(position)
+            if blood and blood.codename == "blood" then
+              path = tcod.snapshot():find_path(entity.position, position)
+              if #path > 0 then
+                goto follow_path
+              else
+                path = nil
+              end
+            end
+          end
+        end
+
+        while not path do
           local destination = entity.position + Vector {
             math.random(-TRAVEL_R, TRAVEL_R),
             math.random(-TRAVEL_R, TRAVEL_R),
           }
+          Log.trace("destination", destination)
 
           path = tcod.snapshot():find_path(entity.position, destination)
-          if #path > 2 then break end
+          if #path <= 2 then path = nil end
+          coroutine.yield()
         end
 
+        ::follow_path::
         api.follow_path(entity, path)
       end
 
@@ -95,6 +113,11 @@ local peaceful_module = function()
 
           entity:rotate(washing_direction_name)
         end
+      end
+
+      local blood = State.grids.on_tiles[entity.position]
+      if -Query(blood).codename == "blood" then
+        State:remove(blood)
       end
 
       -- 4. pick up the bucket --
