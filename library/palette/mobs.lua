@@ -171,7 +171,10 @@ end
 mobs.janitor = function()
   return Table.extend(
     mobs.dreamer({
-      inventory = {main_hand = items.mop()},
+      inventory = {
+        main_hand = items.mop(),
+        other_hand = items.bucket(),
+      },
     }),
     {
       name = "уборщик",

@@ -254,4 +254,11 @@ module.protective_robe = function()
   )
 end
 
+module.bucket = function()
+  return Table.extend(
+    animated("assets/sprites/animations/bucket"),
+    {slot = "other_hand"}
+  )
+end
+
 return module
