@@ -75,6 +75,7 @@ module_mt.__call = function(_)
             return f.action
           end)
           :filter(Fun.op.truth)
+          :filter(function(a) return Table.contains(entity.potential_actions, a) end)
           :totable()
 
         entity.action_factories = {}

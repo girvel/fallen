@@ -11,7 +11,7 @@ feats.great_weapon_master = static {
   attack_modifier = -5,
   damage_modifier = 10,
 
-  action = static .. action {
+  action = static(action {
     name = "Переключить тяжёлые атаки",
     codename = "toggle_gwm",
     _get_description = function(self)
@@ -25,7 +25,7 @@ feats.great_weapon_master = static {
       local params = State.player.effect_params[feats.great_weapon_master]
       params.enabled = not params.enabled
     end,
-  },
+  }),
 
   _gwm_condition = function(self, entity)
     local weapon = entity.inventory.main_hand
