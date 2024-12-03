@@ -135,8 +135,9 @@ mobs.hauler = function()
     name = "...",
     race = Random.choice(dreamer_races),
     max_hp = 15,
-    base_abilities = abilities(10, 10, 10, 10, 10, 10),
+    base_abilities = abilities(16, 10, 10, 10, 10, 10),
     ai = hauler_ai(),
+    faction = "haulers",
   }
 end
 

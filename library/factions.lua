@@ -16,6 +16,7 @@ return Module("library.factions", function()
   set_faction(result, "canteen_dreamers")
   set_faction(result, "protected_dreamers")
   set_faction(result, "janitor")
+  set_faction(result, "haulers")
 
   for i = 1, 2 do
     set_faction(result, "dreamers_" .. i)
