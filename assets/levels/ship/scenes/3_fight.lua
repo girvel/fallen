@@ -165,7 +165,7 @@ return function()
         self.enabled = false
         api.notification("Задача выполнена", true)
         api.update_quest({detective = quest.COMPLETED})
-        self:start_lunch()
+        rails:start_lunch()
       end,
     },
 
