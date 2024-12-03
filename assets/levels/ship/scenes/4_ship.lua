@@ -373,6 +373,35 @@ return function()
     },
 
     {
+      name = "Talking alcohol",
+      enabled = true,
+
+      characters = {
+        player = {},
+        alcohol_crate = {},
+      },
+
+      start_predicate = function(self, rails, dt, c)
+        return c.alcohol_crate.interacted_by == c.player
+          and not State.combat
+          and not State:exists(rails.entities.guard_1)
+      end,
+
+      run = function(self, rails, c)
+        self.enabled = false
+
+        api.narration("В ящике полным-полно съестных припасов различной ценности.")
+        api.narration("Основная масса — старые консервы в невзрачных упаковках, но присутствуют и относительно свежие овощи и даже вполне сносное мясо.")
+        api.narration("В центре композиции лежит единственный алкогольный напиток: бутылка дешёвого рома “Русалкино молоко”.")
+        api.narration("Бутылка сияет, как бриллиант в короне, а русалка на этикетке так и завлекает на грех.")
+
+        rails.bottles_taken = rails.bottles_taken + 1
+        rails.source_of_first_alcohol = rails.source_of_first_alcohol or "storage_room"
+        c.alcohol_crate:open()
+      end,
+    },
+
+    {
       name = "Talking to the first guard",
       enabled = true,
 
