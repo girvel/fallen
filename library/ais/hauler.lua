@@ -31,7 +31,7 @@ module_mt.__call = function(_)
       end
 
       api.tcod_travel(entity, hauler.get_point(self.point_i))
-    end, true)
+    end)
   }
 end
 

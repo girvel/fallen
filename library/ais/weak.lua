@@ -20,7 +20,7 @@ module_mt.__call = function()
           Random.choice({"Ааай", "Оой"}), {source = entity}
         )
       end
-    end, true),
+    end),
     observe = function(self, entity, dt)
       api.aggregate_aggression(entity.ai._was_attacked_by, entity)
       if State:check_aggression(State.player, entity) then

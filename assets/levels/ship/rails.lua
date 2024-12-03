@@ -143,7 +143,7 @@ return function(positions, entities)
     -- maybe it can be coupled with quests into a state machine
     -- or at least all grouped somewhere
     rront_runs_away = function(self)
-      if not State:exists(self.entities.rront) then return end
+      if not State:exists(self.entities.engineer_3) then return end
       State:remove(self.entities.engineer_3)
       api.notification("Задача выполнена неудовлетворительно", true)
       api.update_quest({detective = quest.FAILED})

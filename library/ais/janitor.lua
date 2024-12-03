@@ -105,7 +105,7 @@ local peaceful_module = function()
       end
       item.give(entity, items.bucket())
       coroutine.yield()
-    end, true),
+    end),
   }
 end
 

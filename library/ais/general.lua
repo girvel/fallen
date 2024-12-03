@@ -22,6 +22,7 @@ module_mt.__call = function(_, works_outside_of_combat)
 
     -- TODO optimize
     run = ai.async(function(self, entity, dt)
+      if not State.combat and not works_outside_of_combat then return end
       if
         not api.in_combat(entity)
         and self.mode.enum_variant ~= general_ai.modes.run_away_to
@@ -65,7 +66,7 @@ module_mt.__call = function(_, works_outside_of_combat)
           end
         end
       end
-    end, works_outside_of_combat),
+    end),
 
     observe = function(self, entity, dt)
       api.aggregate_aggression(self.was_attacked_by, entity)

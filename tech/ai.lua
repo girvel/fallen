@@ -7,25 +7,23 @@ ai.api = static {}
 
 local coroutine_cache = {}
 
-ai.async = function(fun, works_outside_of_combat)  -- TODO remove last argument
+--- Converts asynchronous function describing a move as a whole into a normal single-frame run function
+--- @param fun fun(self: table, entity: entity, dt: number): nil
+--- @return fun(self: table, enitity: entity, dt: number): any
+ai.async = function(fun)  -- TODO remove last argument
   return Dump.ignore_upvalue_size .. function(self, entity, dt)
     -- TODO support WORLD_TURN (which is 1 frame only btw)
-    if
-      not works_outside_of_combat
-      and not Table.contains(-Query(State.combat).list or {}, entity)
-    then return end
+    if not Common.period(.25, ai.async, entity) then return end
 
-    if Common.period(.25, ai.async, entity) then
-      coroutine_cache[fun] = coroutine_cache[fun] or coroutine.create(function(...)
-        return Debug.call(fun, ...)
-      end)
+    coroutine_cache[fun] = coroutine_cache[fun] or coroutine.create(function(...)
+      return Debug.call(fun, ...)
+    end)
 
-      Common.resume_logged(coroutine_cache[fun], self, entity, dt)
+    Common.resume_logged(coroutine_cache[fun], self, entity, dt)
 
-      if coroutine.status(coroutine_cache[fun]) == "dead" then
-        coroutine_cache[fun] = nil
-        return entity:act(actions.finish_turn)
-      end
+    if coroutine.status(coroutine_cache[fun]) == "dead" then
+      coroutine_cache[fun] = nil
+      return entity:act(actions.finish_turn)
     end
   end
 end
