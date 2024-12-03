@@ -67,11 +67,11 @@ module_mt.__call = function(_, works_outside_of_combat)
       end
     end, works_outside_of_combat),
 
-    observe = function(self, dt)
-      api.aggregate_aggression(self.ai.was_attacked_by, self)
+    observe = function(self, entity, dt)
+      api.aggregate_aggression(self.was_attacked_by, entity)
 
-      if self.ai.look_for_aggression then
-        self.resources.reactions = 0
+      if self.look_for_aggression then
+        entity.resources.reactions = 0
       end
     end,
   }

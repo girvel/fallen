@@ -204,13 +204,13 @@ api.message.positional = function(content, params)
     _epicenter = State.player.position,
     _dependent_entities = Table.extend({}, entities),
     ai = {
-      observe = function(self)
-        if (State.player.position - self._epicenter):abs() <= 2 then return end
+      observe = function(self, entity)
+        if (State.player.position - entity._epicenter):abs() <= 2 then return end
 
-        for _, e in ipairs(self._dependent_entities) do
+        for _, e in ipairs(entity._dependent_entities) do
           State:refresh(e, {life_time = life_time})
         end
-        self.ai.observe = nil
+        self.observe = nil
       end,
     },
   })

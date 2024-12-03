@@ -48,7 +48,7 @@ acting.system = static(Tiny.processingSystem({
   process = function(self, entity, dt)
     local observe = entity.ai.observe
     if observe then
-      Debug.pcall(observe, entity, dt)
+      Debug.pcall(observe, entity.ai, entity, dt)
     end
     if not entity.ai.run then return end
 

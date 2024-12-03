@@ -177,7 +177,7 @@ local state_base = {
       animated("assets/sprites/animations/water"),
       {
         _offset = Vector.zero,
-        ai = {observe = function(entity, dt)
+        ai = {observe = function(self, entity, dt)
           entity._offset = (entity._offset + Vector.down * State.water_speed * dt)
             :map(function(it) return it % constants.CELL_DISPLAY_SIZE end)
         end},

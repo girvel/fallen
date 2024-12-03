@@ -56,17 +56,17 @@ module_mt.__call = function(_)
         return result
       end,
 
-      observe = function(self)
-        local mutex_factories, other_factories = Fun.iter(self.action_factories)
+      observe = function(self, entity)
+        local mutex_factories, other_factories = Fun.iter(entity.action_factories)
           :span(function(f) return f.mutex_group end)
 
-        self.actions = mutex_factories
+        entity.actions = mutex_factories
           :group_by(function(f) return f.mutex_group, f end)
           :map(function(group, fs)
             local result = Fun.iter(fs)
-              :filter(function(f) return self._last_actions[group] == f end)
+              :filter(function(f) return entity._last_actions[group] == f end)
               :nth(1) or fs[1]
-            self._last_actions[group] = result
+            entity._last_actions[group] = result
             return result
           end)
           :chain(other_factories)
@@ -77,15 +77,15 @@ module_mt.__call = function(_)
           :filter(Fun.op.truth)
           :totable()
 
-        self.action_factories = {}
+        entity.action_factories = {}
 
-        if not self:can_act() then
-          self.actions = {}
+        if not entity:can_act() then
+          entity.actions = {}
         end
 
         local k = love.keyboard.isDown("lshift", "rshift") and 1.5 or 1
 
-        self.animation_rate = k
+        entity.animation_rate = k
         for _, key in ipairs({"w", "a", "s", "d"}) do
           love.custom.set_key_rate(key, love.custom.get_rate() * k)
         end

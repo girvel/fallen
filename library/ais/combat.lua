@@ -18,7 +18,7 @@ module_mt.__call = function()
       api.try_attacking(entity, State.player)
     end, true),
 
-    observe = function(entity, dt)
+    observe = function(self, entity, dt)
       if not hostility.are_hostile(entity, State.player)
         and State:check_aggression(State.player, entity)
       then

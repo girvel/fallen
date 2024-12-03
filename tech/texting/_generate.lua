@@ -21,7 +21,7 @@ return function(lines, view)
         {
           view = view,
           size = Vector({font:getWidth(token.content), font:getHeight()}),
-          ai = token.on_update and {observe = token.on_update},
+          ai = token.on_update and {observe = function(_, ...) return token.on_update(...) end},
         }
       ))
     end
