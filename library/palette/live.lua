@@ -4,8 +4,9 @@ local level = require("state.level")
 local sprite = require("tech.sprite")
 local sound = require("tech.sound")
 local railing = require("tech.railing")
-local pipes   = require("library.palette.pipes")
-
+local pipes = require("library.palette.pipes")
+local creature = require("mech.creature")
+local on_solids = require("library.palette.on_solids")
 
 
 local live, _, static = Module("library.palette.live")
@@ -198,6 +199,29 @@ for i = 1, 3 do
     return result
   end
 end
+end
+
+live.breakable_door = function()
+  return creature(animated.load_pack("assets/sprites/animations/breakable_door"), {
+    name = "дверь",
+    codename = "breakable_door",
+
+    max_hp = 20,
+    perks = {
+      {
+        modify_incoming_damage = function(self, entity, damage)
+          if damage < 8 then
+            return 0
+          end
+          return damage
+        end,
+      },
+    },
+
+    on_death = function(self)
+      State:add(on_solids.broken_door(), {position = self.position})
+    end,
+  })
 end
 
 return live

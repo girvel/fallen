@@ -11,7 +11,7 @@
 	"iid": "1bd1ae20-4ce0-11ef-896a-fbdee15fad32",
 	"jsonVersion": "1.5.3",
 	"appBuildId": 473703,
-	"nextUid": 96,
+	"nextUid": 98,
 	"identifierStyle": "Free",
 	"toc": [],
 	"worldLayout": "Free",
@@ -2231,6 +2231,41 @@
 			"pivotX": 0,
 			"pivotY": 0,
 			"fieldDefs": []
+		},
+		{
+			"identifier": "breakable_door",
+			"uid": 97,
+			"tags": ["live"],
+			"exportToToc": false,
+			"allowOutOfBounds": false,
+			"doc": null,
+			"width": 16,
+			"height": 16,
+			"resizableX": false,
+			"resizableY": false,
+			"minWidth": null,
+			"maxWidth": null,
+			"minHeight": null,
+			"maxHeight": null,
+			"keepAspectRatio": false,
+			"tileOpacity": 1,
+			"fillOpacity": 0.08,
+			"lineOpacity": 0,
+			"hollow": false,
+			"color": "#F6757A",
+			"renderMode": "Tile",
+			"showName": true,
+			"tilesetId": 96,
+			"tileRenderMode": "FitInside",
+			"tileRect": { "tilesetUid": 96, "x": 0, "y": 0, "w": 16, "h": 16 },
+			"uiTileRect": null,
+			"nineSliceBorders": [],
+			"maxCount": 0,
+			"limitScope": "PerLevel",
+			"limitBehavior": "MoveLastOne",
+			"pivotX": 0,
+			"pivotY": 0,
+			"fieldDefs": []
 		}
 	], "tilesets": [
 		{
@@ -2747,6 +2782,25 @@
 			"customData": [],
 			"savedSelections": [],
 			"cachedPixelData": { "opaqueTiles": "0000", "averageColors": "3845384538453845" }
+		},
+		{
+			"__cWid": 1,
+			"__cHei": 1,
+			"identifier": "breakable_door",
+			"uid": 96,
+			"relPath": "../sprites/animations/breakable_door/idle.png",
+			"embedAtlas": null,
+			"pxWid": 16,
+			"pxHei": 16,
+			"tileGridSize": 16,
+			"spacing": 0,
+			"padding": 0,
+			"tags": ["standalone"],
+			"tagsSourceEnumUid": null,
+			"enumTags": [],
+			"customData": [],
+			"savedSelections": [],
+			"cachedPixelData": { "opaqueTiles": "0", "averageColors": "f734" }
 		}
 	], "enums": [{ "identifier": "layer", "uid": 29, "values": [
 		{ "id": "on_solids", "tileRect": null, "color": 16705377 },
@@ -3430,7 +3484,7 @@
 						},
 						{
 							"__identifier": "position",
-							"__grid": [15,76],
+							"__grid": [19,124],
 							"__pivot": [0,0],
 							"__tags": ["positions"],
 							"__tile": null,
@@ -3439,13 +3493,13 @@
 							"width": 16,
 							"height": 16,
 							"defUid": 22,
-							"px": [240,1216],
+							"px": [304,1984],
 							"fieldInstances": [{ "__identifier": "name", "__type": "String", "__value": "checkpoint_4", "__tile": null, "defUid": 23, "realEditorValues": [{
 								"id": "V_String",
 								"params": ["checkpoint_4"]
 							}] }],
-							"__worldX": 240,
-							"__worldY": 704
+							"__worldX": 304,
+							"__worldY": 1472
 						},
 						{
 							"__identifier": "position",
@@ -4730,25 +4784,6 @@
 						},
 						{
 							"__identifier": "door",
-							"__grid": [19,122],
-							"__pivot": [0,0],
-							"__tags": ["live"],
-							"__tile": { "tilesetUid": 11, "x": 0, "y": 0, "w": 16, "h": 16 },
-							"__smartColor": "#BE4A2F",
-							"iid": "e9036e50-4ce0-11ef-896a-9fe97ffecabe",
-							"width": 16,
-							"height": 16,
-							"defUid": 12,
-							"px": [304,1952],
-							"fieldInstances": [
-								{ "__identifier": "args", "__type": "String", "__value": null, "__tile": null, "defUid": 45, "realEditorValues": [] },
-								{ "__identifier": "rails_name", "__type": "String", "__value": null, "__tile": null, "defUid": 47, "realEditorValues": [] }
-							],
-							"__worldX": 304,
-							"__worldY": 1440
-						},
-						{
-							"__identifier": "door",
 							"__grid": [24,122],
 							"__pivot": [0,0],
 							"__tags": ["live"],
@@ -5728,6 +5763,22 @@
 							"fieldInstances": [],
 							"__worldX": 240,
 							"__worldY": 864
+						},
+						{
+							"__identifier": "breakable_door",
+							"__grid": [19,122],
+							"__pivot": [0,0],
+							"__tags": ["live"],
+							"__tile": { "tilesetUid": 96, "x": 0, "y": 0, "w": 16, "h": 16 },
+							"__smartColor": "#F6757A",
+							"iid": "2ee37500-9b00-11ef-ba27-6327c4ade9cf",
+							"width": 16,
+							"height": 16,
+							"defUid": 97,
+							"px": [304,1952],
+							"fieldInstances": [],
+							"__worldX": 304,
+							"__worldY": 1440
 						}
 					]
 				},

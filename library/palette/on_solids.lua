@@ -19,7 +19,7 @@ factoring.from_atlas(on_solids, "assets/sprites/atlases/on_solids.png",
   {
     "mirror", "dirt", "airway", "map", "sign", "window", "upper_bunk", "cauldron",
     "vines", "vines", "vines", "vines", "vines", "son_mary1", "blood", "cauldron",
-    false, "vines", "vines", "vines", "vines", "son_mary2", "helm", "inscription",
+    "broken_door", "vines", "vines", "vines", "vines", "son_mary2", "helm", "inscription",
     "megadoor1_open", "megadoor2_open", "megadoor3_open", "vines", "vines", false, false, false,
     false, false, false, "vines", "vines", false, false, false,
   }

@@ -29,6 +29,10 @@ end
 --- @param is_critical boolean? whether to display damage as critical
 --- @return nil
 health.damage = function(target, amount, is_critical)
+  if target.get_effect then
+    amount = target:get_effect("modify_incoming_damage", amount)
+  end
+
   amount = math.max(0, amount)
   Log.info("damage: " .. amount)
 

@@ -53,12 +53,12 @@ local creature_methods = {
 
     local base = OrderedMap {}
     if rest_type == "free" then
-      base.movement = self.race.movement_speed
+      base.movement = -Query(self.race).movement_speed or 0
       base.bonus_actions = 1
     elseif rest_type == "move" then
       base.actions = 1
       base.bonus_actions = 1
-      base.movement = self.race.movement_speed
+      base.movement = -Query(self.race).movement_speed or 0
       base.reactions = 1
     end
 
