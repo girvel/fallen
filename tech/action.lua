@@ -44,7 +44,7 @@ module_mt.__call = function(_, base_table)
 
         table.insert(result, Html.p {
           cost_repr or "",
-          cost_repr and postfix and ", " or "",
+          cost_repr and postfix and "\n" or "",
           postfix or "",
         })
       end
