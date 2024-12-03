@@ -33,6 +33,9 @@ module_mt.__call = function(_, gui)
         State:remove_multiple(self._text_entities)
       end
 
+      -- Bonuses to abilities depend on race
+      local race_form = forms.race()
+
       local page = Html.pre {
         "   ", Html.h1 {
           self:is_readonly()
@@ -40,7 +43,7 @@ module_mt.__call = function(_, gui)
             or Html.span {color = Colors.green, "Повышение уровня"},
         },
         forms.abilities(),
-        forms.race(),
+        race_form,
         forms.class(),
       }
 
@@ -86,17 +89,8 @@ module_mt.__call = function(_, gui)
       return not self:is_readonly() and self._ability_points == 0
     end,
 
-    submit = function(self)
-      if self:is_readonly() then
-        State.gui.notifier:push("Нельзя изменить персонажа")
-        return
-      end
-      if not self:can_submit() then
-        State.gui.notifier:push("Не все ресурсы распределены")
-        return
-      end
-
-      self._mixin.perks = Fun.chain(
+    _get_current_perks = function(self)
+      return Fun.chain(
         experience.get_progression(self._mixin.class, self._mixin.level),
         experience.get_progression(self._mixin.race, self._mixin.level)
       )
@@ -107,6 +101,19 @@ module_mt.__call = function(_, gui)
           return it
         end)
         :totable()
+    end,
+
+    submit = function(self)
+      if self:is_readonly() then
+        State.gui.notifier:push("Нельзя изменить персонажа")
+        return
+      end
+      if not self:can_submit() then
+        State.gui.notifier:push("Не все ресурсы распределены")
+        return
+      end
+
+      self._mixin.perks = self:_get_current_perks()
 
       Log.info("Finishing character creation with args:", self._mixin)
       State.player:level_up(self._mixin)

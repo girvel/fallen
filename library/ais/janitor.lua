@@ -50,7 +50,6 @@ local peaceful_module = function()
             math.random(-TRAVEL_R, TRAVEL_R),
             math.random(-TRAVEL_R, TRAVEL_R),
           }
-          Log.trace("destination", destination)
 
           path = tcod.snapshot():find_path(entity.position, destination)
           if #path <= 2 then path = nil end

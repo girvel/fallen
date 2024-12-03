@@ -134,7 +134,7 @@ ability_line = function(ability_name)
 
   local index = #creator._movement_functions
   local value = creator._mixin.base_abilities[ability_name]
-  local bonus = Fun.iter(-Query(creator._mixin.race).progression_table[1] or {})
+  local bonus = Fun.iter(creator:_get_current_perks())
     :filter(function(p) return p.modify_ability_score end)
     :reduce(
       function(acc, p)
@@ -144,6 +144,8 @@ ability_line = function(ability_name)
       end,
       0
     )
+
+  Log.trace(bonus)
 
   return {
     tags.anchor(index),
