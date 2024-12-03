@@ -138,8 +138,12 @@ actions.move = static .. action {
     end
 
     local tile = State.grids.tiles[entity.position]
-    if tile and tile.sounds and tile.sounds.move then
-      sound.play(tile.sounds.move, tile.position)
+    local move_sounds = -Query(tile).sounds.move
+    if move_sounds then
+      Random.choice(move_sounds)
+        :clone()
+        :place(entity.position)
+        :play()
     end
 
     return true

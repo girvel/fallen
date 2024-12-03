@@ -1,3 +1,4 @@
+local sound = require("tech.sound")
 local gui = require("state.gui")
 local quest = require("tech.quest")
 local texting = require("tech.texting")
@@ -111,6 +112,8 @@ api.notification = function(text, is_order)
   State.gui.notifier:push(text, is_order)
 end
 
+local codex_update_sound = sound("assets/sounds/update_codex.mp3", .3)
+
 --- Update wiki.codex, discovering new wiki pages; notifies player
 --- @param page_table {[string]: any}
 --- @return nil
@@ -119,6 +122,7 @@ api.discover_wiki = function(page_table)
     State.gui.wiki.codex[k] = v
   end
   api.notification("Кодекс обновлён")  -- TODO mention page name
+  codex_update_sound:play()
 end
 
 --- Make faction hostile towards player

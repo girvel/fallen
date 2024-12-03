@@ -73,7 +73,7 @@ return Module("state.gui.wiki", function(gui)
       },
     }),
 
-    _open_sound = sound.multiple("assets/sounds/open_wiki.mp3", 0.3),
+    _open_sound = sound.multiple("assets/sounds/open_wiki", 0.3),
     _close_sound = sound.multiple("assets/sounds/close_wiki.mp3"),
 
     show = function(self, id)

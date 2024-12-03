@@ -1,3 +1,4 @@
+local sound = require("tech.sound")
 local interactive = require("tech.interactive")
 local animated = require("tech.animated")
 local level = require("state.level")
@@ -216,6 +217,10 @@ live.breakable_door = function()
           return damage
         end,
       },
+    },
+
+    sounds = {
+      hit = sound.multiple("assets/sounds/hits_soft_wood", .35),
     },
 
     on_death = function(self)

@@ -15,6 +15,7 @@ local shaders = require("tech.shaders")
 local player  = require("state.player")
 local health  = require("mech.health")
 local sound   = require("tech.sound")
+local sounds  = require("tech.sounds")
 
 
 return function()
@@ -77,7 +78,7 @@ return function()
         api.center_camera()
         State:remove(rails.entities.captain_door_note)
         api.update_quest({parasites = 1, alcohol = quest.COMPLETED})
-        --rails.has_valve = true
+        rails.has_valve = true
         --rails.bottles_taken = 3
 
         --rails:notice_flask()
