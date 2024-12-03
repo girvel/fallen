@@ -118,7 +118,9 @@ module_mt.__call = function(_)
       if hostility.are_hostile(entity, State.player) then
         return self._combat_module:run(entity, dt)
       else
-        return self._peace_module:run(entity, dt)
+        if not State.combat then
+          return self._peace_module:run(entity, dt)
+        end
       end
     end,
 

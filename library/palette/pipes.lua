@@ -52,33 +52,39 @@ factoring.from_atlas(
   }
 )
 
-local hissing_sound = sound("assets/sounds/steam_hissing_loop.wav", 1)
-hissing_sound.source:setLooping(true)
+local hissing_sound = sound("assets/sounds/steam_hissing_loop.wav", 1):set_looping(true)
 
 factoring.extend(pipes, "leaking_left_down", {
   trigger_seconds = 5,
   overflow_counter = 0,
-  sound_loop = hissing_sound,
   paused = false,
 
-  ai = {run = function(self, entity, dt)
-    if entity.paused then return end
-    entity.overflow_counter = entity.overflow_counter + dt
+  ai = {
+    run = function(self, entity, dt)
+      if entity.paused then return end
+      entity.overflow_counter = entity.overflow_counter + dt
 
-    if entity.overflow_counter >= 60 then
-      sound.play({entity.sound_loop}, entity.position)
-      if Common.relative_period(1, dt, entity, "steam") then
+      if entity.overflow_counter >= 60 then
+        if not entity._sound_loop then
+          entity._sound_loop = hissing_sound:clone():place(entity.position):play()
+        end
+        if Common.relative_period(1, dt, entity, "steam") then
+          pipes.burst_with_steam(entity)
+        end
+        return
+      end
+
+      if entity._sound_loop then
+        entity._sound_loop:stop()
+        entity._sound_loop = nil
+      end
+
+      if Common.relative_period(entity.trigger_seconds, dt, entity, "steam") then
+        entity.trigger_seconds = 8 + math.random() * 4
         pipes.burst_with_steam(entity)
       end
-      return
-    end
-    entity.sound_loop.source:stop()
-
-    if Common.relative_period(entity.trigger_seconds, dt, entity, "steam") then
-      entity.trigger_seconds = 8 + math.random() * 4
-      pipes.burst_with_steam(entity)
-    end
-  end},
+    end,
+  },
 })
 
 local steam_hissing_sound = sound("assets/sounds/steam_hissing.wav", 0.8)

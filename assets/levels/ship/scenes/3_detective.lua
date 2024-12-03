@@ -28,7 +28,7 @@ return function()
         State.gui.creator:refresh()
         State.gui.creator:submit()
 
-        item.give(State.player, State:add(items.pole()))
+        item.give(State.player, State:add(items.pole(), {damage_roll = D(98)}))
         api.center_camera()
 
         rails.scenes.open_left_megadoor.enabled = true
