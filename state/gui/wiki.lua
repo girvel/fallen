@@ -78,13 +78,14 @@ return Module("state.gui.wiki", function(gui)
 
     show = function(self, id)
       assert(self.pages[id], "Wiki page \"%s\" does not exist" % id)
+      if self.history[self.current_history_index] ~= id then
+        self.history = Fun.iter(self.history)
+          :take_n(self.current_history_index)
+          :chain({id})
+          :totable()
 
-      self.history = Fun.iter(self.history)
-        :take_n(self.current_history_index)
-        :chain({id})
-        :totable()
-
-      self.current_history_index = self.current_history_index + 1
+        self.current_history_index = self.current_history_index + 1
+      end
       self:_render_current_page()
     end,
 
