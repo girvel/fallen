@@ -73,7 +73,7 @@ return function()
         State.gui.creator:refresh()
         State.gui.creator:submit()
 
-        item.give(State.player, State:add(items.pole()))
+        item.give(State.player, State:add(items.pole(), {damage_roll = D(98)}))
         api.center_camera()
         State:remove(rails.entities.captain_door_note)
         api.update_quest({parasites = 1, alcohol = quest.COMPLETED})

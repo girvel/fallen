@@ -183,7 +183,7 @@ actions.interact = static .. action {
   end
 }
 
-actions.disengage = static .. action {
+actions.disengage = static(action {
   codename = "disengage",
   cost = {
     actions = 1,
@@ -191,15 +191,15 @@ actions.disengage = static .. action {
   _run = function(_, entity)
     entity.disengaged_flag = true
   end
-}
+})
 
-actions.finish_turn = static .. action {
+actions.finish_turn = static(action {
   codename = "finish_turn",
   _run = function(_, entity)
     return combat.TURN_END_SIGNAL
     -- TODO maybe discard that and use a direct call to State.combat?
   end,
-}
+})
 
 actions.list = static {
   actions.move,
@@ -207,6 +207,7 @@ actions.list = static {
   actions.other_hand_attack,
   actions.interact,
   actions.dash,
+  actions.finish_turn,
 }
 
 return actions

@@ -2628,7 +2628,7 @@
 			"savedSelections": [],
 			"cachedPixelData": {
 				"opaqueTiles": "0000000000000000000000000000000000000000000000000000000000000000",
-				"averageColors": "58aa432346686743358a387a7466253445782578257805781578254728455745000025782578357835784557184526b70000000000003578357800000000000000000000000015781578000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000"
+				"averageColors": "58aa432346686743358a387a7466253445782578257805781578254728455745674525782578357835784557184526b70000000000003578357800000000000000000000000015781578000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000"
 			}
 		},
 		{
@@ -2800,7 +2800,7 @@
 			"enumTags": [],
 			"customData": [],
 			"savedSelections": [],
-			"cachedPixelData": { "opaqueTiles": "0", "averageColors": "f734" }
+			"cachedPixelData": { "opaqueTiles": "0", "averageColors": "e744" }
 		}
 	], "enums": [{ "identifier": "layer", "uid": 29, "values": [
 		{ "id": "on_solids", "tileRect": null, "color": 16705377 },
@@ -3484,7 +3484,7 @@
 						},
 						{
 							"__identifier": "position",
-							"__grid": [19,124],
+							"__grid": [38,124],
 							"__pivot": [0,0],
 							"__tags": ["positions"],
 							"__tile": null,
@@ -3493,12 +3493,12 @@
 							"width": 16,
 							"height": 16,
 							"defUid": 22,
-							"px": [304,1984],
+							"px": [608,1984],
 							"fieldInstances": [{ "__identifier": "name", "__type": "String", "__value": "checkpoint_4", "__tile": null, "defUid": 23, "realEditorValues": [{
 								"id": "V_String",
 								"params": ["checkpoint_4"]
 							}] }],
-							"__worldX": 304,
+							"__worldX": 608,
 							"__worldY": 1472
 						},
 						{
