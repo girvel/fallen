@@ -140,7 +140,7 @@ local creature_methods = {
   end,
 
   on_death = function(self)
-    if not self.position or State.grids.items[self.position] then return end
+    if not self.position or State.grids.on_tiles[self.position] then return end
     State:add(on_tiles.blood(), {position = self.position})
   end,
 

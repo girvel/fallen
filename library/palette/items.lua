@@ -88,6 +88,23 @@ module.pole = function()
   )
 end
 
+module.mop = function()
+  return Table.extend(
+    item.mixin(),
+    animated("assets/sprites/animations/mop", "atlas"),
+    {
+      name = "швабра",
+      damage_roll = D(6),
+      bonus = 0,
+      tags = {
+        heavy = true,
+        versatile = true,
+      },
+      slot = "hands",
+    }
+  )
+end
+
 module.mace = function()
   return Table.extend(
     item.mixin(),

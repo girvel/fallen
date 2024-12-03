@@ -11,7 +11,7 @@
 	"iid": "1bd1ae20-4ce0-11ef-896a-fbdee15fad32",
 	"jsonVersion": "1.5.3",
 	"appBuildId": 473703,
-	"nextUid": 95,
+	"nextUid": 96,
 	"identifierStyle": "Free",
 	"toc": [],
 	"worldLayout": "Free",
@@ -2196,6 +2196,41 @@
 					"tilesetUid": null
 				}
 			]
+		},
+		{
+			"identifier": "janitor",
+			"uid": 95,
+			"tags": ["mobs"],
+			"exportToToc": false,
+			"allowOutOfBounds": false,
+			"doc": null,
+			"width": 16,
+			"height": 16,
+			"resizableX": false,
+			"resizableY": false,
+			"minWidth": null,
+			"maxWidth": null,
+			"minHeight": null,
+			"maxHeight": null,
+			"keepAspectRatio": false,
+			"tileOpacity": 1,
+			"fillOpacity": 0.08,
+			"lineOpacity": 0,
+			"hollow": false,
+			"color": "#181425",
+			"renderMode": "Tile",
+			"showName": true,
+			"tilesetId": 4,
+			"tileRenderMode": "FitInside",
+			"tileRect": { "tilesetUid": 4, "x": 32, "y": 0, "w": 16, "h": 16 },
+			"uiTileRect": null,
+			"nineSliceBorders": [],
+			"maxCount": 0,
+			"limitScope": "PerLevel",
+			"limitBehavior": "MoveLastOne",
+			"pivotX": 0,
+			"pivotY": 0,
+			"fieldDefs": []
 		}
 	], "tilesets": [
 		{
@@ -3395,7 +3430,7 @@
 						},
 						{
 							"__identifier": "position",
-							"__grid": [16,103],
+							"__grid": [34,70],
 							"__pivot": [0,0],
 							"__tags": ["positions"],
 							"__tile": null,
@@ -3404,13 +3439,13 @@
 							"width": 16,
 							"height": 16,
 							"defUid": 22,
-							"px": [256,1648],
+							"px": [544,1120],
 							"fieldInstances": [{ "__identifier": "name", "__type": "String", "__value": "checkpoint_4", "__tile": null, "defUid": 23, "realEditorValues": [{
 								"id": "V_String",
 								"params": ["checkpoint_4"]
 							}] }],
-							"__worldX": 256,
-							"__worldY": 1136
+							"__worldX": 544,
+							"__worldY": 608
 						},
 						{
 							"__identifier": "position",
@@ -6197,6 +6232,22 @@
 							}] }],
 							"__worldX": 160,
 							"__worldY": 1072
+						},
+						{
+							"__identifier": "janitor",
+							"__grid": [37,70],
+							"__pivot": [0,0],
+							"__tags": ["mobs"],
+							"__tile": { "tilesetUid": 4, "x": 32, "y": 0, "w": 16, "h": 16 },
+							"__smartColor": "#181425",
+							"iid": "5c12f450-9b00-11ef-ba27-fd3bcd5c01ad",
+							"width": 16,
+							"height": 16,
+							"defUid": 95,
+							"px": [592,1120],
+							"fieldInstances": [],
+							"__worldX": 592,
+							"__worldY": 608
 						}
 					]
 				},

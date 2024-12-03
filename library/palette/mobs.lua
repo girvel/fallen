@@ -14,6 +14,7 @@ local abilities = require("mech.abilities")
 local races = require("mech.races")
 local constants = require("mech.constants")
 local general_ai = require("library.ais.general")
+local janitor    = require("library.ais.janitor")
 
 
 local mobs, _, static = Module("library.palette.mobs")
@@ -165,6 +166,19 @@ mobs.protected_dreamer = function()
 
   result.armor_class = 17
   return result
+end
+
+mobs.janitor = function()
+  return Table.extend(
+    mobs.dreamer({
+      inventory = {main_hand = items.mop()},
+    }),
+    {
+      name = "уборщик",
+      faction = "janitor",
+      ai = janitor(),
+    }
+  )
 end
 
 mobs.combat_dreamer = function(params)

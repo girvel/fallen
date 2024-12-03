@@ -69,7 +69,10 @@ ai.api.tcod_travel = function(entity, destination)
     path = tcod.snapshot():find_path(entity.position, destination + d)
     if #path > 0 then break end
   end
+  ai.api.follow_path(entity, path)
+end
 
+ai.api.follow_path = function(entity, path)
   for _, position in ipairs(path) do
     if entity.resources.movement <= 0 then
       if entity.resources.actions > 0 then
@@ -108,6 +111,11 @@ ai.api.aggregate_aggression = function(t, entity)
     :filter(function(pair) return pair[2] == entity end)
     :map(function(pair) return pair[1] end)
     :totable())
+end
+
+ai.api.wait_seconds = function(s)
+  local t = love.timer.getTime()
+  while love.timer.getTime() - t < s do coroutine.yield() end
 end
 
 return ai
