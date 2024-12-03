@@ -155,7 +155,7 @@ return function(positions, entities)
     end,
 
     notice_flask = function(self)
-      local e = self.entities.flask_dreamer
+      local e = self.entities.canteen_dreamer_flask
       self.flask_noticed = true
       if State:exists(e) then
         cue.set(e, "highlight", true)
@@ -243,7 +243,7 @@ return function(positions, entities)
         local v = self.positions.canteen_dreamer_spawn_flask + d
         if not State.grids.solids:safe_get(v) then
           self.entities.canteen_dreamer_flask = State:add(
-            mobs.dreamer({faction = "canteen_dreamers"}),
+            mobs.dreamer({faction = "canteen_dreamers", race = "half_elf"}),
             interactive.detector(),
             {
               position = v,

@@ -1,3 +1,4 @@
+local interactive = require("tech.interactive")
 local animated = require("tech.animated")
 local animation_packs = require("library.animation_packs")
 local item = require("tech.item")
@@ -221,10 +222,16 @@ end
 
 module.large_valve = function()
   return Table.extend(
-    item.mixin(),
+    interactive(function(self)
+      State.rails.has_valve = true
+      State:remove(self)
+    end, {highlight = true}),
     animated("assets/sprites/animations/large_valve", "atlas"),
     {
+      layer = "items",
+      view = "scene",
       direction = "right",
+
       name = "большой вентиль",
       damage_roll = D(2),
       bonus = 0,
@@ -236,10 +243,17 @@ end
 
 module.flask = function()
   return Table.extend(
-    item.mixin(),
+    interactive(function(self)
+      State.rails.bottles_taken = State.rails.bottles_taken + 1
+      State.rails.source_of_first_alcohol = State.rails.source_of_first_alcohol or "flask"
+      State:remove(self)
+    end, {highlight = true}),
     animated("assets/sprites/animations/flask", "atlas"),
     {
+      layer = "items",
+      view = "scene",
       direction = "right",
+
       name = "фляга",
       slot = "right_pocket",
     }
