@@ -1,3 +1,4 @@
+local tcod = require("tech.tcod")
 local fx = require("tech.fx")
 local ai = require("tech.ai")
 local level = require("state.level")
@@ -938,7 +939,10 @@ return function()
       },
 
       start_predicate = function(self, rails, dt, c)
+        local snapshot = tcod.snapshot()
         return (State.player.position - c.canteen_killer_1.position):abs() <= 5
+          and snapshot:is_visible_unsafe(unpack(c.canteen_killer_1.position))
+          and snapshot:is_visible_unsafe(unpack(c.canteen_killer_2.position))
       end,
 
       run = function(self, rails, c)
