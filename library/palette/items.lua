@@ -223,7 +223,7 @@ end
 module.large_valve = function()
   return Table.extend(
     interactive(function(self)
-      State.rails.has_valve = true
+      State.rails:give_valve_to_player()
       State:remove(self)
     end, {highlight = true}),
     animated("assets/sprites/animations/large_valve", "atlas"),
