@@ -1026,6 +1026,7 @@ return function()
 
       start_predicate = function(self, rails, dt, c)
         return (c.canteen_dreamer_flask.position - c.player.position):abs() <= 3
+          and tcod.snapshot():is_visible_unsafe(unpack(c.canteen_dreamer_flask.position))
       end,
 
       run = function(self, rails, c)
