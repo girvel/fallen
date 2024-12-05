@@ -37,10 +37,23 @@ entityx.is_over = function(position, entity)
   return position >= entity.position and position < entity.position + entity.size
 end
 
---- @param entity entity
---- @return boolean
+local NO_ENTITY = "<none>"
+local NO_NAME = "<no name>"
+
+--- Get best possible in-game naming; prefers .name, then .codename, then the default value
+--- @param entity entity?
+--- @return string
 entityx.name = function(entity)
-  return -Query(entity).name or -Query(entity).codename or "???"
+  if not entity then return NO_ENTITY end
+  return entity.name or entity.codename or NO_NAME
+end
+
+--- Get best possible in-code naming; prefers .codename, then .name, then the default value
+--- @param entity entity?
+--- @return string
+entityx.codename = function(entity)
+  if not entity then return NO_ENTITY end
+  return entity.codename or entity.name or NO_NAME
 end
 
 return entityx

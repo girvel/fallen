@@ -10,7 +10,7 @@ return function(positions, entities)
     entities = entities,
     scenes = {
       {
-        name = "Checkpoint",
+        name = "Only checkpoint",
         enabled = true,
 
         characters = {
@@ -25,7 +25,6 @@ return function(positions, entities)
         run = function(self, rails, c)
           self.enabled = false
 
-          api.checkpoint_base()
           State.player.experience = experience.for_level[2]
           State.gui.creator:refresh()
           State.gui.creator:submit()

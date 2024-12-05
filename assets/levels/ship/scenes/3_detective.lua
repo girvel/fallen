@@ -9,7 +9,7 @@ local experience = require("mech.experience")
 
 return function()
   return {
-    checkpoint_3 = {
+    cp3 = {
       name = "Checkpoint (3)",
       enabled = false,
       start_predicate = function(self, rails, dt)
@@ -18,7 +18,7 @@ return function()
 
       run = function(self, rails)
         self.enabled = false
-        api.checkpoint_base()
+        rails.scenes.cp1:run(rails)
 
         level.move(State.player, rails.positions.detective_exit_warning)
         api.update_quest({detective = 1})
@@ -104,6 +104,7 @@ return function()
     second_rotates_valve = {
       name = "Second rotates the valve",
       enabled = true,
+      boring_flag = true,
       start_predicate = function(self, rails, dt)
         return not rails:is_running("detective_intro") and Common.relative_period(30, dt, self)
       end,
@@ -124,6 +125,7 @@ return function()
     first_shouts = {
       name = "Lead engineer shouts",
       enabled = true,
+      boring_flag = true,
       start_predicate = function(self, rails, dt)
         return Common.relative_period(40, dt, self)
           and State:exists(rails.entities.engineer_1)

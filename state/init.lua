@@ -74,7 +74,7 @@ local state_base = {
   remove = function(self, entity)
     --- @cast entity entity
     if not entity.boring_flag then
-      Log.debug("State:remove(%s)" % Entity.name(entity))
+      Log.debug("State:remove(%s)" % Entity.codename(entity))
     end
 
     self._world:remove(entity)
@@ -169,8 +169,12 @@ local state_base = {
       error("Player entity not found when loading %q" % path)
     end
 
-    self.rails = level_data.rails
-    Query(self.rails):initialize(self)
+    if level_data.rails then
+      self.rails = level_data.rails
+      Log.info("Initializing rails")
+      self.rails:initialize(self)
+      Log.info("Rails initialization finished")
+    end
 
     self.gui:initialize()
     self.background = State:add(

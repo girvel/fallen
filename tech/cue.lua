@@ -27,6 +27,7 @@ cue.factories = {
         codename = "highlight",
         slot = "highlight",
         animated_independently_flag = true,
+        boring_flag = true,
       }
     )
   end,

@@ -54,7 +54,7 @@ return function()
       end,
     },
 
-    checkpoint_4 = {
+    cp4 = {
       name = "Checkpoint (4)",
       enabled = false,
       start_predicate = function(self, rails, dt)
@@ -63,7 +63,7 @@ return function()
 
       run = function(self, rails)
         self.enabled = false
-        api.checkpoint_base()
+        rails.scenes.cp1:run(rails)
 
         level.move(State.player, rails.positions.checkpoint_4)
         api.update_quest({warmup = quest.COMPLETED})

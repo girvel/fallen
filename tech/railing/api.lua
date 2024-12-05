@@ -287,15 +287,6 @@ api.get_quest = function(codename)
   return State.gui.wiki.quest_states[codename] or 0
 end
 
---- Base call for checkpoints
---- @return nil
-api.checkpoint_base = function()
-  State.gui.creator._ability_points = 0
-  State.gui.creator._mixin.base_abilities = abilities(15, 15, 15, 8, 8, 8)
-  State.gui.creator._choices.race = 2
-  api.center_camera()
-end
-
 --- Rotate given entity towards player
 --- @param entity table
 --- @return nil

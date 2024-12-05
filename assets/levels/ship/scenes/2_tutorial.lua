@@ -12,14 +12,14 @@ local api = require("tech.railing").api
 
 return function()
   return {
-    checkpoint_2 = {
+    cp2 = {
       name = "Checkpoint (2)",
       enabled = false,
       start_predicate = function(self, rails, dt) return true end,
 
       run = function(self, rails)
-        rails:remove_scene("checkpoint_2")
-        api.checkpoint_base()
+        rails:remove_scene("cp2")
+        rails.scenes.cp1:run(rails)
         level.move(State.player, rails.positions.checkpoint_2)
         State.player.experience = experience.for_level[2]
         State.gui.creator:refresh()
@@ -165,7 +165,7 @@ return function()
               "assets/sprites/fx/mirage_spawn", "fx_under", rails.positions.officer_room_enter
             ))
             api.wait_seconds(0.5)
-            sound("assets/sounds/phantom_appearing.mp3", .3):play()
+            sound("assets/sounds/phantom_appearing.mp3", .1):play()
             e = State:add(mobs.phantom_knight(), {position = rails.positions.officer_room_enter})
 
             if api.ability_check("arcana", 10) then

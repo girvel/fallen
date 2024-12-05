@@ -264,14 +264,14 @@ module.protective_robe = function()
   return Table.extend(
     item.mixin(),
     animated("assets/sprites/animations/protective_robe", "atlas"),
-    {slot = "body"}
+    {name = "Защитная роба", slot = "body"}
   )
 end
 
 module.bucket = function()
   return Table.extend(
     animated("assets/sprites/animations/bucket"),
-    {slot = "other_hand"}
+    {codename = "bucket", slot = "other_hand"}
   )
 end
 

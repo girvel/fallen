@@ -1,3 +1,4 @@
+local abilities = require("mech.abilities")
 local sprite = require("tech.sprite")
 local on_tiles = require("library.palette.on_tiles")
 local mobs = require("library.palette.mobs")
@@ -31,7 +32,29 @@ return function(positions, entities)
       require("assets.levels.ship.scenes.4_ship")(),
       require("assets.levels.ship.scenes.4_son_mary")(),
       {
-        checkpoint_0 = {
+        cp1 = {
+          name = "Checkpoint Base",
+          enabled = false,
+          start_predicate = function(self, rails, dt)
+            return true
+          end,
+
+          run = function(self, rails)
+            self.enabled = false
+
+            -- local INTRO_SCENES = {"intro", "character_created", "warning_leaving_player_room"}
+            -- for _, s in ipairs(INTRO_SCENES) do
+            --   rails:remove_scene(s)
+            -- end
+
+            State.gui.creator._ability_points = 0
+            State.gui.creator._mixin.base_abilities = abilities(15, 15, 15, 8, 8, 8)
+            State.gui.creator._choices.race = 2
+            api.center_camera()
+          end,
+        },
+
+        cp0 = {
           name = "Checkpoint -- captain's deck",
           enabled = false,
           start_predicate = function(self, rails, dt)
@@ -39,7 +62,9 @@ return function(positions, entities)
           end,
 
           run = function(self, rails)
-            rails:remove_scene("checkpoint_0")
+            rails.scenes.cp1:run(rails)
+
+            rails:remove_scene("cp0")
             level.move(State.player, rails.positions.checkpoint_0)
             rails.entities.captain_door:open()
             rails.scenes.open_left_megadoor.enabled = true
