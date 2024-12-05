@@ -87,7 +87,10 @@ local peaceful_module = function()
       end
 
       -- 3. mop the floor --
-      local washing_direction_name = Random.choice({"up", "down"})
+      local washing_direction_name = Random.choice(
+        Table.remove({"up", "down"}, bucket_direction_name)
+      )
+
       entity:rotate(washing_direction_name)
       for _ = 1, math.random(5, 10) do
         entity:animate("main_hand_attack")

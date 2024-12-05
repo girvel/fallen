@@ -68,11 +68,16 @@ tablex.merge = function(base, extension, ...)
   return tablex.merge(base, ...)
 end
 
+--- Return the first index of the item in the table
+--- @generic T
+--- @param t T[]
+--- @param item T
+--- @return integer?
 tablex.index_of = function(t, item)
   return Fun.iter(t)
     :enumerate()
-    :filter(function(i, x) return x == item end)
-    :map(function(i, x) return i end)
+    :filter(function(_, x) return x == item end)
+    :map(function(i, _) return i end)
     :nth(1)
 end
 
