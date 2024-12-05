@@ -165,7 +165,7 @@ return function()
               "assets/sprites/fx/mirage_spawn", "fx_under", rails.positions.officer_room_enter
             ))
             api.wait_seconds(0.5)
-            sound("assets/sounds/phantom_appearing.mp3"):play()
+            sound("assets/sounds/phantom_appearing.mp3", .3):play()
             e = State:add(mobs.phantom_knight(), {position = rails.positions.officer_room_enter})
 
             if api.ability_check("arcana", 10) then
