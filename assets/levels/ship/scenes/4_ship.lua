@@ -218,6 +218,7 @@ return function()
     guard_1_rotates = {
       name = "Guard #1 rotates",
       enabled = true,
+      boring_flag = true,
 
       characters = {
         guard_1 = {},

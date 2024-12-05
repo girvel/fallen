@@ -28,15 +28,23 @@ railing._methods.update = static .. function(self, dt)
     then
       table.insert(self._active_coroutines, {
         coroutine = coroutine.create(function()
-          Log.info("Scene `" .. scene.name .. "` starts")
+          if not scene.boring_flag then
+            Log.info("Scene `" .. scene.name .. "` starts")
+          end
+
           for _, character in pairs(characters) do
             Query(character).ai.in_cutscene = true
           end
+
           Debug.call(scene.run, scene, self, characters)
+
           for _, character in pairs(characters) do
             Query(character).ai.in_cutscene = nil
           end
-          Log.info("Scene `" .. scene.name .. "` ends")
+
+          if not scene.boring_flag then
+            Log.info("Scene `" .. scene.name .. "` ends")
+          end
         end),
         base_scene = scene,
       })
