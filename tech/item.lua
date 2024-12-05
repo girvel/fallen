@@ -1,7 +1,7 @@
 local iteration = require "tech.iteration"
 local module, _, static = Module("tech.item")
 
-module.DROPPING_SLOTS = {"main_hand", "other_hand", "gloves", "right_pocket"}
+module.DROPPING_SLOTS = {"main_hand", "other_hand", "gloves", "right_pocket", "inside"}
 
 --- @alias has_inventory {inventory: table<string, table>, position: vector}
 

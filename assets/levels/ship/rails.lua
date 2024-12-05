@@ -90,7 +90,7 @@ return function(positions, entities)
       cue.set(self.entities.alcohol_crate, "highlight", true)
 
       self.entities.razor = State:add(items.razor())
-      self.entities.dorm_halfling.inventory[1] = self.entities.razor
+      self.entities.dorm_halfling.inventory.inside = self.entities.razor
 
       self.entities.captain_door_note.interact = nil
       cue.set(self.entities.captain_door_note, "highlight", false)
