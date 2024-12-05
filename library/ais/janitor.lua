@@ -62,23 +62,29 @@ local peaceful_module = function()
 
       -- 2. place the bucket --
       local bucket_position, bucket_direction_name
-      for _, direction_name in ipairs(Vector.direction_names) do
-        bucket_position = entity.position + Vector[direction_name]
+      while true do
+        for _, direction_name in ipairs(Vector.direction_names) do
+          bucket_position = entity.position + Vector[direction_name]
+          if not State.grids.solids[bucket_position] then
+            bucket_direction_name = direction_name
+            goto position_found
+          end
+        end
+        do return end
+
+        ::position_found::
+        entity:rotate(bucket_direction_name)
+        coroutine.yield()
+
+        -- Coroutine yielded => no guarantee that the bucket_position remains empty
         if not State.grids.solids[bucket_position] then
-          bucket_direction_name = direction_name
-          goto position_found
+          State:remove(entity.inventory.other_hand)
+          entity.inventory.other_hand = nil
+          State:add(decorations.bucket(), {position = bucket_position})
+          coroutine.yield()
+          break
         end
       end
-      do return end
-
-      ::position_found::
-      entity:rotate(bucket_direction_name)
-      coroutine.yield()
-
-      State:remove(entity.inventory.other_hand)
-      entity.inventory.other_hand = nil
-      State:add(decorations.bucket(), {position = bucket_position})
-      coroutine.yield()
 
       -- 3. mop the floor --
       local washing_direction_name = Random.choice({"up", "down"})
