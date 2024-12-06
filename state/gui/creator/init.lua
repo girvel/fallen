@@ -33,17 +33,16 @@ module_mt.__call = function(_, gui)
         State:remove_multiple(self._text_entities)
       end
 
-      -- Bonuses to abilities depend on race
-      local race_form = forms.race()
-
       local page = Html.pre {
         "   ", Html.h1 {
           self:is_readonly()
             and "Персонаж"
             or Html.span {color = Colors.green, "Повышение уровня"},
         },
+        -- Bonuses to abilities depend on race => it comes first
+        -- Kind of a hack, exists because there is no recursive initialization
+        forms.race(),
         forms.abilities(),
-        race_form,
         forms.class(),
       }
 

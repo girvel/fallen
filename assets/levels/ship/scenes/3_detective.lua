@@ -26,7 +26,7 @@ return function()
 
         State.player.experience = experience.for_level[3]
         State.gui.creator:refresh()
-        State.gui.creator:submit()
+        -- State.gui.creator:submit()
 
         item.give(State.player, State:add(items.pole(), {damage_roll = D(98)}))
         api.center_camera()
