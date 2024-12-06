@@ -11,7 +11,7 @@ module_mt.__call = function(_, perk)
 
   if perk.__type == class.choice then
     local choices = creator._choices
-    choices[perk] = choices[perk] or next_value(perk.options, Table.last(perk.options), 1)
+    choices[perk] = choices[perk] or next_value(perk.options, Table.last(perk.options), -1)
     creator._active_choices[perk] = true
     -- TODO can be null
 

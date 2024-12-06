@@ -160,9 +160,9 @@ ability_line = function(ability_name)
         and tags.button(index, 1)
         or " ",
     },
-    bonus,
+    "%+i" % {bonus},
     value + bonus,
-    "%+i" % abilities.get_modifier(value + bonus),
+    "%+i" % {abilities.get_modifier(value + bonus)},
   }
 end
 
