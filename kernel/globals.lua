@@ -9,7 +9,7 @@ return function()
   Log.info("Starting basic LOVE setup")
 
   Table = require("lib.table")
-  require("lib.string").inject(getmetatable(""))
+  require("lib.string")
   Query = require("lib.query")
   Math = require("lib.math")
   Common = require("lib.common")

@@ -1,55 +1,53 @@
 local utf8 = require("utf8")
 
 
-local methods = {}
-
-methods.utf_sub = function(str, a, b)
+string.utf_sub = function(str, a, b)
   if not b then
-    b = methods.utf_len(str)
+    b = string.utf_len(str)
   elseif b < 1 then
-    b = b + methods.utf_len(str) + 1
+    b = b + string.utf_len(str) + 1
   end
   return str:sub(utf8.offset(str, a), utf8.offset(str, b + 1) - 1)
 end
 
-methods.utf_len = function(str)
+string.utf_len = function(str)
   return utf8.len(str)
 end
 
 local ru_lower = "абвгдеёжзийклмнопрстуфхцчшщъыьэюя"
 local ru_upper = "АБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯ"
 
-methods.utf_lower = function(str)
+string.utf_lower = function(str)
   str = str:lower()
-  for i = 1, methods.utf_len(ru_lower) do
+  for i = 1, string.utf_len(ru_lower) do
     str = str:gsub(
-      methods.utf_sub(ru_upper, i, i),
-      methods.utf_sub(ru_lower, i, i)
+      string.utf_sub(ru_upper, i, i),
+      string.utf_sub(ru_lower, i, i)
     )
   end
   return str
 end
 
-methods.utf_upper = function(str)
+string.utf_upper = function(str)
   str = str:upper()
-  for i = 1, methods.utf_len(ru_lower) do
+  for i = 1, string.utf_len(ru_lower) do
     str = str:gsub(
-      methods.utf_sub(ru_lower, i, i),
-      methods.utf_sub(ru_upper, i, i)
+      string.utf_sub(ru_lower, i, i),
+      string.utf_sub(ru_upper, i, i)
     )
   end
   return str
 end
 
-methods.starts_with = function(str, prefix)
+string.starts_with = function(str, prefix)
   return str:sub(1, #prefix) == prefix
 end
 
-methods.ends_with = function(str, suffix)
+string.ends_with = function(str, suffix)
   return str:sub(-#suffix, -1) == suffix
 end
 
-methods.split = function(str, pat, plain)
+string.split = function(str, pat, plain)
   local t = {}
 
   while true do
@@ -65,7 +63,7 @@ methods.split = function(str, pat, plain)
   end
 end
 
-methods.ljust = function(str, int, padstr)
+string.ljust = function(str, int, padstr)
   local len = utf8.len(str)
 
   if int > len then
@@ -78,7 +76,7 @@ methods.ljust = function(str, int, padstr)
   return str
 end
 
-methods.rjust = function(str, int, padstr)
+string.rjust = function(str, int, padstr)
   local len = #str
 
   if int > len then
@@ -91,33 +89,33 @@ methods.rjust = function(str, int, padstr)
   return str
 end
 
-methods.lstrip = function(str)
+string.lstrip = function(str)
   return str:gsub("^%s+", "")
 end
 
-methods.rstrip = function(str)
+string.rstrip = function(str)
   return str:gsub("%s+$", "")
 end
 
-methods.strip = function(str)
-  return methods.rstrip(methods.lstrip(str))
+string.strip = function(str)
+  return string.rstrip(string.lstrip(str))
 end
 
-methods.indent = function(str)
+string.indent = function(str)
   return table.concat(Fun.iter(str / "\n")
     :map(function(line) return "  " .. line end)
     :totable(), "\n")
 end
 
 
-local mt = {}
+local mt = getmetatable("")
 
 mt.__mul = function(a, b)
   return a:rep(b)
 end
 
 mt.__div = function(a, b)
-  return methods.split(a, b, true)
+  return string.split(a, b, true)
 end
 
 mt.__mod = function(a, b)
@@ -127,16 +125,3 @@ mt.__mod = function(a, b)
       return a:format(b)
    end
 end
-
-
-return {
-  inject = function(target_metatable)
-    for k, v in pairs(mt) do
-      target_metatable[k] = v
-    end
-
-    for k, v in pairs(methods) do
-      target_metatable.__index[k] = v
-    end
-  end
-}

@@ -4,6 +4,7 @@ describe("Grid library", function()
   _G.Fun = require("vendor.fun")
   _G.Vector = require("lib.vector")
   _G.Module = require("lib.module")
+  require("lib.string")
 
   local grid = require("lib.grid")
   local vector = require("lib.vector")
