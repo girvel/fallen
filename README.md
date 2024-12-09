@@ -12,6 +12,8 @@ RPG/adventure demo written in Lua with LOVE2D.
 
 ## Launching from source
 
+Can be launched from the Fallen's root folder using [LOVE](https://love2d.org/):
+
 ```bash
 love .
 ```
