@@ -6,7 +6,7 @@ RPG/adventure demo written in Lua with LOVE2D.
 
 - [Download](https://github.com/girvel/fallen/releases/latest) (alpha)
 - [Documentation](/docs/README.md) (in progress)
-- [Prototype in Python](https://github.com/girvel/fallen_python)
+- [Prototype](https://github.com/girvel/fallen_python)
 - [VK (RU)](https://vk.com/st_celest)
 - [Telegram (RU)](https://t.me/stcelest)
 
