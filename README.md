@@ -2,11 +2,13 @@
 
 ![](assets/screenshots/main.png)
 
-Mini-RPG/adventure written in Lua with LOVE2D.
+RPG/adventure demo written in Lua with LOVE2D.
 
 - [Download](https://github.com/girvel/fallen/releases/latest) (alpha)
-- [Documentation](/docs/README.md)
-- [
+- [Documentation](/docs/README.md) (in progress)
+- [Prototype in Python](https://github.com/girvel/fallen_python)
+- [VK (RU)](https://vk.com/st_celest)
+- [Telegram (RU)](https://t.me/stcelest)
 
 ## Launching from source
 
@@ -14,11 +16,3 @@ Mini-RPG/adventure written in Lua with LOVE2D.
 love .
 ```
 
-## Documentation
-
-See [/docs/README.md](/docs/README.md) and in-code annotations. Just started to write it, most of it is missing.
-
-## Links
-
-- [VK (RU)](https://vk.com/st_celest)
-- [Telegram (RU)](https://t.me/stcelest)
