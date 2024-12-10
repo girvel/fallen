@@ -1,3 +1,4 @@
+local sprite = require("tech.sprite")
 local interactive = require("tech.interactive")
 local factoring = require("tech.factoring")
 local shaders = require("tech.shaders")
@@ -26,7 +27,9 @@ factoring.from_atlas(on_solids, "assets/sprites/atlases/on_solids.png",
 )
 
 factoring.extend(on_solids, "son_mary2",
-  {sprite_offset = Vector.up * 0.5, name = "Голова в банке"},
+  {sprite_offset = Vector.up * 0.5,
+   name = "Голова в банке",
+   portrait = sprite.image("assets/sprites/portraits/son_mary.png")},
   interactive.detector()
 )
 
