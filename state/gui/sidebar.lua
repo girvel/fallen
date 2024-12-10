@@ -140,6 +140,9 @@ return Module("state.gui.sidebar", function()
         if State.rails.has_sigi then
           table.insert(bag, {"Сигареты", "1"})
         end
+        if State.rails.has_amulet then
+          table.insert(bag, {"Амулет", "1"})
+        end
 
         if #bag > 0 then
           append(Common.build_table(

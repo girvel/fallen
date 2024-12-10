@@ -112,10 +112,10 @@ return function()
           api.line(State.player, "“Где-то светит солнце”")
         end
 
-        api.options({
+        rails.has_amulet = api.options({
           "*принять амулет*",
           "*отказаться от амулета*",
-        })
+        }) == 1
       end,
     },
   }
