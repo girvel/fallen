@@ -70,8 +70,8 @@ feats.savage_attacker = static {
 feats.perk = static .. class.choice {
   name = "Черта",
   options = {
-    feats.great_weapon_master,
     feats.savage_attacker,
+    feats.great_weapon_master,  -- should not go first, too powerful
   },
 }
 
