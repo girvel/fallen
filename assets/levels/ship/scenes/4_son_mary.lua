@@ -782,8 +782,22 @@ return function()
         self._options.people[option] = assert(self._inactive_people_options[option])
       end,
 
+      _remarked_piracy = false,
+
       run = function(self, rails, c)
         c.son_mary.interacted_by = nil
+
+        if not self._remarked_piracy and rails.money >= 1000 then
+          self._remarked_piracy = true
+          api.line(c.son_mary, "А ты не терял время, а?")
+          api.line(c.son_mary, "Так и знал, не обнищала ещё наша порода")
+          api.line(c.son_mary, "Того и гляди — гайки платиновые открутишь с приборной панели.")
+          api.line(c.player, "Что ты несёшь?")
+          api.line(c.son_mary, "Твои карманы набиты ценностями — вещами мертвых и живых.")
+          api.line(c.son_mary, "И забрал ты их с корабля, с которого вот-вот слиняешь.")
+          api.line(c.son_mary, "Ты пират, %s" % {c.son_mary.player_name})
+          return
+        end
 
         api.narration("Сон Мари глухо кашляет, создавая водоворот из пузырей.")
         api.line(c.son_mary, "Ну что %s, собираешься что-то обсудить?" % {c.son_mary.player_name})
@@ -988,7 +1002,7 @@ return function()
                   api.line(c.player, "Где здесь выход?!")
                   api.line(c.son_mary, "Выход один — действовать по моему плану.")
                   api.line(c.son_mary, "Сейчас мы замурованы в свинцовой могиле посреди океана.")
-                  api.line(c.son_mary, "Слушай мудрого Сон Мари, *имя для СМ*, и обретёшь свободу.")
+                  api.line(c.son_mary, "Слушай мудрого Сон Мари, %s, и обретёшь свободу." % {c.son_mary.player_name})
                 end
 
               else
