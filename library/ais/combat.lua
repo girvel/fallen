@@ -23,8 +23,11 @@ module_mt.__call = function()
       if Fun.iter(State._aggression_log)
         :any(function(pair) return pair[2].faction == entity.faction end)
       then
+        if not Table.contains(-Query(State.combat).list or {}, entity) then
+          State:add(fx("assets/sprites/fx/aggression", "fx", entity.position))
+        end
+
         hostility.make_hostile(entity.faction)
-        State:add(fx("assets/sprites/fx/aggression", "fx", entity.position))
         State:start_combat({entity, State.player})
       end
     end,

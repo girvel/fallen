@@ -131,6 +131,9 @@ return Module("state.gui.sidebar", function()
       -- TODO move the bag out of rails, temporary hack for now to use polygon level
       if State.rails.bottles_taken then
         local bag = {}
+        if State.rails.money > 0 then
+          table.insert(bag, {"Финансы", "%i MM" % {State.rails.money}})
+        end
         if State.rails.bottles_taken > 0 then
           table.insert(bag, {"Бутылки с алкоголем", tostring(State.rails.bottles_taken)})
         end

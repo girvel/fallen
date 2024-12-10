@@ -148,6 +148,7 @@ return function(positions, entities)
     met_son_mary = false,
     flask_noticed = false,
     lunch_started = false,
+    money = 0,
 
     spawn_possessed = function(self)
       self.entities.dining_room_door_1:close()

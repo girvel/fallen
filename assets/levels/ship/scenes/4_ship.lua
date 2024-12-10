@@ -1405,5 +1405,78 @@ return function()
         api.narration("Сквозь защитные стёкла не видно глаз; вероятно, твои они тоже не увидят.")
       end,
     },
+
+    {
+      name = "Looting money",
+      enabled = true,
+
+      _container_indexes = Fun.range(10):totable(),
+      _current_active_container_i = nil,
+      _first_time = true,
+      _steals = false,
+
+      start_predicate = function(self, rails, dt)
+        if not self._containers then
+          self._containers = Fun.range(10)
+            :map(function(i) return  end)
+            :totable()
+        end
+
+        self._current_active_container_i = Fun.iter(self._container_indexes)
+          :filter(function(i)
+            return rails.entities["loot_container_" .. i].interacted_by == State.player
+          end)
+          :nth(1)
+
+        return self._current_active_container_i
+      end,
+
+      _contents = {
+        {10, "Под слоями трухлявой одежды лежит несколько старых необналиченных зарплатных выписок; сумма за 10 месяцев работы не вызывает ничего, кроме смеха."},
+        {80, "Развернув тонкий пергамент, ты находишь золотой кулон; внутри него истлевшая фотография и  гравировка: “Любимой жене и матери, возвращайся скорее”."},
+        {120, "В глиняной миске лежит множество ржавых монет неопределенного происхождения и номинала, некоторые неплохо сохранились; с большой серебряной монеты на тебя глазеет морда странного клоуна."},
+        {200, "Среди пустых бутылок премиального алкоголя лежит красочное издание в нераспакованной подарочной упаковке — “Житие святого Кайдена: Последний Император”."},
+        {250, "На дня сундука спрятался кошелёк с фотографией дварфа в форме Экс-Адмирала — внутри стопка увесистых купюр с портретами Святых; 20 лет назад это было целое состояние."},
+        {40, "Один из ящиков не закрывается полностью; за его задней стенкой ты находишь серебряные запонки дварфийской работы."},
+        {70, "В газету завернуто золотое ожерелье; на местах, предназначенных для драгоценных камней зияет пустота: остался лишь один - агат."},
+        {120, "Полусгнившая верхняя стенка при малейшем касании проваливается вглубь ящика, высвобождая на свет витиеватые амулеты, компактные жезлы и наборы рунных колец; тем у кого нет таланта — они не помощники."},
+        {60, "Среди груд повседневной одежды сверкает платиновая ключница; на ней с десяток разнообразных ключей: здесь и кривой амбарный, и маленький почтовый, даже автомобильный — с солидной букой К в основании; тебе никогда не найти, что они открывают."},
+        {50, "В шкафчике в неразобранном виде лежат декады бронзовых пластин с гравировкой ДВБ; в любой точке мира их можно обменять на еду и ночлег."},
+      },
+
+      run = function(self, rails)
+        Table.remove(self._container_indexes, self._current_active_container_i)
+        local container = rails.entities["loot_container_" .. self._current_active_container_i]
+        local money, line = unpack(self._contents[self._current_active_container_i])
+
+        if self._first_time then
+          self._first_time = false
+
+          api.narration(line)
+
+          self._steals = api.options({
+            "(Может пригодиться.)",
+            "(Я не буду брать чужое.)",
+          }) == 1
+
+          if self._steals then
+            api.line(State.player, "(Не похоже, что это сейчас кому-то нужно)")
+            api.narration("Стоит чаще смотреть по сторонам, везде может быть нечто ценное.")
+          else
+            api.line(State.player, "(Я не вор.)")
+            api.narration("Может быть, если не будет монетки на черный день — не будет и чёрного дня.")
+          end
+        else
+          api.message.temporal(line, {source = container})
+        end
+
+        container:open()
+
+        if self._steals then
+          rails.money = rails.money + money
+          sound("assets/sounds/picking_up_loot.mp3", .8):play()
+        end
+      end,
+    },
   }
 end
