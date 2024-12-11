@@ -18,15 +18,18 @@ module_mt.__call = function()
     end),
 
     observe = function(self, entity, dt)
-      if not entity.faction then return end
+      if
+        not entity.faction
+        or Table.contains(-Query(State.combat).list or {}, entity)
+      then
+        return
+      end
       -- TODO OPT -- every frame check is not very efficient; hooks?
       if Fun.iter(State._aggression_log)
         :any(function(pair) return pair[2].faction == entity.faction end)
+        or hostility.are_hostile(entity, State.player)
       then
-        if not Table.contains(-Query(State.combat).list or {}, entity) then
-          State:add(fx("assets/sprites/fx/aggression", "fx", entity.position))
-        end
-
+        State:add(fx("assets/sprites/fx/aggression", "fx", entity.position))
         hostility.make_hostile(entity.faction)
         State:start_combat({entity, State.player})
       end
