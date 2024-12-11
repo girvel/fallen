@@ -149,6 +149,7 @@ return function(positions, entities)
     flask_noticed = false,
     lunch_started = false,
     money = 0,
+    has_bird_food = false,
 
     spawn_possessed = function(self)
       self.entities.dining_room_door_1:close()

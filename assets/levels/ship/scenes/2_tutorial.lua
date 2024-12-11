@@ -219,28 +219,45 @@ return function()
         return rails.entities.bird_food.interacted_by == State.player
       end,
 
+      _options = {
+        "*Взять горсть*",
+      },
+
       run = function(self, rails)
         rails.entities.bird_food.interacted_by = nil
 
         api.narration("В ящике лежит небольшое ведёрко.")
         api.narration("Внутри — приятно пахнущие зёрна.")
+        self._options[2] = "*Закрыть ящик*"
 
-        if api.options({
-          "*Взять горсть*",
-          "*Закрыть ящик*",
-        }) == 1 then
-          rails.entities.bird_food.interact = nil
-          rails.has_bird_food = true
-          self.enabled = false
+        while true do
+          local o = api.options(self._options, true)
+          if o == 1 then
+            rails.entities.bird_food.interact = nil
+            rails.has_bird_food = true
+            rails.scenes.looking_at_bird_cage:activate_option(1)
+            self.enabled = false
+          else
+            break
+          end
         end
       end,
     },
 
-    {
+    looking_at_bird_cage = {
       name = "Look in the cage",
       enabled = true,
       start_predicate = function(self, rails, dt)
         return rails.entities.bird_cage.interacted_by == State.player
+      end,
+
+      _options = {},
+      _inactive_options = {
+        [1] = "*положить корм в клетку*",
+      },
+
+      activate_option = function(self, i)
+        self._options[i] = assert(self._inactive_options[i])
       end,
 
       run = function(self, rails)
@@ -251,29 +268,31 @@ return function()
         api.narration("Хотя здесь есть много помёта.")
         api.narration("И немного перьев.")
 
-        local options = {
-          "*уйти*",
-        }
+        self._options[2] = "*уйти*"
 
-        if rails.has_bird_food then
-          table.insert(options, 1, "*положить корм в клетку*")
+        while true do
+          local o = api.options(self._options, true)
+          if o == 1 then
+            self.enabled = false
+            rails.entities.bird_cage.interact = nil
+            rails.has_bird_food = false
+
+            api.update_quest({warmup = quest.COMPLETED, detective = 1})
+            rails.entities.detective_door.locked = false
+            rails:spawn_possessed()
+
+            api.notification("Направляйся к комнате с черной дверью.", true)
+
+            rails.scenes.open_left_megadoor.enabled = true
+          else
+            if api.get_quest("warmup") == quest.COMPLETED then
+              api.narration("Тишина прерывается отдалённым скрежетом радиовещания.")
+              api.narration("Глухой голос объявляет приближение обеда.")
+            end
+            break
+          end
         end
 
-        if api.options(options) == #options then return end
-
-        self.enabled = false
-        rails.entities.bird_cage.interact = nil
-        rails.has_bird_food = false
-
-        api.update_quest({warmup = quest.COMPLETED, detective = 1})
-        rails.entities.detective_door.locked = false
-        rails:spawn_possessed()
-
-        api.notification("Направляйся к комнате с черной дверью.", true)
-
-        rails.scenes.open_left_megadoor.enabled = true
-
-        api.wait_seconds(10)
       end,
     },
 
