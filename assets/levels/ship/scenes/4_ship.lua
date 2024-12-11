@@ -71,7 +71,7 @@ return function()
         rails.scenes.open_left_megadoor.enabled = true
         rails.entities.detective_door.locked = false
 
-        State.player.experience = experience.for_level[3]
+        State.player.experience = experience.for_level[2]
         State.gui.creator:refresh()
         State.gui.creator:submit()
 
@@ -687,13 +687,16 @@ return function()
       enabled = true,
 
       start_predicate = function(self, rails, dt, c)
-        return not State:exists(rails.entities.captain_door)
-          or rails.entities.captain_door.layer ~= "solids"
+        return not State.grids.solids[rails.entities.captain_door.position]
       end,
 
       run = function(self, rails, c)
         self.enabled = false
         rails.scenes.parasites_start.enabled = false
+
+        State.player.experience = experience.for_level[3]
+        State:add(fx("assets/sprites/fx/mirage_spawn", "fx_under", State.player.position))
+        sound("assets/sounds/level_up.mp3"):play()
 
         api.wait_seconds(8)
         api.notification("Разблокируй желтый рычаг на правой панели.", true)

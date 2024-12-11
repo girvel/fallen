@@ -1,3 +1,4 @@
+local experience = require("mech.experience")
 local interactive = require("tech.interactive")
 
 
@@ -22,6 +23,13 @@ module_mt.__call = function(_)
       local interaction = interactive.get_for(State.player)
       if interaction then
         return "[E] для взаимодействия с " .. Entity.name(interaction)
+      end
+
+      if
+        State.mode:get() == State.mode.free
+        and State.player.experience > experience.for_level[State.player.level]
+      then
+        return "[N] чтобы повысить уровень"
       end
 
       return ""
