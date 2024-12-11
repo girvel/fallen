@@ -27,6 +27,13 @@ local peaceful_module = function()
     _popup = {},
 
     run = ai.async(function(self, entity)
+      -- 0. reset state, may happen after realoading the game --
+      if not State:exists(entity.inventory.other_hand) then
+        item.give(entity, State:add(items.bucket()))
+        -- TODO also remove the bucket-decoration
+      end
+      -- TODO consider other bugs?
+
       -- 1. go to a new place --
       do
         local path
@@ -134,7 +141,7 @@ local peaceful_module = function()
         e.on_remove = nil
         State:remove(e)
       end
-      item.give(entity, items.bucket())
+      item.give(entity, State:add(items.bucket()))
       coroutine.yield()
     end),
   }
