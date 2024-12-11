@@ -1,6 +1,6 @@
 # Fallen
 
-![](assets/screenshots/main.png)
+![](assets/screenshots/alpha_0.4_02.png)
 
 RPG/adventure demo written in Lua with LOVE2D.
 
