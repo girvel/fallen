@@ -132,7 +132,7 @@ return Module("state.gui.sidebar", function()
       if State.rails.bottles_taken then
         local bag = {}
         if State.rails.money > 0 then
-          table.insert(bag, {"Финансы", "%i MM" % {State.rails.money}})
+          table.insert(bag, {"Финансы", "%i Л" % {State.rails.money}})
         end
         if State.rails.bottles_taken > 0 then
           table.insert(bag, {"Бутылки с алкоголем", tostring(State.rails.bottles_taken)})
