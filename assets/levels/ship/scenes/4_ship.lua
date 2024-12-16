@@ -1056,6 +1056,7 @@ return function()
 
       start_predicate = function(self, rails, dt, c)
         return c.canteen_dreamer_flask.interacted_by == c.player
+          and api.get_quest("alcohol") > 0
       end,
 
       _options = {
