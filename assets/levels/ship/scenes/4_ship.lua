@@ -81,7 +81,7 @@ return function()
         --api.update_quest({parasites = 1, alcohol = quest.COMPLETED})
         api.update_quest({parasites = 1, alcohol = 1})
         rails.has_valve = true
-        rails.bottles_taken = 1
+        rails.bottles_taken = 2
 
         --rails:notice_flask()
         health.set_hp(State.player, 20)

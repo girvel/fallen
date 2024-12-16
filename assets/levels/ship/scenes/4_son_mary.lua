@@ -643,6 +643,7 @@ return function()
 
       run = function(self, rails, c)
         self.enabled = false
+        c.son_mary.interacted_by = nil
 
         api.narration("Он старается делать вид, будто не слышал твоей пьяной проповеди; ты тоже не горишь желанием поднимать эту тему.")
         self:main(rails, c)
