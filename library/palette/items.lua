@@ -180,6 +180,7 @@ module.coal = function()
       name = "Уголь",
       codename = "coal",
       slot = "underhand",
+      boring_flag = true,
     }
   )
 end
@@ -271,7 +272,7 @@ end
 module.bucket = function()
   return Table.extend(
     animated("assets/sprites/animations/bucket"),
-    {codename = "bucket", slot = "other_hand"}
+    {codename = "bucket", slot = "other_hand", boring_flag = true}
   )
 end
 

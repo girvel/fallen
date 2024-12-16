@@ -47,6 +47,7 @@ factoring.extend(decorations, "bucket", {
   on_remove = function(self)
     State:add(decorations.bucketd(), {position = self.position})
   end,
+  boring_flag = true,
 })
 
 factoring.extend(decorations, "bucket", {
