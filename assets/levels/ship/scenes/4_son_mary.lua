@@ -543,6 +543,7 @@ return function()
         end
 
         State:remove(rails.entities.engineer_3)
+        rails.bottles_taken = rails.bottles_taken - 1
 
         if api.ability_check("con", 15) then
           -- TODO FX a sound here
@@ -590,7 +591,9 @@ return function()
         c.markiss = rails.entities.markiss;
         c.markiss.ai.in_cutscene = true
         level.move(c.markiss, rails.positions.hungover_markiss)
+        api.rotate_to_player(c.markiss)
         level.move(c.player, rails.positions.hungover_player)
+        rails.entities.hungover_door:open()
         api.fade_in()
 
         api.center_camera()
