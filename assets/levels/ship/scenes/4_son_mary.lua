@@ -462,6 +462,7 @@ return function()
       start_predicate = function(self, rails, dt, c)
         return c.son_mary.interacted_by == c.player
           and api.get_quest("alcohol") == 2
+          and rails.bottles_taken > 0
       end,
 
       _first_time = true,
