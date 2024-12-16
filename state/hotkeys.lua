@@ -299,12 +299,14 @@ return Module("state.hotkeys", function(modes)
   })
 
   -- universal --
-  define_hotkey(hotkeys, Table.deep_copy(modes), {"Ctrl+d"}, {
-    name = "завершить игру",
-    pre_action = function()
-      love.event.push("quit")
-    end,
-  })
+  if Debug.debug_mode then
+    define_hotkey(hotkeys, Table.deep_copy(modes), {"Ctrl+d"}, {
+      name = "завершить игру",
+      pre_action = function()
+        love.event.push("quit")
+      end,
+    })
+  end
 
   define_hotkey(hotkeys, Table.deep_copy(modes), {"Ctrl+r"}, {
     name = "начать заново",
