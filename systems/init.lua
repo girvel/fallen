@@ -12,6 +12,7 @@ return Module("systems", {
   require("systems.acting").system,
   require("systems.animation").system,
   require("systems.timed_death").system,
+  require("systems.drift").system,
   require("systems.railing").system,
   require("systems.music").system,
   require("systems.writing_text").system,

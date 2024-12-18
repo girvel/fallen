@@ -15,15 +15,9 @@ gui.floating_damage = function(number, scene_position, color)
     position = scene_position * State.gui.views.scene:get_multiplier()
       + Vector({math.random(12) - 6, math.random(12) - 6}),
     view = "scene_fx",
+    drift = Vector({0, -24}),
     sprite = sprite.text({color or Colors.red, number}, 14),
     life_time = 3,
-
-    _drift = Vector({0, -24}),
-    ai = {
-      observe = function(_, entity, dt)
-        entity.position = entity.position + entity._drift * dt
-      end,
-    },
   }
 end
 
