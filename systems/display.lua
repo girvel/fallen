@@ -1,6 +1,6 @@
 local constants = require("tech.constants")
 local animated = require("tech.animated")
-local level = require("state.level")
+local level = require("tech.level")
 local tcod = require("tech.tcod")
 local line_profiler = require("lib.line_profiler")
 

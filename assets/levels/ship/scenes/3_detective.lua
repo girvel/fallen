@@ -2,7 +2,7 @@ local item = require("tech.item")
 local pipes = require("library.palette.pipes")
 local api = require("tech.railing").api
 local actions = require("mech.creature.actions")
-local level = require("state.level")
+local level = require("tech.level")
 local items = require("library.palette.items")
 local experience = require("mech.experience")
 

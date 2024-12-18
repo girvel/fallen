@@ -1,5 +1,5 @@
 local animated = require("tech.animated")
-local level = require("state.level")
+local level = require("tech.level")
 local combat = require("tech.combat")
 local abilities = require("mech.abilities")
 local sprite = require("tech.sprite")

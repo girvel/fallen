@@ -2,7 +2,7 @@ local interactive = require("tech.interactive")
 local sprite = require("tech.sprite")
 local sound = require("tech.sound")
 local factoring = require("tech.factoring")
-local level = require("state.level")
+local level = require("tech.level")
 local shaders = require("tech.shaders")
 
 

@@ -1,5 +1,5 @@
 local actions = require("mech.creature.actions")
-local level = require("state.level")
+local level = require("tech.level")
 local quest = require("tech.quest")
 local sound = require("tech.sound")
 local api = require("tech.railing.api")

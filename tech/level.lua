@@ -1,4 +1,4 @@
-local level, _, static = Module("state.level")
+local level, _, static = Module("tech.level")
 
 --- @alias grid_positioned {position: vector, layer: layer}
 

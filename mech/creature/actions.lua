@@ -1,6 +1,6 @@
 local experience = require("mech.experience")
 local action = require("tech.action")
-local level = require("state.level")
+local level = require("tech.level")
 local attacking = require("mech.attacking")
 local abilities = require("mech.abilities")
 local hostility = require("mech.hostility")

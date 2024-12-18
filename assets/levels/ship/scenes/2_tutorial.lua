@@ -6,7 +6,7 @@ local sound = require("tech.sound")
 local quest = require("tech.quest")
 local interactive = require("tech.interactive")
 local mobs = require("library.palette.mobs")
-local level = require("state.level")
+local level = require("tech.level")
 local api = require("tech.railing").api
 
 
