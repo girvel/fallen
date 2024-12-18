@@ -42,19 +42,8 @@ railing_methods.update = function(self, dt)
             Query(character).ai.in_cutscene = true
           end
 
-          -- run the body
-          -- if failed
-          --   if debug mode
-          --     update stack
-          --     launch debug shell
-          --   else
-          --     log the stack trace
-          --     reset blackout
-          -- else
-          --   proceed
-          -- reset in_cutscene
-          -- log ending
-
+          -- Debug.call is for Debug.shell
+          -- xpcall is for logging coroutine error
           Debug.call(scene.run, scene, self, characters)
 
           for _, character in pairs(characters) do
