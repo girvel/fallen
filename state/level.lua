@@ -18,6 +18,11 @@ level.GRID_COMPLEX_LAYERS = {fx_under = true, fx = true}
 --- @param position vector
 --- @return nil
 level.move = function(entity, position)
+  assert(entity.position, "Can not move an entity without the current position")
+  -- assert(grid[entity.position] == entity)
+  -- if this is false, it wouldn't break anything permanently, though raise strictness unnecessarily?
+  assert(not level.GRID_COMPLEX_LAYERS[entity.layer], "entities in complex layers are immovable")
+
   local grid = State.grids[entity.layer]
   if grid[position] then
     Log.warn("level.move: replacing %s with %s" % {Entity.name(grid[position]), Entity.name(entity)})

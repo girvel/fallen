@@ -89,17 +89,25 @@ module_mt.__call = function(_, gui)
     end,
 
     _get_current_perks = function(self)
-      return Fun.chain(
-        experience.get_progression(self._mixin.class, self._mixin.level),
-        experience.get_progression(self._mixin.race, self._mixin.level)
-      )
-        :map(function(it)
-          if it.__type == class.choice then
-            return self._choices[it]
-          end
-          return it
-        end)
-        :totable()
+      -- deconstructed from functional expression for debugging purposes
+      local result = {}
+
+      local map = function(it)
+        if it.__type == class.choice then
+          return self._choices[it]
+        end
+        return it
+      end
+
+      for _, it in ipairs(experience.get_progression(self._mixin.class, self._mixin.level)) do
+        table.insert(result, map(it))
+      end
+
+      for _, it in ipairs(experience.get_progression(self._mixin.race, self._mixin.level)) do
+        table.insert(result, map(it))
+      end
+
+      return result
     end,
 
     submit = function(self)

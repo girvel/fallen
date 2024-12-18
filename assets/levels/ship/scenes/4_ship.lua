@@ -184,7 +184,7 @@ return function()
               for ch, p in pairs(old_positions) do
                 level.move(ch, p)
               end
-              item.drop(c.dorm_halfling, 1)
+              item.drop(c.dorm_halfling, "inside")
               level.move(rails.entities.razor, rails.positions.razor_drop)
 
               api.fade_in()
