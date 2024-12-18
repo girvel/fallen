@@ -26,6 +26,7 @@ end
 --- @field base_abilities table
 --- @field direction direction_name
 --- @field inventory table
+--- @field position vector
 --- @field layer string
 --- @field view string
 --- @field sounds table<string, table>

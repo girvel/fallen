@@ -108,7 +108,7 @@ actions.move = static .. action {
   },
   run = function(_, entity)
     local old_position = entity.position
-    if not level.move(entity, entity.position + Vector[entity.direction]) then
+    if not level.safe_move(entity, entity.position + Vector[entity.direction]) then
       return false
     end
 

@@ -42,6 +42,7 @@ local grid_methods = {
   --- @param default? any
   --- @return any
   safe_get = function(self, v, default)
+    assert(getmetatable(v) == Vector.mt)
     if not self:can_fit(v) then return default end
     return self[v]
   end,
