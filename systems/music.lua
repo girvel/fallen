@@ -5,7 +5,7 @@ music.system = static .. Tiny.system {
   base_callback = "update",
   update = function(self, dt)
     State.ambient:update()
-  end
+  end,
 }
 
 return music
