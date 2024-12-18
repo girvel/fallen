@@ -4,7 +4,8 @@ local collect_scancodes, _, static = Module("systems.collect_scancodes")
 collect_scancodes.system = static(Tiny.system({
   codename = "collect_scancodes",
   base_callback = "custom_keypressed",
-  scancode_conversion = {
+
+  _scancode_conversion = {
     ["return"] = "enter",
     escape = "esc",
     rshift = "shift",
@@ -20,8 +21,9 @@ collect_scancodes.system = static(Tiny.system({
     [4] = "backmb",
     [5] = "forwardmb",
   },
+
   update = function(self, scancode)
-    scancode = self.scancode_conversion[scancode] or scancode
+    scancode = self._scancode_conversion[scancode] or scancode
 
     local modifier = ""
     if scancode ~= "shift" and love.keyboard.isDown("rshift", "lshift") then
