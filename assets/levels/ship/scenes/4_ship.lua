@@ -1312,7 +1312,7 @@ return function()
 
         c.storage_container_3:open()
         api.message.temporal(
-          "В ящике стопка старых газет, видимо, для хозяйственных нужд. Одна из них привлекает твоё внимание.",
+          "В ящике стопка старых газет, видимо, для хозяйственных нужд.",
           {source = c.storage_container_3}
         )
       end,
