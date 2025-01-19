@@ -347,7 +347,7 @@ return function()
       _popup = {},
 
       start_predicate = function(self, rails, dt, c)
-        return c.soup_cauldron.interacted_by == State.player
+        return c.soup_cauldron.interacted_by == State.player and not rails.lunch_started
       end,
 
       run = function(self, rails, c)
@@ -369,7 +369,7 @@ return function()
       run = function(self, rails)
         self.enabled = false
         State:add(fx("assets/sprites/fx/disappearing_dude", "fx", rails.positions.possessed_image))
-        sound.play("assets/sounds/creepy", .1)
+        sound("assets/sounds/creepy.mp3", .1):play()
       end,
     },
 

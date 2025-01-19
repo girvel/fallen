@@ -765,7 +765,7 @@ return function()
       },
 
       start_predicate = function(self, rails, dt, c)
-        return c.soup_cauldron.interacted_by == c.player
+        return c.soup_cauldron.interacted_by == c.player and rails.lunch_started
       end,
 
       _first_time = true,
