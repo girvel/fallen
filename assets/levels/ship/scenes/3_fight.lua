@@ -146,6 +146,7 @@ return function()
               rails.scenes.engineer_4_normal_dialogue.enabled = false
               rails.scenes.dwarf_signals_talking.enabled = true
               rails.scenes.dwarf_talks_about_rront.enabled = true
+              api.autosave()
             end
             break
           end
@@ -166,6 +167,7 @@ return function()
         api.notification("Задача выполнена", true)
         api.update_quest({detective = quest.COMPLETED})
         rails:start_lunch()
+        api.autosave()
       end,
     },
 
@@ -213,6 +215,7 @@ return function()
       run = function(self, rails)
         self.enabled = false
         api.discover_wiki({fought_dreamers = true})
+        api.autosave()
       end,
     },
 

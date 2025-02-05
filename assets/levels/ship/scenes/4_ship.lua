@@ -81,7 +81,6 @@ return function()
         State:remove(rails.entities.captain_door_note)
         --api.update_quest({parasites = 1, alcohol = quest.COMPLETED})
         api.update_quest({parasites = 1, alcohol = 1})
-        State:refresh(rails.entities.canteen_dreamer_flask, interactive.detector())
         rails.has_valve = true
         rails.bottles_taken = 2
 
@@ -91,6 +90,7 @@ return function()
         coroutine.yield()
         health.damage(rails.entities.possessed, 1000)
         rails:start_lunch()
+        State:refresh(rails.entities.canteen_dreamer_flask, interactive.detector())
         rails.seen_water = true
         rails.met_son_mary = true
         rails.entities.son_mary.player_name = "Гаспар"
@@ -208,7 +208,13 @@ return function()
               health.damage(c.dorm_halfling, 10, true)
               api.narration("Толпа вмиг звереет, видимо, ошибочно посчитав тебя виновным в этой вакханалии.")
               hostility.make_hostile("dreamers_1")
+
+              coroutine.yield()
+              while State.combat do
+                coroutine.yield()
+              end
             end
+            api.autosave()
             break
           else
             break
@@ -327,6 +333,7 @@ return function()
             rails.bottles_taken = rails.bottles_taken + 1
             rails.source_of_first_alcohol = rails.source_of_first_alcohol or "storage_room"
             c.alcohol_crate:open()
+            api.autosave()
             return
           end
 
@@ -356,6 +363,7 @@ return function()
             end
 
             api.narration("И бодрой походкой победителя выходишь из кладовой.")
+            api.autosave()
             return
           end
 
@@ -375,6 +383,19 @@ return function()
         api.line(c.player, "Через твой труп.")
 
         hostility.make_hostile("guards")
+      end,
+    },
+
+    {
+      name = "Guards are dead",
+      enabled = true,
+      start_predicate = function(self, rails, dt)
+        return not State:exists(rails.entities.guard_1, rails.entities.guard_2)
+      end,
+
+      run = function(self, rails)
+        self.enabled = false
+        api.autosave()
       end,
     },
 
@@ -705,6 +726,7 @@ return function()
         api.notification("Разблокируй желтый рычаг на правой панели.", true)
         api.wait_seconds(3)
         api.update_quest({parasites = 2})
+        api.autosave()
       end,
     },
 
@@ -932,6 +954,7 @@ return function()
         c.player:rest("long")
         State.ambient:set_paused(false)
         self.enabled = false
+        api.autosave()
       end,
     },
 
@@ -1194,6 +1217,12 @@ return function()
         hostility.make_hostile(c.canteen_dreamer_flask.faction)
         self.enabled = false
         c.canteen_dreamer_flask.interact = nil
+
+        coroutine.yield()
+        while State.combat do
+          coroutine.yield()
+        end
+        api.autosave()
       end,
 
       _good_ending = function(self, rails, c)
@@ -1203,6 +1232,7 @@ return function()
         rails.source_of_first_alcohol = rails.source_of_first_alcohol or "flask"
         self.enabled = false
         c.canteen_dreamer_flask.interact = nil
+        api.autosave()
       end,
     },
 

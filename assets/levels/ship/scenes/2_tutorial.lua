@@ -209,6 +209,8 @@ return function()
 
         Table.extend(rails.entities.bird_cage, interactive.detector(), {name = "клетка"})
         Table.extend(rails.entities.bird_food, interactive.detector())
+
+        api.autosave()
       end,
     },
 
@@ -295,6 +297,7 @@ return function()
           end
         end
 
+        api.autosave()
       end,
     },
 

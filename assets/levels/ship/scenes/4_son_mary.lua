@@ -239,6 +239,7 @@ return function()
           api.wait_seconds(5)
           api.notification("Не слушай его, займись делом.", true)
         end)
+        api.autosave()
       end,
     },
 
@@ -449,6 +450,7 @@ return function()
         end
 
         api.update_quest({alcohol = 2})
+        api.autosave()
       end,
     },
 
@@ -626,6 +628,7 @@ return function()
         api.narration("Стоит проветриться и поговорить капитаном; ему точно есть что сказать.")
 
         api.update_quest({alcohol = 3})
+        api.autosave()
       end
     },
 
@@ -1079,6 +1082,8 @@ return function()
             end
           end
         end
+
+        api.autosave()
       end,
     },
   }
