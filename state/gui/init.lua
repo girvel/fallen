@@ -27,13 +27,12 @@ local PORTRAIT_SPACE = Vector({360, 190})
 
 module_mt.__call = function(_)
   local result = {
-    font_size = 12,
     pressed_scancodes = {},
     _prev_camera_position = Vector.zero,
 
     styles = {
       default = {
-        font_size = 12,
+        font_size = 14,
         color = Colors.white,
       },
       a = {

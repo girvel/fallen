@@ -72,7 +72,7 @@ return Module("state.gui.wiki", function(gui)
         font_size = 24,
       },
       h2 = {
-        font_size = 16,
+        font_size = 20,
       },
     }),
 
