@@ -73,7 +73,7 @@ forms.abilities = function()
     Html.p {
       Html().build_table(
         {
-          {" ", "Способность ", "Значение", "Бонус расы", "Результат", "Модификатор"},
+          {" ", "Способность ", "Значение", "Бонус", "Результат", "Модификатор"},
           {" ", Html.tline {}},
           Fun.iter(abilities.list)
             :map(ability_line)
