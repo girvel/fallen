@@ -180,7 +180,7 @@ return function()
       run = function(self, rails)
         self.enabled = false
         State.gui.hint.override = "Нажмите [K] чтобы открыть кодекс"
-        while Table.last(State.gui.wiki.history) ~= "codex" and not Common.period(10, self) do
+        while Table.last(State.gui.wiki.history) ~= "codex" and not Common.period(15, self) do
           coroutine.yield()
         end
         State.gui.hint.override = nil

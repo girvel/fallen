@@ -207,7 +207,6 @@ return function()
         api.notification("Покорми птицу в клетке", true)
         api.update_quest({warmup = 6})
 
-        Table.extend(rails.entities.bird_food, interactive.detector(), {name = "ящик"})
         Table.extend(rails.entities.bird_cage, interactive.detector(), {name = "клетка"})
       end,
     },
@@ -216,7 +215,8 @@ return function()
       name = "Look in the crate",
       enabled = true,
       start_predicate = function(self, rails, dt)
-        return rails.entities.bird_food.interacted_by == State.player
+        return api.get_quest("warmup") == 6
+          and rails.entities.bird_food.interacted_by == State.player
       end,
 
       _options = {
@@ -248,7 +248,8 @@ return function()
       name = "Look in the cage",
       enabled = true,
       start_predicate = function(self, rails, dt)
-        return rails.entities.bird_cage.interacted_by == State.player
+        return api.get_quest("warmup") == 6
+          and rails.entities.bird_cage.interacted_by == State.player
       end,
 
       _options = {},

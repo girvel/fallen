@@ -134,6 +134,8 @@ return function(positions, entities)
 
       decorations.lie(self.entities.sleeping_dreamer_1, self.positions.bed_1, "lower")
       decorations.lie(self.entities.sleeping_dreamer_2, self.positions.bed_2, "upper")
+
+      self.entities.bird_food.interact = nil
     end,
 
     been_to_latrine = false,
