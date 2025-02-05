@@ -192,7 +192,7 @@ local message = function(content, params)
 
   return texting.popup(
     (params.source.position + offset) * State.gui.views.scene:get_multiplier(),
-    "above", "scene_popup", content, State.gui.wiki.styles, 300
+    "above", "scene_popup", content, State.gui.styles, 300
   )
 end
 

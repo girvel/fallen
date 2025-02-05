@@ -32,7 +32,7 @@ module_mt.__call = function(_)
 
     styles = {
       default = {
-        font_size = 14,
+        font_size = 12,
         color = Colors.white,
       },
       a = {

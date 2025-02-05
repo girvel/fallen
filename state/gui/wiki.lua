@@ -65,9 +65,10 @@ return Module("state.gui.wiki", function(gui)
     quest_states = {},
 
     styles = Table.extend({}, gui.styles, {
-      -- default = {
-      --   font_size = 14,
-      -- },
+      default = {
+        font_size = 14,
+        color = Colors.white,
+      },
       h1 = {
         font_size = 24,
       },
