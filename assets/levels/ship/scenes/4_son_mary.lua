@@ -1,3 +1,4 @@
+local interactive = require("tech.interactive")
 local actions = require("mech.creature.actions")
 local level = require("tech.level")
 local quest = require("tech.quest")
@@ -232,6 +233,7 @@ return function()
         end
 
         api.update_quest({alcohol = 1})
+        State:refresh(rails.entities.canteen_dreamer_flask, interactive.detector())
         rails.scenes.markiss:activate_option(6)
         rails:run_task(function()
           api.wait_seconds(5)

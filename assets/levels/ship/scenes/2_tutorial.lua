@@ -208,6 +208,7 @@ return function()
         api.update_quest({warmup = 6})
 
         Table.extend(rails.entities.bird_cage, interactive.detector(), {name = "клетка"})
+        Table.extend(rails.entities.bird_food, interactive.detector())
       end,
     },
 

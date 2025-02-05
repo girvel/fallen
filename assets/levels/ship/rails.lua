@@ -273,7 +273,6 @@ return function(positions, entities)
         if not State.grids.solids:safe_get(v) then
           self.entities.canteen_dreamer_flask = State:add(
             mobs.dreamer({faction = "canteen_dreamers", race = "half_elf"}),
-            interactive.detector(),
             {
               position = v,
               inventory = {right_pocket = items.flask()},

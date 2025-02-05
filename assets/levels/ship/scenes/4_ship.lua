@@ -1,3 +1,4 @@
+local interactive = require("tech.interactive")
 local tcod = require("tech.tcod")
 local fx = require("tech.fx")
 local ai = require("tech.ai")
@@ -80,6 +81,7 @@ return function()
         State:remove(rails.entities.captain_door_note)
         --api.update_quest({parasites = 1, alcohol = quest.COMPLETED})
         api.update_quest({parasites = 1, alcohol = 1})
+        State:refresh(rails.entities.canteen_dreamer_flask, interactive.detector())
         rails.has_valve = true
         rails.bottles_taken = 2
 
@@ -1030,7 +1032,8 @@ return function()
       },
 
       start_predicate = function(self, rails, dt, c)
-        return (c.canteen_dreamer_flask.position - c.player.position):abs() <= 3
+        return api.get_quest("alcohol") > 0
+          and (c.canteen_dreamer_flask.position - c.player.position):abs() <= 3
           and tcod.snapshot():is_visible_unsafe(unpack(c.canteen_dreamer_flask.position))
       end,
 
