@@ -320,6 +320,7 @@ return function()
         api.narration("На стуле бледный мужчина с диким взглядом зубами — нет — пастью разрывает иволгу.")
         api.narration("Его одежда разорвана; всё вокруг покрыто кровью и перьями прекрасной птицы.")
         sound("assets/sounds/possessed_turns_around.mp3", .15):play()
+        api.rotate_to_player(c.possessed)
         api.narration("Внезапно демон в человеческом обличье замечает тебя.")
 
         State:start_combat({c.player, c.possessed})

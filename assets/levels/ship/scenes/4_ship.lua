@@ -483,6 +483,7 @@ return function()
 
         if not State:exists(rails.entities.captain_door_note)
           and not rails.has_valve
+          and State.grids.solids[rails.entities.captain_door.position]
         then
           if api.get_quest("parasites") == 1 then
             if self._can_activate[2] then
