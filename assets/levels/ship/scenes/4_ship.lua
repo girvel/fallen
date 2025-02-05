@@ -694,6 +694,7 @@ return function()
         self.enabled = false
         rails.scenes.parasites_start.enabled = false
 
+        rails.seen_water = true
         State.player.experience = experience.for_level[3]
         State:add(fx("assets/sprites/fx/mirage_spawn", "fx_under", State.player.position))
         sound("assets/sounds/level_up.mp3"):play()
@@ -715,7 +716,6 @@ return function()
 
       run = function(self, rails)
         State.player.fov_radius = 30
-        rails.seen_water = true
       end,
     },
 

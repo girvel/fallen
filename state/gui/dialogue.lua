@@ -20,7 +20,7 @@ local base = {
   show = function(self, line, portrait)
     self._entities = State:add_multiple(Table.concat(
       texting.generate(
-        texting.parse("<pre>%s</pre>" % line), State.gui.wiki.styles,  -- TODO move styles?
+        texting.parse("<pre>%s</pre>" % line), State.gui.styles,
         math.min(
           love.graphics.getWidth() - 40 - State.gui.views.dialogue_text.offset[1],
           constants.TEXT_MAX_SIZE[1]
