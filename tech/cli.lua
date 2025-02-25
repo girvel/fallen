@@ -6,8 +6,8 @@ return {
     args[-1] = nil
 
     local parser = argparse()
-      :name("Unalive")
-      :description("Launch the Unalive")
+      :name("Fallen")
+      :description("Launch the Fallen")
 
     parser:option(
       "-s --enable-scenes",
