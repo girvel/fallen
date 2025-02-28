@@ -86,7 +86,7 @@ return function()
 
             if picked_suboption == 1 then
               api.line(rails.entities.engineer_3, "Я... Я не знаю")
-              api.line(rails.entities.engineer_3, "Помню мы с друзьями, ну, культурно отдыхали")
+              api.line(rails.entities.engineer_3, "Помню, мы с друзьями, ну, культурно отдыхали")
               api.line(rails.entities.engineer_3, "С алкоголем")
               api.line(rails.entities.engineer_3, "А потом я здесь, а вокруг эти... как зомби себя ведут")
               api.line(rails.entities.engineer_3, "И правильно Рронт, две р")
