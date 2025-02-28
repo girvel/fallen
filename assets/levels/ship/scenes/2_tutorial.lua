@@ -153,7 +153,7 @@ return function()
         while true do
           local o = api.options(options)
           if o == 1 then
-            api.narration("После нажатия, пергамент исчезает в глубине блока, а потом снова всплывает с противоположной стороны.")
+            api.narration("После нажатия пергамент исчезает в глубине блока, а потом снова всплывает с противоположной стороны.")
           elseif o == 2 then
             self.enabled = false
             c.mirage_block.interact = nil
