@@ -271,7 +271,7 @@ return function()
 
                     if chosen_option_4 == 1 then
                       api.line(c.markiss, "Спасибо, э, как я там тебя называл?")
-                      api.line(c.player, "Начальник, хотя зовут меня — %s" % c.player.inner_name)
+                      api.line(c.player, "Начальник, хотя зовут меня — %s" % c.player.real_name)
                       api.line(c.markiss, "Не подходит тебе это имя, своё поищи")
                       api.line(c.player, "А имя должно как-то подходить? Вот, допустим, твоё?")
                       api.line(c.markiss, "Я — Маркисс")
