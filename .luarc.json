@@ -1,10 +1,11 @@
 {
-    "runtime.special": {
-        "love.filesystem.load": "loadfile"
-    },
-    "diagnostics": {
-        "globals": [
-            "describe", "it",
-        ]
-    },
+  "runtime.special": {
+    "love.filesystem.load": "loadfile"
+  },
+  "diagnostics": {
+    "globals": ["describe", "it"]
+  },
+  "workspace": {
+    "library": ["${3rd}/love2d/library"]
+  }
 }
