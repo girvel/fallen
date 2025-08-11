@@ -149,10 +149,19 @@ common.resolve_path = function(path)
 end
 
 common.load_c_library = function(name)
+  local extension if love.system.getOS() == "Windows" then
+    extension = ".dll"
+  else
+    extension = ".so"
+  end
+
   for _, path in ipairs({
     "vendor/" .. name,
     love.filesystem.getSource() .. "/vendor/" .. name,
     love.filesystem.getSourceBaseDirectory() .. "/" .. name,
+    "vendor/" .. name .. extension,
+    love.filesystem.getSource() .. "/vendor/" .. name .. extension,
+    love.filesystem.getSourceBaseDirectory() .. "/" .. name .. extension,
   }) do
     local ok, result = pcall(ffi.load, path)
     Log.info("Loading %s @ %s: %s, %s" % {name, path, ok, result})
