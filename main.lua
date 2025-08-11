@@ -8,7 +8,6 @@ require("kernel").initialize()
 -- local imports --
 local quests = require("library.quests")
 local factions = require("library.factions")
-local sound = require("tech.sound")
 local game_save = require("state.game_save")
 
 -- TODO move these to the level configuration

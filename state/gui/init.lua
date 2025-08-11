@@ -54,9 +54,9 @@ module_mt.__call = function(_)
       }
     },
 
-    _update_views = function(self)
+    _update_views = function(self, dt)
       for key, f in pairs(self.views_offset_functions) do
-        self.views[key].offset = f()
+        self.views[key].offset = f(dt)
       end
       self._prev_camera_position = self.views.scene.offset
     end,
@@ -78,7 +78,7 @@ module_mt.__call = function(_)
     end,
 
     update = function(self, dt)
-      self:_update_views()
+      self:_update_views(dt)
       for _, k in ipairs({
         "sidebar",
         "notifier",
@@ -159,13 +159,25 @@ gui.offsets.scene_steeply = static(function()
   )
 end)
 
-gui.offsets.scene = static .. function()
-  local target = gui.offsets.scene_steeply()
-  local prev = State.gui._prev_camera_position
-  local d = target - prev
-  local length = d:abs()
-  return prev + (d:fully_normalized() * Math.median(3, length / 20, length)):map(math.floor)
-end
+local SMOOTHING_CUTOFF = 3
+local SPRING_STIFFNESS = 100
+local DAMPING_K = 2 * math.sqrt(SPRING_STIFFNESS)
+
+gui.offsets.scene = setmetatable({
+  velocity = Vector.zero,
+}, {
+  __call = function(self, dt)
+    local target = gui.offsets.scene_steeply()
+    local prev = State.gui._prev_camera_position
+
+    local d = target - prev
+    if d:abs() <= SMOOTHING_CUTOFF then return target end
+
+    local acceleration = SPRING_STIFFNESS * d - DAMPING_K * self.velocity
+    self.velocity = self.velocity + acceleration * dt
+    return prev + self.velocity * dt
+  end,
+})
 
 gui.offsets.dialogue = static .. function()
   local window_w = love.graphics.getWidth()
