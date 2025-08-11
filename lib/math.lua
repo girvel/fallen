@@ -5,7 +5,8 @@ local module = {}
 --- @return number
 module.sign = function(x)
   if x == 0 then return 0 end
-  return x / math.abs(x)
+  if x > 0 then return 1 end
+  return -1
 end
 
 -- TODO unify median & average
