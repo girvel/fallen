@@ -42,11 +42,6 @@ return function(positions, entities)
           run = function(self, rails)
             self.enabled = false
 
-            -- local INTRO_SCENES = {"intro", "character_created", "warning_leaving_player_room"}
-            -- for _, s in ipairs(INTRO_SCENES) do
-            --   rails:remove_scene(s)
-            -- end
-
             State.gui.creator._ability_points = 0
             State.gui.creator._mixin.base_abilities = abilities(15, 15, 15, 8, 8, 8)
             State.gui.creator._choices.race = 2
@@ -72,7 +67,7 @@ return function(positions, entities)
             -- rails.scenes.son_mary_meeting.enabled = false
             -- rails.scenes.son_mary_curses.enabled = false
             -- api.update_quest({alcohol = 1})
-            -- rails.bottles_taken = 1
+            -- State.player.bag.alcohol = 1
             -- rails.source_of_first_alcohol = "storage"
           end,
         },
@@ -141,17 +136,12 @@ return function(positions, entities)
     been_to_latrine = false,
     tolerates_latrine = nil,
     dreamers_talked_to = {},
-    bottles_taken = 0,
-    has_valve = false,
     resists_son_mary = false,
     source_of_first_alcohol = false,
-    has_sigi = false,
     seen_water = false,
     met_son_mary = false,
     flask_noticed = false,
     lunch_started = false,
-    money = 0,
-    has_bird_food = false,
 
     spawn_possessed = function(self)
       self.entities.dining_room_door_1:close()
@@ -166,7 +156,7 @@ return function(positions, entities)
     end,
 
     give_valve_to_player = function(self)
-      self.has_valve = true
+      State.player.bag.valve = 1
       State:remove(self.entities.captain_door_valve)
       self.entities.guard_2.inventory.other_hand = nil
       cue.set(self.entities.captain_door, "highlight", true)
@@ -194,12 +184,12 @@ return function(positions, entities)
     --- @param state "found" | "needed"
     sigi_update = function(self, state)
       if state == "found" then
-        self.has_sigi = true
+        State.player.bag.sigs = 1
       else
         api.update_quest({sigi = 1})
       end
 
-      if self.has_sigi and api.get_quest("sigi") == 1 then
+      if State.player.bag.sigs > 0 and api.get_quest("sigi") == 1 then
         api.update_quest({sigi = 2})
         self.scenes.markiss:activate_option(7)
       end

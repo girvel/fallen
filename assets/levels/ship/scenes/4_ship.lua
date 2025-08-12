@@ -81,8 +81,8 @@ return function()
         State:remove(rails.entities.captain_door_note)
         --api.update_quest({parasites = 1, alcohol = quest.COMPLETED})
         api.update_quest({parasites = 1, alcohol = 1})
-        rails.has_valve = true
-        rails.bottles_taken = 2
+        State.player.bag.valve = 1
+        State.player.bag.alcohol = 2
 
         --rails:notice_flask()
         health.set_hp(State.player, 20)
@@ -330,7 +330,7 @@ return function()
             api.line(c.player, "(Вот теперь можно идти)")
             api.narration("Бутылка при тебе. И нет, ты не понимаешь, как у тебя это получилось.")
 
-            rails.bottles_taken = rails.bottles_taken + 1
+            State.player.bag.alcohol = State.player.bag.alcohol + 1
             rails.source_of_first_alcohol = rails.source_of_first_alcohol or "storage_room"
             c.alcohol_crate:open()
             api.autosave()
@@ -345,7 +345,7 @@ return function()
             api.narration("Ты подсчитываешь момент, когда они не смотрят;")
             api.narration("Пяткой откатываешь валяющийся на полу помидор — было бы глупо на него случайно наступить;")
 
-            rails.bottles_taken = rails.bottles_taken + 1
+            State.player.bag.alcohol = State.player.bag.alcohol + 1
             rails.source_of_first_alcohol = rails.source_of_first_alcohol or "storage_room"
             c.alcohol_crate:open()
 
@@ -422,7 +422,7 @@ return function()
         api.narration("В центре композиции лежит единственный алкогольный напиток: бутылка дешёвого рома “Русалкино молоко”.")
         api.narration("Бутылка сияет, как бриллиант в короне, а русалка на этикетке так и завлекает на грех.")
 
-        rails.bottles_taken = rails.bottles_taken + 1
+        State.player.bag.alcohol = State.player.bag.alcohol + 1
         rails.source_of_first_alcohol = rails.source_of_first_alcohol or "storage_room"
         c.alcohol_crate:open()
       end,
@@ -482,7 +482,7 @@ return function()
         end
 
         if not State:exists(rails.entities.captain_door_note)
-          and not rails.has_valve
+          and State.player.bag.valve == 0
           and State.grids.solids[rails.entities.captain_door.position]
         then
           if api.get_quest("parasites") == 1 then
@@ -624,7 +624,7 @@ return function()
 
         self._options[1] = "*уйти*"
 
-        if rails.has_valve then
+        if State.player.bag.valve > 0 then
           self._options[3] = "*Вернуть вентиль на законное место*"
         end
 
@@ -678,7 +678,7 @@ return function()
               api.narration("Придётся найти вентиль или инструмент, способный провернуть механизм.")
             end
           elseif chosen_option_1 == 3 then
-            rails.has_valve = false
+            State.player.bag.valve = 0
 
             for i = 1, 3 do
               local position = c.captain_door.position + Vector.left * (i - 1)
@@ -1229,7 +1229,7 @@ return function()
       _good_ending = function(self, rails, c)
         State:remove(c.canteen_dreamer_flask.inventory.right_pocket)
         c.canteen_dreamer_flask.inventory.right_pocket = nil
-        rails.bottles_taken = rails.bottles_taken + 1
+        State.player.bag.alcohol = State.player.bag.alcohol + 1
         rails.source_of_first_alcohol = rails.source_of_first_alcohol or "flask"
         self.enabled = false
         c.canteen_dreamer_flask.interact = nil
@@ -1511,7 +1511,8 @@ return function()
         container:open()
 
         if self._steals then
-          rails.money = rails.money + money
+          local bag = State.player.bag
+          bag.money = bag.money + money
           sound("assets/sounds/picking_up_loot.mp3", .8):play()
         end
       end,

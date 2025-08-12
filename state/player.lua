@@ -17,7 +17,7 @@ local player, module_mt, static = Module("state.player")
 
 player.DEFAULT_FOV = 15
 
-module_mt.__call = function(_)
+player.new = function()
   local player_base = {
     player_flag = true,
     name = "протагонист",
@@ -29,6 +29,16 @@ module_mt.__call = function(_)
     faction = "player",
     fov_radius = player.DEFAULT_FOV,
     race = races.human,
+
+    bag = {
+      money = 0,
+      alcohol = 0,
+      valve = 0,
+      sigs = 0,
+      amulet = 0,
+      bird_food = 0,
+      bird_remains = 0,
+    },
 
     immortal = true,
     on_death = function(self)

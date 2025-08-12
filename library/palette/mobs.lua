@@ -19,7 +19,7 @@ local janitor    = require("library.ais.janitor")
 
 local mobs, _, static = Module("library.palette.mobs")
 
-mobs.player = player
+mobs.player = player.new
 
 local dreamer_engineer_mixin = {
   max_hp = 22,

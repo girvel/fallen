@@ -263,7 +263,7 @@ return function()
       run = function(self, rails, c)
         c.son_mary.interacted_by = nil
 
-        if rails.bottles_taken == 0 then
+        if State.player.bag.alcohol == 0 then
           local LINES = {
             "Нет алкоголя — нет разговора",
             "Неужели так тяжело что-то найти?",
@@ -299,7 +299,7 @@ return function()
           return
         end
 
-        rails.bottles_taken = rails.bottles_taken - 1
+        State.player.bag.alcohol = State.player.bag.alcohol - 1
         api.narration("Одна из труб примечательна; её дальний конец присоединен к центральной системе, а ближайший закрыт клапаном.")
         api.narration("Несомненно, это то, что тебе нужно; ты вскрываешь клапан и заливаешь напиток.")
         -- TODO FX music, animation
@@ -336,7 +336,7 @@ return function()
           "*Молча уйти, хватит с тебя этого дерьма*",
         }
 
-        if rails.bottles_taken > 0 then
+        if State.player.bag.alcohol > 0 then
           options[6] = "*Молча показать вторую бутылку*"
         end
 
@@ -466,7 +466,7 @@ return function()
       start_predicate = function(self, rails, dt, c)
         return c.son_mary.interacted_by == c.player
           and api.get_quest("alcohol") == 2
-          and rails.bottles_taken > 0
+          and State.player.bag.alcohol > 0
       end,
 
       _first_time = true,
@@ -504,7 +504,7 @@ return function()
 
         api.line(c.player, "Или мне пойти за третьей?")
 
-        if rails.bottles_taken > 1 then
+        if State.player.bag.alcohol > 1 then
           api.line(c.player, "Так я её сразу и принёс.")
           -- TODO achievement
         end
@@ -548,7 +548,7 @@ return function()
         end
 
         State:remove(rails.entities.engineer_3)
-        rails.bottles_taken = rails.bottles_taken - 1
+        State.player.bag.alcohol = State.player.bag.alcohol - 1
 
         if api.ability_check("con", 15) then
           -- TODO FX a sound here
@@ -798,7 +798,7 @@ return function()
       run = function(self, rails, c)
         c.son_mary.interacted_by = nil
 
-        if not self._remarked_piracy and rails.money >= 1000 then
+        if not self._remarked_piracy and State.player.bag.money >= 1000 then
           self._remarked_piracy = true
           api.line(c.son_mary, "А ты не терял время, а?")
           api.line(c.son_mary, "Так и знал, не обнищала ещё наша порода")

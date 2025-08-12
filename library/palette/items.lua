@@ -244,8 +244,8 @@ end
 
 module.flask = function()
   return Table.extend(
-    interactive(function(self)
-      State.rails.bottles_taken = State.rails.bottles_taken + 1
+    interactive(function(self, other)
+      other.bag.alcohol = other.bag.alcohol + 1
       State.rails.source_of_first_alcohol = State.rails.source_of_first_alcohol or "flask"
       State:remove(self)
     end, {highlight = true}),

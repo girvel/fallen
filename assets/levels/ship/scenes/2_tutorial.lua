@@ -237,7 +237,7 @@ return function()
           local o = api.options(self._options, true)
           if o == 1 then
             rails.entities.bird_food.interact = nil
-            rails.has_bird_food = true
+            State.player.bag.bird_food = 1
             rails.scenes.looking_at_bird_cage:activate_option(1)
             self.enabled = false
           else
@@ -279,7 +279,7 @@ return function()
           if o == 1 then
             self.enabled = false
             rails.entities.bird_cage.interact = nil
-            rails.has_bird_food = false
+            State.player.bag.bird_food = 0
 
             api.update_quest({warmup = quest.COMPLETED, detective = 1})
             rails.entities.detective_door.locked = false

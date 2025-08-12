@@ -128,34 +128,24 @@ return Module("state.gui.sidebar", function()
         append("Второе оружие: %s\n\n" % second_weapon:to_display())
       end
 
-      -- TODO move the bag out of rails, temporary hack for now to use polygon level
-      if State.rails.bottles_taken then
-        local bag = {}
-        if State.rails.money > 0 then
-          table.insert(bag, {"Финансы", "%i Л" % {State.rails.money}})
+      local TRANSLATIONS = {
+        money = "Финансы",
+        alcohol = "Бутылки с алкоголем",
+        valve = "Вентиль",
+        sigs = "Сигареты",
+        amulet = "Амулет",
+        bird_food = "Корм",
+        bird_remains = "Останки птицы"
+      }
+      local bag_render = {}
+      for name, amount in pairs(State.player.bag) do
+        if amount > 0 then
+          table.insert(bag_render, {TRANSLATIONS[name], tostring(amount)})
         end
-        if State.rails.bottles_taken > 0 then
-          table.insert(bag, {"Бутылки с алкоголем", tostring(State.rails.bottles_taken)})
-        end
-        if State.rails.has_valve then
-          table.insert(bag, {"Вентиль", "1"})
-        end
-        if State.rails.has_sigi then
-          table.insert(bag, {"Сигареты", "1"})
-        end
-        if State.rails.has_amulet then
-          table.insert(bag, {"Амулет", "1"})
-        end
-        if State.rails.has_bird_food then
-          table.insert(bag, {"Корм", "1"})
-        end
+      end
 
-        if #bag > 0 then
-          append(Common.build_table(
-            {"Сумка", ""},
-            bag
-          ) .. "\n\n")
-        end
+      if #bag_render > 0 then
+        append(Common.build_table({"Сумка", ""}, bag_render) .. "\n\n")
       end
 
       local shown_resources, max_resources
