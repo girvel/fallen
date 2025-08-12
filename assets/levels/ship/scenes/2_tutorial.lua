@@ -360,6 +360,7 @@ return function()
             end
           elseif o == 2 then
             rails.scenes.return_bird_remains.enabled = true
+            State.player.bag.bird_remains = 1
             Table.extend(rails.entities.bird_cage, interactive.detector())
             cue.set(rails.entities.bird_cage, "highlight", true)
           else
@@ -381,6 +382,7 @@ return function()
         self.enabled = false
         rails.entities.bird_cage.interacted_by = nil
         rails.entities.bird_cage.interact = nil
+        State.player.bag.bird_remains = 0
         api.narration("Останки птицы очень печально смотрятся в клетке.")
         api.narration("Может, однажды она переродится?")
       end,
