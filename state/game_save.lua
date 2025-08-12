@@ -11,7 +11,7 @@ game_save.read = function(filepath)
   Log.info("Loading the game from %s" % filepath)
   State = assert(loadstring(love.data.decompress(
     "string", "gzip", love.filesystem.read(filepath)
-  ), "last_save")())
+  ) --[[@as string]], filepath)())
   Log.info("Game loaded")
 end
 
