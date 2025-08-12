@@ -123,7 +123,7 @@ mobs.markiss = function()
       },
       max_hp = 15,
       base_abilities = abilities(10, 10, 10, 10, 10, 10),
-      ai = hauler_ai,
+      ai = hauler_ai(),
       invincible = true,
     },
     interactive.detector()
