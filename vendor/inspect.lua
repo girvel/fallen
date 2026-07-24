@@ -296,7 +296,7 @@ function Inspector:putValue(v, keys_limit)
             end
             if i <= seqLen then
                puts(buf, ' ')
-               self:putValue(t[i])
+               self:putValue(t[i], keys_limit)
             else
                local k = keys[i - seqLen]
                tabify(self)
@@ -304,11 +304,11 @@ function Inspector:putValue(v, keys_limit)
                   puts(buf, k)
                else
                   puts(buf, "[")
-                  self:putValue(k)
+                  self:putValue(k, keys_limit)
                   puts(buf, "]")
                end
                puts(buf, ' = ')
-               self:putValue(t[k])
+               self:putValue(t[k], keys_limit)
             end
          end
 
@@ -317,7 +317,7 @@ function Inspector:putValue(v, keys_limit)
             if seqLen + keysLen > 0 then puts(buf, ',') end
             tabify(self)
             puts(buf, '<metatable> = ')
-            self:putValue(mt)
+            self:putValue(mt, keys_limit)
          end
 
          self.level = self.level - 1

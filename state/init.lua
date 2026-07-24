@@ -139,8 +139,11 @@ local state_base = {
   --- @param path string
   --- @return nil
   load_level = function(self, path)
+    local t = love.timer.getTime()
     local level_data = require(path).load()
+    Log.info("Loading itself", love.timer.getTime() - t)
 
+    t = love.timer.getTime()
     self.water_speed = assert(
       level_data.water_speed,
       "water_speed for level %q is undefined" % path
@@ -187,6 +190,8 @@ local state_base = {
         end},
       }
     )
+
+    Log.info("Initialization & adding entities", love.timer.getTime() - t)
   end,
 
   --- @param self state

@@ -1,5 +1,4 @@
---- Library for profiling by lines; all functions marked as deprecated to prevent them leaking into
---- production code.
+--- Library for profiling by lines
 local line_profiler = {}
 
 local time_spent = {}
