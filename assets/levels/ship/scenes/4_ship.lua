@@ -1454,12 +1454,6 @@ return function()
       _steals = false,
 
       start_predicate = function(self, rails, dt)
-        if not self._containers then
-          self._containers = Fun.range(10)
-            :map(function(i) return  end)
-            :totable()
-        end
-
         self._current_active_container_i = Fun.iter(self._container_indexes)
           :filter(function(i)
             return rails.entities["loot_container_" .. i].interacted_by == State.player

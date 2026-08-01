@@ -380,6 +380,7 @@ return function()
         return State.player.hp < State.player:get_max_hp()
           and State.mode:get() == State.mode.free
           and not State.player.ai.in_cutscene
+          and (State.player.resources.hit_dice or 0) > 0
       end,
 
       run = function(self, rails)

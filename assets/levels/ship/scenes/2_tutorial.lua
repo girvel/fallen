@@ -1,5 +1,4 @@
 local fx = require("tech.fx")
-local on_tiles = require("library.palette.on_tiles")
 local cue = require("tech.cue")
 local experience = require("mech.experience")
 local sound = require("tech.sound")
